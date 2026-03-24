@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NASH Mock Test Part 2 — Set 1 of 7 | Obsidian Majesty</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@400;500;600;700&display=swap');
+:root{--bg-start:#050508;--bg-mid:#0d0d14;--bg-end:#08080c;--accent:#c0c0c0;--accent2:#e8e8f0;--accent-glow:rgba(192,192,192,0.30);--card-bg:rgba(13,13,13,0.85);--text-primary:#e8e8f0;--text-secondary:#8a8aa0;--border-glow:rgba(192,192,192,0.4);--green:#22c55e;--red:#ef4444;--amber:#f59e0b}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+@keyframes bgShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes auroraFloat{0%,100%{opacity:.05;transform:translateY(0)}50%{opacity:.12;transform:translateY(-20px)}}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes correctPulse{0%{transform:scale(1)}50%{transform:scale(1.025)}100%{transform:scale(1)}}
+@keyframes wrongShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.02)}}
+@keyframes bounceIn{0%{transform:scale(0);opacity:0}50%{transform:scale(1.15)}70%{transform:scale(0.95)}100%{transform:scale(1);opacity:1}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.15s!important;transition-duration:.15s!important}}
+body{font-family:'DM Sans',sans-serif;color:var(--text-primary);background:linear-gradient(135deg,var(--bg-start),var(--bg-mid),var(--bg-end),var(--bg-start));background-size:400% 400%;animation:bgShift 12s ease-in-out infinite;min-height:100vh;padding-bottom:140px;overflow-x:hidden}
+body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(ellipse at 50% 50%,var(--accent-glow),transparent 70%);animation:auroraFloat 8s ease-in-out infinite;pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.5}
+.nav{position:sticky;top:0;height:56px;background:rgba(0,0,0,0.7);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-bottom:1px solid rgba(192,192,192,0.30);display:flex;align-items:center;justify-content:space-between;padding:0 24px;z-index:100}
+.nav-left{font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent)}.nav-right{font-size:12px;color:var(--text-secondary);letter-spacing:1px}
+.container{max-width:820px;margin:0 auto;padding:24px 16px;position:relative;z-index:10}
+.card{background:var(--card-bg);backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px) saturate(150%);border:1px solid rgba(192,192,192,0.30);border-radius:20px;box-shadow:0 8px 32px rgba(0,0,0,0.4);padding:32px 28px;animation:fadeInUp .5s ease-out;margin-bottom:24px}
+.domain-badge{display:inline-block;padding:5px 14px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:rgba(192,192,192,0.30);margin-bottom:8px}
+.strand-badge{display:inline-block;padding:4px 12px;border-radius:16px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-secondary);background:rgba(255,255,255,0.05);margin-bottom:16px}
+.q-counter{font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:16px}
+.q-text{font-size:clamp(20px,2.8vw,24px);font-weight:600;line-height:1.75;margin-bottom:24px}
+.q-img{max-width:100%;border-radius:12px;margin:16px 0;border:1px solid rgba(192,192,192,0.30)}
+.choices{display:flex;flex-direction:column;gap:10px}
+.choice-btn{display:flex;align-items:flex-start;gap:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.10);border-radius:14px;min-height:64px;padding:18px 22px;cursor:pointer;transition:all .25s ease;width:100%;text-align:left;color:var(--text-primary);font-family:'DM Sans',sans-serif;font-size:clamp(18px,2.4vw,22px);font-weight:500;line-height:1.6}
+.choice-btn:hover:not(.locked){border-color:rgba(192,192,192,0.4);background:rgba(192,192,192,0.30);box-shadow:0 0 20px rgba(192,192,192,0.30)}
+.choice-btn:hover:not(.locked) .letter{background:rgba(192,192,192,0.4)}
+.choice-btn.locked{cursor:default}
+.choice-btn.correct{background:rgba(34,197,94,0.12);border-color:rgba(34,197,94,0.50);animation:correctPulse .4s ease}
+.choice-btn.correct .letter{background:var(--green);color:#fff}
+.choice-btn.wrong{background:rgba(239,68,68,0.12);border-color:rgba(239,68,68,0.50);animation:wrongShake .4s ease}
+.choice-btn.wrong .letter{background:var(--red);color:#fff}
+.choice-btn.dimmed{opacity:.4}
+.letter{width:38px;height:38px;border-radius:10px;background:rgba(192,192,192,0.30);color:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;flex-shrink:0;transition:all .25s ease}
+.choice-text{flex:1;padding-top:4px}
+.explanation{animation:fadeInUp .3s ease;background:rgba(0,0,0,0.50);border-left:4px solid var(--accent);border-radius:14px;padding:24px 28px;margin-top:20px;display:none}
+.explanation.show{display:block}
+.exp-header{font-size:13px;letter-spacing:2px;text-transform:uppercase;font-weight:700;color:var(--accent);margin-bottom:16px}
+.exp-correct{display:inline-block;padding:6px 16px;border-radius:12px;background:rgba(34,197,94,0.15);color:var(--green);font-weight:600;font-size:15px;margin-bottom:16px;line-height:1.5}
+.exp-body{font-size:clamp(17px,2.2vw,20px);line-height:1.7;color:var(--text-secondary)}
+.exp-body p{margin-bottom:12px}.exp-body .wrong-label{color:var(--red);font-weight:600}
+.exp-body .section-title{color:var(--accent);font-weight:700;font-size:14px;letter-spacing:1px;text-transform:uppercase;margin:16px 0 8px}
+.next-btn{display:block;margin:28px auto 0;min-height:60px;min-width:260px;border-radius:16px;font-size:18px;font-weight:700;border:none;cursor:pointer;color:#000;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 4px 20px var(--accent-glow);font-family:'DM Sans',sans-serif;animation:breathe 3s ease-in-out infinite;transition:all .3s ease;padding:0 32px}
+.next-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px var(--accent-glow)}
+.progress-bar{position:fixed;bottom:0;left:0;width:100%;background:rgba(0,0,0,0.80);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(192,192,192,0.30);padding:12px 24px 14px;z-index:1000}
+.progress-stats{display:flex;align-items:center;gap:16px;font-size:13px;font-weight:600;margin-bottom:8px;flex-wrap:wrap}
+.stat-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px;vertical-align:middle}
+.stat-dot.accent{background:var(--accent)}.stat-dot.green{background:var(--green)}.stat-dot.red{background:var(--red)}
+.stat-pct{color:var(--accent);font-weight:700}
+.progress-track{height:6px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:3px;transition:width .6s cubic-bezier(0.16,1,0.3,1);width:0%}
+.results-screen{display:none;text-align:center;padding:40px 20px}.results-screen.show{display:block}
+.trophy{font-size:clamp(56px,10vw,80px);animation:bounceIn .6s ease-out}
+.score-number{font-family:'Cormorant Garamond',serif;font-size:clamp(64px,14vw,96px);font-weight:700;margin:16px 0}
+.score-subtitle{font-size:20px;color:var(--text-secondary);margin-bottom:32px}
+.stat-boxes{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:32px}
+.stat-box{background:rgba(255,255,255,0.05);backdrop-filter:blur(10px);border-radius:16px;padding:20px 28px;min-width:120px;border:1px solid rgba(255,255,255,0.08)}
+.stat-box.green-tint{border-color:rgba(34,197,94,0.3)}.stat-box.red-tint{border-color:rgba(239,68,68,0.3)}.stat-box.accent-tint{border-color:rgba(192,192,192,0.30)}
+.stat-box-num{font-size:32px;font-weight:700}.stat-box-label{font-size:13px;color:var(--text-secondary);margin-top:4px}
+.perf-pill{display:inline-block;padding:8px 24px;border-radius:20px;font-size:16px;font-weight:700;margin-bottom:20px}
+.perf-pill.excellent{background:var(--green);color:#fff}.perf-pill.proficient{background:var(--accent);color:#000}.perf-pill.developing{background:var(--amber);color:#000}.perf-pill.needs-review{background:var(--red);color:#fff}
+.motiv-msg{font-size:18px;color:var(--text-secondary);line-height:1.7;max-width:500px;margin:0 auto 32px}
+.results-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.btn-outline{min-height:56px;padding:0 32px;border-radius:16px;font-size:16px;font-weight:700;border:2px solid var(--accent);background:transparent;color:var(--accent);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .3s ease}
+.btn-outline:hover{background:rgba(192,192,192,0.30)}
+.btn-filled{min-height:56px;padding:0 32px;border-radius:16px;font-size:16px;font-weight:700;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#000;cursor:pointer;font-family:'DM Sans',sans-serif;box-shadow:0 4px 20px var(--accent-glow);transition:all .3s ease}
+.btn-filled:hover{transform:translateY(-2px);box-shadow:0 8px 30px var(--accent-glow)}
+#particleCanvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;display:none}
+.hidden{display:none!important}
+.file-nav{position:relative;z-index:10;max-width:820px;margin:40px auto 0;padding:0 16px 40px;text-align:center}
+.file-nav-label{font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-secondary);margin-bottom:12px}
+.file-nav-links{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.file-nav-links a{display:inline-flex;align-items:center;justify-content:center;min-width:48px;height:44px;padding:0 16px;border-radius:12px;font-size:14px;font-weight:700;text-decoration:none;color:var(--text-secondary);background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.10);transition:all .25s ease}
+.file-nav-links a:hover{border-color:rgba(192,192,192,0.4);background:rgba(192,192,192,0.30);color:var(--accent)}
+.file-nav-links a.active{background:var(--accent);color:#000;border-color:var(--accent);pointer-events:none}
+@media(max-width:600px){.card{padding:24px 18px;border-radius:16px}.choice-btn{padding:14px 16px;gap:12px}.letter{width:34px;height:34px;font-size:14px}.nav{padding:0 16px}.progress-bar{padding:10px 16px 12px}.explanation{padding:20px 18px}.results-actions{flex-direction:column;align-items:center}}
+</style>
+</head>
+<body>
+<canvas id="particleCanvas"></canvas>
+<nav class="nav"><div class="nav-left">NASH Reviewer — Set 1 of 7</div><div class="nav-right">Obsidian Majesty</div></nav>
+<div class="container"><div id="quizArea"></div><div id="resultsArea" class="results-screen"></div></div>
+<div class="file-nav"><div class="file-nav-label">Navigate to Other Sets</div><div class="file-nav-links"><a href="nash-01.html" class="active">File 1</a>
+<a href="nash-02.html">File 2</a>
+<a href="nash-03.html">File 3</a>
+<a href="nash-04.html">File 4</a>
+<a href="nash-05.html">File 5</a>
+<a href="nash-06.html">File 6</a>
+<a href="nash-07.html">File 7</a>
+</div></div>
+<div class="progress-bar"><div class="progress-stats"><span><span class="stat-dot accent"></span> Q <span id="pCur">1</span> of 20</span><span><span class="stat-dot green"></span> Correct: <span id="pCor">0</span></span><span><span class="stat-dot red"></span> Wrong: <span id="pWrn">0</span></span><span class="stat-pct"><span id="pPct">0</span>%</span></div><div class="progress-track"><div class="progress-fill" id="pFill"></div></div></div>
+<script>
+
+const Q=[
+{q:"A school head conducted a self-assessment of his/her personal and professional development using the Philippine Professional Standards for School Heads (PPSSH). What should be the next step of the school head after his/her self-assessment?",
+c:[{t:"Create a learning plan for professional development based on his/her self-assessment aligned with PPSSH.",x:0},{t:"Create a learning resource for his/her fellow schools based on his/her self-assessment aligned with PPSSH.",x:0},{t:"Reflect on the attainment of his/her personal and professional development goals and objectives aligned with PPSSH.",x:0},{t:"Set personal and professional development goals based on his/her self-assessment aligned with PPSSH.",x:1}],
+d:"Domain 4 \u2014 Developing Self and Others",s:"4.1 Personal and professional development",
+e:{w:"After conducting a self-assessment, the logical next step is to set goals based on the identified strengths and areas for improvement. Goal-setting comes before creating plans (which operationalize goals) or reflecting on attainment (which happens after implementation). Under the PPSSH, self-assessment feeds directly into goal-setting as part of the professional development cycle.",
+wr:[{l:"A",r:"Creating a learning plan comes after setting goals. The plan is the operational document that details how to achieve the goals \u2014 it cannot be crafted without first identifying what the goals are."},{l:"B",r:"Creating learning resources for fellow schools is a sharing/dissemination activity, not the immediate next step after self-assessment. This would come much later in the development cycle."},{l:"C",r:"Reflecting on the attainment of goals presupposes that goals have already been set and pursued. Since the school head just completed the self-assessment, there are no goals yet to reflect upon."}]}},
+
+{q:"One of the perspectives of the concept of shared leadership in school is distributed leadership. Which of the following demonstrates this standpoint?",
+c:[{t:"The school head empowers every stakeholder to implement school-related activities and holds everyone accountable for the outputs and outcomes.",x:0},{t:"The school head addresses all the formal and informal issues and concerns submitted to the School Governing Council and then immediately acts on them.",x:0},{t:"The school head enhances the knowledge and skills of the people in the school organization and creates a common culture of expectations and accountability.",x:1},{t:"The school head openly articulates the goal, shares decision-making authority with stakeholders, and involves them before decisions are made.",x:0}],
+d:"Domain 1 \u2014 Leading Strategically",s:"1.1 Vision, mission and core values",
+e:{w:"Distributed leadership goes beyond simply delegating tasks or sharing decisions. It focuses on building the capacity of people within the organization so that leadership functions are genuinely distributed across many individuals. Enhancing knowledge and skills while creating a shared culture of expectations and accountability reflects the true essence of distributed leadership \u2014 developing others to lead, not just participate.",
+wr:[{l:"A",r:"This describes delegation and accountability, which is empowerment but not necessarily distributed leadership. It focuses on task implementation rather than building leadership capacity."},{l:"B",r:"This describes a centralized, reactive approach where the school head acts alone on issues \u2014 the opposite of distributed leadership."},{l:"D",r:"This describes participative or collaborative leadership where stakeholders are consulted, but it still positions the school head as the primary decision-maker who shares authority. Distributed leadership goes further by building leadership throughout the organization."}]}},
+
+{q:"A teacher has an IPCRF rating of 4.53. However, the school head noticed that there are many items under development needs in his/her IDP. How will the school head reconcile these?\n\nI. Validate the teacher\u2019s rating.\nII. Discuss with the teacher his/her development plans.\nIII. Instruct the teacher to delete items under development needs.\nIV. Let the teacher explain his/her development needs.\nV. Rescind the teacher\u2019s development plan.\nVI. Direct the teacher regarding what must consist of his/her development plans.",
+c:[{t:"I, IV, V",x:0},{t:"II, III, VI",x:0},{t:"I, II, IV",x:1},{t:"III, V, VI",x:0}],
+d:"Domain 4 \u2014 Developing Self and Others",s:"4.4 Performance management",
+e:{w:"The appropriate steps are: (I) Validate the teacher\u2019s rating to ensure accuracy, (II) Discuss with the teacher his/her development plans to align expectations, and (IV) Let the teacher explain his/her development needs to understand the rationale. These three steps promote a constructive, dialogic approach consistent with the RPMS framework.",
+wr:[{l:"A",r:"While validating the rating (I) and letting the teacher explain (IV) are correct, rescinding the development plan (V) is punitive and inappropriate \u2014 development plans should be improved, not discarded."},{l:"B",r:"Instructing the teacher to delete items (III) and directing what must be in the plan (VI) are authoritarian approaches that undermine teacher autonomy and professional growth."},{l:"D",r:"Deleting items (III), rescinding the plan (V), and directing the content (VI) are all inappropriate \u2014 they represent a controlling, non-collaborative approach that violates the spirit of professional development under RPMS."}]}},
+
+{q:"Due to her numerous accomplishments as president of the PTA for two consecutive terms, Mrs. A seems to be the parents\u2019 favorite. She is popular among local officials in the community. To keep her notable contribution in school, a request among parents surfaced for her term extension and to not hold an election anymore. What should the school head do in the plenary session with parents in response to the stated situation?",
+c:[{t:"Review the parents on the structure of the PTA officers and their duties and responsibilities as a partner of the school.",x:0},{t:"Announce the election postponement to discuss the issues with the current officers.",x:0},{t:"Inform the parents of DepEd guidelines of the annual PTA election and the two consecutive term-limitation of the elected officers.",x:1},{t:"Approve the parents\u2019 request for \u2018term extension\u2019 and \u2018no election\u2019 for the entire school year.",x:0}],
+d:"Domain 5 \u2014 Building Connections",s:"5.2 Management of school organizations",
+e:{w:"DepEd guidelines clearly mandate annual PTA elections and limit officers to two consecutive terms. The school head must uphold these policies by informing parents of the guidelines. This maintains institutional integrity while respectfully addressing the parents\u2019 request with policy-based reasoning.",
+wr:[{l:"A",r:"While reviewing the PTA structure is helpful, it does not directly address the specific issue of term extension and election requirements. The parents need to know the specific policy limitation."},{l:"B",r:"Postponing the election would effectively grant the request and violate DepEd guidelines. Elections must be held annually as prescribed."},{l:"D",r:"Approving the term extension directly violates DepEd policy on PTA elections and term limits. A school head cannot override departmental guidelines regardless of popular demand."}]}},
+
+{q:"A school has been focused on improving teachers\u2019 performance yearly to deliver better results for its clientele. Parents, learners, and other stakeholders play vital roles in this yearly effort since the school seriously considers their suggestions and feedback. The school head believes that involving stakeholders in such an important activity is essential since everyone deserves to be part of improving learners\u2019 well-being and development. In what domain in the PPSSH does the school head\u2019s creativity fit exactly?",
+c:[{t:"Managing school operations and resources",x:0},{t:"Focusing on the teaching and learning",x:0},{t:"Leading strategically",x:1},{t:"Developing self and others",x:0}],
+d:"Domain 1 \u2014 Leading Strategically",s:"1.4 Stakeholder engagement",
+e:{w:"The scenario describes a school head who strategically involves all stakeholders \u2014 parents, learners, and others \u2014 in the improvement process. This represents Leading Strategically under the PPSSH, which encompasses vision-driven leadership, stakeholder engagement, and collaborative improvement planning.",
+wr:[{l:"A",r:"Managing school operations focuses on day-to-day management of human, financial, and material resources \u2014 not on the strategic engagement of stakeholders for school improvement."},{l:"B",r:"Focusing on teaching and learning deals with curriculum, instruction, and assessment practices \u2014 not the broader strategic involvement of stakeholders."},{l:"D",r:"Developing self and others focuses on professional growth, mentoring, and capacity building \u2014 not on the strategic engagement of external stakeholders."}]}},
+
+{q:"A school head is sent outside the region to attend an intensive in-house capacity-building for school heads for a month. How would the school head ensure the school\u2019s continuity of basic education service despite the month-long absence?",
+c:[{t:"Empower key persons to oversee daily school operations.",x:1},{t:"Designate an OIC to perform the duties and responsibilities.",x:0},{t:"Assign individuals and/or teams to monitor school staff.",x:0},{t:"Communicate with the district supervisors to manage school operations and resources.",x:0}],
+d:"Domain 2 \u2014 Managing School Operations and Resources",s:"2.4 Management of staff",
+e:{w:"Empowering key persons reflects distributed leadership and ensures the continuity of school operations through shared responsibility. It builds institutional capacity rather than creating dependency on a single individual.",
+wr:[{l:"B",r:"Designating an OIC places all responsibility on one person rather than distributing leadership. The question asks how to ensure continuity, which requires broader empowerment."},{l:"C",r:"Assigning teams to monitor staff focuses narrowly on supervision rather than the full scope of school operations."},{l:"D",r:"Relying on district supervisors is externally dependent and not sustainable. School operations should be managed by internal leadership."}]}},
+
+{q:"The result of the item analysis of a recently concluded quarterly examination in Araling Panlipunan 7 revealed that the items on understanding the ways of life of the different indigenous groups obtained the greatest number of errors. The school decided to develop lesson exemplars on understanding culture and practices using authentic assessment. What will the school head do to lead the development of the lesson exemplars and assessment tools?",
+c:[{t:"Conduct teacher capability building with the help of the indigenous people communities.",x:0},{t:"Coordinate with different indigenous people communities in terms of cultural expressions in the development of learning materials, assessment, and rubrics.",x:1},{t:"Conduct surveys and interviews with teachers to identify their learning needs.",x:0},{t:"Provide assistance by utilizing the MOOE.",x:0}],
+d:"Domain 3 \u2014 Focusing on Teaching and Learning",s:"3.1 School-based review, contextualization and implementation of learning standards",
+e:{w:"Since the lesson exemplars involve understanding indigenous cultures and practices, the most appropriate action is to coordinate directly with indigenous people communities. This ensures cultural authenticity in learning materials and assessments, and aligns with DepEd\u2019s policy on indigenization and contextualization of the curriculum.",
+wr:[{l:"A",r:"While capability building is important, this option places IP communities as helpers rather than partners. The question asks about leading development, which requires coordination and co-development."},{l:"C",r:"Conducting surveys with teachers addresses teachers\u2019 needs but does not directly address the content gap about indigenous cultures."},{l:"D",r:"Providing MOOE assistance is a financial/operational support action that does not directly lead the development of culturally responsive materials."}]}},
+
+{q:"A teacher is planning a lesson and wants to incorporate a project that requires students to research a local environmental issue and present solutions to the community. Explain how this teacher\u2019s lesson plan integrates the principles of School-Based Management (SBM) and the Philippine Professional Standards for Teachers (PPST).",
+c:[{t:"The lesson plan only aligns with the PPST\u2019s focus on curriculum, but not with SBM.",x:0},{t:"The lesson plan is a direct result of SBM, as all lesson plans must be approved by the SGC.",x:0},{t:"The lesson plan embodies SBM by involving the community as a learning resource, while also aligning with the PPST\u2019s domains on community engagement and curriculum planning.",x:1},{t:"This lesson plan is not appropriate as it goes beyond the scope of the DepEd curriculum.",x:0}],
+d:"Domain 3 \u2014 Focusing on Teaching and Learning",s:"3.2 Teaching standards and pedagogy",
+e:{w:"The lesson plan integrates SBM by using the community as a learning resource and involving community stakeholders in the educational process. It also aligns with the PPST domains on community linkages (Domain 6) and curriculum planning (Domain 1). SBM provides the governance framework for community involvement, while PPST guides the professional practice.",
+wr:[{l:"A",r:"The lesson plan clearly involves the community, which is a fundamental principle of SBM. It aligns with both frameworks, not just one."},{l:"B",r:"Not all lesson plans require SGC approval. SBM is about decentralized governance and community involvement, not requiring governing council approval for every plan."},{l:"D",r:"DepEd encourages contextualized, community-engaged learning. The curriculum supports projects that connect classroom learning to real-world community issues."}]}},
+
+{q:"In the context of the new program, how can a school head use the principles of SBM and their leadership competencies from PPSSH to empower teachers, guided by the PPST, to create a successful and sustainable mental health initiative?",
+c:[{t:"The school head can use SBM to delegate the entire project to the PTA, as it is a community-based concern.",x:0},{t:"The school head can directly instruct all teachers to use the same lesson plan provided by the central office, enforcing the PPST.",x:0},{t:"The school head should only focus on administrative tasks and wait for the teachers to independently implement the program based on their understanding of the PPST.",x:0},{t:"The school head, using competencies from PPSSH, can create a collaborative team under SBM, allowing teachers to use their PPST skills (e.g., Domain 2) to design specific, school-based interventions and activities that address the unique mental health needs of their learners.",x:1}],
+d:"Domain 1 \u2014 Leading Strategically",s:"1.2 School planning and implementation",
+e:{w:"This option demonstrates the integration of all three frameworks: PPSSH (leadership competencies for collaboration), SBM (creating a collaborative school-based team), and PPST (teachers applying Domain 2 on learning environment to design context-specific interventions). This represents the highest level of relational thinking in school leadership.",
+wr:[{l:"A",r:"Delegating entirely to the PTA removes the school head\u2019s leadership role and treats mental health as solely a community concern. SBM is about collaboration, not abdication."},{l:"B",r:"Instructing all teachers to use the same central office plan contradicts SBM\u2019s principle of school-based decision-making and ignores the unique context."},{l:"C",r:"Focusing only on administrative tasks fails to demonstrate the leadership competencies required under PPSSH. School heads must actively lead, not merely administer."}]}},
+
+{q:"It was found that a group of children aged ten and above are learners with no records of formal schooling. As a school head, what action will help these learners secure official documents?",
+c:[{t:"Register the children as kindergarten learners to formalize the records.",x:0},{t:"Request the teachers to assess the learners\u2019 competencies for grade-level assignments.",x:0},{t:"Recommend the children for the grade level placement assessment.",x:1},{t:"Provide school records appropriate to learners\u2019 grade levels.",x:0}],
+d:"Domain 3 \u2014 Focusing on Teaching and Learning",s:"3.3 Assessment and reporting",
+e:{w:"For learners aged ten and above with no formal schooling records, the Grade Level Placement Assessment is the appropriate DepEd-mandated mechanism. It determines the proper grade level placement based on the learner\u2019s actual competencies, ensuring they are placed at the right instructional level and receive official documentation.",
+wr:[{l:"A",r:"Registering ten-year-old children as kindergarten learners is inappropriate because it does not consider their actual developmental and learning levels. Age-appropriate placement is essential."},{l:"B",r:"While teacher assessment is part of the process, the formal mechanism for learners without records is the Grade Level Placement Assessment, not an informal teacher competency check."},{l:"D",r:"Providing school records without proper assessment would be fabricating documents. Records can only be issued after proper placement through the designated assessment process."}]}},
+
+{q:"Before a school head decides on a specific school project to undertake, he/she conducts a brainstorming activity through a focus group discussion with student-leaders and Parent-Teachers Association officers. What type of leadership does the school head possess?",
+c:[{t:"Autocratic, because he/she controls the decisions of the school team.",x:0},{t:"Considerate, because he/she values the relationship, care, and support of others.",x:0},{t:"Client-focused, because he/she listens to learners\u2019 feedback.",x:1},{t:"Proactive, because he/she calculates the risks to reduce impact.",x:0}],
+d:"Domain 1 \u2014 Leading Strategically",s:"1.4 Stakeholder engagement",
+e:{w:"The school head demonstrates client-focused leadership by conducting brainstorming with student-leaders and PTA officers. In the education context, learners and parents are the primary clients. By actively seeking their input before making decisions, the school head ensures projects are responsive to actual needs.",
+wr:[{l:"A",r:"Autocratic leadership involves making decisions unilaterally. Conducting focus group discussions with stakeholders is the opposite of autocratic behavior."},{l:"B",r:"While the school head may be considerate, the defining characteristic is actively seeking client input to inform decision-making \u2014 which is specifically client-focused."},{l:"D",r:"Proactive leadership involves anticipating problems and taking preventive action. The scenario describes consultation and participation, not risk assessment."}]}},
+
+{q:"A parent went to school to request for admission of her 10-year-old son to Grade 2. However, the LIS data revealed that the child had not undergone Kindergarten and Grade 1. How will the school head deal with this issue?",
+c:[{t:"Explain thoroughly to the parent DO #20 series 2018 or the age requirement for kindergarten.",x:1},{t:"Enroll the child in Grade 2 and encourage the parent to consider Philippine Educational Placement Test (PEPT).",x:0},{t:"Ignore the parent\u2019s request since kindergarten is a prerequisite to finishing the K to 12 curricula.",x:0},{t:"Advise the parent to enroll her son in another school.",x:0}],
+d:"Domain 2 \u2014 Managing School Operations and Resources",s:"2.5 Management of school information",
+e:{w:"According to DepEd Order No. 20, s. 2018, a child must have completed Kindergarten before being admitted to Grade 1. The school head\u2019s responsibility is to uphold DepEd policies and provide accurate information to the parent. Explaining the policy thoroughly ensures the parent understands the requirements.",
+wr:[{l:"B",r:"Enrolling the child in Grade 2 without completing Kindergarten and Grade 1 violates DepEd\u2019s sequential enrollment policy. The PEPT does not bypass the Kindergarten requirement."},{l:"C",r:"While kindergarten is indeed a prerequisite, ignoring the parent is unprofessional and fails the school head\u2019s duty to provide guidance."},{l:"D",r:"Advising the parent to enroll elsewhere is evasive and unhelpful. The same DepEd policy applies to all public schools."}]}},
+
+{q:"Which of the following are the benefits of utilizing learners\u2019 voices in policy development and decision-making towards school improvement?\n\nI. A deeper understanding of the real needs and problems of the learners\nII. An excellent feedback mechanism on existing school interventions\nIII. An insight into what school processes need further analysis\nIV. An opportunity for learners to express their grievances\nV. An avenue to conduct research on learners\u2019 opinions",
+c:[{t:"IV and V",x:0},{t:"III and V",x:0},{t:"I, II, and III",x:1},{t:"I, II, and IV",x:0}],
+d:"Domain 1 \u2014 Leading Strategically",s:"1.4 Stakeholder engagement",
+e:{w:"These three statements collectively show how learner voices contribute to informed policy and school improvement: I \u2192 Identifies actual learner needs; II \u2192 Provides feedback on current programs; III \u2192 Helps determine areas requiring improvement. Together they demonstrate a relational understanding of learner participation in governance and improvement.",
+wr:[{l:"A",r:"Expressing grievances (IV) and conducting research (V) are not the primary benefits of learner voice in policy development. Grievances are complaints, not constructive input."},{l:"B",r:"While gaining insight into processes (III) is correct, conducting research on opinions (V) is not the purpose of utilizing learner voices in policy development."},{l:"D",r:"While I and II are correct, expressing grievances (IV) is not a benefit of utilizing learner voices in policy development. The focus should be on constructive contribution."}]}},
+
+{q:"An agency is very willing to dispose of an old serviceable vehicle that is no longer used. A school head learned about this and expressed their need for a vehicle at this agency. Which mode of disposal is most favorable to the school if it has no funds to procure the vehicle?",
+c:[{t:"Barter",x:0},{t:"Sale",x:0},{t:"Donation",x:1},{t:"Transfer",x:0}],
+d:"Domain 2 \u2014 Managing School Operations and Resources",s:"2.3 School facilities and equipment",
+e:{w:"Donation is a voluntary disposition without cost \u2014 the most favorable since the school needs a vehicle but has no funds. This is the only mode of disposal that does not require the school to spend money or exchange property.",
+wr:[{l:"A",r:"Barter requires exchange of property. The school would need to give something of value in return, which may not be feasible for a public school."},{l:"B",r:"Sale requires the school to pay money to acquire the vehicle, which is not possible since the school has no funds."},{l:"D",r:"Transfer usually involves corresponding funds or budget transfer between government agencies, which again requires financial resources the school does not have."}]}},
+
+{q:"In promoting \u201COne DepEd,\u201D which of the following activities of the department contributes in attaining its vision to improve itself continuously?\n\nI. Implementation of Philippine Professional Standards for Teachers, School Heads, and Supervisors\nII. Allocation and Utilization of Human Resource Development Fund for Teachers\u2019 and School Leaders\u2019 Continuous Learning and Development\nIII. Creation of the Education Program Delivery Unit\nIV. Institutionalization of Quality Management System\nV. Organization of the Maintenance Information Program",
+c:[{t:"I & IV",x:0},{t:"II, III, V",x:0},{t:"I, II, IV",x:1},{t:"III & V",x:0}],
+d:"Domain 1 \u2014 Leading Strategically",s:"1.1 Vision, mission and core values",
+e:{w:"\u201COne DepEd\u201D emphasizes continuous improvement. The three activities that directly contribute are: (I) Implementing professional standards ensures quality benchmarks; (II) Allocating HRDF ensures sustained professional development; (IV) Institutionalizing QMS establishes systematic processes for continuous improvement.",
+wr:[{l:"A",r:"While I and IV are both correct, this combination is incomplete \u2014 it misses the crucial element of resource allocation for professional development (II)."},{l:"B",r:"The Creation of the Education Program Delivery Unit (III) and Organization of the Maintenance Information Program (V) are specific operational activities, not broad continuous improvement initiatives."},{l:"D",r:"Neither III nor V directly addresses the continuous improvement vision of \u201COne DepEd.\u201D They are operational functions rather than strategic improvement mechanisms."}]}},
+
+{q:"The Local Chief Executive (LCE), who has been supporting a school, requested that his son be accommodated in the Science Section. However, his qualifying examination score was below the cut-off. What should the school head do to fulfill both responsibilities to enforce DepEd policies and build strong connections with stakeholders?",
+c:[{t:"Apologize to the Local Chief Executive for declining the request.",x:0},{t:"Accommodate the request to avoid conflict and gain strong and continuous support from the requesting politician.",x:0},{t:"Gracefully explain the Science Curriculum selection policy to justify the request\u2019s non-accommodation.",x:1},{t:"Uphold the integrity of the selection process of the Science Curriculum by disregarding the request.",x:0}],
+d:"Domain 5 \u2014 Building Connections",s:"5.1 Management of diverse relationships",
+e:{w:"This option balances both responsibilities: it upholds the integrity of DepEd\u2019s selection policy while maintaining a respectful, diplomatic relationship with the LCE. By gracefully explaining the policy, the school head demonstrates transparency and professionalism \u2014 firm on policy, graceful in delivery.",
+wr:[{l:"A",r:"Simply apologizing without explaining the policy does not fulfill the school head\u2019s educational responsibility. The LCE deserves to understand the reason behind the decision."},{l:"B",r:"Accommodating the request would compromise the integrity of the selection process and violate DepEd policies."},{l:"D",r:"While upholding integrity is correct, \u201Cdisregarding the request\u201D is dismissive and damages the school-LGU relationship. Effective leadership requires both policy enforcement and respectful communication."}]}},
+
+{q:"In line with the school\u2019s Gender and Development (GAD) Plan, a school head pointed out certain activities to address gender issues during the COVID-19 pandemic. Which of the following outputs enable the learners, teachers, and school personnel to adhere to the GAD mandates?",
+c:[{t:"Hiring of janitors and utility personnel and utilizing GAD funds for their salaries in line with maintaining the school\u2019s cleanliness, sanitation, and hygiene.",x:0},{t:"The procurement of personal protective equipment for men and women as this supports the increase of awareness and appreciation of the GAD program.",x:0},{t:"The administration of survey questionnaire on sex-disaggregated data related to COVID-19 situation to be used for program planning, implementation, and recognition.",x:0},{t:"The conduct of webinars on mental health and psychosocial wellness facilitates the increase of participants\u2019 capacities on gender health and well-being.",x:1}],
+d:"Domain 5 \u2014 Building Connections",s:"5.3 Inclusive practice",
+e:{w:"Conducting webinars on mental health and psychosocial wellness directly addresses gender-responsive capacity building. During the COVID-19 pandemic, mental health issues disproportionately affected different genders. This activity increases participants\u2019 understanding and builds their capacity to respond \u2014 the core purpose of GAD programming.",
+wr:[{l:"A",r:"Hiring janitors and using GAD funds for their salaries is not a GAD activity. GAD funds must be used for gender-responsive programs, not general maintenance costs."},{l:"B",r:"Procuring PPE is a health and safety measure, not a gender-responsive activity. Simply providing equal PPE does not constitute GAD programming."},{l:"C",r:"While collecting sex-disaggregated data is useful for planning, it is a data-gathering tool, not an output that enables adherence to GAD mandates."}]}},
+
+{q:"A Grade 8 MAPEH teacher renders a maximum of six hours of actual classroom teaching per day and leaves the school after work. A newly-hired colleague came to the school head\u2019s office and requested an explanation regarding the practice of the said teacher. If you were the school head, what would be your response?",
+c:[{t:"He/she is subjected to salary deduction for he/she is not exempted from the eight-hour workday based on CSC resolution 080096, revised 2008.",x:0},{t:"He/she may choose to render the remaining two hours of work outside the school premises as stated in DO 16, s. 2009.",x:1},{t:"He/she can render the remaining two hours of work outside the school premises with 2 hours equivalent to salary deduction per day.",x:0},{t:"He/she may choose to render the remaining two hours of work outside the school premises without salary deduction if he/she can submit means of verification.",x:0}],
+d:"Domain 2 \u2014 Managing School Operations and Resources",s:"2.4 Management of staff",
+e:{w:"DepEd Order No. 16, s. 2009 (implementing DepEd Memorandum No. 291, s. 2008) provides that teachers with six hours of actual classroom teaching may render the remaining two hours within or outside the school premises. This is a policy-backed arrangement, not an unauthorized practice.",
+wr:[{l:"A",r:"The teacher is not subject to salary deduction because DO 16, s. 2009 explicitly allows the two-hour arrangement."},{l:"C",r:"There is no salary deduction involved when the teacher renders the remaining two hours outside the school premises. This is authorized under DepEd policy."},{l:"D",r:"The policy does not require submission of means of verification as a condition. The arrangement is authorized by default under DO 16, s. 2009."}]}},
+
+{q:"Reflective thinking enhances knowledge, practice, belief, and assumptions. Which of the following statements are true about reflective thinking?\n\nI. It leads to engagement, creativity, and innovation.\nII. It considers the self alone to improve one\u2019s practice.\nIII. It is most effective when used after something happens.\nIV. It is designed to challenge the status quo and level of practice.\nV. It enhances awareness of one\u2019s environment.",
+c:[{t:"II and III",x:0},{t:"I, III and IV",x:0},{t:"II and V",x:0},{t:"I, IV and V",x:1}],
+d:"Domain 4 \u2014 Developing Self and Others",s:"4.2 Professional reflection and learning",
+e:{w:"The true statements are: (I) It leads to engagement, creativity, and innovation; (IV) It is designed to challenge the status quo and level of practice; (V) It enhances awareness of one\u2019s environment. Reflective thinking broadens perspective beyond self and drives deeper thinking.",
+wr:[{l:"A",r:"Statement II is incorrect because reflective thinking goes beyond the self \u2014 it considers context, relationships, and environment. Statement III is incorrect because reflection is effective before, during, and after events."},{l:"B",r:"While I and IV are correct, statement III (most effective after something happens) is incorrect. Reflective thinking can be anticipatory, concurrent, and retrospective."},{l:"C",r:"Statement II is incorrect \u2014 reflective thinking extends beyond self-focused reflection. While V is correct, it is paired with an incorrect statement."}]}},
+
+{q:"Which of the following statements are true about formative assessment?\n\nI. It creates opportunities for the teacher to gather pieces of evidence of learners\u2019 progressive learning.\nII. It gives the teacher insights into the learners\u2019 strengths, needs, and weaknesses.\nIII. It allows learners to constructively suggest to teachers the best way to handle their class.\nIV. It enables the teacher to evaluate the effectiveness of the classroom instruction adopted.\nV. It measures whether the learners have met the content and performance standards.\nVI. It occurs toward the end of a period of learning to describe the competencies covered by the teacher.",
+c:[{t:"III, V and VI",x:0},{t:"II, IV and V",x:0},{t:"II, III and VI",x:0},{t:"I, II and IV",x:1}],
+d:"Domain 3 \u2014 Focusing on Teaching and Learning",s:"3.3 Assessment and reporting",
+e:{w:"Formative assessment is conducted during the learning process to monitor learners\u2019 progress and improve instruction. Key characteristics: (I) gathers evidence of progressive learning; (II) provides insights into strengths, needs, and weaknesses; (IV) enables evaluation of instruction effectiveness. It helps teachers adjust teaching strategies and support learners effectively.",
+wr:[{l:"A",r:"Statement III describes learner feedback on teaching methods, not formative assessment. Statements V and VI describe summative assessment characteristics."},{l:"B",r:"While II and IV are correct, statement V (measuring content and performance standards) describes summative assessment, not formative."},{l:"C",r:"Statement III (learner suggestions on class handling) is not formative assessment, and statement VI (occurring at end of learning period) describes summative assessment."}]}}
+];
+const L=['A','B','C','D'];
+let cur=0,cor=0,wrn=0,ans=false;
+function render(){
+if(cur>=Q.length){showResults();return;}
+const q=Q[cur];
+document.getElementById('pCur').textContent=cur+1;
+document.getElementById('pFill').style.width=(cur/Q.length*100)+'%';
+let stem=q.q.replace(/\n/g,'<br>');
+let imgHtml='';
+
+let h='<div class="card"><div class="domain-badge">'+q.d+'</div><br><div class="strand-badge">'+q.s+'</div><div class="q-counter">Question '+(cur+1)+' of '+Q.length+'</div><div class="q-text">'+stem+'</div>'+imgHtml+'<div class="choices" id="ch">';
+q.c.forEach(function(c,i){h+='<button class="choice-btn" onclick="pick('+i+')" id="cb'+i+'"><span class="letter">'+L[i]+'</span><span class="choice-text">'+c.t+'</span></button>';});
+h+='</div><div class="explanation" id="ep"></div><button class="next-btn hidden" id="nb" onclick="nxt()">'+(cur<Q.length-1?'Next Question \u2192':'See Results \ud83c\udfc6')+'</button></div>';
+document.getElementById('quizArea').innerHTML=h;
+ans=false;window.scrollTo({top:0,behavior:'smooth'});
+}
+function pick(i){
+if(ans)return;ans=true;const q=Q[cur];
+document.querySelectorAll('.choice-btn').forEach(function(b,j){b.classList.add('locked');if(q.c[j].x)b.classList.add('correct');else if(j===i)b.classList.add('wrong');else b.classList.add('dimmed');});
+if(q.c[i].x)cor++;else wrn++;
+document.getElementById('pCor').textContent=cor;document.getElementById('pWrn').textContent=wrn;
+var tot=cor+wrn;document.getElementById('pPct').textContent=tot?Math.round(cor/tot*100):0;
+var ci=q.c.findIndex(function(c){return c.x;});
+var eh='<div class="exp-header">\ud83d\udca1 EXPLANATION</div><div class="exp-correct">\u2713 Correct Answer: '+L[ci]+' \u2014 '+q.c[ci].t+'</div><div class="exp-body"><div class="section-title">Why This Is Correct</div><p>'+q.e.w+'</p><div class="section-title">Why the Others Are Incorrect</div>';
+q.e.wr.forEach(function(w){eh+='<p><span class="wrong-label">'+w.l+'.</span> '+w.r+'</p>';});
+eh+='</div>';
+var ep=document.getElementById('ep');ep.innerHTML=eh;ep.classList.add('show');
+document.getElementById('nb').classList.remove('hidden');
+setTimeout(function(){var nb=document.getElementById('nb');nb.scrollIntoView({behavior:'smooth',block:'center'});},350);
+}
+function nxt(){cur++;render();}
+function showResults(){
+document.getElementById('quizArea').classList.add('hidden');document.getElementById('pFill').style.width='100%';
+var p=Math.round(cor/Q.length*100);var band,bc,em,msg;
+if(p>=90){band='\ud83c\udf1f Excellent';bc='excellent';em='\ud83c\udfc6';msg='Outstanding performance! You demonstrate mastery of school leadership competencies. Keep shining, future school head!';}
+else if(p>=75){band='\u2705 Proficient';bc='proficient';em='\ud83c\udfaf';msg="Great job! You show a strong grasp of PPSSH domains. Review the items you missed and you will be fully ready for the NASH.";}
+else if(p>=60){band='\ud83d\udcc8 Developing';bc='developing';em='\ud83d\udcda';msg="You are making good progress! Focus on the domains where you struggled and revisit the key DepEd issuances.";}
+else{band='\ud83d\udd04 Needs Review';bc='needs-review';em='\ud83d\udcaa';msg="Do not give up! Revisit the PPSSH domains and key DepEd policies. Every review session brings you closer to passing the NASH.";}
+var r=document.getElementById('resultsArea');
+r.innerHTML='<div class="trophy">'+em+'</div><div class="score-number" style="color:'+(p>=75?'var(--green)':p>=60?'var(--amber)':'var(--red)')+'" id="sn">0%</div><div class="score-subtitle">'+cor+' out of '+Q.length+' correct</div><div class="stat-boxes"><div class="stat-box green-tint"><div class="stat-box-num" style="color:var(--green)">'+cor+'</div><div class="stat-box-label">Correct</div></div><div class="stat-box red-tint"><div class="stat-box-num" style="color:var(--red)">'+wrn+'</div><div class="stat-box-label">Wrong</div></div><div class="stat-box accent-tint"><div class="stat-box-num" style="color:var(--accent)">'+p+'%</div><div class="stat-box-label">Score</div></div></div><div class="perf-pill '+bc+'">'+band+'</div><div class="motiv-msg">'+msg+'</div><div class="results-actions"><button class="btn-outline" onclick="restart()">\u21ba Restart This Set</button><button class="btn-filled" onclick="window.location.href=\'nash-02.html\'">Proceed to Set 2 \u2192</button></div>';
+r.classList.add('show');
+var c=0,el=document.getElementById('sn');var iv=setInterval(function(){c++;el.textContent=c+'%';if(c>=p)clearInterval(iv);},20);launchP();
+}
+function restart(){cur=0;cor=0;wrn=0;ans=false;document.getElementById('pCor').textContent=0;document.getElementById('pWrn').textContent=0;document.getElementById('pPct').textContent=0;document.getElementById('pFill').style.width='0%';var r=document.getElementById('resultsArea');r.classList.remove('show');r.innerHTML='';document.getElementById('quizArea').classList.remove('hidden');render();}
+function launchP(){var cv=document.getElementById('particleCanvas');cv.style.display='block';var cx=cv.getContext('2d');cv.width=innerWidth;cv.height=innerHeight;var ps=[];for(var i=0;i<60;i++)ps.push({x:cv.width/2,y:cv.height/2,vx:(Math.random()-.5)*12,vy:(Math.random()-.5)*12,r:Math.random()*4+2,a:1,d:Math.random()*.02+.005});(function anim(){cx.clearRect(0,0,cv.width,cv.height);var alive=false;ps.forEach(function(p){p.x+=p.vx;p.y+=p.vy;p.vy+=.15;p.a-=p.d;if(p.a>0){alive=true;cx.beginPath();cx.arc(p.x,p.y,p.r,0,Math.PI*2);cx.fillStyle='rgba(192,192,192,'+p.a+')';cx.fill();}});if(alive)requestAnimationFrame(anim);else{cv.style.display='none';cx.clearRect(0,0,cv.width,cv.height);}})();}
+render();
+</script>
+</body>
+</html>
