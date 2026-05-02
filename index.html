@@ -3,7 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sir Orlando V. Pasion, Jr. — Teacher VI · Mathematician · Visionary</title>
+  <title>Sir Orlando V. Pasion, Jr. — Teacher VI · Mathematics Educator · EdTech Innovator</title>
+  <meta name="description" content="Official resource library of Sir Orlando V. Pasion, Jr., featuring NASH reviewers, mock tests, mathematics tools, and professional learning resources.">
+  <meta property="og:title" content="Sir Orlando V. Pasion, Jr. — Learning Resources">
+  <meta property="og:description" content="NASH reviewers, mock tests, mathematics tools, and professional learning resources in one curated library.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://orlandopasion000.github.io/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Syne:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
@@ -179,29 +184,27 @@
     .hub-stat { font-family: var(--font-mono); font-size: 12px; color: var(--white-dim); padding: 8px 14px; background: var(--surface-2); border: 1px solid var(--white-faint); }
     .hub-stat strong { color: var(--gold); }
 
-    .hub-cat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 14px; border-bottom: 1px solid var(--white-faint); }
-    .hub-cat-title { font-family: var(--font-mono); font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); }
-    .hub-cat-count { font-family: var(--font-mono); font-size: 11px; color: var(--white-dim); }
-    .hub-category + .hub-category { margin-top: 34px; }
-
-    .hub-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+    .hub-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 18px; }
 
     .hub-card {
-      display: block; background: var(--surface-2); border: 1px solid var(--white-faint); padding: 24px;
+      display: flex; flex-direction: column; min-height: 100%; background: var(--surface-2); border: 1px solid var(--white-faint); padding: 24px;
       transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
     }
     .hub-card:hover { transform: translateY(-4px); border-color: rgba(212,168,83,0.3); box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
+    .hub-card:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+    .hub-card.is-featured { grid-column: span 2; background: linear-gradient(135deg, rgba(212,168,83,0.14), var(--surface-2) 42%, rgba(86,212,200,0.08)); border-color: rgba(212,168,83,0.22); }
+    .hub-card.is-featured h3 { font-size: 19px; }
 
     .hub-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
     .hub-card-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 18px; background: var(--gold-glow); border: 1px solid rgba(212,168,83,0.12); }
     .hub-card-badge { font-family: var(--font-mono); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; padding: 3px 10px; border: 1px solid rgba(93,232,160,0.3); color: var(--green); background: rgba(93,232,160,0.06); }
     .hub-card h3 { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
     .hub-card-desc { font-size: 13px; color: var(--white-dim); line-height: 1.5; margin-bottom: 14px; }
-    .hub-card-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid var(--white-faint); }
-    .hub-card-meta { display: flex; gap: 10px; }
+    .hub-card-footer { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: auto; padding-top: 12px; border-top: 1px solid var(--white-faint); }
+    .hub-card-meta { display: flex; gap: 10px; flex-wrap: wrap; }
     .hub-card-meta span { font-family: var(--font-mono); font-size: 10px; color: var(--white-dim); }
-    .hub-card-open { font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); opacity: 0; transition: opacity 0.3s; }
-    .hub-card:hover .hub-card-open { opacity: 1; }
+    .hub-card-open { font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); opacity: 0.78; transition: opacity 0.3s; }
+    .hub-card:hover .hub-card-open, .hub-card:focus-visible .hub-card-open { opacity: 1; }
 
     .hub-empty { text-align: center; padding: 48px 20px; color: var(--white-dim); display: none; }
 
@@ -259,6 +262,7 @@
       .about-meta { grid-template-columns: 1fr; }
       .about-portrait { max-width: 280px; margin: 0 auto; }
       .hub-grid { grid-template-columns: 1fr; }
+      .hub-card.is-featured { grid-column: auto; }
       .philosophy { padding: 80px 20px; }
     }
   </style>
@@ -271,7 +275,7 @@
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
       <li><a href="#expertise">Expertise</a></li>
-      <li><a href="#resources">My Files</a></li>
+      <li><a href="#resources">Resources</a></li>
       <li><a href="#journey">Journey</a></li>
     </ul>
     <button class="nav-hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
@@ -279,21 +283,21 @@
   <div class="mobile-menu" id="mobileMenu">
     <a href="#about" onclick="closeMenu()">About</a>
     <a href="#expertise" onclick="closeMenu()">Expertise</a>
-    <a href="#resources" onclick="closeMenu()">My Files</a>
+    <a href="#resources" onclick="closeMenu()">Resources</a>
     <a href="#journey" onclick="closeMenu()">Journey</a>
   </div>
 
   <!-- HERO -->
   <section class="hero" id="hero">
-    <div class="hero-overtitle">Teacher VI · Mathematician · Visionary</div>
+    <div class="hero-overtitle">Teacher VI · Mathematics Educator · EdTech Innovator</div>
     <h1 class="hero-name">
       <span class="line">Sir Orlando V.</span>
       <span class="line">Pasion, Jr.</span>
     </h1>
     <div class="hero-bar"></div>
-    <p class="hero-subtitle">Newly promoted <strong>Teacher VI</strong> at Nancalobasaan National High School — transforming Mathematics education through innovation, technology, and commitment to every Filipino learner.</p>
+    <p class="hero-subtitle"><strong>Teacher VI</strong> at Nancalobasaan National High School — advancing Mathematics education through innovation, technology, and a commitment to every Filipino learner.</p>
     <div class="hero-cta">
-      <a href="#resources" class="btn btn-gold">▸ Open My Files</a>
+      <a href="#resources" class="btn btn-gold">▸ View Resources</a>
       <a href="#about" class="btn btn-ghost">Learn More</a>
     </div>
     <div class="hero-scroll"><span>Scroll</span><div class="scroll-line"></div></div>
@@ -311,7 +315,7 @@
   <section class="sec" id="about">
     <div class="sec-inner">
       <div class="sec-label sr">001 — About</div>
-      <h2 class="sec-title sr sr-d1">The Educator Behind<br>the <em>Innovation</em></h2>
+      <h2 class="sec-title sr sr-d1">Educator, Mentor,<br>and <em>Innovator</em></h2>
       <div class="about-grid">
         <div class="about-portrait sr">
           <div class="monogram">O</div>
@@ -319,16 +323,16 @@
           <div class="name-display">Orlando V. Pasion, Jr.</div>
         </div>
         <div class="about-content sr sr-d2">
-          <p>I am <strong>Sir Orlando V. Pasion, Jr.</strong>, newly promoted <strong>Teacher VI</strong> at Nancalobasaan National High School under DepEd Region I — Ilocos Region. Mathematics is not just my subject; it is my language, my lens, and my legacy.</p>
-          <p>Currently pursuing my <strong>Doctor of Education</strong> in Educational Management at Urdaneta City University, I am preparing for school leadership — building mastery across all five PPSSH domains.</p>
+          <p>I am <strong>Sir Orlando V. Pasion, Jr.</strong>, <strong>Teacher VI</strong> at Nancalobasaan National High School under DepEd Region I — Ilocos Region. Mathematics is the discipline through which I teach problem-solving, confidence, and lifelong learning.</p>
+          <p>Currently pursuing my <strong>Doctor of Education</strong> in Educational Management at Urdaneta City University, I am preparing for school leadership while strengthening my practice across the five PPSSH domains.</p>
           <p>I believe in the fusion of tradition and technology — where chalk meets code, and every student discovers that mathematics is a <strong>bridge to possibility</strong>.</p>
           <div class="about-meta">
             <div><div class="about-meta-label">Position</div><div class="about-meta-value">Teacher VI</div></div>
             <div><div class="about-meta-label">School</div><div class="about-meta-value">Nancalobasaan NHS</div></div>
             <div><div class="about-meta-label">Region</div><div class="about-meta-value">DepEd Region I</div></div>
-            <div><div class="about-meta-label">Graduate Studies</div><div class="about-meta-value">EdD — Urdaneta City U</div></div>
+            <div><div class="about-meta-label">Graduate Studies</div><div class="about-meta-value">EdD, Urdaneta City University</div></div>
             <div><div class="about-meta-label">Specialization</div><div class="about-meta-value">Mathematics</div></div>
-            <div><div class="about-meta-label">NASH Target</div><div class="about-meta-value">School Principal</div></div>
+            <div><div class="about-meta-label">Leadership Goal</div><div class="about-meta-value">School Principal</div></div>
           </div>
         </div>
       </div>
@@ -339,11 +343,11 @@
   <section class="sec" id="expertise">
     <div class="sec-inner">
       <div class="sec-label sr">002 — Expertise</div>
-      <h2 class="sec-title sr sr-d1">Domains of <em>Mastery</em></h2>
+      <h2 class="sec-title sr sr-d1">Professional <em>Strengths</em></h2>
       <p class="sec-desc sr sr-d2">Built on the PPSSH, the MATATAG curriculum, and years of frontline teaching.</p>
       <div class="expertise-grid">
-        <div class="exp-card sr sr-d1"><div class="exp-number">01</div><h3>Advanced Mathematics</h3><p>Grade 8 — Central Tendency to Probability, every lesson engineered for mastery.</p></div>
-        <div class="exp-card sr sr-d2"><div class="exp-number">02</div><h3>Educational Technology</h3><p>Interactive HTML/CSS/JS tools, AI-integrated reviewers, and luxury-themed quiz apps.</p></div>
+        <div class="exp-card sr sr-d1"><div class="exp-number">01</div><h3>Advanced Mathematics</h3><p>Grade 8 — Central Tendency to Probability, with lessons designed to support mastery.</p></div>
+        <div class="exp-card sr sr-d2"><div class="exp-number">02</div><h3>Educational Technology</h3><p>Interactive HTML/CSS/JS tools, AI-integrated reviewers, and polished quiz apps.</p></div>
         <div class="exp-card sr sr-d3"><div class="exp-number">03</div><h3>Curriculum Architecture</h3><p>MATATAG-aligned lesson series with 40+ slide decks, assessments, and TOS grids.</p></div>
         <div class="exp-card sr sr-d4"><div class="exp-number">04</div><h3>Education Policy</h3><p>RA 9155, RA 10533, DO 7 s. 2023, RA 12009, and Philippine education governance.</p></div>
         <div class="exp-card sr sr-d5"><div class="exp-number">05</div><h3>School Leadership</h3><p>NASH preparation across all five PPSSH domains — instructional leadership to strategic planning.</p></div>
@@ -357,111 +361,98 @@
        ============================================================ -->
   <section class="sec hub-section" id="resources">
     <div class="sec-inner">
-      <div class="sec-label sr">003 — My Files</div>
+      <div class="sec-label sr">003 — Resources</div>
       <h2 class="sec-title sr sr-d1">Digital <em>Library</em></h2>
-      <p class="sec-desc sr sr-d2">All my tools and reviewers — one click to open any file.</p>
+      <p class="sec-desc sr sr-d2">All my reviewers, tools, and learning resources — one click to open what you need.</p>
 
       <div class="hub-search-bar sr">
         <span class="hub-search-icon">⌕</span>
-        <input type="text" id="hubSearch" placeholder="Search files... (e.g. nash, obsidian, jade)">
+        <input type="text" id="hubSearch" placeholder="Search resources... (e.g., NASH, mock test, Academy)">
       </div>
 
       <div class="hub-stats sr">
-        <div class="hub-stat"><strong id="hubFileCount">0</strong> files</div>
+        <div class="hub-stat"><strong id="hubResourceCount">0</strong> resources</div>
         <div class="hub-stat"><strong id="hubQuestionCount">0</strong> questions</div>
-        <div class="hub-stat"><strong id="hubCategoryCount">0</strong> categories</div>
+        <div class="hub-stat"><strong id="hubLiveCount">0</strong> live links</div>
       </div>
 
-      <div class="sr hub-category" data-category="nash-series">
-        <div class="hub-cat-header">
-          <div class="hub-cat-title">NASH Reviewer Series</div>
-          <div class="hub-cat-count" id="nashSeriesCount">0 files / 0 questions</div>
-        </div>
+      <div class="sr">
         <div class="hub-grid" id="hubGrid">
 
-          <a href="nash-01.html" target="_blank" class="hub-card" data-category="nash-series" data-questions="20" data-search="nash 01 obsidian majesty q1 20">
-            <div class="hub-card-top"><div class="hub-card-icon">◆</div><div class="hub-card-badge">Live</div></div>
-            <h3>Obsidian Majesty</h3>
-            <div class="hub-card-desc">NASH Reviewer 01 — Interactive quiz with policy-cited explanations.</div>
-            <div class="hub-card-footer"><div class="hub-card-meta"><span>Q1–20</span><span>20 Items</span></div><div class="hub-card-open">Open →</div></div>
-          </a>
-
-          <a href="nash-02.html" target="_blank" class="hub-card" data-category="nash-series" data-questions="20" data-search="nash 02 titanium fortress q21 40">
-            <div class="hub-card-top"><div class="hub-card-icon">⟐</div><div class="hub-card-badge">Live</div></div>
-            <h3>Titanium Fortress</h3>
-            <div class="hub-card-desc">NASH Reviewer 02 — Advanced PPSSH domain coverage.</div>
-            <div class="hub-card-footer"><div class="hub-card-meta"><span>Q21–40</span><span>20 Items</span></div><div class="hub-card-open">Open →</div></div>
-          </a>
-
-          <a href="nash-03.html" target="_blank" class="hub-card" data-category="nash-series" data-questions="20" data-search="nash 03 jade emperor q41 60">
-            <div class="hub-card-top"><div class="hub-card-icon">△</div><div class="hub-card-badge">Live</div></div>
-            <h3>Jade Emperor</h3>
-            <div class="hub-card-desc">NASH Reviewer 03 — Comprehensive coverage with navigation.</div>
-            <div class="hub-card-footer"><div class="hub-card-meta"><span>Q41–60</span><span>20 Items</span></div><div class="hub-card-open">Open →</div></div>
-          </a>
-
-          <a href="nash-04.html" target="_blank" class="hub-card" data-category="nash-series" data-questions="20" data-search="nash 04 aurum prestige q61 80">
-            <div class="hub-card-top"><div class="hub-card-icon">◇</div><div class="hub-card-badge">Live</div></div>
-            <h3>Aurum Prestige</h3>
-            <div class="hub-card-desc">NASH Reviewer 04 — Gold-themed with full explanations.</div>
-            <div class="hub-card-footer"><div class="hub-card-meta"><span>Q61–80</span><span>20 Items</span></div><div class="hub-card-open">Open →</div></div>
-          </a>
-
-          <a href="nash-05.html" target="_blank" class="hub-card" data-category="nash-series" data-questions="20" data-search="nash 05 bourbon dynasty q81 100">
-            <div class="hub-card-top"><div class="hub-card-icon">□</div><div class="hub-card-badge">Live</div></div>
-            <h3>Bourbon Dynasty</h3>
-            <div class="hub-card-desc">NASH Reviewer 05 — Complete PPSSH standard citations.</div>
-            <div class="hub-card-footer"><div class="hub-card-meta"><span>Q81–100</span><span>20 Items</span></div><div class="hub-card-open">Open →</div></div>
-          </a>
-
-          <a href="nash-06.html" target="_blank" class="hub-card" data-category="nash-series" data-questions="20" data-search="nash 06 sapphire sovereign q101 120">
-            <div class="hub-card-top"><div class="hub-card-icon">○</div><div class="hub-card-badge">Live</div></div>
-            <h3>Sapphire Sovereign</h3>
-            <div class="hub-card-desc">NASH Reviewer 06 — Elegant quiz with detailed rationales.</div>
-            <div class="hub-card-footer"><div class="hub-card-meta"><span>Q101–120</span><span>20 Items</span></div><div class="hub-card-open">Open →</div></div>
-          </a>
-
-          <a href="nash-07.html" target="_blank" class="hub-card" data-category="nash-series" data-questions="19" data-search="nash 07 crimson throne q121 139">
-            <div class="hub-card-top"><div class="hub-card-icon">⬡</div><div class="hub-card-badge">Live</div></div>
-            <h3>Crimson Throne</h3>
-            <div class="hub-card-desc">NASH Reviewer 07 — Final set, 139-question bank complete.</div>
-            <div class="hub-card-footer"><div class="hub-card-meta"><span>Q121–139</span><span>19 Items</span></div><div class="hub-card-open">Open →</div></div>
-          </a>
-
-          <a href="may-2026-mock-test-reviewer.html" target="_blank" class="hub-card" data-category="nash-series" data-questions="140" data-search="may 2026 mock test nash reviewer official google forms answer key 140 items">
-            <div class="hub-card-top"><div class="hub-card-icon">✦</div><div class="hub-card-badge">Live</div></div>
+          <a href="may-2026-mock-test-reviewer.html" target="_blank" class="hub-card is-featured" data-questions="140" data-search="may 2026 mock test nash reviewer answer checks revision notes 140 items">
+            <div class="hub-card-top"><div class="hub-card-icon">✦</div><div class="hub-card-badge">New</div></div>
             <h3>May 2026 Mock Test Reviewer</h3>
-            <div class="hub-card-desc">Exact-question NASH reviewer with the official Google Forms answer key, explanations, and answer-change audit.</div>
+            <div class="hub-card-desc">May 2026 NASH mock-test reviewer with explanations, answer checks, and revision notes.</div>
             <div class="hub-card-footer"><div class="hub-card-meta"><span>May 2026</span><span>140 Items</span></div><div class="hub-card-open">Open →</div></div>
           </a>
 
+          <a href="https://orlandopasion000.github.io/nash-1" target="_blank" class="hub-card" data-questions="50" data-search="nash practice quiz ppssh all domains scenario">
+            <div class="hub-card-top"><div class="hub-card-icon">⚡</div><div class="hub-card-badge">Live</div></div>
+            <h3>NASH Practice Quiz App</h3>
+            <div class="hub-card-desc">Full PPSSH reviewer — 50 scenario-based questions across all five domains.</div>
+            <div class="hub-card-footer"><div class="hub-card-meta"><span>All Domains</span><span>50 Items</span></div><div class="hub-card-open">Open →</div></div>
+          </a>
+
+          <a href="nash-01.html" target="_blank" class="hub-card" data-questions="20" data-search="nash 01 obsidian majesty q1 20">
+            <div class="hub-card-top"><div class="hub-card-icon">◆</div><div class="hub-card-badge">Live</div></div>
+            <h3>NASH Reviewer 01: Obsidian Majesty</h3>
+            <div class="hub-card-desc">Interactive quiz with policy-cited explanations.</div>
+            <div class="hub-card-footer"><div class="hub-card-meta"><span>Q1–20</span><span>20 Items</span></div><div class="hub-card-open">Open →</div></div>
+          </a>
+
+          <a href="nash-02.html" target="_blank" class="hub-card" data-questions="20" data-search="nash 02 titanium fortress q21 40">
+            <div class="hub-card-top"><div class="hub-card-icon">⟐</div><div class="hub-card-badge">Live</div></div>
+            <h3>NASH Reviewer 02: Titanium Fortress</h3>
+            <div class="hub-card-desc">Advanced PPSSH domain coverage.</div>
+            <div class="hub-card-footer"><div class="hub-card-meta"><span>Q21–40</span><span>20 Items</span></div><div class="hub-card-open">Open →</div></div>
+          </a>
+
+          <a href="nash-03.html" target="_blank" class="hub-card" data-questions="20" data-search="nash 03 jade emperor q41 60">
+            <div class="hub-card-top"><div class="hub-card-icon">△</div><div class="hub-card-badge">Live</div></div>
+            <h3>NASH Reviewer 03: Jade Emperor</h3>
+            <div class="hub-card-desc">Comprehensive coverage with navigation.</div>
+            <div class="hub-card-footer"><div class="hub-card-meta"><span>Q41–60</span><span>20 Items</span></div><div class="hub-card-open">Open →</div></div>
+          </a>
+
+          <a href="nash-04.html" target="_blank" class="hub-card" data-questions="20" data-search="nash 04 aurum prestige q61 80">
+            <div class="hub-card-top"><div class="hub-card-icon">◇</div><div class="hub-card-badge">Live</div></div>
+            <h3>NASH Reviewer 04: Aurum Prestige</h3>
+            <div class="hub-card-desc">Gold-themed reviewer with full explanations.</div>
+            <div class="hub-card-footer"><div class="hub-card-meta"><span>Q61–80</span><span>20 Items</span></div><div class="hub-card-open">Open →</div></div>
+          </a>
+
+          <a href="nash-05.html" target="_blank" class="hub-card" data-questions="20" data-search="nash 05 bourbon dynasty q81 100">
+            <div class="hub-card-top"><div class="hub-card-icon">□</div><div class="hub-card-badge">Live</div></div>
+            <h3>NASH Reviewer 05: Bourbon Dynasty</h3>
+            <div class="hub-card-desc">Complete PPSSH standard citations.</div>
+            <div class="hub-card-footer"><div class="hub-card-meta"><span>Q81–100</span><span>20 Items</span></div><div class="hub-card-open">Open →</div></div>
+          </a>
+
+          <a href="nash-06.html" target="_blank" class="hub-card" data-questions="20" data-search="nash 06 sapphire sovereign q101 120">
+            <div class="hub-card-top"><div class="hub-card-icon">○</div><div class="hub-card-badge">Live</div></div>
+            <h3>NASH Reviewer 06: Sapphire Sovereign</h3>
+            <div class="hub-card-desc">Elegant quiz with detailed rationales.</div>
+            <div class="hub-card-footer"><div class="hub-card-meta"><span>Q101–120</span><span>20 Items</span></div><div class="hub-card-open">Open →</div></div>
+          </a>
+
+          <a href="nash-07.html" target="_blank" class="hub-card" data-questions="19" data-search="nash 07 crimson throne q121 139">
+            <div class="hub-card-top"><div class="hub-card-icon">⬡</div><div class="hub-card-badge">Live</div></div>
+            <h3>NASH Reviewer 07: Crimson Throne</h3>
+            <div class="hub-card-desc">Final set completing the 139-question bank.</div>
+            <div class="hub-card-footer"><div class="hub-card-meta"><span>Q121–139</span><span>19 Items</span></div><div class="hub-card-open">Open →</div></div>
+          </a>
+
+          <a href="anthropic-academy-orlandopremium.html" target="_blank" class="hub-card" data-questions="0" data-search="anthropic academy claude courses ai fluency developer certificate free">
+            <div class="hub-card-top"><div class="hub-card-icon">AI</div><div class="hub-card-badge">Live</div></div>
+            <h3>Anthropic Academy</h3>
+            <div class="hub-card-desc">13 free Claude courses with certificates — AI Fluency, Developer Deep-Dives, and Cloud & Enterprise tracks.</div>
+            <div class="hub-card-footer"><div class="hub-card-meta"><span>3 Tracks</span><span>13 Courses</span></div><div class="hub-card-open">Open →</div></div>
+          </a>
+
         </div>
       </div>
 
-      <div class="sr hub-category" data-category="additional">
-        <div class="hub-cat-header">
-          <div class="hub-cat-title">Additional Live Resources</div>
-          <div class="hub-cat-count" id="additionalResourceCount">0 resources / 0 questions</div>
-        </div>
-        <div class="hub-grid" id="additionalGrid">
-
-          <a href="https://orlandopasion000.github.io/nash-1" target="_blank" class="hub-card" data-category="additional" data-questions="50" data-search="nash practice quiz ppssh all domains scenario">
-  <div class="hub-card-top"><div class="hub-card-icon">⚡</div><div class="hub-card-badge">Live</div></div>
-  <h3>NASH Practice Quiz App</h3>
-  <div class="hub-card-desc">Full PPSSH reviewer — 50 scenario-based questions across all five domains.</div>
-  <div class="hub-card-footer"><div class="hub-card-meta"><span>All Domains</span><span>50 Items</span></div><div class="hub-card-open">Open →</div></div>
-</a>
-          <a href="anthropic-academy-orlandopremium.html" target="_blank" class="hub-card" data-category="additional" data-questions="0" data-search="anthropic academy claude courses ai fluency developer certificate free">
-  <div class="hub-card-top"><div class="hub-card-icon">🤖</div><div class="hub-card-badge">Live</div></div>
-  <h3>Anthropic Academy</h3>
-  <div class="hub-card-desc">13 free Claude courses with certificates — AI Fluency, Developer Deep-Dives, and Cloud & Enterprise tracks.</div>
-  <div class="hub-card-footer"><div class="hub-card-meta"><span>3 Tracks</span><span>13 Courses</span></div><div class="hub-card-open">Open →</div></div>
-</a>
-
-        </div>
-      </div>
-
-      <div class="hub-empty" id="hubEmpty">No files match your search.</div>
+      <div class="hub-empty" id="hubEmpty">No resources match your search.</div>
     </div>
   </section>
 
@@ -469,7 +460,7 @@
   <section class="philosophy">
     <div class="sr">
       <div class="phil-mark">"</div>
-      <p class="phil-quote">A great teacher does not simply deliver lessons — he builds futures, one student at a time, with patience as his foundation and innovation as his compass.</p>
+      <p class="phil-quote">A great teacher does not simply deliver lessons — they build futures, one student at a time, with patience as their foundation and innovation as their compass.</p>
       <div class="phil-line"></div>
       <div class="phil-author">Sir Orlando V. Pasion, Jr.</div>
     </div>
@@ -483,7 +474,7 @@
       <div class="timeline">
         <div class="tl-item sr"><div class="tl-dot"></div><div class="tl-year">2026 — Present</div><div class="tl-title">Promoted to Teacher VI</div><div class="tl-desc">Recognized for excellence in mathematics instruction and educational technology integration.</div></div>
         <div class="tl-item sr"><div class="tl-dot"></div><div class="tl-year">Ongoing</div><div class="tl-title">EdD — Educational Management</div><div class="tl-desc">Doctoral studies at Urdaneta City University — governance, instructional leadership, school-based management.</div></div>
-        <div class="tl-item sr"><div class="tl-dot"></div><div class="tl-year">2026</div><div class="tl-title">NASH Examination — Batch 2</div><div class="tl-desc">All five PPSSH domains targeting School Principal qualification.</div></div>
+        <div class="tl-item sr"><div class="tl-dot"></div><div class="tl-year">2026</div><div class="tl-title">NASH Examination — Batch 2</div><div class="tl-desc">Preparation across all five PPSSH domains for School Principal qualification.</div></div>
         <div class="tl-item sr"><div class="tl-dot"></div><div class="tl-year">Continuous</div><div class="tl-title">EdTech Innovation</div><div class="tl-desc">Interactive classroom tools and AI-powered review systems for Filipino students.</div></div>
         <div class="tl-item sr"><div class="tl-dot"></div><div class="tl-year">Vision</div><div class="tl-title">School Leadership</div><div class="tl-desc">Leading a school where technology and community partnerships transform education.</div></div>
       </div>
@@ -493,8 +484,8 @@
   <!-- FOOTER -->
   <footer class="footer">
     <div class="footer-name">Sir Orlando V. Pasion, Jr.</div>
-    <div class="footer-sub">Teacher VI · Mathematician · Visionary</div>
-    <div class="footer-copy">&copy; 2026 Sir Orlando V. Pasion, Jr. — Handcrafted with HTML, CSS &amp; JavaScript</div>
+    <div class="footer-sub">Teacher VI · Mathematics Educator · EdTech Innovator</div>
+    <div class="footer-copy">&copy; 2026 Sir Orlando V. Pasion, Jr. — Designed and developed with HTML, CSS, and JavaScript</div>
   </footer>
 
   <button class="to-top" id="toTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
@@ -546,17 +537,9 @@
     });
 
     // RESOURCE METRICS
-    function plural(value, singular, pluralText) {
-      return value + ' ' + (value === 1 ? singular : pluralText);
-    }
-
     function cardQuestions(card) {
       var value = parseInt(card.getAttribute('data-questions') || '0', 10);
       return isNaN(value) ? 0 : value;
-    }
-
-    function cardsByCategory(category) {
-      return Array.prototype.slice.call(document.querySelectorAll('.hub-card[data-category="' + category + '"]'));
     }
 
     function questionTotal(cards) {
@@ -565,20 +548,16 @@
       }, 0);
     }
 
-    function updateHubMetrics() {
-      var cards = Array.prototype.slice.call(document.querySelectorAll('.hub-card'));
-      var categories = Array.prototype.slice.call(document.querySelectorAll('.hub-category'));
-      var nashCards = cardsByCategory('nash-series');
-      var additionalCards = cardsByCategory('additional');
+    function updateHubMetrics(activeCards) {
+      var cards = activeCards || Array.prototype.slice.call(document.querySelectorAll('.hub-card'));
       var totalQuestions = questionTotal(cards);
-      var nashQuestions = questionTotal(nashCards);
-      var additionalQuestions = questionTotal(additionalCards);
+      var liveLinks = cards.filter(function(card) {
+        return !!card.getAttribute('href');
+      }).length;
 
-      document.getElementById('hubFileCount').textContent = cards.length;
+      document.getElementById('hubResourceCount').textContent = cards.length;
       document.getElementById('hubQuestionCount').textContent = totalQuestions;
-      document.getElementById('hubCategoryCount').textContent = categories.length;
-      document.getElementById('nashSeriesCount').textContent = plural(nashCards.length, 'file', 'files') + ' / ' + plural(nashQuestions, 'question', 'questions');
-      document.getElementById('additionalResourceCount').textContent = plural(additionalCards.length, 'resource', 'resources') + ' / ' + plural(additionalQuestions, 'question', 'questions');
+      document.getElementById('hubLiveCount').textContent = liveLinks;
     }
 
     updateHubMetrics();
@@ -588,22 +567,18 @@
       var query = this.value.toLowerCase().trim();
       var cards = document.querySelectorAll('.hub-card');
       var visible = 0;
+      var visibleCards = [];
       cards.forEach(function(card) {
         var searchText = (card.getAttribute('data-search') || '') + ' ' + card.textContent.toLowerCase();
         if (!query || searchText.indexOf(query) !== -1) {
           card.style.display = '';
           visible++;
+          visibleCards.push(card);
         } else {
           card.style.display = 'none';
         }
       });
-      document.querySelectorAll('.hub-category').forEach(function(category) {
-        var categoryCards = category.querySelectorAll('.hub-card');
-        var categoryVisible = Array.prototype.some.call(categoryCards, function(card) {
-          return card.style.display !== 'none';
-        });
-        category.style.display = categoryVisible ? '' : 'none';
-      });
+      updateHubMetrics(visibleCards);
       document.getElementById('hubEmpty').style.display = visible === 0 ? 'block' : 'none';
     });
   </script>
