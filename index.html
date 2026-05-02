@@ -182,6 +182,7 @@
     .hub-cat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 14px; border-bottom: 1px solid var(--white-faint); }
     .hub-cat-title { font-family: var(--font-mono); font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); }
     .hub-cat-count { font-family: var(--font-mono); font-size: 11px; color: var(--white-dim); }
+    .hub-category + .hub-category { margin-top: 34px; }
 
     .hub-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
 
@@ -366,81 +367,91 @@
       </div>
 
       <div class="hub-stats sr">
-        <div class="hub-stat"><strong>10</strong> files</div>
-        <div class="hub-stat"><strong>329</strong> questions</div>
-        <div class="hub-stat"><strong>10</strong> themes</div>
+        <div class="hub-stat"><strong id="hubFileCount">0</strong> files</div>
+        <div class="hub-stat"><strong id="hubQuestionCount">0</strong> questions</div>
+        <div class="hub-stat"><strong id="hubCategoryCount">0</strong> categories</div>
       </div>
 
-      <div class="sr">
+      <div class="sr hub-category" data-category="nash-series">
         <div class="hub-cat-header">
           <div class="hub-cat-title">NASH Reviewer Series</div>
-          <div class="hub-cat-count">8 files · 279 questions</div>
+          <div class="hub-cat-count" id="nashSeriesCount">0 files / 0 questions</div>
         </div>
         <div class="hub-grid" id="hubGrid">
 
-          <a href="nash-01.html" target="_blank" class="hub-card" data-search="nash 01 obsidian majesty q1 20">
+          <a href="nash-01.html" target="_blank" class="hub-card" data-category="nash-series" data-questions="20" data-search="nash 01 obsidian majesty q1 20">
             <div class="hub-card-top"><div class="hub-card-icon">◆</div><div class="hub-card-badge">Live</div></div>
             <h3>Obsidian Majesty</h3>
             <div class="hub-card-desc">NASH Reviewer 01 — Interactive quiz with policy-cited explanations.</div>
             <div class="hub-card-footer"><div class="hub-card-meta"><span>Q1–20</span><span>20 Items</span></div><div class="hub-card-open">Open →</div></div>
           </a>
 
-          <a href="nash-02.html" target="_blank" class="hub-card" data-search="nash 02 titanium fortress q21 40">
+          <a href="nash-02.html" target="_blank" class="hub-card" data-category="nash-series" data-questions="20" data-search="nash 02 titanium fortress q21 40">
             <div class="hub-card-top"><div class="hub-card-icon">⟐</div><div class="hub-card-badge">Live</div></div>
             <h3>Titanium Fortress</h3>
             <div class="hub-card-desc">NASH Reviewer 02 — Advanced PPSSH domain coverage.</div>
             <div class="hub-card-footer"><div class="hub-card-meta"><span>Q21–40</span><span>20 Items</span></div><div class="hub-card-open">Open →</div></div>
           </a>
 
-          <a href="nash-03.html" target="_blank" class="hub-card" data-search="nash 03 jade emperor q41 60">
+          <a href="nash-03.html" target="_blank" class="hub-card" data-category="nash-series" data-questions="20" data-search="nash 03 jade emperor q41 60">
             <div class="hub-card-top"><div class="hub-card-icon">△</div><div class="hub-card-badge">Live</div></div>
             <h3>Jade Emperor</h3>
             <div class="hub-card-desc">NASH Reviewer 03 — Comprehensive coverage with navigation.</div>
             <div class="hub-card-footer"><div class="hub-card-meta"><span>Q41–60</span><span>20 Items</span></div><div class="hub-card-open">Open →</div></div>
           </a>
 
-          <a href="nash-04.html" target="_blank" class="hub-card" data-search="nash 04 aurum prestige q61 80">
+          <a href="nash-04.html" target="_blank" class="hub-card" data-category="nash-series" data-questions="20" data-search="nash 04 aurum prestige q61 80">
             <div class="hub-card-top"><div class="hub-card-icon">◇</div><div class="hub-card-badge">Live</div></div>
             <h3>Aurum Prestige</h3>
             <div class="hub-card-desc">NASH Reviewer 04 — Gold-themed with full explanations.</div>
             <div class="hub-card-footer"><div class="hub-card-meta"><span>Q61–80</span><span>20 Items</span></div><div class="hub-card-open">Open →</div></div>
           </a>
 
-          <a href="nash-05.html" target="_blank" class="hub-card" data-search="nash 05 bourbon dynasty q81 100">
+          <a href="nash-05.html" target="_blank" class="hub-card" data-category="nash-series" data-questions="20" data-search="nash 05 bourbon dynasty q81 100">
             <div class="hub-card-top"><div class="hub-card-icon">□</div><div class="hub-card-badge">Live</div></div>
             <h3>Bourbon Dynasty</h3>
             <div class="hub-card-desc">NASH Reviewer 05 — Complete PPSSH standard citations.</div>
             <div class="hub-card-footer"><div class="hub-card-meta"><span>Q81–100</span><span>20 Items</span></div><div class="hub-card-open">Open →</div></div>
           </a>
 
-          <a href="nash-06.html" target="_blank" class="hub-card" data-search="nash 06 sapphire sovereign q101 120">
+          <a href="nash-06.html" target="_blank" class="hub-card" data-category="nash-series" data-questions="20" data-search="nash 06 sapphire sovereign q101 120">
             <div class="hub-card-top"><div class="hub-card-icon">○</div><div class="hub-card-badge">Live</div></div>
             <h3>Sapphire Sovereign</h3>
             <div class="hub-card-desc">NASH Reviewer 06 — Elegant quiz with detailed rationales.</div>
             <div class="hub-card-footer"><div class="hub-card-meta"><span>Q101–120</span><span>20 Items</span></div><div class="hub-card-open">Open →</div></div>
           </a>
 
-          <a href="nash-07.html" target="_blank" class="hub-card" data-search="nash 07 crimson throne q121 139">
+          <a href="nash-07.html" target="_blank" class="hub-card" data-category="nash-series" data-questions="19" data-search="nash 07 crimson throne q121 139">
             <div class="hub-card-top"><div class="hub-card-icon">⬡</div><div class="hub-card-badge">Live</div></div>
             <h3>Crimson Throne</h3>
             <div class="hub-card-desc">NASH Reviewer 07 — Final set, 139-question bank complete.</div>
             <div class="hub-card-footer"><div class="hub-card-meta"><span>Q121–139</span><span>19 Items</span></div><div class="hub-card-open">Open →</div></div>
           </a>
 
-          <a href="may-2026-mock-test-reviewer.html" target="_blank" class="hub-card" data-search="may 2026 mock test nash reviewer official google forms answer key 140 items">
+          <a href="may-2026-mock-test-reviewer.html" target="_blank" class="hub-card" data-category="nash-series" data-questions="140" data-search="may 2026 mock test nash reviewer official google forms answer key 140 items">
             <div class="hub-card-top"><div class="hub-card-icon">✦</div><div class="hub-card-badge">Live</div></div>
             <h3>May 2026 Mock Test Reviewer</h3>
             <div class="hub-card-desc">Exact-question NASH reviewer with the official Google Forms answer key, explanations, and answer-change audit.</div>
             <div class="hub-card-footer"><div class="hub-card-meta"><span>May 2026</span><span>140 Items</span></div><div class="hub-card-open">Open →</div></div>
           </a>
 
-          <a href="https://orlandopasion000.github.io/nash-1" target="_blank" class="hub-card" data-search="nash practice quiz ppssh all domains scenario">
+        </div>
+      </div>
+
+      <div class="sr hub-category" data-category="additional">
+        <div class="hub-cat-header">
+          <div class="hub-cat-title">Additional Live Resources</div>
+          <div class="hub-cat-count" id="additionalResourceCount">0 resources / 0 questions</div>
+        </div>
+        <div class="hub-grid" id="additionalGrid">
+
+          <a href="https://orlandopasion000.github.io/nash-1" target="_blank" class="hub-card" data-category="additional" data-questions="50" data-search="nash practice quiz ppssh all domains scenario">
   <div class="hub-card-top"><div class="hub-card-icon">⚡</div><div class="hub-card-badge">Live</div></div>
   <h3>NASH Practice Quiz App</h3>
   <div class="hub-card-desc">Full PPSSH reviewer — 50 scenario-based questions across all five domains.</div>
   <div class="hub-card-footer"><div class="hub-card-meta"><span>All Domains</span><span>50 Items</span></div><div class="hub-card-open">Open →</div></div>
 </a>
-          <a href="anthropic-academy-orlandopremium.html" target="_blank" class="hub-card" data-search="anthropic academy claude courses ai fluency developer certificate free">
+          <a href="anthropic-academy-orlandopremium.html" target="_blank" class="hub-card" data-category="additional" data-questions="0" data-search="anthropic academy claude courses ai fluency developer certificate free">
   <div class="hub-card-top"><div class="hub-card-icon">🤖</div><div class="hub-card-badge">Live</div></div>
   <h3>Anthropic Academy</h3>
   <div class="hub-card-desc">13 free Claude courses with certificates — AI Fluency, Developer Deep-Dives, and Cloud & Enterprise tracks.</div>
@@ -448,8 +459,9 @@
 </a>
 
         </div>
-        <div class="hub-empty" id="hubEmpty">No files match your search.</div>
       </div>
+
+      <div class="hub-empty" id="hubEmpty">No files match your search.</div>
     </div>
   </section>
 
@@ -533,10 +545,48 @@
       document.getElementById('toTop').classList.toggle('show', window.scrollY > 500);
     });
 
+    // RESOURCE METRICS
+    function plural(value, singular, pluralText) {
+      return value + ' ' + (value === 1 ? singular : pluralText);
+    }
+
+    function cardQuestions(card) {
+      var value = parseInt(card.getAttribute('data-questions') || '0', 10);
+      return isNaN(value) ? 0 : value;
+    }
+
+    function cardsByCategory(category) {
+      return Array.prototype.slice.call(document.querySelectorAll('.hub-card[data-category="' + category + '"]'));
+    }
+
+    function questionTotal(cards) {
+      return cards.reduce(function(total, card) {
+        return total + cardQuestions(card);
+      }, 0);
+    }
+
+    function updateHubMetrics() {
+      var cards = Array.prototype.slice.call(document.querySelectorAll('.hub-card'));
+      var categories = Array.prototype.slice.call(document.querySelectorAll('.hub-category'));
+      var nashCards = cardsByCategory('nash-series');
+      var additionalCards = cardsByCategory('additional');
+      var totalQuestions = questionTotal(cards);
+      var nashQuestions = questionTotal(nashCards);
+      var additionalQuestions = questionTotal(additionalCards);
+
+      document.getElementById('hubFileCount').textContent = cards.length;
+      document.getElementById('hubQuestionCount').textContent = totalQuestions;
+      document.getElementById('hubCategoryCount').textContent = categories.length;
+      document.getElementById('nashSeriesCount').textContent = plural(nashCards.length, 'file', 'files') + ' / ' + plural(nashQuestions, 'question', 'questions');
+      document.getElementById('additionalResourceCount').textContent = plural(additionalCards.length, 'resource', 'resources') + ' / ' + plural(additionalQuestions, 'question', 'questions');
+    }
+
+    updateHubMetrics();
+
     // SEARCH
     document.getElementById('hubSearch').addEventListener('input', function() {
       var query = this.value.toLowerCase().trim();
-      var cards = document.querySelectorAll('#hubGrid .hub-card');
+      var cards = document.querySelectorAll('.hub-card');
       var visible = 0;
       cards.forEach(function(card) {
         var searchText = (card.getAttribute('data-search') || '') + ' ' + card.textContent.toLowerCase();
@@ -546,6 +596,13 @@
         } else {
           card.style.display = 'none';
         }
+      });
+      document.querySelectorAll('.hub-category').forEach(function(category) {
+        var categoryCards = category.querySelectorAll('.hub-card');
+        var categoryVisible = Array.prototype.some.call(categoryCards, function(card) {
+          return card.style.display !== 'none';
+        });
+        category.style.display = categoryVisible ? '' : 'none';
       });
       document.getElementById('hubEmpty').style.display = visible === 0 ? 'block' : 'none';
     });
