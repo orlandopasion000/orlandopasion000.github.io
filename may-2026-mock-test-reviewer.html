@@ -1111,6 +1111,215 @@ function renderChoiceExplanations(q, correctChoice) {
     .join("");
   return wrongs || "<p>This item is currently unscored pending verification.</p>";
 }
+function answerTitle(correctDisplayLabel, correctChoice) {
+  if (!correctChoice) return "Why the answer needs verification";
+  const answer = cleanText(correctChoice.text);
+  return answer.length <= 55
+    ? `Why ${correctDisplayLabel} (${answer}) is the correct answer`
+    : `Why ${correctDisplayLabel} is the correct answer`;
+}
+function explanationProfile(q, correctChoice) {
+  const source = `${q.question} ${q.legalBasis} ${correctChoice ? correctChoice.text : ""}`.toLowerCase();
+  const answer = correctChoice ? cleanText(correctChoice.text) : "the verified answer";
+  const legal = getLegalProfile(q, correctChoice);
+  if (/dropout|sardo|student-at-risk|enrollment dropout|enrolment dropout|retention/.test(source) && /access/.test(answer.toLowerCase())) {
+    return {
+      why: "The school head is responding to dropout and SARDO, so the issue is whether learners remain in school. Access covers enrollment, participation, retention, and completion; a 5% dropout is an Access problem before it is a teaching, governance, or operations problem.",
+      policy: "LIS-generated data is used to monitor learner participation and retention. Meeting the School-Community Planning Team and the SARDO Project Team turns the data into a targeted intervention to keep learners in the school system.",
+      rule: "When the stem is about dropout, non-participation, SARDO, enrollment, retention, or learners leaving school, the key result area is Access."
+    };
+  }
+  if (/ict|information and communication technology|learner information system|learners information system|\blis\b|\bebeis\b|\bpnpki\b|sf10|data privacy|social media|digital signature|deped email/.test(source)) {
+    return {
+      why: "The correct answer keeps only ICT practices that are official, secure, and appropriate for school data. LIS, PNPKI, and EBEIS fit because they use authorized systems; public posting and ordinary email transmission of sensitive learner records do not.",
+      policy: "DepEd data systems support efficient school management, but RA 10173 requires learner information to remain protected. Effective ICT use is not just using technology; it is using the right system for the right kind of data.",
+      rule: "For ICT items involving learner records, ask three questions: Is it official? Is it secure? Does it protect confidentiality? If any answer is no, exclude it."
+    };
+  }
+  if (/professional networking|professional networks|domain 4|developing self and others/.test(source)) {
+    return {
+      why: `${answer} is correct because the selected practices actually build professional growth. Benchmarking, professional connections, and career progression improve leadership practice; travel and sponsorship are only side benefits or resource matters.`,
+      policy: "PPSSH Domain 4 focuses on developing self and others. Professional networking should strengthen knowledge, skills, reflection, collaboration, and leadership growth.",
+      rule: "For professional-networking items, choose the options that develop professional practice, not the options that merely describe perks, travel, or funding."
+    };
+  }
+  if (/conduct award|core values|always observed|awards and recognition/.test(source)) {
+    return {
+      why: `${answer} is correct because conduct awards are based on eligibility, discipline record, and consistent demonstration of DepEd core values. Ratings, absence of serious sanctions, and AO marks are evidence; nomination, rank, and residency are not enough.`,
+      policy: "DepEd Order No. 36, s. 2016 makes recognition evidence-based. Conduct is judged through documented core-values behavior, not popularity or academic ranking.",
+      rule: "For conduct-award items, look for core-values evidence and official eligibility requirements. Do not treat grades, rank, or nomination as substitutes for conduct."
+    };
+  }
+  if (/classroom assessment|interim assessment|grading|mean percentage score|remediation/.test(source)) {
+    return {
+      why: `${answer} is correct because the action uses assessment evidence to understand learner needs and improve instruction. The focus is not just recording scores; it is using results to guide support.`,
+      policy: "DepEd assessment policy treats assessment as evidence for teaching decisions, remediation, monitoring, and learner progress.",
+      rule: "When the stem gives assessment data, choose the response that diagnoses the learning gap and leads to instructional support."
+    };
+  }
+  if (/school-based management|sbm|school improvement plan|sip|annual implementation plan|aip|swot|stakeholder|community|partnership/.test(source)) {
+    return {
+      why: `${answer} is correct because it connects the school problem to shared planning, stakeholder participation, evidence, implementation, and monitoring.`,
+      policy: "SBM and SIP policies expect schools to use data, involve stakeholders, document decisions, assign responsibilities, and improve based on results.",
+      rule: "For SBM or SIP items, choose the action that links evidence, participation, implementation, monitoring, and adjustment."
+    };
+  }
+  if (/child protection|bullying|corporal punishment|children's rights|positive discipline|hazing/.test(source)) {
+    return {
+      why: `${answer} is correct because it protects learners and addresses the problem through a rights-based, preventive, and properly coordinated response.`,
+      policy: "Child-protection policy requires schools to prevent abuse, bullying, violence, discrimination, and harmful discipline while using positive interventions.",
+      rule: "For child-protection items, reject responses that punish, shame, exclude, or skip the proper protective process."
+    };
+  }
+  if (/sped|lsen|lwd|learners with disabilities|inclusive education|resource room|visual impairment/.test(source)) {
+    return {
+      why: `${answer} is correct because it gives the learner concrete support instead of delaying, excluding, or shifting responsibility to the family.`,
+      policy: "Inclusive education requires assessment, reasonable support, appropriate materials, trained personnel, and coordination so learners can access learning.",
+      rule: "For inclusion items, choose the answer that removes the barrier to learning."
+    };
+  }
+  if (/financial|mooe|coa|inventory|property|procurement|fund|cash|disbursement|condemned textbooks|disposal/.test(source)) {
+    return {
+      why: `${answer} is correct because it keeps public funds or property documented, authorized, and auditable.`,
+      policy: "Government resource-management rules require proper authority, inventory, valuation, procurement, liquidation, or disposal procedures.",
+      rule: "For funds or property items, choose the answer with documentation, authority, and accountability."
+    };
+  }
+  if (/curriculum|k to 12|learning standards|competenc|pedagogy|teaching strategies|senior high school|shs|career guidance|work immersion|track|strand/.test(source)) {
+    return {
+      why: `${answer} is correct because it aligns the school action with the learning standard, competency, learner need, or career-development purpose in the stem.`,
+      policy: "Curriculum policy requires alignment among competencies, instruction, assessment, learner support, and intended learning outcomes.",
+      rule: "For curriculum items, choose the option that directly supports the competency or learner outcome being tested."
+    };
+  }
+  return {
+    why: `${answer} is correct because it directly addresses ${taskFocus(q)} within the policy context of the item.`,
+    policy: `${q.legalBasis} sets the boundary for the answer. The choice must match the official action, criterion, process, or safeguard required by the stem.`,
+    rule: `Read the last question carefully, identify the policy issue, then choose the option that solves ${taskFocus(q)} without changing the problem.`
+  };
+}
+function kraWeakness(choiceText, correctText) {
+  const choice = cleanText(choiceText).toLowerCase();
+  const correct = cleanText(correctText).toLowerCase();
+  const access = "Access is about enrollment, participation, retention, completion, and keeping learners in school.";
+  const quality = "Quality is about learning outcomes, achievement, instruction, assessment, and teaching effectiveness.";
+  const governance = "Governance is about leadership, accountability, stakeholder processes, transparency, and decision-making systems.";
+  const operations = "Operations is about managing resources, facilities, records, schedules, logistics, and day-to-day school systems.";
+  if (correct === "access") {
+    if (choice === "quality") return `${quality} The stem is not mainly about learning results; it is about learners dropping out or staying in school.`;
+    if (choice === "governance") return `${governance} The meeting process involves governance, but the purpose of the action is to solve dropout, so the focus remains Access.`;
+    if (choice === "operations") return `${operations} The dropout problem is not primarily a facility, resource, or logistics issue.`;
+  }
+  if (correct === "quality") {
+    if (choice === "access") return `${access} The stem is not mainly about getting learners into school; it is about improving what they learn.`;
+    if (choice === "governance") return `${governance} Leadership may support the work, but the focus is learner achievement or instructional effectiveness.`;
+    if (choice === "operations") return `${operations} Resources may matter, but the item is testing learning quality.`;
+  }
+  if (correct === "governance") {
+    if (choice === "access") return `${access} The stem is not mainly about learner entry or retention.`;
+    if (choice === "quality") return `${quality} The item is more about leadership and accountability than classroom results.`;
+    if (choice === "operations") return `${operations} The action is not mainly about logistics or resource handling.`;
+  }
+  if (correct === "operations") {
+    if (choice === "access") return `${access} The item is not mainly about participation or retention.`;
+    if (choice === "quality") return `${quality} The item is not mainly about instruction or learner achievement.`;
+    if (choice === "governance") return `${governance} Governance may frame the work, but the specific task is operational management.`;
+  }
+  return "";
+}
+function conciseNonRomanWeakness(q, choice, correctChoice) {
+  if (!correctChoice) return "This choice cannot be verified until the answer key is confirmed.";
+  const kra = kraWeakness(choice.text, correctChoice.text);
+  if (kra) return kra;
+  const lower = cleanText(choice.text).toLowerCase();
+  const source = `${q.question} ${q.legalBasis} ${correctChoice.text}`.toLowerCase();
+  if (/dropout|sardo|retention/.test(source) && lower !== "access") return "This choice names a school function, but it does not name the real problem: learners are leaving or at risk of leaving school.";
+  if (/ict|data privacy|sf10|social media|pnpki|ebeis|lis/.test(source)) {
+    if (/social media|publicly/.test(lower)) return "This uses technology, but it violates confidentiality because learner academic standing should not be posted publicly.";
+    if (/sf10|email|transfer credentials/.test(lower)) return "This uses an official email account, but SF10 and transfer credentials need a secure, traceable records-transfer process.";
+  }
+  return shortText(nonRomanChoiceFeedback(q, choice, correctChoice), 240);
+}
+function conciseStatementReason(q, key, text, included) {
+  const analysis = statementAnalysis(q, key, text, included);
+  const value = included ? analysis.contribution : analysis.mistake;
+  return shortText(value.replace(new RegExp(`^${key}\\s*-?\\s*`, "i"), ""), 220);
+}
+function renderStatementCheck(q, correctChoice) {
+  const statements = getRomanStatements(q.question);
+  const correctSet = parseRomanSet(correctChoice ? correctChoice.text : "");
+  if (!correctSet.length || !Object.keys(statements).length) return "";
+  const rows = ROMAN_ORDER
+    .filter(key => statements[key])
+    .map(key => {
+      const included = correctSet.includes(key);
+      const verdict = included ? "Include" : "Exclude";
+      return `<li><b>${esc(verdict)} ${esc(key)}.</b> ${esc(statements[key])}<br><span>${esc(conciseStatementReason(q, key, statements[key], included))}</span></li>`;
+    })
+    .join("");
+  return `<div class="explainBlock"><h4>Statement check</h4><ul class="explainList">${rows}</ul></div>`;
+}
+function conciseRomanWeakness(q, choice, correctChoice) {
+  const statements = getRomanStatements(q.question);
+  const correctSet = parseRomanSet(correctChoice ? correctChoice.text : "");
+  const choiceSet = parseRomanSet(choice.text);
+  const correctSequence = parseRomanSequence(correctChoice ? correctChoice.text : "");
+  const choiceSequence = parseRomanSequence(choice.text);
+  if (sameRomanSet(choiceSet, correctSet) && choiceSequence.join("|") !== correctSequence.join("|")) {
+    const firstWrong = choiceSequence.findIndex((item, index) => item !== correctSequence[index]);
+    const expected = correctSequence[firstWrong >= 0 ? firstWrong : 0];
+    return `The numerals are correct, but the order is wrong. Step ${firstWrong + 1} should be ${expected} because ${conciseStatementReason(q, expected, statements[expected] || expected, true)}`;
+  }
+  const wrong = choiceSet.filter(key => !correctSet.includes(key));
+  const needed = correctSet.filter(key => !choiceSet.includes(key));
+  const parts = [];
+  if (wrong.length) {
+    parts.push(`It brings in ${formatRomanSet(wrong)}: ${wrong.map(key => `${key} - ${conciseStatementReason(q, key, statements[key] || key, false)}`).join(" ")}`);
+  }
+  if (needed.length) {
+    parts.push(`It leaves out ${formatRomanSet(needed)}: ${needed.map(key => `${key} - ${conciseStatementReason(q, key, statements[key] || key, true)}`).join(" ")}`);
+  }
+  return parts.join(" ") || "This set does not match the policy focus of the item.";
+}
+function renderConciseWrongChoices(q, correctChoice) {
+  const wrongs = q.choices
+    .map((choice, index) => ({ choice, label: String.fromCharCode(65 + index) }))
+    .filter(item => item.choice.originalLetter !== q.correctOriginalLetter)
+    .map(item => {
+      const choiceSet = parseRomanSet(item.choice.text);
+      const correctSet = parseRomanSet(correctChoice ? correctChoice.text : "");
+      const reason = choiceSet.length && correctSet.length
+        ? conciseRomanWeakness(q, item.choice, correctChoice)
+        : conciseNonRomanWeakness(q, item.choice, correctChoice);
+      return `<p><b>${esc(item.label)}. ${esc(item.choice.text)}</b> - ${esc(reason)}</p>`;
+    })
+    .join("");
+  return wrongs || "<p>This item is currently unscored pending verification.</p>";
+}
+function renderCoachExplanation(q, correctChoice, correctDisplayLabel) {
+  if (!correctChoice) {
+    return `<div class="explainBlock"><h4>Answer key needs verification</h4><p>Use the cited legal basis first before relying on a letter for this item.</p></div>`;
+  }
+  const profile = explanationProfile(q, correctChoice);
+  const statements = renderStatementCheck(q, correctChoice);
+  const wrongs = renderConciseWrongChoices(q, correctChoice);
+  return `
+    <div class="explainBlock">
+      <h4>${esc(answerTitle(correctDisplayLabel, correctChoice))}</h4>
+      <p>${esc(profile.why)}</p>
+      <p><b>Policy connection:</b> ${esc(profile.policy)}</p>
+      <p class="basis"><b>Legal basis:</b> ${esc(q.legalBasis)}</p>
+    </div>
+    ${statements}
+    <div class="explainBlock">
+      <h4>Why the other choices are weaker</h4>
+      <div class="choiceExplain">${wrongs}</div>
+    </div>
+    <div class="explainBlock">
+      <h4>Decision rule</h4>
+      <p>${esc(profile.rule)}</p>
+    </div>`;
+}
 function applyTheme() { const [name, vars] = THEMES[themeIndex]; Object.entries(vars).forEach(([k,v])=>document.documentElement.style.setProperty(k,v)); document.getElementById("modePill").textContent=name; }
 function scrollQuestionTop() {
   requestAnimationFrame(()=>document.getElementById("quiz").scrollIntoView({behavior:"smooth", block:"start"}));
@@ -1195,9 +1404,7 @@ function render() {
     }
     return `<button class="${cls}" data-letter="${esc(c.originalLetter)}"><span class="letter">${label}</span><span class="choiceText">${esc(c.text)}</span></button>`;
   }).join("");
-  const learningHtml = correctReason(q, correctChoice);
-  const legalHtml = renderLegalBasis(q, correctChoice);
-  const wrongs = renderChoiceExplanations(q, correctChoice);
+  const explanationHtml = renderCoachExplanation(q, correctChoice, correctDisplayLabel);
   const explanationVisible = explanationVisibility.has(q.number) ? explanationVisibility.get(q.number) : Boolean(picked || reviewMode);
   const panelClass = explanationVisible ? "panel show" : "panel";
   const explanationButtonText = explanationVisible ? "Hide explanation" : "Show explanation";
@@ -1208,18 +1415,7 @@ function render() {
     <div class="choices">${choiceHtml}</div>
     <div class="${panelClass}" id="explain">
       <h3>${q.correctOriginalLetter ? "Correct answer: " + esc(correctDisplayLabel) + ". " + esc(correctChoice ? correctChoice.text : q.correctOriginalLetter) : "Answer key needs verification"}</h3>
-      <div class="explainBlock">
-        <h4>Legal basis</h4>
-        ${legalHtml}
-      </div>
-      <div class="explainBlock">
-        <h4>Why this answer works</h4>
-        ${learningHtml}
-      </div>
-      <div class="explainBlock">
-        <h4>Why the other choices are weaker</h4>
-        <div class="choiceExplain">${wrongs}</div>
-      </div>
+      ${explanationHtml}
       <p><b>Review note:</b> ${esc(q.reviewNote)}</p>
     </div>
     <div class="row"><button id="prevBtn">Previous</button><button id="showBtn" aria-controls="explain" aria-expanded="${explanationVisible ? "true" : "false"}">${explanationButtonText}</button><button id="nextBtn" class="primary ${picked ? "nextReady" : ""}">${current===questions.length-1 ? "Finish" : "Next question"}</button></div>`;
