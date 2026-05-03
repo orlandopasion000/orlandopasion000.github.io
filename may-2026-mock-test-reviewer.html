@@ -231,6 +231,14 @@ function parseRomanSet(text) {
   while ((match = pattern.exec(upper))) found.add(match[1]);
   return ROMAN_ORDER.filter(item => found.has(item));
 }
+function parseRomanSequence(text) {
+  const sequence = [];
+  const pattern = /\b(VIII|VII|VI|IV|IX|III|II|I|V|X)\b/g;
+  let match;
+  const upper = String(text ?? "").toUpperCase();
+  while ((match = pattern.exec(upper))) sequence.push(match[1]);
+  return sequence;
+}
 function listJoin(items) {
   if (!items.length) return "";
   if (items.length === 1) return items[0];
@@ -245,10 +253,11 @@ function getLegalProfile(q, correctChoice) {
   const answer = correctChoice ? correctChoice.text : "the verified answer";
   const base = {
     citation: q.legalBasis,
-    controllingRule: "The cited issuance gives the official standard for deciding the item; the best answer must follow that standard, not merely sound helpful.",
+    controllingRule: "The cited issuance gives the official standard for deciding the item; the best answer must follow that standard, not just name a broadly useful school activity.",
+    legalDetail: "Treat the legal basis as the boundary of the answer. The option must match the official criterion, process, role, or safeguard named in the policy.",
     application: `The stem asks ${getPromptQuestion(q)} The answer must solve that exact problem within the policy context.`,
     answerLink: `${answer} is preferred because it is the option that stays closest to the required policy action or principle.`,
-    trap: "A distractor may be related to school work, but it becomes wrong if it adds an unsupported condition, skips a required process, or shifts to a different policy area.",
+    trap: "A choice becomes weak when it changes the criterion, jumps to a later step, or treats a side activity as the answer.",
     procedure: "policy-based"
   };
   const profiles = [
@@ -256,6 +265,7 @@ function getLegalProfile(q, correctChoice) {
       pattern: /professional networking|professional networks|domain 4|developing self and others/,
       data: {
         controllingRule: "DepEd Order No. 24, s. 2020 adopts the PPSSH. Domain 4, Developing Self and Others, expects school heads to strengthen personal and professional development, reflection, professional networks, performance management, personnel development, leadership development, welfare, and recognition. Strand 4.3 specifically treats professional networks as a means to upgrade knowledge, skills, and leadership practice.",
+        legalDetail: "Under PPSSH Domain 4, networking is not measured by perks. It is measured by professional learning, collaboration, mentoring, benchmarking, and growth in leadership practice.",
         application: "Because the stem asks for the most desirable practices of professional networking, the correct choices must be real professional-growth mechanisms: benchmarking, professional connection, and career progression.",
         answerLink: "Benchmarking gives a school head models of effective practice; professional connection creates mentoring and collaboration channels; career progression connects networking to continuing growth. Travel and project sponsorship may happen around networking, but they are not the core professional-networking practices being tested.",
         trap: "Do not choose a statement just because it sounds beneficial. Ask whether it directly improves professional knowledge, skills, practice, or career growth under PPSSH Domain 4.",
@@ -266,6 +276,7 @@ function getLegalProfile(q, correctChoice) {
       pattern: /manual of style|dmos|business writing|jargon|active voice|clear and simple/,
       data: {
         controllingRule: "The DepEd Manual of Style favors official communication that is clear, simple, direct, and reader-centered. Avoiding jargon and using active voice are writing choices that make meaning easier to understand.",
+        legalDetail: "Official issuances must be understood quickly by the intended readers. Clear wording, simple sentence construction, active voice, and plain terms reduce ambiguity in implementation.",
         application: "The stem gives three clues: keep statements clear and simple, avoid jargon, and use active voice. All three point to clarity.",
         answerLink: "Clarity is the principle that makes official issuances easy to read, interpret, and act on.",
         trap: "Coherence, consistency, and courtesy are good writing qualities, but they do not best summarize the three clues in the stem.",
@@ -276,6 +287,7 @@ function getLegalProfile(q, correctChoice) {
       pattern: /conduct award|core values|always observed|awards and recognition/,
       data: {
         controllingRule: "DepEd Order No. 36, s. 2016 sets award criteria so recognition is evidence-based and fair. For conduct awards, the focus is consistent demonstration of DepEd core values and compliance with the stated qualifications.",
+        legalDetail: "Conduct awards are not academic-rank awards. They depend on documented conduct, absence of serious sanctions, and core-values marks such as AO, or Always Observed, in the report card.",
         application: "The stem asks for the bases for selecting learners for the conduct award. The correct set must contain criteria tied to rating, discipline record, and observed core values.",
         answerLink: "The correct statements identify the required minimum rating, absence of serious sanctions, and the needed Always Observed marks in the core values.",
         trap: "Academic rank, popularity, broad nomination, or residency may sound orderly, but they are not the conduct-award bases in the item.",
@@ -286,6 +298,7 @@ function getLegalProfile(q, correctChoice) {
       pattern: /no records of formal schooling|placement assessment|pept|grade level placement/,
       data: {
         controllingRule: "DepEd assessment policy provides an official route for learners without complete formal school records to establish grade-level placement.",
+        legalDetail: "When records are absent, the school needs an assessment-based basis for placement. This protects the learner from arbitrary grade placement and protects the school record from unsupported entries.",
         application: "The stem asks how learners with no formal-schooling records can secure official documents. The school head should use the recognized placement-assessment process.",
         answerLink: "Recommending grade-level placement assessment creates a legitimate basis for placement and records.",
         trap: "The school should not invent records, automatically place learners in kindergarten, or rely only on informal teacher judgment.",
@@ -296,6 +309,7 @@ function getLegalProfile(q, correctChoice) {
       pattern: /child protection|bullying|corporal punishment|children's rights|positive discipline/,
       data: {
         controllingRule: "The Child Protection Policy requires schools to protect learners from abuse, bullying, violence, exploitation, discrimination, and corporal punishment through positive and non-violent discipline.",
+        legalDetail: "The policy frame is prevention, protection, reporting, referral, and positive discipline. A response is weak if it humiliates, excludes, or punishes learners without a child-protection process.",
         application: "When the stem involves bullying or discipline, the answer should strengthen prevention, protection, education, referral, and capacity-building.",
         answerLink: "The best choice is the one that protects children and improves adult practice without normalizing punishment.",
         trap: "Any option that relies on corporal punishment, exclusion, or a parents-only/teachers-only response is too narrow or inconsistent with child protection.",
@@ -306,6 +320,7 @@ function getLegalProfile(q, correctChoice) {
       pattern: /sped|lsen|lwd|learners with disabilities|inclusive education|resource room/,
       data: {
         controllingRule: "Inclusive education and SPED policies require appropriate support so learners with disabilities or special educational needs can access learning.",
+        legalDetail: "Inclusion means reasonable support, assistive materials, trained personnel, assessment, and coordination with proper offices. Admission or participation should not depend on families solving every support need alone.",
         application: "The correct answer should provide assessment, trained support, appropriate materials, intervention, accessibility, or collaboration needed by the learner.",
         answerLink: "The best option removes a learning barrier instead of merely describing the learner's condition.",
         trap: "Avoid answers that segregate without support, delay help, or treat disability as a reason for exclusion.",
@@ -316,6 +331,7 @@ function getLegalProfile(q, correctChoice) {
       pattern: /learning action cell|lac|slac/,
       data: {
         controllingRule: "LAC policy treats collaborative professional learning as a mechanism for improving teacher practice and learner outcomes.",
+        legalDetail: "A LAC is not just a meeting schedule. Its value is sustained professional learning that leads to reflection, improved pedagogy, shared solutions, and better learner participation or achievement.",
         application: "The answer should connect the LAC to reflection, shared problem-solving, classroom practice, coaching, or evidence of learner improvement.",
         answerLink: "The correct choice is the one that turns teacher collaboration into improved instruction.",
         trap: "Meetings, committees, or attendance alone are not enough unless they improve practice.",
@@ -326,6 +342,7 @@ function getLegalProfile(q, correctChoice) {
       pattern: /financial|mooe|coa|inventory|property|procurement|fund|cash|disbursement|condemned textbooks/,
       data: {
         controllingRule: "Resource-management rules require official accounting, inventory, procurement, liquidation, and disposal procedures for public property and funds.",
+        legalDetail: "Public resources must be traceable. Before money or property is used, transferred, repaired, disposed, or procured, the school must establish authority, documentation, valuation, inventory, and accountability.",
         application: "If the stem involves money, property, textbooks, equipment, or downloaded funds, the school head must follow the authorized government process.",
         answerLink: "The correct option is the one that keeps the action documented, auditable, and within the allowed use of funds or property.",
         trap: "Good intentions do not cure an unauthorized sale, purchase, use of funds, or disposal of property.",
@@ -336,6 +353,7 @@ function getLegalProfile(q, correctChoice) {
       pattern: /ict|information and communication technology|learner information system|learners information system|\blis\b|\bebeis\b|\bpnpki\b|sf10|data privacy|social media|digital signature|deped email/,
       data: {
         controllingRule: "Effective ICT use in school data management must be official, secure, and privacy-compliant. LIS and EBEIS are DepEd data systems; PNPKI supports legally recognized government digital signatures; learner academic records are protected by privacy and records-management rules.",
+        legalDetail: "LIS is for learner records, EBEIS is for official school statistics and indicators, and PNPKI supports trusted electronic signatures. RA 10173 protects learner data, while the Electronic Commerce Act supports the legal recognition of electronic documents and signatures when proper safeguards are used.",
         application: "The item asks which ICT practices are appropriate in a school setting. The correct statements use authorized systems for learner records, official digital signing, and school performance indicators.",
         answerLink: "I, III, and IV are secure and system-appropriate: LIS verifies learner enrolment records, PNPKI validates digital signatures, and EBEIS provides official school performance data.",
         trap: "Do not confuse convenience with proper ICT use. Public posting of learner academic standing violates confidentiality, and sending SF10 or transfer credentials by ordinary email exposes sensitive learner records.",
@@ -346,6 +364,7 @@ function getLegalProfile(q, correctChoice) {
       pattern: /school-based management|sbm|school improvement plan|sip|annual implementation plan|aip|swot|stakeholder|community|partnership/,
       data: {
         controllingRule: "SBM and school-planning policies emphasize evidence-based planning, stakeholder participation, shared accountability, and continuous improvement.",
+        legalDetail: "SBM is strongest when the school uses evidence, consults stakeholders, documents decisions, assigns accountability, monitors implementation, and adjusts plans based on results.",
         application: "The answer should use data, consult the right stakeholders, set priorities, implement, and monitor improvement actions.",
         answerLink: "The winning option connects the school problem to a participatory and evidence-based improvement process.",
         trap: "A quick activity or isolated partnership is weaker if it is not connected to planning, implementation, and monitoring.",
@@ -356,6 +375,7 @@ function getLegalProfile(q, correctChoice) {
       pattern: /curriculum|k to 12|learning standards|competenc|pedagogy|teaching strategies|senior high school|shs|career guidance|work immersion|track|strand/,
       data: {
         controllingRule: "Curriculum and teaching-learning policies require alignment among standards, competencies, pedagogy, assessment, learner needs, and career pathways.",
+        legalDetail: "Curriculum decisions should connect content standards, performance standards, learning competencies, assessment evidence, instructional support, and learner development. A choice is weak when it isolates one subject, one activity, or one output from the intended competency.",
         application: "The correct answer should address what learners must learn and how teachers should support that learning.",
         answerLink: "The best choice fits the learning standard or competency demanded by the stem.",
         trap: "An option can sound educational but still be wrong if it is too narrow, subject-limited, or disconnected from the competency.",
@@ -366,6 +386,7 @@ function getLegalProfile(q, correctChoice) {
       pattern: /praise|rewards|recognition|performance-based incentive|ipcrf|promotion/,
       data: {
         controllingRule: "Performance and recognition policies require clear criteria, evidence, fairness, and approved mechanisms for rewards, incentives, and career actions.",
+        legalDetail: "Recognition and performance management are defensible only when they use documented accomplishments, fair criteria, and an approved mechanism such as PRAISE, IPCRF, or a school-based recognition process.",
         application: "The answer should match the rating, incentive, promotion, or recognition rule being asked.",
         answerLink: "The correct option uses the approved basis rather than personal preference or informal judgment.",
         trap: "Avoid choices that reward people without criteria or confuse individual performance, office performance, promotion, and recognition.",
@@ -382,6 +403,7 @@ function renderLegalBasis(q, correctChoice) {
     <p class="basis">${esc(legal.citation)}</p>
     <div class="legalDetail">
       <p><b>Controlling rule:</b> ${esc(legal.controllingRule)}</p>
+      <p><b>Legal detail:</b> ${esc(legal.legalDetail)}</p>
       <p><b>How it applies here:</b> ${esc(legal.application)}</p>
       <p><b>Why the answer wins:</b> ${esc(legal.answerLink)}</p>
       <p><b>Common trap:</b> ${esc(legal.trap)}</p>
@@ -427,92 +449,443 @@ function keywordHints(q, correctChoice) {
   if (hits.length) return hits;
   return shortText(correctChoice ? correctChoice.text : "official answer", 80).split(/\s+/).filter(word => word.length > 4).slice(0, 5);
 }
-function statementVerdict(q, key, text, included) {
+function makeStatementAnalysis(rationale, contribution, mistake) {
+  return {
+    rationale,
+    contribution: contribution || rationale,
+    mistake: mistake || rationale
+  };
+}
+function statementAnalysis(q, key, text, included) {
   const source = `${q.question} ${q.legalBasis}`.toLowerCase();
   const value = cleanText(text).toLowerCase();
+  const exact = (rationale, contribution, mistake) => makeStatementAnalysis(rationale, contribution, mistake);
   if (/ict|information and communication technology|learner information system|learners information system|\blis\b|\bebeis\b|\bpnpki\b|sf10|data privacy|social media|digital signature|deped email/.test(source)) {
     if (value.includes("lis") || value.includes("learner information") || value.includes("learners information")) {
-      return "This is an appropriate use of ICT because LIS is the official DepEd system for managing and verifying learner enrolment and school-record data.";
+      return exact(
+        "This is an effective use of ICT. The Learner Information System is the authorized DepEd environment for checking enrolment history and learner-record data, so the action is efficient without leaving the official records system.",
+        "I anchors the answer in the official learner-record system, which is exactly what school data management requires.",
+        "Leaving out I removes the safest source for verifying enrolment data."
+      );
     }
     if (value.includes("social media") || value.includes("publicly")) {
-      return "This is not appropriate. Publicly posting a learner's academic standing discloses confidential learner information and violates the privacy principle behind Republic Act 10173, the Data Privacy Act of 2012.";
+      return exact(
+        "This is neither effective nor appropriate. Publicly posting a learner's academic standing exposes confidential academic information, conflicts with the privacy protections of Republic Act 10173, and can subject learners, especially minors, to public scrutiny and reputational harm.",
+        "II does not contribute to proper ICT use because publicity is the opposite of confidential records handling.",
+        "II fails on ethics and legality: it treats a public platform as if it were an authorized records channel and exposes protected learner information."
+      );
     }
     if (value.includes("pnpki") || value.includes("digital signature")) {
-      return "This is an appropriate use of ICT because PNPKI is the government digital-signature infrastructure used to support authenticity, integrity, and non-repudiation of official electronic documents.";
+      return exact(
+        "This is an effective use of ICT. PNPKI is the government digital-signature infrastructure that supports authenticity, integrity, non-repudiation, and legal recognition of official electronic documents under the electronic transactions framework.",
+        "III supplies the official digital-signing mechanism, so the document is not just electronic; it is verifiable.",
+        "Leaving out III loses the government-recognized safeguard that makes electronic signing trustworthy."
+      );
     }
     if (value.includes("ebeis") || value.includes("key performance indicators")) {
-      return "This is an appropriate use of ICT because EBEIS is DepEd's official school-data system for statistics and performance indicators used in evidence-based planning and monitoring.";
+      return exact(
+        "This is an effective use of ICT. EBEIS is DepEd's official school-data system for statistics and key performance indicators, so it supports planning and monitoring with verified data rather than informal estimates.",
+        "IV provides the official performance-indicator source needed for evidence-based school decisions.",
+        "Leaving out IV weakens the answer because school KPIs should come from the official EBEIS data source."
+      );
     }
     if (value.includes("sf10") || value.includes("transfer credentials") || value.includes("email")) {
-      return "This is not appropriate. SF10 and transfer credentials contain sensitive learner information; sending them through ordinary email creates avoidable data-security and records-handling risks.";
+      return exact(
+        "This is not considered appropriate for this item. SF10 and transfer credentials contain sensitive learner information; ordinary email, even when it uses a DepEd account, can be forwarded, misaddressed, retained outside the intended control, or accessed without the documented chain of custody expected for confidential records.",
+        "V does not strengthen proper ICT use because convenience cannot replace secure and traceable handling of confidential learner records.",
+        "V fails on protocol and security: it confuses an official email account with a secure records-transfer process for SF10 and other confidential credentials."
+      );
     }
   }
   if (/professional networking|professional networks|domain 4|developing self and others/.test(source)) {
-    if (value.includes("benchmark")) return included
-      ? "Benchmarking is a true professional-networking practice because it lets school heads compare effective practices, learn from other schools or leaders, and adapt proven strategies for improvement."
-      : "Benchmarking usually belongs in professional networking; if it is excluded, recheck the answer key.";
-    if (value.includes("professional connection")) return included
-      ? "Professional connection is central to networking because it builds mentoring, collaboration, consultation, and access to relevant professional groups."
-      : "Professional connection usually belongs in professional networking; if it is excluded, recheck the answer key.";
-    if (value.includes("career progression")) return included
-      ? "Career progression fits PPSSH Domain 4 because professional networks should support continuing growth, leadership development, and advancement in professional practice."
-      : "Career progression can be a professional-growth outcome; if it is excluded, the item may be using a narrower definition.";
-    if (value.includes("travel")) return "Travel can be a side benefit of conferences or visits, but it is not itself the professional-growth practice. The learning value is the exchange, benchmarking, or collaboration, not the trip.";
-    if (value.includes("sponsorship")) return "Sponsorship of school projects is closer to resource mobilization or partnership support. It may help a project, but it is not the main professional-networking practice asked by the stem.";
+    if (value.includes("benchmark")) return exact(
+      "Benchmarking is a desirable professional-networking practice because it lets school heads study effective practices, compare systems, ask questions from peers, and adapt proven approaches to their own school context.",
+      "II gives networking its learning value: the school head gains tested ideas from other professionals and institutions.",
+      "Excluding benchmarking removes one of the clearest professional-learning uses of a network."
+    );
+    if (value.includes("professional connection")) return exact(
+      "Professional connection is central to networking. It creates access to mentors, peers, expert groups, consultation, collaboration, and communities of practice that a school head can draw from when improving leadership practice.",
+      "IV is the relationship base of professional networking; without professional connection, there is no real network to learn from.",
+      "Excluding professional connection empties the idea of networking itself."
+    );
+    if (value.includes("career progression")) return exact(
+      "Career progression fits PPSSH Domain 4 because professional networks can support continuing growth, leadership development, professional visibility, and movement toward higher levels of practice.",
+      "V shows the growth outcome of networking: it helps the school head develop toward broader professional responsibility.",
+      "Excluding career progression ignores the PPSSH focus on continuing professional growth."
+    );
+    if (value.includes("travel")) return exact(
+      "Travel may happen during conferences, benchmarking visits, or training, but the trip is only a possible circumstance. The desirable practice is the learning exchange, not the opportunity to travel.",
+      "I is only a possible perk, not a professional-growth mechanism.",
+      "I mistakes an incidental benefit for the actual professional-networking practice."
+    );
+    if (value.includes("sponsorship")) return exact(
+      "Sponsorship of school projects is closer to resource mobilization or partnership support. It can help a school project, but it does not directly describe professional networking for the school head's growth.",
+      "III points to project support, not the school head's professional learning.",
+      "III shifts the focus from professional growth to project funding or sponsorship."
+    );
   }
   if (/conduct award|core values|awards and recognition/.test(source)) {
-    if (value.includes("75")) return included
-      ? "The minimum rating requirement is an objective eligibility screen, so it belongs as a basis for selection."
-      : "The rating requirement is normally part of eligibility; if excluded, recheck the set.";
-    if (value.includes("sanction") || value.includes("suspension")) return included
-      ? "The discipline-record requirement protects the meaning of a conduct award: a candidate should not have serious sanctions within the school year."
-      : "Serious sanctions are relevant to conduct; if excluded, recheck the set.";
-    if (value.includes("always observed") || value.includes("ao")) return included
-      ? "The Always Observed core-values marks are direct evidence that the learner consistently demonstrates the DepEd core values."
-      : "Core-values marks are direct conduct evidence; if excluded, recheck the set.";
-    if (value.includes("nominated")) return "Nomination may start a discussion, but the item asks for bases for selection. A nomination by teachers is not the same as a policy criterion.";
-    if (value.includes("top 10") || value.includes("esp")) return "Academic rank or ESP grades do not replace the conduct-award criteria. The award is about observed core values, not being in the academic Top 10.";
-    if (value.includes("residency")) return "School residency may be an administrative detail, but it is not one of the conduct-award bases in this item.";
+    if (value.includes("75")) return exact(
+      "This is a valid eligibility basis because the minimum rating requirement gives an objective floor before a learner may be considered for the conduct award.",
+      "I establishes the academic eligibility screen before conduct is judged.",
+      "Leaving out I removes the baseline rating requirement."
+    );
+    if (value.includes("sanction") || value.includes("suspension")) return exact(
+      "This is a valid basis because a conduct award should not be given to a learner with a serious sanction during the school year. The discipline record protects the credibility of the award.",
+      "II confirms that the learner's conduct record is consistent with the award.",
+      "Leaving out II ignores the discipline-record screen for a conduct award."
+    );
+    if (value.includes("always observed") || value.includes("ao")) return exact(
+      "This is the strongest conduct evidence. AO, or Always Observed, marks in the core values show that the learner consistently demonstrates the DepEd values across observed behavior.",
+      "V supplies the direct evidence of consistent DepEd core-values behavior.",
+      "Leaving out V removes the core-values evidence that gives the award its meaning."
+    );
+    if (value.includes("nominated")) return exact(
+      "Nomination can start a conversation, but it is not the policy criterion. The conduct award must rest on documented qualifications, not merely on who nominated the learner.",
+      "III is only a nomination procedure, not a selection basis.",
+      "III replaces evidence with nomination, which is not enough for an award based on conduct."
+    );
+    if (value.includes("top 10") || value.includes("esp")) return exact(
+      "Academic rank or ESP grades do not replace the conduct-award criteria. The award is about observed DepEd core values and conduct qualifications, not class ranking.",
+      "IV changes the award from conduct recognition into academic ranking.",
+      "IV uses the wrong evidence: ESP rank is not the same as consistently observed core values."
+    );
+    if (value.includes("residency")) return exact(
+      "School residency may be administratively convenient, but the item asks for conduct-award bases. Residency does not prove consistent demonstration of core values.",
+      "VI is an administrative condition, not proof of conduct.",
+      "VI distracts from the actual conduct criteria by adding a residency requirement."
+    );
   }
-  if (/manual of style|dmos|business writing/.test(source)) {
-    if (value.includes("clear") || value.includes("simple") || value.includes("jargon") || value.includes("active voice")) {
-      return "This clue points to clarity because the writer is making the message easier to read, shorter to process, and less open to misinterpretation.";
+  if (/classroom assessment|interim assessment|grading/.test(source)) {
+    if (value.includes("progressive learning") || value.includes("pieces of evidence")) return exact(
+      "This belongs because classroom assessment is evidence-gathering over time. The teacher needs proof of how learning is developing, not just a final score.",
+      `${key} supplies the ongoing evidence needed to understand learner progress.`,
+      `${key} should not be dropped because assessment starts with evidence of learning.`
+    );
+    if (value.includes("strengths") || value.includes("needs") || value.includes("weaknesses")) return exact(
+      "This belongs because assessment should diagnose what learners already understand, where they struggle, and what support they need next.",
+      `${key} turns assessment results into a diagnosis for teaching support.`,
+      `${key} matters because assessment should guide instructional response.`
+    );
+    if (value.includes("effectiveness of the classroom instruction")) return exact(
+      "This belongs because assessment also tells the teacher whether the chosen instruction is working. Learner results become feedback on teaching practice.",
+      `${key} connects assessment evidence to improving instruction.`,
+      `${key} is important because assessment should improve both learning and teaching.`
+    );
+    if (value.includes("constructively suggest")) return exact(
+      "Learner feedback can be useful, but this statement describes students suggesting how a class should be handled. That is not the main policy function of classroom assessment.",
+      `${key} is about classroom preference, not assessment evidence.`,
+      `${key} shifts the item from assessment of learning to classroom-management preference.`
+    );
+    if (value.includes("content and performance standards") || value.includes("toward the end")) return exact(
+      "This describes a more summative use of assessment: checking achievement after a period of learning. The item is focused on ongoing assessment that informs teaching while learning is still developing.",
+      `${key} points to end-of-period judgment rather than ongoing assessment support.`,
+      `${key} is weaker because it moves the focus from formative evidence to summative description.`
+    );
+    if (value.includes("psds feedback") || value.includes("sdo") || value.includes("bi-annual")) return exact(
+      "This belongs because monitoring interim assessment requires a feedback and reporting loop beyond the classroom. Results and issues must reach the district or division level so policy and implementation can be improved.",
+      `${key} creates the formal feedback loop needed for monitoring and evaluation.`,
+      `${key} should not be dropped because monitoring requires more than local observation.`
+    );
+    if (value.includes("prepares quarterly report")) return exact(
+      "A quarterly report may be useful, but by itself it does not complete the monitoring and evaluation cycle described in the item. The stronger statements connect reports to feedback, submission, analysis, and action.",
+      `${key} is an internal activity without the clearer feedback pathway required by the item.`,
+      `${key} stops at report preparation instead of completing the monitoring loop.`
+    );
+  }
+  if (/reflective thinking|coaching|follow.?up observation|action plan/.test(source)) {
+    if (value.includes("engagement") || value.includes("creativity") || value.includes("innovation")) return exact(
+      "This belongs because reflective thinking helps practitioners question routines, generate alternatives, and improve practice with more creativity and ownership.",
+      `${key} shows the productive outcome of reflection: better engagement and innovation.`,
+      `${key} should not be dropped because reflection is meant to improve practice, not merely describe it.`
+    );
+    if (value.includes("only the self")) return exact(
+      "This is too narrow. Reflection includes the self, but effective professional reflection also considers learners, colleagues, evidence, context, and the effect of one's practice on others.",
+      `${key} narrows reflection into self-focus only.`,
+      `${key} fails because reflective practice should consider evidence and context, not only the self.`
+    );
+    if (value.includes("after something happens")) return exact(
+      "This belongs in this item because reflection is most concrete after actual practice. A completed action gives the teacher evidence to analyze, not just intentions to imagine.",
+      `${key} explains why post-action reflection can be powerful: it uses real evidence from practice.`,
+      `${key} should not be dropped because follow-up reflection depends on what actually happened.`
+    );
+    if (value.includes("status quo") || value.includes("level of practice")) return exact(
+      "This belongs because reflective thinking should challenge routines and help a professional move beyond habitual practice.",
+      `${key} captures the improvement purpose of reflection.`,
+      `${key} matters because reflection should lead to better practice, not passive acceptance.`
+    );
+    if (value.includes("environment")) return exact(
+      "Awareness of the environment can be helpful, but this item is testing reflective thinking as a driver of professional practice and improvement. The statement is broader and less direct.",
+      `${key} is a broad awareness statement rather than the specific reflective-practice idea being tested.`,
+      `${key} is too general to carry the answer.`
+    );
+    if (value.includes("accountable") || value.includes("motivated") || value.includes("focused") || value.includes("goals")) return exact(
+      "This belongs because a follow-up visit keeps the action plan alive. It reminds the teacher of the agreed goals and turns coaching into sustained implementation.",
+      `${key} strengthens follow-through after coaching.`,
+      `${key} should not be dropped because follow-up is what keeps improvement from becoming a one-time conversation.`
+    );
+    if (value.includes("high performance rating") || value.includes("compare performance")) return exact(
+      "This is not the purpose of the follow-up. Coaching follow-up is meant to improve practice against the teacher's action plan, not to compare teachers or guarantee a rating.",
+      `${key} changes coaching into comparison or rating pressure.`,
+      `${key} misses the developmental purpose of follow-up coaching.`
+    );
+  }
+  if (/school-based management|sbm|school improvement plan|sip|annual implementation plan|aip|swot|school-community planning|school report card|state of the school|stakeholder|community|partnership/.test(source)) {
+    if (value.includes("mercy of the community") || value.includes("depends only") || value.includes("stop focusing") || value.includes("reduce transparency")) return exact(
+      "This conflicts with SBM. Shared governance does not mean the school surrenders leadership, hides information, or depends on one group alone.",
+      `${key} breaks the accountability and shared-governance principle of SBM.`,
+      `${key} is a governance trap: it either removes transparency, removes shared responsibility, or makes one group solely responsible.`
+    );
+    if (value.includes("linkage") || value.includes("partnership") || value.includes("rapport") || value.includes("community") || value.includes("stakeholders") || value.includes("school report card") || value.includes("state of the school") || value.includes("transparency")) {
+      if (included) return exact(
+        "This belongs because SBM depends on informed participation. Stakeholders can support the school only when plans, reports, roles, and results are openly discussed.",
+        `${key} strengthens shared accountability between the school and its stakeholders.`,
+        `${key} should not be dropped because SBM requires participation supported by information.`
+      );
+      return exact(
+        "This sounds connected to SBM, but in this item it is not the strongest indicator being asked. It may describe a benefit or broad relationship rather than the specific governance practice in the official set.",
+        `${key} is too broad for the specific SBM indicator being tested.`,
+        `${key} can distract because it sounds collaborative without matching the exact SBM indicator.`
+      );
     }
+    if (value.includes("curriculum") || value.includes("teacher training") || value.includes("leadership training") || value.includes("replicate best practices") || value.includes("progress report") || value.includes("recommendations") || value.includes("adjust") || value.includes("modify")) return exact(
+      "This belongs because the action uses evidence, strengthens implementation, or feeds monitoring results back into the school improvement plan.",
+      `${key} moves SBM from paperwork to monitored improvement action.`,
+      `${key} is important because planning must lead to implementation, review, and adjustment.`
+    );
   }
-  if (/child protection|bullying|corporal punishment/.test(source)) {
-    if (/corporal punishment|punishment|exclusive|only/.test(value) && !included) return "This is excluded because child-protection policy favors positive, non-violent, preventive, and capacity-building responses.";
+  if (/financial|mooe|coa|inventory|property|procurement|fund|disbursement|condemned textbooks|disposal/.test(source)) {
+    if (value.includes("economically repairable") || value.includes("property inventory") || value.includes("depreciated value")) return exact(
+      "This belongs because disposal begins with evidence: condition, inventory status, and value. These protect the school from disposing of public property without basis.",
+      `${key} provides documentation needed before public property can be acted on.`,
+      `${key} should not be dropped because property disposal must be supported by records and valuation.`
+    );
+    if (value.includes("current market value") || value.includes("accredited bidders") || value.includes("bids and awards")) return exact(
+      "This is not the preparatory inspection step asked in the item. Bidding and market procedures come later or belong to a different stage, after the property has been validated for disposal.",
+      `${key} jumps ahead to a later procurement or bidding concern.`,
+      `${key} is a timing error: it treats disposal preparation as if bidding had already begun.`
+    );
+    if (included) return exact(
+      "This belongs because it keeps public resources documented, authorized, and auditable.",
+      `${key} supports accountability for public funds or property.`,
+      `${key} should not be dropped because resource management needs an audit trail.`
+    );
+    return exact(
+      "This fails when it bypasses required documentation, authority, accounting, procurement, or property-disposal rules.",
+      `${key} lacks the control expected in public-resource management.`,
+      `${key} is risky because public funds and property cannot be handled through shortcuts.`
+    );
   }
-  if (/financial|mooe|coa|inventory|property|procurement|fund|disbursement|condemned textbooks/.test(source)) {
-    if (!included) return "This is excluded when it bypasses required documentation, authority, accounting, procurement, or property-disposal rules.";
-    return "This belongs because it keeps public resources documented, authorized, and auditable.";
+  if (/parent.?teacher|pta|computer shop|barangay|lgu|ordinance/.test(source)) {
+    if (value.includes("meeting with parents") || value.includes("lgu") || value.includes("ordinance") || value.includes("not to admit school-age children")) return exact(
+      "This belongs because the school head addresses the attendance problem through consultation and lawful community coordination rather than unilateral punishment.",
+      `${key} uses proper stakeholder action to protect learners' attendance.`,
+      `${key} should not be dropped because the problem requires coordinated action beyond the classroom.`
+    );
+    if (value.includes("revocation") || value.includes("close their shop")) return exact(
+      "This is too heavy-handed for the school head. Revoking a business permit or forcing closure is not a school-level authority and may bypass due process.",
+      `${key} exceeds the school head's proper role in community coordination.`,
+      `${key} is a legal-authority problem: the school cannot simply cancel permits or close private businesses.`
+    );
+    if (value.includes("class adviser") || value.includes("homeroom president") || value.includes("non-teaching personnel")) return exact(
+      "This belongs when it follows the PTA rule on teacher-members, homeroom participation, or committee service without taking over the association's independent governance.",
+      `${key} reflects an allowed PTA role under the item.`,
+      `${key} should not be dropped if it matches the PTA membership or committee rule.`
+    );
+    if (value.includes("more than two") || value.includes("half of the board")) return exact(
+      "This fails because PTA governance has limits on terms, representation, and the role of elected parent officers. The association cannot ignore those safeguards.",
+      `${key} violates a PTA governance safeguard.`,
+      `${key} is a governance error, not a valid PTA practice.`
+    );
+  }
+  if (/curriculum|k to 12|learning standards|competenc|pedagogy|teaching strategies|21st-century|learning and innovation|information, media and technology|career guidance|work immersion|reading comprehension|literacy and numeracy/.test(source)) {
+    if (value.includes("learning and innovation") || value.includes("information, media and technology") || value.includes("informed decisions") || value.includes("literacy and numeracy") || value.includes("research-based module") || value.includes("interest inventory") || value.includes("portfolio")) return exact(
+      "This belongs because it connects learning to competencies, evidence, learner development, and skills that can be applied beyond a single lesson.",
+      `${key} aligns the school action with the competency or learner-development target.`,
+      `${key} should not be dropped because it carries the curriculum-alignment purpose of the item.`
+    );
+    if (value.includes("mapeh class only") || value.includes("only") || value.includes("face-to-face") || value.includes("postpone")) return exact(
+      "This is too restrictive. Curriculum support should not be locked into one subject, one delivery mode, or a postponement when safe and evidence-based alternatives exist.",
+      `${key} narrows the curriculum response too much.`,
+      `${key} fails because the learner need can be addressed through a more flexible, evidence-based approach.`
+    );
+    if (value.includes("decoding") || value.includes("spelling") || value.includes("logical") || value.includes("mathematical") || value.includes("professional network")) return exact(
+      "This may describe a useful skill or support activity, but it is not the central competency set required by the item. The stronger statements address broader learning, innovation, technology, or lifelong-learning outcomes.",
+      `${key} is useful but narrower than the tested competency focus.`,
+      `${key} distracts by naming something educational without matching the exact competency boundary.`
+    );
+  }
+  if (/indigenous peoples|iped|cultural communities|culture-responsive/.test(source)) {
+    if (value.includes("discrimination") || value.includes("cultural identity") || value.includes("existing practices")) return exact(
+      "This belongs because Indigenous Peoples Education protects learners from discrimination and affirms cultural identity through culture-responsive teaching.",
+      `${key} protects cultural identity and learner dignity, which is central to IPEd.`,
+      `${key} should not be dropped because IPEd is built around identity, respect, and responsive practice.`
+    );
+    if (value.includes("foreign objectives")) return exact(
+      "This fails because culture-responsive education should not impose foreign objectives that disconnect instruction from the learner's cultural context.",
+      `${key} conflicts with culture-responsive learning.`,
+      `${key} is the opposite of contextualized Indigenous Peoples Education.`
+    );
+    if (value.includes("ancestral domain") || value.includes("knowledge system")) return exact(
+      "This is connected to IPEd, but the official set for this item focuses on discrimination, identity affirmation, and teacher adaptation. Use the answer key's narrower boundary when selecting the combination.",
+      `${key} is adjacent to the topic but not part of this item's official combination.`,
+      `${key} can tempt you because it sounds culturally relevant, but the item's official set is narrower.`
+    );
+  }
+  if (/gender|magna carta of women|child-friendly|safe, and motivating/.test(source)) {
+    if (value.includes("health") || value.includes("equal learning opportunities") || value.includes("physical punishment")) return exact(
+      "This belongs because a child-friendly and gender-sensitive school protects health, ensures equal opportunity, and rejects physical punishment.",
+      `${key} supports a safe, equitable, learner-protective environment.`,
+      `${key} should not be dropped because gender-sensitive schooling includes both equity and safety.`
+    );
+    return exact(
+      "This is weaker when it makes participation or parent collaboration only occasional or partial. The policy goal is a consistently safe, inclusive, and motivating environment.",
+      `${key} is too partial for the policy standard.`,
+      `${key} weakens the answer because inclusive practice should be consistent, not occasional.`
+    );
+  }
+  if (/hazing|juvenile violence|pnp|department of social welfare|interior and local government/.test(source)) {
+    if (value.includes("philippine national police") || value.includes("interior and local government") || value.includes("social welfare")) return exact(
+      "This belongs because hazing and juvenile violence require coordination with agencies that handle peace and order, local governance, child welfare, and protective intervention.",
+      `${key} is an operational partner for prevention, referral, or protective response.`,
+      `${key} should not be dropped because school safety problems often require inter-agency coordination.`
+    );
+    return exact(
+      "This agency may have a public mandate, but it is not the most direct partner named by the item for school-level prevention of juvenile violence and protective response.",
+      `${key} is less operational for the immediate school-safety problem.`,
+      `${key} distracts by naming a government body that is not the direct partner in this item.`
+    );
   }
   if (/learning action cell|lac|slac/.test(source)) {
-    if (included) return "This belongs when it turns collaboration into improved teacher practice, reflection, coaching, or learner outcomes.";
-    return "This is excluded if it is only attendance, committee work, or a meeting activity without evidence of improved practice.";
+    if (value.includes("sustained relationship") || value.includes("changes in teachers") || value.includes("organizing the lac") || value.includes("administrative support") || value.includes("facilitates and implements")) return exact(
+      "This belongs because a LAC must be sustained and must lead to improved teaching practice, not just one-time attendance.",
+      `${key} connects the LAC to sustained collaboration or improved pedagogy.`,
+      `${key} should not be dropped because LAC work is about continuing professional learning.`
+    );
+    return exact(
+      "This is weaker if it describes a general benefit without showing the sustained relationship, implementation role, or change in classroom practice expected from LAC policy.",
+      `${key} is too general for the LAC requirement in this item.`,
+      `${key} sounds positive but does not carry the LAC implementation standard being tested.`
+    );
+  }
+  if (/every child a reader|3bs|reading program|reading comprehension|below mastery/.test(source)) {
+    if (value.includes("benchmark") || value.includes("capacitate all teachers") || value.includes("engage stakeholders") || value.includes("school-wide reading") || value.includes("lac sessions") || value.includes("sdo reading") || value.includes("parental orientation") || value.includes("monitor teachers") || value.includes("celebrate learners")) return exact(
+      "This belongs because reading improvement needs a coordinated program: teacher capacity, evidence-based intervention, parent support, monitoring, and motivation for learners.",
+      `${key} contributes to a school-wide reading response rather than a one-shot activity.`,
+      `${key} should not be dropped because reading recovery needs coordinated implementation.`
+    );
+    if (value.includes("more reading homework") || value.includes("ignore results")) return exact(
+      "This fails because it either shifts the burden to learners without support or ignores diagnostic evidence. Low mastery requires intervention, not avoidance or more unsupervised work.",
+      `${key} does not give learners the structured support that reading data calls for.`,
+      `${key} is a trap because it treats a learning gap as either extra homework or no problem.`
+    );
+    if (value.includes("parents/guardians") || value.includes("district supervisor")) return exact(
+      "This is not the strongest school-head strategy in the official set. Parent support and supervisor orientation may help, but the item prioritizes direct school implementation, teacher capacity, and stakeholder support for the reading program.",
+      `${key} is less direct than the school-led reading interventions in the answer.`,
+      `${key} shifts attention away from direct program implementation.`
+    );
+  }
+  if (/inclusive education|sped|learners with disabilities|lwd|visual impairment/.test(source)) {
+    if (value.includes("formal assessment") || value.includes("specialized training") || value.includes("communication expenses") || value.includes("differentiated instruction") || value.includes("sped coordinator") || value.includes("braille")) return exact(
+      "This belongs because it removes an access barrier through assessment, trained support, appropriate materials, coordination, or assistive resources.",
+      `${key} gives concrete support for inclusive education.`,
+      `${key} should not be dropped because inclusion requires support, not just admission.`
+    );
+    if (value.includes("without threshold") || value.includes("personal aide") || value.includes("before accepting")) return exact(
+      "This fails because it either ignores funding controls or shifts the school's inclusion responsibility to the family. Inclusive education requires reasonable school support within policy limits.",
+      `${key} violates either funding discipline or the principle of inclusive access.`,
+      `${key} is a trap because it makes support conditional or uncontrolled.`
+    );
+    return exact(
+      "This is weaker because it does not directly provide the specialized support, coordination, or accessibility measure required by the learner's need.",
+      `${key} is less direct as an inclusion support.`,
+      `${key} does not remove the learner's access barrier.`
+    );
+  }
+  if (/six-hour|actual classroom teaching|university teacher|part-time/.test(source)) {
+    if (value.includes("permit to teach") || value.includes("load schedules") || value.includes("3-hour teaching load") || value.includes("utmost 3-hour")) return exact(
+      "This belongs because outside teaching must be authorized, scheduled outside official time, and limited so it does not compromise public-service duties.",
+      `${key} documents compliance with the outside-teaching conditions.`,
+      `${key} should not be dropped because outside employment needs approval, schedule proof, and time limits.`
+    );
+    return exact(
+      "This is not the required condition for outside teaching. Meetings, study permits, or end-of-semester narratives do not prove that the work is authorized and outside official service time.",
+      `${key} is not the controlling document for part-time outside teaching.`,
+      `${key} distracts from the actual permission, schedule, and time-limit requirements.`
+    );
+  }
+  if (/uniform|civilian attire|prescribed deped uniform/.test(source)) {
+    if (value.includes("remind") || value.includes("formal memo")) return exact(
+      "This belongs because repeated non-compliance should first be handled through policy reminder and documented notice before any heavier personnel action.",
+      `${key} applies the uniform rule through proper documentation.`,
+      `${key} should not be dropped because corrective action should be progressive and documented.`
+    );
+    return exact(
+      "This is weak because comfort, exemption requests, or immediate suspension do not match a proportionate first response to uniform non-compliance.",
+      `${key} either excuses the violation without basis or jumps to an excessive action.`,
+      `${key} misses the proper personnel-management response.`
+    );
+  }
+  if (/risk analysis|catch-up plan|unaccomplished activities|operational plans/.test(source)) {
+    if (included) return exact(
+      "This step belongs in the sequence of recovering delayed operational-plan activities: identify the responsible project owners, analyze risk, prepare a catch-up plan, then implement the unfinished activities.",
+      `${key} is one part of the recovery sequence for delayed implementation.`,
+      `${key} should remain in the sequence because catch-up work needs ownership, analysis, planning, and action.`
+    );
   }
   if (included) {
     const legal = getLegalProfile(q, null);
-    return `Included because it matches ${taskFocus(q)} and follows the ${legal.procedure} standard described in the legal basis.`;
+    return exact(
+      `This belongs because it performs the official action, criterion, or safeguard required by the item. In this context, the statement is not just helpful; it fits the ${legal.procedure} standard in the legal basis.`,
+      `${key} carries part of the policy requirement needed to answer the stem.`,
+      `${key} should not be dropped because it is part of the official requirement in this item.`
+    );
   }
   if (/\bonly\b|\balways\b|\ball\b|\bsole\b|\btop 10\b|\bregardless\b/i.test(text)) {
-    return "This statement is too absolute, too narrow, or adds a condition that the policy basis does not require.";
+    return exact(
+      "This is too absolute or too narrow for a policy item. DepEd leadership questions usually require the actual rule, process, or criterion, not a blanket shortcut.",
+      `${key} narrows the rule beyond what the policy allows.`,
+      `${key} is a trap because absolute wording often breaks the official policy boundary.`
+    );
   }
-  return `Excluded because it shifts the answer away from ${taskFocus(q)} or adds a condition that the controlling rule does not require.`;
+  return exact(
+    `This is excluded because it changes the basis of the decision. The stem is asking for ${taskFocus(q)}, while this statement moves to a weaker condition or a different school task.`,
+    `${key} is not the policy basis the stem is testing.`,
+    `${key} distracts from the controlling rule by moving to a different condition or action.`
+  );
+}
+function statementVerdict(q, key, text, included) {
+  return statementAnalysis(q, key, text, included).rationale;
+}
+function romanStatusLabel(q, included, key, sequence) {
+  const source = `${q.question} ${q.legalBasis}`.toLowerCase();
+  if (sequence && sequence.length && sequence.includes(key)) return `Step ${sequence.indexOf(key) + 1}`;
+  if (/ict|information and communication technology|learner information system|ebeis|pnpki|sf10|data privacy/.test(source)) return included ? "Effective ICT use" : "Not appropriate";
+  if (/professional networking|professional networks/.test(source)) return included ? "Desirable practice" : "Not the practice tested";
+  if (/conduct award|core values|awards and recognition/.test(source)) return included ? "Valid basis" : "Not a valid basis";
+  if (/inclusive education|sped|learners with disabilities|lwd/.test(source)) return included ? "Inclusive support" : "Not inclusive enough";
+  if (/financial|mooe|coa|inventory|property|procurement|fund|disposal/.test(source)) return included ? "Required control" : "Wrong stage or control";
+  return included ? "Included" : "Excluded";
 }
 function romanExplanation(q, correctChoice) {
   const statements = getRomanStatements(q.question);
   const correctSet = parseRomanSet(correctChoice ? correctChoice.text : "");
+  const correctSequence = parseRomanSequence(correctChoice ? correctChoice.text : "");
+  const isSequenceItem = correctSequence.length > 1 && correctSequence.join("|") !== correctSet.join("|");
   if (!correctSet.length || !Object.keys(statements).length) return "";
   const rationale = ROMAN_ORDER
     .filter(key => statements[key])
     .map(key => {
       const included = correctSet.includes(key);
-      const label = included ? "Included" : "Excluded";
+      const label = romanStatusLabel(q, included, key, isSequenceItem ? correctSequence : null);
       return `<li><b>${esc(label)} - ${esc(key)}.</b> ${esc(statements[key])}<br><span>${esc(statementVerdict(q, key, statements[key], included))}</span></li>`;
     })
     .join("");
+  const lead = isSequenceItem
+    ? `The correct order is <b>${esc(correctSequence.join(", "))}</b>.`
+    : `The correct set is <b>${esc(formatRomanSet(correctSet))}</b>.`;
   return `
-    <p>The correct set is <b>${esc(formatRomanSet(correctSet))}</b>.</p>
+    <p>${lead}</p>
     <div class="verdictGroup"><b>Rationale for each statement</b><ul class="explainList">${rationale}</ul></div>`;
 }
 function correctReason(q, correctChoice) {
@@ -607,23 +980,121 @@ function nonRomanChoiceFeedback(q, choice, correctChoice) {
   const seed = (choice.originalLetter || "A").charCodeAt(0) % variants.length;
   return variants[seed];
 }
+function sameRomanSet(a, b) {
+  return a.length === b.length && a.every(item => b.includes(item));
+}
+function romanChoiceTheme(q) {
+  const source = `${q.question} ${q.legalBasis}`.toLowerCase();
+  if (/ict|information and communication technology|learner information system|ebeis|pnpki|sf10|data privacy/.test(source)) {
+    return {
+      label: "ICT practice",
+      boundary: "authorized, secure, and privacy-compliant ICT use",
+      lesson: "The exam lesson is that digital does not automatically mean appropriate. The tool, the data, and the transmission method must all be proper."
+    };
+  }
+  if (/professional networking|professional networks/.test(source)) {
+    return {
+      label: "networking practice",
+      boundary: "professional growth under PPSSH Domain 4",
+      lesson: "The exam lesson is to separate real professional growth from perks or resource support surrounding an event."
+    };
+  }
+  if (/conduct award|core values|awards and recognition/.test(source)) {
+    return {
+      label: "selection basis",
+      boundary: "documented conduct-award criteria",
+      lesson: "The exam lesson is to look for evidence of conduct and core values, not popularity, rank, or added qualifications."
+    };
+  }
+  if (/school-based management|sbm|school improvement plan|sip|stakeholder|community|partnership/.test(source)) {
+    return {
+      label: "SBM action",
+      boundary: "participatory and evidence-based school improvement",
+      lesson: "The exam lesson is to choose actions that connect data, stakeholders, implementation, monitoring, and adjustment."
+    };
+  }
+  if (/financial|mooe|coa|inventory|property|procurement|fund|disposal/.test(source)) {
+    return {
+      label: "resource-management step",
+      boundary: "documented authority and auditability",
+      lesson: "The exam lesson is to respect the stage of the official process before acting on public funds or property."
+    };
+  }
+  if (/inclusive education|sped|learners with disabilities|lwd/.test(source)) {
+    return {
+      label: "inclusive-education response",
+      boundary: "support that removes barriers for learners",
+      lesson: "The exam lesson is that inclusion requires concrete support, not delay, exclusion, or transferring the burden to the family."
+    };
+  }
+  if (/classroom assessment|interim assessment|grading/.test(source)) {
+    return {
+      label: "assessment statement",
+      boundary: "assessment evidence used to improve teaching and learning",
+      lesson: "The exam lesson is to distinguish ongoing diagnostic use of assessment from end-of-period judgment or unrelated feedback."
+    };
+  }
+  return {
+    label: "statement",
+    boundary: "the policy boundary in the legal basis",
+    lesson: "The exam lesson is to choose statements that carry the official criterion, not statements that only name a generally useful school activity."
+  };
+}
+function romanChoiceFeedback(q, choice, correctChoice, displayLabel) {
+  const statements = getRomanStatements(q.question);
+  const correctSet = parseRomanSet(correctChoice ? correctChoice.text : "");
+  const choiceSet = parseRomanSet(choice.text);
+  const missing = correctSet.filter(item => !choiceSet.includes(item));
+  const extra = choiceSet.filter(item => !correctSet.includes(item));
+  const validChosen = choiceSet.filter(item => correctSet.includes(item));
+  const theme = romanChoiceTheme(q);
+  const paragraphs = [];
+  if (extra.length && validChosen.length) {
+    paragraphs.push(`This option mixes valid ${theme.label}s with statements that fail the ${theme.boundary} test.`);
+  } else if (extra.length) {
+    paragraphs.push(`This option is built on the distractor statements, so it fails the ${theme.boundary} test from the start.`);
+  } else if (missing.length) {
+    paragraphs.push(`This option is partly on track, but it stops before the required ${theme.label}s are complete.`);
+  } else {
+    paragraphs.push(`This option does not match the required reading of the Roman numerals under the legal basis.`);
+  }
+  if (extra.length) {
+    const details = extra
+      .map(key => `${key} - ${statementAnalysis(q, key, statements[key] || key, false).mistake}`)
+      .join(" ");
+    paragraphs.push(`${formatRomanSet(extra)} create the main problem: ${details}`);
+  }
+  if (missing.length) {
+    const details = missing
+      .map(key => `${key} - ${statementAnalysis(q, key, statements[key] || key, true).contribution}`)
+      .join(" ");
+    paragraphs.push(`It also loses ${formatRomanSet(missing)}: ${details}`);
+  }
+  paragraphs.push(theme.lesson);
+  return choiceParagraph(displayLabel, choice.text, paragraphs.join(" "));
+}
+function romanSequenceFeedback(q, choice, correctChoice, displayLabel) {
+  const statements = getRomanStatements(q.question);
+  const correctSequence = parseRomanSequence(correctChoice ? correctChoice.text : "");
+  const choiceSequence = parseRomanSequence(choice.text);
+  const firstWrong = choiceSequence.findIndex((item, index) => item !== correctSequence[index]);
+  const expected = correctSequence[firstWrong >= 0 ? firstWrong : 0];
+  const actual = choiceSequence[firstWrong >= 0 ? firstWrong : 0];
+  const expectedAnalysis = statementAnalysis(q, expected, statements[expected] || expected, true);
+  const actualAnalysis = statementAnalysis(q, actual, statements[actual] || actual, true);
+  const reason = `The statements are the right ingredients, but the sequence is wrong. At step ${firstWrong + 1}, the process should use ${expected}: ${expectedAnalysis.contribution} This option places ${actual} there instead: ${actualAnalysis.contribution} In sequencing items, the logic of the work matters because implementation should move from ownership, to analysis, to planning, to action.`;
+  return choiceParagraph(displayLabel, choice.text, reason);
+}
 function choiceFeedback(q, choice, correctChoice, displayLabel) {
   const correctSet = parseRomanSet(correctChoice ? correctChoice.text : "");
   const choiceSet = parseRomanSet(choice.text);
   if (choiceSet.length && correctSet.length) {
-    const missing = correctSet.filter(item => !choiceSet.includes(item));
-    const extra = choiceSet.filter(item => !correctSet.includes(item));
-    const parts = [];
-    if (missing.length) {
-      parts.push(`omits ${formatRomanSet(missing)}`);
+    const correctSequence = parseRomanSequence(correctChoice ? correctChoice.text : "");
+    const choiceSequence = parseRomanSequence(choice.text);
+    if (sameRomanSet(choiceSet, correctSet) && choiceSequence.join("|") !== correctSequence.join("|")) {
+      return romanSequenceFeedback(q, choice, correctChoice, displayLabel);
     }
-    if (extra.length) {
-      parts.push(`includes ${formatRomanSet(extra)}`);
-    }
-    const reason = parts.length
-      ? `Incorrect because it ${parts.join(" and ")}. The detailed statement-by-statement rationale above explains why each numeral belongs or does not belong.`
-      : "Incorrect because the set does not match the policy-based combination required by the item.";
-    return choiceParagraph(displayLabel, choice.text, reason);
+    return romanChoiceFeedback(q, choice, correctChoice, displayLabel);
   }
   const correctYesNo = correctChoice && correctChoice.text.match(/^(Yes|No)\b/i);
   const choiceYesNo = choice.text.match(/^(Yes|No)\b/i);
