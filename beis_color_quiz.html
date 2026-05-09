@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BEIS Color Code Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue:   #1a5fa8; --blue-light:   #ddeeff; --blue-dark:   #0c3466;
+  --green:  #1e7a3c; --green-light:  #d4f0de; --green-dark:  #0d4520;
+  --yellow: #b86e00; --yellow-light: #fff0c2; --yellow-dark: #6b3e00;
+  --red:    #b52b1e; --red-light:    #fde8e6; --red-dark:    #6e150b;
+  --bg:     #f4f1eb;
+  --text:   #0f0f0f;
+  --muted:  #606060;
+  --border: #ddd8ce;
+  --fhead:  'Lora', Georgia, serif;
+  --fbody:  'Inter', system-ui, sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--fbody);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── TOP BAR ── */
+.topbar {
+  background: #111; color: #fff;
+  padding: 16px 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.25);
+}
+.topbar-title { font-family: var(--fhead); font-size: 20px; font-weight: 700; }
+.topbar-score {
+  font-size: 17px; font-weight: 700;
+  background: rgba(255,255,255,0.13);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 99px; padding: 6px 22px; white-space: nowrap;
+}
+
+/* ── LEGEND — hidden until answered ── */
+.legend-bar { background: #fff; border-bottom: 2px solid var(--border); display: none; }
+.legend-bar.visible { display: flex; }
+.legend-item {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  gap: 8px; padding: 13px 8px; font-size: 15px; font-weight: 700;
+  border-right: 1px solid var(--border); font-family: var(--fbody);
+}
+.legend-item:last-child { border-right: none; }
+.ldot { width: 13px; height: 13px; border-radius: 50%; flex-shrink: 0; }
+.ldot-blue { background: var(--blue); } .ldot-green { background: var(--green); }
+.ldot-yellow { background: var(--yellow); } .ldot-red { background: var(--red); }
+
+/* ── MAIN ── */
+.main { max-width: 960px; margin: 0 auto; padding: 56px 52px 220px; }
+
+/* ── START SCREEN ── */
+.start-screen { text-align: center; padding: 60px 0; }
+.start-hero { background: #111; color: #fff; border-radius: 24px; padding: 72px 56px; margin-bottom: 36px; }
+.start-title { font-family: var(--fhead); font-size: 52px; font-weight: 700; line-height: 1.15; margin-bottom: 20px; }
+.start-sub { font-size: 22px; color: #bbb; line-height: 1.65; max-width: 560px; margin: 0 auto 44px; }
+.start-stats { display: flex; gap: 18px; justify-content: center; margin-bottom: 44px; flex-wrap: wrap; }
+.start-stat { background: rgba(255,255,255,0.09); border: 1px solid rgba(255,255,255,0.15); border-radius: 14px; padding: 20px 32px; min-width: 120px; }
+.start-stat-num { font-family: var(--fhead); font-size: 40px; font-weight: 700; line-height: 1.1; }
+.start-stat-label { font-size: 13px; color: #aaa; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 4px; }
+.start-btn {
+  background: #fff; color: #111; border: none; border-radius: 14px; padding: 22px 68px;
+  font-family: var(--fbody); font-size: 24px; font-weight: 700; cursor: pointer; transition: all 0.15s;
+}
+.start-btn:hover { background: #e0d8cc; transform: translateY(-2px); }
+.color-chips { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.chip { display: flex; align-items: center; gap: 8px; padding: 12px 22px; border-radius: 99px; font-size: 17px; font-weight: 600; }
+.chip-blue { background: var(--blue-light); color: var(--blue-dark); }
+.chip-green { background: var(--green-light); color: var(--green-dark); }
+.chip-yellow { background: var(--yellow-light); color: var(--yellow-dark); }
+.chip-red { background: var(--red-light); color: var(--red-dark); }
+
+/* ── ITEM HEADER — hidden until answered ── */
+.item-header {
+  font-family: var(--fhead); font-size: 30px; font-weight: 700;
+  color: #111; margin-bottom: 24px; padding-bottom: 18px;
+  border-bottom: 4px solid #111; line-height: 1.3; display: none;
+}
+.item-header.visible { display: block; }
+
+/* ── COLOR TAG — hidden until answered ── */
+.color-tag {
+  display: none; align-items: center; gap: 8px; padding: 7px 20px;
+  border-radius: 99px; font-size: 14px; font-weight: 800; margin-bottom: 24px;
+  text-transform: uppercase; letter-spacing: 0.09em;
+}
+.color-tag.visible { display: inline-flex; }
+.tag-blue { background: var(--blue-light); color: var(--blue-dark); }
+.tag-green { background: var(--green-light); color: var(--green-dark); }
+.tag-yellow { background: var(--yellow-light); color: var(--yellow-dark); }
+.tag-red { background: var(--red-light); color: var(--red-dark); }
+
+.item-number {
+  display: block; font-family: var(--fbody); font-size: 16px; font-weight: 700;
+  color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 28px;
+}
+
+/* ── QUESTION — 46px Lora ── */
+.q-paragraph {
+  font-family: var(--fhead); font-size: 46px; line-height: 1.5;
+  font-weight: 400; color: #111; margin-bottom: 52px;
+}
+.q-paragraph strong { font-weight: 700; }
+.q-paragraph em { font-style: italic; }
+
+/* ── CHOICES — 38px Inter ── */
+.choices-label {
+  font-size: 15px; font-weight: 800; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px;
+}
+.choices-list { list-style: none; border-top: 2px solid var(--border); }
+.choice-item { border-bottom: 2px solid var(--border); }
+.choice-btn {
+  display: flex; align-items: flex-start; gap: 20px;
+  width: 100%; background: transparent; border: none;
+  padding: 26px 20px; cursor: pointer; text-align: left;
+  font-family: var(--fbody); font-size: 38px; color: var(--text);
+  line-height: 1.5; transition: background 0.12s;
+}
+.choice-btn:hover:not(:disabled) { background: #eae5d8; }
+.choice-btn:disabled { cursor: default; }
+.choice-letter {
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--fbody); font-weight: 800; font-size: 26px;
+  color: #fff; background: #333; border-radius: 50%;
+  width: 52px; height: 52px; flex-shrink: 0; margin-right: 4px;
+  margin-top: 4px; line-height: 1;
+}
+.choice-text { flex: 1; }
+.choice-item.state-correct { background: var(--green-light) !important; border-color: var(--green); }
+.choice-item.state-correct .choice-letter { background: var(--green); color: #fff; }
+.choice-item.state-wrong { background: var(--red-light) !important; border-color: var(--red); }
+.choice-item.state-wrong .choice-letter { background: var(--red); color: #fff; }
+
+/* ── EXPLANATION BOX ── */
+.explanation-box {
+  margin-top: 48px; border-radius: 18px; padding: 44px 48px;
+  display: none; animation: fadeUp 0.35s ease;
+}
+.explanation-box.show { display: block; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+.explanation-box.exp-correct { background: var(--green-light); border-left: 7px solid var(--green); }
+.explanation-box.exp-wrong   { background: var(--red-light);   border-left: 7px solid var(--red); }
+
+.exp-verdict {
+  font-family: var(--fhead); font-size: 30px; font-weight: 700; margin-bottom: 20px; line-height: 1.3;
+}
+.exp-verdict.vc { color: var(--green-dark); }
+.exp-verdict.vw { color: var(--red-dark); }
+
+.exp-body { font-family: var(--fbody); font-size: 32px; line-height: 1.78; color: #111; margin-bottom: 28px; }
+.exp-body strong { font-weight: 700; }
+.exp-body em { font-style: italic; }
+
+.exp-table {
+  width: 100%; border-collapse: collapse; font-size: 22px; margin-top: 24px;
+  background: rgba(255,255,255,0.7); border-radius: 12px; overflow: hidden;
+}
+.exp-table th {
+  text-align: left; font-weight: 800; padding: 14px 20px;
+  border-bottom: 2px solid rgba(0,0,0,0.1); font-size: 14px;
+  text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted);
+}
+.exp-table td { padding: 14px 20px; border-bottom: 1px solid rgba(0,0,0,0.08); vertical-align: top; line-height: 1.5; }
+.exp-table tr:last-child td { border-bottom: none; }
+
+/* ── BIG NEXT BUTTON ── */
+.next-big-wrap { display: none; margin-top: 48px; }
+.next-big-wrap.show { display: block; }
+.next-big-btn {
+  width: 100%; background: #111; color: #fff; border: none;
+  border-radius: 18px; padding: 32px 40px;
+  font-family: var(--fbody); font-size: 32px; font-weight: 800;
+  cursor: pointer; transition: background 0.15s, transform 0.12s;
+  display: flex; align-items: center; justify-content: center; gap: 14px;
+  letter-spacing: -0.01em;
+}
+.next-big-btn:hover { background: #2a2a2a; transform: translateY(-2px); }
+.next-big-btn .arrow { font-size: 38px; }
+
+/* post-answer info block — appears below choices after answering */
+.post-answer-block {
+  margin-top: 40px;
+  padding-top: 36px;
+  border-top: 3px solid var(--border);
+  animation: fadeUp 0.3s ease;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── STICKY NAV ── */
+.sticky-nav {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 200; display: none;
+  align-items: center; gap: 10px; padding: 10px 24px;
+  background: rgba(244,241,235,0.82); backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px); border-top: 1px solid rgba(0,0,0,0.08);
+}
+.snav-btn {
+  background: rgba(0,0,0,0.06); border: 1px solid rgba(0,0,0,0.13); border-radius: 9px;
+  padding: 8px 20px; font-family: var(--fbody); font-size: 14px; font-weight: 700;
+  color: #222; cursor: pointer; transition: background 0.12s; white-space: nowrap;
+}
+.snav-btn:hover:not(:disabled) { background: rgba(0,0,0,0.13); }
+.snav-btn:disabled { opacity: 0.22; cursor: default; }
+#sn-next { visibility: hidden; }
+#sn-next.ready { visibility: visible; }
+.snav-pbar { width: 90px; height: 5px; background: var(--border); border-radius: 99px; overflow: hidden; flex-shrink: 0; }
+.snav-pbar-fill { height: 5px; background: #111; border-radius: 99px; transition: width 0.4s ease; }
+.snav-progress-text { margin-left: auto; font-size: 14px; font-weight: 700; color: var(--muted); white-space: nowrap; }
+
+/* ═══════════════════════════════════════════
+   RADIAL BURST OVERLAY
+═══════════════════════════════════════════ */
+#flash-overlay {
+  position: fixed; inset: 0; z-index: 999;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  pointer-events: none;
+  /* no bg here — canvas draws the radial burst */
+}
+
+/* canvas fills overlay for radial gradient animation */
+#burst-canvas {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+}
+
+.flash-message {
+  position: relative; z-index: 2;
+  text-align: center;
+  opacity: 0;
+  transform: scale(0.7);
+  transition: opacity 0.18s ease, transform 0.22s cubic-bezier(0.34,1.56,0.64,1);
+}
+.flash-message.pop {
+  opacity: 1;
+  transform: scale(1);
+}
+.flash-emoji {
+  font-size: 100px; line-height: 1; display: block; margin-bottom: 14px;
+  filter: drop-shadow(0 4px 20px rgba(0,0,0,0.35));
+}
+.flash-text {
+  font-family: var(--fhead); font-size: 54px; font-weight: 700;
+  color: #fff; text-shadow: 0 3px 24px rgba(0,0,0,0.45); line-height: 1.2;
+}
+.flash-sub {
+  font-family: var(--fbody); font-size: 24px; color: rgba(255,255,255,0.92);
+  margin-top: 10px; font-weight: 600;
+}
+
+/* ── RESULT ── */
+#result-screen { display: none; padding-bottom: 100px; }
+.result-hero { background: #111; color: #fff; border-radius: 24px; padding: 64px 52px; text-align: center; margin-bottom: 32px; }
+.result-eyebrow { font-family: var(--fbody); font-size: 15px; font-weight: 700; color: #777; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.1em; }
+.result-big { font-family: var(--fhead); font-size: 110px; font-weight: 700; line-height: 1; }
+.result-denom { font-size: 28px; color: #888; margin-bottom: 12px; }
+.result-pct { font-size: 30px; font-weight: 700; margin-bottom: 26px; }
+.result-msg { font-size: 22px; color: #ccc; line-height: 1.7; max-width: 580px; margin: 0 auto; }
+.result-card { background: #fff; border: 1px solid var(--border); border-radius: 20px; padding: 40px 48px; margin-bottom: 24px; box-shadow: 0 4px 24px rgba(0,0,0,0.06); }
+.result-card-title { font-family: var(--fhead); font-size: 28px; font-weight: 700; margin-bottom: 30px; }
+.bd-item { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+.bd-item:last-child { margin-bottom: 0; }
+.bd-label { font-size: 20px; font-weight: 700; min-width: 120px; }
+.bd-bar-bg { flex: 1; height: 12px; background: var(--border); border-radius: 99px; overflow: hidden; }
+.bd-bar-fill { height: 12px; border-radius: 99px; transition: width 1.1s cubic-bezier(0.4,0,0.2,1); }
+.bar-blue { background: var(--blue); } .bar-green { background: var(--green); }
+.bar-yellow { background: var(--yellow); } .bar-red { background: var(--red); }
+.bd-frac { font-size: 18px; font-weight: 700; color: var(--muted); min-width: 48px; text-align: right; }
+.mistake-item { padding: 22px 0; border-bottom: 1px solid var(--border); }
+.mistake-item:last-child { border-bottom: none; padding-bottom: 0; }
+.mistake-qnum { font-size: 16px; font-weight: 700; color: var(--muted); margin-bottom: 8px; }
+.mistake-qtext { font-size: 22px; color: #111; margin-bottom: 12px; line-height: 1.5; font-family: var(--fhead); }
+.badge { display: inline-block; padding: 5px 18px; border-radius: 99px; font-size: 16px; font-weight: 700; }
+.badge-wrong { background: var(--red-light); color: var(--red-dark); }
+.badge-right { background: var(--green-light); color: var(--green-dark); }
+.restart-btn { width: 100%; background: #111; color: #fff; border: none; border-radius: 18px; padding: 28px; font-family: var(--fbody); font-size: 28px; font-weight: 800; cursor: pointer; transition: background 0.15s; }
+.restart-btn:hover { background: #2d2d2d; }
+.kb-hint { font-size: 15px; color: var(--muted); margin-top: 32px; text-align: center; opacity: 0.7; line-height: 1.7; }
+kbd { background: #e8e3da; border: 1px solid #ccc; border-radius: 5px; padding: 2px 9px; font-size: 13px; font-family: monospace; font-weight: 700; }
+
+@media (max-width: 720px) {
+  .main { padding: 28px 22px 220px; }
+  .q-paragraph { font-size: 30px; }
+  .choice-btn { font-size: 26px; padding: 20px 12px; }
+  .choice-letter { width: 40px; height: 40px; font-size: 20px; }
+  .exp-body { font-size: 24px; }
+  .next-big-btn { font-size: 26px; padding: 26px; }
+  .fw-text, .sad-text { font-size: 38px; }
+  .fw-emoji, .sad-emoji { font-size: 80px; }
+  .result-big { font-size: 72px; }
+}
+</style>
+</head>
+<body>
+
+<!-- RADIAL BURST OVERLAY -->
+<div id="flash-overlay">
+  <canvas id="burst-canvas"></canvas>
+  <div class="flash-message" id="flash-message">
+    <span class="flash-emoji" id="flash-emoji">💚</span>
+    <div class="flash-text" id="flash-text">Correct!</div>
+    <div class="flash-sub" id="flash-sub"></div>
+  </div>
+</div>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-title">BEIS Color Code Quiz</div>
+  <div class="topbar-score" id="topbar-score" style="display:none;">
+    Score: <span id="ts-score">0</span> / <span id="ts-total">20</span>
+  </div>
+</div>
+
+<!-- LEGEND: hidden until answered -->
+<div class="legend-bar" id="legend-bar">
+  <div class="legend-item"><span class="ldot ldot-blue"></span>Blue — Surplus</div>
+  <div class="legend-item"><span class="ldot ldot-green"></span>Green — Standard</div>
+  <div class="legend-item"><span class="ldot ldot-yellow"></span>Yellow — Slight Deficit</div>
+  <div class="legend-item"><span class="ldot ldot-red"></span>Red — Critical</div>
+</div>
+
+<div class="main">
+  <!-- START -->
+  <div id="start-screen" class="start-screen">
+    <div class="start-hero">
+      <div class="start-title">BEIS Color-Coded<br>Infrastructure Mapping</div>
+      <div class="start-sub">20 questions · Full explanations after every answer · PPSSH Domain 2</div>
+      <div class="start-stats">
+        <div class="start-stat"><div class="start-stat-num">20</div><div class="start-stat-label">Questions</div></div>
+        <div class="start-stat"><div class="start-stat-num">4</div><div class="start-stat-label">Colors</div></div>
+        <div class="start-stat"><div class="start-stat-num">1:45</div><div class="start-stat-label">Standard</div></div>
+      </div>
+      <button class="start-btn" onclick="startQuiz()">Begin Quiz →</button>
+    </div>
+    <div class="color-chips">
+      <div class="chip chip-blue"><span class="ldot ldot-blue"></span>Blue = Below 1:45</div>
+      <div class="chip chip-green"><span class="ldot ldot-green"></span>Green = At 1:45</div>
+      <div class="chip chip-yellow"><span class="ldot ldot-yellow"></span>Yellow = Slightly above</div>
+      <div class="chip chip-red"><span class="ldot ldot-red"></span>Red = Far above 1:45</div>
+    </div>
+    <div class="kb-hint" style="margin-top:36px;">
+      Shortcuts: <kbd>A</kbd> <kbd>B</kbd> <kbd>C</kbd> <kbd>D</kbd> to answer &nbsp;·&nbsp; <kbd>→</kbd> Next &nbsp;·&nbsp; <kbd>←</kbd> Prev
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="quiz-screen" style="display:none;">
+    <div id="q-area"></div>
+    <div class="kb-hint">Press <kbd>A</kbd> <kbd>B</kbd> <kbd>C</kbd> <kbd>D</kbd> to answer &nbsp;·&nbsp; <kbd>→</kbd> Next &nbsp;·&nbsp; <kbd>←</kbd> Prev</div>
+  </div>
+
+  <!-- RESULT -->
+  <div id="result-screen">
+    <div class="result-hero">
+      <div class="result-eyebrow">Quiz Complete</div>
+      <div class="result-big" id="res-big">0</div>
+      <div class="result-denom">out of 20</div>
+      <div class="result-pct" id="res-pct"></div>
+      <div class="result-msg" id="res-msg"></div>
+    </div>
+    <div class="result-card">
+      <div class="result-card-title">Performance by Color</div>
+      <div id="bd-items"></div>
+    </div>
+    <div class="result-card">
+      <div class="result-card-title" id="mistakes-title">Missed Questions</div>
+      <div id="mistakes-list"></div>
+    </div>
+    <button class="restart-btn" onclick="restartQuiz()">↺ &nbsp;Try Again</button>
+  </div>
+</div>
+
+<!-- STICKY NAV -->
+<div class="sticky-nav" id="sticky-nav">
+  <button class="snav-btn" id="sn-prev" onclick="prevQ()">← Prev</button>
+  <div class="snav-pbar"><div class="snav-pbar-fill" id="sn-fill" style="width:0%"></div></div>
+  <div class="snav-progress-text" id="sn-txt">Question 1 of 20 · 0% done</div>
+  <button class="snav-btn" id="sn-next" onclick="nextQ()">Next →</button>
+</div>
+
+<script>
+/* ── DATA ── */
+const LETTERS = ['A','B','C','D'];
+
+const Q = [
+  { q:"A school's BEIS report shows that it has a student-classroom ratio classified as <strong>Blue</strong>. What does this mean for the school's enrollment capacity?", choices:["The school has more learners than its classrooms can handle.","The school can still accommodate additional learners.","The school's classrooms meet the exact 1:45 ratio standard.","The school urgently needs new classroom construction."], correct:1, color:"blue", verdict:"✓ Correct! Blue means surplus capacity.", explain:"<strong>Blue = Surplus.</strong> The student-classroom ratio is <em>below</em> 1:45, meaning there is remaining capacity. The school head should report to the Division that the school may accept transfer students or additional enrollees without requiring new classroom construction.", table:[["Color","Status","Ratio Condition"],["🔵 Blue","Surplus","Below 1:45"],["🟢 Green","At Standard","At 1:45"],["🟡 Yellow","Slight Deficit","Slightly above 1:45"],["🔴 Red","Critical Deficit","Far above 1:45"]] },
+  { q:"A school's BEIS report shows a <strong>Red</strong> classification. What is the most appropriate immediate action of the school head?", choices:["Accept transfer students to maximize classroom use.","Report that no action is needed since classrooms are sufficient.","Submit an urgent request for additional classrooms and consider shifting schedules.","Inform the Division that the school is at exactly the standard ratio."], correct:2, color:"red", verdict:"✓ Correct! Red demands urgent action.", explain:"<strong>Red = Critical deficit.</strong> The ratio is far above 1:45. The school head must act urgently — submit infrastructure requests to the Division and explore remedies like shifting class schedules to reduce classroom load per session.", table:[["Color","Action"],["🔵 Blue","Report you can accept transfers"],["🟢 Green","Maintain and monitor"],["🟡 Yellow","Request additional classrooms"],["🔴 Red","Urgent request + consider shifting schedules"]] },
+  { q:"School B has a student-classroom ratio of <strong>1:38</strong>. Under DepEd's BEIS color-coding, which color classification applies?", choices:["Red","Yellow","Green","Blue"], correct:3, color:"blue", verdict:"✓ Correct! 1:38 is below 1:45 — that's Blue.", explain:"<strong>1:38 is BELOW the 1:45 standard</strong>, which means there are fewer students per classroom than the maximum threshold. This is a <em>surplus</em> condition — classified as <strong>Blue</strong>. Green means you are <em>at</em> the standard, not below it.", table:[["Ratio","vs. Standard","Color"],["1:38","Below (−7)","🔵 Blue"],["1:45","Exactly at","🟢 Green"],["1:52","Above (+7)","🟡 Yellow"],["1:72","Far above (+27)","🔴 Red"]] },
+  { q:"The Division Planning report shows that School C has a <strong>Green</strong> classification. Which of the following best describes School C's situation?", choices:["Classrooms are overcrowded and require immediate intervention.","The school's enrollment matches its classroom capacity at the standard ratio.","The school has surplus classrooms and can absorb more learners.","The school's floor area per pupil exceeds the required standard."], correct:1, color:"green", verdict:"✓ Correct! Green = at the standard ratio.", explain:"<strong>Green = At standard.</strong> The school is at or near the 1:45 ratio. No immediate action is required, but the school head must monitor enrollment closely to prevent it from slipping into Yellow. Note: Choice C describes <strong>Blue</strong> (surplus), not Green.", table:null },
+  { q:"A principal notices that the BEIS report classifies the school as <strong>Yellow</strong>. What should the principal infer from this classification?", choices:["The school has a surplus of classrooms.","The school's ratio is exactly 1:45.","The school is slightly overcrowded and needs additional classrooms.","The school meets all DepEd infrastructure standards."], correct:2, color:"yellow", verdict:"✓ Correct! Yellow signals a slight deficit.", explain:"<strong>Yellow = Slight deficit.</strong> The ratio is slightly above 1:45 (e.g., 1:52). While not yet a crisis, this signals the need to formally request additional classrooms from the Division before it worsens into a Red situation. Think of Yellow as an <em>early warning</em>.", table:[["Color","Urgency","Example Ratio"],["🟡 Yellow","Moderate — request classrooms","1:52"],["🔴 Red","Urgent — immediate action","1:70+"]] },
+  { q:"Which of the following student-classroom ratios would most likely result in a <strong>Red</strong> classification?", choices:["1:38","1:44","1:47","1:72"], correct:3, color:"red", verdict:"✓ Correct! 1:72 is a critical deficit.", explain:"<strong>1:72 is far above the 1:45 standard</strong> — a severe overcrowding condition flagged as <strong>Red</strong>. The further above 1:45, the more critical the classification. At 1:72, the school has 27 more students per classroom than the standard allows.", table:[["Ratio","Color","Status"],["1:38","🔵 Blue","Surplus"],["1:44","🟢 Green","At standard"],["1:47","🟡 Yellow","Mild deficit"],["1:72","🔴 Red","Critical deficit"]] },
+  { q:"The school head wants to report to the Division that the school is ready to receive learners displaced by a nearby school damaged by a typhoon. Which color classification <strong>supports</strong> this report?", choices:["Red","Yellow","Green","Blue"], correct:3, color:"blue", verdict:"✓ Correct! Only Blue has available capacity.", explain:"<strong>Blue = Surplus capacity.</strong> Only a Blue-classified school has the available classroom space to absorb additional learners. Even a Green school risks slipping into Yellow if it accepts more students.", table:[["Color","Can accept displaced learners?"],["🔵 Blue","✅ Yes — has available capacity"],["🟢 Green","⚠️ Risky — would push above standard"],["🟡 Yellow","❌ No — already slightly overcrowded"],["🔴 Red","❌ Absolutely not — already in crisis"]] },
+  { q:"A teacher remarks that their classroom is <em>'so spacious that students can move around freely during group activities.'</em> Which DepEd metric does this observation <strong>BEST</strong> refer to?", choices:["Student-classroom ratio classification","Floor area per pupil standard","Blue color classification in BEIS","Classroom-to-teacher ratio"], correct:1, color:"green", verdict:"✓ Correct! This is the classic exam trap — it's about floor area, not color-coding.", explain:"<strong>This is the classic exam trap.</strong> Physical spaciousness and mobility refer to the <em>floor area per pupil</em> standard — a completely <strong>different metric</strong> from the student-classroom ratio that BEIS color-coding measures. Whenever you see 'move around freely' or 'mobility of learners,' that is the floor area standard, NOT color-coding.", table:[["Metric","Standard","Answers the question..."],["Student-classroom ratio","1:45","Is there enough classrooms for enrollment?"],["Floor area per pupil","1.65 sq.m. (elem) / 1.80 sq.m. (sec)","Can learners move around freely?"]] },
+  { q:"In the BEIS color-coding system, what is the benchmark ratio against which all classifications are measured?", choices:["1:30","1:40","1:45","1:60"], correct:2, color:"green", verdict:"✓ Correct! 1:45 is the DepEd standard.", explain:"<strong>1:45 is the DepEd standard</strong> — one classroom for every 45 students. This is the single most important number to memorize. Everything revolves around this benchmark: below it is surplus (Blue), at it is ideal (Green), and above it signals overcrowding (Yellow/Red).", table:null },
+  { q:"School D has a ratio of <strong>1:45</strong>. School E has a ratio of <strong>1:52</strong>. Which pair of BEIS color classifications correctly describes them?", choices:["School D = Blue; School E = Green","School D = Green; School E = Yellow","School D = Yellow; School E = Red","School D = Blue; School E = Red"], correct:1, color:"green", verdict:"✓ Correct! D is Green, E is Yellow.", explain:"<strong>School D at 1:45 = Green</strong> (exactly at standard). <strong>School E at 1:52 = Yellow</strong> (slightly above standard — a mild deficit). Even being just a few students above 1:45 already pushes a school into Yellow territory.", table:[["School","Ratio","vs. Standard","Color"],["School D","1:45","Exactly at 1:45","🟢 Green"],["School E","1:52","7 above standard","🟡 Yellow"]] },
+  { q:"The Division Planning Officer explains that a school's Blue classification means it is <em>'below the threshold.'</em> What threshold is being referred to?", choices:["The 1.65 sq.m. floor area per pupil standard","The 1:45 student-classroom ratio standard","The minimum number of teachers required per school","The maximum enrollment cap set by the region"], correct:1, color:"blue", verdict:"✓ Correct! The threshold is the 1:45 ratio.", explain:"<strong>The threshold is the 1:45 student-classroom ratio.</strong> Being 'below the threshold' means the school has fewer students per classroom than the maximum standard — a surplus condition classified as Blue. Choice A (1.65 sq.m.) is a real DepEd metric but is a completely separate measurement.", table:[["Threshold","Value","Measures"],["Student-classroom ratio","1:45","Number of students per room"],["Floor area per pupil","1.65 sq.m. (elem) / 1.80 sq.m. (sec)","Physical space per student"]] },
+  { q:"A Division Supervisor reviewing four schools wants to prioritize infrastructure funding. Which color classification should receive the <strong>HIGHEST</strong> priority?", choices:["Blue","Green","Yellow","Red"], correct:3, color:"red", verdict:"✓ Correct! Red gets the highest funding priority.", explain:"<strong>Red receives the highest priority</strong> because it represents a critical deficit — classrooms are severely overcrowded, posing risks to learning quality and student safety. Blue schools not only don't need funding — they can help by accepting students from Red and Yellow schools.", table:[["Priority","Color","Reason"],["1st","🔴 Red","Critical deficit — immediate danger"],["2nd","🟡 Yellow","Slight deficit — needs attention soon"],["3rd","🟢 Green","At standard — monitor closely"],["4th","🔵 Blue","Surplus — no construction needed"]] },
+  { q:"Which statement <strong>INCORRECTLY</strong> describes the Blue classification in DepEd's BEIS color-coding system?", choices:["The school can accept additional learners.","The student-classroom ratio is below 1:45.","The school urgently needs new classroom construction.","The school has surplus classroom capacity."], correct:2, color:"blue", verdict:"✓ Correct! Urgent construction describes Red, not Blue.", explain:"<strong>Choice C is incorrect for Blue.</strong> Urgent construction is required for Red (critical deficit), not Blue. Blue means the school has <em>more</em> capacity than current enrollment demands. This question tests reverse thinking — it asks what Blue does NOT mean.", table:[["Choice","Correct for Blue?"],["A. Can accept additional learners","✅ True — Blue has surplus"],["B. Ratio is below 1:45","✅ True — that is the definition of Blue"],["C. Urgently needs construction","❌ False — that describes Red"],["D. Has surplus classroom capacity","✅ True — Blue = surplus"]] },
+  { q:"A school head submits a report stating: <em>'Our current classification indicates a slight deficit requiring attention but not yet at crisis level.'</em> Which classification is the school head describing?", choices:["Blue","Green","Yellow","Red"], correct:2, color:"yellow", verdict:"✓ Correct! 'Slight deficit, not yet crisis' = Yellow.", explain:"<strong>Yellow = Slight deficit.</strong> The phrase 'not yet at crisis level but requiring attention' perfectly describes Yellow — overcrowding is beginning and action is needed before it becomes a Red emergency.", table:[["Phrase","Color"],["'Can still absorb more learners'","🔵 Blue"],["'Exactly at standard, monitoring'","🟢 Green"],["'Slight deficit, needs attention'","🟡 Yellow"],["'Crisis level, urgent action needed'","🔴 Red"]] },
+  { q:"Under PPSSH Domain 2, a school head interprets a Blue BEIS classification and communicates it to stakeholders. Which communication is <strong>MOST accurate?</strong>", choices:["'We are in crisis. We need immediate classroom construction.'","'We are at the ideal ratio. No action needed for now.'","'We have available capacity. We can welcome additional learners.'","'We are slightly overcrowded. I am requesting additional rooms.'"], correct:2, color:"blue", verdict:"✓ Correct! Blue = 'We can welcome additional learners.'", explain:"<strong>Choice C accurately communicates a Blue classification.</strong> School heads under Domain 2 must not only interpret data correctly but also communicate it clearly to stakeholders. Blue = surplus = the school can absorb more students.", table:[["Choice","What color it actually describes"],["A. 'We are in crisis'","🔴 Red"],["B. 'At the ideal ratio'","🟢 Green"],["C. 'We have available capacity'","🔵 Blue ✅"],["D. 'Slightly overcrowded'","🟡 Yellow"]] },
+  { q:"Two schools are compared: School F is <strong>Blue</strong> and School G is <strong>Red</strong>. Which of the following statements is TRUE?", choices:["School F has more students per classroom than School G.","School G has a lower student-classroom ratio than School F.","School F has fewer students per classroom than School G.","Both schools have the same number of students per classroom."], correct:2, color:"red", verdict:"✓ Correct! Blue has fewer students per room than Red.", explain:"<strong>Blue has FEWER students per classroom than Red.</strong> Blue (surplus) = below 1:45. Red (critical deficit) = far above 1:45. So School F (Blue) has a lower ratio — fewer students per room — than School G (Red), which is severely overcrowded.", table:[["School","Color","Example Ratio","Students per room"],["School F","🔵 Blue","1:38","38 students"],["School G","🔴 Red","1:72","72 students"]] },
+  { q:"A newly appointed school head misreads the Blue classification as a warning to <strong>reduce enrollment</strong>. What error in understanding did the school head commit?", choices:["Confusing Blue with the floor area per pupil standard","Misidentifying Blue as a deficit condition instead of a surplus","Confusing Green and Blue classifications","Applying the classroom-to-teacher ratio instead of the student-classroom ratio"], correct:1, color:"blue", verdict:"✓ Correct! Blue is a surplus, not a deficit.", explain:"<strong>Blue is a surplus, not a deficit.</strong> The school head incorrectly treated Blue as a warning when it actually signals available capacity. This is a Domain 2 competency error — misreading infrastructure data leads to poor resource decisions.", table:[["Wrong interpretation","Correct interpretation"],["Reduce enrollment","Accept more learners"],["Request new classrooms","Report surplus to Division"],["Treat as overcrowded","Treat as under-capacity"]] },
+  { q:"Which sequence correctly arranges the BEIS color classifications from <strong>MOST overcrowded</strong> to <strong>MOST surplus?</strong>", choices:["Blue → Green → Yellow → Red","Red → Yellow → Green → Blue","Yellow → Red → Blue → Green","Green → Blue → Yellow → Red"], correct:1, color:"red", verdict:"✓ Correct! Red → Yellow → Green → Blue.", explain:"<strong>Red → Yellow → Green → Blue</strong> is the correct order from most overcrowded to most surplus. Memory trick: <em>'Really Yikes, Getting Better'</em> — Red → Yellow → Green → Blue.", table:[["Position","Color","Status","Example Ratio"],["Most overcrowded","🔴 Red","Critical deficit","1:72"],["↓","🟡 Yellow","Slight deficit","1:52"],["↓","🟢 Green","At standard","1:45"],["Most surplus","🔵 Blue","Surplus","1:38"]] },
+  { q:"A reporter asks: <em>'Your school is Blue-classified. Does that mean your classrooms are dangerously small?'</em> How should the school head correctly respond?", choices:["'Yes, we are in a critical overcrowding situation.'","'No, Blue means we actually have more classroom capacity than our current enrollment requires.'","'Blue means our rooms meet the exact 1:45 ratio with no room to spare.'","'Blue refers to our floor area standard, not the number of students.'"], correct:1, color:"blue", verdict:"✓ Correct! Blue means surplus capacity, not danger.", explain:"<strong>Blue = Surplus capacity, not danger.</strong> The school head must clarify that Blue is a favorable classification — classrooms have more space than the current student population demands.", table:[["Choice","Why it's wrong"],["A. 'Critical overcrowding'","That describes 🔴 Red, not Blue"],["C. 'Exact 1:45 with no room to spare'","That describes 🟢 Green, not Blue"],["D. 'Refers to floor area standard'","Floor area is a separate metric entirely"]] },
+  { q:"The Division Planning Unit's color-coded report serves primarily to help school heads do which of the following?", choices:["Evaluate teacher performance based on class size.","Determine which teachers need professional development.","Interpret infrastructure data to make informed resource and enrollment decisions.","Measure student academic performance across grade levels."], correct:2, color:"green", verdict:"✓ Correct! It supports Domain 2 resource decision-making.", explain:"<strong>The primary purpose is informed resource decision-making</strong> — a core Domain 2 competency under PPSSH. The color-coded system gives school heads an at-a-glance tool to assess classroom supply vs. enrollment demand, enabling accurate reporting to the Division and strategic planning for infrastructure needs.", table:[["Choice","Why it's wrong"],["A. Teacher performance","Falls under Domain 1 — Leadership"],["B. Professional development","Falls under Domain 4 — Prof. Development"],["D. Academic performance","Falls under Domain 3 — Curriculum"],["C. Resource decisions","✅ Domain 2 — School Operations"]] }
+];
+
+/* ── STATE ── */
+let cur = 0, score = 0, streak = 0;
+let answered   = new Array(Q.length).fill(undefined);
+let userChoice = new Array(Q.length).fill(undefined);
+
+const COLOR_TAG   = {blue:'tag-blue',green:'tag-green',yellow:'tag-yellow',red:'tag-red'};
+const COLOR_DOT   = {blue:'ldot-blue',green:'ldot-green',yellow:'ldot-yellow',red:'ldot-red'};
+const COLOR_LABEL = {blue:'Blue Classification',green:'Green Classification',yellow:'Yellow Classification',red:'Red Classification'};
+
+/* ═══════════════════════════════════
+   WEB AUDIO SOUNDS
+═══════════════════════════════════ */
+let audioCtx = null;
+function getAudio() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+function playCorrect() {
+  try {
+    const ac = getAudio();
+    [523.25, 659.25, 783.99, 1046.5].forEach((freq, i) => {
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
+      osc.connect(gain); gain.connect(ac.destination);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, ac.currentTime + i * 0.09);
+      gain.gain.setValueAtTime(0, ac.currentTime + i * 0.09);
+      gain.gain.linearRampToValueAtTime(0.22, ac.currentTime + i * 0.09 + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + i * 0.09 + 0.28);
+      osc.start(ac.currentTime + i * 0.09);
+      osc.stop(ac.currentTime + i * 0.09 + 0.3);
+    });
+  } catch(e) {}
+}
+function playWrong() {
+  try {
+    const ac = getAudio();
+    [180, 150].forEach((freq, i) => {
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
+      osc.connect(gain); gain.connect(ac.destination);
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(freq, ac.currentTime + i * 0.13);
+      gain.gain.setValueAtTime(0, ac.currentTime + i * 0.13);
+      gain.gain.linearRampToValueAtTime(0.18, ac.currentTime + i * 0.13 + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + i * 0.13 + 0.22);
+      osc.start(ac.currentTime + i * 0.13);
+      osc.stop(ac.currentTime + i * 0.13 + 0.25);
+    });
+  } catch(e) {}
+}
+
+/* ═══════════════════════════════════
+   FLASH OVERLAY LOGIC
+   correct → green flash 700ms → auto next question
+   Radial burst — 900ms — auto-advances on both correct and wrong
+═══════════════════════════════════ */
+const FLASH_MS = 900;
+
+/* ── Radial burst canvas ── */
+const burstCanvas = document.getElementById('burst-canvas');
+const burstCtx    = burstCanvas.getContext('2d');
+let burstRAF      = null;
+
+function runBurst(r, g, b) {
+  burstCanvas.width  = window.innerWidth;
+  burstCanvas.height = window.innerHeight;
+  const cx = burstCanvas.width  / 2;
+  const cy = burstCanvas.height / 2;
+  const maxR = Math.hypot(cx, cy) * 1.1;
+  const start = performance.now();
+  const dur   = FLASH_MS;
+
+  function draw(now) {
+    const t    = Math.min((now - start) / dur, 1);
+    // ease: fast burst in, slow fade out
+    const eIn  = t < 0.25 ? t / 0.25 : 1;
+    const eOut = t < 0.25 ? 1 : 1 - ((t - 0.25) / 0.75);
+    const alpha = eIn * eOut * 0.88;
+    const radius = maxR * (0.15 + 0.85 * (t < 0.3 ? t / 0.3 : 1));
+
+    burstCtx.clearRect(0, 0, burstCanvas.width, burstCanvas.height);
+    const grad = burstCtx.createRadialGradient(cx, cy, 0, cx, cy, radius);
+    grad.addColorStop(0,   `rgba(${r},${g},${b},${alpha})`);
+    grad.addColorStop(0.45,`rgba(${r},${g},${b},${alpha * 0.7})`);
+    grad.addColorStop(1,   `rgba(${r},${g},${b},0)`);
+    burstCtx.fillStyle = grad;
+    burstCtx.fillRect(0, 0, burstCanvas.width, burstCanvas.height);
+
+    if (t < 1) burstRAF = requestAnimationFrame(draw);
+    else burstCtx.clearRect(0, 0, burstCanvas.width, burstCanvas.height);
+  }
+  if (burstRAF) cancelAnimationFrame(burstRAF);
+  burstRAF = requestAnimationFrame(draw);
+}
+
+function showFlash(correct) {
+  const msg   = document.getElementById('flash-message');
+  const emoji = document.getElementById('flash-emoji');
+  const text  = document.getElementById('flash-text');
+  const sub   = document.getElementById('flash-sub');
+
+  // set content
+  if (correct) {
+    emoji.textContent = '💚';
+    text.textContent  = 'Correct!';
+    const ms = ['Well done!','Keep going!','On a roll! 🔥','3 in a row! 🔥','Amazing! 🔥🔥','Unstoppable! 🔥🔥🔥'];
+    sub.textContent   = ms[Math.min(streak - 1, 5)];
+    runBurst(34, 197, 94);   // green radial burst
+    playCorrect();
+  } else {
+    emoji.textContent = '😔';
+    text.textContent  = 'Wrong!';
+    sub.textContent   = `Correct answer: ${LETTERS[Q[cur].correct]}`;
+    runBurst(220, 50, 40);   // red radial burst
+    playWrong();
+  }
+
+  // pop message in
+  msg.classList.remove('pop');
+  requestAnimationFrame(() => requestAnimationFrame(() => msg.classList.add('pop')));
+
+  // after 900ms: auto-advance to next question — BOTH correct and wrong
+  setTimeout(() => {
+    msg.classList.remove('pop');
+    burstCtx.clearRect(0, 0, burstCanvas.width, burstCanvas.height);
+    // always go to next question immediately
+    if (cur < Q.length - 1) { cur++; renderQ(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    else showResult();
+  }, FLASH_MS);
+}
+
+/* ── RENDER ── */
+function renderQ() {
+  const total  = Q.length;
+  const q      = Q[cur];
+  const isDone = answered[cur] !== undefined;
+  const ua     = userChoice[cur];
+  const ok     = isDone && ua === q.correct;
+
+  /* sticky nav */
+  document.getElementById('sn-prev').disabled = cur === 0;
+  const snNext = document.getElementById('sn-next');
+  snNext.textContent = cur === total-1 ? 'Results →' : 'Next →';
+  isDone ? snNext.classList.add('ready') : snNext.classList.remove('ready');
+  document.getElementById('sn-fill').style.width = (cur/total*100)+'%';
+  document.getElementById('sn-txt').textContent  = `Question ${cur+1} of ${total} · ${Math.round(cur/total*100)}% done`;
+  document.getElementById('ts-score').textContent = score;
+
+  /* legend — only visible after answering */
+  isDone
+    ? document.getElementById('legend-bar').classList.add('visible')
+    : document.getElementById('legend-bar').classList.remove('visible');
+
+  /* choices */
+  const choicesHTML = q.choices.map((c,i) => {
+    let liCls = 'choice-item';
+    if (isDone) {
+      if (i===q.correct)       liCls += ' state-correct';
+      else if (i===ua && !ok)  liCls += ' state-wrong';
+    }
+    return `<li class="${liCls}">
+      <button class="choice-btn" onclick="answer(${i})" ${isDone?'disabled':''}>
+        <span class="choice-letter">${LETTERS[i]}</span>
+        <span class="choice-text">${c}</span>
+      </button></li>`;
+  }).join('');
+
+  /* explanation table */
+  let tableHTML = '';
+  if (isDone && q.table) {
+    const rows = q.table.map((row,ri) =>
+      ri===0
+        ? '<tr>'+row.map(h=>`<th>${h}</th>`).join('')+'</tr>'
+        : '<tr>'+row.map(d=>`<td>${d}</td>`).join('')+'</tr>'
+    ).join('');
+    tableHTML = `<table class="exp-table">${rows}</table>`;
+  }
+
+  /* POST-ANSWER BLOCK: official answer + classification + explanation + next btn
+     Nothing here is visible before the user answers */
+  const verdictHTML = ok
+    ? '✓ ' + q.verdict.replace(/^[✓✗x×]\s*/i,'')
+    : '✗ Wrong — The correct answer is <strong>' + LETTERS[q.correct] + '</strong>. Here is why:';
+
+  const postHTML = isDone ? `
+    <div class="post-answer-block">
+      <div class="item-header visible">
+        Item ${cur+1} &nbsp;|&nbsp; Official Answer: ${LETTERS[q.correct]}
+      </div>
+      <div class="color-tag ${COLOR_TAG[q.color]} visible">
+        <span class="ldot ${COLOR_DOT[q.color]}"></span>${COLOR_LABEL[q.color]}
+      </div>
+      <div class="explanation-box show ${ok?'exp-correct':'exp-wrong'}" id="exp-box">
+        <div class="exp-verdict ${ok?'vc':'vw'}">${verdictHTML}</div>
+        <div class="exp-body">${q.explain}</div>
+        ${tableHTML}
+      </div>
+      <div class="next-big-wrap show">
+        <button class="next-big-btn" onclick="nextQ()">
+          ${cur===total-1?'See Final Results':'Next Question'}
+          <span class="arrow">→</span>
+        </button>
+      </div>
+    </div>` : '';
+
+  document.getElementById('q-area').innerHTML = `
+    <span class="item-number">Question ${cur+1} of ${total}</span>
+    <p class="q-paragraph">${q.q}</p>
+    <div class="choices-label">Choose the best answer:</div>
+    <ul class="choices-list">${choicesHTML}</ul>
+    ${postHTML}`;
+}
+/* ── ANSWER ── */
+function answer(i) {
+  if (answered[cur] !== undefined) return;
+  userChoice[cur] = i;
+  const ok = i === Q[cur].correct;
+  answered[cur] = ok;
+  if (ok) { score++; streak++; }
+  else    { streak = 0; }
+  showFlash(ok);
+}
+
+function nextQ() {
+  if (answered[cur] === undefined) return;
+  if (cur < Q.length-1) { cur++; renderQ(); window.scrollTo({top:0,behavior:'smooth'}); }
+  else showResult();
+}
+
+function prevQ() {
+  if (cur > 0) { cur--; renderQ(); window.scrollTo({top:0,behavior:'smooth'}); }
+}
+
+function startQuiz() {
+  document.getElementById('start-screen').style.display = 'none';
+  document.getElementById('quiz-screen').style.display  = 'block';
+  document.getElementById('sticky-nav').style.display   = 'flex';
+  document.getElementById('topbar-score').style.display = 'block';
+  document.getElementById('ts-total').textContent = Q.length;
+  renderQ(); window.scrollTo(0,0);
+}
+
+function showResult() {
+  document.getElementById('quiz-screen').style.display  = 'none';
+  document.getElementById('sticky-nav').style.display   = 'none';
+  document.getElementById('legend-bar').classList.remove('visible');
+  document.getElementById('result-screen').style.display = 'block';
+  window.scrollTo({top:0,behavior:'smooth'});
+
+  const total = Q.length, pct = Math.round(score/total*100);
+  document.getElementById('res-big').textContent = score;
+  document.getElementById('res-pct').textContent = pct+'% Correct';
+  document.getElementById('res-msg').textContent =
+    pct===100?'Perfect score! You have fully mastered the BEIS color-code system.':
+    pct>=85  ?'Excellent! You are exam-ready. Review any missed items.':
+    pct>=70  ?'Good effort. Review the Blue vs. Green distinction and the floor area trap.':
+    pct>=50  ?'Keep studying. Practice applying the 1:45 benchmark.':
+              'More practice needed. Memorize the four colors and their ratio ranges first.';
+
+  const cnt={blue:[0,0],green:[0,0],yellow:[0,0],red:[0,0]};
+  Q.forEach((q,i)=>{ cnt[q.color][1]++; if(answered[i]===true) cnt[q.color][0]++; });
+  const LBL={blue:'🔵 Blue',green:'🟢 Green',yellow:'🟡 Yellow',red:'🔴 Red'};
+  const BAR={blue:'bar-blue',green:'bar-green',yellow:'bar-yellow',red:'bar-red'};
+  document.getElementById('bd-items').innerHTML=Object.entries(cnt).map(([c,[ok,tot]])=>{
+    const p=tot>0?Math.round(ok/tot*100):0;
+    return `<div class="bd-item"><div class="bd-label">${LBL[c]}</div><div class="bd-bar-bg"><div class="bd-bar-fill ${BAR[c]}" style="width:0%" data-w="${p}"></div></div><div class="bd-frac">${ok}/${tot}</div></div>`;
+  }).join('');
+  setTimeout(()=>document.querySelectorAll('.bd-bar-fill').forEach(el=>el.style.width=el.dataset.w+'%'),150);
+
+  const miss=Q.map((q,i)=>({q,i,ua:userChoice[i],ok:answered[i]})).filter(x=>!x.ok&&x.ua!==undefined);
+  document.getElementById('mistakes-title').textContent=`Missed Questions (${miss.length})`;
+  document.getElementById('mistakes-list').innerHTML=miss.length===0
+    ?'<div style="font-size:22px;color:var(--muted);text-align:center;padding:20px 0;">No mistakes — perfect! 🎉</div>'
+    :miss.map(m=>`<div class="mistake-item"><div class="mistake-qnum">Item ${m.i+1} — ${COLOR_LABEL[m.q.color]}</div><div class="mistake-qtext">${m.q.q.replace(/<[^>]+>/g,'').substring(0,120)}…</div><span class="badge badge-wrong">Your answer: ${LETTERS[m.ua]}</span> → <span class="badge badge-right">Correct: ${LETTERS[m.q.correct]}</span></div>`).join('');
+}
+
+function restartQuiz() {
+  cur=0; score=0; streak=0;
+  answered=new Array(Q.length).fill(undefined);
+  userChoice=new Array(Q.length).fill(undefined);
+  document.getElementById('result-screen').style.display='none';
+  document.getElementById('quiz-screen').style.display='block';
+  document.getElementById('sticky-nav').style.display='flex';
+  document.getElementById('legend-bar').classList.remove('visible');
+  renderQ(); window.scrollTo({top:0,behavior:'smooth'});
+}
+
+document.addEventListener('keydown', e => {
+  if (['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
+  if (document.getElementById('quiz-screen').style.display==='none') return;
+  const map={a:0,b:1,c:2,d:3};
+  const k=e.key.toLowerCase();
+  if (k in map && answered[cur]===undefined) answer(map[k]);
+  else if (e.key==='ArrowRight') nextQ();
+  else if (e.key==='ArrowLeft')  prevQ();
+});
+</script>
+</body>
+</html>
