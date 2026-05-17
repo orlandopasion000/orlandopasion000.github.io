@@ -119,7 +119,7 @@ d:"Domain 2 \u2014 Managing School Operations and Resources",s:"2.2 Financial ma
 e:{w:"The Special Hardship Allowance amount varies based on the distance of the school from the nearest population center and the teacher\u2019s basic monthly salary. Explaining these computation factors directly addresses the concern with a clear, policy-based rationale.",
 wr:[{l:"B",r:"Simply telling teachers to read the DO does not proactively address their concern. A school head should explain the policy, not deflect."},{l:"C",r:"Advising teachers to post on social media is inappropriate and unprofessional."},{l:"D",r:"This is factually incorrect. Special Hardship Allowance is not limited to pure multi-grade schools."}]}},
 
-{q:"When a school head was transferred to a multi-grade school, he/she discovered critical areas of concern. The school\u2019s key performance indicators were consistently declining, as shown by the table below.\n\nWhat process steps can the school head undertake to improve the performance of the failing school?",img:"IMG44",
+{q:"When a school head was transferred to a multi-grade school, he/she discovered critical areas of concern. The school\u2019s key performance indicators were consistently declining, as shown by the table below.\n\nWhat process steps can the school head undertake to improve the performance of the failing school?",img:"assets/nash-images/nash-q044.png",
 c:[{t:"A. Diagnose \u2192 Motivate \u2192 Reform \u2192 Monitor",x:0},{t:"B. Diagnose \u2192 Plan \u2192 Implement \u2192 Monitor \u2192 Improve",x:1},{t:"C. Diagnose \u2192 Strategize \u2192 Act \u2192 Evaluate",x:0},{t:"D. Diagnose \u2192 Propose \u2192 Mobilize \u2192 Evaluate \u2192 Improve",x:0}],
 d:"Domain 1 \u2014 Leading Strategically",s:"1.2 School planning and implementation",
 e:{w:"Option B (Diagnose \u2192 Plan \u2192 Implement \u2192 Monitor \u2192 Improve) presents the most complete and logical process for school improvement. It follows the standard improvement cycle: diagnose problems, plan interventions, implement them, monitor progress, and continuously improve.",
@@ -131,7 +131,7 @@ d:"Domain 4 \u2014 Developing Self and Others",s:"4.5 Professional development o
 e:{w:"The phrase \u201Cquality teachers means quality learners\u201D emphasizes a direct cause-and-effect relationship. If teachers enhance their knowledge, skills, and attitude, they will produce better learning results. This makes teachers\u2019 growth a direct part of the school\u2019s mission to improve student learning.",
 wr:[{l:"A",r:"\u201CNo learner is left behind\u201D focuses on learner inclusion rather than the direct link between teacher quality and student outcomes."},{l:"B",r:"\u201CCall of the time\u201D frames development as a temporal obligation rather than establishing the fundamental cause-and-effect."},{l:"C",r:"Acknowledging learners\u2019 capacity is important but does not directly connect teacher improvement to student outcomes."}]}},
 
-{q:"What does the table below imply about the organizational structures and staffing patterns of Stand-Alone and Integrated Senior High School (SHS)?",img:"IMG46",
+{q:"What does the table below imply about the organizational structures and staffing patterns of Stand-Alone and Integrated Senior High School (SHS)?",img:"assets/nash-images/nash-q046.png",
 c:[{t:"Schools A and D have the same number of staff and population.",x:0},{t:"The SHS staffing patterns consider the varying needs and contexts of the schools based on population.",x:1},{t:"The bigger the schools, the more staff will be assigned.",x:0},{t:"School Heads assume the responsibilities if not given Assistant School Head items.",x:0}],
 d:"Domain 2 \u2014 Managing School Operations and Resources",s:"2.4 Management of staff",
 e:{w:"The table shows different schools with different population sizes have different staffing configurations. This demonstrates that staffing patterns are context-responsive, considering the varying needs and sizes of schools rather than a one-size-fits-all approach.",
@@ -229,7 +229,7 @@ const q=Q[cur];
 document.getElementById('pCur').textContent=cur+1;
 document.getElementById('pFill').style.width=(cur/Q.length*100)+'%';
 let stem=q.q.replace(/\n/g,'<br>');
-let imgHtml='';
+let imgHtml=q.img?'<img class="q-img" src="'+q.img+'" alt="Question reference image">':'';
 if(q.img==='IMG44') imgHtml='<img class="q-img" src="'+IMG44T+'" alt="KPI Table"><img class="q-img" src="'+IMG44F+'" alt="Process Flowcharts">';
 if(q.img==='IMG46') imgHtml='<img class="q-img" src="'+IMG46+'" alt="Data Table">';
 

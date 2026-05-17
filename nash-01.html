@@ -227,7 +227,7 @@ const q=Q[cur];
 document.getElementById('pCur').textContent=cur+1;
 document.getElementById('pFill').style.width=(cur/Q.length*100)+'%';
 let stem=q.q.replace(/\n/g,'<br>');
-let imgHtml='';
+let imgHtml=q.img?'<img class="q-img" src="'+q.img+'" alt="Question reference image">':'';
 
 let h='<div class="card"><div class="domain-badge">'+q.d+'</div><br><div class="strand-badge">'+q.s+'</div><div class="q-counter">Question '+(cur+1)+' of '+Q.length+'</div><div class="q-text">'+stem+'</div>'+imgHtml+'<div class="choices" id="ch">';
 q.c.forEach(function(c,i){h+='<button class="choice-btn" onclick="pick('+i+')" id="cb'+i+'"><span class="letter">'+L[i]+'</span><span class="choice-text">'+c.t+'</span></button>';});
