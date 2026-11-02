@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- Atkinson Hyperlegible: designed by the Braille Institute so that 0/O, 1/l/I, 5/S, 8/B never get confused -->
-<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Atkinson+Hyperlegible+Mono:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Atkinson+Hyperlegible+Mono:wght@400;600;700;800&family=Rubik:wght@600;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --black:#000;
@@ -36,10 +36,29 @@ main{max-width:1240px;margin:0 auto;padding:36px 44px 90px}
 /* ===== CLOCK ===== */
 .hero{position:relative;padding:36px 44px 40px;border:1px solid var(--line);border-radius:32px;background:#000;margin-bottom:28px;overflow:hidden}
 .hero::before{content:"";position:absolute;top:-1px;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);box-shadow:0 0 18px var(--gold)}
-.clock-row{display:flex;align-items:flex-start;gap:18px;flex-wrap:nowrap}
-#clock{font-family:var(--mono);font-weight:700;font-size:clamp(4.2rem,15.5vw,13.5rem);line-height:.95;letter-spacing:-.04em;font-variant-numeric:tabular-nums slashed-zero;color:var(--text);white-space:nowrap;
-  text-shadow:0 0 30px rgba(245,241,230,.28),0 0 90px rgba(217,185,92,.16)}
-#ampm{font-family:var(--mono);font-weight:700;font-size:clamp(1.4rem,3.6vw,3.2rem);color:var(--gold);text-shadow:var(--glow-g);margin-top:.5em}
+.clock-row{display:flex;align-items:flex-start;gap:18px;flex-wrap:nowrap;padding-bottom:clamp(1.2rem,5vw,4.5rem);
+  -webkit-box-reflect:below -2px linear-gradient(transparent 62%,rgba(0,0,0,.30))}
+
+/* ── Glossy black-chrome digits (like polished 3D numerals) ── */
+.chrome{font-family:'Rubik',var(--sans);font-weight:700;line-height:1;white-space:nowrap;
+  filter:drop-shadow(0 0 1px rgba(255,255,255,.45)) drop-shadow(0 12px 18px rgba(0,0,0,.95)) drop-shadow(0 0 34px rgba(255,255,255,.12))}
+.chrome span{display:inline-block;width:.64em;text-align:center;
+  background:linear-gradient(180deg,#ffffff 0%,#ececec 10%,#a9a9a9 30%,#5c5c5c 46%,#1e1e1e 50%,#333 58%,#6e6e6e 76%,#c9c9c9 92%,#f4f4f4 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  -webkit-text-stroke:1.2px rgba(255,255,255,.28)}
+.chrome span.c{width:.3em;transform:translateY(-.06em)}
+#clock{font-size:clamp(4rem,14.5vw,13rem)}
+#ampm{font-family:'Rubik',var(--sans);font-weight:700;font-size:clamp(1.4rem,3.4vw,3rem);color:var(--gold);text-shadow:var(--glow-g);margin-top:.35em}
+
+/* ── Rest mode: only the clock, pure black ── */
+#rest{position:fixed;inset:0;background:#000;display:none;align-items:center;justify-content:center;z-index:90;cursor:pointer}
+#rest.show{display:flex}
+#rest.idle{cursor:none}
+#restWrap{display:flex;flex-direction:column;align-items:center;transition:transform 3s ease;
+  -webkit-box-reflect:below -4px linear-gradient(transparent 65%,rgba(0,0,0,.28))}
+#restClock{font-size:min(19vw,40vh)}
+#restAmpm{font-family:'Rubik',var(--sans);font-weight:600;font-size:min(3.4vw,6vh);letter-spacing:.35em;color:var(--gold);text-shadow:var(--glow-g);margin-top:.6em;opacity:.85}
+#restHint{position:fixed;left:0;right:0;bottom:28px;text-align:center;color:var(--mute);font-size:1rem;transition:opacity 1.2s}
 #date{font-size:clamp(1.3rem,2.4vw,1.9rem);color:var(--dim);margin-top:14px;text-shadow:var(--glow-w)}
 .next{margin-top:30px;padding-top:26px;border-top:1px solid var(--line2);display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:10px 28px}
 .label{font-size:.85rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--mute)}
@@ -137,7 +156,7 @@ li.cur{opacity:1;border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 3
 <body>
 <main>
   <section class="hero" aria-live="off">
-    <div class="clock-row"><div id="clock">--:--:--</div><div id="ampm"></div></div>
+    <div class="clock-row"><div id="clock" class="chrome"></div><div id="ampm"></div></div>
     <div id="date"></div>
     <div class="next">
       <div><div class="label">Next alarm</div><div id="nextLabel">Loading…</div></div>
@@ -149,6 +168,7 @@ li.cur{opacity:1;border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 3
     <button class="primary" id="arm">Turn Alarms On</button>
     <button class="ghost" id="test">▶ Test Sound</button>
     <button class="ghost" id="wake">Keep Screen On</button>
+    <button class="ghost" id="restBtn" title="Full screen clock only">⛶ Rest Mode</button>
     <div class="vol">
       <button id="volIcon" title="Mute / unmute" aria-label="Mute">🔊</button>
       <input type="range" id="volSlider" min="0" max="100" value="70" aria-label="Volume">
@@ -181,6 +201,11 @@ li.cur{opacity:1;border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 3
 
   <p class="note">Alarms ring only while this page stays open. On a phone, tap “Keep Screen On” and leave the page in front. Switch any row off to skip its alarm. Each alarm plays a 30-second song clip, and a different song every time.</p>
 </main>
+
+<div id="rest" aria-label="Rest mode clock. Tap to exit.">
+  <div id="restWrap"><div id="restClock" class="chrome"></div><div id="restAmpm"></div></div>
+  <div id="restHint">Tap anywhere or press Esc to exit</div>
+</div>
 
 <div id="ov" role="alertdialog" aria-live="assertive">
   <div class="ring">🔔</div>
@@ -390,8 +415,9 @@ $("wake").onclick=async function(){
 /* ───────── CLOCK LOOP ───────── */
 function tick(){
   var n=new Date(),sec=n.getHours()*3600+n.getMinutes()*60+n.getSeconds(),on=!!days[n.getDay()];
-  $("clock").textContent=p2(n.getHours()%12||12)+":"+p2(n.getMinutes())+":"+p2(n.getSeconds());
-  $("ampm").textContent=n.getHours()>=12?"PM":"AM";
+  var tstr=p2(n.getHours()%12||12)+":"+p2(n.getMinutes())+":"+p2(n.getSeconds()),ap=n.getHours()>=12?"PM":"AM";
+  if(tstr!==lastT){lastT=tstr;var html=chromeHTML(tstr);$("clock").innerHTML=html;if(restOn)$("restClock").innerHTML=html}
+  $("ampm").textContent=ap;$("restAmpm").textContent=ap;
   $("date").textContent=n.toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric",year:"numeric"});
   var cur=-1;
   S.forEach(function(s,i){
@@ -416,6 +442,40 @@ function tick(){
   $("nextLabel").textContent=fmt(S[found.i][0],S[found.i][1])+" — "+S[found.i][3];
   $("count").textContent="in "+(h?h+"h ":"")+(h||m?p2(m)+"m ":"")+p2(s2)+"s";
 }
+
+/* ───────── CHROME DIGITS (each digit in a fixed-width cell so nothing jiggles) ───────── */
+var lastT="";
+function chromeHTML(str){
+  return str.split("").map(function(c){return c===":"?'<span class="c">:</span>':'<span>'+c+'</span>'}).join("");
+}
+
+/* ───────── REST MODE: full screen, clock only ───────── */
+var restOn=false,idleT=null,driftT=null;
+function restIdle(){
+  $("rest").classList.remove("idle");$("restHint").style.opacity=1;
+  clearTimeout(idleT);idleT=setTimeout(function(){$("rest").classList.add("idle");$("restHint").style.opacity=0},2500);
+}
+function drift(){ /* tiny movement every minute protects the OLED from burn-in */
+  var x=(Math.random()*4-2).toFixed(2),y=(Math.random()*4-2).toFixed(2);
+  $("restWrap").style.transform="translate("+x+"vw,"+y+"vh)";
+}
+function enterRest(){
+  restOn=true;lastT="";$("rest").className="show";restIdle();drift();
+  driftT=setInterval(drift,60000);tick();
+  var el=document.documentElement;
+  try{(el.requestFullscreen||el.webkitRequestFullscreen).call(el)}catch(e){}
+}
+function exitRest(){
+  if(!restOn)return;
+  restOn=false;$("rest").className="";clearInterval(driftT);clearTimeout(idleT);
+  try{if(document.fullscreenElement||document.webkitFullscreenElement)(document.exitFullscreen||document.webkitExitFullscreen).call(document)}catch(e){}
+}
+$("restBtn").onclick=enterRest;
+$("rest").onclick=exitRest;
+$("rest").addEventListener("mousemove",restIdle);
+document.addEventListener("keydown",function(e){if(e.key==="Escape")exitRest()});
+document.addEventListener("fullscreenchange",function(){if(!document.fullscreenElement)exitRest()});
+document.addEventListener("webkitfullscreenchange",function(){if(!document.webkitFullscreenElement)exitRest()});
 
 queued=nextSong();
 showVol();showSong();setStatus();tick();setInterval(tick,1000);
