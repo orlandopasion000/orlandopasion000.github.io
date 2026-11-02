@@ -51,6 +51,8 @@ main{max-width:1240px;margin:0 auto;padding:36px 44px 90px}
 #ampm{font-family:'Rubik',var(--sans);font-weight:700;font-size:clamp(1.4rem,3.4vw,3rem);color:var(--gold);text-shadow:var(--glow-g);margin-top:.35em}
 
 /* ── Rest mode: only the clock, pure black ── */
+html.resting,html.resting body{overflow:hidden!important;height:100%;scrollbar-width:none}
+html.resting::-webkit-scrollbar,html.resting body::-webkit-scrollbar{display:none;width:0;height:0}
 #rest{position:fixed;inset:0;background:#000;display:none;align-items:center;justify-content:center;z-index:90;cursor:pointer}
 #rest.show{display:flex}
 #rest.idle{cursor:none}
@@ -280,48 +282,97 @@ function save(){try{
 
 /* ───────── SHUFFLE BAG: every song plays once before any repeats ───────── */
 var bag=[],lastIdx=-1,queued;
+function refill(){
+  bag=SONGS.map(function(_,i){return i});
+  for(var i=bag.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=bag[i];bag[i]=bag[j];bag[j]=t}
+  if(bag[0]===lastIdx||(queued&&bag[0]===idx(queued)))bag.push(bag.shift());
+}
+function peekIdx(){if(!bag.length)refill();return bag[0]}
 function nextSong(){
-  if(!bag.length){
-    bag=SONGS.map(function(_,i){return i});
-    for(var i=bag.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=bag[i];bag[i]=bag[j];bag[j]=t}
-    if(bag[0]===lastIdx)bag.push(bag.shift());
-  }
+  if(!bag.length)refill();
   lastIdx=bag.shift();
   return SONGS[lastIdx];
 }
 
-/* ───────── AUDIO ENGINE ───────── */
-var audio=new Audio();audio.preload="auto";
-var current=null,onDone=null,fadeT=null,fadingOut=false,mode=null;
+/* ───────── AUDIO ENGINE ─────────
+   All clips are downloaded when the page opens, and the "up next" songs are
+   decoded into memory ahead of time, so pressing play (or an alarm) starts
+   instantly. Fades are done by the audio hardware clock, so they are glitch-free. */
+var AC=window.AudioContext||window.webkitAudioContext;
+var ac=null,master=null,raw={},bufs={},ready={},curSrc=null,curFade=null,fallback=null;
+var current=null,onDone=null,mode=null;
 function target(){return muted?0:volume}
-function fadeTo(to,ms,cb){
-  clearInterval(fadeT);
-  var from=audio.volume,steps=Math.max(1,Math.round(ms/40)),k=0;
-  fadeT=setInterval(function(){
-    k++;audio.volume=Math.min(1,Math.max(0,from+(to-from)*k/steps));
-    if(k>=steps){clearInterval(fadeT);fadeT=null;cb&&cb()}
-  },40);
+function initAudio(){
+  if(ac||!AC)return;
+  ac=new AC({latencyHint:"interactive"});
+  master=ac.createGain();master.gain.value=target();master.connect(ac.destination);
+}
+function unlock(){initAudio();if(ac&&ac.state!=="running")ac.resume()}
+["pointerdown","keydown","touchstart"].forEach(function(ev){document.addEventListener(ev,unlock,{passive:true,capture:true})});
+
+var loading=SONGS.map(function(s,i){
+  return fetch(s.file).then(function(r){if(!r.ok)throw 0;return r.arrayBuffer()}).then(function(x){raw[i]=x}).catch(function(){});
+});
+function idx(song){return SONGS.indexOf(song)}
+function decode(i){
+  if(bufs[i])return bufs[i];
+  initAudio();
+  var pr=loading[i].then(function(){
+    if(!raw[i]||!ac)throw new Error("not loaded");
+    return new Promise(function(res,rej){ac.decodeAudioData(raw[i].slice(0),res,rej)});
+  });
+  bufs[i]=pr;
+  pr.then(function(buf){if(bufs[i]===pr)ready[i]=buf}).catch(function(){if(bufs[i]===pr)delete bufs[i]});
+  return pr;
+}
+/* keep only current + up next + the one after decoded (saves memory) */
+function prepare(){
+  var keep={};
+  if(current)keep[idx(current)]=1;
+  if(queued)keep[idx(queued)]=1;
+  keep[peekIdx()]=1;
+  Object.keys(keep).forEach(function(i){decode(+i)});
+  Object.keys(bufs).forEach(function(i){if(!keep[i]){delete bufs[i];delete ready[i]}});
+}
+function startBuf(buf){
+  var src=ac.createBufferSource(),g=ac.createGain(),t=ac.currentTime+.01,d=buf.duration;
+  src.buffer=buf;src.connect(g);g.connect(master);
+  g.gain.setValueAtTime(0,t);
+  g.gain.linearRampToValueAtTime(1,t+.35);          /* quick fade-in hides any MP3 cut click */
+  g.gain.setValueAtTime(1,Math.max(t+.4,t+d-2.2));
+  g.gain.linearRampToValueAtTime(0,t+d);              /* smooth fade-out at the end */
+  src.onended=function(){if(src===curSrc)finished()};
+  src.start(t);curSrc=src;curFade=g;
+}
+function startFallback(song){ /* only used if Web Audio is unavailable */
+  var el=new Audio(song.file);el.volume=target();fallback=el;
+  el.onended=function(){if(fallback===el){fallback=null;finished()}};
+  el.play().catch(function(){$("status").textContent="Tap the page once so the browser allows music."});
 }
 function playSong(song,done,m){
   stopSong();
-  current=song;onDone=done||null;mode=m||"test";fadingOut=false;
-  audio.src=song.file;audio.currentTime=0;audio.volume=0;
-  var p=audio.play();
-  if(p&&p.catch)p.catch(function(){$("status").textContent="Tap anywhere on the page once so the browser allows music."});
-  fadeTo(target(),1500);
+  current=song;onDone=done||null;mode=m||"test";
+  unlock();
+  var i=idx(song);
+  if(ac&&ready[i])startBuf(ready[i]);
+  else if(ac)decode(i).then(function(buf){if(current===song)startBuf(buf)}).catch(function(){if(current===song)startFallback(song)});
+  else startFallback(song);
+  if(ac)setTimeout(function(){if(ac.state!=="running")$("status").textContent="Tap anywhere on the page so the browser allows music."},600);
   showSong();
+}
+function finished(){
+  var cb=onDone;curSrc=curFade=null;current=null;onDone=null;mode=null;showSong();cb&&cb();
 }
 function stopSong(){
-  clearInterval(fadeT);fadeT=null;
-  audio.pause();current=null;onDone=null;mode=null;fadingOut=false;
+  if(curSrc){
+    var sr=curSrc,g=curFade,t=ac.currentTime;sr.onended=null;
+    g.gain.cancelScheduledValues(t);g.gain.setValueAtTime(g.gain.value,t);g.gain.linearRampToValueAtTime(0,t+.06);
+    try{sr.stop(t+.08)}catch(e){}
+  }
+  if(fallback){fallback.onended=null;fallback.pause();fallback=null}
+  curSrc=curFade=null;current=null;onDone=null;mode=null;
   showSong();
 }
-audio.addEventListener("timeupdate",function(){
-  if(!fadingOut&&audio.duration&&audio.duration-audio.currentTime<2.2){fadingOut=true;fadeTo(0,2000)}
-});
-audio.addEventListener("ended",function(){
-  var cb=onDone;current=null;onDone=null;mode=null;showSong();cb&&cb();
-});
 function showSong(){
   var s=current||queued;
   $("songTitle").textContent=s.title;
@@ -331,21 +382,23 @@ function showSong(){
   var t=mode==="test";
   $("test").textContent=t?"■ Stop":"▶ Test Sound";
   $("test").classList.toggle("active",t);
+  prepare();
 }
 
 /* ───────── VOLUME ───────── */
+function applyVol(){
+  if(master)master.gain.setTargetAtTime(target(),ac.currentTime,.03);
+  if(fallback)fallback.volume=target();
+}
 function showVol(){
   var pct=Math.round(volume*100);
   $("volSlider").value=pct;
   $("volSlider").style.setProperty("--p",(muted?0:pct)+"%");
   $("volPct").textContent=muted?"Muted":pct+"%";
   $("volIcon").textContent=muted||volume===0?"🔇":volume<.4?"🔉":"🔊";
-  if(current&&!fadingOut&&!fadeT)audio.volume=target();
+  applyVol();
 }
-$("volSlider").addEventListener("input",function(){
-  volume=this.value/100;muted=false;showVol();save();
-  if(current&&fadeT&&!fadingOut){clearInterval(fadeT);fadeT=null;audio.volume=target()}
-});
+$("volSlider").addEventListener("input",function(){volume=this.value/100;muted=false;showVol();save()});
 $("volIcon").onclick=function(){muted=!muted;showVol();save()};
 
 /* ───────── BUILD UI ───────── */
@@ -389,9 +442,7 @@ function setStatus(){
 $("arm").onclick=function(){
   armed=!armed;setStatus();
   if(armed){
-    /* unlock audio on this tap so later alarms can play without a click */
-    audio.muted=true;audio.src=queued.file;
-    var p=audio.play();if(p&&p.then)p.then(function(){audio.pause();audio.muted=false}).catch(function(){audio.muted=false});else audio.muted=false;
+    unlock(); /* this tap lets the browser play alarms later without another click */
     try{if(window.Notification&&Notification.permission==="default")Notification.requestPermission()}catch(e){}
   }
 };
@@ -401,7 +452,7 @@ $("test").onclick=function(){
   playSong(song,null,"test");
 };
 $("skip").onclick=function(){
-  if(current){var song=nextSong();playSong(song,onDone,mode);queued=nextSong()}
+  if(current){var song=nextSong();playSong(song,onDone,mode)}
   else{queued=nextSong();showSong()}
 };
 $("wake").onclick=async function(){
@@ -460,14 +511,14 @@ function drift(){ /* tiny movement every minute protects the OLED from burn-in *
   $("restWrap").style.transform="translate("+x+"vw,"+y+"vh)";
 }
 function enterRest(){
-  restOn=true;lastT="";$("rest").className="show";restIdle();drift();
+  restOn=true;lastT="";document.documentElement.classList.add("resting");$("rest").className="show";restIdle();drift();
   driftT=setInterval(drift,60000);tick();
   var el=document.documentElement;
   try{(el.requestFullscreen||el.webkitRequestFullscreen).call(el)}catch(e){}
 }
 function exitRest(){
   if(!restOn)return;
-  restOn=false;$("rest").className="";clearInterval(driftT);clearTimeout(idleT);
+  restOn=false;$("rest").className="";document.documentElement.classList.remove("resting");clearInterval(driftT);clearTimeout(idleT);
   try{if(document.fullscreenElement||document.webkitFullscreenElement)(document.exitFullscreen||document.webkitExitFullscreen).call(document)}catch(e){}
 }
 $("restBtn").onclick=enterRest;
