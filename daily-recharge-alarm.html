@@ -3,103 +3,583 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Daily Recharge Alarm</title>
+<title>Daily Recharge Alarm — Sir Orlando V. Pasion, Jr.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#EEF4F3;--card:#fff;--ink:#14282F;--mute:#52656B;--line:#D5E2E0;--teal:#14A085;--dteal:#0B5E50;--navy:#1F3A5F;--class:#8FB0D9;--work:#F2B84B;--err:#B5B5B5;--night:#1F3A5F;--ring:#0B5E50;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E1B1F;--card:#162A30;--ink:#E6F0EF;--mute:#9DB3B7;--line:#27424A;--teal:#2BC4A5;--ring:#2BC4A5;--class:#6E92BF;--night:#5D7FB0;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#0E1B1F;--card:#162A30;--ink:#E6F0EF;--mute:#9DB3B7;--line:#27424A;--teal:#2BC4A5;--ring:#2BC4A5;--class:#6E92BF;--night:#5D7FB0;color-scheme:dark}
-*,*:before,*:after{box-sizing:inherit}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 "Avenir Next","Segoe UI",system-ui,sans-serif;min-height:100vh}
-main{max-width:560px;margin:0 auto;padding:18px 16px 40px}
-h1{font-size:1.05rem;margin:0 0 14px;font-weight:700;color:var(--mute)}
-.hero{background:var(--dteal);color:#fff;border-radius:22px;padding:22px 20px;position:relative;overflow:hidden}
-.hero:after{content:"";position:absolute;right:-40px;top:-50px;width:170px;height:170px;border-radius:50%;background:#fff;opacity:.08}
-#clock{font-size:3.4rem;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1}
-#date{opacity:.8;margin-top:4px}
-.next{margin-top:18px;padding-top:14px;border-top:1px solid rgba(255,255,255,.22)}
-.next small{opacity:.75;display:block}
-#nextLabel{font-size:1.15rem;font-weight:600;margin:2px 0}
-#count{font-variant-numeric:tabular-nums;font-size:1.6rem;font-weight:700}
-.bar{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
-button{font:inherit;cursor:pointer;border:0;border-radius:12px;padding:11px 16px;font-weight:600}
-button:focus-visible,input:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
-.primary{background:var(--teal);color:#fff}
-.primary.on{background:var(--card);color:var(--teal);box-shadow:inset 0 0 0 2px var(--teal)}
-.ghost{background:var(--card);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
-.days{display:flex;gap:6px;margin-bottom:6px}
-.days button{flex:1;padding:9px 0;background:var(--card);color:var(--mute);box-shadow:inset 0 0 0 1px var(--line)}
-.days button.on{background:var(--navy);color:#fff;box-shadow:none}
-#status{color:var(--mute);font-size:.9rem;margin:4px 2px 12px}
-ul{list-style:none;margin:0;padding:0}
-li{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:14px;padding:11px 12px;margin-bottom:8px;border-left:6px solid var(--c)}
-li.rest{--c:var(--teal)}li.class{--c:var(--class)}li.work{--c:var(--work)}li.err{--c:var(--err)}li.night{--c:var(--night)}
-li.past{opacity:.5}
-li.cur{box-shadow:0 0 0 2px var(--teal)}
-li.rest .t{font-weight:700}
-.t{font-variant-numeric:tabular-nums;min-width:5.6em;font-weight:600}
-.l{flex:1}
-.l span{display:block;color:var(--mute);font-size:.82rem}
-.sw{position:relative;width:46px;height:28px;flex:none}
-.sw input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer;z-index:2}
-.sw i{position:absolute;inset:0;border-radius:14px;background:var(--line);transition:background .15s}
-.sw i:after{content:"";position:absolute;left:3px;top:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:transform .15s}
-.sw input:checked+i{background:var(--teal)}
-.sw input:checked+i:after{transform:translateX(18px)}
-#ov{position:fixed;inset:0;background:var(--ring);color:#fff;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;z-index:9}
-#ov.show{display:flex}
-#ov .big{font-size:2.2rem;font-weight:700;margin:6px 0 4px}
-#ov .tm{font-size:1.2rem;opacity:.85;margin-bottom:28px}
-#ov button{background:#fff;color:var(--dteal);font-size:1.2rem;padding:16px 44px;border-radius:16px}
-.pulse{width:84px;height:84px;border-radius:50%;background:#fff;opacity:.9;animation:p 1s ease-in-out infinite}
-@keyframes p{50%{transform:scale(1.18);opacity:.5}}
-@media (prefers-reduced-motion:reduce){.pulse{animation:none}}
-.note{color:var(--mute);font-size:.85rem;margin-top:14px}
+:root {
+  --black: #000000;
+  --card: #0A0A0A;
+  --card-hover: #111111;
+  --border: #1A1A1A;
+  --border-light: #222222;
+  --gold: #C9A84C;
+  --gold-dim: #A68A3E;
+  --gold-glow: rgba(201,168,76,0.15);
+  --gold-glow-strong: rgba(201,168,76,0.25);
+  --text: #F0ECE2;
+  --text-dim: #8A8478;
+  --text-muted: #5A5650;
+  --rest: #C9A84C;
+  --class: #7B9EC9;
+  --work: #E8C570;
+  --err: #6B6B6B;
+  --night: #5A6E8A;
+  --rest-bg: rgba(201,168,76,0.06);
+  --class-bg: rgba(123,158,201,0.06);
+  --work-bg: rgba(232,197,112,0.06);
+  --err-bg: rgba(107,107,107,0.06);
+  --night-bg: rgba(90,110,138,0.06);
+  color-scheme: dark;
+  box-sizing: border-box;
+}
+*, *::before, *::after { box-sizing: inherit; margin: 0; padding: 0; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+body {
+  background: var(--black);
+  color: var(--text);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 18px;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* === HEADER BAR === */
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 48px;
+  backdrop-filter: blur(20px) saturate(1.8);
+  -webkit-backdrop-filter: blur(20px) saturate(1.8);
+  background: rgba(0,0,0,0.75);
+  border-bottom: 1px solid var(--border);
+  transition: background 0.3s;
+}
+.topbar-brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.15em;
+  text-decoration: none;
+}
+.topbar-nav {
+  display: flex;
+  gap: 36px;
+}
+.topbar-nav a {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: color 0.25s;
+}
+.topbar-nav a:hover { color: var(--gold); }
+
+/* === MAIN LAYOUT === */
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 120px 48px 80px;
+}
+@media (max-width: 768px) {
+  main { padding: 100px 20px 60px; }
+  .topbar { padding: 16px 20px; }
+  .topbar-nav { gap: 20px; }
+}
+
+/* === HERO SECTION === */
+.hero-label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+.hero {
+  position: relative;
+  border-radius: 28px;
+  padding: 52px 48px 48px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  margin-bottom: 32px;
+}
+.hero::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 60px;
+  right: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.hero::after {
+  content: "";
+  position: absolute;
+  right: -80px;
+  top: -80px;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--gold-glow) 0%, transparent 70%);
+  pointer-events: none;
+}
+#clock {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 5rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--text);
+}
+#date {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  font-style: italic;
+  color: var(--text-dim);
+  margin-top: 8px;
+}
+.next {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-light);
+}
+.next small {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  display: block;
+}
+#nextLabel {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 6px 0;
+}
+#count {
+  font-family: 'JetBrains Mono', monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--gold);
+}
+
+/* === CONTROLS === */
+.controls {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+button {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  cursor: pointer;
+  border: 0;
+  border-radius: 14px;
+  padding: 14px 24px;
+  font-weight: 600;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: 0.02em;
+}
+button:focus-visible, input:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+.primary {
+  background: var(--gold);
+  color: var(--black);
+}
+.primary:hover {
+  background: #D4B45A;
+  box-shadow: 0 4px 24px var(--gold-glow-strong);
+  transform: translateY(-1px);
+}
+.primary.on {
+  background: transparent;
+  color: var(--gold);
+  box-shadow: inset 0 0 0 2px var(--gold);
+}
+.primary.on:hover {
+  background: var(--gold-glow);
+}
+.ghost {
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--border-light);
+}
+.ghost:hover {
+  background: var(--card-hover);
+  border-color: var(--text-muted);
+  transform: translateY(-1px);
+}
+
+/* === DAYS === */
+.days-section {
+  margin-bottom: 8px;
+}
+.days-title {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+.days {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.days button {
+  flex: 1;
+  padding: 14px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  background: var(--card);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.days button:hover {
+  border-color: var(--text-muted);
+  color: var(--text-dim);
+}
+.days button.on {
+  background: var(--gold);
+  color: var(--black);
+  border-color: var(--gold);
+  box-shadow: 0 2px 16px var(--gold-glow);
+}
+
+#status {
+  color: var(--text-muted);
+  font-size: 1rem;
+  margin: 8px 0 32px;
+  font-style: italic;
+}
+
+/* === SCHEDULE LIST === */
+.list-section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.list-section-title::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--border-light), transparent);
+}
+
+ul { list-style: none; }
+
+li {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: var(--card);
+  border-radius: 16px;
+  padding: 18px 24px;
+  margin-bottom: 10px;
+  border: 1px solid var(--border);
+  border-left: 5px solid var(--c);
+  transition: all 0.2s ease;
+}
+li:hover {
+  background: var(--card-hover);
+  transform: translateX(4px);
+}
+li.rest  { --c: var(--rest);  background: var(--rest-bg); }
+li.class { --c: var(--class); background: var(--class-bg); }
+li.work  { --c: var(--work);  background: var(--work-bg); }
+li.err   { --c: var(--err);   background: var(--err-bg); }
+li.night { --c: var(--night); background: var(--night-bg); }
+li:hover.rest  { background: rgba(201,168,76,0.10); }
+li:hover.class { background: rgba(123,158,201,0.10); }
+li:hover.work  { background: rgba(232,197,112,0.10); }
+li:hover.err   { background: rgba(107,107,107,0.10); }
+li:hover.night { background: rgba(90,110,138,0.10); }
+
+li.past { opacity: 0.35; }
+li.cur  {
+  box-shadow: 0 0 0 2px var(--gold), 0 4px 20px var(--gold-glow);
+  opacity: 1 !important;
+}
+li.rest .t { font-weight: 700; color: var(--gold); }
+
+.t {
+  font-family: 'JetBrains Mono', monospace;
+  font-variant-numeric: tabular-nums;
+  min-width: 7em;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--text);
+}
+.l {
+  flex: 1;
+  font-size: 1.1rem;
+}
+.l span {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+/* === TOGGLE SWITCH === */
+.sw {
+  position: relative;
+  width: 52px;
+  height: 30px;
+  flex: none;
+}
+.sw input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  margin: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+.sw i {
+  position: absolute;
+  inset: 0;
+  border-radius: 15px;
+  background: var(--border-light);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.sw i::after {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--text-dim);
+  transition: transform 0.2s, background 0.2s;
+}
+.sw input:checked + i {
+  background: var(--gold);
+  box-shadow: 0 0 12px var(--gold-glow);
+}
+.sw input:checked + i::after {
+  transform: translateX(22px);
+  background: var(--black);
+}
+
+/* === ALARM OVERLAY === */
+#ov {
+  position: fixed;
+  inset: 0;
+  background: var(--black);
+  color: var(--text);
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px;
+  z-index: 100;
+}
+#ov.show { display: flex; }
+#ov .big {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.8rem;
+  font-weight: 700;
+  margin: 20px 0 8px;
+}
+#ov .tm {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.4rem;
+  color: var(--gold);
+  margin-bottom: 40px;
+}
+#ov button {
+  background: var(--gold);
+  color: var(--black);
+  font-size: 1.3rem;
+  padding: 18px 56px;
+  border-radius: 16px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+#ov button:hover {
+  background: #D4B45A;
+  box-shadow: 0 4px 32px var(--gold-glow-strong);
+}
+.pulse {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 3px solid var(--gold);
+  animation: p 1.5s ease-in-out infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pulse::after {
+  content: "⏰";
+  font-size: 2.4rem;
+}
+@keyframes p {
+  0%   { transform: scale(1);    opacity: 1;   box-shadow: 0 0 0 0 var(--gold-glow-strong); }
+  50%  { transform: scale(1.15); opacity: 0.7; box-shadow: 0 0 40px 10px var(--gold-glow); }
+  100% { transform: scale(1);    opacity: 1;   box-shadow: 0 0 0 0 var(--gold-glow-strong); }
+}
+@media (prefers-reduced-motion: reduce) { .pulse { animation: none; } }
+
+/* === FOOTER NOTE === */
+.note {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  line-height: 1.7;
+}
+
+/* === CATEGORY LEGEND === */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+}
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  #clock { font-size: 3.2rem; }
+  #count { font-size: 1.5rem; }
+  #nextLabel { font-size: 1.2rem; }
+  .hero { padding: 36px 24px 32px; }
+  li { padding: 14px 16px; gap: 14px; }
+  .t { min-width: 6em; font-size: 1rem; }
+  .l { font-size: 1rem; }
+  .list-section-title { font-size: 1.3rem; }
+  .topbar-nav { display: none; }
+}
+
+@media (max-width: 480px) {
+  #clock { font-size: 2.5rem; }
+  .days button { font-size: 0.85rem; padding: 10px 0; }
+}
 </style>
 </head>
 <body>
+
+<nav class="topbar">
+  <a class="topbar-brand" href="https://orlandopasion000.github.io/">OVP</a>
+  <div class="topbar-nav">
+    <a href="https://orlandopasion000.github.io/">Portfolio</a>
+    <a href="#">Recharge</a>
+  </div>
+</nav>
+
 <main>
-<h1>Daily Recharge Alarm</h1>
-<section class="hero" aria-live="off">
-  <div id="clock">--:--:--</div>
-  <div id="date"></div>
-  <div class="next"><small>Next alarm</small><div id="nextLabel">Loading…</div><div id="count"></div></div>
-</section>
-<div class="bar">
-  <button class="primary" id="arm">Turn alarms on</button>
-  <button class="ghost" id="test">Test sound</button>
-  <button class="ghost" id="wake">Keep screen on</button>
-</div>
-<div class="days" id="days" role="group" aria-label="Alarm days"></div>
-<div id="status">Alarms are off. Tap “Turn alarms on” first.</div>
-<ul id="list"></ul>
-<p class="note">Alarms ring only while this page stays open. On a phone, tap “Keep screen on” and leave the page in front. Switch any row off to skip its alarm.</p>
+  <div class="hero-label">Daily Recharge Alarm</div>
+  <section class="hero" aria-live="off">
+    <div id="clock">--:--:--</div>
+    <div id="date"></div>
+    <div class="next">
+      <small>Next Alarm</small>
+      <div id="nextLabel">Loading…</div>
+      <div id="count"></div>
+    </div>
+  </section>
+
+  <div class="controls">
+    <button class="primary" id="arm">Turn Alarms On</button>
+    <button class="ghost" id="test">Test Sound</button>
+    <button class="ghost" id="wake">Keep Screen On</button>
+  </div>
+
+  <div class="days-section">
+    <div class="days-title">Active Days</div>
+    <div class="days" id="days" role="group" aria-label="Alarm days"></div>
+  </div>
+  <div id="status">Alarms are off — tap "Turn Alarms On" to begin.</div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--rest)"></div>Recharge</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--class)"></div>Class</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--work)"></div>Work</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--err)"></div>Task</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--night)"></div>Wind-Down</div>
+  </div>
+
+  <div class="list-section-title">Today's Schedule</div>
+  <ul id="list"></ul>
+
+  <p class="note">Alarms ring only while this page stays open. On a phone, tap "Keep Screen On" and leave the page in front. Toggle any row's switch to skip its alarm.</p>
 </main>
-<div id="ov" role="alertdialog" aria-live="assertive"><div class="pulse"></div><div class="big" id="ovT"></div><div class="tm" id="ovM"></div><button id="ovB">Dismiss</button></div>
+
+<div id="ov" role="alertdialog" aria-live="assertive">
+  <div class="pulse"></div>
+  <div class="big" id="ovT"></div>
+  <div class="tm" id="ovM"></div>
+  <button id="ovB">Dismiss</button>
+</div>
+
 <script>
 var S=[
-[7,0,"work","Arrive: read, learn, develop"],
-[8,0,"rest","Short recharge, 10 min"],
+[7,0,"work","Arrive — read, learn, develop"],
+[8,0,"rest","Short recharge — 10 min"],
 [8,10,"work","Work and print"],
-[8,20,"rest","Recharge before class, 10 min"],
+[8,20,"rest","Recharge before class — 10 min"],
 [8,30,"class","Class: Math 8"],
-[9,30,"rest","Long recharge, 40 min"],
+[9,30,"rest","Long recharge — 40 min"],
 [10,11,"work","Work and print"],
-[10,31,"rest","Recharge before class, 14 min"],
+[10,31,"rest","Recharge before class — 14 min"],
 [10,45,"class","Class: Math 10"],
-[11,45,"err","Principal’s office: log out/in"],
-[12,0,"rest","Lunch and recharge, 45 min"],
+[11,45,"err","Principal's office — log out/in"],
+[12,0,"rest","Lunch and recharge — 45 min"],
 [12,45,"err","Personal hygiene"],
-[12,50,"rest","Recharge before class, 10 min"],
+[12,50,"rest","Recharge before class — 10 min"],
 [13,0,"class","Class: Math 8"],
-[14,0,"rest","Longest recharge, 60 min"],
+[14,0,"rest","Longest recharge — 60 min"],
 [15,0,"work","Work and print"],
-[15,10,"rest","Quick recharge, 5 min"],
+[15,10,"rest","Quick recharge — 5 min"],
 [15,15,"class","Class: Gen Math 11"],
 [16,16,"err","Organize files"],
 [16,21,"rest","Recharge, then go home"],
-[20,0,"night","Shutdown: write tomorrow’s top 3"],
-[20,30,"night","Wind-down: no screens"],
+[20,0,"night","Shutdown — write tomorrow's top 3"],
+[20,30,"night","Wind-down — no screens"],
 [21,30,"night","Bedtime"]
 ];
 var DN=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
@@ -154,28 +634,28 @@ function ring(i){
 $("ovB").onclick=function(){clearInterval(ringTimer);$("ov").className=""};
 
 function setStatus(){
-  $("arm").textContent=armed?"Alarms are on":"Turn alarms on";
+  $("arm").textContent=armed?"Alarms Are On":"Turn Alarms On";
   $("arm").className="primary"+(armed?" on":"");
-  $("status").textContent=armed?"Alarms are on. Keep this page open.":"Alarms are off. Tap “Turn alarms on” first.";
+  $("status").textContent=armed?'Alarms active — keep this page open.':'Alarms are off — tap "Turn Alarms On" to begin.';
 }
 $("arm").onclick=function(){
   if(armed){armed=false;setStatus();return}
-  try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();ac.resume()}catch(e){$("status").textContent="This browser cannot play sound.";return}
+  try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();ac.resume()}catch(e){$("status").textContent="This browser cannot play sound.";return}
   try{if(window.Notification&&Notification.permission==="default")Notification.requestPermission()}catch(e){}
   armed=true;setStatus();play("rest");
 };
 $("test").onclick=function(){
-  try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();ac.resume()}catch(e){return}
+  try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();ac.resume()}catch(e){return}
   play("rest");setTimeout(function(){play("class")},1400);
 };
 $("wake").onclick=async function(){
   try{
-    if(lock){await lock.release();lock=null;$("wake").textContent="Keep screen on";return}
-    lock=await navigator.wakeLock.request("screen");$("wake").textContent="Screen stays on";
-    lock.addEventListener("release",function(){lock=null;$("wake").textContent="Keep screen on"});
-  }catch(e){$("wake").textContent="Not supported here"}
+    if(lock){await lock.release();lock=null;$("wake").textContent="Keep Screen On";return}
+    lock=await navigator.wakeLock.request("screen");$("wake").textContent="Screen Stays On ✓";
+    lock.addEventListener("release",function(){lock=null;$("wake").textContent="Keep Screen On"});
+  }catch(e){$("wake").textContent="Not Supported"}
 };
-document.addEventListener("visibilitychange",function(){if(!document.hidden&&lock===null&&$("wake").textContent==="Screen stays on")$("wake").click()});
+document.addEventListener("visibilitychange",function(){if(!document.hidden&&lock===null&&$("wake").textContent==="Screen Stays On ✓")$("wake").click()});
 
 function tick(){
   var n=new Date(),sec=n.getHours()*3600+n.getMinutes()*60+n.getSeconds(),dow=n.getDay(),on=!!days[dow];
@@ -205,7 +685,7 @@ function tick(){
   if(!found){$("nextLabel").textContent="No alarms set";$("count").textContent="Choose a day and switch rows on";return}
   var diff=Math.round((found.at-n)/1000),h=Math.floor(diff/3600),m=Math.floor(diff%3600/60),s2=diff%60;
   var s=S[found.i];
-  $("nextLabel").textContent=fmt(s[0],s[1])+"  "+s[3];
+  $("nextLabel").textContent=fmt(s[0],s[1])+"  —  "+s[3];
   $("count").textContent="in "+(h?h+" h ":"")+(h||m?m+" min ":"")+s2+" s";
 }
 setStatus();tick();setInterval(tick,1000);
