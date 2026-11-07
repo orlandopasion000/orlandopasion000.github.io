@@ -2103,18 +2103,22 @@ document.addEventListener('visibilitychange', function() {
 
 var keepAliveNode = null;
 function startAudioKeepAlive() {
-  if (!actx) initAudio();
-  if (!actx || keepAliveNode) return;
   try {
-    if (actx.state === 'suspended') actx.resume();
-    var buffer = actx.createBuffer(1, actx.sampleRate * 2, actx.sampleRate);
-    keepAliveNode = actx.createBufferSource();
+    if (!ac && (window.AudioContext || window.webkitAudioContext)) {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      ac = new AC();
+    }
+    if (!ac || keepAliveNode) return;
+    if (ac.state === 'suspended') ac.resume().catch(function(){});
+    var sr = ac.sampleRate || 44100;
+    var buffer = ac.createBuffer(1, sr * 2, sr);
+    keepAliveNode = ac.createBufferSource();
     keepAliveNode.buffer = buffer;
     keepAliveNode.loop = true;
-    var gainNode = actx.createGain();
+    var gainNode = ac.createGain();
     gainNode.gain.value = 0.0001; // Inaudible keep-alive channel
     keepAliveNode.connect(gainNode);
-    gainNode.connect(actx.destination);
+    gainNode.connect(ac.destination);
     keepAliveNode.start(0);
   } catch(e){}
 }
@@ -2452,21 +2456,24 @@ if (!localStorage.getItem("dra-tour-done")) {
   setTimeout(openOnboardingModal, 500);
 }
 
-/* ───────── INITIAL BOOTSTRAP ───────── */
-queued=nextSong();
-renderList();
-showVol();
-showSong();
-setStatus();
-updateAmbientUI();
-updatePresetSelectorUI();
-if(armed){
-  requestWakeLock();
-  startAudioKeepAlive();
-}
-checkUrlHashRoutine();
-tick();
-setInterval(tick,1000);
+/* ───────── INITIAL BOOTSTRAP (Zero-Delay Immediate Clock Render) ───────── */
+try { tick(); } catch(e){ console.error("Initial tick error:", e); }
+try { setInterval(tick, 1000); } catch(e){}
+
+try { queued = nextSong(); } catch(e){}
+try { renderList(); } catch(e){}
+try { showVol(); } catch(e){}
+try { showSong(); } catch(e){}
+try { setStatus(); } catch(e){}
+try { updateAmbientUI(); } catch(e){}
+try { updatePresetSelectorUI(); } catch(e){}
+try {
+  if (armed) {
+    requestWakeLock();
+    startAudioKeepAlive();
+  }
+} catch(e){}
+try { checkUrlHashRoutine(); } catch(e){}
 </script>
 </body>
 </html>
