@@ -527,7 +527,7 @@ li.cur{opacity:1;border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 3
     <div class="sched-actions" id="schedActionsEdit" style="display:none">
       <button class="btn-save" id="saveScheduleBtn">💾 Save Changes</button>
       <button class="btn-cancel" id="cancelScheduleBtn">✕ Cancel Edit</button>
-      <button class="ghost" id="addAlarmEditBtn">+ Add Row</button>
+      <button class="ghost" id="addAlarmEditBtn">+ Add Alarm</button>
     </div>
   </div>
 
@@ -556,106 +556,70 @@ li.cur{opacity:1;border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 3
       </div>
     </div>
 
-    <div class="dist-grid">
+    <div class="dist-grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
       <!-- Card 1: Install Desktop & Mobile Application -->
       <div class="dist-card">
         <div class="dist-card-top">
-          <div class="dist-icon">⬇</div>
+          <div class="dist-icon">💻</div>
           <div>
-            <div class="dist-name">Install Desktop & Mobile App</div>
-            <div class="dist-desc">Install onto your desktop, laptop, or phone home screen with zero security warnings.</div>
+            <div class="dist-name">Install to Device</div>
+            <div class="dist-desc">Install onto your Windows PC, Mac, Android phone, or iPhone with zero security warnings.</div>
           </div>
         </div>
         <div style="display:flex;flex-direction:column;gap:8px">
-          <button class="primary dist-btn" id="installAppBtn" style="gap:8px">⚡ 1-Click Install App (Zero Warnings)</button>
+          <button class="primary dist-btn" id="installAppBtn">⚡ 1-Click Install App (Zero Warnings)</button>
           <div style="display:flex;gap:6px;flex-wrap:wrap">
-            <a class="ghost dist-btn" href="downloads/Install-DailyRecharge-Windows.cmd" download style="flex:1;min-width:130px;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;font-size:.82rem">⚡ 1-Click Setup (.cmd)</a>
-            <a class="ghost dist-btn" href="downloads/DailyRecharge-Setup.exe" download style="flex:1;min-width:130px;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;font-size:.82rem" title="Standalone .exe for non-managed PCs">⬇ Windows (.exe)</a>
+            <a class="ghost dist-btn" href="downloads/DailyRecharge-Setup.exe" download style="flex:1;min-width:130px;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;font-size:.82rem" title="Standalone .exe for Windows">⬇ Windows (.exe)</a>
+            <a class="ghost dist-btn" href="downloads/Install-DailyRecharge-Windows.cmd" download style="flex:1;min-width:130px;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;font-size:.82rem" title="Bypasses DepEd AppLocker policy">⚡ DepEd Setup (.cmd)</a>
           </div>
         </div>
       </div>
 
-      <!-- Card 2: Mobile QR Code -->
+      <!-- Card 2: Mobile QR Code & Link Sharing -->
       <div class="dist-card">
         <div class="dist-card-top">
-          <div class="dist-icon">📷</div>
+          <div class="dist-icon">📲</div>
           <div>
-            <div class="dist-name">Mobile QR Code</div>
-            <div class="dist-desc">Instant phone camera scanner to carry your recharge cockpit during classes and walks.</div>
+            <div class="dist-name">Mobile QR & Share</div>
+            <div class="dist-desc">Instant phone camera scanner to open on mobile, or copy the direct web link to share.</div>
           </div>
         </div>
-        <button class="ghost dist-btn" id="openQrBtn">📷 Open Phone QR</button>
-      </div>
-
-      <!-- Card 3: Share Application -->
-      <div class="dist-card">
-        <div class="dist-card-top">
-          <div class="dist-icon">🔗</div>
-          <div>
-            <div class="dist-name">Share Cockpit</div>
-            <div class="dist-desc">Share with colleagues, send via AirDrop/Messages, or copy the direct web link.</div>
-          </div>
+        <div style="display:flex;gap:8px">
+          <button class="ghost dist-btn" id="openQrBtn" style="flex:1">📷 Open Phone QR</button>
+          <button class="ghost dist-btn" id="shareAppBtn" style="flex:1">↗ Copy Link</button>
         </div>
-        <button class="ghost dist-btn" id="shareAppBtn">↗ Share / Copy Link</button>
       </div>
 
-      <!-- Card 4: Backup Schedule -->
+      <!-- Card 3: Backup & Restore Schedule -->
       <div class="dist-card">
         <div class="dist-card-top">
           <div class="dist-icon">💾</div>
           <div>
-            <div class="dist-name">Backup Schedule</div>
-            <div class="dist-desc">Download a secure JSON backup of your 23 custom alarms and settings to your computer.</div>
-          </div>
-        </div>
-        <button class="ghost dist-btn" id="exportBackupBtn">💾 Export Backup (.json)</button>
-      </div>
-
-      <!-- Card 5: Restore Schedule -->
-      <div class="dist-card">
-        <div class="dist-card-top">
-          <div class="dist-icon">📂</div>
-          <div>
-            <div class="dist-name">Restore Schedule</div>
-            <div class="dist-desc">Import a saved backup JSON file to restore your entire schedule across any browser.</div>
-          </div>
-        </div>
-        <button class="ghost dist-btn" id="importBackupBtn">📂 Import Backup</button>
-        <input type="file" id="importBackupFile" accept=".json" style="display:none">
-      </div>
-
-      <!-- Card 6: Live Production CDN -->
-      <div class="dist-card">
-        <div class="dist-card-top">
-          <div class="dist-icon">🌐</div>
-          <div>
-            <div class="dist-name">Published Status</div>
-            <div class="dist-desc">Deployed live on GitHub Pages CDN with HTTP/2 and automated cache invalidation.</div>
+            <div class="dist-name">Backup & Restore</div>
+            <div class="dist-desc">Save a secure JSON backup of your custom alarms to your computer, or restore a saved schedule.</div>
           </div>
         </div>
         <div style="display:flex;gap:8px">
-          <a class="ghost dist-btn" href="https://orlandopasion000.github.io/daily-recharge-alarm.html" target="_blank" rel="noopener" style="flex:1">⚡ Live Site</a>
-          <button class="ghost dist-btn" id="syncUpdatesBtn" title="Check for latest code updates" style="flex:none;width:44px;padding:0">↺</button>
+          <button class="ghost dist-btn" id="exportBackupBtn" style="flex:1">💾 Export (.json)</button>
+          <button class="ghost dist-btn" id="importBackupBtn" style="flex:1">📂 Import</button>
+          <input type="file" id="importBackupFile" accept=".json" style="display:none">
         </div>
       </div>
+    </div>
 
-      <!-- Card 7: Blank Edition (For Anyone) -->
-      <div class="dist-card" style="border-color:rgba(217,185,92,.5);background:linear-gradient(180deg,#14151f 0%,#0c0c0e 100%)">
-        <div class="dist-card-top">
-          <div class="dist-icon" style="background:rgba(217,185,92,.15);color:var(--gold);border-color:rgba(217,185,92,.3)">🎁</div>
-          <div>
-            <div class="dist-name" style="color:var(--gold)">Clean Blank Edition (For Anyone)</div>
-            <div class="dist-desc">A 100% clean, schedule-free app with isolated storage. Zero personal data — install on Windows or Android with zero warnings.</div>
-          </div>
+    <!-- Highlight Banner: Clean Blank Edition (For Friends & Students) -->
+    <div class="dist-card" style="margin-top:16px;border-color:rgba(217,185,92,.5);background:linear-gradient(180deg,#14151f 0%,#0c0c0e 100%)">
+      <div class="dist-card-top">
+        <div class="dist-icon" style="background:rgba(217,185,92,.15);color:var(--gold);border-color:rgba(217,185,92,.3)">🎁</div>
+        <div>
+          <div class="dist-name" style="color:var(--gold)">Clean Blank Edition (For Anyone)</div>
+          <div class="dist-desc">A 100% clean, schedule-free app with isolated storage. Zero personal data — ready for anyone to enter their own schedule.</div>
         </div>
-        <div style="display:flex;flex-direction:column;gap:8px">
-          <a class="primary dist-btn" href="recharge-clean.html" target="_blank" rel="noopener" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px">🚀 Open Blank Web App</a>
-          <div style="display:flex;gap:6px;flex-wrap:wrap">
-            <a class="ghost dist-btn" href="downloads/Install-DailyRecharge-Clean-Windows.cmd" download style="flex:1;min-width:130px;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;font-size:.82rem">⚡ 1-Click Setup (.cmd)</a>
-            <a class="ghost dist-btn" href="downloads/DailyRecharge-Clean-Setup.exe" download style="flex:1;min-width:130px;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;font-size:.82rem" title="Standalone .exe for non-managed PCs">⬇ Windows (.exe)</a>
-            <button class="ghost dist-btn" id="downloadBlankAppBtn" style="flex:1;min-width:130px;font-size:.82rem">💾 Standalone (.html)</button>
-          </div>
-        </div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <a class="primary dist-btn" href="recharge-clean.html" target="_blank" rel="noopener" style="flex:1;min-width:140px;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center">🚀 Open Blank Web App</a>
+        <a class="ghost dist-btn" href="downloads/DailyRecharge-Clean-Setup.exe" download style="flex:1;min-width:140px;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;font-size:.85rem">⬇ Windows (.exe)</a>
+        <button class="ghost dist-btn" id="downloadBlankAppBtn" style="flex:1;min-width:140px;font-size:.85rem">💾 Standalone (.html)</button>
       </div>
     </div>
   </section>
@@ -681,6 +645,61 @@ li.cur{opacity:1;border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 3
     <button class="primary" id="ovB">Dismiss</button>
   </div>
   <div class="ov-keys">S = snooze · Esc = dismiss</div>
+</div>
+
+<!-- Interactive Add Alarm Modal (Drop-Down Category, Custom Time, No Browser Prompt) -->
+<div class="modal-wrap" id="addAlarmModal" role="dialog" aria-modal="true" aria-label="Add New Alarm">
+  <div class="modal-box" style="text-align:left;max-width:440px">
+    <button class="modal-close" id="closeAddAlarmModal" aria-label="Close modal">✕</button>
+    <div class="modal-title" style="text-align:center;display:flex;align-items:center;justify-content:center;gap:8px">
+      <span>⏰</span>
+      <span>Add New Alarm</span>
+    </div>
+    <div class="modal-text" style="margin-bottom:16px;text-align:center">Set the time, activity title, and category for your schedule.</div>
+
+    <form id="addAlarmForm" onsubmit="return false;" style="display:flex;flex-direction:column;gap:14px">
+      <!-- Time Input -->
+      <div>
+        <label for="newAlarmTime" style="display:block;font-size:.80rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Alarm Time</label>
+        <input type="time" id="newAlarmTime" value="08:00" required style="font-family:var(--font-clock);font-size:1.25rem;font-weight:700;background:var(--surface-2);color:var(--text);border:1px solid var(--line2);border-radius:12px;padding:10px 14px;width:100%">
+      </div>
+
+      <!-- Activity Title Input -->
+      <div>
+        <label for="newAlarmTitle" style="display:block;font-size:.80rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Activity Title</label>
+        <input type="text" id="newAlarmTitle" placeholder="e.g. Short recharge — 10 min, Math 8" required style="font-family:var(--sans);font-size:1.02rem;font-weight:600;background:var(--surface-2);color:var(--text);border:1px solid var(--line2);border-radius:12px;padding:11px 14px;width:100%">
+        <!-- Quick Preset Suggestion Chips -->
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
+          <button type="button" class="preset-chip" data-title="Short recharge — 10 min" data-cat="rest" style="background:var(--surface-2);border:1px solid var(--line2);border-radius:8px;padding:4px 9px;font-size:.76rem;color:var(--dim);cursor:pointer;font-family:var(--sans)">+ 🌿 Recharge</button>
+          <button type="button" class="preset-chip" data-title="Class Lecture" data-cat="class" style="background:var(--surface-2);border:1px solid var(--line2);border-radius:8px;padding:4px 9px;font-size:.76rem;color:var(--dim);cursor:pointer;font-family:var(--sans)">+ 🔵 Class</button>
+          <button type="button" class="preset-chip" data-title="Work & Admin" data-cat="work" style="background:var(--surface-2);border:1px solid var(--line2);border-radius:8px;padding:4px 9px;font-size:.76rem;color:var(--dim);cursor:pointer;font-family:var(--sans)">+ 🟣 Work</button>
+          <button type="button" class="preset-chip" data-title="Task & Duty" data-cat="err" style="background:var(--surface-2);border:1px solid var(--line2);border-radius:8px;padding:4px 9px;font-size:.76rem;color:var(--dim);cursor:pointer;font-family:var(--sans)">+ ⚪ Task</button>
+          <button type="button" class="preset-chip" data-title="Evening Wind-down" data-cat="night" style="background:var(--surface-2);border:1px solid var(--line2);border-radius:8px;padding:4px 9px;font-size:.76rem;color:var(--dim);cursor:pointer;font-family:var(--sans)">+ 🟡 Wind-down</button>
+        </div>
+      </div>
+
+      <!-- Category Dropdown Selector with Arrow and Colors -->
+      <div>
+        <label for="newAlarmCategory" style="display:block;font-size:.80rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Category (Class, Recharge, Work, Task, Wind-down)</label>
+        <div style="position:relative">
+          <select id="newAlarmCategory" style="font-family:var(--sans);font-size:1rem;font-weight:600;background:var(--surface-2);color:var(--text);border:1px solid var(--line2);border-radius:12px;padding:11px 14px;width:100%;cursor:pointer;-webkit-appearance:none;appearance:none;padding-right:36px">
+            <option value="rest">🟢 Recharge (Green) — Rest, nap & meditation</option>
+            <option value="class">🔵 Class (Blue) — Teaching & lectures</option>
+            <option value="work">🟣 Work (Purple) — Admin, print & grading</option>
+            <option value="err">⚪ Task (Silver) — Quick errands & duties</option>
+            <option value="night">🟡 Wind-down (Gold) — Evening relaxation & sleep</option>
+          </select>
+          <span style="position:absolute;right:14px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--gold);font-size:.85rem">▼</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div style="display:flex;gap:10px;margin-top:8px">
+        <button type="submit" class="primary" id="confirmAddAlarmBtn" style="flex:1;padding:12px 18px;font-size:.98rem;font-weight:700">✓ Add Alarm</button>
+        <button type="button" class="ghost" id="cancelAddAlarmBtn" style="flex:1;padding:12px 18px;font-size:.98rem">Cancel</button>
+      </div>
+    </form>
+  </div>
 </div>
 
 <!-- Mobile Camera QR Code Modal -->
@@ -1317,31 +1336,71 @@ $("saveScheduleBtn").onclick=function(){
   tick();
 };
 
-function addAlarmPrompt(){
-  var timeStr=prompt("Alarm time (24h format HH:MM, e.g. 08:30 or 14:00):","08:00");
-  if(!timeStr||!/^\d{1,2}:\d{2}$/.test(timeStr.trim()))return;
-  var parts=timeStr.trim().split(":");
-  var h=+parts[0],m=+parts[1];
-  var title=prompt("Alarm title or description:","Recharge Break");
-  if(!title||!title.trim())return;
-  var catInput=prompt("Category (class, recharge, work, task, winddown):","recharge");
-  var cat="rest";
-  if(catInput){
-    var c=catInput.toLowerCase();
-    if(c.indexOf("class")!==-1)cat="class";
-    else if(c.indexOf("work")!==-1)cat="work";
-    else if(c.indexOf("task")!==-1||c.indexOf("err")!==-1)cat="err";
-    else if(c.indexOf("wind")!==-1||c.indexOf("night")!==-1)cat="night";
+/* Interactive Add Alarm Modal Logic */
+function openAddAlarmModal(){
+  var m=$("addAlarmModal");
+  if(!m)return;
+  var now=new Date();
+  var nextH=(now.getHours()+1)%24;
+  $("newAlarmTime").value=p2(nextH)+":00";
+  $("newAlarmTitle").value="";
+  $("newAlarmCategory").value="rest";
+  m.classList.add("open");
+  setTimeout(function(){
+    try{$("newAlarmTitle").focus();}catch(e){}
+  },100);
+}
+
+function closeAddAlarmModal(){
+  var m=$("addAlarmModal");
+  if(m)m.classList.remove("open");
+}
+
+$("closeAddAlarmModal").onclick=closeAddAlarmModal;
+$("cancelAddAlarmBtn").onclick=closeAddAlarmModal;
+$("addAlarmModal").onclick=function(e){
+  if(e.target===this)closeAddAlarmModal();
+};
+
+document.querySelectorAll(".preset-chip").forEach(function(chip){
+  chip.onclick=function(){
+    var t=this.getAttribute("data-title");
+    var c=this.getAttribute("data-cat");
+    if(t)$("newAlarmTitle").value=t;
+    if(c)$("newAlarmCategory").value=c;
+    $("newAlarmTitle").focus();
+  };
+});
+
+$("addAlarmForm").onsubmit=function(e){
+  e.preventDefault();
+  var t=$("newAlarmTime").value;
+  var title=$("newAlarmTitle").value.trim();
+  var cat=$("newAlarmCategory").value;
+  if(!t||!/^\d{1,2}:\d{2}$/.test(t)){
+    alert("Please select a valid alarm time.");
+    $("newAlarmTime").focus();
+    return;
   }
-  S.push([h,m,cat,title.trim()]);
+  if(!title){
+    alert("Please enter a title or description for this alarm.");
+    $("newAlarmTitle").focus();
+    return;
+  }
+  var parts=t.split(":");
+  var h=+parts[0],min=+parts[1];
+  S.push([h,min,cat,title]);
   sortSchedule();
   save();
   renderList();
   tick();
-  $("status").textContent="✓ Added “"+title.trim()+"” at "+fmt(h,m);
-}
-$("addAlarmBtn").onclick=addAlarmPrompt;
-$("addAlarmEditBtn").onclick=addAlarmPrompt;
+  closeAddAlarmModal();
+  $("status").textContent="✓ Added “"+title+"” at "+fmt(h,min);
+  showToast("Added “"+title+"” at "+fmt(h,min), "⏰");
+};
+
+$("addAlarmBtn").onclick=openAddAlarmModal;
+$("addAlarmEditBtn").onclick=openAddAlarmModal;
 
 /* Reset to DepEd Default Schedule */
 $("resetSchedBtn").onclick=function(){
@@ -1513,7 +1572,14 @@ function exitRest(){
 $("restBtn").onclick=enterRest;
 $("rest").onclick=exitRest;
 $("rest").addEventListener("mousemove",restIdle);
-document.addEventListener("keydown",function(e){if(e.key==="Escape"&&$("ov").className!=="show")exitRest()});
+document.addEventListener("keydown",function(e){
+  if(e.key==="Escape"&&$("ov").className!=="show"){
+    if($("addAlarmModal")&&$("addAlarmModal").classList.contains("open")){closeAddAlarmModal();return;}
+    if($("qrModal")&&$("qrModal").classList.contains("open")){$("qrModal").classList.remove("open");return;}
+    if($("installGuideModal")&&$("installGuideModal").classList.contains("open")){$("installGuideModal").classList.remove("open");return;}
+    exitRest();
+  }
+});
 document.addEventListener("fullscreenchange",function(){if(!document.fullscreenElement)exitRest()});
 document.addEventListener("webkitfullscreenchange",function(){if(!document.webkitFullscreenElement)exitRest()});
 
@@ -1704,19 +1770,6 @@ $("importBackupFile").onchange=function(e){
   reader.readAsText(file);
 };
 
-/* Sync Updates / Force CDN Re-fetch */
-$("syncUpdatesBtn").onclick=function(){
-  showToast("Checking GitHub Pages for latest release...", "↺");
-  if(swReg&&swReg.update){
-    swReg.update().then(function(){
-      setTimeout(function(){location.reload(true)},600);
-    }).catch(function(){
-      location.reload(true);
-    });
-  }else{
-    location.reload(true);
-  }
-};
 
 /* ───────── SERVICE WORKER & PWA INSTALL ───────── */
 var swReg=null;
