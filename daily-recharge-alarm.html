@@ -148,6 +148,54 @@ body[data-clock-theme="white"] .chrome span{
 .sound-chip:hover{color:var(--text);border-color:var(--gold-soft)}
 .sound-chip.on{background:rgba(93,232,160,.12);border-color:#5de8a0;color:#5de8a0;box-shadow:0 0 14px rgba(93,232,160,.25)}
 
+/* Soundscape Mixer Rack */
+.sound-mixer-rack{margin-top:16px;padding-top:16px;border-top:1px solid var(--line2)}
+.mixer-rack-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.mixer-rack-label{font-size:.85rem;font-weight:700;color:var(--gold);letter-spacing:.05em;text-transform:uppercase}
+.mixer-rack-hint{font-size:.8rem;color:var(--mute)}
+.mixer-tracks{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:12px}
+.mixer-row{display:flex;align-items:center;gap:12px;background:#000;border:1px solid var(--line2);border-radius:14px;padding:10px 16px}
+.mixer-name{display:flex;align-items:center;gap:8px;font-size:.9rem;font-weight:600;min-width:115px}
+.mixer-slider{-webkit-appearance:none;appearance:none;flex:1;height:5px;border-radius:3px;cursor:pointer;background:linear-gradient(90deg,var(--gold) 0%,var(--gold) var(--p,60%),var(--line2) var(--p,60%))}
+.mixer-slider::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px rgba(217,185,92,.7);cursor:pointer}
+.mixer-slider::-moz-range-thumb{width:18px;height:18px;border:0;border-radius:50%;background:var(--gold);box-shadow:0 0 10px rgba(217,185,92,.7);cursor:pointer}
+.mixer-val{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:.88rem;font-weight:700;color:var(--dim);min-width:2.8em;text-align:right}
+.mixer-remove{background:none;border:none;color:var(--mute);cursor:pointer;font-size:1.1rem;padding:2px 6px;line-height:1;border-radius:6px;transition:color .2s}
+.mixer-remove:hover{color:#ff6b6b}
+
+/* App Distribution & Operations Suite */
+.app-dist{margin-top:44px;padding:32px;border:1px solid var(--line);border-radius:28px;background:var(--surface);position:relative;overflow:hidden}
+.app-dist::before{content:"";position:absolute;top:0;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);box-shadow:0 0 16px var(--gold)}
+.dist-head{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:24px}
+.dist-title{font-size:1.35rem;font-weight:700;color:var(--text);display:flex;align-items:center;gap:10px}
+.dist-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:12px;font-size:.78rem;font-weight:700;background:rgba(93,232,160,.12);color:#5de8a0;border:1px solid rgba(93,232,160,.3)}
+.dist-subtitle{font-size:.9rem;color:var(--dim);margin-top:4px}
+.dist-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+.dist-card{background:#000;border:1px solid var(--line2);border-radius:18px;padding:20px;display:flex;flex-direction:column;justify-content:space-between;gap:16px;transition:all .2s cubic-bezier(.4,0,.2,1)}
+.dist-card:hover{border-color:var(--gold-soft);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.6)}
+.dist-card-top{display:flex;align-items:flex-start;gap:14px}
+.dist-icon{font-size:1.6rem;line-height:1;width:44px;height:44px;border-radius:12px;background:var(--surface-2);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;flex:none}
+.dist-name{font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:3px}
+.dist-desc{font-size:.86rem;color:var(--dim);line-height:1.45}
+.dist-btn{width:100%;font-size:.92rem;font-weight:700;padding:12px 18px;border-radius:12px;text-align:center;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--sans)}
+
+/* Modals (QR Code & Install Guide) */
+.modal-wrap{position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:220;padding:20px}
+.modal-wrap.open{display:flex}
+.modal-box{background:var(--surface);border:1px solid var(--gold-soft);box-shadow:0 0 50px rgba(217,185,92,.25);border-radius:26px;padding:32px;max-width:440px;width:100%;text-align:center;position:relative}
+.modal-close{position:absolute;top:16px;right:18px;background:none;border:none;color:var(--mute);font-size:1.4rem;cursor:pointer;padding:4px 8px;line-height:1;border-radius:8px}
+.modal-close:hover{color:var(--text)}
+.modal-qr-frame{background:#fff;padding:14px;border-radius:16px;display:inline-block;margin:18px 0;box-shadow:0 0 30px rgba(255,255,255,.1)}
+.modal-qr-frame img{display:block;width:210px;height:210px}
+.modal-title{font-size:1.3rem;font-weight:700;color:var(--gold);text-shadow:var(--glow-g);margin-bottom:6px}
+.modal-text{font-size:.92rem;color:var(--dim);line-height:1.5}
+.modal-actions{display:flex;gap:10px;margin-top:20px;justify-content:center}
+
+/* Toast */
+#toastBox{position:fixed;bottom:24px;right:24px;z-index:350;display:flex;flex-direction:column;gap:10px;pointer-events:none}
+.toast{pointer-events:auto;background:var(--surface-2);color:var(--text);border:1px solid var(--gold);box-shadow:0 8px 30px rgba(0,0,0,.8),0 0 20px var(--gold-glow);border-radius:14px;padding:12px 20px;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:10px;animation:toastIn .25s ease-out}
+@keyframes toastIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
 /* Primary Controls */
 .controls{display:flex;gap:12px;flex-wrap:wrap;align-items:stretch;margin-bottom:20px}
 button{font-family:var(--sans);font-size:1.05rem;font-weight:700;cursor:pointer;border:0;border-radius:16px;padding:14px 22px;transition:all .22s cubic-bezier(.4,0,.2,1)}
@@ -339,6 +387,13 @@ li.cur{opacity:1;border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 3
       <button class="sound-chip" data-sound="fire"><span>🪵</span><span>Warm Campfire</span></button>
       <button class="sound-chip" data-sound="space"><span>🪐</span><span>Deep Space</span></button>
     </div>
+    <div class="sound-mixer-rack" id="soundMixerRack" style="display:none">
+      <div class="mixer-rack-head">
+        <span class="mixer-rack-label">🎛 Individual Track Mix Levels</span>
+        <span class="mixer-rack-hint">Craft your personal rest atmosphere</span>
+      </div>
+      <div class="mixer-tracks" id="mixerTracksList"></div>
+    </div>
   </div>
 
   <!-- 5. PRIMARY APPLICATION CONTROLS -->
@@ -396,6 +451,97 @@ li.cur{opacity:1;border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 3
   <!-- The Interactive Schedule List -->
   <ul id="list"></ul>
 
+  <!-- 8. APP DISTRIBUTION & COMMAND SUITE (Install, Share, QR, Backup, Publish) -->
+  <section class="app-dist" aria-labelledby="distTitle">
+    <div class="dist-head">
+      <div>
+        <div class="dist-title" id="distTitle">
+          <span>📲 App Distribution & Command Suite</span>
+          <span class="dist-badge">● PWA Ready</span>
+        </div>
+        <div class="dist-subtitle">Installed, offline-cached, shareable, and verified for Sir Orlando V. Pasion, Jr.</div>
+      </div>
+    </div>
+
+    <div class="dist-grid">
+      <!-- Card 1: Install PWA -->
+      <div class="dist-card">
+        <div class="dist-card-top">
+          <div class="dist-icon">⬇</div>
+          <div>
+            <div class="dist-name">Install Application</div>
+            <div class="dist-desc">Install onto your desktop, laptop, or phone home screen for standalone fullscreen launch.</div>
+          </div>
+        </div>
+        <button class="primary dist-btn" id="installAppBtn">⬇ Install as App</button>
+      </div>
+
+      <!-- Card 2: Mobile QR Code -->
+      <div class="dist-card">
+        <div class="dist-card-top">
+          <div class="dist-icon">📷</div>
+          <div>
+            <div class="dist-name">Mobile QR Code</div>
+            <div class="dist-desc">Instant phone camera scanner to carry your recharge cockpit during classes and walks.</div>
+          </div>
+        </div>
+        <button class="ghost dist-btn" id="openQrBtn">📷 Open Phone QR</button>
+      </div>
+
+      <!-- Card 3: Share Application -->
+      <div class="dist-card">
+        <div class="dist-card-top">
+          <div class="dist-icon">🔗</div>
+          <div>
+            <div class="dist-name">Share Cockpit</div>
+            <div class="dist-desc">Share with colleagues, send via AirDrop/Messages, or copy the direct web link.</div>
+          </div>
+        </div>
+        <button class="ghost dist-btn" id="shareAppBtn">↗ Share / Copy Link</button>
+      </div>
+
+      <!-- Card 4: Backup Schedule -->
+      <div class="dist-card">
+        <div class="dist-card-top">
+          <div class="dist-icon">💾</div>
+          <div>
+            <div class="dist-name">Backup Schedule</div>
+            <div class="dist-desc">Download a secure JSON backup of your 23 custom alarms and settings to your computer.</div>
+          </div>
+        </div>
+        <button class="ghost dist-btn" id="exportBackupBtn">💾 Export Backup (.json)</button>
+      </div>
+
+      <!-- Card 5: Restore Schedule -->
+      <div class="dist-card">
+        <div class="dist-card-top">
+          <div class="dist-icon">📂</div>
+          <div>
+            <div class="dist-name">Restore Schedule</div>
+            <div class="dist-desc">Import a saved backup JSON file to restore your entire schedule across any browser.</div>
+          </div>
+        </div>
+        <button class="ghost dist-btn" id="importBackupBtn">📂 Import Backup</button>
+        <input type="file" id="importBackupFile" accept=".json" style="display:none">
+      </div>
+
+      <!-- Card 6: Live Production CDN -->
+      <div class="dist-card">
+        <div class="dist-card-top">
+          <div class="dist-icon">🌐</div>
+          <div>
+            <div class="dist-name">Published Status</div>
+            <div class="dist-desc">Deployed live on GitHub Pages CDN with HTTP/2 and automated cache invalidation.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <a class="ghost dist-btn" href="https://orlandopasion000.github.io/daily-recharge-alarm.html" target="_blank" rel="noopener" style="flex:1">⚡ Live Site</a>
+          <button class="ghost dist-btn" id="syncUpdatesBtn" title="Check for latest code updates" style="flex:none;width:44px;padding:0">↺</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <!-- Rest Mode Screen -->
@@ -418,6 +564,56 @@ li.cur{opacity:1;border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 3
   </div>
   <div class="ov-keys">S = snooze · Esc = dismiss</div>
 </div>
+
+<!-- Mobile Camera QR Code Modal -->
+<div class="modal-wrap" id="qrModal" role="dialog" aria-modal="true" aria-label="Mobile QR Code">
+  <div class="modal-box">
+    <button class="modal-close" id="closeQrModal" aria-label="Close modal">✕</button>
+    <div class="modal-title">Mobile Camera QR</div>
+    <div class="modal-text">Point your iPhone or Android camera at the QR code below to immediately open your Daily Recharge Cockpit.</div>
+    <div class="modal-qr-frame">
+      <img src="assets/qr-code.svg" alt="Daily Recharge Alarm QR Code" width="210" height="210">
+    </div>
+    <div style="font-family:var(--mono);font-size:.82rem;color:var(--gold);word-break:break-all;margin-bottom:14px">
+      https://orlandopasion000.github.io/daily-recharge-alarm.html
+    </div>
+    <div class="modal-actions">
+      <button class="primary" id="copyQrLinkBtn" style="padding:10px 20px;font-size:.9rem">Copy Web Link</button>
+      <button class="ghost" id="doneQrBtn" style="padding:10px 20px;font-size:.9rem">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- Install Guide Modal (Safari / Desktop / Android) -->
+<div class="modal-wrap" id="installGuideModal" role="dialog" aria-modal="true" aria-label="Install App Guide">
+  <div class="modal-box" style="text-align:left">
+    <button class="modal-close" id="closeInstallGuide" aria-label="Close modal">✕</button>
+    <div class="modal-title" style="text-align:center">Install Daily Recharge Alarm</div>
+    <div class="modal-text" style="margin-bottom:16px;text-align:center">Follow the quick step for your browser:</div>
+    <div style="display:flex;flex-direction:column;gap:12px;font-size:.9rem;color:var(--text)">
+      <div style="background:#000;border:1px solid var(--line2);border-radius:14px;padding:14px">
+        <b style="color:var(--gold)">🍎 iPhone & iPad (Safari):</b><br>
+        1. Tap the <b>Share</b> button (<span style="font-size:1.1rem">⎙</span>) at the bottom.<br>
+        2. Scroll down and tap <b>Add to Home Screen</b> (⊞).<br>
+        3. Tap <b>Add</b> in the top right.
+      </div>
+      <div style="background:#000;border:1px solid var(--line2);border-radius:14px;padding:14px">
+        <b style="color:var(--gold)">💻 Windows, Mac & Chromebook (Chrome / Edge):</b><br>
+        Click the <b>Install</b> icon (⊞) in your address bar, or click Menu (⋮) → <b>Install Daily Recharge Alarm</b>.
+      </div>
+      <div style="background:#000;border:1px solid var(--line2);border-radius:14px;padding:14px">
+        <b style="color:var(--gold)">🤖 Android (Chrome):</b><br>
+        Tap the menu dots (⋮) in the top-right corner, then tap <b>Install app</b> or <b>Add to Home Screen</b>.
+      </div>
+    </div>
+    <div class="modal-actions" style="margin-top:20px">
+      <button class="primary" id="dismissInstallGuide" style="width:100%;padding:12px">Got It</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Notifications Container -->
+<div id="toastBox" aria-live="polite"></div>
 
 <script>
 /* ───────── MASTER SCHEDULE (Sir Orlando V. Pasion, Jr.) ───────── */
@@ -572,154 +768,188 @@ function updateAudioBadge(){
 }
 $("audioBadge").onclick=unlock;
 
-/* ───────── MEDITATIVE SOUNDSCAPES MIXER (BetterSleep Imitation) ───────── */
-var ambientMaster=null;
-var activeSounds={}; // soundName -> { src, gain, filter, lfo }
+/* ───────── MEDITATIVE SOUNDSCAPES ENGINE (Real Studio Recordings & Multi-Track Mixer) ───────── */
+var SOUND_CONFIG = {
+  rain:   { id: "rain",   name: "Gentle Rain",   icon: "🌧", file: "sounds/rain.mp3",     defVol: 0.60 },
+  green:  { id: "green",  name: "Green Noise",  icon: "🌿", file: "sounds/river.mp3",    defVol: 0.50 },
+  waves:  { id: "waves",  name: "Ocean Waves",  icon: "🌊", file: "sounds/waves.mp3",    defVol: 0.60 },
+  breeze: { id: "breeze", name: "Night Breeze", icon: "🌬", file: "sounds/wind.mp3",     defVol: 0.55 },
+  fire:   { id: "fire",   name: "Warm Campfire",icon: "🪵", file: "sounds/campfire.mp3", defVol: 0.65 },
+  space:  { id: "space",  name: "Deep Space",   icon: "🪐", file: "sounds/space.mp3",    defVol: 0.50 }
+};
 
-function initAmbientEngine(){
-  if(!ac||ambientMaster)return;
-  ambientMaster=ac.createGain();
-  ambientMaster.gain.setValueAtTime(0.35,ac.currentTime);
-  ambientMaster.connect(master);
+var soundAudioElements = {};
+var soundVolumes = {};
+var soundFadeTimers = {};
+
+function initAmbientEngine(){}
+
+function getSoundAudio(id){
+  if(!soundAudioElements[id]){
+    var conf = SOUND_CONFIG[id];
+    var a = new Audio(conf.file);
+    a.loop = true;
+    a.preload = "auto";
+    soundAudioElements[id] = a;
+    soundVolumes[id] = conf.defVol;
+  }
+  return soundAudioElements[id];
 }
 
-function createNoiseBuffer(seconds){
-  var size=seconds*ac.sampleRate,buf=ac.createBuffer(1,size,ac.sampleRate),out=buf.getChannelData(0);
-  var last=0.0;
-  for(var i=0;i<size;i++){
-    var w=Math.random()*2-1;
-    out[i]=(last+(0.02*w))/1.02;last=out[i];out[i]*=3.5;
-  }
-  return buf;
+function isSoundPlaying(id){
+  var a = soundAudioElements[id];
+  return !!(a && !a.paused);
 }
 
-function startSound(type){
-  initAudio();unlock();
-  if(!ac)return;
-  initAmbientEngine();
-  if(activeSounds[type])return;
+function startSound(id){
+  unlock();
+  var conf = SOUND_CONFIG[id];
+  if(!conf) return;
+  var a = getSoundAudio(id);
+  clearInterval(soundFadeTimers[id]);
 
-  var t=ac.currentTime;
-  var g=ac.createGain();
-  g.gain.setValueAtTime(0,t);
-  g.connect(ambientMaster);
+  var targetVol = soundVolumes[id] !== undefined ? soundVolumes[id] : conf.defVol;
+  a.volume = 0;
+  var playPromise = a.play();
+  if(playPromise && playPromise.catch){
+    playPromise.catch(function(err){ console.log("Soundscape playback gesture required:", err); });
+  }
 
-  if(type==="rain"){
-    var src=ac.createBufferSource();src.buffer=createNoiseBuffer(3);src.loop=true;
-    var flt=ac.createBiquadFilter();flt.type="lowpass";flt.frequency.setValueAtTime(750,t);
-    src.connect(flt);flt.connect(g);
-    g.gain.linearRampToValueAtTime(0.28,t+1.5);
-    src.start(t);
-    activeSounds[type]={src:src,gain:g};
-  }
-  else if(type==="green"){
-    // Nature-balanced green noise centered at 500Hz
-    var src=ac.createBufferSource();src.buffer=createNoiseBuffer(3);src.loop=true;
-    var flt=ac.createBiquadFilter();flt.type="bandpass";flt.frequency.setValueAtTime(500,t);flt.Q.setValueAtTime(0.7,t);
-    src.connect(flt);flt.connect(g);
-    g.gain.linearRampToValueAtTime(0.32,t+1.5);
-    src.start(t);
-    activeSounds[type]={src:src,gain:g};
-  }
-  else if(type==="waves"){
-    // Periodic ocean waves with LFO modulation
-    var src=ac.createBufferSource();src.buffer=createNoiseBuffer(4);src.loop=true;
-    var flt=ac.createBiquadFilter();flt.type="lowpass";flt.frequency.setValueAtTime(380,t);
-    var waveGain=ac.createGain();waveGain.gain.setValueAtTime(0.1,t);
-    var lfo=ac.createOscillator();lfo.frequency.setValueAtTime(0.08,t); // 12-second swell cycle
-    var lfoGain=ac.createGain();lfoGain.gain.setValueAtTime(0.25,t);
-    lfo.connect(lfoGain);lfoGain.connect(waveGain.gain);
-    src.connect(flt);flt.connect(waveGain);waveGain.connect(g);
-    g.gain.linearRampToValueAtTime(0.35,t+2);
-    lfo.start(t);src.start(t);
-    activeSounds[type]={src:src,gain:g,lfo:lfo};
-  }
-  else if(type==="breeze"){
-    // Gentle whispering night breeze with slow filter sweep
-    var src=ac.createBufferSource();src.buffer=createNoiseBuffer(4);src.loop=true;
-    var flt=ac.createBiquadFilter();flt.type="bandpass";flt.frequency.setValueAtTime(340,t);flt.Q.setValueAtTime(1.2,t);
-    var lfo=ac.createOscillator();lfo.frequency.setValueAtTime(0.12,t);
-    var lfoGain=ac.createGain();lfoGain.gain.setValueAtTime(160,t);
-    lfo.connect(lfoGain);lfoGain.connect(flt.frequency);
-    src.connect(flt);flt.connect(g);
-    g.gain.linearRampToValueAtTime(0.22,t+1.5);
-    lfo.start(t);src.start(t);
-    activeSounds[type]={src:src,gain:g,lfo:lfo};
-  }
-  else if(type==="fire"){
-    // Campfire warmth
-    var src=ac.createBufferSource();src.buffer=createNoiseBuffer(3);src.loop=true;
-    var flt=ac.createBiquadFilter();flt.type="lowpass";flt.frequency.setValueAtTime(220,t);
-    src.connect(flt);flt.connect(g);
-    g.gain.linearRampToValueAtTime(0.3,t+1.5);
-    src.start(t);
-    activeSounds[type]={src:src,gain:g};
-  }
-  else if(type==="space"){
-    // Deep space theta-wave drone
-    var osc1=ac.createOscillator();osc1.type="sine";osc1.frequency.setValueAtTime(65,t);
-    var osc2=ac.createOscillator();osc2.type="sine";osc2.frequency.setValueAtTime(130,t);
-    var spaceSub=ac.createBufferSource();spaceSub.buffer=createNoiseBuffer(3);spaceSub.loop=true;
-    var flt=ac.createBiquadFilter();flt.type="lowpass";flt.frequency.setValueAtTime(90,t);
-    spaceSub.connect(flt);flt.connect(g);
-    var subG=ac.createGain();subG.gain.setValueAtTime(0.12,t);
-    osc1.connect(subG);osc2.connect(subG);subG.connect(g);
-    g.gain.linearRampToValueAtTime(0.26,t+2);
-    osc1.start(t);osc2.start(t);spaceSub.start(t);
-    activeSounds[type]={src:spaceSub,gain:g,extra:[osc1,osc2]};
-  }
+  // Smooth 350ms fade-in
+  var steps = 14, curStep = 0;
+  soundFadeTimers[id] = setInterval(function(){
+    curStep++;
+    a.volume = Math.min(1, targetVol * (curStep / steps));
+    if(curStep >= steps){
+      clearInterval(soundFadeTimers[id]);
+      a.volume = targetVol;
+    }
+  }, 25);
 
   updateAmbientUI();
+  renderMixerRack();
 }
 
-function stopSound(type){
-  if(!activeSounds[type]||!ac)return;
-  var entry=activeSounds[type],t=ac.currentTime;
-  entry.gain.gain.linearRampToValueAtTime(0.001,t+0.8);
-  setTimeout(function(){
-    try{entry.src.stop()}catch(e){}
-    if(entry.lfo){try{entry.lfo.stop()}catch(e){}}
-    if(entry.extra){entry.extra.forEach(function(o){try{o.stop()}catch(e){}})}
-    delete activeSounds[type];
+function stopSound(id){
+  var a = soundAudioElements[id];
+  if(!a || a.paused){
     updateAmbientUI();
-  },850);
+    renderMixerRack();
+    return;
+  }
+  clearInterval(soundFadeTimers[id]);
+  var initialVol = a.volume;
+  var steps = 14, curStep = 0;
+  soundFadeTimers[id] = setInterval(function(){
+    curStep++;
+    a.volume = Math.max(0, initialVol * (1 - curStep / steps));
+    if(curStep >= steps){
+      clearInterval(soundFadeTimers[id]);
+      a.pause();
+      a.currentTime = 0;
+      updateAmbientUI();
+      renderMixerRack();
+    }
+  }, 25);
+}
+
+function stopAllSounds(){
+  Object.keys(SOUND_CONFIG).forEach(function(id){
+    stopSound(id);
+  });
+}
+
+function setSoundVolume(id, vol){
+  vol = Math.max(0, Math.min(1, vol));
+  soundVolumes[id] = vol;
+  var a = soundAudioElements[id];
+  if(a && !a.paused){
+    a.volume = vol;
+  }
 }
 
 function updateAmbientUI(){
-  var activeCount=Object.keys(activeSounds).length;
+  var activeIds = Object.keys(SOUND_CONFIG).filter(isSoundPlaying);
+  var activeCount = activeIds.length;
+
   document.querySelectorAll(".sound-chip").forEach(function(chip){
-    var type=chip.getAttribute("data-sound");
-    chip.classList.toggle("on",!!activeSounds[type]);
+    var type = chip.getAttribute("data-sound");
+    chip.classList.toggle("on", isSoundPlaying(type));
   });
-  var toggleBtn=$("ambientToggleBtn"),summary=$("ambientSummary");
-  if(activeCount===0){
-    summary.textContent="Rain Sound: Off";
+
+  var toggleBtn = $("ambientToggleBtn"), summary = $("ambientSummary");
+  if(activeCount === 0){
+    summary.textContent = "Rain Sound: Off";
     toggleBtn.classList.remove("live");
-  }else if(activeCount===1&&activeSounds.rain){
-    summary.textContent="Rain Sound: Active";
+  } else if(activeCount === 1 && isSoundPlaying("rain")){
+    var pct = Math.round((soundVolumes.rain || 0.6) * 100);
+    summary.textContent = "Rain Sound: " + pct + "%";
     toggleBtn.classList.add("live");
-  }else{
-    summary.textContent="Sounds: "+activeCount+" Playing";
+  } else {
+    summary.textContent = "Sounds: " + activeCount + " Playing";
     toggleBtn.classList.add("live");
   }
 }
 
+function renderMixerRack(){
+  var rack = $("soundMixerRack"), list = $("mixerTracksList");
+  if(!rack || !list) return;
+  var activeIds = Object.keys(SOUND_CONFIG).filter(isSoundPlaying);
+
+  if(activeIds.length === 0){
+    rack.style.display = "none";
+    list.innerHTML = "";
+    return;
+  }
+
+  rack.style.display = "block";
+  list.innerHTML = activeIds.map(function(id){
+    var conf = SOUND_CONFIG[id];
+    var vol = soundVolumes[id] !== undefined ? soundVolumes[id] : conf.defVol;
+    var pct = Math.round(vol * 100);
+    return '<div class="mixer-row" data-id="' + id + '">' +
+      '<div class="mixer-name"><span>' + conf.icon + '</span> <b>' + conf.name + '</b></div>' +
+      '<input type="range" class="mixer-slider" min="0" max="100" value="' + pct + '" data-sound="' + id + '" style="--p:' + pct + '%" aria-label="' + conf.name + ' volume">' +
+      '<span class="mixer-val" id="mixerVal_' + id + '">' + pct + '%</span>' +
+      '<button class="mixer-remove" data-sound="' + id + '" title="Stop ' + conf.name + '">✕</button>' +
+    '</div>';
+  }).join("");
+
+  list.querySelectorAll(".mixer-slider").forEach(function(slider){
+    slider.oninput = function(){
+      var id = slider.getAttribute("data-sound");
+      var val = +slider.value;
+      slider.style.setProperty("--p", val + "%");
+      var valEl = $("mixerVal_" + id);
+      if(valEl) valEl.textContent = val + "%";
+      setSoundVolume(id, val / 100);
+      updateAmbientUI();
+    };
+  });
+
+  list.querySelectorAll(".mixer-remove").forEach(function(btn){
+    btn.onclick = function(){
+      var id = btn.getAttribute("data-sound");
+      stopSound(id);
+    };
+  });
+}
+
 document.querySelectorAll(".sound-chip").forEach(function(chip){
-  chip.onclick=function(){
-    var type=chip.getAttribute("data-sound");
-    if(activeSounds[type])stopSound(type);
+  chip.onclick = function(){
+    var type = chip.getAttribute("data-sound");
+    if(isSoundPlaying(type)) stopSound(type);
     else startSound(type);
   };
 });
 
-$("stopAllSounds").onclick=function(){
-  Object.keys(activeSounds).forEach(stopSound);
-};
+$("stopAllSounds").onclick = stopAllSounds;
 
-$("ambientToggleBtn").onclick=function(){
-  // If no sounds are playing, start gentle rain. If sounds are playing, toggle rain or stop.
-  if(Object.keys(activeSounds).length===0)startSound("rain");
-  else Object.keys(activeSounds).forEach(stopSound);
+$("ambientToggleBtn").onclick = function(){
+  // If no sounds are playing, start gentle rain. If any playing, stop all.
+  var activeIds = Object.keys(SOUND_CONFIG).filter(isSoundPlaying);
+  if(activeIds.length === 0) startSound("rain");
+  else stopAllSounds();
 };
 
 /* ───────── SONG PLAYER ENGINE (Song Clip Only) ───────── */
@@ -1165,10 +1395,160 @@ function ringInstant(mins){
   playSong(song,null,"alarm");
 }
 
+/* ───────── EXECUTIVE TOAST NOTIFICATIONS ───────── */
+function showToast(msg, icon){
+  var box=$("toastBox");
+  if(!box)return;
+  var t=document.createElement("div");
+  t.className="toast";
+  t.innerHTML=(icon?"<span>"+icon+"</span>":"<span>✓</span>")+"<span>"+msg+"</span>";
+  box.appendChild(t);
+  setTimeout(function(){
+    t.style.opacity="0";
+    t.style.transition="opacity .3s ease";
+    setTimeout(function(){try{t.remove()}catch(e){}},350);
+  },3000);
+}
+
+/* ───────── APP DISTRIBUTION & COMMAND SUITE ───────── */
+var deferredInstallPrompt=null;
+window.addEventListener("beforeinstallprompt",function(e){
+  e.preventDefault();
+  deferredInstallPrompt=e;
+  var b=$("installAppBtn");
+  if(b)b.textContent="⬇ Install Now (Ready)";
+});
+
+$("installAppBtn").onclick=function(){
+  if(deferredInstallPrompt){
+    deferredInstallPrompt.prompt();
+    deferredInstallPrompt.userChoice.then(function(choice){
+      if(choice.outcome==="accepted"){
+        showToast("Installation started! Adding to home screen...", "📲");
+      }
+      deferredInstallPrompt=null;
+    });
+  }else{
+    $("installGuideModal").classList.add("open");
+  }
+};
+$("closeInstallGuide").onclick=function(){$("installGuideModal").classList.remove("open")};
+$("dismissInstallGuide").onclick=function(){$("installGuideModal").classList.remove("open")};
+
+/* Mobile QR Code Modal */
+$("openQrBtn").onclick=function(){$("qrModal").classList.add("open")};
+$("closeQrModal").onclick=function(){$("qrModal").classList.remove("open")};
+$("doneQrBtn").onclick=function(){$("qrModal").classList.remove("open")};
+$("copyQrLinkBtn").onclick=function(){
+  copyAppUrl();
+};
+
+function copyAppUrl(){
+  var url="https://orlandopasion000.github.io/daily-recharge-alarm.html";
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(url).then(function(){
+      showToast("Link copied to clipboard!", "📋");
+    }).catch(function(){fallbackCopy(url)});
+  }else{
+    fallbackCopy(url);
+  }
+}
+function fallbackCopy(text){
+  var ta=document.createElement("textarea");
+  ta.value=text;ta.style.position="fixed";ta.style.opacity="0";
+  document.body.appendChild(ta);ta.select();
+  try{document.execCommand("copy");showToast("Link copied to clipboard!", "📋")}catch(e){}
+  document.body.removeChild(ta);
+}
+
+/* Share Cockpit */
+$("shareAppBtn").onclick=function(){
+  var shareData={
+    title:"Daily Recharge Alarm — Sir Orlando V. Pasion, Jr.",
+    text:"Rest, recharge, and master your daily teaching and work rhythm.",
+    url:"https://orlandopasion000.github.io/daily-recharge-alarm.html"
+  };
+  if(navigator.share){
+    navigator.share(shareData).catch(function(err){
+      if(err.name!=="AbortError")copyAppUrl();
+    });
+  }else{
+    copyAppUrl();
+  }
+};
+
+/* Export Backup JSON */
+$("exportBackupBtn").onclick=function(){
+  var backupData={
+    app:"Daily Recharge Alarm",
+    version:"2.4.0",
+    owner:"Sir Orlando V. Pasion, Jr.",
+    exportedAt:new Date().toISOString(),
+    theme:clockTheme,
+    armed:armed,
+    days:days,
+    schedule:S
+  };
+  var blob=new Blob([JSON.stringify(backupData,null,2)],{type:"application/json"});
+  var a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="daily-recharge-schedule-backup.json";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(a.href);
+  showToast("Schedule backup downloaded!", "💾");
+};
+
+/* Import Backup JSON */
+$("importBackupBtn").onclick=function(){
+  $("importBackupFile").click();
+};
+$("importBackupFile").onchange=function(e){
+  var file=e.target.files&&e.target.files[0];
+  if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(evt){
+    try{
+      var data=JSON.parse(evt.target.result);
+      if(data&&Array.isArray(data.schedule)&&data.schedule.length>0){
+        S=data.schedule.slice(0);
+        if(data.days)days=data.days;
+        if(data.theme&&THEMES.indexOf(data.theme)!==-1)applyClockTheme(data.theme);
+        save();
+        renderList();
+        renderDays();
+        tick();
+        showToast("Schedule restored successfully ("+S.length+" alarms)!", "✓");
+      }else{
+        alert("Invalid backup file format. Expected a valid schedule array.");
+      }
+    }catch(err){
+      alert("Error reading backup file: "+err.message);
+    }
+    $("importBackupFile").value="";
+  };
+  reader.readAsText(file);
+};
+
+/* Sync Updates / Force CDN Re-fetch */
+$("syncUpdatesBtn").onclick=function(){
+  showToast("Checking GitHub Pages for latest release...", "↺");
+  if(swReg&&swReg.update){
+    swReg.update().then(function(){
+      setTimeout(function(){location.reload(true)},600);
+    }).catch(function(){
+      location.reload(true);
+    });
+  }else{
+    location.reload(true);
+  }
+};
+
 /* ───────── SERVICE WORKER & PWA INSTALL ───────── */
 var swReg=null;
 if("serviceWorker" in navigator&&location.protocol!=="file:"){
-  navigator.serviceWorker.register("recharge-sw.js",{scope:"./daily-recharge-alarm"}).then(function(r){swReg=r}).catch(function(){});
+  navigator.serviceWorker.register("recharge-sw.js",{scope:"./"}).then(function(r){swReg=r}).catch(function(){});
   navigator.serviceWorker.addEventListener("message",function(e){
     var d=e.data||{};if(d.type!=="alarm-action")return;
     if(d.action==="snooze")snooze();else if(d.action==="dismiss")dismiss();else window.focus();
@@ -1183,6 +1563,7 @@ renderList();
 showVol();
 showSong();
 setStatus();
+updateAmbientUI();
 tick();
 setInterval(tick,1000);
 </script>
