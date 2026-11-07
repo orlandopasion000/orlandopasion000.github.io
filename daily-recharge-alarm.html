@@ -563,14 +563,14 @@ li.cur{opacity:1;border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 3
           <div class="dist-icon">⬇</div>
           <div>
             <div class="dist-name">Install Desktop & Mobile App</div>
-            <div class="dist-desc">Install as a native desktop application on Windows, or install directly onto your Android/iOS home screen.</div>
+            <div class="dist-desc">Install onto your desktop, laptop, or phone home screen with zero security warnings.</div>
           </div>
         </div>
         <div style="display:flex;flex-direction:column;gap:8px">
-          <a class="primary dist-btn" href="downloads/DailyRecharge-Setup.exe" download style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px">⬇ Download Windows App (.exe)</a>
+          <button class="primary dist-btn" id="installAppBtn" style="gap:8px">⚡ 1-Click Install App (Zero Warnings)</button>
           <div style="display:flex;gap:6px;flex-wrap:wrap">
             <a class="ghost dist-btn" href="downloads/Install-DailyRecharge-Windows.cmd" download style="flex:1;min-width:130px;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;font-size:.82rem">⚡ 1-Click Setup (.cmd)</a>
-            <button class="ghost dist-btn" id="installAppBtn" style="flex:1;min-width:130px;font-size:.82rem">📲 Browser PWA Install</button>
+            <a class="ghost dist-btn" href="downloads/DailyRecharge-Setup.exe" download style="flex:1;min-width:130px;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;font-size:.82rem" title="Standalone .exe for non-managed PCs">⬇ Windows (.exe)</a>
           </div>
         </div>
       </div>
@@ -645,14 +645,14 @@ li.cur{opacity:1;border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 3
           <div class="dist-icon" style="background:rgba(217,185,92,.15);color:var(--gold);border-color:rgba(217,185,92,.3)">🎁</div>
           <div>
             <div class="dist-name" style="color:var(--gold)">Clean Blank Edition (For Anyone)</div>
-            <div class="dist-desc">A 100% clean, schedule-free app with isolated storage. Zero personal data — install on Windows or Android, customize your own schedule, or publish to App Stores.</div>
+            <div class="dist-desc">A 100% clean, schedule-free app with isolated storage. Zero personal data — install on Windows or Android with zero warnings.</div>
           </div>
         </div>
         <div style="display:flex;flex-direction:column;gap:8px">
-          <a class="primary dist-btn" href="downloads/DailyRecharge-Clean-Setup.exe" download style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px">⬇ Download Windows App (.exe)</a>
+          <a class="primary dist-btn" href="recharge-clean.html" target="_blank" rel="noopener" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px">🚀 Open Blank Web App</a>
           <div style="display:flex;gap:6px;flex-wrap:wrap">
             <a class="ghost dist-btn" href="downloads/Install-DailyRecharge-Clean-Windows.cmd" download style="flex:1;min-width:130px;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;font-size:.82rem">⚡ 1-Click Setup (.cmd)</a>
-            <a class="ghost dist-btn" href="recharge-clean.html" target="_blank" rel="noopener" style="flex:1;min-width:130px;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;font-size:.82rem">🚀 Open Web App</a>
+            <a class="ghost dist-btn" href="downloads/DailyRecharge-Clean-Setup.exe" download style="flex:1;min-width:130px;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;font-size:.82rem" title="Standalone .exe for non-managed PCs">⬇ Windows (.exe)</a>
             <button class="ghost dist-btn" id="downloadBlankAppBtn" style="flex:1;min-width:130px;font-size:.82rem">💾 Standalone (.html)</button>
           </div>
         </div>
@@ -722,6 +722,11 @@ li.cur{opacity:1;border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 3
       <div style="background:#000;border:1px solid var(--line2);border-radius:14px;padding:14px">
         <b style="color:var(--gold)">🤖 Android (Chrome):</b><br>
         Tap the menu dots (⋮) in the top-right corner, then tap <b>Install app</b> or <b>Add to Home Screen</b>.
+      </div>
+      <div style="background:#14151b;border:1px solid rgba(217,185,92,.35);border-radius:14px;padding:14px;font-size:.85rem;color:var(--dim);line-height:1.5">
+        <b style="color:var(--gold)">🛡️ Seeing "isn't commonly downloaded" in Edge?</b><br>
+        Microsoft Edge displays this standard alert on newly published executables. In your browser Downloads list, hover over the file and click <b>••• (More actions) → Keep → Keep anyway</b>.<br>
+        <i>Tip: Using the <b>Install App</b> icon in your address bar (⊞) gives you a 100% native Windows desktop app with zero security warnings!</i>
       </div>
     </div>
     <div class="modal-actions" style="margin-top:20px">

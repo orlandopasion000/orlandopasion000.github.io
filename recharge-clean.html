@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⏰</text></svg>">
-<link rel="manifest" href="recharge-manifest.webmanifest">
+<link rel="manifest" href="recharge-clean-manifest.webmanifest">
 <link rel="apple-touch-icon" href="assets/recharge-apple-touch.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -563,14 +563,14 @@ li.cur{opacity:1;border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 3
           <div class="dist-icon">⬇</div>
           <div>
             <div class="dist-name">Install Desktop & Mobile App</div>
-            <div class="dist-desc">Install as a native desktop application on Windows, or install directly onto your Android/iOS home screen.</div>
+            <div class="dist-desc">Install onto your desktop, laptop, or phone home screen with zero security warnings.</div>
           </div>
         </div>
         <div style="display:flex;flex-direction:column;gap:8px">
-          <a class="primary dist-btn" href="downloads/DailyRecharge-Clean-Setup.exe" download style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px">⬇ Download Windows App (.exe)</a>
+          <button class="primary dist-btn" id="installAppBtn" style="gap:8px">⚡ 1-Click Install App (Zero Warnings)</button>
           <div style="display:flex;gap:6px;flex-wrap:wrap">
             <a class="ghost dist-btn" href="downloads/Install-DailyRecharge-Clean-Windows.cmd" download style="flex:1;min-width:130px;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;font-size:.82rem">⚡ 1-Click Setup (.cmd)</a>
-            <button class="ghost dist-btn" id="installAppBtn" style="flex:1;min-width:130px;font-size:.82rem">📲 Browser PWA Install</button>
+            <a class="ghost dist-btn" href="downloads/DailyRecharge-Clean-Setup.exe" download style="flex:1;min-width:130px;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;font-size:.82rem" title="Standalone .exe for non-managed PCs">⬇ Windows (.exe)</a>
           </div>
         </div>
       </div>
@@ -718,6 +718,11 @@ li.cur{opacity:1;border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 3
       <div style="background:#000;border:1px solid var(--line2);border-radius:14px;padding:14px">
         <b style="color:var(--gold)">🤖 Android (Chrome):</b><br>
         Tap the menu dots (⋮) in the top-right corner, then tap <b>Install app</b> or <b>Add to Home Screen</b>.
+      </div>
+      <div style="background:#14151b;border:1px solid rgba(217,185,92,.35);border-radius:14px;padding:14px;font-size:.85rem;color:var(--dim);line-height:1.5">
+        <b style="color:var(--gold)">🛡️ Seeing "isn't commonly downloaded" in Edge?</b><br>
+        Microsoft Edge displays this standard alert on newly published executables. In your browser Downloads list, hover over the file and click <b>••• (More actions) → Keep → Keep anyway</b>.<br>
+        <i>Tip: Using the <b>Install App</b> icon in your address bar (⊞) gives you a 100% native Windows desktop app with zero security warnings!</i>
       </div>
     </div>
     <div class="modal-actions" style="margin-top:20px">

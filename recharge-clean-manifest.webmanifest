@@ -1,0 +1,21 @@
+{
+  "name": "Daily Recharge (Clean Edition)",
+  "short_name": "Daily Recharge",
+  "description": "Clean, customizable personal daily alarm schedule with sleep soundscapes and luxury metallic clocks.",
+  "id": "recharge-clean-pwa",
+  "start_url": "./recharge-clean.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "categories": ["productivity", "utilities"],
+  "icons": [
+    { "src": "assets/recharge-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/recharge-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/recharge-icon-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Rest Mode clock", "short_name": "Rest Mode", "url": "./recharge-clean.html?rest=1", "icons": [{ "src": "assets/recharge-icon-192.png", "sizes": "192x192" }] }
+  ]
+}
