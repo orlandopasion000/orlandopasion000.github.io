@@ -1,0 +1,21 @@
+{
+  "name": "Daily Recharge Alarm",
+  "short_name": "Recharge",
+  "description": "Daily schedule alarms with song clips — by Sir Orlando V. Pasion, Jr.",
+  "id": "./daily-recharge-alarm.html",
+  "start_url": "./daily-recharge-alarm.html?source=app",
+  "scope": "./daily-recharge-alarm",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "categories": ["productivity", "utilities"],
+  "icons": [
+    { "src": "assets/recharge-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/recharge-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/recharge-icon-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Rest Mode clock", "short_name": "Rest Mode", "url": "./daily-recharge-alarm.html?rest=1", "icons": [{ "src": "assets/recharge-icon-192.png", "sizes": "192x192" }] }
+  ]
+}

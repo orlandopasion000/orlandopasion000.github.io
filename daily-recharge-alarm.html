@@ -7,22 +7,35 @@
 <title>Daily Recharge Alarm — Sir Orlando V. Pasion, Jr.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- Atkinson Hyperlegible: designed by the Braille Institute so that 0/O, 1/l/I, 5/S, 8/B never get confused -->
-<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Atkinson+Hyperlegible+Mono:wght@400;600;700;800&family=Rubik:wght@600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⏰</text></svg>">
+<link rel="manifest" href="recharge-manifest.webmanifest">
+<link rel="apple-touch-icon" href="assets/recharge-apple-touch.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Recharge">
+<meta name="description" content="Daily schedule alarms with song clips, Zen chimes, Rest Mode clock, and editable schedule.">
+<!-- Plus Jakarta Sans & Inter: ultra-refined geometric precision for numbers, letters, and clock numerals -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
   --black:#000;
-  --line:#1C1C1C;
-  --line2:#2A2A2A;
+  --surface:#0c0c0e;
+  --surface-2:#15161c;
+  --surface-3:#1e2029;
+  --line:#1C1C20;
+  --line2:#2B2C33;
   --gold:#D9B95C;
   --gold-soft:rgba(217,185,92,.55);
   --gold-glow:rgba(217,185,92,.18);
+  --gold-glow-strong:rgba(217,185,92,.45);
   --text:#F5F1E6;
   --dim:#B4AC9C;
   --mute:#7E776B;
-  --rest:#D9B95C;--class:#8EB4E6;--work:#F0CF7A;--err:#9A9A9A;--night:#7F97C2;
-  --sans:'Atkinson Hyperlegible',system-ui,sans-serif;
-  --mono:'Atkinson Hyperlegible Mono','Atkinson Hyperlegible',ui-monospace,monospace;
+  --rest:#D9B95C;--class:#8EB4E6;--work:#F0CF7A;--err:#A5A5AA;--night:#8FA3CF;
+  --sans:'Plus Jakarta Sans','Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  --font-clock:'Plus Jakarta Sans','Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  --mono:'Plus Jakarta Sans','Inter',-apple-system,BlinkMacSystemFont,monospace;
   --glow-w:0 0 18px rgba(245,241,230,.22),0 0 42px rgba(245,241,230,.08);
   --glow-g:0 0 16px rgba(217,185,92,.55),0 0 40px rgba(217,185,92,.22);
   color-scheme:dark;
@@ -30,27 +43,57 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{background:#000}
 html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-body{color:var(--text);font-family:var(--sans);font-size:21px;line-height:1.55;min-height:100vh;overflow-x:hidden}
-main{max-width:1240px;margin:0 auto;padding:36px 44px 90px}
+body{color:var(--text);font-family:var(--sans);font-size:20px;line-height:1.55;min-height:100vh;overflow-x:hidden}
+main{max-width:1240px;margin:0 auto;padding:32px 36px 90px}
+
+/* Top bar with system diagnostics & clock theme selector */
+.top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;gap:12px;flex-wrap:wrap}
+.brand-tag{display:flex;align-items:center;gap:10px;font-size:.9rem;color:var(--dim);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.brand-tag .dot{width:9px;height:9px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px var(--gold)}
+.top-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.badge-btn{display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:20px;font-size:.85rem;font-weight:600;background:var(--surface);border:1px solid var(--line2);color:var(--dim);cursor:pointer;transition:all .2s;font-family:var(--sans)}
+.badge-btn:hover{border-color:var(--gold-soft);color:var(--text)}
+.badge-btn.live{color:#5de8a0;border-color:rgba(93,232,160,.35)}
+.badge-btn.live .status-dot{background:#5de8a0;box-shadow:0 0 8px #5de8a0}
+.badge-btn.warn{color:var(--gold);border-color:var(--gold-soft);animation:pulse-border 2s infinite}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--mute);flex:none}
+@keyframes pulse-border{0%,100%{box-shadow:0 0 0 0 rgba(217,185,92,.3)}50%{box-shadow:0 0 12px 2px rgba(217,185,92,.4)}}
 
 /* ===== CLOCK ===== */
-.hero{position:relative;padding:36px 44px 40px;border:1px solid var(--line);border-radius:32px;background:#000;margin-bottom:28px;overflow:hidden}
-.hero::before{content:"";position:absolute;top:-1px;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);box-shadow:0 0 18px var(--gold)}
-.clock-row{display:flex;align-items:flex-start;gap:18px;flex-wrap:nowrap;padding-bottom:clamp(1.2rem,5vw,4.5rem);
+.hero{position:relative;padding:36px 44px 38px;border:1px solid var(--line);border-radius:32px;background:#000;margin-bottom:24px;overflow:hidden}
+.hero::before{content:"";position:absolute;top:-1px;left:8%;right:8%;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);box-shadow:0 0 18px var(--gold)}
+.clock-row{display:flex;align-items:flex-start;gap:18px;flex-wrap:nowrap;padding-bottom:clamp(1rem,4.5vw,4rem);
   -webkit-box-reflect:below -2px linear-gradient(transparent 62%,rgba(0,0,0,.30))}
 
-/* ── Glossy black-chrome digits (like polished 3D numerals) ── */
-.chrome{font-family:'Rubik',var(--sans);font-weight:700;line-height:1;white-space:nowrap;
+/* ── Numerals: Precision Typographic Rendering (No slashed zeroes, perfectly balanced 8) ── */
+.chrome{font-family:var(--font-clock);font-weight:700;line-height:1;white-space:nowrap;font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1, "zero" 0;letter-spacing:-.02em}
+.chrome span{display:inline-block;width:.62em;text-align:center}
+.chrome span.c{width:.26em;transform:translateY(-.04em)}
+
+/* Themes for Clock numerals */
+body[data-clock-theme="chrome"] .chrome{
   filter:drop-shadow(0 0 1px rgba(255,255,255,.45)) drop-shadow(0 12px 18px rgba(0,0,0,.95)) drop-shadow(0 0 34px rgba(255,255,255,.12))}
-.chrome span{display:inline-block;width:.64em;text-align:center;
+body[data-clock-theme="chrome"] .chrome span{
   background:linear-gradient(180deg,#ffffff 0%,#ececec 10%,#a9a9a9 30%,#5c5c5c 46%,#1e1e1e 50%,#333 58%,#6e6e6e 76%,#c9c9c9 92%,#f4f4f4 100%);
   -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
   -webkit-text-stroke:1.2px rgba(255,255,255,.28)}
-.chrome span.c{width:.3em;transform:translateY(-.06em)}
-#clock{font-size:clamp(4rem,14.5vw,13rem)}
-#ampm{font-family:'Rubik',var(--sans);font-weight:700;font-size:clamp(1.4rem,3.4vw,3rem);color:var(--gold);text-shadow:var(--glow-g);margin-top:.35em}
 
-/* ── Rest mode: only the clock, pure black ── */
+body[data-clock-theme="gold"] .chrome{
+  filter:drop-shadow(0 0 1px rgba(217,185,92,.6)) drop-shadow(0 12px 20px rgba(0,0,0,.95)) drop-shadow(0 0 36px rgba(217,185,92,.25))}
+body[data-clock-theme="gold"] .chrome span{
+  background:linear-gradient(180deg,#fff4cf 0%,#f0cf7a 24%,#d9b95c 52%,#8a6d25 76%,#e2c673 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  -webkit-text-stroke:1px rgba(240,207,122,.3)}
+
+body[data-clock-theme="white"] .chrome{
+  filter:drop-shadow(0 0 2px rgba(255,255,255,.5)) drop-shadow(0 10px 24px rgba(0,0,0,.9))}
+body[data-clock-theme="white"] .chrome span{
+  color:#FFFFFF;-webkit-text-fill-color:#FFFFFF;text-shadow:0 0 24px rgba(255,255,255,.3)}
+
+#clock{font-size:clamp(3.8rem,14vw,12.5rem)}
+#ampm{font-family:var(--font-clock);font-weight:700;font-size:clamp(1.3rem,3.2vw,2.8rem);color:var(--gold);text-shadow:var(--glow-g);margin-top:.38em;letter-spacing:.02em}
+
+/* ── Rest mode: fullscreen pure black clock ── */
 html.resting,html.resting body{overflow:hidden!important;height:100%;scrollbar-width:none}
 html.resting::-webkit-scrollbar,html.resting body::-webkit-scrollbar{display:none;width:0;height:0}
 #rest{position:fixed;inset:0;background:#000;display:none;align-items:center;justify-content:center;z-index:90;cursor:pointer}
@@ -59,118 +102,211 @@ html.resting::-webkit-scrollbar,html.resting body::-webkit-scrollbar{display:non
 #restWrap{display:flex;flex-direction:column;align-items:center;transition:transform 3s ease;
   -webkit-box-reflect:below -4px linear-gradient(transparent 65%,rgba(0,0,0,.28))}
 #restClock{font-size:min(19vw,40vh)}
-#restAmpm{font-family:'Rubik',var(--sans);font-weight:600;font-size:min(3.4vw,6vh);letter-spacing:.35em;color:var(--gold);text-shadow:var(--glow-g);margin-top:.6em;opacity:.85}
-#restHint{position:fixed;left:0;right:0;bottom:28px;text-align:center;color:var(--mute);font-size:1rem;transition:opacity 1.2s}
-#date{font-size:clamp(1.3rem,2.4vw,1.9rem);color:var(--dim);margin-top:14px;text-shadow:var(--glow-w)}
-.next{margin-top:30px;padding-top:26px;border-top:1px solid var(--line2);display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:10px 28px}
-.label{font-size:.85rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--mute)}
-#nextLabel{font-size:clamp(1.4rem,2.6vw,2.1rem);font-weight:700;margin-top:4px;text-shadow:var(--glow-w)}
-#count{font-family:var(--mono);font-variant-numeric:tabular-nums slashed-zero;font-size:clamp(1.8rem,3.6vw,3rem);font-weight:700;color:var(--gold);text-shadow:var(--glow-g);white-space:nowrap}
+#restAmpm{font-family:var(--font-clock);font-weight:600;font-size:min(3.4vw,6vh);letter-spacing:.35em;color:var(--gold);text-shadow:var(--glow-g);margin-top:.6em;opacity:.85}
+#restHint{position:fixed;left:0;right:0;bottom:28px;text-align:center;color:var(--mute);font-size:1rem;transition:opacity 1.2s;display:flex;justify-content:center;gap:18px}
+#date{font-size:clamp(1.2rem,2.2vw,1.8rem);color:var(--dim);margin-top:14px;text-shadow:var(--glow-w);font-weight:500}
+
+/* Right now block */
+.now{--c:var(--gold);margin-top:28px;padding:16px 20px;border-radius:18px;background:rgba(255,255,255,.02);border:1px solid var(--line2)}
+.now[hidden]{display:none}
+.now-top{display:flex;justify-content:space-between;align-items:baseline;gap:16px}
+#nowLabel{font-size:clamp(1.2rem,2.2vw,1.6rem);font-weight:700;margin-top:4px;color:var(--text);letter-spacing:-.01em}
+#nowLeft{font-family:var(--mono);font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1, "zero" 0;font-weight:600;color:var(--c);font-size:1.05rem;white-space:nowrap}
+.bar{height:7px;background:var(--line2);border-radius:4px;overflow:hidden;margin-top:12px}
+.bar i{display:block;height:100%;width:0;background:var(--c);box-shadow:0 0 12px var(--c);border-radius:4px;transition:width 1s linear}
+
+.next{margin-top:26px;padding-top:24px;border-top:1px solid var(--line2);display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:10px 28px}
+.label{font-size:.82rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--mute)}
+#nextLabel{font-size:clamp(1.3rem,2.4vw,2rem);font-weight:700;margin-top:4px;text-shadow:var(--glow-w);letter-spacing:-.01em}
+#count{font-family:var(--mono);font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1, "zero" 0;letter-spacing:-.01em;font-size:clamp(1.8rem,3.6vw,3rem);font-weight:700;color:var(--gold);text-shadow:var(--glow-g);white-space:nowrap}
+
+/* Instant Recharge Chips */
+.quick-tray{display:flex;align-items:center;gap:10px;margin-bottom:22px;flex-wrap:wrap}
+.quick-title{font-size:.82rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--mute);margin-right:4px}
+.chip{background:var(--surface);border:1px solid var(--line2);color:var(--text);padding:8px 16px;border-radius:24px;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:6px;font-family:var(--sans)}
+.chip:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-1px);box-shadow:0 0 16px var(--gold-glow)}
+.chip.active{background:var(--gold);color:#000;border-color:var(--gold);box-shadow:0 0 20px rgba(217,185,92,.4)}
 
 /* ===== CONTROLS ===== */
-.controls{display:flex;gap:14px;flex-wrap:wrap;align-items:stretch;margin-bottom:20px}
-button{font-family:var(--sans);font-size:1.15rem;font-weight:700;cursor:pointer;border:0;border-radius:16px;padding:16px 30px;transition:all .22s cubic-bezier(.4,0,.2,1)}
-button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
-.primary{background:var(--gold);color:#000;box-shadow:0 0 26px rgba(217,185,92,.35)}
-.primary:hover{transform:translateY(-1px);box-shadow:0 0 38px rgba(217,185,92,.55)}
+.controls{display:flex;gap:12px;flex-wrap:wrap;align-items:stretch;margin-bottom:20px}
+button{font-family:var(--sans);font-size:1.05rem;font-weight:700;cursor:pointer;border:0;border-radius:16px;padding:15px 24px;transition:all .22s cubic-bezier(.4,0,.2,1)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.primary{background:var(--gold);color:#000;box-shadow:0 0 24px rgba(217,185,92,.35)}
+.primary:hover{transform:translateY(-1px);box-shadow:0 0 36px rgba(217,185,92,.55)}
 .primary.on{background:#000;color:var(--gold);box-shadow:inset 0 0 0 2px var(--gold),0 0 22px rgba(217,185,92,.3);text-shadow:var(--glow-g)}
 .ghost{background:#000;color:var(--text);border:1px solid var(--line2)}
 .ghost:hover{border-color:var(--gold-soft);box-shadow:0 0 20px var(--gold-glow);transform:translateY(-1px)}
-.ghost.active{border-color:var(--gold);color:var(--gold);text-shadow:var(--glow-g)}
+.ghost.active{border-color:var(--gold);color:var(--gold);text-shadow:var(--glow-g);background:var(--surface-2)}
+[hidden]{display:none!important}
+.tip{border:1px solid var(--gold-soft);border-radius:18px;padding:16px 22px;margin-bottom:22px;color:var(--dim);font-size:1.05rem;display:flex;gap:16px;align-items:center;background:rgba(217,185,92,.04)}
+.tip b{color:var(--gold)}
+.tip button{margin-left:auto;padding:8px 14px;font-size:.95rem;flex:none}
 
 /* Volume */
-.vol{display:flex;align-items:center;gap:14px;margin-left:auto;border:1px solid var(--line2);border-radius:16px;padding:10px 20px;background:#000}
-#volIcon{background:none;padding:4px;font-size:1.5rem;line-height:1;border-radius:10px;box-shadow:none}
-#volSlider{-webkit-appearance:none;appearance:none;width:170px;height:6px;border-radius:3px;cursor:pointer;
+.vol{display:flex;align-items:center;gap:14px;margin-left:auto;border:1px solid var(--line2);border-radius:16px;padding:10px 18px;background:#000}
+#volIcon{background:none;padding:4px;font-size:1.4rem;line-height:1;border-radius:10px;box-shadow:none}
+#volSlider{-webkit-appearance:none;appearance:none;width:140px;height:6px;border-radius:3px;cursor:pointer;
   background:linear-gradient(90deg,var(--gold) 0%,var(--gold) var(--p,70%),var(--line2) var(--p,70%))}
-#volSlider::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:var(--gold);box-shadow:0 0 14px rgba(217,185,92,.7)}
-#volSlider::-moz-range-thumb{width:24px;height:24px;border:0;border-radius:50%;background:var(--gold);box-shadow:0 0 14px rgba(217,185,92,.7)}
-#volPct{font-family:var(--mono);font-weight:700;font-size:1.1rem;color:var(--dim);min-width:3.2em;text-align:right}
+#volSlider::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--gold);box-shadow:0 0 12px rgba(217,185,92,.7)}
+#volSlider::-moz-range-thumb{width:22px;height:22px;border:0;border-radius:50%;background:var(--gold);box-shadow:0 0 12px rgba(217,185,92,.7)}
+#volPct{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:700;font-size:1.05rem;color:var(--dim);min-width:3.2em;text-align:right}
 
-/* Now playing */
-.player{display:flex;align-items:center;gap:18px;border:1px solid var(--line);border-radius:18px;padding:16px 22px;margin-bottom:30px;background:#000}
+/* Player Bar */
+.player{display:flex;align-items:center;gap:18px;border:1px solid var(--line);border-radius:18px;padding:16px 22px;margin-bottom:26px;background:#000;flex-wrap:wrap}
 .eq{display:flex;align-items:flex-end;gap:4px;height:26px;width:30px;flex:none}
 .eq i{flex:1;background:var(--gold);border-radius:2px;height:25%;box-shadow:0 0 8px var(--gold);opacity:.5}
 .player.playing .eq i{opacity:1;animation:eq .9s ease-in-out infinite}
 .player.playing .eq i:nth-child(2){animation-delay:-.3s}.player.playing .eq i:nth-child(3){animation-delay:-.6s}.player.playing .eq i:nth-child(4){animation-delay:-.45s}
 @keyframes eq{0%,100%{height:20%}50%{height:100%}}
 .player .label{display:block}
-#songTitle{font-size:1.3rem;font-weight:700;color:var(--gold);text-shadow:var(--glow-g)}
-#songArtist{color:var(--dim);font-size:1.1rem}
-#skip{margin-left:auto;padding:12px 20px;font-size:1rem}
+#songTitle{font-size:1.25rem;font-weight:700;color:var(--gold);text-shadow:var(--glow-g)}
+#songArtist{color:var(--dim);font-size:1.05rem}
+.player-actions{display:flex;align-items:center;gap:10px;margin-left:auto;flex-wrap:wrap}
+.sound-mode-select{background:var(--surface-2);color:var(--text);border:1px solid var(--line2);border-radius:12px;padding:10px 14px;font-size:.95rem;font-weight:600;font-family:var(--sans);cursor:pointer}
+.sound-mode-select:focus{outline:2px solid var(--gold)}
+#skip{padding:10px 18px;font-size:.95rem}
 
 /* Days */
 .days{display:flex;gap:10px;margin:12px 0 10px}
-.days button{flex:1;padding:16px 0;font-size:1.15rem;background:#000;color:var(--mute);border:1px solid var(--line2)}
+.days button{flex:1;padding:15px 0;font-size:1.1rem;background:#000;color:var(--mute);border:1px solid var(--line2);border-radius:14px}
 .days button:hover{color:var(--dim);border-color:var(--mute)}
 .days button.on{background:var(--gold);color:#000;border-color:var(--gold);box-shadow:0 0 20px rgba(217,185,92,.35)}
-#status{color:var(--dim);font-size:1.1rem;margin:10px 0 40px}
+#status{color:var(--dim);font-size:1.05rem;margin:10px 0 34px}
+#status.warn{color:var(--gold);text-shadow:var(--glow-g)}
 
-/* Schedule */
-h2{font-size:clamp(1.7rem,3vw,2.3rem);font-weight:700;display:flex;align-items:center;gap:18px;margin-bottom:18px;text-shadow:var(--glow-w)}
-h2::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line2),transparent)}
-.legend{display:flex;flex-wrap:wrap;gap:12px 26px;margin-bottom:22px;color:var(--dim);font-size:1.05rem}
-.legend span{display:flex;align-items:center;gap:9px}
-.legend b{width:12px;height:12px;border-radius:50%;background:var(--c);box-shadow:0 0 10px var(--c)}
+/* Schedule Header & Controls */
+.sched-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;margin-bottom:14px}
+h2{font-size:clamp(1.6rem,2.8vw,2.2rem);font-weight:700;display:flex;align-items:center;gap:16px;text-shadow:var(--glow-w);margin:0}
+.sched-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+
+/* Legend / Category Filter Pills */
+.legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}
+.cat-pill{display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line2);color:var(--dim);border-radius:20px;padding:8px 16px;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:var(--sans)}
+.cat-pill b{width:11px;height:11px;border-radius:50%;background:var(--c);box-shadow:0 0 8px var(--c)}
+.cat-pill:hover{color:var(--text);border-color:var(--c)}
+.cat-pill.active{background:var(--surface-2);color:var(--text);border-color:var(--gold);box-shadow:0 0 14px var(--gold-glow)}
+
+/* Schedule List */
 ul{list-style:none}
-li{--c:var(--work);display:flex;align-items:center;gap:24px;background:#000;border:1px solid var(--line);border-left:5px solid var(--c);border-radius:18px;padding:20px 28px;margin-bottom:12px;transition:transform .2s,box-shadow .2s,opacity .3s}
-li:hover{transform:translateX(4px);box-shadow:-6px 0 24px -8px var(--c)}
+li{--c:var(--work);display:flex;align-items:center;gap:20px;background:#000;border:1px solid var(--line);border-left:5px solid var(--c);border-radius:18px;padding:18px 24px;margin-bottom:12px;transition:transform .2s,box-shadow .2s,opacity .3s}
+li:hover{transform:translateX(3px);box-shadow:-6px 0 24px -8px var(--c)}
 li.rest{--c:var(--rest)}li.class{--c:var(--class)}li.work{--c:var(--work)}li.err{--c:var(--err)}li.night{--c:var(--night)}
-li.past{opacity:.32}
+li.past{opacity:.35}
 li.cur{opacity:1;border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 34px rgba(217,185,92,.25)}
-.t{font-family:var(--mono);font-variant-numeric:tabular-nums slashed-zero;font-weight:700;font-size:1.35rem;min-width:7.2em;color:var(--c);text-shadow:0 0 14px color-mix(in srgb,var(--c) 55%,transparent)}
-.l{flex:1;font-size:1.35rem;font-weight:700}
-.sw{position:relative;width:60px;height:34px;flex:none}
+
+/* Time Typography: Clean, optical, professional numbers */
+.t{font-family:var(--mono);font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1, "zero" 0;letter-spacing:-.01em;font-weight:700;font-size:1.35rem;min-width:7.2em;color:var(--c);text-shadow:0 0 14px color-mix(in srgb,var(--c) 55%,transparent)}
+.l{flex:1;font-size:1.3rem;font-weight:600}
+
+/* Inline Edit Controls in rows */
+.edit-row-ctrls{display:flex;align-items:center;gap:10px;flex:1;flex-wrap:wrap}
+.edit-time-in{font-family:var(--mono);font-size:1.15rem;font-weight:700;background:var(--surface-2);color:var(--text);border:1px solid var(--line2);border-radius:10px;padding:8px 12px;width:125px}
+.edit-cat-sel{font-family:var(--sans);font-size:.95rem;font-weight:600;background:var(--surface-2);color:var(--text);border:1px solid var(--line2);border-radius:10px;padding:8px 12px;cursor:pointer}
+.edit-title-in{font-family:var(--sans);font-size:1.15rem;font-weight:600;background:var(--surface-2);color:var(--text);border:1px solid var(--line2);border-radius:10px;padding:8px 14px;flex:1;min-width:180px}
+.reorder-btn{background:none;border:1px solid var(--line2);color:var(--mute);padding:6px 10px;font-size:1rem;cursor:pointer;border-radius:8px}
+.reorder-btn:hover{color:var(--text);border-color:var(--gold)}
+
+.sw{position:relative;width:58px;height:34px;flex:none}
 .sw input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer;z-index:2}
 .sw i{position:absolute;inset:0;border-radius:17px;background:var(--line2);transition:all .2s}
 .sw i::after{content:"";position:absolute;left:4px;top:4px;width:26px;height:26px;border-radius:50%;background:var(--mute);transition:all .2s}
 .sw input:checked+i{background:var(--gold);box-shadow:0 0 16px rgba(217,185,92,.5)}
-.sw input:checked+i::after{transform:translateX(26px);background:#000}
-.note{color:var(--mute);font-size:1.05rem;margin-top:30px;padding-top:24px;border-top:1px solid var(--line)}
+.sw input:checked+i::after{transform:translateX(24px);background:#000}
+
+/* Add Item / Bottom bar in schedule */
+.sched-bottom-bar{display:flex;gap:12px;margin-top:20px;flex-wrap:wrap}
+
+.note{color:var(--mute);font-size:1.02rem;margin-top:28px;padding-top:22px;border-top:1px solid var(--line)}
 
 /* Alarm overlay */
 #ov{position:fixed;inset:0;background:#000;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;z-index:100}
 #ov.show{display:flex}
 .ring{width:130px;height:130px;border-radius:50%;border:3px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:3.2rem;animation:pulse 1.6s ease-in-out infinite}
 @keyframes pulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(217,185,92,.4)}50%{transform:scale(1.12);box-shadow:0 0 60px 14px rgba(217,185,92,.25)}}
-#ovT{font-size:clamp(2.2rem,5.5vw,4.2rem);font-weight:700;margin:30px 0 6px;text-shadow:var(--glow-w)}
-#ovM{font-family:var(--mono);font-size:clamp(1.6rem,3vw,2.4rem);font-weight:700;color:var(--gold);text-shadow:var(--glow-g)}
-#ovSong{color:var(--dim);font-size:1.2rem;margin:22px 0 40px}
+#ovT{font-size:clamp(2.2rem,5.5vw,4.2rem);font-weight:700;letter-spacing:-.02em;margin:30px 0 6px;text-shadow:var(--glow-w)}
+#ovM{font-family:var(--font-clock);font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1, "zero" 0;font-size:clamp(1.8rem,3.2vw,2.6rem);font-weight:700;letter-spacing:.01em;color:var(--gold);text-shadow:var(--glow-g)}
+.ov-actions{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+#ovS{font-size:1.35rem;padding:18px 38px}
+.ov-keys{margin-top:22px;color:var(--mute);font-size:.95rem}
+#ovSong{color:var(--dim);font-size:1.2rem;margin:22px 0 36px}
 #ovSong b{color:var(--gold);text-shadow:var(--glow-g)}
-#ovB{font-size:1.4rem;padding:20px 64px}
+#ovB{font-size:1.35rem;padding:18px 58px}
 @media (prefers-reduced-motion:reduce){.ring,.player.playing .eq i{animation:none}}
 
 /* Responsive */
 @media (max-width:820px){
   body{font-size:18px}
   main{padding:20px 16px 60px}
-  .hero{padding:26px 22px 28px;border-radius:24px}
+  .hero{padding:24px 20px 26px;border-radius:24px}
   .vol{margin-left:0;width:100%}
   #volSlider{flex:1;width:auto}
   .controls button{flex:1}
-  li{padding:16px 18px;gap:14px}
-  .t,.l{font-size:1.1rem}
-  .t{min-width:6.4em}
+  li{padding:14px 16px;gap:12px;flex-wrap:wrap}
+  .t,.l{font-size:1.15rem}
+  .t{min-width:6.2em}
   .days{gap:6px}.days button{font-size:.95rem;padding:12px 0}
+  .edit-row-ctrls{width:100%}
 }
 </style>
 </head>
-<body>
+<body data-clock-theme="chrome">
 <main>
+  <!-- Top Bar: Diagnostics & Appearance -->
+  <div class="top-bar">
+    <div class="brand-tag">
+      <span class="dot"></span>
+      <span>Daily Recharge Cockpit — Sir Orlando V. Pasion, Jr.</span>
+    </div>
+    <div class="top-actions">
+      <button class="badge-btn live" id="audioBadge" title="Audio Engine Status">
+        <span class="status-dot"></span>
+        <span id="audioBadgeText">● Audio Engine Armed</span>
+      </button>
+      <button class="badge-btn" id="ambientBtn" title="Toggle Soft Meditative Rain Sound">
+        <span>🌧</span>
+        <span id="ambientText">Rain Sound: Off</span>
+      </button>
+      <button class="badge-btn" id="themeBtn" title="Cycle Clock Font Appearance">
+        <span>🎨 Clock Style: <b id="themeLabel">Chrome 3D</b></span>
+      </button>
+    </div>
+  </div>
+
   <section class="hero" aria-live="off">
     <div class="clock-row"><div id="clock" class="chrome"></div><div id="ampm"></div></div>
     <div id="date"></div>
+
+    <div class="now" id="now" hidden>
+      <div class="now-top"><span class="label">Right now</span><span id="nowLeft"></span></div>
+      <div id="nowLabel"></div>
+      <div class="bar" role="progressbar" aria-label="Time block progress"><i id="nowBar"></i></div>
+    </div>
+
     <div class="next">
       <div><div class="label">Next alarm</div><div id="nextLabel">Loading…</div></div>
       <div id="count"></div>
     </div>
   </section>
 
+  <!-- Instant Recharge Quick Launch -->
+  <div class="quick-tray">
+    <span class="quick-title">⚡ Instant Recharge:</span>
+    <button class="chip" data-min="5">5m Reset</button>
+    <button class="chip" data-min="10">10m Power Recharge</button>
+    <button class="chip" data-min="15">15m Deep Rest</button>
+    <button class="chip" data-min="25">25m Focus Sprint</button>
+    <button class="chip" data-min="45">45m Lunch & Nap</button>
+  </div>
+
+  <!-- Primary Application Controls -->
   <div class="controls">
-    <button class="primary" id="arm">Turn Alarms On</button>
+    <button class="primary on" id="arm">✓ Alarms Are On</button>
+    <button class="ghost" id="editModeBtn">✎ Edit Schedule</button>
+    <button class="ghost" id="quickRechargeBtn">⚡ Quick 10m Recharge</button>
     <button class="ghost" id="test">▶ Test Sound</button>
-    <button class="ghost" id="wake">Keep Screen On</button>
     <button class="ghost" id="restBtn" title="Full screen clock only">⛶ Rest Mode</button>
+    <button class="ghost" id="calBtn" title="Export schedule to calendar">📅 Add to Calendar</button>
+    <button class="ghost" id="installBtn" hidden>⬇ Install App</button>
     <div class="vol">
       <button id="volIcon" title="Mute / unmute" aria-label="Mute">🔊</button>
       <input type="range" id="volSlider" min="0" max="100" value="70" aria-label="Volume">
@@ -178,107 +314,182 @@ li.cur{opacity:1;border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 3
     </div>
   </div>
 
+  <div class="tip" id="tip" hidden><span id="tipText"></span><button class="ghost" id="tipX" aria-label="Hide tip">✕</button></div>
+
+  <!-- Music & Audio Engine Player -->
   <div class="player" id="player">
     <div class="eq"><i></i><i></i><i></i><i></i></div>
     <div>
       <span class="label" id="playerLabel">Up next</span>
       <div><span id="songTitle">—</span> <span id="songArtist"></span></div>
     </div>
-    <button class="ghost" id="skip" title="Choose a different song">Shuffle ⟳</button>
+    <div class="player-actions">
+      <select class="sound-mode-select" id="soundMode" aria-label="Sound alert mode">
+        <option value="both">Mode: Chime + Song</option>
+        <option value="song">Mode: Song Clip Only</option>
+        <option value="chime">Mode: Zen Chime Only</option>
+      </select>
+      <button class="ghost" id="skip" title="Choose a different song">Shuffle ⟳</button>
+    </div>
   </div>
 
   <div class="label">Active days</div>
   <div class="days" id="days" role="group" aria-label="Alarm days"></div>
-  <div id="status"></div>
+  <div id="status">Alarms are on. Keep this page open.</div>
 
-  <h2>Today's Schedule</h2>
-  <div class="legend">
-    <span style="--c:var(--rest)"><b></b>Recharge</span>
-    <span style="--c:var(--class)"><b></b>Class</span>
-    <span style="--c:var(--work)"><b></b>Work</span>
-    <span style="--c:var(--err)"><b></b>Task</span>
-    <span style="--c:var(--night)"><b></b>Wind-down</span>
+  <!-- Schedule Section Header -->
+  <div class="sched-head">
+    <h2>Today's Schedule</h2>
+    <div class="sched-actions">
+      <button class="ghost" id="addTopBtn" style="padding:10px 18px;font-size:.95rem">+ Add Alarm</button>
+      <button class="ghost" id="resetSchedBtn" style="padding:10px 18px;font-size:.95rem">↺ Reset Default</button>
+    </div>
   </div>
+
+  <!-- Legend & Interactive Category Filters -->
+  <div class="legend" id="categoryFilters">
+    <button class="cat-pill active" data-cat="all"><b></b>All (23)</button>
+    <button class="cat-pill" data-cat="rest" style="--c:var(--rest)"><b></b>Recharge</button>
+    <button class="cat-pill" data-cat="class" style="--c:var(--class)"><b></b>Class</button>
+    <button class="cat-pill" data-cat="work" style="--c:var(--work)"><b></b>Work</button>
+    <button class="cat-pill" data-cat="err" style="--c:var(--err)"><b></b>Task</button>
+    <button class="cat-pill" data-cat="night" style="--c:var(--night)"><b></b>Wind-down</button>
+  </div>
+
+  <!-- The Interactive Schedule List -->
   <ul id="list"></ul>
 
-  <p class="note">Alarms ring only while this page stays open. On a phone, tap “Keep Screen On” and leave the page in front. Switch any row off to skip its alarm. Each alarm plays a 30-second song clip, and a different song every time.</p>
+  <!-- Bottom Action Bar -->
+  <div class="sched-bottom-bar">
+    <button class="ghost" id="addBottomBtn">+ Add Schedule Item</button>
+    <button class="ghost" id="exportJsonBtn">Export Schedule (JSON)</button>
+  </div>
+
+  <p class="note">Alarms ring while this page or the installed app is open. When an alarm rings, press <b>S</b> to snooze for 5 minutes or <b>Esc</b> to dismiss. Tap <b>✎ Edit Schedule</b> to change any time, label, or category right on this page. Tap <b>📅 Add to Calendar</b> to sync all alarms directly into your phone’s calendar so they ring even when closed.</p>
 </main>
 
+<!-- Rest Mode Screen -->
 <div id="rest" aria-label="Rest mode clock. Tap to exit.">
   <div id="restWrap"><div id="restClock" class="chrome"></div><div id="restAmpm"></div></div>
-  <div id="restHint">Tap anywhere or press Esc to exit</div>
+  <div id="restHint">
+    <span>Tap anywhere or press Esc to exit</span>
+  </div>
 </div>
 
-<div id="ov" role="alertdialog" aria-live="assertive">
+<!-- Ringing Alarm Overlay -->
+<div id="ov" role="alertdialog" aria-modal="true" aria-labelledby="ovT" aria-live="assertive">
   <div class="ring">🔔</div>
   <div id="ovT"></div>
   <div id="ovM"></div>
   <div id="ovSong">♪ <b id="ovSongName"></b></div>
-  <button class="primary" id="ovB">Dismiss</button>
+  <div class="ov-actions">
+    <button class="ghost" id="ovS">Snooze 5 min</button>
+    <button class="primary" id="ovB">Dismiss</button>
+  </div>
+  <div class="ov-keys">S = snooze · Esc = dismiss</div>
 </div>
 
 <script>
-/* ───────── SCHEDULE ───────── */
-var S=[
-[7,0,"work","Arrive — read, learn, develop"],
-[8,0,"rest","Short recharge — 10 min"],
-[8,10,"work","Work and print"],
-[8,20,"rest","Recharge before class — 10 min"],
-[8,30,"class","Class: Math 8"],
-[9,30,"rest","Long recharge — 40 min"],
-[10,11,"work","Work and print"],
-[10,31,"rest","Recharge before class — 14 min"],
-[10,45,"class","Class: Math 10"],
-[11,45,"err","Principal’s office — log out/in"],
-[12,0,"rest","Lunch and recharge — 45 min"],
-[12,45,"err","Personal hygiene"],
-[12,50,"rest","Recharge before class — 10 min"],
-[13,0,"class","Class: Math 8"],
-[14,0,"rest","Longest recharge — 60 min"],
-[15,0,"work","Work and print"],
-[15,10,"rest","Quick recharge — 5 min"],
-[15,15,"class","Class: Gen Math 11"],
-[16,16,"err","Organize files"],
-[16,21,"rest","Recharge, then go home"],
-[20,0,"night","Shutdown — write tomorrow’s top 3"],
-[20,30,"night","Wind-down — no screens"],
-[21,30,"night","Bedtime"]
+/* ───────── DEFAULT MASTER SCHEDULE (Sir Orlando V. Pasion, Jr.) ───────── */
+var DEFAULT_SCHEDULE = [
+  [7,0,"work","Arrive — read, learn, develop"],
+  [8,0,"rest","Short recharge — 10 min"],
+  [8,10,"work","Work and print"],
+  [8,20,"rest","Recharge before class — 10 min"],
+  [8,30,"class","Class: Math 8"],
+  [9,30,"rest","Long recharge — 40 min"],
+  [10,11,"work","Work and print"],
+  [10,31,"rest","Recharge before class — 14 min"],
+  [10,45,"class","Class: Math 10"],
+  [11,45,"err","Principal’s office — log out/in"],
+  [12,0,"rest","Lunch and recharge — 45 min"],
+  [12,45,"err","Personal hygiene"],
+  [12,50,"rest","Recharge before class — 10 min"],
+  [13,0,"class","Class: Math 8"],
+  [14,0,"rest","Longest recharge — 60 min"],
+  [15,0,"work","Work and print"],
+  [15,10,"rest","Quick recharge — 5 min"],
+  [15,15,"class","Class: Gen Math 11"],
+  [16,16,"err","Organize files"],
+  [16,21,"rest","Recharge, then go home"],
+  [20,0,"night","Shutdown — write tomorrow’s top 3"],
+  [20,30,"night","Wind-down — no screens"],
+  [21,30,"night","Bedtime"]
 ];
 
+var S = DEFAULT_SCHEDULE.slice(0);
+try {
+  var saved = localStorage.getItem("dra-schedule");
+  if (saved) {
+    var parsed = JSON.parse(saved);
+    if (Array.isArray(parsed) && parsed.length > 0) S = parsed;
+  }
+} catch(e){}
+
+function sortSchedule(){
+  S.sort(function(a,b){ return (a[0]*60+a[1]) - (b[0]*60+b[1]); });
+}
+sortSchedule();
+
 /* ───────── SONGS (30-second clips, cut near the chorus) ───────── */
-var SONGS=[
- {file:"music/palagi.mp3",title:"Palagi",artist:"TJ Monterde & KZ Tandingan"},
- {file:"music/na-para-bang.mp3",title:"Na Para Bang",artist:"Mariah Deborah"},
- {file:"music/what-if-i-miss-you.mp3",title:"What If I Miss You",artist:"Janine Berdin"},
- {file:"music/okay.mp3",title:"OKAY!",artist:"Forrest Frank"},
- {file:"music/training-season.mp3",title:"Training Season",artist:"Dua Lipa"},
- {file:"music/stop-the-wedding.mp3",title:"Stop The Wedding!",artist:"Ashe"},
- {file:"music/malibu-nights.mp3",title:"Malibu Nights",artist:"LANY"},
- {file:"music/enchanted.mp3",title:"Enchanted",artist:"Taylor Swift"},
- {file:"music/the-man-who-cant-be-moved.mp3",title:"The Man Who Can’t Be Moved",artist:"The Script"},
- {file:"music/youre-still-the-one.mp3",title:"You’re Still The One",artist:"Shania Twain"}
+var SONGS = [
+  {file:"music/palagi.mp3",title:"Palagi",artist:"TJ Monterde & KZ Tandingan"},
+  {file:"music/na-para-bang.mp3",title:"Na Para Bang",artist:"Mariah Deborah"},
+  {file:"music/what-if-i-miss-you.mp3",title:"What If I Miss You",artist:"Janine Berdin"},
+  {file:"music/okay.mp3",title:"OKAY!",artist:"Forrest Frank"},
+  {file:"music/training-season.mp3",title:"Training Season",artist:"Dua Lipa"},
+  {file:"music/stop-the-wedding.mp3",title:"Stop The Wedding!",artist:"Ashe"},
+  {file:"music/malibu-nights.mp3",title:"Malibu Nights",artist:"LANY"},
+  {file:"music/enchanted.mp3",title:"Enchanted",artist:"Taylor Swift"},
+  {file:"music/the-man-who-cant-be-moved.mp3",title:"The Man Who Can’t Be Moved",artist:"The Script"},
+  {file:"music/youre-still-the-one.mp3",title:"You’re Still The One",artist:"Shania Twain"}
 ];
 
 function $(i){return document.getElementById(i)}
 function p2(n){return n<10?"0"+n:""+n}
 function fmt(h,m){return (h%12||12)+":"+p2(m)+" "+(h>=12?"PM":"AM")}
 
-/* ───────── STATE ───────── */
+/* ───────── STATE: ALARMS ALWAYS ON BY DEFAULT ───────── */
 var DN=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-var off={},days={1:1,2:1,3:1,4:1,5:1},armed=false,fired={},lock=null;
-var volume=.7,muted=false;
+var off={},days={1:1,2:1,3:1,4:1,5:1},armed=true,fired={},lock=null;
+var volume=.7,muted=false,soundMode="both",clockTheme="chrome";
+var activeFilter="all",isEditing=false;
+
 try{
   off=JSON.parse(localStorage.getItem("dra-off")||"{}");
   var d=localStorage.getItem("dra-days");if(d)days=JSON.parse(d);
   var v=localStorage.getItem("dra-vol");if(v!==null&&!isNaN(+v))volume=+v;
   muted=localStorage.getItem("dra-mute")==="1";
+  var sm=localStorage.getItem("dra-sound-mode");if(sm)soundMode=sm;
+  var ct=localStorage.getItem("dra-clock-theme");if(ct)clockTheme=ct;
+  // Always default armed to true every time the website is opened
+  armed=true;
 }catch(e){}
+
 function save(){try{
   localStorage.setItem("dra-off",JSON.stringify(off));
   localStorage.setItem("dra-days",JSON.stringify(days));
   localStorage.setItem("dra-vol",""+volume);
   localStorage.setItem("dra-mute",muted?"1":"0");
+  localStorage.setItem("dra-sound-mode",soundMode);
+  localStorage.setItem("dra-clock-theme",clockTheme);
+  localStorage.setItem("dra-schedule",JSON.stringify(S));
 }catch(e){}}
+
+/* ───────── CLOCK THEME CONTROLLER ───────── */
+var THEMES=["chrome","gold","white"];
+var THEME_NAMES={"chrome":"Chrome 3D","gold":"Radiant Gold","white":"Pure White"};
+function applyClockTheme(theme){
+  clockTheme=theme;
+  document.body.setAttribute("data-clock-theme",theme);
+  $("themeLabel").textContent=THEME_NAMES[theme]||theme;
+  save();
+}
+$("themeBtn").onclick=function(){
+  var idx=(THEMES.indexOf(clockTheme)+1)%THEMES.length;
+  applyClockTheme(THEMES[idx]);
+};
+applyClockTheme(clockTheme);
 
 /* ───────── SHUFFLE BAG: every song plays once before any repeats ───────── */
 var bag=[],lastIdx=-1,queued;
@@ -294,21 +505,95 @@ function nextSong(){
   return SONGS[lastIdx];
 }
 
-/* ───────── AUDIO ENGINE ─────────
-   All clips are downloaded when the page opens, and the "up next" songs are
-   decoded into memory ahead of time, so pressing play (or an alarm) starts
-   instantly. Fades are done by the audio hardware clock, so they are glitch-free. */
+/* ───────── AUDIO ENGINE (Web Audio + Fail-Safe Synthesizer) ───────── */
 var AC=window.AudioContext||window.webkitAudioContext;
 var ac=null,master=null,raw={},bufs={},ready={},curSrc=null,curFade=null,fallback=null;
 var current=null,onDone=null,mode=null;
+var ambientNode=null,ambientActive=false;
+
 function target(){return muted?0:volume}
 function initAudio(){
   if(ac||!AC)return;
   ac=new AC({latencyHint:"interactive"});
   master=ac.createGain();master.gain.value=target();master.connect(ac.destination);
+  updateAudioBadge();
 }
-function unlock(){initAudio();if(ac&&ac.state!=="running")ac.resume()}
-["pointerdown","keydown","touchstart"].forEach(function(ev){document.addEventListener(ev,unlock,{passive:true,capture:true})});
+function unlock(){
+  initAudio();
+  if(ac&&ac.state!=="running")ac.resume().then(updateAudioBadge);
+  else updateAudioBadge();
+}
+["pointerdown","keydown","touchstart","scroll"].forEach(function(ev){document.addEventListener(ev,unlock,{passive:true,capture:true})});
+
+function updateAudioBadge(){
+  var badge=$("audioBadge"),text=$("audioBadgeText");
+  if(!ac||ac.state!=="running"){
+    badge.className="badge-btn warn";
+    text.textContent="⚡ Tap to Arm Audio";
+  }else{
+    badge.className="badge-btn live";
+    text.textContent="● Audio Engine Armed";
+  }
+}
+$("audioBadge").onclick=unlock;
+
+/* Zen Bell / Chime Synthesizer (Zero-Network, 100% Reliable Fail-Safe) */
+function playZenChime(cb){
+  initAudio();
+  unlock();
+  if(!ac){if(cb)cb();return}
+  var t=ac.currentTime+.02;
+  var freqs=[432, 864, 1296, 1728];
+  var gains=[0.55, 0.32, 0.15, 0.06];
+  var dur=4.5;
+  var gChime=ac.createGain();
+  gChime.gain.setValueAtTime(1,t);
+  gChime.connect(master);
+  freqs.forEach(function(f,idx){
+    var osc=ac.createOscillator(),g=ac.createGain();
+    osc.type=idx===0?"sine":"triangle";
+    osc.frequency.setValueAtTime(f,t);
+    osc.detune.setValueAtTime((idx%2===0?2:-2)*idx,t);
+    g.gain.setValueAtTime(0,t);
+    g.gain.linearRampToValueAtTime(gains[idx],t+.03);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    osc.connect(g);g.connect(gChime);
+    osc.start(t);osc.stop(t+dur+.1);
+  });
+  if(cb)setTimeout(cb,3200);
+}
+
+/* Ambient Restorative Rain Sound */
+function toggleAmbient(){
+  initAudio();unlock();
+  if(!ac)return;
+  if(ambientActive){
+    if(ambientNode){
+      ambientNode.gain.gain.linearRampToValueAtTime(0.001,ac.currentTime+.6);
+      setTimeout(function(){try{ambientNode.src.stop()}catch(e){}ambientNode=null},700);
+    }
+    ambientActive=false;
+    $("ambientText").textContent="Rain Sound: Off";
+    $("ambientBtn").classList.remove("live");
+  }else{
+    var bufSize=2*ac.sampleRate,buf=ac.createBuffer(1,bufSize,ac.sampleRate),out=buf.getChannelData(0);
+    var last=0.0;
+    for(var i=0;i<bufSize;i++){
+      var w=Math.random()*2-1;
+      out[i]=(last+(0.02*w))/1.02;last=out[i];out[i]*=3.2;
+    }
+    var src=ac.createBufferSource();src.buffer=buf;src.loop=true;
+    var flt=ac.createBiquadFilter();flt.type="lowpass";flt.frequency.setValueAtTime(420,ac.currentTime);
+    var g=ac.createGain();g.gain.setValueAtTime(0,ac.currentTime);
+    g.gain.linearRampToValueAtTime(0.16,ac.currentTime+1.2);
+    src.connect(flt);flt.connect(g);g.connect(master);src.start();
+    ambientNode={src:src,gain:g};
+    ambientActive=true;
+    $("ambientText").textContent="Rain Sound: Active";
+    $("ambientBtn").classList.add("live");
+  }
+}
+$("ambientBtn").onclick=toggleAmbient;
 
 var loading=SONGS.map(function(s,i){
   return fetch(s.file).then(function(r){if(!r.ok)throw 0;return r.arrayBuffer()}).then(function(x){raw[i]=x}).catch(function(){});
@@ -325,7 +610,6 @@ function decode(i){
   pr.then(function(buf){if(bufs[i]===pr)ready[i]=buf}).catch(function(){if(bufs[i]===pr)delete bufs[i]});
   return pr;
 }
-/* keep only current + up next + the one after decoded (saves memory) */
 function prepare(){
   var keep={};
   if(current)keep[idx(current)]=1;
@@ -338,27 +622,44 @@ function startBuf(buf){
   var src=ac.createBufferSource(),g=ac.createGain(),t=ac.currentTime+.01,d=buf.duration;
   src.buffer=buf;src.connect(g);g.connect(master);
   g.gain.setValueAtTime(0,t);
-  g.gain.linearRampToValueAtTime(1,t+.35);          /* quick fade-in hides any MP3 cut click */
+  g.gain.linearRampToValueAtTime(1,t+.35);
   g.gain.setValueAtTime(1,Math.max(t+.4,t+d-2.2));
-  g.gain.linearRampToValueAtTime(0,t+d);              /* smooth fade-out at the end */
+  g.gain.linearRampToValueAtTime(0,t+d);
   src.onended=function(){if(src===curSrc)finished()};
   src.start(t);curSrc=src;curFade=g;
 }
-function startFallback(song){ /* only used if Web Audio is unavailable */
+function startFallback(song){
   var el=new Audio(song.file);el.volume=target();fallback=el;
   el.onended=function(){if(fallback===el){fallback=null;finished()}};
-  el.play().catch(function(){$("status").textContent="Tap the page once so the browser allows music."});
+  el.play().catch(function(){
+    playZenChime(finished);
+  });
 }
 function playSong(song,done,m){
   stopSong();
   current=song;onDone=done||null;mode=m||"test";
   unlock();
+
+  if(soundMode==="chime"){
+    playZenChime(finished);
+    showSong();
+    return;
+  }
+
+  if(soundMode==="both"&&m==="alarm"){
+    playZenChime(function(){
+      if(current===song)playClipDirect(song);
+    });
+  }else{
+    playClipDirect(song);
+  }
+  showSong();
+}
+function playClipDirect(song){
   var i=idx(song);
   if(ac&&ready[i])startBuf(ready[i]);
   else if(ac)decode(i).then(function(buf){if(current===song)startBuf(buf)}).catch(function(){if(current===song)startFallback(song)});
   else startFallback(song);
-  if(ac)setTimeout(function(){if(ac.state!=="running")$("status").textContent="Tap anywhere on the page so the browser allows music."},600);
-  showSong();
 }
 function finished(){
   var cb=onDone;curSrc=curFade=null;current=null;onDone=null;mode=null;showSong();cb&&cb();
@@ -375,8 +676,8 @@ function stopSong(){
 }
 function showSong(){
   var s=current||queued;
-  $("songTitle").textContent=s.title;
-  $("songArtist").textContent="— "+s.artist;
+  $("songTitle").textContent=soundMode==="chime"?"Zen Tibetan Bell":s.title;
+  $("songArtist").textContent=soundMode==="chime"?"Harmonic Pure Chime":"— "+s.artist;
   $("playerLabel").textContent=current?"Now playing":"Up next";
   $("player").classList.toggle("playing",!!current);
   var t=mode==="test";
@@ -385,9 +686,14 @@ function showSong(){
   prepare();
 }
 
+$("soundMode").value=soundMode;
+$("soundMode").onchange=function(){
+  soundMode=this.value;save();showSong();
+};
+
 /* ───────── VOLUME ───────── */
 function applyVol(){
-  if(master)master.gain.setTargetAtTime(target(),ac.currentTime,.03);
+  if(master&&ac)master.gain.setTargetAtTime(target(),ac.currentTime,.03);
   if(fallback)fallback.volume=target();
 }
 function showVol(){
@@ -401,48 +707,246 @@ function showVol(){
 $("volSlider").addEventListener("input",function(){volume=this.value/100;muted=false;showVol();save()});
 $("volIcon").onclick=function(){muted=!muted;showVol();save()};
 
-/* ───────── BUILD UI ───────── */
-var list=$("list");
-S.forEach(function(s,i){
-  var li=document.createElement("li");li.className=s[2];li.id="r"+i;
-  li.innerHTML='<div class="t">'+fmt(s[0],s[1])+'</div><div class="l">'+s[3]+'</div><label class="sw"><input type="checkbox" aria-label="Alarm at '+fmt(s[0],s[1])+'"><i></i></label>';
-  var cb=li.querySelector("input");cb.checked=!off[i];
-  cb.onchange=function(){if(cb.checked)delete off[i];else off[i]=1;save()};
-  list.appendChild(li);
+/* ───────── IN-PLACE SCHEDULE RENDERING & EDITING ───────── */
+var CAT_NAMES = {
+  "rest":"Recharge",
+  "class":"Class",
+  "work":"Work",
+  "err":"Task",
+  "night":"Wind-down"
+};
+
+function renderList(){
+  var list=$("list");list.innerHTML="";
+  var counts={all:S.length,rest:0,class:0,work:0,err:0,night:0};
+  S.forEach(function(s){if(counts[s[2]]!==undefined)counts[s[2]]++});
+
+  // Update category filter pill counts
+  document.querySelectorAll(".cat-pill").forEach(function(p){
+    var cat=p.getAttribute("data-cat");
+    if(cat==="all")p.querySelector("b").nextSibling.textContent="All ("+counts.all+")";
+    else if(counts[cat]!==undefined){
+      p.querySelector("b").nextSibling.textContent=CAT_NAMES[cat]+" ("+counts[cat]+")";
+    }
+  });
+
+  S.forEach(function(s,i){
+    if(activeFilter!=="all"&&s[2]!==activeFilter)return;
+    var li=document.createElement("li");li.className=s[2];li.id="r"+i;
+
+    if(!isEditing){
+      // Normal View: Clean, crisp, professional
+      li.innerHTML=
+        '<div class="t" title="Click to edit time">'+fmt(s[0],s[1])+'</div>'+
+        '<div class="l" title="Click to edit title">'+s[3]+'</div>'+
+        '<div style="display:flex;align-items:center;gap:12px">'+
+          '<button class="reorder-btn edit-one-btn" title="Edit this item">✎</button>'+
+          '<label class="sw"><input type="checkbox" aria-label="Alarm at '+fmt(s[0],s[1])+'"><i></i></label>'+
+        '</div>';
+      var cb=li.querySelector("input");cb.checked=!off[i];
+      cb.onchange=function(){if(cb.checked)delete off[i];else off[i]=1;save()};
+      li.querySelector(".edit-one-btn").onclick=function(){
+        toggleEditMode(true);
+      };
+      // Direct click-to-edit on time or label
+      li.querySelector(".t").onclick=function(){
+        var curT=p2(s[0])+":"+p2(s[1]);
+        var nT=prompt("Edit alarm time (24h format HH:MM, e.g. 08:30):", curT);
+        if(nT&&/^\d{1,2}:\d{2}$/.test(nT.trim())){
+          var parts=nT.trim().split(":");
+          s[0]=+parts[0];s[1]=+parts[1];
+          sortSchedule();save();renderList();tick();
+        }
+      };
+      li.querySelector(".l").onclick=function(){
+        var nL=prompt("Edit schedule label:", s[3]);
+        if(nL&&nL.trim()){s[3]=nL.trim();save();renderList();tick()}
+      };
+    } else {
+      // Direct In-Place Edit Mode: full inputs inside every row
+      var timeVal=p2(s[0])+":"+p2(s[1]);
+      li.innerHTML=
+        '<div class="edit-row-ctrls">'+
+          '<input type="time" class="edit-time-in" value="'+timeVal+'">'+
+          '<select class="edit-cat-sel">'+
+            '<option value="rest" '+(s[2]==="rest"?"selected":"")+'>⚡ Recharge</option>'+
+            '<option value="class" '+(s[2]==="class"?"selected":"")+'>📚 Class</option>'+
+            '<option value="work" '+(s[2]==="work"?"selected":"")+'>💼 Work</option>'+
+            '<option value="err" '+(s[2]==="err"?"selected":"")+'>📋 Task</option>'+
+            '<option value="night" '+(s[2]==="night"?"selected":"")+'>🌙 Wind-down</option>'+
+          '</select>'+
+          '<input type="text" class="edit-title-in" value="'+s[3].replace(/"/g,"&quot;")+'">'+
+          '<button class="reorder-btn move-up" title="Move Up">↑</button>'+
+          '<button class="reorder-btn move-down" title="Move Down">↓</button>'+
+          '<button class="reorder-btn del-row" title="Delete" style="color:#ff6b6b">✕</button>'+
+        '</div>';
+
+      var tIn=li.querySelector(".edit-time-in");
+      var cSel=li.querySelector(".edit-cat-sel");
+      var lIn=li.querySelector(".edit-title-in");
+
+      tIn.onchange=function(){
+        var parts=tIn.value.split(":");
+        s[0]=+parts[0];s[1]=+parts[1];
+        sortSchedule();save();renderList();tick();
+      };
+      cSel.onchange=function(){
+        s[2]=cSel.value;
+        li.className=s[2];
+        save();renderList();tick();
+      };
+      lIn.onchange=function(){
+        s[3]=lIn.value.trim()||s[3];
+        save();tick();
+      };
+      li.querySelector(".move-up").onclick=function(){
+        if(i>0){var tmp=S[i];S[i]=S[i-1];S[i-1]=tmp;save();renderList();tick()}
+      };
+      li.querySelector(".move-down").onclick=function(){
+        if(i<S.length-1){var tmp=S[i];S[i]=S[i+1];S[i+1]=tmp;save();renderList();tick()}
+      };
+      li.querySelector(".del-row").onclick=function(){
+        if(confirm("Delete “"+s[3]+"”?")){
+          S.splice(i,1);delete off[i];save();renderList();tick();
+        }
+      };
+    }
+    list.appendChild(li);
+  });
+}
+
+function toggleEditMode(force){
+  isEditing = typeof force==="boolean" ? force : !isEditing;
+  $("editModeBtn").textContent = isEditing ? "✓ Done Editing" : "✎ Edit Schedule";
+  $("editModeBtn").classList.toggle("active", isEditing);
+  renderList();
+  tick();
+}
+$("editModeBtn").onclick=function(){toggleEditMode()};
+
+/* Add Item Functionality */
+function addNewItem(){
+  var timeStr=prompt("Enter time for new alarm (e.g. 08:45 or 14:30):","08:00");
+  if(!timeStr||!/^\d{1,2}:\d{2}$/.test(timeStr.trim()))return;
+  var parts=timeStr.trim().split(":");
+  var h=+parts[0],m=+parts[1];
+  var title=prompt("Enter title or activity:","Recharge Break");
+  if(!title||!title.trim())return;
+  var catPrompt=prompt("Enter category (recharge, class, work, task, winddown):","recharge");
+  var cat="rest";
+  if(catPrompt){
+    var cp=catPrompt.toLowerCase();
+    if(cp.indexOf("class")!==-1)cat="class";
+    else if(cp.indexOf("work")!==-1)cat="work";
+    else if(cp.indexOf("task")!==-1||cp.indexOf("err")!==-1)cat="err";
+    else if(cp.indexOf("wind")!==-1||cp.indexOf("night")!==-1)cat="night";
+  }
+  S.push([h,m,cat,title.trim()]);
+  sortSchedule();
+  save();
+  renderList();
+  tick();
+  $("status").textContent="✓ Added “"+title.trim()+"” at "+fmt(h,m);
+}
+$("addTopBtn").onclick=addNewItem;
+$("addBottomBtn").onclick=addNewItem;
+
+/* Category Filter Pills */
+document.querySelectorAll(".cat-pill").forEach(function(pill){
+  pill.onclick=function(){
+    document.querySelectorAll(".cat-pill").forEach(function(p){p.classList.remove("active")});
+    pill.classList.add("active");
+    activeFilter=pill.getAttribute("data-cat");
+    renderList();
+    tick();
+  };
 });
+
+/* Reset to DepEd Default Schedule */
+$("resetSchedBtn").onclick=function(){
+  if(confirm("Reset entire schedule back to Sir Orlando’s Master Schedule (23 blocks)?")){
+    S=DEFAULT_SCHEDULE.slice(0);
+    off={};
+    save();
+    renderList();
+    tick();
+    alert("Schedule reset to default.");
+  }
+};
+
+/* Export JSON */
+$("exportJsonBtn").onclick=function(){
+  var json=JSON.stringify(S,null,2);
+  navigator.clipboard.writeText(json).then(function(){
+    alert("Schedule copied to clipboard as JSON!");
+  }).catch(function(){alert(json)});
+};
+
+/* ───────── ACTIVE DAYS ───────── */
+$("days").innerHTML="";
 [1,2,3,4,5,6,0].forEach(function(n){
   var b=document.createElement("button");b.textContent=DN[n];
   function paint(){b.className=days[n]?"on":"";b.setAttribute("aria-pressed",!!days[n])}
   paint();
-  b.onclick=function(){if(days[n])delete days[n];else days[n]=1;paint();save()};
+  b.onclick=function(){if(days[n])delete days[n];else days[n]=1;paint();save();tick()};
   $("days").appendChild(b);
 });
 
-/* ───────── ALARM ───────── */
-function ring(i){
-  var s=S[i],plays=0;
-  $("ovT").textContent=s[3];$("ovM").textContent=fmt(s[0],s[1]);$("ov").className="show";
+/* ───────── ALARM TRIGGERING ───────── */
+var ringing=-1,snoozes=[];
+function ring(i,snoozed){
+  var s=S[i],plays=0;ringing=i;
+  $("ovT").textContent=(snoozed?"Snoozed — ":"")+s[3];
+  $("ovM").textContent=fmt(s[0],s[1]);
+  $("ov").className="show";
   function go(){
     var song=queued;queued=nextSong();
-    $("ovSongName").textContent=song.title+" — "+song.artist;
+    $("ovSongName").textContent=soundMode==="chime"?"Zen Tibetan Bell":song.title+" — "+song.artist;
     playSong(song,function(){if(++plays<4&&$("ov").className==="show")go()},"alarm");
     if(navigator.vibrate)navigator.vibrate([400,200,400]);
   }
   go();
-  try{if(window.Notification&&Notification.permission==="granted")new Notification(s[3],{body:fmt(s[0],s[1]),tag:"dra"})}catch(e){}
+  setTimeout(function(){if($("ov").className==="show")$("ovB").focus()},50);
+  notify(s[3],fmt(s[0],s[1])+" — tap Snooze or Dismiss");
 }
-$("ovB").onclick=function(){$("ov").className="";stopSong()};
+function notify(title,body){
+  try{
+    if(!window.Notification||Notification.permission!=="granted")return;
+    var opt={body:body,tag:"dra",renotify:true,requireInteraction:true,icon:"assets/recharge-icon-192.png",badge:"assets/recharge-icon-192.png",vibrate:[400,200,400],
+      actions:[{action:"snooze",title:"Snooze 5 min"},{action:"dismiss",title:"Dismiss"}]};
+    if(swReg)swReg.showNotification(title,opt);
+    else{delete opt.actions;new Notification(title,opt)}
+  }catch(e){}
+}
+function clearNotes(){if(swReg&&swReg.getNotifications)swReg.getNotifications({tag:"dra"}).then(function(l){l.forEach(function(x){x.close()})}).catch(function(){})}
+function dismiss(){if($("ov").className!=="show")return;$("ov").className="";ringing=-1;stopSong();clearNotes();if(navigator.vibrate)navigator.vibrate(0)}
+function snooze(){
+  if($("ov").className!=="show")return;
+  var i=ringing;dismiss();
+  snoozes.push({i:i,at:Date.now()+5*60000});
+  $("status").textContent="Snoozed — “"+S[i][3]+"” will ring again in 5 minutes.";
+}
+$("ovB").onclick=dismiss;
+$("ovS").onclick=snooze;
+document.addEventListener("keydown",function(e){
+  if($("ov").className!=="show")return;
+  if(e.key==="Escape"){e.preventDefault();dismiss()}
+  else if(e.key==="s"||e.key==="S"){e.preventDefault();snooze()}
+});
 
-/* ───────── BUTTONS ───────── */
+/* ───────── APPLICATION CONTROLS ───────── */
 function setStatus(){
   $("arm").textContent=armed?"✓ Alarms Are On":"Turn Alarms On";
   $("arm").className="primary"+(armed?" on":"");
-  $("status").textContent=armed?"Alarms are on. Keep this page open.":"Alarms are off. Tap “Turn Alarms On” first.";
+  $("status").textContent=armed?"Alarms are on. Keep this page open.":"Alarms are off. Tap “Turn Alarms On” to arm.";
+  $("status").classList.toggle("warn",!armed);
+  updateAudioBadge();
 }
 $("arm").onclick=function(){
-  armed=!armed;setStatus();
+  armed=!armed;
+  setStatus();
   if(armed){
-    unlock(); /* this tap lets the browser play alarms later without another click */
+    unlock();
     try{if(window.Notification&&Notification.permission==="default")Notification.requestPermission()}catch(e){}
   }
 };
@@ -455,29 +959,49 @@ $("skip").onclick=function(){
   if(current){var song=nextSong();playSong(song,onDone,mode)}
   else{queued=nextSong();showSong()}
 };
-$("wake").onclick=async function(){
-  try{
-    if(lock){await lock.release();lock=null;$("wake").textContent="Keep Screen On";$("wake").classList.remove("active");return}
-    lock=await navigator.wakeLock.request("screen");$("wake").textContent="✓ Screen Stays On";$("wake").classList.add("active");
-    lock.addEventListener("release",function(){lock=null;$("wake").textContent="Keep Screen On";$("wake").classList.remove("active")});
-  }catch(e){$("wake").textContent="Not Supported Here"}
+
+/* Instant 10m Quick Recharge Button */
+$("quickRechargeBtn").onclick=function(){
+  triggerQuickRecharge(10);
 };
 
 /* ───────── CLOCK LOOP ───────── */
+var lastT="";
 function tick(){
   var n=new Date(),sec=n.getHours()*3600+n.getMinutes()*60+n.getSeconds(),on=!!days[n.getDay()];
   var tstr=p2(n.getHours()%12||12)+":"+p2(n.getMinutes())+":"+p2(n.getSeconds()),ap=n.getHours()>=12?"PM":"AM";
   if(tstr!==lastT){lastT=tstr;var html=chromeHTML(tstr);$("clock").innerHTML=html;if(restOn)$("restClock").innerHTML=html}
   $("ampm").textContent=ap;$("restAmpm").textContent=ap;
   $("date").textContent=n.toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric",year:"numeric"});
+
   var cur=-1;
   S.forEach(function(s,i){
     var t=s[0]*3600+s[1]*60;
     if(on&&t<=sec)cur=i;
-    $("r"+i).classList.toggle("past",on&&t<=sec);
+    var el=$("r"+i);
+    if(el)el.classList.toggle("past",on&&t<=sec);
     if(armed&&on&&!off[i]){var k=n.toDateString()+i;if(!fired[k]&&sec>=t&&sec-t<90){fired[k]=1;ring(i)}}
   });
-  S.forEach(function(s,i){$("r"+i).classList.toggle("cur",i===cur)});
+  S.forEach(function(s,i){var el=$("r"+i);if(el)el.classList.toggle("cur",i===cur)});
+
+  /* Process snoozes */
+  for(var z=snoozes.length-1;z>=0;z--){
+    if(n.getTime()>=snoozes[z].at){var zi=snoozes[z].i;snoozes.splice(z,1);if(armed)ring(zi,true)}
+  }
+
+  /* Right now progress bar */
+  if(cur>=0){
+    var st=S[cur][0]*3600+S[cur][1]*60,en=cur+1<S.length?S[cur+1][0]*3600+S[cur+1][1]*60:24*3600;
+    if(S[cur][3]==="Bedtime")en=st+9.5*3600;
+    var left=Math.max(0,en-sec),pct=Math.min(100,(sec-st)/(en-st)*100);
+    $("now").hidden=false;
+    $("now").style.setProperty("--c","var(--"+S[cur][2]+")");
+    $("nowLabel").textContent=S[cur][3];
+    $("nowLeft").textContent=left>=3600?Math.floor(left/3600)+"h "+p2(Math.floor(left%3600/60))+"m left":Math.floor(left/60)+"m "+p2(left%60)+"s left";
+    $("nowBar").style.width=pct.toFixed(2)+"%";
+  }else $("now").hidden=true;
+
+  /* Next alarm countdown */
   var found=null;
   for(var dd=0;dd<8&&!found;dd++){
     var dt=new Date(n.getFullYear(),n.getMonth(),n.getDate()+dd);
@@ -488,25 +1012,24 @@ function tick(){
       if(at>n){found={i:i,at:at};break}
     }
   }
-  if(!found){$("nextLabel").textContent="No alarms set";$("count").textContent="";return}
+  if(!found){$("nextLabel").textContent="No alarms set";$("count").textContent="";document.title="Daily Recharge Alarm";return}
   var diff=Math.round((found.at-n)/1000),h=Math.floor(diff/3600),m=Math.floor(diff%3600/60),s2=diff%60;
   $("nextLabel").textContent=fmt(S[found.i][0],S[found.i][1])+" — "+S[found.i][3];
   $("count").textContent="in "+(h?h+"h ":"")+(h||m?p2(m)+"m ":"")+p2(s2)+"s";
+  document.title=($("ov").className==="show"?"🔔 ":armed?"":"⏸ ")+(h?h+"h ":"")+p2(m)+"m — "+S[found.i][3];
 }
 
-/* ───────── CHROME DIGITS (each digit in a fixed-width cell so nothing jiggles) ───────── */
-var lastT="";
 function chromeHTML(str){
   return str.split("").map(function(c){return c===":"?'<span class="c">:</span>':'<span>'+c+'</span>'}).join("");
 }
 
-/* ───────── REST MODE: full screen, clock only ───────── */
+/* ───────── REST MODE (Fullscreen Ambient Clock) ───────── */
 var restOn=false,idleT=null,driftT=null;
 function restIdle(){
   $("rest").classList.remove("idle");$("restHint").style.opacity=1;
   clearTimeout(idleT);idleT=setTimeout(function(){$("rest").classList.add("idle");$("restHint").style.opacity=0},2500);
 }
-function drift(){ /* tiny movement every minute protects the OLED from burn-in */
+function drift(){
   var x=(Math.random()*4-2).toFixed(2),y=(Math.random()*4-2).toFixed(2);
   $("restWrap").style.transform="translate("+x+"vw,"+y+"vh)";
 }
@@ -524,12 +1047,99 @@ function exitRest(){
 $("restBtn").onclick=enterRest;
 $("rest").onclick=exitRest;
 $("rest").addEventListener("mousemove",restIdle);
-document.addEventListener("keydown",function(e){if(e.key==="Escape")exitRest()});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&$("ov").className!=="show")exitRest()});
 document.addEventListener("fullscreenchange",function(){if(!document.fullscreenElement)exitRest()});
 document.addEventListener("webkitfullscreenchange",function(){if(!document.webkitFullscreenElement)exitRest()});
 
+/* ───────── QUICK RECHARGE COUNTDOWN TIMERS ───────── */
+var timerInterval=null;
+function triggerQuickRecharge(mins){
+  if(timerInterval){clearInterval(timerInterval);timerInterval=null}
+  var targetTime=Date.now()+mins*60000;
+  $("status").textContent="⚡ Quick Recharge: "+mins+" min countdown running...";
+  timerInterval=setInterval(function(){
+    var rem=Math.max(0,Math.round((targetTime-Date.now())/1000));
+    $("quickRechargeBtn").textContent=p2(Math.floor(rem/60))+":"+p2(rem%60)+" Left";
+    if(rem<=0){
+      clearInterval(timerInterval);timerInterval=null;
+      $("quickRechargeBtn").textContent="⚡ Quick 10m Recharge";
+      ringInstant(mins);
+    }
+  },1000);
+}
+document.querySelectorAll(".chip").forEach(function(chip){
+  chip.onclick=function(){
+    var mins=+chip.getAttribute("data-min");
+    triggerQuickRecharge(mins);
+  };
+});
+function ringInstant(mins){
+  $("ovT").textContent="Recharge Complete!";
+  $("ovM").textContent=mins+" Minute Session";
+  $("ov").className="show";
+  var song=queued;queued=nextSong();
+  $("ovSongName").textContent=soundMode==="chime"?"Zen Tibetan Bell":song.title+" — "+song.artist;
+  playSong(song,null,"alarm");
+}
+
+/* ───────── CALENDAR EXPORT (.ics) ───────── */
+function icsDate(d){return d.getFullYear()+p2(d.getMonth()+1)+p2(d.getDate())}
+function icsEsc(t){return t.replace(/\\/g,"\\\\").replace(/;/g,"\\;").replace(/,/g,"\\,").replace(/\n/g,"\\n")}
+$("calBtn").onclick=function(){
+  var BY=["SU","MO","TU","WE","TH","FR","SA"],act=[1,2,3,4,5,6,0].filter(function(d){return days[d]});
+  if(!act.length){alert("Pick at least one active day first.");return}
+  var now=new Date(),first=null;
+  for(var k=0;k<7&&!first;k++){var dt=new Date(now.getFullYear(),now.getMonth(),now.getDate()+k);if(days[dt.getDay()])first=dt}
+  var stamp=new Date().toISOString().replace(/[-:]/g,"").replace(/\.\d+/,""),day=icsDate(first);
+  var L=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Orlando Pasion//Daily Recharge Alarm//EN","CALSCALE:GREGORIAN","METHOD:PUBLISH","X-WR-CALNAME:Daily Recharge"];
+  var count=0;
+  S.forEach(function(s,i){
+    if(off[i])return;count++;
+    var mins=i+1<S.length?(S[i+1][0]*60+S[i+1][1])-(s[0]*60+s[1]):30;
+    if(s[3]==="Bedtime"||mins<=0||mins>240)mins=Math.min(Math.max(mins,5),30);
+    L.push("BEGIN:VEVENT","UID:dra-"+i+"-"+s[0]+p2(s[1])+"@orlandopasion000.github.io","DTSTAMP:"+stamp,
+      "DTSTART:"+day+"T"+p2(s[0])+p2(s[1])+"00","DURATION:PT"+mins+"M",
+      "RRULE:FREQ=WEEKLY;BYDAY="+act.map(function(d){return BY[d]}).join(","),
+      "SUMMARY:"+icsEsc(s[3]),"CATEGORIES:"+s[2].toUpperCase(),"TRANSP:TRANSPARENT",
+      "BEGIN:VALARM","ACTION:DISPLAY","DESCRIPTION:"+icsEsc(s[3]),"TRIGGER:PT0S","END:VALARM","END:VEVENT");
+  });
+  L.push("END:VCALENDAR");
+  var blob=new Blob([L.join("\r\n")+"\r\n"],{type:"text/calendar;charset=utf-8"}),a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);a.download="daily-recharge-alarms.ics";document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},2000);
+  showTip("<b>"+count+" alarms exported.</b> Open the downloaded file to add them to your calendar so they ring even when closed.");
+};
+
+/* ───────── SERVICE WORKER & PWA INSTALL ───────── */
+var swReg=null;
+if("serviceWorker" in navigator&&location.protocol!=="file:"){
+  navigator.serviceWorker.register("recharge-sw.js",{scope:"./daily-recharge-alarm"}).then(function(r){swReg=r}).catch(function(){});
+  navigator.serviceWorker.addEventListener("message",function(e){
+    var d=e.data||{};if(d.type!=="alarm-action")return;
+    if(d.action==="snooze")snooze();else if(d.action==="dismiss")dismiss();else window.focus();
+  });
+}
+var installEvt=null,standalone=matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();installEvt=e;$("installBtn").hidden=false});
+$("installBtn").onclick=function(){
+  if(!installEvt)return;installEvt.prompt();
+  installEvt.userChoice.finally(function(){installEvt=null;$("installBtn").hidden=true});
+};
+window.addEventListener("appinstalled",function(){$("installBtn").hidden=true;showTip("<b>Installed.</b> Open “Recharge” from your home screen.")});
+
+function showTip(html){$("tipText").innerHTML=html;$("tip").hidden=false}
+$("tipX").onclick=function(){$("tip").hidden=true;try{localStorage.setItem("dra-tip","1")}catch(e){}};
+
+if(/[?&]rest=1/.test(location.search))enterRest();
+
+/* ───────── INITIAL BOOTSTRAP ───────── */
 queued=nextSong();
-showVol();showSong();setStatus();tick();setInterval(tick,1000);
+renderList();
+showVol();
+showSong();
+setStatus();
+tick();
+setInterval(tick,1000);
 </script>
 </body>
 </html>
