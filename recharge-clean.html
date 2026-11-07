@@ -896,10 +896,18 @@ body.light-theme .modal-close:hover{
   color:#1D1D1F !important;
 }
 body.light-theme .modal-box input,
-body.light-theme .modal-box select{
+body.light-theme .modal-box select,
+body.light-theme .modal-box textarea{
   background:#F0F0F3 !important;
   color:#1D1D1F !important;
   border-color:#D1D1D6 !important;
+}
+.class-count-btn.active{
+  background:var(--gold) !important;
+  color:#000 !important;
+  border-color:var(--gold) !important;
+  font-weight:700 !important;
+  box-shadow:0 0 14px rgba(217,185,92,.4) !important;
 }
 body.light-theme .preset-chip{
   background:#F0F0F3 !important;
@@ -1083,8 +1091,9 @@ body.light-theme .highlight-card .dist-icon{
       </select>
       <span id="presetDaysBadge" style="font-size:.78rem;font-weight:700;padding:5px 12px;border-radius:12px;background:var(--surface-3);color:var(--gold);border:1px solid var(--line2);display:inline-flex;align-items:center;gap:5px;white-space:nowrap" title="Active days for this routine"><span>📅</span> <b>Active: Mon — Fri</b></span>
     </div>
-    <div style="display:flex;gap:8px">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
       <button class="ghost" id="shareRoutineBtn" style="padding:7px 14px;font-size:.86rem;font-weight:600" title="Copy instant share link for this routine">🔗 Share Routine</button>
+      <button class="primary" id="openClassEncoderBtn" style="padding:7px 14px;font-size:.86rem;font-weight:700;display:inline-flex;align-items:center;gap:6px" title="Easily type and encode 1 to 8 classes">📚 Encode Classes</button>
     </div>
   </div>
 
@@ -1284,6 +1293,101 @@ body.light-theme .highlight-card .dist-icon{
         <button type="button" class="ghost" id="cancelAddAlarmBtn" style="flex:1;padding:12px 18px;font-size:.98rem">Cancel</button>
       </div>
     </form>
+  </div>
+</div>
+
+<!-- Quick Class Schedule Encoder Modal (1 to 8 Classes or Free-Form Text) -->
+<div class="modal-wrap" id="classScheduleModal" role="dialog" aria-modal="true" aria-label="Encode Class Schedule">
+  <div class="modal-box" style="text-align:left;max-width:540px;max-height:88vh;overflow-y:auto;display:flex;flex-direction:column;gap:14px">
+    <button class="modal-close" id="closeClassModal" aria-label="Close modal">✕</button>
+    
+    <div style="text-align:center">
+      <div style="font-size:2rem;margin-bottom:4px">📚</div>
+      <div class="modal-title" style="margin-bottom:4px">Encode Class Schedule</div>
+      <div class="modal-text" style="color:var(--dim);font-size:.88rem">
+        Easily type or configure your 1 to 8 daily teaching classes with automatic recharge buffers.
+      </div>
+    </div>
+
+    <!-- Quick Class Count Picker (1 to 8 Buttons) -->
+    <div>
+      <div style="font-size:.80rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center">
+        <span>Number of Classes Today:</span>
+        <span id="classCountDisplay" style="color:var(--text);font-size:.85rem;font-weight:600">4 Classes</span>
+      </div>
+      <div id="classCountButtons" style="display:flex;gap:6px;flex-wrap:wrap">
+        <button type="button" class="cat-pill class-count-btn" data-count="1" style="flex:1;min-width:38px;padding:6px 0;justify-content:center">1</button>
+        <button type="button" class="cat-pill class-count-btn" data-count="2" style="flex:1;min-width:38px;padding:6px 0;justify-content:center">2</button>
+        <button type="button" class="cat-pill class-count-btn" data-count="3" style="flex:1;min-width:38px;padding:6px 0;justify-content:center">3</button>
+        <button type="button" class="cat-pill class-count-btn active" data-count="4" style="flex:1;min-width:38px;padding:6px 0;justify-content:center">4</button>
+        <button type="button" class="cat-pill class-count-btn" data-count="5" style="flex:1;min-width:38px;padding:6px 0;justify-content:center">5</button>
+        <button type="button" class="cat-pill class-count-btn" data-count="6" style="flex:1;min-width:38px;padding:6px 0;justify-content:center">6</button>
+        <button type="button" class="cat-pill class-count-btn" data-count="7" style="flex:1;min-width:38px;padding:6px 0;justify-content:center">7</button>
+        <button type="button" class="cat-pill class-count-btn" data-count="8" style="flex:1;min-width:38px;padding:6px 0;justify-content:center">8</button>
+      </div>
+    </div>
+
+    <!-- Mode Switcher -->
+    <div style="display:flex;gap:8px;border-bottom:1px solid var(--line2);padding-bottom:10px;margin-top:2px">
+      <button type="button" class="ghost" id="classModeRowsBtn" style="flex:1;padding:7px 12px;font-size:.84rem;font-weight:700;border-color:var(--gold);color:var(--gold);background:var(--surface-3)">📝 Visual Rows (1–8)</button>
+      <button type="button" class="ghost" id="classModeTextBtn" style="flex:1;padding:7px 12px;font-size:.84rem;font-weight:600">⌨️ Free-Form Type / Paste</button>
+    </div>
+
+    <!-- Container A: Dynamic Interactive Rows (1 to 8 rows) -->
+    <div id="classRowsContainer" style="display:flex;flex-direction:column;gap:10px">
+      <!-- Injected by JavaScript -->
+    </div>
+
+    <!-- Container B: Free-Form Type / Paste Box -->
+    <div id="classTextContainer" style="display:none;flex-direction:column;gap:8px">
+      <div style="font-size:.80rem;color:var(--dim)">Type or paste lines (e.g. <code>8:30 AM Math 8</code> or <code>10:45 Math 10</code>):</div>
+      <textarea id="classFreeText" rows="6" placeholder="8:30 AM Math 8&#10;10:45 AM Math 10&#10;1:00 PM Math 8&#10;3:15 PM Gen Math 11" style="font-family:var(--mono);font-size:.9rem;background:var(--surface-2);color:var(--text);border:1px solid var(--line2);border-radius:12px;padding:10px 12px;width:100%;resize:vertical"></textarea>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span id="classTextParsedCount" style="font-size:.78rem;color:var(--gold);font-weight:600">Detected: 4 classes</span>
+        <button type="button" class="ghost" id="syncTextToRowsBtn" style="padding:4px 10px;font-size:.78rem">⚡ Sync to Rows</button>
+      </div>
+    </div>
+
+    <!-- Quick Subject Fillers -->
+    <div style="background:var(--surface-2);border:1px solid var(--line2);border-radius:12px;padding:10px 12px">
+      <div style="font-size:.76rem;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">Quick Subject Fillers (Tap to apply to active row):</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button type="button" class="preset-chip class-quick-subject" data-sub="Math 8" style="background:var(--surface-3);border:1px solid var(--line2);border-radius:8px;padding:4px 8px;font-size:.76rem;color:var(--text);cursor:pointer">+ Math 8</button>
+        <button type="button" class="preset-chip class-quick-subject" data-sub="Math 10" style="background:var(--surface-3);border:1px solid var(--line2);border-radius:8px;padding:4px 8px;font-size:.76rem;color:var(--text);cursor:pointer">+ Math 10</button>
+        <button type="button" class="preset-chip class-quick-subject" data-sub="Gen Math 11" style="background:var(--surface-3);border:1px solid var(--line2);border-radius:8px;padding:4px 8px;font-size:.76rem;color:var(--text);cursor:pointer">+ Gen Math 11</button>
+        <button type="button" class="preset-chip class-quick-subject" data-sub="Science" style="background:var(--surface-3);border:1px solid var(--line2);border-radius:8px;padding:4px 8px;font-size:.76rem;color:var(--text);cursor:pointer">+ Science</button>
+        <button type="button" class="preset-chip class-quick-subject" data-sub="English" style="background:var(--surface-3);border:1px solid var(--line2);border-radius:8px;padding:4px 8px;font-size:.76rem;color:var(--text);cursor:pointer">+ English</button>
+        <button type="button" class="preset-chip class-quick-subject" data-sub="Advisory" style="background:var(--surface-3);border:1px solid var(--line2);border-radius:8px;padding:4px 8px;font-size:.76rem;color:var(--text);cursor:pointer">+ Advisory</button>
+        <button type="button" class="preset-chip class-quick-subject" data-sub="Homeroom" style="background:var(--surface-3);border:1px solid var(--line2);border-radius:8px;padding:4px 8px;font-size:.76rem;color:var(--text);cursor:pointer">+ Homeroom</button>
+      </div>
+    </div>
+
+    <!-- Smart Teaching Rhythm Options -->
+    <div style="background:var(--surface-2);border:1px solid var(--line2);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px;font-size:.84rem;color:var(--text)">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+        <input type="checkbox" id="classOptRecharge" checked style="accent-color:var(--gold);width:16px;height:16px">
+        <span>🔋 <b>Auto-add 10-minute micro-recharge</b> before each class</span>
+      </label>
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+        <input type="checkbox" id="classOptLunch" checked style="accent-color:var(--gold);width:16px;height:16px">
+        <span>🥗 <b>Include Lunch &amp; Recharge</b> at 12:00 PM (45 min)</span>
+      </label>
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+        <input type="checkbox" id="classOptDays" checked style="accent-color:var(--gold);width:16px;height:16px">
+        <span>📅 <b>Set Active Days to Monday — Friday</b> (DepEd teaching days)</span>
+      </label>
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+        <input type="checkbox" id="classOptWinddown" checked style="accent-color:var(--gold);width:16px;height:16px">
+        <span>🌙 <b>Include evening wind-down</b> (8:30 PM) &amp; Bedtime (9:30 PM)</span>
+      </label>
+    </div>
+
+    <!-- Action Buttons -->
+    <div style="display:flex;gap:10px;margin-top:6px;flex-wrap:wrap">
+      <button type="button" class="primary" id="applyClassScheduleBtn" style="flex:2;min-width:180px;padding:12px 18px;font-size:.96rem;font-weight:700">💾 Build Teaching Schedule</button>
+      <button type="button" class="ghost" id="appendClassScheduleBtn" style="flex:1;min-width:130px;padding:12px 14px;font-size:.88rem;font-weight:600" title="Add these classes to existing schedule">➕ Append Only</button>
+      <button type="button" class="ghost" id="cancelClassModalBtn" style="padding:12px 16px;font-size:.88rem">Cancel</button>
+    </div>
   </div>
 </div>
 
@@ -2075,6 +2179,289 @@ $("addAlarmForm").onsubmit=function(e){
 
 $("addAlarmBtn").onclick=openAddAlarmModal;
 $("addAlarmEditBtn").onclick=openAddAlarmModal;
+
+/* ══════════════════════════════════════════════════════════════
+   QUICK CLASS SCHEDULE ENCODER (1 to 8 Classes + Smart Buffers)
+   ══════════════════════════════════════════════════════════════ */
+var activeClassCount = 4;
+var lastFocusedClassInputIndex = 0;
+var defaultClassTemplates = [
+  { time: "08:30", title: "Math 8" },
+  { time: "10:45", title: "Math 10" },
+  { time: "13:00", title: "Math 8" },
+  { time: "15:15", title: "Gen Math 11" },
+  { time: "09:30", title: "Math 8 Remedial" },
+  { time: "14:00", title: "Math 10 Consultation" },
+  { time: "16:15", title: "Advisory Class" },
+  { time: "17:00", title: "Homeroom / Clubs" }
+];
+var userClassList = [
+  { time: "08:30", title: "Math 8" },
+  { time: "10:45", title: "Math 10" },
+  { time: "13:00", title: "Math 8" },
+  { time: "15:15", title: "Gen Math 11" }
+];
+
+function openClassEncoderModal() {
+  var m = $("classScheduleModal");
+  if (!m) return;
+  syncClassesToText();
+  renderClassRows();
+  m.classList.add("open");
+}
+
+function closeClassEncoderModal() {
+  var m = $("classScheduleModal");
+  if (m) m.classList.remove("open");
+}
+
+function setClassCount(num) {
+  if (num < 1) num = 1;
+  if (num > 8) num = 8;
+  activeClassCount = num;
+  if ($("classCountDisplay")) {
+    $("classCountDisplay").textContent = num + " " + (num === 1 ? "Class" : "Classes");
+  }
+  document.querySelectorAll(".class-count-btn").forEach(function(b) {
+    var c = parseInt(b.getAttribute("data-count"), 10);
+    b.classList.toggle("active", c === num);
+  });
+  while (userClassList.length < num) {
+    var nextIdx = userClassList.length;
+    var tpl = defaultClassTemplates[nextIdx] || { time: "08:00", title: "Class " + (nextIdx + 1) };
+    userClassList.push({ time: tpl.time, title: tpl.title });
+  }
+  if (userClassList.length > num) {
+    userClassList = userClassList.slice(0, num);
+  }
+  renderClassRows();
+  syncClassesToText();
+}
+
+function renderClassRows() {
+  var container = $("classRowsContainer");
+  if (!container) return;
+  container.innerHTML = "";
+  userClassList.forEach(function(item, idx) {
+    var row = document.createElement("div");
+    row.style.cssText = "display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--line2);border-radius:12px;padding:8px 12px;";
+    row.innerHTML =
+      '<span style="font-size:.82rem;font-weight:700;color:var(--gold);min-width:32px">#' + (idx + 1) + '</span>' +
+      '<input type="time" class="class-row-time" value="' + item.time + '" style="font-family:var(--font-clock);font-size:1.05rem;font-weight:700;background:var(--surface-3);color:var(--text);border:1px solid var(--line2);border-radius:8px;padding:7px 10px;outline:none">' +
+      '<input type="text" class="class-row-title" value="' + item.title.replace(/"/g, '&quot;') + '" placeholder="e.g. Math 8, Gen Math 11" style="flex:1;font-family:var(--sans);font-size:.95rem;font-weight:600;background:var(--surface-3);color:var(--text);border:1px solid var(--line2);border-radius:8px;padding:7px 12px;outline:none">' +
+      (userClassList.length > 1 ? '<button type="button" class="del-class-row" title="Remove class" style="background:none;border:none;color:var(--dim);cursor:pointer;font-size:1.1rem;padding:4px 8px;line-height:1">✕</button>' : '');
+
+    var tIn = row.querySelector(".class-row-time");
+    var lIn = row.querySelector(".class-row-title");
+    var delBtn = row.querySelector(".del-class-row");
+
+    tIn.onchange = function() {
+      item.time = tIn.value;
+      syncClassesToText();
+    };
+    lIn.oninput = function() {
+      item.title = lIn.value;
+      syncClassesToText();
+    };
+    lIn.onfocus = function() {
+      lastFocusedClassInputIndex = idx;
+    };
+    if (delBtn) {
+      delBtn.onclick = function() {
+        userClassList.splice(idx, 1);
+        setClassCount(userClassList.length);
+      };
+    }
+    container.appendChild(row);
+  });
+}
+
+function syncClassesToText() {
+  var area = $("classFreeText");
+  if (!area) return;
+  var lines = userClassList.map(function(item) {
+    return item.time + " " + item.title;
+  });
+  area.value = lines.join("\n");
+  if ($("classTextParsedCount")) {
+    $("classTextParsedCount").textContent = "Detected: " + userClassList.length + " classes";
+  }
+}
+
+function parseClassFreeText() {
+  var area = $("classFreeText");
+  if (!area) return [];
+  var lines = area.value.split("\n");
+  var list = [];
+  lines.forEach(function(l) {
+    var s = l.trim();
+    if (!s) return;
+    var m = s.match(/^(\d{1,2}):(\d{2})\s*(AM|PM|am|pm)?[\s\-–—:]*(.*)$/);
+    if (m) {
+      var h = parseInt(m[1], 10);
+      var min = parseInt(m[2], 10);
+      var ampm = m[3] ? m[3].toUpperCase() : null;
+      var title = (m[4] || "").trim();
+      if (ampm === "PM" && h < 12) h += 12;
+      if (ampm === "AM" && h === 12) h = 0;
+      var hh = h < 10 ? "0" + h : "" + h;
+      var mm = min < 10 ? "0" + min : "" + min;
+      if (!title) title = "Class " + (list.length + 1);
+      list.push({ time: hh + ":" + mm, title: title });
+    }
+  });
+  return list;
+}
+
+if ($("openClassEncoderBtn")) $("openClassEncoderBtn").onclick = openClassEncoderModal;
+if ($("closeClassModal")) $("closeClassModal").onclick = closeClassEncoderModal;
+if ($("cancelClassModalBtn")) $("cancelClassModalBtn").onclick = closeClassEncoderModal;
+
+document.querySelectorAll(".class-count-btn").forEach(function(btn) {
+  btn.onclick = function() {
+    var c = parseInt(btn.getAttribute("data-count"), 10);
+    setClassCount(c);
+  };
+});
+
+if ($("classModeRowsBtn")) {
+  $("classModeRowsBtn").onclick = function() {
+    $("classRowsContainer").style.display = "flex";
+    $("classTextContainer").style.display = "none";
+    this.style.borderColor = "var(--gold)";
+    this.style.color = "var(--gold)";
+    this.style.background = "var(--surface-3)";
+    $("classModeTextBtn").style.borderColor = "var(--line2)";
+    $("classModeTextBtn").style.color = "var(--dim)";
+    $("classModeTextBtn").style.background = "transparent";
+  };
+}
+if ($("classModeTextBtn")) {
+  $("classModeTextBtn").onclick = function() {
+    $("classRowsContainer").style.display = "none";
+    $("classTextContainer").style.display = "flex";
+    this.style.borderColor = "var(--gold)";
+    this.style.color = "var(--gold)";
+    this.style.background = "var(--surface-3)";
+    $("classModeRowsBtn").style.borderColor = "var(--line2)";
+    $("classModeRowsBtn").style.color = "var(--dim)";
+    $("classModeRowsBtn").style.background = "transparent";
+  };
+}
+
+if ($("classFreeText")) {
+  $("classFreeText").oninput = function() {
+    var parsed = parseClassFreeText();
+    if ($("classTextParsedCount")) {
+      $("classTextParsedCount").textContent = "Detected: " + parsed.length + " classes";
+    }
+  };
+}
+if ($("syncTextToRowsBtn")) {
+  $("syncTextToRowsBtn").onclick = function() {
+    var parsed = parseClassFreeText();
+    if (parsed.length > 0) {
+      userClassList = parsed.slice(0, 8);
+      setClassCount(userClassList.length);
+      if ($("classModeRowsBtn")) $("classModeRowsBtn").click();
+      showToast("Synced " + userClassList.length + " classes to rows!", "⚡");
+    } else {
+      alert("No valid class times detected in text. Example: 8:30 AM Math 8");
+    }
+  };
+}
+
+document.querySelectorAll(".class-quick-subject").forEach(function(chip) {
+  chip.onclick = function() {
+    var sub = chip.getAttribute("data-sub");
+    if (!sub) return;
+    if (userClassList[lastFocusedClassInputIndex]) {
+      userClassList[lastFocusedClassInputIndex].title = sub;
+      renderClassRows();
+      syncClassesToText();
+      showToast("Applied “" + sub + "” to Class #" + (lastFocusedClassInputIndex + 1), "✏️");
+    }
+  };
+});
+
+function buildScheduleFromClasses(appendOnly) {
+  var classesToUse = userClassList;
+  if ($("classTextContainer") && $("classTextContainer").style.display === "flex") {
+    var parsed = parseClassFreeText();
+    if (parsed.length > 0) classesToUse = parsed;
+  }
+  if (!classesToUse || classesToUse.length === 0) {
+    alert("Please enter at least 1 class with time and subject.");
+    return;
+  }
+
+  var optRecharge = $("classOptRecharge") ? $("classOptRecharge").checked : true;
+  var optLunch = $("classOptLunch") ? $("classOptLunch").checked : true;
+  var optDays = $("classOptDays") ? $("classOptDays").checked : true;
+  var optWinddown = $("classOptWinddown") ? $("classOptWinddown").checked : true;
+
+  var newBlocks = [];
+
+  classesToUse.forEach(function(c, i) {
+    var parts = c.time.split(":");
+    var h = parseInt(parts[0], 10);
+    var min = parseInt(parts[1], 10);
+    var title = c.title.trim() || ("Class " + (i + 1));
+    var classLabel = title.toLowerCase().indexOf("class:") === 0 ? title : ("Class: " + title);
+
+    if (optRecharge) {
+      var recMin = min - 10;
+      var recH = h;
+      if (recMin < 0) {
+        recMin += 60;
+        recH -= 1;
+        if (recH < 0) recH += 24;
+      }
+      newBlocks.push([recH, recMin, "rest", "Recharge before " + title + " — 10 min"]);
+    }
+    newBlocks.push([h, min, "class", classLabel]);
+  });
+
+  if (!appendOnly) {
+    if (optLunch) {
+      newBlocks.push([12, 0, "rest", "Lunch and recharge — 45 min"]);
+      newBlocks.push([12, 45, "err", "Personal hygiene & prep"]);
+    }
+    if (optWinddown) {
+      newBlocks.push([20, 30, "night", "Wind-down — no screens"]);
+      newBlocks.push([21, 30, "night", "Bedtime"]);
+    }
+    S = newBlocks;
+  } else {
+    newBlocks.forEach(function(b) { S.push(b); });
+  }
+
+  sortSchedule();
+  if (optDays) {
+    days = { 1: 1, 2: 1, 3: 1, 4: 1, 5: 1 };
+  }
+  off = {};
+  try { localStorage.setItem("dra-clean-preset-key", "custom"); } catch(e){}
+  save();
+  renderList();
+  renderDays();
+  tick();
+  updatePresetSelectorUI();
+  updatePresetDaysBadge();
+  closeClassEncoderModal();
+  showToast("Loaded " + classesToUse.length + " classes into schedule!", "📚");
+}
+
+if ($("applyClassScheduleBtn")) {
+  $("applyClassScheduleBtn").onclick = function() {
+    buildScheduleFromClasses(false);
+  };
+}
+if ($("appendClassScheduleBtn")) {
+  $("appendClassScheduleBtn").onclick = function() {
+    buildScheduleFromClasses(true);
+  };
+}
 
 /* Reset to DepEd Default Schedule */
 $("resetSchedBtn").onclick=function(){
