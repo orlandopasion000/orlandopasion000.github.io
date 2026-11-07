@@ -455,8 +455,8 @@ li.cur{opacity:1;border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 3
         <span id="audioBadgeText">🔊 Sound Ready</span>
       </button>
       <button class="pill-btn" id="ambientToggleBtn" title="Toggle Meditative Soundscapes Deck">
-        <span>🌧</span>
-        <span id="ambientSummary">Rain Sound: Off</span>
+        <span>🌿</span>
+        <span id="ambientSummary">Green Noise: Off</span>
       </button>
       <button class="pill-btn" id="themeBtn" title="Cycle Clock Font Appearance">
         <span>🎨 Clock Style: <b id="themeLabel">Royal 24K Radiant Gold</b></span>
@@ -473,12 +473,19 @@ li.cur{opacity:1;border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 3
       <button class="ghost" id="stopAllSounds" style="padding:6px 14px;font-size:.85rem">Stop All Sounds</button>
     </div>
     <div class="sound-chips">
-      <button class="sound-chip" data-sound="rain"><span>🌧</span><span>Gentle Rain</span></button>
       <button class="sound-chip" data-sound="green"><span>🌿</span><span>Green Noise</span></button>
+      <button class="sound-chip" data-sound="rain"><span>🌧</span><span>Gentle Rain</span></button>
       <button class="sound-chip" data-sound="waves"><span>🌊</span><span>Ocean Waves</span></button>
+      <button class="sound-chip" data-sound="river"><span>🏞</span><span>River</span></button>
       <button class="sound-chip" data-sound="breeze"><span>🌬</span><span>Night Breeze</span></button>
       <button class="sound-chip" data-sound="fire"><span>🪵</span><span>Warm Campfire</span></button>
+      <button class="sound-chip" data-sound="birds"><span>🐦</span><span>Birds</span></button>
+      <button class="sound-chip" data-sound="piano"><span>🎹</span><span>Piano</span></button>
       <button class="sound-chip" data-sound="space"><span>🪐</span><span>Deep Space</span></button>
+      <button class="sound-chip" data-sound="brown"><span>🟤</span><span>Brown Noise</span></button>
+      <button class="sound-chip" data-sound="pink"><span>🌸</span><span>Pink Noise</span></button>
+      <button class="sound-chip" data-sound="white"><span>⚪</span><span>White Noise</span></button>
+      <button class="sound-chip" data-sound="blue"><span>🔵</span><span>Blue Noise</span></button>
     </div>
     <div class="sound-mixer-rack" id="soundMixerRack" style="display:none">
       <div class="mixer-rack-head">
@@ -768,6 +775,17 @@ try {
   }
 } catch(e){}
 
+// Automatically update 10:31 -> 10:30 if present in user's saved schedule
+var migrated = false;
+S.forEach(function(item){
+  if(item[0]===10 && item[1]===31 && item[2]==="rest"){
+    item[1] = 30;
+    item[3] = "Recharge before class — 15 min";
+    migrated = true;
+  }
+});
+if(migrated) try { localStorage.setItem("dra-clean-schedule", JSON.stringify(S)); } catch(e){}
+
 function sortSchedule(){
   S.sort(function(a,b){ return (a[0]*60+a[1]) - (b[0]*60+b[1]); });
 }
@@ -932,12 +950,19 @@ initAudio();
 
 /* ───────── MEDITATIVE SOUNDSCAPES ENGINE (Real Studio Recordings & Multi-Track Mixer) ───────── */
 var SOUND_CONFIG = {
-  rain:   { id: "rain",   name: "Gentle Rain",   icon: "🌧", file: "sounds/rain.mp3",     defVol: 0.60 },
-  green:  { id: "green",  name: "Green Noise",  icon: "🌿", file: "sounds/river.mp3",    defVol: 0.50 },
-  waves:  { id: "waves",  name: "Ocean Waves",  icon: "🌊", file: "sounds/waves.mp3",    defVol: 0.60 },
-  breeze: { id: "breeze", name: "Night Breeze", icon: "🌬", file: "sounds/wind.mp3",     defVol: 0.55 },
-  fire:   { id: "fire",   name: "Warm Campfire",icon: "🪵", file: "sounds/campfire.mp3", defVol: 0.65 },
-  space:  { id: "space",  name: "Deep Space",   icon: "🪐", file: "sounds/space.mp3",    defVol: 0.50 }
+  green:  { id: "green",  name: "Green Noise",   icon: "🌿", file: "sounds/green-noise.wav", defVol: 0.55 },
+  rain:   { id: "rain",   name: "Gentle Rain",   icon: "🌧", file: "sounds/rain.mp3",        defVol: 0.60 },
+  waves:  { id: "waves",  name: "Ocean Waves",   icon: "🌊", file: "sounds/waves.mp3",       defVol: 0.60 },
+  river:  { id: "river",  name: "River",         icon: "🏞", file: "sounds/river.mp3",       defVol: 0.55 },
+  breeze: { id: "breeze", name: "Night Breeze",  icon: "🌬", file: "sounds/wind.mp3",        defVol: 0.55 },
+  fire:   { id: "fire",   name: "Warm Campfire", icon: "🪵", file: "sounds/campfire.mp3",    defVol: 0.65 },
+  birds:  { id: "birds",  name: "Birds",         icon: "🐦", file: "sounds/birds.mp3",       defVol: 0.50 },
+  piano:  { id: "piano",  name: "Piano",         icon: "🎹", file: "sounds/piano.mp3",       defVol: 0.60 },
+  space:  { id: "space",  name: "Deep Space",    icon: "🪐", file: "sounds/space.mp3",       defVol: 0.50 },
+  brown:  { id: "brown",  name: "Brown Noise",   icon: "🟤", file: "sounds/brown-noise.wav", defVol: 0.55 },
+  pink:   { id: "pink",   name: "Pink Noise",    icon: "🌸", file: "sounds/pink-noise.wav",  defVol: 0.50 },
+  white:  { id: "white",  name: "White Noise",   icon: "⚪", file: "sounds/white-noise.wav", defVol: 0.45 },
+  blue:   { id: "blue",   name: "Blue Noise",    icon: "🔵", file: "sounds/blue-noise.wav",  defVol: 0.45 }
 };
 
 var soundAudioElements = {};
@@ -958,7 +983,7 @@ function getSoundAudio(id){
   return soundAudioElements[id];
 }
 
-// Pre-instantiate and pre-buffer all 6 soundscape audio elements for instant zero-latency playback
+// Pre-instantiate and pre-buffer all soundscape audio elements for instant zero-latency playback
 Object.keys(SOUND_CONFIG).forEach(function(id){
   var a = getSoundAudio(id);
   try{ a.load(); }catch(e){}
@@ -1036,11 +1061,17 @@ function updateAmbientUI(){
 
   var toggleBtn = $("ambientToggleBtn"), summary = $("ambientSummary");
   if(activeCount === 0){
-    summary.textContent = "Rain Sound: Off";
+    summary.textContent = "Green Noise: Off";
     toggleBtn.classList.remove("live");
-  } else if(activeCount === 1 && isSoundPlaying("rain")){
-    var pct = Math.round((soundVolumes.rain || 0.6) * 100);
-    summary.textContent = "Rain Sound: " + pct + "%";
+  } else if(activeCount === 1 && isSoundPlaying("green")){
+    var pct = Math.round((soundVolumes.green || 0.55) * 100);
+    summary.textContent = "Green Noise: " + pct + "%";
+    toggleBtn.classList.add("live");
+  } else if(activeCount === 1){
+    var singleId = activeIds[0];
+    var conf = SOUND_CONFIG[singleId];
+    var pct = Math.round((soundVolumes[singleId] || conf.defVol) * 100);
+    summary.textContent = conf.name + ": " + pct + "%";
     toggleBtn.classList.add("live");
   } else {
     summary.textContent = "Sounds: " + activeCount + " Playing";
@@ -1103,9 +1134,9 @@ document.querySelectorAll(".sound-chip").forEach(function(chip){
 $("stopAllSounds").onclick = stopAllSounds;
 
 $("ambientToggleBtn").onclick = function(){
-  // If no sounds are playing, start gentle rain. If any playing, stop all.
+  // If no sounds are playing, start Green Noise by default. If any playing, stop all.
   var activeIds = Object.keys(SOUND_CONFIG).filter(isSoundPlaying);
-  if(activeIds.length === 0) startSound("rain");
+  if(activeIds.length === 0) startSound("green");
   else stopAllSounds();
 };
 
