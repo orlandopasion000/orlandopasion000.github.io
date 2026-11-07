@@ -450,9 +450,9 @@ li.cur{opacity:1;border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 3
   <!-- 2. CONTROL BAR (Streamlined Clock Style & Audio Status) -->
   <div class="cockpit-bar">
     <div class="cockpit-pills">
-      <button class="pill-btn live" id="audioBadge" title="Audio Engine Status">
+      <button class="pill-btn live" id="audioBadge" title="Browser audio is ready to play alarms and soundscapes">
         <span class="status-dot"></span>
-        <span id="audioBadgeText">● Audio Engine Armed</span>
+        <span id="audioBadgeText">🔊 Sound Ready</span>
       </button>
       <button class="pill-btn" id="ambientToggleBtn" title="Toggle Meditative Soundscapes Deck">
         <span>🌧</span>
@@ -492,7 +492,6 @@ li.cur{opacity:1;border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 3
   <!-- 5. PRIMARY APPLICATION CONTROLS -->
   <div class="controls">
     <button class="primary on" id="arm">✓ Alarms Are On</button>
-    <button class="ghost" id="quick10Btn">⚡ Quick 10m Recharge</button>
     <button class="ghost" id="test">▶ Test Sound</button>
     <button class="ghost" id="restBtn" title="Full screen clock only">⛶ Rest Mode</button>
     <div class="vol">
@@ -924,19 +923,29 @@ function initAudio(){
 }
 function unlock(){
   initAudio();
-  if(ac&&ac.state!=="running")ac.resume().then(updateAudioBadge);
-  else updateAudioBadge();
+  if(ac&&ac.state!=="running"){
+    ac.resume().then(function(){
+      updateAudioBadge();
+      prepare();
+    }).catch(function(){});
+  }else{
+    updateAudioBadge();
+    prepare();
+  }
 }
 ["pointerdown","keydown","touchstart","scroll"].forEach(function(ev){document.addEventListener(ev,unlock,{passive:true,capture:true})});
 
 function updateAudioBadge(){
   var badge=$("audioBadge"),text=$("audioBadgeText");
+  if(!badge||!text)return;
   if(!ac||ac.state!=="running"){
     badge.className="pill-btn";
-    text.textContent="⚡ Tap to Arm Audio";
+    text.textContent="🔇 Tap to Enable Sound";
+    badge.title="Click or tap anywhere on the screen to enable browser audio";
   }else{
     badge.className="pill-btn live";
-    text.textContent="● Audio Engine Armed";
+    text.textContent="🔊 Sound Ready";
+    badge.title="Audio is unlocked and ready to play alarms and soundscapes";
   }
 }
 $("audioBadge").onclick=unlock;
@@ -969,6 +978,12 @@ function getSoundAudio(id){
   return soundAudioElements[id];
 }
 
+// Pre-instantiate and pre-buffer all 6 soundscape audio elements for instant zero-latency playback
+Object.keys(SOUND_CONFIG).forEach(function(id){
+  var a = getSoundAudio(id);
+  try{ a.load(); }catch(e){}
+});
+
 function isSoundPlaying(id){
   var a = soundAudioElements[id];
   return !!(a && !a.paused);
@@ -982,22 +997,11 @@ function startSound(id){
   clearInterval(soundFadeTimers[id]);
 
   var targetVol = soundVolumes[id] !== undefined ? soundVolumes[id] : conf.defVol;
-  a.volume = 0;
+  a.volume = targetVol;
   var playPromise = a.play();
   if(playPromise && playPromise.catch){
     playPromise.catch(function(err){ console.log("Soundscape playback gesture required:", err); });
   }
-
-  // Smooth 350ms fade-in
-  var steps = 14, curStep = 0;
-  soundFadeTimers[id] = setInterval(function(){
-    curStep++;
-    a.volume = Math.min(1, targetVol * (curStep / steps));
-    if(curStep >= steps){
-      clearInterval(soundFadeTimers[id]);
-      a.volume = targetVol;
-    }
-  }, 25);
 
   updateAmbientUI();
   renderMixerRack();
@@ -1012,7 +1016,7 @@ function stopSound(id){
   }
   clearInterval(soundFadeTimers[id]);
   var initialVol = a.volume;
-  var steps = 14, curStep = 0;
+  var steps = 8, curStep = 0;
   soundFadeTimers[id] = setInterval(function(){
     curStep++;
     a.volume = Math.max(0, initialVol * (1 - curStep / steps));
@@ -1023,7 +1027,7 @@ function stopSound(id){
       updateAmbientUI();
       renderMixerRack();
     }
-  }, 25);
+  }, 20);
 }
 
 function stopAllSounds(){
@@ -1126,7 +1130,19 @@ $("ambientToggleBtn").onclick = function(){
 };
 
 /* ───────── SONG PLAYER ENGINE (Song Clip Only) ───────── */
+var songAudioCache = {};
+function getSongAudioElement(song){
+  if(!songAudioCache[song.file]){
+    var el = new Audio(song.file);
+    el.preload = "auto";
+    try{ el.load(); }catch(e){}
+    songAudioCache[song.file] = el;
+  }
+  return songAudioCache[song.file];
+}
+
 var loading=SONGS.map(function(s,i){
+  getSongAudioElement(s);
   return fetch(s.file).then(function(r){if(!r.ok)throw 0;return r.arrayBuffer()}).then(function(x){raw[i]=x}).catch(function(){});
 });
 function idx(song){return SONGS.indexOf(song)}
@@ -1150,19 +1166,23 @@ function prepare(){
   Object.keys(bufs).forEach(function(i){if(!keep[i]){delete bufs[i];delete ready[i]}});
 }
 function startBuf(buf){
-  var src=ac.createBufferSource(),g=ac.createGain(),t=ac.currentTime+.01,d=buf.duration;
+  var src=ac.createBufferSource(),g=ac.createGain(),t=ac.currentTime+.005,d=buf.duration;
   src.buffer=buf;src.connect(g);g.connect(master);
   g.gain.setValueAtTime(0,t);
-  g.gain.linearRampToValueAtTime(1,t+.35);
-  g.gain.setValueAtTime(1,Math.max(t+.4,t+d-2.2));
+  g.gain.linearRampToValueAtTime(1,t+.04);
+  g.gain.setValueAtTime(1,Math.max(t+.05,t+d-1.5));
   g.gain.linearRampToValueAtTime(0,t+d);
   src.onended=function(){if(src===curSrc)finished()};
   src.start(t);curSrc=src;curFade=g;
 }
 function startFallback(song){
-  var el=new Audio(song.file);el.volume=target();fallback=el;
+  var el=getSongAudioElement(song);
+  el.currentTime=0;
+  el.volume=target();
+  fallback=el;
   el.onended=function(){if(fallback===el){fallback=null;finished()}};
-  el.play().catch(function(){});
+  var p=el.play();
+  if(p&&p.catch)p.catch(function(){});
 }
 function playSong(song,done,m){
   stopSong();
@@ -1583,31 +1603,7 @@ document.addEventListener("keydown",function(e){
 document.addEventListener("fullscreenchange",function(){if(!document.fullscreenElement)exitRest()});
 document.addEventListener("webkitfullscreenchange",function(){if(!document.webkitFullscreenElement)exitRest()});
 
-/* ───────── QUICK RECHARGE COUNTDOWN TIMERS ───────── */
-var timerInterval=null;
-function triggerQuickRecharge(mins){
-  if(timerInterval){clearInterval(timerInterval);timerInterval=null}
-  var targetTime=Date.now()+mins*60000;
-  $("status").textContent="⚡ Quick Recharge: "+mins+" min countdown running...";
-  timerInterval=setInterval(function(){
-    var rem=Math.max(0,Math.round((targetTime-Date.now())/1000));
-    $("quick10Btn").textContent=p2(Math.floor(rem/60))+":"+p2(rem%60)+" Left";
-    if(rem<=0){
-      clearInterval(timerInterval);timerInterval=null;
-      $("quick10Btn").textContent="⚡ Quick 10m Recharge";
-      ringInstant(mins);
-    }
-  },1000);
-}
-$("quick10Btn").onclick=function(){triggerQuickRecharge(10)};
-function ringInstant(mins){
-  $("ovT").textContent="Recharge Complete!";
-  $("ovM").textContent=mins+" Minute Session";
-  $("ov").className="show";
-  var song=queued;queued=nextSong();
-  $("ovSongName").textContent=song.title+" — "+song.artist;
-  playSong(song,null,"alarm");
-}
+
 
 /* ───────── EXECUTIVE TOAST NOTIFICATIONS ───────── */
 function showToast(msg, icon){
