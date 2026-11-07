@@ -60,13 +60,13 @@ console.log('✓ Store-ready Privacy Policy and Terms of Service exist');
   }
 });
 
-// 4. Verify Service Worker v8 caches all 13 sounds
+// 4. Verify Service Worker v9 caches all 13 sounds
 const swContent = fs.readFileSync(path.join(__dirname, 'recharge-sw.js'), 'utf8');
-if (!swContent.includes('recharge-v8')) {
-  console.error('FAIL: Service worker version is not recharge-v8');
+if (!/recharge-v[9\d]/.test(swContent)) {
+  console.error('FAIL: Service worker version is not recharge-v9 or higher');
   pass = false;
 } else {
-  console.log('✓ Service Worker is on recharge-v8');
+  console.log('✓ Service Worker is on recharge-v9');
 }
 requiredSounds.forEach(s => {
   if (!swContent.includes(s)) {

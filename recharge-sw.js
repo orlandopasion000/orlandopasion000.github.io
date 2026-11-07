@@ -1,8 +1,8 @@
-/* Daily Recharge Alarm — Service Worker v8
+/* Daily Recharge Alarm — Service Worker v9
    • Caches core app, clean blank edition, manifests, song chorus clips, 13 studio ambient soundscapes, mobile QR code, and Lexend font for 100% offline playback.
    • Handles notification actions (Snooze / Dismiss).
    Scope: ./ */
-var VERSION = "recharge-v8";
+var VERSION = "recharge-v9";
 var CORE = [
   "daily-recharge-alarm.html",
   "recharge-clean.html",
