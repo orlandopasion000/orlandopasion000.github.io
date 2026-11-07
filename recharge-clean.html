@@ -14,7 +14,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="apple-mobile-web-app-title" content="Recharge">
-<meta name="description" content="Clean, customizable personal daily alarm schedule with sleep soundscapes, luxury metallic clocks, and Rest Mode.">
+<meta name="description" content="Clean, customizable daily alarm schedule with sleep soundscapes, luxury metallic clocks, and Rest Mode.">
 <!-- Choice 6: Lexend Bold (Geometric, Modern, High-Legibility) -->
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -428,6 +428,102 @@ li.cur{opacity:1;border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 3
   .days{gap:6px}.days button{font-size:.95rem;padding:12px 0}
   .edit-row-ctrls{width:100%}
 }
+
+/* Light Mode (Porcelain Pearl) */
+body.light-theme{
+  --black:#F6F8FA;
+  --surface:#FFFFFF;
+  --surface-2:#F1F3F5;
+  --surface-3:#E9ECEF;
+  --line:#D0D7DE;
+  --line2:#CED4DA;
+  --gold:#9A7B1C;
+  --gold-soft:rgba(154,123,28,0.55);
+  --gold-glow:rgba(154,123,28,0.15);
+  --text:#1F2328;
+  --dim:#59636E;
+  --mute:#656D76;
+  background:#F6F8FA !important;
+  color:#1F2328 !important;
+  color-scheme:light;
+}
+body.light-theme .hero,
+body.light-theme #rest{
+  background:#FFFFFF !important;
+  border-color:#D0D7DE !important;
+}
+body.light-theme .hero::before{
+  background:linear-gradient(90deg,transparent,rgba(154,123,28,0.5),transparent) !important;
+}
+body.light-theme .dist-card{
+  background:#FFFFFF !important;
+  border-color:#D0D7DE !important;
+}
+body.light-theme li{
+  background:#FFFFFF !important;
+  border-color:#E9ECEF !important;
+}
+body.light-theme .pill-btn{
+  background:#FFFFFF !important;
+  border-color:#D0D7DE !important;
+  color:#1F2328 !important;
+}
+body.light-theme .modal-box{
+  background:#FFFFFF !important;
+  color:#1F2328 !important;
+  border-color:#D0D7DE !important;
+}
+body.light-theme .modal-box input,
+body.light-theme .modal-box select{
+  background:#F1F3F5 !important;
+  color:#1F2328 !important;
+  border-color:#CED4DA !important;
+}
+body.light-theme .preset-bar{
+  background:#FFFFFF !important;
+  border-color:#D0D7DE !important;
+}
+body.light-theme #presetSelect{
+  background:#F1F3F5 !important;
+  color:#1F2328 !important;
+  border-color:#CED4DA !important;
+}
+
+/* Accessibility Font Scalers */
+body[data-font-scale="large"]{font-size:20px}
+body[data-font-scale="large"] .chrome{font-size:clamp(4.2rem,11.5vw,7.6rem)}
+body[data-font-scale="large"] li{font-size:1.15rem}
+
+body[data-font-scale="xlarge"]{font-size:23px}
+body[data-font-scale="xlarge"] .chrome{font-size:clamp(4.6rem,12.5vw,8.4rem)}
+body[data-font-scale="xlarge"] li{font-size:1.28rem}
+
+/* Status Active Pulse Animation */
+.status-active-pulse{
+  display:inline-block;
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:#34d399;
+  box-shadow:0 0 10px #34d399;
+  margin-right:6px;
+  animation:statusPulse 2s infinite ease-in-out;
+  vertical-align:middle;
+}
+@keyframes statusPulse{
+  0%,100%{transform:scale(1);opacity:1}
+  50%{transform:scale(1.25);opacity:0.75}
+}
+.status-paused-dot{
+  display:inline-block;
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  border:2px solid var(--mute);
+  margin-right:6px;
+  vertical-align:middle;
+}
+
 </style>
 </head>
 <body data-clock-theme="gold">
@@ -460,6 +556,18 @@ li.cur{opacity:1;border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 3
       </button>
       <button class="pill-btn" id="themeBtn" title="Cycle Clock Font Appearance">
         <span>🎨 Clock Style: <b id="themeLabel">Royal 24K Radiant Gold</b></span>
+      </button>
+      <button class="pill-btn" id="themeModeBtn" title="Toggle Light / Dark Mode">
+        <span id="themeModeIcon">🌙</span>
+        <span id="themeModeLabel">Dark</span>
+      </button>
+      <button class="pill-btn" id="textSizeBtn" title="Change Text Size">
+        <span>Aa</span>
+        <span id="textSizeLabel">100%</span>
+      </button>
+      <button class="pill-btn" id="tourBtn" title="First-Run Walkthrough & Help">
+        <span>✨</span>
+        <span>Tour & Help</span>
       </button>
     </div>
   </div>
@@ -520,7 +628,26 @@ li.cur{opacity:1;border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 3
 
   <div class="label">Active days</div>
   <div class="days" id="days" role="group" aria-label="Alarm days"></div>
-  <div id="status">Alarms are on. Keep this page open.</div>
+  <div id="status"><span class="status-active-pulse">●</span> <b>Alarms Armed · Screen-Off Wake Active</b></div>
+
+  <!-- ROUTINE PRESETS & CLOUD SHARE BAR -->
+  <div class="preset-bar" style="margin:16px 0 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:12px 18px;background:var(--surface-2);border:1px solid var(--line2);border-radius:16px">
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <span style="font-size:.80rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;display:flex;align-items:center;gap:6px">
+        <span>📋</span> Routine Preset:
+      </span>
+      <select id="presetSelect" aria-label="Choose routine preset" style="background:var(--surface-3);color:var(--text);border:1px solid var(--line2);border-radius:10px;padding:7px 14px;font-family:var(--sans);font-size:.92rem;font-weight:600;outline:none;cursor:pointer">
+        <option value="class">🎓 Class Day (DepEd Master — 23 Blocks)</option>
+        <option value="weekend">🌿 Weekend Recharge (Nature & Rest — 8 Blocks)</option>
+        <option value="exam">⚡ Exam Week (Study Sprints — 10 Blocks)</option>
+        <option value="minimal">🎯 Minimalist Routine (4 Anchor Blocks)</option>
+        <option value="blank">📝 Blank Canvas (Start Fresh — 0 Blocks)</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="ghost" id="shareRoutineBtn" style="padding:7px 14px;font-size:.86rem;font-weight:600" title="Copy instant share link for this routine">🔗 Share Routine</button>
+    </div>
+  </div>
 
   <!-- 7. SCHEDULE SECTION -->
   <div class="sched-head">
@@ -613,21 +740,35 @@ li.cur{opacity:1;border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 3
       </div>
     </div>
 
-    <!-- Highlight Banner: Master Preset Schedule (Sir Orlando's Edition) -->
+    <!-- Highlight Banner: Preset Routines (Class Day, Weekend, Exam Week) -->
     <div class="dist-card" style="margin-top:16px;border-color:rgba(217,185,92,.5);background:linear-gradient(180deg,#14151f 0%,#0c0c0e 100%)">
       <div class="dist-card-top">
         <div class="dist-icon" style="background:rgba(217,185,92,.15);color:var(--gold);border-color:rgba(217,185,92,.3)">🎓</div>
         <div>
-          <div class="dist-name" style="color:var(--gold)">Master Preset Schedule</div>
-          <div class="dist-desc">Looking for inspiration? Explore Sir Orlando V. Pasion, Jr.'s curated 23-alarm daily teaching & recharge schedule.</div>
+          <div class="dist-name" style="color:var(--gold)">Routine Presets Ready</div>
+          <div class="dist-desc">Choose from curated presets: Class Day (23 blocks), Weekend Recharge (8 blocks), Exam Week (10 blocks), or Minimalist.</div>
         </div>
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <a class="primary dist-btn" href="daily-recharge-alarm.html" target="_blank" rel="noopener" style="flex:1;min-width:140px;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center">⚡ View Master Schedule</a>
-        <button class="ghost dist-btn" id="downloadBlankAppBtn" style="flex:1;min-width:140px;font-size:.85rem">💾 Standalone (.html)</button>
+        <button class="primary dist-btn" id="explorePresetsBtn" style="flex:1;min-width:140px;text-align:center">📋 Switch Routine Preset</button>
+        <button class="ghost dist-btn" id="clearScheduleBtn" style="flex:1;min-width:140px;font-size:.85rem">📝 Start Blank</button>
       </div>
     </div>
   </section>
+
+  <!-- FOOTER & LEGAL LINKS (App Store Ready) -->
+  <footer style="margin-top:40px;padding-top:24px;border-top:1px solid var(--line2);text-align:center;font-size:.85rem;color:var(--dim);display:flex;flex-direction:column;gap:10px">
+    <div style="display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap">
+      <a href="privacy-policy.html" style="color:var(--gold);text-decoration:none;font-weight:600">Privacy Policy</a>
+      <span style="opacity:.4">•</span>
+      <a href="terms.html" style="color:var(--gold);text-decoration:none;font-weight:600">Terms of Service</a>
+      <span style="opacity:.4">•</span>
+      <a href="https://github.com/orlandopasion000/orlandopasion000.github.io" target="_blank" rel="noopener" style="color:var(--dim);text-decoration:none">GitHub Source</a>
+    </div>
+    <div style="font-size:.78rem;color:var(--mute)">
+      🛡️ 100% On-Device · Zero Telemetry · Offline Service Worker v8 · Screen Wake Lock Active
+    </div>
+  </footer>
 
 </main>
 
@@ -760,6 +901,64 @@ li.cur{opacity:1;border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 3
 </div>
 
 <!-- Toast Notifications Container -->
+<!-- Onboarding Welcome Tour Modal -->
+<div class="modal-wrap" id="onboardingModal" role="dialog" aria-modal="true" aria-label="Welcome Tour">
+  <div class="modal-box" style="text-align:left;max-width:480px">
+    <button class="modal-close" id="closeOnboardingModal" aria-label="Close modal">✕</button>
+    <div style="text-align:center;margin-bottom:16px">
+      <div style="font-size:2.4rem;margin-bottom:8px">⏰✨</div>
+      <div class="modal-title">Welcome to Daily Recharge</div>
+      <div class="modal-text" style="color:var(--dim);font-size:.92rem">Your science-backed rhythm for peak focus, timely recharges, and restful recovery.</div>
+    </div>
+
+    <!-- 3 Highlight Features -->
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px">
+      <div style="background:var(--surface-2);border:1px solid var(--line2);border-radius:12px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start">
+        <span style="font-size:1.3rem">🛡️</span>
+        <div>
+          <b style="color:var(--text);font-size:.92rem">Screen-Off Reliability</b>
+          <div style="font-size:.82rem;color:var(--dim)">Screen Wake Lock and continuous audio keep-alive ensure your alarms ring even when your device is resting or screen is locked.</div>
+        </div>
+      </div>
+      <div style="background:var(--surface-2);border:1px solid var(--line2);border-radius:12px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start">
+        <span style="font-size:1.3rem">🌿</span>
+        <div>
+          <b style="color:var(--text);font-size:.92rem">13 Studio Rest Soundscapes</b>
+          <div style="font-size:.82rem;color:var(--dim)">Mix and match Green Noise, Gentle Rain, Waves, River, Birds, Piano, and Brown/Pink/White/Blue noise 100% offline.</div>
+        </div>
+      </div>
+      <div style="background:var(--surface-2);border:1px solid var(--line2);border-radius:12px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start">
+        <span style="font-size:1.3rem">⚡</span>
+        <div>
+          <b style="color:var(--text);font-size:.92rem">1-Tap Routine Presets</b>
+          <div style="font-size:.82rem;color:var(--dim)">Switch effortlessly between Class Day, Weekend Recharge, Exam Week, Minimalist, or create your custom routine.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-actions" style="margin-top:16px">
+      <button class="primary" id="startTourBtn" style="width:100%;padding:13px;font-size:1rem;font-weight:700">Get Started · Arm Alarms ⚡</button>
+    </div>
+  </div>
+</div>
+
+<!-- Shared Routine Detected Modal -->
+<div class="modal-wrap" id="sharedRoutineModal" role="dialog" aria-modal="true" aria-label="Shared Routine Imported">
+  <div class="modal-box" style="text-align:left;max-width:440px">
+    <button class="modal-close" id="closeSharedRoutineModal" aria-label="Close modal">✕</button>
+    <div style="text-align:center;margin-bottom:14px">
+      <div style="font-size:2.2rem;margin-bottom:6px">📥</div>
+      <div class="modal-title">Shared Routine Detected</div>
+      <div class="modal-text" id="sharedRoutineDesc" style="color:var(--dim);font-size:.92rem">Someone shared a Daily Recharge routine with you.</div>
+    </div>
+    <div id="sharedRoutinePreview" style="max-height:180px;overflow-y:auto;background:var(--surface-2);border:1px solid var(--line2);border-radius:12px;padding:12px;margin-bottom:16px;font-size:.85rem;color:var(--text)"></div>
+    <div style="display:flex;gap:10px">
+      <button class="primary" id="confirmLoadSharedRoutineBtn" style="flex:1;padding:12px;font-weight:700">Load This Routine</button>
+      <button class="ghost" id="cancelLoadSharedRoutineBtn" style="flex:1;padding:12px">Dismiss</button>
+    </div>
+  </div>
+</div>
+
 <div id="toastBox" aria-live="polite"></div>
 
 <script>
@@ -816,19 +1015,19 @@ var volume=.7,muted=false,clockTheme="gold";
 var activeFilter="all",isEditing=false,editingBackup=null;
 
 try{
-  off=JSON.parse(localStorage.getItem("dra-clean-off")||"{}");
+  off=JSON.parse(localStorage.getItem("dra-off")||"{}");
   var d=localStorage.getItem("dra-clean-days");if(d)days=JSON.parse(d);
-  var v=localStorage.getItem("dra-clean-vol");if(v!==null&&!isNaN(+v))volume=+v;
-  muted=localStorage.getItem("dra-clean-mute")==="1";
+  var v=localStorage.getItem("dra-vol");if(v!==null&&!isNaN(+v))volume=+v;
+  muted=localStorage.getItem("dra-mute")==="1";
   var ct=localStorage.getItem("dra-clock-theme");if(ct)clockTheme=ct;
   armed=true; // Always default to true every time site is opened
 }catch(e){}
 
 function save(){try{
-  localStorage.setItem("dra-clean-off",JSON.stringify(off));
+  localStorage.setItem("dra-off",JSON.stringify(off));
   localStorage.setItem("dra-clean-days",JSON.stringify(days));
-  localStorage.setItem("dra-clean-vol",""+volume);
-  localStorage.setItem("dra-clean-mute",muted?"1":"0");
+  localStorage.setItem("dra-vol",""+volume);
+  localStorage.setItem("dra-mute",muted?"1":"0");
   localStorage.setItem("dra-clock-theme",clockTheme);
   localStorage.setItem("dra-clean-schedule",JSON.stringify(S));
 }catch(e){}}
@@ -1264,25 +1463,6 @@ var CAT_LABELS = {
 
 function renderList(){
   var list=$("list");list.innerHTML="";
-  if(!isEditing && (!S || S.length === 0)){
-    var emptyLi = document.createElement("li");
-    emptyLi.style.cssText = "display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:48px 24px;border:1px dashed var(--line2);border-radius:20px;background:var(--surface);margin-bottom:12px;list-style:none";
-    emptyLi.innerHTML = '<div style="font-size:2.6rem;margin-bottom:10px">✨</div>' +
-      '<div style="font-weight:700;font-size:1.35rem;color:var(--text);margin-bottom:8px">Your Schedule is Ready</div>' +
-      '<div style="color:var(--dim);font-size:1rem;max-width:480px;line-height:1.5;margin:0 auto 20px">This is your 100% clean, blank slate. Craft your own daily alarms, study blocks, recharge breaks, and evening routines.</div>' +
-      '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">' +
-      '<button class="primary" id="emptyAddBtn" style="padding:10px 22px;font-size:.95rem">+ Add First Alarm</button>' +
-      '<button class="ghost" id="emptyEditBtn" style="padding:10px 22px;font-size:.95rem">✎ Open Schedule Editor</button>' +
-      '</div>';
-    list.appendChild(emptyLi);
-    setTimeout(function(){
-      var b1 = document.getElementById("emptyAddBtn");
-      var b2 = document.getElementById("emptyEditBtn");
-      if(b1) b1.onclick = function(){ $("addAlarmBtn").click(); };
-      if(b2) b2.onclick = function(){ $("editScheduleBtn").click(); };
-    }, 50);
-    return;
-  }
   var counts={all:S.length,class:0,rest:0,work:0,err:0,night:0};
   S.forEach(function(s){if(counts[s[2]]!==undefined)counts[s[2]]++});
 
@@ -1454,13 +1634,13 @@ $("addAlarmEditBtn").onclick=openAddAlarmModal;
 
 /* Reset to DepEd Default Schedule */
 $("resetSchedBtn").onclick=function(){
-  if(confirm("Clear all alarms and start with a fresh schedule?")){
+  if(confirm("Reset entire schedule back to Sir Orlando’s Default Schedule?")){
     S=DEFAULT_SCHEDULE.slice(0);
     off={};
     save();
     renderList();
     tick();
-    $("status").textContent="Schedule cleared. Ready for your custom alarms.";
+    $("status").textContent="Schedule reset to default 23 blocks.";
   }
 };
 
@@ -1516,8 +1696,10 @@ function dismiss(){if($("ov").className!=="show")return;$("ov").className="";rin
 function snooze(){
   if($("ov").className!=="show")return;
   var i=ringing;dismiss();
-  snoozes.push({i:i,at:Date.now()+5*60000});
-  $("status").textContent="Snoozed — “"+S[i][3]+"” will ring again in 5 minutes.";
+  snoozes.push({i:i,at:Date.now()+5*60000,title:S[i]?S[i][3]:"Alarm"});
+  saveSnoozes();
+  $("status").innerHTML='<span class="status-active-pulse">●</span> Snoozed — “'+(S[i]?escapeHtml(S[i][3]):'Alarm')+'” will ring again in 5 minutes.';
+  showToast("Snoozed for 5 minutes", "⏰");
 }
 $("ovB").onclick=dismiss;
 $("ovS").onclick=snooze;
@@ -1529,9 +1711,18 @@ document.addEventListener("keydown",function(e){
 
 /* ───────── CONTROLS ───────── */
 function setStatus(){
-  $("arm").textContent=armed?"✓ Alarms Are On":"Turn Alarms On";
-  $("arm").className="primary"+(armed?" on":"");
-  $("status").textContent=armed?"Alarms are on. Keep this page open.":"Alarms are off. Tap “Turn Alarms On” to arm.";
+  if ($("arm")) {
+    $("arm").textContent = armed ? "✓ Alarms Are On" : "Turn Alarms On";
+    $("arm").className = "primary" + (armed ? " on" : "");
+  }
+  var st = $("status");
+  if (st) {
+    if (armed) {
+      st.innerHTML = '<span class="status-active-pulse">●</span> <b>Alarms Armed · Screen-Off Wake Active</b> <span style="display:block;font-size:.82rem;color:var(--dim);margin-top:2px">Screen wake lock active & background audio keep-alive running</span>';
+    } else {
+      st.innerHTML = '<span class="status-paused-dot">○</span> <b>Alarms Paused</b> <span style="display:block;font-size:.82rem;color:var(--dim);margin-top:2px">Tap "Turn Alarms On" to arm your schedule</span>';
+    }
+  }
   updateAudioBadge();
 }
 $("arm").onclick=function(){
@@ -1539,7 +1730,14 @@ $("arm").onclick=function(){
   setStatus();
   if(armed){
     unlock();
+    requestWakeLock();
+    startAudioKeepAlive();
     try{if(window.Notification&&Notification.permission==="default")Notification.requestPermission()}catch(e){}
+    showToast("Alarms Armed & Screen Wake Active", "🛡️");
+  } else {
+    releaseWakeLock();
+    stopAudioKeepAlive();
+    showToast("Alarms Paused", "⏸️");
   }
 };
 $("test").onclick=function(){
@@ -1573,7 +1771,7 @@ function tick(){
 
   /* Process snoozes */
   for(var z=snoozes.length-1;z>=0;z--){
-    if(n.getTime()>=snoozes[z].at){var zi=snoozes[z].i;snoozes.splice(z,1);if(armed)ring(zi,true)}
+    if(n.getTime()>=snoozes[z].at){var zi=snoozes[z].i;snoozes.splice(z,1);saveSnoozes();if(armed)ring(zi,true)}
   }
 
   /* Next alarm countdown */
@@ -1722,7 +1920,7 @@ $("exportBackupBtn").onclick=function(){
   var backupData={
     app:"Daily Recharge Alarm",
     version:"2.4.0",
-    owner:"Clean Personal Edition",
+    owner:"Public Clean Edition",
     exportedAt:new Date().toISOString(),
     theme:clockTheme,
     armed:armed,
@@ -1732,7 +1930,7 @@ $("exportBackupBtn").onclick=function(){
   var blob=new Blob([JSON.stringify(backupData,null,2)],{type:"application/json"});
   var a=document.createElement("a");
   a.href=URL.createObjectURL(blob);
-  a.download="daily-recharge-schedule-backup.json";
+  a.download="daily-recharge-clean-backup.json";
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -1809,6 +2007,403 @@ if("serviceWorker" in navigator&&location.protocol!=="file:"){
 
 if(/[?&]rest=1/.test(location.search))enterRest();
 
+
+/* ══════════════════════════════════════════════════════════════
+   RELIABILITY SUITE: SCREEN WAKE LOCK & BACKGROUND AUDIO KEEP-ALIVE
+   ══════════════════════════════════════════════════════════════ */
+var wakeLock = null;
+async function requestWakeLock() {
+  if ('wakeLock' in navigator) {
+    try {
+      wakeLock = await navigator.wakeLock.request('screen');
+      wakeLock.addEventListener('release', function() {
+        wakeLock = null;
+      });
+    } catch(err) {
+      // Ignore wake lock denial
+    }
+  }
+}
+function releaseWakeLock() {
+  if (wakeLock) {
+    try {
+      wakeLock.release().then(function() { wakeLock = null; }).catch(function(){});
+    } catch(e){}
+  }
+}
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'visible' && armed) {
+    requestWakeLock();
+  }
+});
+
+var keepAliveNode = null;
+function startAudioKeepAlive() {
+  if (!actx) initAudio();
+  if (!actx || keepAliveNode) return;
+  try {
+    if (actx.state === 'suspended') actx.resume();
+    var buffer = actx.createBuffer(1, actx.sampleRate * 2, actx.sampleRate);
+    keepAliveNode = actx.createBufferSource();
+    keepAliveNode.buffer = buffer;
+    keepAliveNode.loop = true;
+    var gainNode = actx.createGain();
+    gainNode.gain.value = 0.0001; // Inaudible keep-alive channel
+    keepAliveNode.connect(gainNode);
+    gainNode.connect(actx.destination);
+    keepAliveNode.start(0);
+  } catch(e){}
+}
+function stopAudioKeepAlive() {
+  if (keepAliveNode) {
+    try { keepAliveNode.stop(); keepAliveNode.disconnect(); } catch(e){}
+    keepAliveNode = null;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PERSISTENT SNOOZE (Survives Restarts & Refreshes)
+   ══════════════════════════════════════════════════════════════ */
+function saveSnoozes() {
+  try { localStorage.setItem("dra-clean-snoozes", JSON.stringify(snoozes)); } catch(e){}
+}
+function loadSnoozes() {
+  try {
+    var saved = localStorage.getItem("dra-clean-snoozes");
+    if (saved) {
+      var parsed = JSON.parse(saved);
+      var now = Date.now();
+      snoozes = parsed.filter(function(item){ return item.at > (now - 10*60000); });
+    }
+  } catch(e) { snoozes = []; }
+}
+loadSnoozes();
+
+/* ══════════════════════════════════════════════════════════════
+   SCHEDULE PRESETS SYSTEM
+   ══════════════════════════════════════════════════════════════ */
+var SCHEDULE_PRESETS = {
+  class: {
+    name: "Class Day (DepEd Master)",
+    icon: "🎓",
+    desc: "23-block daily teaching and recharge schedule.",
+    schedules: [
+      [7,0,"work","Arrive — read, learn, develop"],
+      [8,0,"rest","Short recharge — 10 min"],
+      [8,10,"work","Work and print"],
+      [8,20,"rest","Recharge before class — 10 min"],
+      [8,30,"class","Class: Math 8"],
+      [9,30,"rest","Long recharge — 40 min"],
+      [10,11,"work","Work and print"],
+      [10,30,"rest","Recharge before class — 15 min"],
+      [10,45,"class","Class: Math 10"],
+      [11,45,"err","Principal’s office — log out/in"],
+      [12,0,"rest","Lunch and recharge — 45 min"],
+      [12,45,"err","Personal hygiene"],
+      [12,50,"rest","Recharge before class — 10 min"],
+      [13,0,"class","Class: Math 8"],
+      [14,0,"rest","Longest recharge — 60 min"],
+      [15,0,"work","Work and print"],
+      [15,10,"rest","Quick recharge — 5 min"],
+      [15,15,"class","Class: Gen Math 11"],
+      [16,16,"err","Organize files"],
+      [16,21,"rest","Recharge, then go home"],
+      [20,0,"night","Shutdown — write tomorrow’s top 3"],
+      [20,30,"night","Wind-down — no screens"],
+      [21,30,"night","Bedtime"]
+    ]
+  },
+  weekend: {
+    name: "Weekend Recharge",
+    icon: "🌿",
+    desc: "8 gentle recovery blocks for outdoor walks, meditation, and rest.",
+    schedules: [
+      [8,0,"rest","Morning gentle stretch & hydrate — 15 min"],
+      [9,30,"rest","Sunlight walk & fresh air — 30 min"],
+      [12,0,"err","Wholesome midday meal"],
+      [13,30,"rest","Afternoon meditation & power nap — 25 min"],
+      [15,30,"work","Passion project & reading — 60 min"],
+      [18,0,"err","Light movement & hydration"],
+      [20,0,"night","Gratitude & family wind-down"],
+      [21,30,"night","Screen-off deep sleep transition"]
+    ]
+  },
+  exam: {
+    name: "Exam Week (Study Sprints)",
+    icon: "⚡",
+    desc: "10 high-performance sprint and memory consolidation blocks.",
+    schedules: [
+      [7,0,"err","High-protein breakfast & daily focus review"],
+      [8,0,"work","Focus Study Sprint 1 — Core concepts"],
+      [9,30,"rest","Eye rest, stretching & hydration — 15 min"],
+      [9,45,"work","Focus Study Sprint 2 — Problem solving"],
+      [11,15,"rest","Memory consolidation walk — 20 min"],
+      [12,0,"err","Nourishing lunch break"],
+      [13,0,"work","Focus Study Sprint 3 — Practice test"],
+      [14,30,"rest","Brain reset power nap — 20 min"],
+      [15,0,"work","Active recall & flashcard drill"],
+      [21,0,"night","Mind quiet & sleep preparation"]
+    ]
+  },
+  minimal: {
+    name: "Minimalist Routine (4 Anchors)",
+    icon: "🎯",
+    desc: "4 essential daily pillars for simple, uncluttered flow.",
+    schedules: [
+      [7,0,"work","Morning Energy Launch"],
+      [12,0,"rest","Midday Recharge & Nutrition — 45 min"],
+      [17,30,"work","Evening Wrap-up & Transition"],
+      [22,0,"night","Deep Sleep Wind-down"]
+    ]
+  },
+  blank: {
+    name: "Blank Canvas",
+    icon: "📝",
+    desc: "Starts empty so you can add your custom alarms from scratch.",
+    schedules: []
+  }
+};
+
+function getCurrentPresetKey() {
+  for (var key in SCHEDULE_PRESETS) {
+    var p = SCHEDULE_PRESETS[key];
+    if (p.schedules.length === S.length) {
+      var match = true;
+      for (var k = 0; k < S.length; k++) {
+        if (S[k][0] !== p.schedules[k][0] || S[k][1] !== p.schedules[k][1] || S[k][3] !== p.schedules[k][3]) {
+          match = false; break;
+        }
+      }
+      if (match) return key;
+    }
+  }
+  return "custom";
+}
+
+function updatePresetSelectorUI() {
+  var sel = $("presetSelect");
+  if (!sel) return;
+  var key = getCurrentPresetKey();
+  if (key === "custom") {
+    if (!sel.querySelector('option[value="custom"]')) {
+      var opt = document.createElement("option");
+      opt.value = "custom";
+      opt.textContent = "✏️ Custom Routine (" + S.length + " Blocks)";
+      sel.appendChild(opt);
+    }
+    sel.value = "custom";
+  } else {
+    sel.value = key;
+  }
+}
+
+function applyPreset(presetKey, skipConfirm) {
+  var p = SCHEDULE_PRESETS[presetKey];
+  if (!p) return;
+  if (!skipConfirm && S.length > 0) {
+    if (!confirm("Switch to '" + p.name + "'? Your schedule will be updated. You can restore your current schedule anytime via Export backup.")) {
+      updatePresetSelectorUI();
+      return;
+    }
+  }
+  S = p.schedules.slice(0);
+  off = {};
+  save();
+  renderList();
+  tick();
+  updatePresetSelectorUI();
+  showToast("Loaded " + p.name + " (" + S.length + " alarms)", p.icon);
+}
+
+if ($("presetSelect")) {
+  $("presetSelect").onchange = function() {
+    var val = this.value;
+    if (val === "custom") return;
+    applyPreset(val);
+  };
+}
+
+/* ══════════════════════════════════════════════════════════════
+   CLOUD LINK SYNC & SHARE ROUTINE (#s=HASH)
+   ══════════════════════════════════════════════════════════════ */
+function escapeHtml(str) {
+  return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function generateShareUrl() {
+  try {
+    var payload = JSON.stringify(S);
+    var b64 = btoa(encodeURIComponent(payload).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+      return String.fromCharCode('0x' + p1);
+    }));
+    return window.location.origin + window.location.pathname + '#s=' + b64;
+  } catch(e) {
+    return window.location.href;
+  }
+}
+
+if ($("shareRoutineBtn")) {
+  $("shareRoutineBtn").onclick = function() {
+    var url = generateShareUrl();
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(function() {
+        showToast("Shareable routine link copied to clipboard!", "🔗");
+      }).catch(function() { fallbackCopy(url); });
+    } else {
+      fallbackCopy(url);
+    }
+  };
+}
+
+var pendingImportedSchedule = null;
+function showSharedRoutineModal(imported) {
+  pendingImportedSchedule = imported;
+  var preview = $("sharedRoutinePreview");
+  var desc = $("sharedRoutineDesc");
+  if (desc) desc.textContent = "This link contains a routine with " + imported.length + " scheduled alarms.";
+  if (preview) {
+    preview.innerHTML = imported.map(function(item){
+      return '<div style="padding:4px 0;display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.06)">' +
+             '<b style="color:var(--gold)">' + fmt(item[0], item[1]) + '</b>' +
+             '<span style="color:var(--dim);text-align:right">' + escapeHtml(item[3]) + '</span>' +
+             '</div>';
+    }).join('');
+  }
+  $("sharedRoutineModal").classList.add("open");
+}
+
+function closeSharedRoutineModal() {
+  $("sharedRoutineModal").classList.remove("open");
+  pendingImportedSchedule = null;
+  try {
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState(null, null, window.location.pathname);
+    }
+  } catch(e){}
+}
+if ($("closeSharedRoutineModal")) $("closeSharedRoutineModal").onclick = closeSharedRoutineModal;
+if ($("cancelLoadSharedRoutineBtn")) $("cancelLoadSharedRoutineBtn").onclick = closeSharedRoutineModal;
+if ($("confirmLoadSharedRoutineBtn")) {
+  $("confirmLoadSharedRoutineBtn").onclick = function() {
+    if (pendingImportedSchedule && Array.isArray(pendingImportedSchedule)) {
+      S = pendingImportedSchedule.slice(0);
+      off = {};
+      save();
+      renderList();
+      tick();
+      updatePresetSelectorUI();
+      showToast("Shared routine loaded (" + S.length + " alarms)!", "✓");
+      closeSharedRoutineModal();
+    }
+  };
+}
+
+function checkUrlHashRoutine() {
+  if (window.location.hash && window.location.hash.indexOf('#s=') === 0) {
+    var raw = window.location.hash.substring(3);
+    try {
+      var decoded = decodeURIComponent(Array.prototype.map.call(atob(raw), function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+      var importedS = JSON.parse(decoded);
+      if (Array.isArray(importedS) && importedS.length >= 0) {
+        setTimeout(function(){ showSharedRoutineModal(importedS); }, 300);
+      }
+    } catch(err) {
+      console.warn("Could not parse shared routine from URL hash:", err);
+    }
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   THEME MODE: OBSIDIAN DARK 🌙 <-> PORCELAIN LIGHT ☀️
+   ══════════════════════════════════════════════════════════════ */
+var currentThemeMode = localStorage.getItem("dra-clean-theme-mode") || "dark";
+function applyThemeMode(mode) {
+  currentThemeMode = mode;
+  try { localStorage.setItem("dra-clean-theme-mode", mode); } catch(e){}
+  if (mode === "light") {
+    document.body.classList.add("light-theme");
+    if ($("themeModeIcon")) $("themeModeIcon").textContent = "☀️";
+    if ($("themeModeLabel")) $("themeModeLabel").textContent = "Light";
+  } else {
+    document.body.classList.remove("light-theme");
+    if ($("themeModeIcon")) $("themeModeIcon").textContent = "🌙";
+    if ($("themeModeLabel")) $("themeModeLabel").textContent = "Dark";
+  }
+}
+if ($("themeModeBtn")) {
+  $("themeModeBtn").onclick = function() {
+    var nextMode = currentThemeMode === "dark" ? "light" : "dark";
+    applyThemeMode(nextMode);
+    showToast("Switched to " + (nextMode === "light" ? "Porcelain Light" : "Obsidian Dark") + " theme", nextMode === "light" ? "☀️" : "🌙");
+  };
+}
+applyThemeMode(currentThemeMode);
+
+/* ══════════════════════════════════════════════════════════════
+   ACCESSIBILITY: TEXT SIZE SCALER (100% / 115% / 130%)
+   ══════════════════════════════════════════════════════════════ */
+var fontScales = ["standard", "large", "xlarge"];
+var fontScaleLabels = { standard: "100%", large: "115%", xlarge: "130%" };
+var currentFontScale = localStorage.getItem("dra-clean-font-scale") || "standard";
+function applyFontScale(scale) {
+  currentFontScale = scale;
+  try { localStorage.setItem("dra-clean-font-scale", scale); } catch(e){}
+  document.body.setAttribute("data-font-scale", scale);
+  if ($("textSizeLabel")) $("textSizeLabel").textContent = fontScaleLabels[scale] || "100%";
+}
+if ($("textSizeBtn")) {
+  $("textSizeBtn").onclick = function() {
+    var idx = fontScales.indexOf(currentFontScale);
+    var nextScale = fontScales[(idx + 1) % fontScales.length];
+    applyFontScale(nextScale);
+    showToast("Text size: " + fontScaleLabels[nextScale], "Aa");
+  };
+}
+applyFontScale(currentFontScale);
+
+/* ══════════════════════════════════════════════════════════════
+   FIRST-RUN ONBOARDING TOUR
+   ══════════════════════════════════════════════════════════════ */
+function openOnboardingModal() {
+  var m = $("onboardingModal");
+  if (m) m.classList.add("open");
+}
+function closeOnboardingModal() {
+  var m = $("onboardingModal");
+  if (m) m.classList.remove("open");
+  try { localStorage.setItem("dra-clean-tour-done", "1"); } catch(e){}
+}
+if ($("tourBtn")) $("tourBtn").onclick = openOnboardingModal;
+if ($("closeOnboardingModal")) $("closeOnboardingModal").onclick = closeOnboardingModal;
+if ($("startTourBtn")) {
+  $("startTourBtn").onclick = function() {
+    closeOnboardingModal();
+    if (!armed && $("arm")) $("arm").click();
+    showToast("Alarms Armed & Screen Wake Active", "🛡️");
+  };
+}
+if (!localStorage.getItem("dra-clean-tour-done")) {
+  setTimeout(openOnboardingModal, 500);
+}
+
+
+if ($("explorePresetsBtn")) {
+  $("explorePresetsBtn").onclick = function() {
+    var p = $("presetSelect");
+    if (p) {
+      p.scrollIntoView({ behavior: "smooth", block: "center" });
+      p.focus();
+    }
+  };
+}
+if ($("clearScheduleBtn")) {
+  $("clearScheduleBtn").onclick = function() {
+    applyPreset("blank", true);
+  };
+}
+
 /* ───────── INITIAL BOOTSTRAP ───────── */
 queued=nextSong();
 renderList();
@@ -1816,6 +2411,12 @@ showVol();
 showSong();
 setStatus();
 updateAmbientUI();
+updatePresetSelectorUI();
+if(armed){
+  requestWakeLock();
+  startAudioKeepAlive();
+}
+checkUrlHashRoutine();
 tick();
 setInterval(tick,1000);
 </script>
