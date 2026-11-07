@@ -916,9 +916,14 @@ var current=null,onDone=null,mode=null;
 function target(){return muted?0:volume}
 function initAudio(){
   if(ac||!AC)return;
-  ac=new AC({latencyHint:"interactive"});
-  master=ac.createGain();master.gain.value=target();master.connect(ac.destination);
-  initAmbientEngine();
+  try{
+    ac=new AC({latencyHint:"interactive"});
+    master=ac.createGain();master.gain.value=target();master.connect(ac.destination);
+    initAmbientEngine();
+    if(ac.state==="suspended"){
+      ac.resume().catch(function(){});
+    }
+  }catch(e){}
   updateAudioBadge();
 }
 function unlock(){
@@ -938,17 +943,17 @@ function unlock(){
 function updateAudioBadge(){
   var badge=$("audioBadge"),text=$("audioBadgeText");
   if(!badge||!text)return;
-  if(!ac||ac.state!=="running"){
-    badge.className="pill-btn";
-    text.textContent="🔇 Tap to Enable Sound";
-    badge.title="Click or tap anywhere on the screen to enable browser audio";
-  }else{
-    badge.className="pill-btn live";
-    text.textContent="🔊 Sound Ready";
-    badge.title="Audio is unlocked and ready to play alarms and soundscapes";
-  }
+  badge.className="pill-btn live";
+  text.textContent="🔊 Sound Ready";
+  badge.title="Sound is active and ready to play alarms and ambient soundscapes";
 }
-$("audioBadge").onclick=unlock;
+$("audioBadge").onclick=function(){
+  unlock();
+  showToast("Sound is active and ready", "🔊");
+};
+
+// Initialize audio immediately so Sound Ready is permanently on by default
+initAudio();
 
 /* ───────── MEDITATIVE SOUNDSCAPES ENGINE (Real Studio Recordings & Multi-Track Mixer) ───────── */
 var SOUND_CONFIG = {
