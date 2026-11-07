@@ -15,9 +15,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="apple-mobile-web-app-title" content="Recharge">
 <meta name="description" content="Daily schedule alarm cockpit with music clips, sleep soundscapes, and Rest Mode clock.">
-<!-- Plus Jakarta Sans & Inter: ultra-refined geometric precision for clock numerals, times, and UI -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+<!-- Lexend (Choice 6), Plus Jakarta Sans & Inter -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lexend:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
+@font-face{
+  font-family:'Lexend';
+  src:url('assets/lexend.ttf') format('truetype');
+  font-weight:100 900;
+  font-display:swap;
+}
 :root{
   --black:#000;
   --surface:#0c0c0e;
@@ -40,8 +46,8 @@
   --night:#F0CF7A;   /* Gold for Wind-down */
 
   --sans:'Plus Jakarta Sans','Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-  --font-clock:'Plus Jakarta Sans','Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-  --mono:'Plus Jakarta Sans','Inter',-apple-system,BlinkMacSystemFont,monospace;
+  --font-clock:'Lexend',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  --mono:'Lexend',-apple-system,BlinkMacSystemFont,monospace;
   --glow-w:0 0 18px rgba(245,241,230,.22),0 0 42px rgba(245,241,230,.08);
   --glow-g:0 0 16px rgba(217,185,92,.55),0 0 40px rgba(217,185,92,.22);
   color-scheme:dark;
@@ -58,57 +64,169 @@ main{max-width:1160px;margin:0 auto;padding:28px 32px 80px}
 .clock-row{display:flex;align-items:flex-start;gap:18px;flex-wrap:nowrap;padding-bottom:clamp(1rem,4.5vw,3.8rem);
   -webkit-box-reflect:below -2px linear-gradient(transparent 62%,rgba(0,0,0,.30))}
 
-/* ── Precision Numerals (No slashed zeroes, perfectly balanced 8) ── */
+/* ── Precision Numerals (Choice 6: Lexend Bold) ── */
 .chrome{font-family:var(--font-clock);font-weight:700;line-height:1;white-space:nowrap;font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1, "zero" 0;letter-spacing:-.02em}
 .chrome span{display:inline-block;width:.62em;text-align:center}
 .chrome span.c{width:.26em;transform:translateY(-.04em)}
 
-/* ── 6 Metallic & Radiant Clock Styles ── */
-/* 1. Chrome 3D */
-body[data-clock-theme="chrome"] .chrome{
-  filter:drop-shadow(0 0 1px rgba(255,255,255,.45)) drop-shadow(0 12px 18px rgba(0,0,0,.95)) drop-shadow(0 0 34px rgba(255,255,255,.12))}
-body[data-clock-theme="chrome"] .chrome span{
-  background:linear-gradient(180deg,#ffffff 0%,#ececec 10%,#a9a9a9 30%,#5c5c5c 46%,#1e1e1e 50%,#333 58%,#6e6e6e 76%,#c9c9c9 92%,#f4f4f4 100%);
-  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
-  -webkit-text-stroke:1.2px rgba(255,255,255,.28)}
+/* ── 16 Executive Clock Styles (Powered by Lexend Bold) ── */
 
-/* 2. Radiant Gold */
+/* 1. Radiant Gold / Royal 24K Radiant Gold */
 body[data-clock-theme="gold"] .chrome{
-  filter:drop-shadow(0 0 1px rgba(240,207,122,.7)) drop-shadow(0 12px 20px rgba(0,0,0,.95)) drop-shadow(0 0 36px rgba(217,185,92,.35))}
+  filter:drop-shadow(0 0 1px rgba(240,207,122,.7)) drop-shadow(0 12px 20px rgba(0,0,0,.95)) drop-shadow(0 0 38px rgba(217,185,92,.42));
+}
 body[data-clock-theme="gold"] .chrome span{
-  background:linear-gradient(180deg,#fff7d6 0%,#f5d378 22%,#d9b95c 50%,#87691f 74%,#f0cf7a 100%);
+  background:linear-gradient(180deg,#fff7d6 0%,#f6d479 20%,#d9b95c 48%,#85661b 72%,#f0cf7a 100%);
   -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
-  -webkit-text-stroke:1.2px rgba(245,211,120,.32)}
+  -webkit-text-stroke:1.2px rgba(245,211,120,.35);
+}
 
-/* 3. Purple Metallic */
+/* 2. Purple Metallic */
 body[data-clock-theme="purple"] .chrome{
-  filter:drop-shadow(0 0 1px rgba(195,145,255,.7)) drop-shadow(0 12px 20px rgba(0,0,0,.95)) drop-shadow(0 0 36px rgba(168,85,247,.35))}
+  filter:drop-shadow(0 0 1px rgba(195,145,255,.7)) drop-shadow(0 12px 20px rgba(0,0,0,.95)) drop-shadow(0 0 36px rgba(168,85,247,.35));
+}
 body[data-clock-theme="purple"] .chrome span{
   background:linear-gradient(180deg,#f3e8ff 0%,#d8b4fe 22%,#a855f7 50%,#581c87 74%,#c084fc 100%);
   -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
-  -webkit-text-stroke:1.2px rgba(216,180,254,.32)}
+  -webkit-text-stroke:1.2px rgba(216,180,254,.32);
+}
 
-/* 4. Pink Metallic (Rose Gold) */
-body[data-clock-theme="rose"] .chrome{
-  filter:drop-shadow(0 0 1px rgba(255,165,195,.7)) drop-shadow(0 12px 20px rgba(0,0,0,.95)) drop-shadow(0 0 36px rgba(244,114,182,.35))}
-body[data-clock-theme="rose"] .chrome span{
+/* 3. Pink Metallic */
+body[data-clock-theme="pink"] .chrome{
+  filter:drop-shadow(0 0 1px rgba(255,165,195,.7)) drop-shadow(0 12px 20px rgba(0,0,0,.95)) drop-shadow(0 0 36px rgba(244,114,182,.35));
+}
+body[data-clock-theme="pink"] .chrome span{
   background:linear-gradient(180deg,#fdf2f8 0%,#fbcfe8 22%,#f472b6 50%,#831843 74%,#f472b6 100%);
   -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
-  -webkit-text-stroke:1.2px rgba(251,207,232,.32)}
+  -webkit-text-stroke:1.2px rgba(251,207,232,.32);
+}
 
-/* 5. Rainbow Shining */
+/* 4. Rainbow Shining */
 body[data-clock-theme="rainbow"] .chrome{
-  filter:drop-shadow(0 0 2px rgba(255,255,255,.6)) drop-shadow(0 12px 20px rgba(0,0,0,.95)) drop-shadow(0 0 36px rgba(120,200,255,.35))}
+  filter:drop-shadow(0 0 2px rgba(255,255,255,.6)) drop-shadow(0 12px 20px rgba(0,0,0,.95)) drop-shadow(0 0 36px rgba(120,200,255,.35));
+}
 body[data-clock-theme="rainbow"] .chrome span{
   background:linear-gradient(135deg,#ff7675 0%,#fdcb6e 20%,#55efc4 40%,#74b9ff 60%,#a29bfe 80%,#fd79a8 100%);
   -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
-  -webkit-text-stroke:1px rgba(255,255,255,.35)}
+  -webkit-text-stroke:1px rgba(255,255,255,.35);
+}
 
-/* 6. Pure Platinum */
-body[data-clock-theme="white"] .chrome{
-  filter:drop-shadow(0 0 2px rgba(255,255,255,.5)) drop-shadow(0 10px 24px rgba(0,0,0,.9))}
-body[data-clock-theme="white"] .chrome span{
-  color:#FFFFFF;-webkit-text-fill-color:#FFFFFF;text-shadow:0 0 24px rgba(255,255,255,.3)}
+/* 5. Pure Platinum */
+body[data-clock-theme="platinum"] .chrome{
+  filter:drop-shadow(0 0 1px rgba(255,255,255,.5)) drop-shadow(0 12px 20px rgba(0,0,0,.95)) drop-shadow(0 0 32px rgba(200,215,230,.3));
+}
+body[data-clock-theme="platinum"] .chrome span{
+  background:linear-gradient(180deg,#ffffff 0%,#f1f5f9 20%,#cbd5e1 45%,#475569 70%,#e2e8f0 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  -webkit-text-stroke:1.2px rgba(255,255,255,.35);
+}
+
+/* 6. Green Nature */
+body[data-clock-theme="green-nature"] .chrome{
+  filter:drop-shadow(0 0 1px rgba(72,199,116,.7)) drop-shadow(0 12px 20px rgba(0,0,0,.95)) drop-shadow(0 0 36px rgba(72,199,116,.4));
+}
+body[data-clock-theme="green-nature"] .chrome span{
+  background:linear-gradient(180deg,#f0fdf4 0%,#86efac 22%,#22c55e 50%,#14532d 74%,#4ade80 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  -webkit-text-stroke:1.2px rgba(134,239,172,.35);
+}
+
+/* 7. Pure White */
+body[data-clock-theme="pure-white"] .chrome{
+  filter:drop-shadow(0 0 2px rgba(255,255,255,.6)) drop-shadow(0 10px 24px rgba(0,0,0,.9)) drop-shadow(0 0 32px rgba(255,255,255,.35));
+}
+body[data-clock-theme="pure-white"] .chrome span{
+  color:#FFFFFF;-webkit-text-fill-color:#FFFFFF;
+  -webkit-text-stroke:1px rgba(255,255,255,.4);
+}
+
+/* 8. Executive Chrome 3D */
+body[data-clock-theme="chrome"] .chrome{
+  filter:drop-shadow(0 0 1px rgba(255,255,255,.45)) drop-shadow(0 12px 18px rgba(0,0,0,.95)) drop-shadow(0 0 34px rgba(255,255,255,.12));
+}
+body[data-clock-theme="chrome"] .chrome span{
+  background:linear-gradient(180deg,#ffffff 0%,#ececec 10%,#a9a9a9 30%,#5c5c5c 46%,#1e1e1e 50%,#333 58%,#6e6e6e 76%,#c9c9c9 92%,#f4f4f4 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  -webkit-text-stroke:1.2px rgba(255,255,255,.28);
+}
+
+/* 9. Cyberpunk Emerald Matrix */
+body[data-clock-theme="cyber-emerald"] .chrome{
+  filter:drop-shadow(0 0 2px rgba(16,185,129,.8)) drop-shadow(0 10px 22px rgba(0,0,0,.95)) drop-shadow(0 0 38px rgba(16,185,129,.45));
+}
+body[data-clock-theme="cyber-emerald"] .chrome span{
+  background:linear-gradient(180deg,#ecfdf5 0%,#34d399 30%,#059669 68%,#064e3b 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  -webkit-text-stroke:1.1px rgba(110,231,183,.4);
+}
+
+/* 10. Glacial Titanium & Ice Blue */
+body[data-clock-theme="ice-titanium"] .chrome{
+  filter:drop-shadow(0 0 2px rgba(56,189,248,.75)) drop-shadow(0 10px 22px rgba(0,0,0,.95)) drop-shadow(0 0 36px rgba(56,189,248,.38));
+}
+body[data-clock-theme="ice-titanium"] .chrome span{
+  background:linear-gradient(180deg,#f0f9ff 0%,#7dd3fc 28%,#0284c7 65%,#082f49 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  -webkit-text-stroke:1.1px rgba(186,230,253,.38);
+}
+
+/* 11. Imperial Amethyst Purple */
+body[data-clock-theme="amethyst"] .chrome{
+  filter:drop-shadow(0 0 2px rgba(168,85,247,.75)) drop-shadow(0 10px 22px rgba(0,0,0,.95)) drop-shadow(0 0 38px rgba(168,85,247,.42));
+}
+body[data-clock-theme="amethyst"] .chrome span{
+  background:linear-gradient(180deg,#faf5ff 0%,#d8b4fe 24%,#9333ea 55%,#3b0764 80%,#c084fc 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  -webkit-text-stroke:1.1px rgba(216,180,254,.38);
+}
+
+/* 12. Sunset Rose Gold */
+body[data-clock-theme="sunset-rose"] .chrome{
+  filter:drop-shadow(0 0 2px rgba(244,63,94,.7)) drop-shadow(0 10px 22px rgba(0,0,0,.95)) drop-shadow(0 0 34px rgba(244,63,94,.38));
+}
+body[data-clock-theme="sunset-rose"] .chrome span{
+  background:linear-gradient(180deg,#fff1f2 0%,#fda4af 24%,#e11d48 55%,#4c0519 80%,#fb7185 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  -webkit-text-stroke:1.1px rgba(254,205,211,.35);
+}
+
+/* 13. Pure Minimalist Studio White */
+body[data-clock-theme="minimal-white"] .chrome{
+  filter:drop-shadow(0 0 1px rgba(255,255,255,.8)) drop-shadow(0 10px 22px rgba(0,0,0,.95)) drop-shadow(0 0 28px rgba(255,255,255,.3));
+}
+body[data-clock-theme="minimal-white"] .chrome span{
+  color:#FFFFFF;-webkit-text-fill-color:#FFFFFF;
+  -webkit-text-stroke:1.2px rgba(255,255,255,.45);
+}
+
+/* 14. German Chronometer DIN */
+body[data-clock-theme="chronometer-din"] .chrome{
+  filter:drop-shadow(0 0 1px rgba(255,255,255,.5)) drop-shadow(0 10px 20px rgba(0,0,0,.95)) drop-shadow(0 0 30px rgba(148,163,184,.28));
+}
+body[data-clock-theme="chronometer-din"] .chrome span{
+  background:linear-gradient(180deg,#ffffff 0%,#e2e8f0 28%,#94a3b8 64%,#334155 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  -webkit-text-stroke:1.1px rgba(226,232,240,.35);
+}
+
+/* 15. Blazing Sunset Amber */
+body[data-clock-theme="sunset-amber"] .chrome{
+  filter:drop-shadow(0 0 2px rgba(245,158,11,.75)) drop-shadow(0 10px 22px rgba(0,0,0,.95)) drop-shadow(0 0 36px rgba(245,158,11,.42));
+}
+body[data-clock-theme="sunset-amber"] .chrome span{
+  background:linear-gradient(180deg,#fffbeb 0%,#fcd34d 24%,#d97706 58%,#451a03 84%,#f59e0b 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  -webkit-text-stroke:1.1px rgba(253,230,138,.4);
+}
+
+/* 16. Midnight Gold Dual-Tone Rim */
+body[data-clock-theme="midnight-gold"] .chrome{
+  filter:drop-shadow(0 0 2px #d9b95c) drop-shadow(0 0 28px rgba(217,185,92,.52)) drop-shadow(0 12px 24px rgba(0,0,0,.95));
+}
+body[data-clock-theme="midnight-gold"] .chrome span{
+  color:#FFFFFF;-webkit-text-fill-color:#FFFFFF;
+  -webkit-text-stroke:2.2px #D9B95C;
+}
 
 #clock{font-size:clamp(3.8rem,14vw,12.5rem)}
 #ampm{font-family:var(--font-clock);font-weight:700;font-size:clamp(1.3rem,3.2vw,2.8rem);color:var(--gold);text-shadow:var(--glow-g);margin-top:.38em;letter-spacing:.02em}
@@ -323,7 +441,7 @@ li.cur{opacity:1;border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 3
 }
 </style>
 </head>
-<body data-clock-theme="chrome">
+<body data-clock-theme="gold">
 <main>
 
   <!-- 1. HERO CLOCK (Live time, AM/PM, Date, Next Alarm) -->
@@ -356,7 +474,7 @@ li.cur{opacity:1;border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 3
         <span id="ambientSummary">Rain Sound: Off</span>
       </button>
       <button class="pill-btn" id="themeBtn" title="Cycle Clock Font Appearance">
-        <span>🎨 Clock Style: <b id="themeLabel">Chrome 3D</b></span>
+        <span>🎨 Clock Style: <b id="themeLabel">Royal 24K Radiant Gold</b></span>
       </button>
     </div>
   </div>
@@ -678,7 +796,7 @@ function fmt(h,m){return (h%12||12)+":"+p2(m)+" "+(h>=12?"PM":"AM")}
 /* ───────── STATE: ALARMS ALWAYS ON BY DEFAULT ───────── */
 var DN=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 var off={},days={1:1,2:1,3:1,4:1,5:1},armed=true,fired={};
-var volume=.7,muted=false,clockTheme="chrome";
+var volume=.7,muted=false,clockTheme="gold";
 var activeFilter="all",isEditing=false,editingBackup=null;
 
 try{
@@ -699,21 +817,52 @@ function save(){try{
   localStorage.setItem("dra-schedule",JSON.stringify(S));
 }catch(e){}}
 
-/* ───────── CLOCK THEME CONTROLLER ───────── */
-var THEMES=["chrome","gold","purple","rose","rainbow","white"];
-var THEME_NAMES={
-  "chrome":"Chrome 3D",
-  "gold":"Radiant Gold",
-  "purple":"Purple Metallic",
-  "rose":"Pink Metallic",
-  "rainbow":"Rainbow Shining",
-  "white":"Pure Platinum"
+/* ───────── CLOCK THEME CONTROLLER (16 Executive Styles) ───────── */
+var THEMES = [
+  "gold",             // Radiant Gold / Royal 24K Radiant Gold
+  "purple",           // Purple Metallic
+  "pink",             // Pink Metallic
+  "rainbow",          // Rainbow Shining
+  "platinum",         // Pure Platinum
+  "green-nature",     // Green Nature
+  "pure-white",       // Pure White
+  "chrome",           // Executive Chrome 3D
+  "cyber-emerald",    // Cyberpunk Emerald Matrix
+  "ice-titanium",     // Glacial Titanium & Ice Blue
+  "amethyst",         // Imperial Amethyst Purple
+  "sunset-rose",      // Sunset Rose Gold
+  "minimal-white",    // Pure Minimalist Studio White
+  "chronometer-din",  // German Chronometer DIN
+  "sunset-amber",     // Blazing Sunset Amber
+  "midnight-gold"     // Midnight Gold Dual-Tone Rim
+];
+
+var THEME_NAMES = {
+  "gold": "Royal 24K Radiant Gold",
+  "purple": "Purple Metallic",
+  "pink": "Pink Metallic",
+  "rainbow": "Rainbow Shining",
+  "platinum": "Pure Platinum",
+  "green-nature": "Green Nature",
+  "pure-white": "Pure White",
+  "chrome": "Executive Chrome 3D",
+  "cyber-emerald": "Cyberpunk Emerald Matrix",
+  "ice-titanium": "Glacial Titanium & Ice Blue",
+  "amethyst": "Imperial Amethyst Purple",
+  "sunset-rose": "Sunset Rose Gold",
+  "minimal-white": "Pure Minimalist Studio White",
+  "chronometer-din": "German Chronometer DIN",
+  "sunset-amber": "Blazing Sunset Amber",
+  "midnight-gold": "Midnight Gold Dual-Tone Rim"
 };
+
 function applyClockTheme(theme){
-  if(!THEME_NAMES[theme])theme="chrome";
-  clockTheme=theme;
-  document.body.setAttribute("data-clock-theme",theme);
-  $("themeLabel").textContent=THEME_NAMES[theme];
+  if(theme === "rose") theme = "pink";
+  else if(theme === "white") theme = "platinum";
+  if(!THEME_NAMES[theme]) theme = "gold";
+  clockTheme = theme;
+  document.body.setAttribute("data-clock-theme", theme);
+  $("themeLabel").textContent = THEME_NAMES[theme];
   save();
 }
 $("themeBtn").onclick=function(){
