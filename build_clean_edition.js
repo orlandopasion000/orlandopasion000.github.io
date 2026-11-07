@@ -43,7 +43,7 @@ src = src.replace(
 
 // Replace Clean Blank Edition Highlight Card with Master Preset Highlight Card
 const oldHighlightCard = `    <!-- Highlight Banner: Clean Blank Edition (For Friends & Students) -->
-    <div class="dist-card" style="margin-top:16px;border-color:rgba(217,185,92,.5);background:linear-gradient(180deg,#14151f 0%,#0c0c0e 100%)">
+    <div class="dist-card highlight-card">
       <div class="dist-card-top">
         <div class="dist-icon" style="background:rgba(217,185,92,.15);color:var(--gold);border-color:rgba(217,185,92,.3)">🎁</div>
         <div>
@@ -58,13 +58,13 @@ const oldHighlightCard = `    <!-- Highlight Banner: Clean Blank Edition (For Fr
       </div>
     </div>`;
 
-const newHighlightCard = `    <!-- Highlight Banner: Preset Routines (Class Day, Weekend, Exam Week) -->
-    <div class="dist-card" style="margin-top:16px;border-color:rgba(217,185,92,.5);background:linear-gradient(180deg,#14151f 0%,#0c0c0e 100%)">
+const newHighlightCard = `    <!-- Highlight Banner: Preset Routines (Class Day, Weekend, Gymmers, Holidays, Seminar) -->
+    <div class="dist-card highlight-card">
       <div class="dist-card-top">
         <div class="dist-icon" style="background:rgba(217,185,92,.15);color:var(--gold);border-color:rgba(217,185,92,.3)">🎓</div>
         <div>
-          <div class="dist-name" style="color:var(--gold)">Routine Presets Ready</div>
-          <div class="dist-desc">Choose from curated presets: Class Day (23 blocks), Weekend Recharge (8 blocks), Exam Week (10 blocks), or Minimalist.</div>
+          <div class="dist-name" style="color:var(--gold)">11+ Routine Presets Ready</div>
+          <div class="dist-desc">Choose from curated presets: Weekend Recharge, Gymmers, Holidays, Seminar, Deep Rest, Class Day, and more.</div>
         </div>
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
@@ -114,6 +114,7 @@ src = src.replace(/"dra-snoozes"/g, '"dra-clean-snoozes"');
 src = src.replace(/"dra-theme-mode"/g, '"dra-clean-theme-mode"');
 src = src.replace(/"dra-font-scale"/g, '"dra-clean-font-scale"');
 src = src.replace(/"dra-tour-done"/g, '"dra-clean-tour-done"');
+src = src.replace(/"dra-preset-key"/g, '"dra-clean-preset-key"');
 
 // Replace any remaining personal references in strings
 src = src.replace(/owner:"Sir Orlando V\. Pasion, Jr\."/g, 'owner:"Public Clean Edition"');

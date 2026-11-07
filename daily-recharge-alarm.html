@@ -805,6 +805,11 @@ body.light-theme #presetSelect{
   color:#1D1D1F !important;
   border-color:#D1D1D6 !important;
 }
+body.light-theme #presetDaysBadge{
+  background:#F0F0F3 !important;
+  color:#8B6508 !important;
+  border-color:#D1D1D6 !important;
+}
 
 /* Light Mode Schedule Items */
 body.light-theme li{
@@ -1063,12 +1068,20 @@ body.light-theme .highlight-card .dist-icon{
         <span>📋</span> Routine Preset:
       </span>
       <select id="presetSelect" aria-label="Choose routine preset" style="background:var(--surface-3);color:var(--text);border:1px solid var(--line2);border-radius:10px;padding:7px 14px;font-family:var(--sans);font-size:.92rem;font-weight:600;outline:none;cursor:pointer">
-        <option value="class">🎓 Class Day (DepEd Master — 23 Blocks)</option>
-        <option value="weekend">🌿 Weekend Recharge (Nature & Rest — 8 Blocks)</option>
-        <option value="exam">⚡ Exam Week (Study Sprints — 10 Blocks)</option>
-        <option value="minimal">🎯 Minimalist Routine (4 Anchor Blocks)</option>
+        <option value="class">🎓 Class Day (DepEd Master — 23 Blocks · Mon–Fri)</option>
+        <option value="weekend">🌿 Weekend Recharge (Nature &amp; Rest — 10 Blocks · Sat–Sun)</option>
+        <option value="gym">🏋️‍♂️ Gymmers &amp; Athletic Vitality (10 Blocks · Mon–Sun)</option>
+        <option value="holiday">🌴 Holidays &amp; Vacation Renewal (9 Blocks · Mon–Sun)</option>
+        <option value="seminar">🎤 Seminar &amp; Workshop (10 Blocks · Mon–Sun)</option>
+        <option value="deeprest">🧘 Deep Rest &amp; Reset (8 Blocks · Mon–Sun)</option>
+        <option value="creative">🎨 Creative Flow &amp; Craft (9 Blocks · Fri–Sun)</option>
+        <option value="exam">⚡ Exam Week (Study Sprints — 10 Blocks · Mon–Sat)</option>
+        <option value="sunday">🌊 Sunday Sanctuary &amp; Sabbath (7 Blocks · Sun Only)</option>
+        <option value="morning">🏃 Morning Momentum (6 Blocks · Mon–Fri)</option>
+        <option value="minimal">🎯 Minimalist Routine (4 Anchor Blocks · Mon–Sun)</option>
         <option value="blank">📝 Blank Canvas (Start Fresh — 0 Blocks)</option>
       </select>
+      <span id="presetDaysBadge" style="font-size:.78rem;font-weight:700;padding:5px 12px;border-radius:12px;background:var(--surface-3);color:var(--gold);border:1px solid var(--line2);display:inline-flex;align-items:center;gap:5px;white-space:nowrap" title="Active days for this routine"><span>📅</span> <b>Active: Mon — Fri</b></span>
     </div>
     <div style="display:flex;gap:8px">
       <button class="ghost" id="shareRoutineBtn" style="padding:7px 14px;font-size:.86rem;font-weight:600" title="Copy instant share link for this routine">🔗 Share Routine</button>
@@ -1357,8 +1370,8 @@ body.light-theme .highlight-card .dist-icon{
       <div style="background:var(--surface-2);border:1px solid var(--line2);border-radius:12px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start">
         <span style="font-size:1.3rem">⚡</span>
         <div>
-          <b style="color:var(--text);font-size:.92rem">1-Tap Routine Presets</b>
-          <div style="font-size:.82rem;color:var(--dim)">Switch effortlessly between Class Day, Weekend Recharge, Exam Week, Minimalist, or create your custom routine.</div>
+          <b style="color:var(--text);font-size:.92rem">1-Tap Curated Routine Presets</b>
+          <div style="font-size:.82rem;color:var(--dim)">Switch effortlessly between Weekend Recharge, Gymmers, Holidays, Seminar, Deep Rest, Class Day, and more.</div>
         </div>
       </div>
     </div>
@@ -1988,6 +2001,7 @@ function renderList(){
     }
     list.appendChild(li);
   });
+  try{ updatePresetSelectorUI(); }catch(e){}
 }
 
 /* Edit Mode Controls (Save & Cancel buttons next to Today's Schedule) */
@@ -2091,11 +2105,16 @@ $("addAlarmEditBtn").onclick=openAddAlarmModal;
 $("resetSchedBtn").onclick=function(){
   if(confirm("Reset entire schedule back to Sir Orlando’s Default Schedule?")){
     S=DEFAULT_SCHEDULE.slice(0);
+    days={1:1,2:1,3:1,4:1,5:1};
     off={};
+    try{ localStorage.setItem("dra-preset-key", "class"); }catch(e){}
     save();
     renderList();
+    renderDays();
     tick();
+    updatePresetSelectorUI();
     $("status").textContent="Schedule reset to default 23 blocks.";
+    showToast("Schedule reset to default 23 blocks.", "↺");
   }
 };
 
@@ -2111,14 +2130,28 @@ document.querySelectorAll(".cat-pill").forEach(function(pill){
 });
 
 /* ───────── ACTIVE DAYS ───────── */
-$("days").innerHTML="";
-[1,2,3,4,5,6,0].forEach(function(n){
-  var b=document.createElement("button");b.textContent=DN[n];
-  function paint(){b.className=days[n]?"on":"";b.setAttribute("aria-pressed",!!days[n])}
-  paint();
-  b.onclick=function(){if(days[n])delete days[n];else days[n]=1;paint();save();tick()};
-  $("days").appendChild(b);
-});
+function renderDays() {
+  var container = $("days");
+  if (!container) return;
+  container.innerHTML = "";
+  [1,2,3,4,5,6,0].forEach(function(n){
+    var b = document.createElement("button");
+    b.textContent = DN[n];
+    b.className = days[n] ? "on" : "";
+    b.setAttribute("aria-pressed", !!days[n]);
+    b.onclick = function(){
+      if (days[n]) delete days[n];
+      else days[n] = 1;
+      b.className = days[n] ? "on" : "";
+      b.setAttribute("aria-pressed", !!days[n]);
+      save();
+      tick();
+      if (typeof updatePresetDaysBadge === "function") updatePresetDaysBadge();
+    };
+    container.appendChild(b);
+  });
+}
+renderDays();
 
 /* ───────── ALARM TRIGGERING (Song Clip Only) ───────── */
 var ringing=-1,snoozes=[];
@@ -2539,13 +2572,15 @@ function loadSnoozes() {
 loadSnoozes();
 
 /* ══════════════════════════════════════════════════════════════
-   SCHEDULE PRESETS SYSTEM
+   SCHEDULE PRESETS SYSTEM (12 Curated Rest & Rhythm Presets)
    ══════════════════════════════════════════════════════════════ */
 var SCHEDULE_PRESETS = {
   class: {
     name: "Class Day (DepEd Master)",
     icon: "🎓",
-    desc: "23-block daily teaching and recharge schedule.",
+    days: { 1: 1, 2: 1, 3: 1, 4: 1, 5: 1 },
+    daysLabel: "Mon — Fri",
+    desc: "23-block daily teaching, paperwork, and structured recharge schedule.",
     schedules: [
       [7,0,"work","Arrive — read, learn, develop"],
       [8,0,"rest","Short recharge — 10 min"],
@@ -2573,52 +2608,184 @@ var SCHEDULE_PRESETS = {
     ]
   },
   weekend: {
-    name: "Weekend Recharge",
+    name: "Weekend Recharge (Nature & Rest)",
     icon: "🌿",
-    desc: "8 gentle recovery blocks for outdoor walks, meditation, and rest.",
+    days: { 6: 1, 0: 1 },
+    daysLabel: "Sat & Sun",
+    desc: "10 restorative recovery blocks for outdoor walks, mindfulness, wholesome meals, and deep rest.",
     schedules: [
-      [8,0,"rest","Morning gentle stretch & hydrate — 15 min"],
-      [9,30,"rest","Sunlight walk & fresh air — 30 min"],
-      [12,0,"err","Wholesome midday meal"],
-      [13,30,"rest","Afternoon meditation & power nap — 25 min"],
-      [15,30,"work","Passion project & reading — 60 min"],
-      [18,0,"err","Light movement & hydration"],
-      [20,0,"night","Gratitude & family wind-down"],
-      [21,30,"night","Screen-off deep sleep transition"]
+      [8,0,"rest","Morning gentle stretch, sunshine & deep hydration (15 min)"],
+      [9,30,"rest","Sunlight barefoot grass walk & fresh nature air (30 min)"],
+      [11,0,"rest","Mindful tea break & unhurried quiet reflection"],
+      [12,30,"err","Wholesome organic midday meal & relaxed dining"],
+      [13,45,"rest","Restorative somatic power nap & meditation (30 min)"],
+      [15,30,"work","Passion project, joyful reading & creative hobby (60 min)"],
+      [17,30,"rest","Golden hour sunset walk & deep breathing reset"],
+      [19,0,"err","Light nourishing dinner & hydration check"],
+      [20,30,"night","Candlelight gratitude journal & family wind-down"],
+      [22,0,"night","Complete screen-off rest & deep cellular sleep transition"]
+    ]
+  },
+  gym: {
+    name: "Gymmers & Athletic Vitality",
+    icon: "🏋️‍♂️",
+    days: { 0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1 },
+    daysLabel: "Mon — Sun",
+    desc: "10-block athletic rhythm: pre-workout fueling, peak training, anabolic recovery, hydration checkpoints, foam rolling, and deep growth-hormone sleep.",
+    schedules: [
+      [6,0,"rest","Pre-workout hydration, electrolytes & dynamic joint warmup (15 min)"],
+      [6,30,"work","Peak Gym Workout: Strength training, hypertrophy & cardio"],
+      [8,0,"err","Post-workout anabolic fuel: Whey protein, complex carbs & cold shower"],
+      [10,30,"rest","Hydration checkpoint (1L water) & postural spine decompression"],
+      [12,30,"err","High-protein recovery lunch (Lean protein, healthy fats & greens)"],
+      [14,30,"rest","CNS recovery power nap & nervous system reset (20 min)"],
+      [16,30,"rest","Electrolyte & amino acid hydration booster + brisk mobility stroll"],
+      [18,30,"rest","Full-body foam rolling, trigger point massage & yoga stretching"],
+      [20,0,"err","Nutrient-rich dinner with magnesium & zinc recovery booster"],
+      [21,45,"night","Blue-light shield, deep sleep prep & 8-hour growth hormone recovery"]
+    ]
+  },
+  holiday: {
+    name: "Holidays & Vacation Renewal",
+    icon: "🌴",
+    days: { 0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1 },
+    daysLabel: "Mon — Sun",
+    desc: "9 serene vacation blocks: slow mornings without alarm stress, leisure brunch, nature discovery, sunset acoustics, and peaceful slumber.",
+    schedules: [
+      [8,30,"rest","Gentle waking without alarm pressure, warm tea & open window sunlight"],
+      [10,0,"err","Leisurely holiday gourmet brunch with coffee or fresh fruit juice"],
+      [11,30,"rest","Scenic outdoor discovery: Beach, forest trail, or sightseeing walk"],
+      [13,30,"rest","Afternoon hammock siesta & relaxing holiday reading"],
+      [15,30,"err","Local cultural exploration, artisan shopping, or fun casual hobby"],
+      [17,30,"rest","Golden hour sunset viewing, ocean breeze & acoustic melodies"],
+      [19,30,"err","Celebratory evening dinner & heartfelt conversations"],
+      [21,30,"night","Stargazing, warm herbal tea & calm holiday reflection"],
+      [22,45,"night","Tranquil holiday slumber with ambient ocean sounds"]
+    ]
+  },
+  seminar: {
+    name: "Seminar & Professional Workshop",
+    icon: "🎤",
+    days: { 0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1 },
+    daysLabel: "Mon — Sun",
+    desc: "10-block symposium flow: registration, keynote lecture, coffee networking, breakout workshops, panel Q&A, and post-conference decompression.",
+    schedules: [
+      [7,0,"err","Seminar badge check-in, event materials review & energizing breakfast"],
+      [8,30,"class","Morning Keynote & Plenary Session: Core speaker lecture"],
+      [10,15,"rest","Mid-morning coffee networking break & mental refresh (20 min)"],
+      [10,45,"work","Interactive Breakout Workshop: Collaborative exercises & hands-on lab"],
+      [12,15,"err","Networking banquet lunch & informal peer discussions"],
+      [13,30,"class","Afternoon Symposium / Panel Discussions & expert deep dive"],
+      [15,15,"rest","Brain consolidation break: Water hydration, eye rest & movement"],
+      [15,45,"work","Action Plan Synthesis: Distill top 5 takeaways & next steps"],
+      [17,30,"rest","Post-seminar decompression walk & mental clutter discharge"],
+      [21,30,"night","Review day’s key insights, organize contacts & restful sleep"]
+    ]
+  },
+  deeprest: {
+    name: "Deep Rest & Nervous System Reset",
+    icon: "🧘",
+    days: { 0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1 },
+    daysLabel: "Mon — Sun",
+    desc: "8 healing recovery blocks: box breathing (4-7-8), soundscapes, somatic release, zero screens, and restorative sleep.",
+    schedules: [
+      [8,30,"rest","Pranayama box breathing (4-7-8) & warm lemon water hydration"],
+      [10,0,"rest","Sensory grounding: Silent patio sitting & birdsong listening (30 min)"],
+      [12,0,"err","Anti-inflammatory warm soup, whole greens & herbal infusion"],
+      [13,30,"rest","Vagus nerve reset: Green noise soundscape immersion & 30-min nap"],
+      [16,0,"rest","Gentle somatic floor stretches & restorative Yin yoga postures"],
+      [18,30,"err","Light comfort dinner eaten in calm, mindful silence"],
+      [20,0,"night","Digital detox: Turn off screens, warm chamomile tea & paper book"],
+      [21,30,"night","Weighted blanket, lavender aromatherapy & restorative cellular sleep"]
+    ]
+  },
+  creative: {
+    name: "Creative Flow & Passion Craft",
+    icon: "🎨",
+    days: { 5: 1, 6: 1, 0: 1 },
+    daysLabel: "Fri — Sun",
+    desc: "9 uninterrupted flow blocks: lo-fi ambient drafting, divergent thinking walks, prototyping, milestone commit, and artistic wind-down.",
+    schedules: [
+      [8,30,"rest","Creative mind-clearing: Matcha/coffee, ambient lo-fi & freewriting journal"],
+      [9,15,"work","Deep Creative Flow Block 1: Raw drafting, prototyping & creation"],
+      [11,30,"rest","Divergent thinking walk: Let subconscious mind connect creative dots"],
+      [12,30,"err","Clean energizing lunch & creative playlist listening"],
+      [13,45,"work","Deep Creative Flow Block 2: Iteration, refinement & fine craftsmanship"],
+      [16,0,"rest","Aesthetic pause: Explore visual art, listen to acoustic vinyl, or sketch"],
+      [17,0,"work","Creative finishing polish, git commit / save milestone & portfolio log"],
+      [19,30,"err","Celebratory relaxed dinner & creative milestone reflection"],
+      [21,45,"night","Subconscious dream prep: Sketch tomorrow’s ideas & peaceful slumber"]
     ]
   },
   exam: {
     name: "Exam Week (Study Sprints)",
     icon: "⚡",
-    desc: "10 high-performance sprint and memory consolidation blocks.",
+    days: { 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1 },
+    daysLabel: "Mon — Sat",
+    desc: "10 high-performance sprint blocks: Pomodoro intervals, active recall, memory consolidation walks, and neuro-rest sleep.",
     schedules: [
-      [7,0,"err","High-protein breakfast & daily focus review"],
-      [8,0,"work","Focus Study Sprint 1 — Core concepts"],
-      [9,30,"rest","Eye rest, stretching & hydration — 15 min"],
-      [9,45,"work","Focus Study Sprint 2 — Problem solving"],
-      [11,15,"rest","Memory consolidation walk — 20 min"],
-      [12,0,"err","Nourishing lunch break"],
-      [13,0,"work","Focus Study Sprint 3 — Practice test"],
-      [14,30,"rest","Brain reset power nap — 20 min"],
-      [15,0,"work","Active recall & flashcard drill"],
-      [21,0,"night","Mind quiet & sleep preparation"]
+      [7,0,"err","High-protein brain breakfast, omega-3s & daily exam target review"],
+      [8,0,"work","Study Sprint 1: Deep concept mastering & high-yield topics (90 min)"],
+      [9,30,"rest","Eye strain relief, neck/shoulder release & cool hydration (15 min)"],
+      [9,45,"work","Study Sprint 2: Hard problem solving & past exam question analysis"],
+      [11,30,"rest","Hippocampus memory consolidation walk — zero screens (20 min)"],
+      [12,0,"err","Nourishing balanced lunch & brain fuel hydration"],
+      [13,0,"work","Study Sprint 3: Mock exam simulation under timed test conditions"],
+      [14,45,"rest","Brain reset power nap in dark room (25 min)"],
+      [15,30,"work","Active recall blitz: Flashcard drills & formula rapid review"],
+      [21,30,"night","Cognitive shutdown ritual: No late cramming, 8 hours restorative sleep"]
+    ]
+  },
+  sunday: {
+    name: "Sunday Sanctuary & Sabbath Rest",
+    icon: "🌊",
+    days: { 0: 1 },
+    daysLabel: "Sun Only",
+    desc: "7 sacred rest blocks: quiet sunrise prayer, spiritual fellowship, family feast, deep afternoon siesta, and tranquil mind prep.",
+    schedules: [
+      [8,0,"rest","Serene Sunday morning: Sunrise prayer, gratitude & quiet contemplation"],
+      [9,30,"class","Spiritual fellowship, inspiring sermon, or uplifting book chapter"],
+      [12,0,"err","Sunday family feast & joy-filled fellowship"],
+      [13,30,"rest","Deep Sabbath afternoon siesta with gentle piano soundscape (60 min)"],
+      [16,30,"rest","Sunday sunset stroll, garden tending & breath of cool fresh air"],
+      [19,0,"err","Light comforting evening soup & peaceful family conversation"],
+      [21,0,"night","Sunday night peace: Surrender all worries, serene heart & early bedtime"]
+    ]
+  },
+  morning: {
+    name: "Morning Momentum & Vitality",
+    icon: "🏃",
+    days: { 1: 1, 2: 1, 3: 1, 4: 1, 5: 1 },
+    daysLabel: "Mon — Fri",
+    desc: "6 high-energy launch blocks: hydration, 15-min cardio activation, contrast shower, protein fuel, and daily top-3 priorities.",
+    schedules: [
+      [5,30,"rest","Awakening 500ml water chug & 5 deep revitalizing diaphragmatic breaths"],
+      [5,45,"rest","Brisk 15-minute outdoor cardio walk or calisthenics vitality jumpstart"],
+      [6,15,"err","Invigorating contrast shower & crisp grooming"],
+      [6,45,"err","High-protein breakfast, fresh berries & green tea booster"],
+      [7,15,"work","Daily Priority Matrix: Write the 3 Non-Negotiable Wins for today"],
+      [7,45,"work","Launch prime mission with 100% focus and unstoppable momentum"]
     ]
   },
   minimal: {
     name: "Minimalist Routine (4 Anchors)",
     icon: "🎯",
-    desc: "4 essential daily pillars for simple, uncluttered flow.",
+    days: { 0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1 },
+    daysLabel: "Mon — Sun",
+    desc: "4 essential daily pillars for simple, uncluttered flow and consistent rhythm.",
     schedules: [
-      [7,0,"work","Morning Energy Launch"],
-      [12,0,"rest","Midday Recharge & Nutrition — 45 min"],
-      [17,30,"work","Evening Wrap-up & Transition"],
-      [22,0,"night","Deep Sleep Wind-down"]
+      [7,0,"work","Morning Energy Launch & Daily Intention"],
+      [12,0,"rest","Midday Recharge, Nutrition & Mindful Pause (45 min)"],
+      [17,30,"work","Evening Wrap-up, Log Accomplishments & Transition"],
+      [22,0,"night","Deep Sleep Wind-down & Cellular Recovery"]
     ]
   },
   blank: {
     name: "Blank Canvas",
     icon: "📝",
-    desc: "Starts empty so you can add your custom alarms from scratch.",
+    days: { 0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1 },
+    daysLabel: "Mon — Sun",
+    desc: "Starts empty with 0 alarms so you can create your own custom routine from scratch.",
     schedules: []
   }
 };
@@ -2635,8 +2802,37 @@ function getCurrentPresetKey() {
       }
       if (match) return key;
     }
+    // Also match legacy 8-block weekend recharge schedule
+    if (key === "weekend" && S.length === 8 && S[0] && S[0][3] && S[0][3].indexOf("Morning gentle stretch") !== -1) {
+      return "weekend";
+    }
   }
   return "custom";
+}
+
+function getDaysSummaryText(dObj) {
+  var d = dObj || days;
+  var count = [0,1,2,3,4,5,6].filter(function(n){ return !!d[n]; }).length;
+  if (count === 7) return "Mon — Sun";
+  if (count === 5 && d[1] && d[2] && d[3] && d[4] && d[5] && !d[6] && !d[0]) return "Mon — Fri";
+  if (count === 2 && d[6] && d[0] && !d[1] && !d[2] && !d[3] && !d[4] && !d[5]) return "Sat & Sun";
+  if (count === 1 && d[0]) return "Sun Only";
+  if (count === 3 && d[5] && d[6] && d[0]) return "Fri — Sun";
+  if (count === 6 && !d[0]) return "Mon — Sat";
+  if (count === 0) return "None";
+  return [1,2,3,4,5,6,0].filter(function(n){ return !!d[n]; }).map(function(n){ return DN[n]; }).join(", ");
+}
+
+function updatePresetDaysBadge() {
+  var badge = $("presetDaysBadge");
+  if (!badge) return;
+  var key = getCurrentPresetKey();
+  var p = SCHEDULE_PRESETS[key];
+  if (p && p.daysLabel) {
+    badge.innerHTML = "<span>📅</span> <b>Active: " + p.daysLabel + "</b>";
+  } else {
+    badge.innerHTML = "<span>📅</span> <b>Active: " + getDaysSummaryText(days) + "</b>";
+  }
 }
 
 function updatePresetSelectorUI() {
@@ -2654,24 +2850,31 @@ function updatePresetSelectorUI() {
   } else {
     sel.value = key;
   }
+  updatePresetDaysBadge();
 }
 
 function applyPreset(presetKey, skipConfirm) {
   var p = SCHEDULE_PRESETS[presetKey];
   if (!p) return;
   if (!skipConfirm && S.length > 0) {
-    if (!confirm("Switch to '" + p.name + "'? Your schedule will be updated. You can restore your current schedule anytime via Export backup.")) {
+    if (!confirm("Switch to '" + p.name + "'? Your schedule and active days (" + (p.daysLabel || "custom") + ") will be loaded. You can restore your current schedule anytime via Export backup.")) {
       updatePresetSelectorUI();
       return;
     }
   }
   S = p.schedules.slice(0);
+  if (p.days) {
+    days = Object.assign({}, p.days);
+  }
   off = {};
+  try { localStorage.setItem("dra-preset-key", presetKey); } catch(e){}
   save();
   renderList();
+  renderDays();
   tick();
   updatePresetSelectorUI();
-  showToast("Loaded " + p.name + " (" + S.length + " alarms)", p.icon);
+  updatePresetDaysBadge();
+  showToast("Loaded " + p.name + " (" + S.length + " alarms · " + (p.daysLabel || "") + ")", p.icon);
 }
 
 if ($("presetSelect")) {
@@ -2749,8 +2952,10 @@ if ($("confirmLoadSharedRoutineBtn")) {
       off = {};
       save();
       renderList();
+      renderDays();
       tick();
       updatePresetSelectorUI();
+      updatePresetDaysBadge();
       showToast("Shared routine loaded (" + S.length + " alarms)!", "✓");
       closeSharedRoutineModal();
     }
@@ -2828,6 +3033,19 @@ if (!localStorage.getItem("dra-tour-done")) {
 }
 
 /* ───────── INITIAL BOOTSTRAP (Zero-Delay Immediate Clock Render) ───────── */
+// Self-healing migration: if user previously had Weekend Recharge loaded with Mon-Fri active,
+// automatically activate Saturday & Sunday and turn off Monday to Friday.
+try {
+  var initPresetKey = getCurrentPresetKey();
+  if (initPresetKey === "weekend") {
+    if (days[1] || days[2] || days[3] || days[4] || days[5] || !days[6] || !days[0]) {
+      days = Object.assign({}, SCHEDULE_PRESETS.weekend.days);
+      save();
+    }
+  }
+} catch(e){}
+
+try { renderDays(); } catch(e){}
 try { tick(); } catch(e){ console.error("Initial tick error:", e); }
 try { setInterval(tick, 1000); } catch(e){}
 
@@ -2838,6 +3056,7 @@ try { showSong(); } catch(e){}
 try { setStatus(); } catch(e){}
 try { updateAmbientUI(); } catch(e){}
 try { updatePresetSelectorUI(); } catch(e){}
+try { updatePresetDaysBadge(); } catch(e){}
 try {
   if (armed) {
     requestWakeLock();
