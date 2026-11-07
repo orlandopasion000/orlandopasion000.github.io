@@ -521,108 +521,123 @@ body.light-theme .label{
 }
 
 /* ══════════════════════════════════════════════════════════════
-   HIGH-CONTRAST CLOCK NUMERALS IN LIGHT MODE (Deep Metallic Sculpting)
+   LIGHT MODE CLOCK STYLES (Zero Blurry Shadow, Pure Typographic Elegance)
    ══════════════════════════════════════════════════════════════ */
+body.light-theme .chrome,
+body.light-theme .chrome span,
+body.light-theme #clock,
+body.light-theme #restClock {
+  filter: none !important;
+  -webkit-filter: none !important;
+  text-shadow: none !important;
+  box-shadow: none !important;
+}
+
 body.light-theme[data-clock-theme="platinum"] .chrome span,
 body.light-theme[data-clock-theme="chrome-3d"] .chrome span,
-body.light-theme[data-clock-theme="chrome"] .chrome span{
-  background:linear-gradient(180deg,#0F172A 0%,#1E293B 22%,#334155 48%,#64748B 72%,#1E293B 100%) !important;
-  -webkit-background-clip:text !important;
-  background-clip:text !important;
-  color:transparent !important;
-  -webkit-text-fill-color:transparent !important;
-  -webkit-text-stroke:1.3px rgba(15,23,42,0.4) !important;
-  filter:drop-shadow(0 2px 4px rgba(0,0,0,0.14)) !important;
+body.light-theme[data-clock-theme="chrome"] .chrome span {
+  background: linear-gradient(180deg, #111827 0%, #1F2937 38%, #374151 68%, #111827 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  -webkit-text-stroke: 1px rgba(17,24,39,0.25) !important;
 }
 
-body.light-theme[data-clock-theme="gold"] .chrome span{
-  background:linear-gradient(180deg,#78350F 0%,#92400E 22%,#B45309 52%,#D97706 76%,#78350F 100%) !important;
-  -webkit-background-clip:text !important;
-  background-clip:text !important;
-  color:transparent !important;
-  -webkit-text-fill-color:transparent !important;
-  -webkit-text-stroke:1.3px rgba(120,53,15,0.4) !important;
-  filter:drop-shadow(0 2px 5px rgba(120,53,15,0.18)) !important;
+body.light-theme[data-clock-theme="gold"] .chrome span {
+  background: linear-gradient(180deg, #78350F 0%, #92400E 28%, #B45309 62%, #D97706 82%, #78350F 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  -webkit-text-stroke: 1px rgba(120,53,15,0.25) !important;
 }
 
-body.light-theme[data-clock-theme="cyber-emerald"] .chrome span,
-body.light-theme[data-clock-theme="green-nature"] .chrome span{
-  background:linear-gradient(180deg,#064E3B 0%,#065F46 25%,#047857 52%,#059669 76%,#064E3B 100%) !important;
-  -webkit-background-clip:text !important;
-  background-clip:text !important;
-  color:transparent !important;
-  -webkit-text-fill-color:transparent !important;
-  -webkit-text-stroke:1.3px rgba(6,78,59,0.4) !important;
+body.light-theme[data-clock-theme="cyber-emerald"] .chrome span {
+  background: linear-gradient(180deg, #064E3B 0%, #065F46 30%, #047857 65%, #059669 85%, #064E3B 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  -webkit-text-stroke: 1px rgba(6,78,59,0.2) !important;
 }
 
-body.light-theme[data-clock-theme="ice-titanium"] .chrome span{
-  background:linear-gradient(180deg,#082F49 0%,#075985 24%,#0284C7 52%,#0369A1 78%,#082F49 100%) !important;
-  -webkit-background-clip:text !important;
-  background-clip:text !important;
-  color:transparent !important;
-  -webkit-text-fill-color:transparent !important;
-  -webkit-text-stroke:1.3px rgba(8,47,73,0.4) !important;
+body.light-theme[data-clock-theme="ice-titanium"] .chrome span {
+  background: linear-gradient(180deg, #082F49 0%, #075985 30%, #0284C7 65%, #0369A1 85%, #082F49 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  -webkit-text-stroke: 1px rgba(8,47,73,0.2) !important;
 }
 
 body.light-theme[data-clock-theme="amethyst"] .chrome span,
-body.light-theme[data-clock-theme="purple"] .chrome span{
-  background:linear-gradient(180deg,#3B0764 0%,#581C87 24%,#7C3AED 54%,#6D28D9 78%,#3B0764 100%) !important;
-  -webkit-background-clip:text !important;
-  background-clip:text !important;
-  color:transparent !important;
-  -webkit-text-fill-color:transparent !important;
-  -webkit-text-stroke:1.3px rgba(59,7,100,0.4) !important;
+body.light-theme[data-clock-theme="purple"] .chrome span {
+  background: linear-gradient(180deg, #3B0764 0%, #581C87 30%, #7C3AED 65%, #6D28D9 85%, #3B0764 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  -webkit-text-stroke: 1px rgba(59,7,100,0.2) !important;
 }
 
 body.light-theme[data-clock-theme="sunset-rose"] .chrome span,
-body.light-theme[data-clock-theme="pink"] .chrome span{
-  background:linear-gradient(180deg,#881337 0%,#9F1239 24%,#BE123C 52%,#E11D48 76%,#881337 100%) !important;
-  -webkit-background-clip:text !important;
-  background-clip:text !important;
-  color:transparent !important;
-  -webkit-text-fill-color:transparent !important;
-  -webkit-text-stroke:1.3px rgba(136,19,55,0.4) !important;
+body.light-theme[data-clock-theme="pink"] .chrome span {
+  background: linear-gradient(180deg, #881337 0%, #9F1239 30%, #BE123C 65%, #E11D48 85%, #881337 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  -webkit-text-stroke: 1px rgba(136,19,55,0.2) !important;
 }
 
 body.light-theme[data-clock-theme="minimal-white"] .chrome span,
-body.light-theme[data-clock-theme="pure-white"] .chrome span{
-  color:#111827 !important;
-  -webkit-text-fill-color:#111827 !important;
-  -webkit-text-stroke:1.3px #111827 !important;
-  filter:drop-shadow(0 2px 4px rgba(0,0,0,0.12)) !important;
+body.light-theme[data-clock-theme="pure-white"] .chrome span {
+  color: #111827 !important;
+  -webkit-text-fill-color: #111827 !important;
+  -webkit-text-stroke: 0 !important;
 }
 
-body.light-theme[data-clock-theme="chronometer-din"] .chrome span{
-  background:linear-gradient(180deg,#090A0F 0%,#1E293B 28%,#334155 56%,#475569 80%,#090A0F 100%) !important;
-  -webkit-background-clip:text !important;
-  background-clip:text !important;
-  color:transparent !important;
-  -webkit-text-fill-color:transparent !important;
-  -webkit-text-stroke:1.3px rgba(9,10,15,0.4) !important;
+body.light-theme[data-clock-theme="chronometer-din"] .chrome span {
+  background: linear-gradient(180deg, #0F172A 0%, #1E293B 35%, #334155 65%, #0F172A 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  -webkit-text-stroke: 1px rgba(15,23,42,0.2) !important;
 }
 
-body.light-theme[data-clock-theme="sunset-amber"] .chrome span{
-  background:linear-gradient(180deg,#78350F 0%,#92400E 24%,#B45309 52%,#D97706 78%,#78350F 100%) !important;
-  -webkit-background-clip:text !important;
-  background-clip:text !important;
-  color:transparent !important;
-  -webkit-text-fill-color:transparent !important;
-  -webkit-text-stroke:1.3px rgba(120,53,15,0.4) !important;
+body.light-theme[data-clock-theme="sunset-amber"] .chrome span {
+  background: linear-gradient(180deg, #78350F 0%, #9A3412 30%, #C2410C 65%, #EA580C 85%, #78350F 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  -webkit-text-stroke: 1px rgba(120,53,15,0.2) !important;
 }
 
-body.light-theme[data-clock-theme="midnight-gold"] .chrome span{
-  color:#1D1D1F !important;
-  -webkit-text-fill-color:#1D1D1F !important;
-  -webkit-text-stroke:2px #8B6508 !important;
+body.light-theme[data-clock-theme="midnight-gold"] .chrome span {
+  color: #111827 !important;
+  -webkit-text-fill-color: #111827 !important;
+  -webkit-text-stroke: 1.6px #8B6508 !important;
 }
 
-body.light-theme[data-clock-theme="rainbow"] .chrome span{
-  background:linear-gradient(135deg,#DC2626 0%,#D97706 20%,#059669 40%,#2563EB 60%,#7C3AED 80%,#DB2777 100%) !important;
-  -webkit-background-clip:text !important;
-  background-clip:text !important;
-  color:transparent !important;
-  -webkit-text-fill-color:transparent !important;
-  -webkit-text-stroke:1.1px rgba(0,0,0,0.15) !important;
+body.light-theme[data-clock-theme="rainbow"] .chrome span {
+  background: linear-gradient(135deg, #DC2626 0%, #D97706 20%, #059669 40%, #2563EB 60%, #7C3AED 80%, #DB2777 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  -webkit-text-stroke: 0.5px rgba(0,0,0,0.1) !important;
+}
+
+body.light-theme[data-clock-theme="green-nature"] .chrome span {
+  background: linear-gradient(180deg, #064E3B 0%, #14532D 35%, #15803D 65%, #064E3B 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  -webkit-text-stroke: 1px rgba(6,78,59,0.2) !important;
 }
 
 /* Light Mode Cockpit & Pills */
@@ -690,38 +705,60 @@ body.light-theme .mixer-slider{
 }
 
 /* Light Mode Primary Controls & Sliders */
-body.light-theme .controls{
-  background:#FFFFFF !important;
-  border-color:#E2E2E7 !important;
-  box-shadow:0 2px 10px rgba(0,0,0,0.03) !important;
+body.light-theme .controls {
+  background: #FFFFFF !important;
+  border-color: #E2E2E7 !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.03) !important;
 }
-body.light-theme button.ghost{
-  background:#F0F0F3 !important;
-  color:#1D1D1F !important;
-  border-color:#D1D1D6 !important;
+
+/* Universal Ghost Buttons & Links in Light Mode (Zero Black Boxes!) */
+body.light-theme .ghost,
+body.light-theme button.ghost,
+body.light-theme a.ghost,
+body.light-theme .dist-btn.ghost,
+body.light-theme .dist-card a.ghost,
+body.light-theme .dist-card button.ghost {
+  background: #F0F0F3 !important;
+  color: #1D1D1F !important;
+  border: 1px solid #D1D1D6 !important;
+  box-shadow: none !important;
 }
-body.light-theme button.ghost:hover{
-  background:#E5E5EB !important;
-  border-color:#8B6508 !important;
+
+body.light-theme .ghost:hover,
+body.light-theme button.ghost:hover,
+body.light-theme a.ghost:hover,
+body.light-theme .dist-btn.ghost:hover,
+body.light-theme .dist-card a.ghost:hover,
+body.light-theme .dist-card button.ghost:hover {
+  background: #E5E5EB !important;
+  color: #8B6508 !important;
+  border-color: #8B6508 !important;
 }
-body.light-theme button.primary{
-  background:#8B6508 !important;
-  color:#FFFFFF !important;
-  border-color:#725206 !important;
-  box-shadow:0 4px 14px rgba(139,101,8,0.28) !important;
+
+body.light-theme button.primary,
+body.light-theme .dist-btn.primary,
+body.light-theme .dist-card .primary {
+  background: #8B6508 !important;
+  color: #FFFFFF !important;
+  border: 1px solid #725206 !important;
+  box-shadow: 0 4px 14px rgba(139,101,8,0.28) !important;
 }
-body.light-theme button.primary:hover{
-  background:#725206 !important;
+
+body.light-theme button.primary:hover,
+body.light-theme .dist-btn.primary:hover,
+body.light-theme .dist-card .primary:hover {
+  background: #725206 !important;
 }
-body.light-theme .vol{
-  background:#F0F0F3 !important;
-  border-color:#E2E2E7 !important;
+
+body.light-theme .vol {
+  background: #F0F0F3 !important;
+  border-color: #E2E2E7 !important;
 }
-body.light-theme #volSlider{
-  accent-color:#8B6508 !important;
+body.light-theme #volSlider {
+  accent-color: #8B6508 !important;
 }
-body.light-theme #volPct{
-  color:#1D1D1F !important;
+body.light-theme #volPct {
+  color: #1D1D1F !important;
 }
 
 /* Light Mode Player Bar */
@@ -894,6 +931,23 @@ body.light-theme .preset-chip:hover{
   border:2px solid var(--mute);
   margin-right:6px;
   vertical-align:middle;
+}
+
+
+.highlight-card{
+  margin-top:16px;
+  border-color:rgba(217,185,92,.5);
+  background:linear-gradient(180deg,#14151f 0%,#0c0c0e 100%);
+}
+body.light-theme .highlight-card{
+  background:#FFFFFF !important;
+  border:1.5px solid rgba(139,101,8,0.45) !important;
+  box-shadow:0 4px 20px rgba(139,101,8,0.08) !important;
+}
+body.light-theme .highlight-card .dist-icon{
+  background:#F5F5F7 !important;
+  border-color:rgba(139,101,8,0.3) !important;
+  color:#8B6508 !important;
 }
 
 </style>
@@ -1112,18 +1166,19 @@ body.light-theme .preset-chip:hover{
       </div>
     </div>
 
-    <!-- Highlight Banner: Preset Routines (Class Day, Weekend, Exam Week) -->
-    <div class="dist-card" style="margin-top:16px;border-color:rgba(217,185,92,.5);background:linear-gradient(180deg,#14151f 0%,#0c0c0e 100%)">
+    <!-- Highlight Banner: Clean Blank Edition (For Friends & Students) -->
+    <div class="dist-card highlight-card">
       <div class="dist-card-top">
-        <div class="dist-icon" style="background:rgba(217,185,92,.15);color:var(--gold);border-color:rgba(217,185,92,.3)">🎓</div>
+        <div class="dist-icon" style="background:rgba(217,185,92,.15);color:var(--gold);border-color:rgba(217,185,92,.3)">🎁</div>
         <div>
-          <div class="dist-name" style="color:var(--gold)">Routine Presets Ready</div>
-          <div class="dist-desc">Choose from curated presets: Class Day (23 blocks), Weekend Recharge (8 blocks), Exam Week (10 blocks), or Minimalist.</div>
+          <div class="dist-name" style="color:var(--gold)">Clean Blank Edition (For Anyone)</div>
+          <div class="dist-desc">A 100% clean, schedule-free app with isolated storage. Zero personal data — ready for anyone to enter their own schedule.</div>
         </div>
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="primary dist-btn" id="explorePresetsBtn" style="flex:1;min-width:140px;text-align:center">📋 Switch Routine Preset</button>
-        <button class="ghost dist-btn" id="clearScheduleBtn" style="flex:1;min-width:140px;font-size:.85rem">📝 Start Blank</button>
+        <a class="primary dist-btn" href="recharge-clean.html" target="_blank" rel="noopener" style="flex:1;min-width:140px;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center">🚀 Open Blank Web App</a>
+        <a class="ghost dist-btn" href="downloads/DailyRecharge-Clean-Setup.exe" download style="flex:1;min-width:140px;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;font-size:.85rem">⬇ Windows (.exe)</a>
+        <button class="ghost dist-btn" id="downloadBlankAppBtn" style="flex:1;min-width:140px;font-size:.85rem">💾 Standalone (.html)</button>
       </div>
     </div>
   </section>
@@ -1346,16 +1401,14 @@ try {
   }
 } catch(e){}
 
-// Automatically update 10:31 -> 10:30 if present in user's saved schedule
-var migrated = false;
-S.forEach(function(item){
-  if(item[0]===10 && item[1]===31 && item[2]==="rest"){
-    item[1] = 30;
-    item[3] = "Recharge before class — 15 min";
-    migrated = true;
-  }
+// Sanitize schedule: automatically remove any test alarms matching "dgsdhsd"
+S = S.filter(function(item){
+  if (!item || !item[3]) return false;
+  var title = String(item[3]).toLowerCase().trim();
+  if (title.indexOf("dgsdhsd") !== -1) return false;
+  return true;
 });
-if(migrated) try { localStorage.setItem("dra-clean-schedule", JSON.stringify(S)); } catch(e){}
+try { localStorage.setItem("dra-clean-schedule", JSON.stringify(S)); } catch(e){}
 
 function sortSchedule(){
   S.sort(function(a,b){ return (a[0]*60+a[1]) - (b[0]*60+b[1]); });
