@@ -21,8 +21,8 @@ src = src.replace(
 
 // Replace Description
 src = src.replace(
-  /<meta name="description" content="Daily schedule alarm cockpit with music clips, sleep soundscapes, and Rest Mode clock\.">/,
-  '<meta name="description" content="Clean, customizable daily alarm schedule with sleep soundscapes, luxury metallic clocks, and Rest Mode.">'
+  /<meta name="description" content="Daily schedule alarm cockpit with music clips and Rest Mode clock\.">/,
+  '<meta name="description" content="Clean, customizable daily alarm schedule with luxury metallic clocks and Rest Mode.">'
 );
 
 // Replace Subtitle

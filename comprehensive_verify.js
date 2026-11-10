@@ -60,21 +60,25 @@ console.log('✓ Store-ready Privacy Policy and Terms of Service exist');
   }
 });
 
-// 4. Verify Service Worker v9 caches all 13 sounds
+// 4. Verify Service Worker v10
 const swContent = fs.readFileSync(path.join(__dirname, 'recharge-sw.js'), 'utf8');
-if (!/recharge-v[9\d]/.test(swContent)) {
-  console.error('FAIL: Service worker version is not recharge-v9 or higher');
+if (!/recharge-v1\d/.test(swContent)) {
+  console.error('FAIL: Service worker version is not recharge-v10 or higher');
   pass = false;
 } else {
-  console.log('✓ Service Worker is on recharge-v9');
+  console.log('✓ Service Worker is on recharge-v10');
 }
-requiredSounds.forEach(s => {
-  if (!swContent.includes(s)) {
-    console.error('FAIL: Service worker does not cache sound:', s);
+const requiredMusic = [
+  'palagi.mp3', 'na-para-bang.mp3', 'what-if-i-miss-you.mp3',
+  'okay.mp3', 'training-season.mp3'
+];
+requiredMusic.forEach(m => {
+  if (!swContent.includes(m)) {
+    console.error('FAIL: Service worker does not cache core alarm music:', m);
     pass = false;
   }
 });
-console.log('✓ Service Worker caches all 13 ambient soundscapes');
+console.log('✓ Service Worker caches core alarm songs');
 
 // 5. Verify manifests
 ['recharge-manifest.webmanifest', 'recharge-clean-manifest.webmanifest'].forEach(mFile => {

@@ -1,8 +1,8 @@
-/* Daily Recharge Alarm — Service Worker v9
-   • Caches core app, clean blank edition, manifests, song chorus clips, 13 studio ambient soundscapes, mobile QR code, and Lexend font for 100% offline playback.
+/* Daily Recharge Alarm — Service Worker v10
+   • Caches core app, clean blank edition, manifests, song chorus clips, mobile QR code, and Lexend font for 100% offline playback.
    • Handles notification actions (Snooze / Dismiss).
    Scope: ./ */
-var VERSION = "recharge-v9";
+var VERSION = "recharge-v10";
 var CORE = [
   "daily-recharge-alarm.html",
   "recharge-clean.html",
@@ -15,19 +15,6 @@ var CORE = [
   "assets/recharge-apple-touch.png",
   "assets/qr-code.svg",
   "assets/lexend.ttf",
-  "sounds/green-noise.wav",
-  "sounds/rain.mp3",
-  "sounds/waves.mp3",
-  "sounds/river.mp3",
-  "sounds/wind.mp3",
-  "sounds/campfire.mp3",
-  "sounds/birds.mp3",
-  "sounds/piano.mp3",
-  "sounds/space.mp3",
-  "sounds/brown-noise.wav",
-  "sounds/pink-noise.wav",
-  "sounds/white-noise.wav",
-  "sounds/blue-noise.wav",
   "music/palagi.mp3",
   "music/na-para-bang.mp3",
   "music/what-if-i-miss-you.mp3",

@@ -14,7 +14,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="apple-mobile-web-app-title" content="Recharge">
-<meta name="description" content="Daily schedule alarm cockpit with music clips, sleep soundscapes, and Rest Mode clock.">
+<meta name="description" content="Daily schedule alarm cockpit with music clips and Rest Mode clock.">
 <!-- Choice 6: Lexend Bold (Geometric, Modern, High-Legibility) -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&family=Montserrat:wght@600;700;800;900&family=Orbitron:wght@700;800;900&family=Outfit:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@600;700;800&family=Rajdhani:wght@600;700&family=Space+Grotesk:wght@600;700&family=Unbounded:wght@700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -994,16 +994,12 @@ body.light-theme .highlight-card .dist-icon{
     </div>
   </section>
 
-  <!-- 2. CONTROL BAR (Identical to Uploaded Screenshot) -->
+  <!-- 2. CONTROL BAR -->
   <div class="cockpit-bar">
     <div class="cockpit-pills">
-      <button class="pill-btn live" id="audioBadge" title="Browser audio is ready to play alarms and soundscapes">
+      <button class="pill-btn live" id="audioBadge" title="Browser audio is ready to play alarms">
         <span class="status-dot"></span>
         <span id="audioBadgeText">🔊 Sound Ready</span>
-      </button>
-      <button class="pill-btn" id="ambientToggleBtn" title="Toggle Meditative Soundscapes Deck">
-        <span>🌿</span>
-        <span id="ambientSummary">Green Noise: Off</span>
       </button>
       <button class="pill-btn" id="themeBtn" title="Cycle Clock Font & Visual Appearance">
         <span>🎨 Clock Style: <b id="themeLabel">Pure Platinum</b></span>
@@ -1021,38 +1017,6 @@ body.light-theme .highlight-card .dist-icon{
       <span>✨</span>
       <span>Tour & Help</span>
     </button>
-  </div>
-
-  <!-- 4. MEDITATIVE SOUNDSCAPES DECK (BetterSleep Multi-Track Mixer) -->
-  <div class="soundscapes-box" id="soundscapeBox">
-    <div class="soundscapes-head">
-      <div class="soundscapes-title">
-        <span>🌿 Rest & Meditation Soundscapes (Mix & Match)</span>
-      </div>
-      <button class="ghost" id="stopAllSounds" style="padding:6px 14px;font-size:.85rem">Stop All Sounds</button>
-    </div>
-    <div class="sound-chips">
-      <button class="sound-chip" data-sound="green"><span>🌿</span><span>Green Noise</span></button>
-      <button class="sound-chip" data-sound="rain"><span>🌧</span><span>Gentle Rain</span></button>
-      <button class="sound-chip" data-sound="waves"><span>🌊</span><span>Ocean Waves</span></button>
-      <button class="sound-chip" data-sound="river"><span>🏞</span><span>River</span></button>
-      <button class="sound-chip" data-sound="breeze"><span>🌬</span><span>Night Breeze</span></button>
-      <button class="sound-chip" data-sound="fire"><span>🪵</span><span>Warm Campfire</span></button>
-      <button class="sound-chip" data-sound="birds"><span>🐦</span><span>Birds</span></button>
-      <button class="sound-chip" data-sound="piano"><span>🎹</span><span>Piano</span></button>
-      <button class="sound-chip" data-sound="space"><span>🪐</span><span>Deep Space</span></button>
-      <button class="sound-chip" data-sound="brown"><span>🟤</span><span>Brown Noise</span></button>
-      <button class="sound-chip" data-sound="pink"><span>🌸</span><span>Pink Noise</span></button>
-      <button class="sound-chip" data-sound="white"><span>⚪</span><span>White Noise</span></button>
-      <button class="sound-chip" data-sound="blue"><span>🔵</span><span>Blue Noise</span></button>
-    </div>
-    <div class="sound-mixer-rack" id="soundMixerRack" style="display:none">
-      <div class="mixer-rack-head">
-        <span class="mixer-rack-label">🎛 Individual Track Mix Levels</span>
-        <span class="mixer-rack-hint">Craft your personal rest atmosphere</span>
-      </div>
-      <div class="mixer-tracks" id="mixerTracksList"></div>
-    </div>
   </div>
 
   <!-- 5. PRIMARY APPLICATION CONTROLS -->
@@ -1079,7 +1043,6 @@ body.light-theme .highlight-card .dist-icon{
 
   <div class="label">Active days</div>
   <div class="days" id="days" role="group" aria-label="Alarm days"></div>
-  <div id="status"><span class="status-active-pulse">●</span> <b>Alarms Armed · Screen-Off Wake Active</b></div>
 
   <!-- ROUTINE PRESETS & CLOUD SHARE BAR (Single-Line Compact Deck) -->
   <div class="preset-bar">
@@ -1477,13 +1440,6 @@ body.light-theme .highlight-card .dist-icon{
         </div>
       </div>
       <div style="background:var(--surface-2);border:1px solid var(--line2);border-radius:12px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start">
-        <span style="font-size:1.3rem">🌿</span>
-        <div>
-          <b style="color:var(--text);font-size:.92rem">13 Studio Rest Soundscapes</b>
-          <div style="font-size:.82rem;color:var(--dim)">Mix and match Green Noise, Gentle Rain, Waves, River, Birds, Piano, and Brown/Pink/White/Blue noise 100% offline.</div>
-        </div>
-      </div>
-      <div style="background:var(--surface-2);border:1px solid var(--line2);border-radius:12px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start">
         <span style="font-size:1.3rem">⚡</span>
         <div>
           <b style="color:var(--text);font-size:.92rem">1-Tap Curated Routine Presets</b>
@@ -1721,7 +1677,7 @@ function updateAudioBadge(){
   if(!badge||!text)return;
   badge.className="pill-btn live";
   text.textContent="🔊 Sound Ready";
-  badge.title="Sound is active and ready to play alarms and ambient soundscapes";
+  badge.title="Sound is active and ready to play alarms";
 }
 $("audioBadge").onclick=function(){
   unlock();
@@ -1731,197 +1687,7 @@ $("audioBadge").onclick=function(){
 // Initialize audio immediately so Sound Ready is permanently on by default
 initAudio();
 
-/* ───────── MEDITATIVE SOUNDSCAPES ENGINE (Real Studio Recordings & Multi-Track Mixer) ───────── */
-var SOUND_CONFIG = {
-  green:  { id: "green",  name: "Green Noise",   icon: "🌿", file: "sounds/green-noise.wav", defVol: 0.55 },
-  rain:   { id: "rain",   name: "Gentle Rain",   icon: "🌧", file: "sounds/rain.mp3",        defVol: 0.60 },
-  waves:  { id: "waves",  name: "Ocean Waves",   icon: "🌊", file: "sounds/waves.mp3",       defVol: 0.60 },
-  river:  { id: "river",  name: "River",         icon: "🏞", file: "sounds/river.mp3",       defVol: 0.55 },
-  breeze: { id: "breeze", name: "Night Breeze",  icon: "🌬", file: "sounds/wind.mp3",        defVol: 0.55 },
-  fire:   { id: "fire",   name: "Warm Campfire", icon: "🪵", file: "sounds/campfire.mp3",    defVol: 0.65 },
-  birds:  { id: "birds",  name: "Birds",         icon: "🐦", file: "sounds/birds.mp3",       defVol: 0.50 },
-  piano:  { id: "piano",  name: "Piano",         icon: "🎹", file: "sounds/piano.mp3",       defVol: 0.60 },
-  space:  { id: "space",  name: "Deep Space",    icon: "🪐", file: "sounds/space.mp3",       defVol: 0.50 },
-  brown:  { id: "brown",  name: "Brown Noise",   icon: "🟤", file: "sounds/brown-noise.wav", defVol: 0.55 },
-  pink:   { id: "pink",   name: "Pink Noise",    icon: "🌸", file: "sounds/pink-noise.wav",  defVol: 0.50 },
-  white:  { id: "white",  name: "White Noise",   icon: "⚪", file: "sounds/white-noise.wav", defVol: 0.45 },
-  blue:   { id: "blue",   name: "Blue Noise",    icon: "🔵", file: "sounds/blue-noise.wav",  defVol: 0.45 }
-};
-
-var soundAudioElements = {};
-var soundVolumes = {};
-var soundFadeTimers = {};
-
-function initAmbientEngine(){}
-
-function getSoundAudio(id){
-  if(!soundAudioElements[id]){
-    var conf = SOUND_CONFIG[id];
-    var a = new Audio(conf.file);
-    a.loop = true;
-    a.preload = "auto";
-    soundAudioElements[id] = a;
-    soundVolumes[id] = conf.defVol;
-  }
-  return soundAudioElements[id];
-}
-
-// Pre-instantiate and pre-buffer all soundscape audio elements for instant zero-latency playback
-Object.keys(SOUND_CONFIG).forEach(function(id){
-  var a = getSoundAudio(id);
-  try{ a.load(); }catch(e){}
-});
-
-function isSoundPlaying(id){
-  var a = soundAudioElements[id];
-  return !!(a && !a.paused);
-}
-
-function startSound(id){
-  unlock();
-  var conf = SOUND_CONFIG[id];
-  if(!conf) return;
-  var a = getSoundAudio(id);
-  clearInterval(soundFadeTimers[id]);
-
-  var targetVol = soundVolumes[id] !== undefined ? soundVolumes[id] : conf.defVol;
-  a.volume = targetVol;
-  var playPromise = a.play();
-  if(playPromise && playPromise.catch){
-    playPromise.catch(function(err){ console.log("Soundscape playback gesture required:", err); });
-  }
-
-  updateAmbientUI();
-  renderMixerRack();
-}
-
-function stopSound(id){
-  var a = soundAudioElements[id];
-  if(!a || a.paused){
-    updateAmbientUI();
-    renderMixerRack();
-    return;
-  }
-  clearInterval(soundFadeTimers[id]);
-  var initialVol = a.volume;
-  var steps = 8, curStep = 0;
-  soundFadeTimers[id] = setInterval(function(){
-    curStep++;
-    a.volume = Math.max(0, initialVol * (1 - curStep / steps));
-    if(curStep >= steps){
-      clearInterval(soundFadeTimers[id]);
-      a.pause();
-      a.currentTime = 0;
-      updateAmbientUI();
-      renderMixerRack();
-    }
-  }, 20);
-}
-
-function stopAllSounds(){
-  Object.keys(SOUND_CONFIG).forEach(function(id){
-    stopSound(id);
-  });
-}
-
-function setSoundVolume(id, vol){
-  vol = Math.max(0, Math.min(1, vol));
-  soundVolumes[id] = vol;
-  var a = soundAudioElements[id];
-  if(a && !a.paused){
-    a.volume = vol;
-  }
-}
-
-function updateAmbientUI(){
-  var activeIds = Object.keys(SOUND_CONFIG).filter(isSoundPlaying);
-  var activeCount = activeIds.length;
-
-  document.querySelectorAll(".sound-chip").forEach(function(chip){
-    var type = chip.getAttribute("data-sound");
-    chip.classList.toggle("on", isSoundPlaying(type));
-  });
-
-  var toggleBtn = $("ambientToggleBtn"), summary = $("ambientSummary");
-  if(activeCount === 0){
-    summary.textContent = "Green Noise: Off";
-    toggleBtn.classList.remove("live");
-  } else if(activeCount === 1 && isSoundPlaying("green")){
-    var pct = Math.round((soundVolumes.green || 0.55) * 100);
-    summary.textContent = "Green Noise: " + pct + "%";
-    toggleBtn.classList.add("live");
-  } else if(activeCount === 1){
-    var singleId = activeIds[0];
-    var conf = SOUND_CONFIG[singleId];
-    var pct = Math.round((soundVolumes[singleId] || conf.defVol) * 100);
-    summary.textContent = conf.name + ": " + pct + "%";
-    toggleBtn.classList.add("live");
-  } else {
-    summary.textContent = "Sounds: " + activeCount + " Playing";
-    toggleBtn.classList.add("live");
-  }
-}
-
-function renderMixerRack(){
-  var rack = $("soundMixerRack"), list = $("mixerTracksList");
-  if(!rack || !list) return;
-  var activeIds = Object.keys(SOUND_CONFIG).filter(isSoundPlaying);
-
-  if(activeIds.length === 0){
-    rack.style.display = "none";
-    list.innerHTML = "";
-    return;
-  }
-
-  rack.style.display = "block";
-  list.innerHTML = activeIds.map(function(id){
-    var conf = SOUND_CONFIG[id];
-    var vol = soundVolumes[id] !== undefined ? soundVolumes[id] : conf.defVol;
-    var pct = Math.round(vol * 100);
-    return '<div class="mixer-row" data-id="' + id + '">' +
-      '<div class="mixer-name"><span>' + conf.icon + '</span> <b>' + conf.name + '</b></div>' +
-      '<input type="range" class="mixer-slider" min="0" max="100" value="' + pct + '" data-sound="' + id + '" style="--p:' + pct + '%" aria-label="' + conf.name + ' volume">' +
-      '<span class="mixer-val" id="mixerVal_' + id + '">' + pct + '%</span>' +
-      '<button class="mixer-remove" data-sound="' + id + '" title="Stop ' + conf.name + '">✕</button>' +
-    '</div>';
-  }).join("");
-
-  list.querySelectorAll(".mixer-slider").forEach(function(slider){
-    slider.oninput = function(){
-      var id = slider.getAttribute("data-sound");
-      var val = +slider.value;
-      slider.style.setProperty("--p", val + "%");
-      var valEl = $("mixerVal_" + id);
-      if(valEl) valEl.textContent = val + "%";
-      setSoundVolume(id, val / 100);
-      updateAmbientUI();
-    };
-  });
-
-  list.querySelectorAll(".mixer-remove").forEach(function(btn){
-    btn.onclick = function(){
-      var id = btn.getAttribute("data-sound");
-      stopSound(id);
-    };
-  });
-}
-
-document.querySelectorAll(".sound-chip").forEach(function(chip){
-  chip.onclick = function(){
-    var type = chip.getAttribute("data-sound");
-    if(isSoundPlaying(type)) stopSound(type);
-    else startSound(type);
-  };
-});
-
-$("stopAllSounds").onclick = stopAllSounds;
-
-$("ambientToggleBtn").onclick = function(){
-  // If no sounds are playing, start Green Noise by default. If any playing, stop all.
-  var activeIds = Object.keys(SOUND_CONFIG).filter(isSoundPlaying);
-  if(activeIds.length === 0) startSound("green");
-  else stopAllSounds();
-};
+function stopAllSounds(){}
 
 /* ───────── SONG PLAYER ENGINE (Song Clip Only) ───────── */
 var songAudioCache = {};
@@ -2601,14 +2367,6 @@ function setStatus(){
   if ($("arm")) {
     $("arm").textContent = armed ? "✓ Alarms Are On" : "Turn Alarms On";
     $("arm").className = "primary" + (armed ? " on" : "");
-  }
-  var st = $("status");
-  if (st) {
-    if (armed) {
-      st.innerHTML = '<span class="status-active-pulse">●</span> <b>Alarms Armed · Screen-Off Wake Active</b> <span style="display:block;font-size:.82rem;color:var(--dim);margin-top:2px">Screen wake lock active & background audio keep-alive running</span>';
-    } else {
-      st.innerHTML = '<span class="status-paused-dot">○</span> <b>Alarms Paused</b> <span style="display:block;font-size:.82rem;color:var(--dim);margin-top:2px">Tap "Turn Alarms On" to arm your schedule</span>';
-    }
   }
   updateAudioBadge();
 }
