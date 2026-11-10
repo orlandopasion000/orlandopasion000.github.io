@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-title" content="Recharge">
 <meta name="description" content="Daily schedule alarm cockpit with music clips and Rest Mode clock.">
 <!-- Choice 6: Lexend Bold (Geometric, Modern, High-Legibility) -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&family=Montserrat:wght@600;700;800;900&family=Orbitron:wght@700;800;900&family=Outfit:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@600;700;800&family=Rajdhani:wght@600;700&family=Space+Grotesk:wght@600;700&family=Unbounded:wght@700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700;800&family=Inter:wght@400;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&family=Montserrat:wght@600;700;800;900&family=Orbitron:wght@700;800;900&family=Outfit:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@600;700;800&family=Rajdhani:wght@600;700&family=Space+Grotesk:wght@600;700&family=Unbounded:wght@700;800;900&display=swap" rel="stylesheet">
 <style>
 @font-face{
   font-family:'Lexend';
@@ -100,19 +100,20 @@ body[data-clock-theme="gold"] .chrome span{
   -webkit-text-stroke:1.2px rgba(253,230,138,0.5);
 }
 
-/* Choice 3: Cyberpunk Emerald Matrix (Orbitron Extra Bold) */
+/* Choice 3: Cyberpunk Emerald Matrix (Chakra Petch Bold) */
 body[data-clock-theme="cyber-emerald"] .chrome,
 body[data-clock-theme="cyberpunk"] .chrome{
-  font-family:'Orbitron',monospace,sans-serif !important;
-  font-weight:900;
-  letter-spacing:-.02em;
-  filter:drop-shadow(0 0 16px rgba(52,211,153,0.4)) drop-shadow(0 0 36px rgba(16,185,129,0.2));
+  font-family:'Chakra Petch',monospace,sans-serif !important;
+  font-weight:700;
+  letter-spacing:0.02em;
+  filter:drop-shadow(0 0 10px rgba(52,211,153,0.7)) drop-shadow(0 0 28px rgba(16,185,129,0.35));
 }
 body[data-clock-theme="cyber-emerald"] .chrome span,
 body[data-clock-theme="cyberpunk"] .chrome span{
-  background:linear-gradient(180deg,#ECFDF5 0%,#A7F3D0 22%,#34D399 50%,#064E3B 74%,#10B981 92%,#6EE7B7 100%);
+  width:.62em;
+  background:linear-gradient(180deg,#F0FDF4 0%,#A7F3D0 22%,#34D399 52%,#059669 82%,#10B981 100%);
   -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
-  -webkit-text-stroke:1.2px rgba(110,231,183,0.6);
+  -webkit-text-stroke:0;
 }
 
 /* Choice 4: Glacial Titanium & Ice Blue (Space Grotesk Bold) */
@@ -130,19 +131,20 @@ body[data-clock-theme="glacial"] .chrome span{
   -webkit-text-stroke:1.2px rgba(186,230,253,0.5);
 }
 
-/* Choice 5: Imperial Amethyst Purple (Unbounded Extra Bold) */
+/* Choice 5: Imperial Amethyst Purple (Outfit Extra Bold) */
 body[data-clock-theme="amethyst"] .chrome,
 body[data-clock-theme="purple"] .chrome{
-  font-family:'Unbounded',-apple-system,BlinkMacSystemFont,sans-serif !important;
+  font-family:'Outfit',-apple-system,BlinkMacSystemFont,sans-serif !important;
   font-weight:800;
-  letter-spacing:-.04em;
-  filter:drop-shadow(0 4px 10px rgba(0,0,0,0.9)) drop-shadow(0 0 22px rgba(168,85,247,0.35));
+  letter-spacing:0.01em;
+  filter:drop-shadow(0 4px 10px rgba(0,0,0,0.9)) drop-shadow(0 0 22px rgba(192,132,252,0.4));
 }
 body[data-clock-theme="amethyst"] .chrome span,
 body[data-clock-theme="purple"] .chrome span{
-  background:linear-gradient(180deg,#FAF5FF 0%,#E9D5FF 22%,#A855F7 52%,#3B0764 74%,#9333EA 88%,#D8B4FE 100%);
+  width:.62em;
+  background:linear-gradient(180deg,#FAF5FF 0%,#E9D5FF 22%,#C084FC 50%,#7E22CE 76%,#A855F7 90%,#E9D5FF 100%);
   -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
-  -webkit-text-stroke:1.2px rgba(233,213,255,0.5);
+  -webkit-text-stroke:0;
 }
 
 /* Choice 6: Sunset Rose Gold (Lexend Bold) */
@@ -205,17 +207,28 @@ body[data-clock-theme="amber"] .chrome span{
   -webkit-text-stroke:1.2px rgba(253,230,138,0.5);
 }
 
-/* Choice 10: Midnight Gold Dual-Tone Rim (Montserrat Extra Bold) */
+/* Choice 10: Midnight Gold Dual-Tone Rim (Inter Display Black) */
 body[data-clock-theme="midnight-gold"] .chrome{
-  font-family:'Montserrat',-apple-system,BlinkMacSystemFont,sans-serif !important;
-  font-weight:800;
-  letter-spacing:-.03em;
-  filter:drop-shadow(0 4px 10px rgba(0,0,0,0.95)) drop-shadow(0 0 15px rgba(217,185,92,0.25));
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif !important;
+  font-weight:900;
+  letter-spacing:0.01em;
+  filter:drop-shadow(0 4px 10px rgba(0,0,0,0.95));
 }
 body[data-clock-theme="midnight-gold"] .chrome span{
+  width:.62em;
   color:#FFFFFF !important;
   -webkit-text-fill-color:#FFFFFF !important;
-  -webkit-text-stroke:1.8px #D9B95C;
+  -webkit-text-stroke:0 !important;
+  text-shadow:
+    -1.5px -1.5px 0 #D9B95C,
+     1.5px -1.5px 0 #D9B95C,
+    -1.5px  1.5px 0 #D9B95C,
+     1.5px  1.5px 0 #D9B95C,
+     0px   -1.8px 0 #D9B95C,
+     0px    1.8px 0 #D9B95C,
+    -1.8px  0px   0 #D9B95C,
+     1.8px  0px   0 #D9B95C,
+     0 0 18px rgba(217,185,92,0.45);
 }
 
 /* Choice 11: Pure Platinum (Uploaded Image Specular Masterpiece) */
@@ -255,8 +268,8 @@ body[data-clock-theme="green-nature"] .chrome span{
   -webkit-text-stroke:1.2px rgba(134,239,172,0.45);
 }
 
-/* Gigantic Clock Geometry (Identical to Uploaded Image) */
-#clock{font-size:clamp(5.2rem,19.5vw,17.5rem);line-height:0.88;letter-spacing:-.04em}
+/* Gigantic Clock Geometry (Calibrated for Perfect Viewport Fit) */
+#clock{font-size:clamp(4.2rem,13.8vw,12.5rem);line-height:0.88;letter-spacing:-.04em}
 #ampm{font-family:inherit;font-weight:800;font-size:clamp(1.4rem,4vw,3.2rem);color:var(--gold);margin-top:0;letter-spacing:.02em;margin-left:8px;align-self:flex-end;margin-bottom:.12em}
 #date{font-size:clamp(1.1rem,2.2vw,1.55rem);color:var(--dim);margin-top:4px;font-weight:600;line-height:1.25}
 
@@ -436,7 +449,7 @@ li.cur{opacity:1;border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 3
 #rest.show{display:flex}
 #rest.idle{cursor:none}
 #restWrap{display:flex;flex-direction:column;align-items:center;transition:transform 3s ease}
-#restClock{font-size:min(19vw,40vh)}
+#restClock{font-size:min(15.5vw,36vh)}
 #restAmpm{font-family:var(--font-clock);font-weight:600;font-size:min(3.4vw,6vh);letter-spacing:.35em;color:var(--gold);margin-top:.6em;opacity:.85}
 #restHint{position:fixed;left:0;right:0;bottom:28px;text-align:center;color:var(--mute);font-size:1rem;transition:opacity 1.2s}
 
@@ -565,13 +578,16 @@ body.light-theme[data-clock-theme="gold"] .chrome span {
   -webkit-text-stroke: 1px rgba(120,53,15,0.25) !important;
 }
 
-body.light-theme[data-clock-theme="cyber-emerald"] .chrome span {
+body.light-theme[data-clock-theme="cyber-emerald"] .chrome span,
+body.light-theme[data-clock-theme="cyberpunk"] .chrome span {
+  width: .62em;
   background: linear-gradient(180deg, #064E3B 0%, #065F46 30%, #047857 65%, #059669 85%, #064E3B 100%) !important;
   -webkit-background-clip: text !important;
   background-clip: text !important;
   color: transparent !important;
   -webkit-text-fill-color: transparent !important;
-  -webkit-text-stroke: 1px rgba(6,78,59,0.2) !important;
+  -webkit-text-stroke: 0 !important;
+  filter: drop-shadow(0 2px 4px rgba(16,185,129,0.25)) !important;
 }
 
 body.light-theme[data-clock-theme="ice-titanium"] .chrome span {
@@ -585,12 +601,14 @@ body.light-theme[data-clock-theme="ice-titanium"] .chrome span {
 
 body.light-theme[data-clock-theme="amethyst"] .chrome span,
 body.light-theme[data-clock-theme="purple"] .chrome span {
+  width: .62em;
   background: linear-gradient(180deg, #3B0764 0%, #581C87 30%, #7C3AED 65%, #6D28D9 85%, #3B0764 100%) !important;
   -webkit-background-clip: text !important;
   background-clip: text !important;
   color: transparent !important;
   -webkit-text-fill-color: transparent !important;
-  -webkit-text-stroke: 1px rgba(59,7,100,0.2) !important;
+  -webkit-text-stroke: 0 !important;
+  filter: drop-shadow(0 2px 4px rgba(124,58,237,0.2)) !important;
 }
 
 body.light-theme[data-clock-theme="sunset-rose"] .chrome span,
@@ -629,9 +647,20 @@ body.light-theme[data-clock-theme="sunset-amber"] .chrome span {
 }
 
 body.light-theme[data-clock-theme="midnight-gold"] .chrome span {
+  width: .62em;
   color: #111827 !important;
   -webkit-text-fill-color: #111827 !important;
-  -webkit-text-stroke: 1.6px #8B6508 !important;
+  -webkit-text-stroke: 0 !important;
+  text-shadow:
+    -1.5px -1.5px 0 #B45309,
+     1.5px -1.5px 0 #B45309,
+    -1.5px  1.5px 0 #B45309,
+     1.5px  1.5px 0 #B45309,
+     0px   -1.8px 0 #B45309,
+     0px    1.8px 0 #B45309,
+    -1.8px  0px   0 #B45309,
+     1.8px  0px   0 #B45309,
+     0 0 10px rgba(180,83,9,0.25) !important;
 }
 
 body.light-theme[data-clock-theme="rainbow"] .chrome span {
