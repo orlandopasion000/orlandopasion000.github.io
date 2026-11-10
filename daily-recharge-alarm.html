@@ -1664,10 +1664,12 @@ function unlock(){
     ac.resume().then(function(){
       updateAudioBadge();
       prepare();
+      if(armed) startAudioKeepAlive();
     }).catch(function(){});
   }else{
     updateAudioBadge();
     prepare();
+    if(armed) startAudioKeepAlive();
   }
 }
 ["pointerdown","keydown","touchstart","scroll"].forEach(function(ev){document.addEventListener(ev,unlock,{passive:true,capture:true})});
@@ -1742,16 +1744,36 @@ function startFallback(song){
   fallback=el;
   el.onended=function(){if(fallback===el){fallback=null;finished()}};
   var p=el.play();
-  if(p&&p.catch)p.catch(function(){});
+  if(p&&p.catch){
+    p.catch(function(err){
+      console.warn("Audio element play blocked, attempting Web Audio buffer:", err);
+      if(ac){
+        ac.resume().then(function(){
+          var i=idx(song);
+          if(ready[i])startBuf(ready[i]);
+        }).catch(function(){});
+      }
+    });
+  }
 }
 function playSong(song,done,m){
   stopSong();
   current=song;onDone=done||null;mode=m||"test";
   unlock();
+  if(ac&&ac.state==="suspended"){
+    ac.resume().catch(function(){});
+  }
   var i=idx(song);
-  if(ac&&ready[i])startBuf(ready[i]);
-  else if(ac)decode(i).then(function(buf){if(current===song)startBuf(buf)}).catch(function(){if(current===song)startFallback(song)});
-  else startFallback(song);
+  if(ac&&ac.state==="running"&&ready[i]){
+    startBuf(ready[i]);
+  } else {
+    startFallback(song);
+    if(ac&&!ready[i]){
+      decode(i).then(function(buf){
+        if(current===song&&(!fallback||fallback.paused))startBuf(buf);
+      }).catch(function(){});
+    }
+  }
   showSong();
 }
 function finished(){
@@ -2320,6 +2342,7 @@ renderDays();
 
 /* ───────── ALARM TRIGGERING (Song Clip Only) ───────── */
 var ringing=-1,snoozes=[];
+var ringTitleTimer=null;
 function ring(i,snoozed){
   var s=S[i],plays=0;ringing=i;
   $("ovT").textContent=(snoozed?"Snoozed — ":"")+s[3];
@@ -2334,24 +2357,69 @@ function ring(i,snoozed){
   go();
   setTimeout(function(){if($("ov").className==="show")$("ovB").focus()},50);
   notify(s[3],fmt(s[0],s[1])+" — tap Snooze or Dismiss");
+
+  // Minimized / background taskbar flash alert
+  clearInterval(ringTitleTimer);
+  var flashOn = false;
+  ringTitleTimer = setInterval(function(){
+    if($("ov").className !== "show"){
+      clearInterval(ringTitleTimer);
+      return;
+    }
+    flashOn = !flashOn;
+    document.title = (flashOn ? "🔔 ALARM: " : "⏰ ") + fmt(s[0],s[1]) + " " + s[3];
+  }, 750);
 }
 function notify(title,body){
   try{
-    if(!window.Notification||Notification.permission!=="granted")return;
-    var opt={body:body,tag:"dra",renotify:true,requireInteraction:true,icon:"assets/recharge-icon-192.png",badge:"assets/recharge-icon-192.png",vibrate:[400,200,400],
-      actions:[{action:"snooze",title:"Snooze 5 min"},{action:"dismiss",title:"Dismiss"}]};
-    if(swReg)swReg.showNotification(title,opt);
-    else{delete opt.actions;new Notification(title,opt)}
+    if(!window.Notification) return;
+    if(Notification.permission === "default"){
+      Notification.requestPermission();
+    }
+    if(Notification.permission !== "granted") return;
+    var opt={
+      body: body,
+      tag: "dra-" + Date.now(),
+      renotify: true,
+      requireInteraction: true,
+      icon: "assets/recharge-icon-192.png",
+      badge: "assets/recharge-icon-192.png",
+      vibrate: [500,250,500,250,500],
+      actions: [
+        { action: "snooze", title: "Snooze 5 min" },
+        { action: "dismiss", title: "Dismiss" }
+      ]
+    };
+    if(swReg && swReg.showNotification){
+      swReg.showNotification(title, opt);
+    } else {
+      delete opt.actions;
+      new Notification(title, opt);
+    }
   }catch(e){}
 }
-function clearNotes(){if(swReg&&swReg.getNotifications)swReg.getNotifications({tag:"dra"}).then(function(l){l.forEach(function(x){x.close()})}).catch(function(){})}
-function dismiss(){if($("ov").className!=="show")return;$("ov").className="";ringing=-1;stopSong();clearNotes();if(navigator.vibrate)navigator.vibrate(0)}
+function clearNotes(){
+  if(swReg&&swReg.getNotifications){
+    swReg.getNotifications().then(function(l){
+      l.forEach(function(x){if(x.tag && x.tag.indexOf("dra")===0) x.close();});
+    }).catch(function(){});
+  }
+}
+function dismiss(){
+  if($("ov").className!=="show")return;
+  $("ov").className="";
+  ringing=-1;
+  clearInterval(ringTitleTimer);
+  stopSong();
+  clearNotes();
+  if(navigator.vibrate)navigator.vibrate(0);
+}
 function snooze(){
   if($("ov").className!=="show")return;
-  var i=ringing;dismiss();
+  var i=ringing;
+  dismiss();
   snoozes.push({i:i,at:Date.now()+5*60000,title:S[i]?S[i][3]:"Alarm"});
   saveSnoozes();
-  $("status").innerHTML='<span class="status-active-pulse">●</span> Snoozed — “'+(S[i]?escapeHtml(S[i][3]):'Alarm')+'” will ring again in 5 minutes.';
   showToast("Snoozed for 5 minutes", "⏰");
 }
 $("ovB").onclick=dismiss;
@@ -2682,31 +2750,93 @@ document.addEventListener('visibilitychange', function() {
   }
 });
 
-var keepAliveNode = null;
+var keepAliveOsc = null;
+var keepAliveGain = null;
+var keepAliveAudio = null;
 function startAudioKeepAlive() {
   try {
+    // 1. Web Audio Engine Keep-Alive with continuous non-zero sub-audible oscillator (15 Hz)
     if (!ac && (window.AudioContext || window.webkitAudioContext)) {
       var AC = window.AudioContext || window.webkitAudioContext;
-      ac = new AC();
+      ac = new AC({ latencyHint: "interactive" });
     }
-    if (!ac || keepAliveNode) return;
-    if (ac.state === 'suspended') ac.resume().catch(function(){});
-    var sr = ac.sampleRate || 44100;
-    var buffer = ac.createBuffer(1, sr * 2, sr);
-    keepAliveNode = ac.createBufferSource();
-    keepAliveNode.buffer = buffer;
-    keepAliveNode.loop = true;
-    var gainNode = ac.createGain();
-    gainNode.gain.value = 0.0001; // Inaudible keep-alive channel
-    keepAliveNode.connect(gainNode);
-    gainNode.connect(ac.destination);
-    keepAliveNode.start(0);
+    if (ac) {
+      if (ac.state === 'suspended') {
+        ac.resume().catch(function(){});
+      }
+      if (!keepAliveOsc) {
+        keepAliveOsc = ac.createOscillator();
+        keepAliveOsc.type = "sine";
+        keepAliveOsc.frequency.setValueAtTime(15, ac.currentTime); // 15 Hz sub-audible tone
+        keepAliveGain = ac.createGain();
+        keepAliveGain.gain.setValueAtTime(0.0001, ac.currentTime); // inaudible
+        keepAliveOsc.connect(keepAliveGain);
+        keepAliveGain.connect(ac.destination);
+        keepAliveOsc.start();
+      }
+    }
+
+    // 2. HTML5 Audio Media Session Anchor
+    // Plays an inaudible 44.1kHz loop so the OS and browser register an active audio stream
+    if (!keepAliveAudio) {
+      keepAliveAudio = new Audio();
+      keepAliveAudio.src = "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==";
+      keepAliveAudio.loop = true;
+      keepAliveAudio.volume = 0.01;
+    }
+    var p = keepAliveAudio.play();
+    if (p && p.catch) p.catch(function(){});
+
+    // 3. Register Media Session to exempt tab from OS background discarding
+    if ("mediaSession" in navigator) {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: "Daily Recharge Alarm (Armed)",
+        artist: "Active Schedule Alarm",
+        album: "Always-On Alarm Engine"
+      });
+      navigator.mediaSession.playbackState = "playing";
+    }
   } catch(e){}
 }
 function stopAudioKeepAlive() {
-  if (keepAliveNode) {
-    try { keepAliveNode.stop(); keepAliveNode.disconnect(); } catch(e){}
-    keepAliveNode = null;
+  try {
+    if (keepAliveOsc) {
+      keepAliveOsc.stop();
+      keepAliveOsc.disconnect();
+      keepAliveOsc = null;
+    }
+    if (keepAliveGain) {
+      keepAliveGain.disconnect();
+      keepAliveGain = null;
+    }
+    if (keepAliveAudio) {
+      keepAliveAudio.pause();
+      keepAliveAudio = null;
+    }
+    if ("mediaSession" in navigator) {
+      navigator.mediaSession.playbackState = "paused";
+    }
+  } catch(e){}
+}
+
+/* ══════════════════════════════════════════════════════════════
+   BACKGROUND WORKER TICKER (Immune to Tab Minimization / Throttling)
+   ══════════════════════════════════════════════════════════════ */
+var tickerWorker = null;
+function startWorkerTicker() {
+  if (tickerWorker) return;
+  try {
+    var blobCode = "var timer=null;self.onmessage=function(e){if(e.data==='start'){if(!timer){timer=setInterval(function(){self.postMessage('tick')},1000)}}else if(e.data==='stop'){if(timer){clearInterval(timer);timer=null}}};";
+    var blob = new Blob([blobCode], { type: "application/javascript" });
+    tickerWorker = new Worker(URL.createObjectURL(blob));
+    tickerWorker.onmessage = function(e) {
+      if (e.data === "tick") {
+        tick();
+      }
+    };
+    tickerWorker.postMessage("start");
+  } catch(e) {
+    console.warn("Web worker ticker unavailable, falling back to window interval:", e);
   }
 }
 
@@ -3205,13 +3335,13 @@ try {
 try { renderDays(); } catch(e){}
 try { tick(); } catch(e){ console.error("Initial tick error:", e); }
 try { setInterval(tick, 1000); } catch(e){}
+try { startWorkerTicker(); } catch(e){}
 
 try { queued = nextSong(); } catch(e){}
 try { renderList(); } catch(e){}
 try { showVol(); } catch(e){}
 try { showSong(); } catch(e){}
 try { setStatus(); } catch(e){}
-try { updateAmbientUI(); } catch(e){}
 try { updatePresetSelectorUI(); } catch(e){}
 try { updatePresetDaysBadge(); } catch(e){}
 try {

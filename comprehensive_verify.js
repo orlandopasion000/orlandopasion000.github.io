@@ -60,13 +60,13 @@ console.log('✓ Store-ready Privacy Policy and Terms of Service exist');
   }
 });
 
-// 4. Verify Service Worker v10
+// 4. Verify Service Worker v11
 const swContent = fs.readFileSync(path.join(__dirname, 'recharge-sw.js'), 'utf8');
-if (!/recharge-v1\d/.test(swContent)) {
-  console.error('FAIL: Service worker version is not recharge-v10 or higher');
+if (!/recharge-v1[1-\d]/.test(swContent)) {
+  console.error('FAIL: Service worker version is not recharge-v11 or higher');
   pass = false;
 } else {
-  console.log('✓ Service Worker is on recharge-v10');
+  console.log('✓ Service Worker is on recharge-v11');
 }
 const requiredMusic = [
   'palagi.mp3', 'na-para-bang.mp3', 'what-if-i-miss-you.mp3',

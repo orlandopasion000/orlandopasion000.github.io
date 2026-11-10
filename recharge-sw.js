@@ -1,8 +1,8 @@
-/* Daily Recharge Alarm — Service Worker v10
+/* Daily Recharge Alarm — Service Worker v11
    • Caches core app, clean blank edition, manifests, song chorus clips, mobile QR code, and Lexend font for 100% offline playback.
-   • Handles notification actions (Snooze / Dismiss).
+   • Handles notification actions (Snooze / Dismiss / Focus).
    Scope: ./ */
-var VERSION = "recharge-v10";
+var VERSION = "recharge-v11";
 var CORE = [
   "daily-recharge-alarm.html",
   "recharge-clean.html",
@@ -100,10 +100,12 @@ self.addEventListener("notificationclick", function (e) {
   e.notification.close();
   e.waitUntil(
     self.clients.matchAll({ type: "window", includeUncontrolled: true }).then(function (list) {
-      var client = list.find(function (c) { return c.url.indexOf("daily-recharge-alarm") !== -1; });
+      var client = list.find(function (c) {
+        return c.url.indexOf("daily-recharge-alarm") !== -1 || c.url.indexOf("recharge-clean") !== -1;
+      });
       if (client) {
         client.postMessage({ type: "alarm-action", action: action, tag: e.notification.tag });
-        return action === "open" ? client.focus() : undefined;
+        return client.focus();
       }
       return self.clients.openWindow("daily-recharge-alarm.html");
     })
