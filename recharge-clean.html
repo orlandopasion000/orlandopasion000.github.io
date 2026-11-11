@@ -7,12 +7,12 @@
 <title>OrlandoRecharge (Clean Edition) — Blank Canvas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="icon" type="image/png" sizes="192x192" href="assets/recharge-icon-192.png?v=or2">
-<link rel="icon" type="image/png" sizes="512x512" href="assets/recharge-icon-512.png?v=or2">
-<link rel="icon" type="image/x-icon" href="favicon.ico?v=or2">
-<link rel="shortcut icon" href="favicon.ico?v=or2">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/recharge-icon-192.png?v=or3">
+<link rel="icon" type="image/png" sizes="512x512" href="assets/recharge-icon-512.png?v=or3">
+<link rel="icon" type="image/x-icon" href="favicon.ico?v=or3">
+<link rel="shortcut icon" href="favicon.ico?v=or3">
 <link rel="manifest" href="recharge-clean-manifest.webmanifest">
-<link rel="apple-touch-icon" href="assets/recharge-apple-touch.png?v=or2">
+<link rel="apple-touch-icon" href="assets/recharge-apple-touch.png?v=or3">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -3647,7 +3647,7 @@ function tick(){
     var isBlankCanvas = (S.length === 0);
     $("nextLabel").textContent = isBlankCanvas ? "Blank Canvas (0 Alarms)" : "No alarms set";
     $("count").textContent = isBlankCanvas ? "Tap + Add Alarm" : "";
-    document.title = isBlankCanvas ? "Daily Recharge Alarm — Clean Blank Canvas" : "Daily Recharge Alarm";
+    document.title = isBlankCanvas ? "OrlandoRecharge — Clean Blank Canvas" : "OrlandoRecharge (Main Version)";
     return;
   }
   var diff=Math.round((found.at-n)/1000),h=Math.floor(diff/3600),m=Math.floor(diff%3600/60),s2=diff%60;
