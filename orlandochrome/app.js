@@ -1139,7 +1139,7 @@
 
     box.innerHTML = `
       <div class="nf-clock-digital">${timeStr}</div>
-      <a href="https://orlandopasion000.github.io/daily-recharge-alarm.html" target="_blank" rel="noopener noreferrer" class="nf-alarm-pill" title="Daily Recharge Alarm Schedule">
+      <a href="https://orlandopasion000.github.io/orlandorecharge" target="_blank" rel="noopener noreferrer" class="nf-alarm-pill" title="OrlandoRecharge — Live Schedule & Alarms">
         ⏰ ${diffText} — ${esc(alarm.title)}
       </a>
     `;

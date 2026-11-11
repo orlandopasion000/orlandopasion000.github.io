@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const repoDir = 'C:\\Users\\Orlando\\.gemini\\antigravity\\scratch\\orlandopasion000.github.io';
-const srcFile = path.join(repoDir, 'daily-recharge-alarm.html');
+const srcFile = path.join(repoDir, 'orlandorecharge.html');
 const destFile = path.join(repoDir, 'recharge-clean.html');
 
 let src = fs.readFileSync(srcFile, 'utf8');
@@ -143,4 +143,4 @@ if ($("clearScheduleBtn")) {
 src = src.replace('/* ───────── INITIAL BOOTSTRAP ───────── */', cleanHooks + '\n/* ───────── INITIAL BOOTSTRAP ───────── */');
 
 fs.writeFileSync(destFile, src, 'utf8');
-console.log('Successfully generated recharge-clean.html from daily-recharge-alarm.html');
+console.log('Successfully generated recharge-clean.html from orlandorecharge.html');

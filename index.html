@@ -474,10 +474,16 @@
     // Metadata for known files (rich descriptions, icons, order)
     // Any file NOT listed here will still appear — with an auto-generated card!
     var KNOWN_FILES = {
-      'daily-recharge-alarm.html': {
-        icon: '⏰', badge: 'Featured Tool', featured: true, order: 0,
-        title: 'Daily Recharge Alarm (Master)',
-        desc: 'Curated daily rhythm with 16 metallic clocks, BetterSleep nature soundscapes, and Rest Mode.',
+      'orlandorecharge': {
+        icon: '⚡', badge: 'Featured Tool', featured: true, order: 0,
+        title: 'OrlandoRecharge (Master)',
+        desc: 'Curated daily rhythm with 17 luxury metallic clocks, BetterSleep nature soundscapes, and Rest Mode.',
+        tags: ['Productivity', 'Daily Alarm', 'PWA']
+      },
+      'orlandorecharge.html': {
+        icon: '⚡', badge: 'Featured Tool', featured: true, order: 0,
+        title: 'OrlandoRecharge (Master)',
+        desc: 'Curated daily rhythm with 17 luxury metallic clocks, BetterSleep nature soundscapes, and Rest Mode.',
         tags: ['Productivity', 'Daily Alarm', 'PWA']
       },
       'recharge-clean.html': {
@@ -549,7 +555,7 @@
     };
 
     // Files to EXCLUDE from the resource listing
-    var EXCLUDE_FILES = ['index.html'];
+    var EXCLUDE_FILES = ['index.html', 'daily-recharge-alarm.html'];
 
     // Auto-icons for unknown files (cycles through these)
     var AUTO_ICONS = ['📄', '📋', '📊', '🔖', '📐', '🧮', '📑', '🗂️'];
@@ -625,7 +631,7 @@
             var known = KNOWN_FILES[file.name];
             if (known) {
               resources.push({
-                href: encodeURI(file.name),
+                href: file.name === 'orlandorecharge.html' ? 'orlandorecharge' : encodeURI(file.name),
                 icon: known.icon,
                 badge: known.badge,
                 featured: known.featured || false,

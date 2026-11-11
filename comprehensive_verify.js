@@ -38,8 +38,8 @@ console.log('✓ All 13 ambient soundscapes verified on disk');
 });
 console.log('✓ Store-ready Privacy Policy and Terms of Service exist');
 
-// 3. Verify JavaScript syntax in daily-recharge-alarm.html and recharge-clean.html
-['daily-recharge-alarm.html', 'recharge-clean.html'].forEach(f => {
+// 3. Verify JavaScript syntax in orlandorecharge.html and recharge-clean.html
+['orlandorecharge.html', 'recharge-clean.html'].forEach(f => {
   const html = fs.readFileSync(path.join(__dirname, f), 'utf8');
   const m = html.match(/<script>([\s\S]*?)<\/script>/);
   if (!m) {

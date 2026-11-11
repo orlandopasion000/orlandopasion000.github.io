@@ -2,10 +2,13 @@
    • Caches core app, clean blank edition, manifests, song chorus clips, mobile QR code, and Lexend font for 100% offline playback.
    • Handles notification actions (Snooze / Dismiss / Focus).
    Scope: ./ */
-var VERSION = "recharge-v12";
+var VERSION = "recharge-v13";
 var CORE = [
-  "daily-recharge-alarm.html",
+  "orlandorecharge",
+  "orlandorecharge.html",
+  "orlandorecharge/index.html",
   "recharge-clean.html",
+  "orlandorecharge-manifest.webmanifest",
   "recharge-manifest.webmanifest",
   "recharge-clean-manifest.webmanifest",
   "assets/app-icon.ico",
@@ -61,10 +64,10 @@ self.addEventListener("fetch", function (e) {
     e.respondWith(
       fetch(req).then(function (res) {
         var copy = res.clone();
-        caches.open(VERSION).then(function (c) { c.put("daily-recharge-alarm.html", copy); });
+        caches.open(VERSION).then(function (c) { c.put("orlandorecharge.html", copy); });
         return res;
       }).catch(function () {
-        return caches.match("daily-recharge-alarm.html");
+        return caches.match("orlandorecharge.html") || caches.match("orlandorecharge/index.html");
       })
     );
     return;
@@ -102,13 +105,13 @@ self.addEventListener("notificationclick", function (e) {
   e.waitUntil(
     self.clients.matchAll({ type: "window", includeUncontrolled: true }).then(function (list) {
       var client = list.find(function (c) {
-        return c.url.indexOf("daily-recharge-alarm") !== -1 || c.url.indexOf("recharge-clean") !== -1;
+        return c.url.indexOf("orlandorecharge") !== -1 || c.url.indexOf("recharge-clean") !== -1 || c.url.indexOf("daily-recharge-alarm") !== -1;
       });
       if (client) {
         client.postMessage({ type: "alarm-action", action: action, tag: e.notification.tag });
         return client.focus();
       }
-      return self.clients.openWindow("daily-recharge-alarm.html");
+      return self.clients.openWindow("orlandorecharge");
     })
   );
 });
