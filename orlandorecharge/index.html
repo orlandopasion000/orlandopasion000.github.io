@@ -1,0 +1,3491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<base href="../">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>OrlandoRecharge — Sir Orlando V. Pasion, Jr.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" href="assets/recharge-icon-192.png">
+<link rel="manifest" href="orlandorecharge-manifest.webmanifest">
+<link rel="apple-touch-icon" href="assets/recharge-apple-touch.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="OrlandoRecharge">
+<meta name="description" content="OrlandoRecharge — Executive daily schedule cockpit with music alarms and Rest Mode clock.">
+<!-- Choice 6: Lexend Bold (Geometric, Modern, High-Legibility) -->
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700;800&family=Inter:wght@400;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&family=Montserrat:wght@600;700;800;900&family=Orbitron:wght@700;800;900&family=Outfit:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@600;700;800&family=Rajdhani:wght@600;700&family=Space+Grotesk:wght@600;700&family=Unbounded:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+@font-face{
+  font-family:'Lexend';
+  src:url('assets/lexend.ttf') format('truetype');
+  font-weight:100 900;
+  font-display:swap;
+}
+:root{
+  --black:#000;
+  --surface:#0c0c0e;
+  --surface-2:#14151b;
+  --surface-3:#1c1d25;
+  --line:#1C1C20;
+  --line2:#272832;
+  --gold:#D9B95C;
+  --gold-soft:rgba(217,185,92,.55);
+  --gold-glow:rgba(217,185,92,.22);
+  --text:#F5F1E6;
+  --dim:#B4AC9C;
+  --mute:#7E776B;
+
+  /* Categories requested by Sir Orlando */
+  --class:#5B9EF5;   /* Blue for Class */
+  --rest:#48C774;    /* Green for Recharge */
+  --work:#AF69EE;    /* Purple for Work */
+  --err:#C2C5D1;     /* Silver for Task */
+  --night:#F0CF7A;   /* Gold for Wind-down */
+
+  --sans:'Lexend',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  --font-clock:'Lexend',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  --mono:'Lexend',-apple-system,BlinkMacSystemFont,monospace;
+  --glow-w:none;
+  --glow-g:none;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#000}
+html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{color:var(--text);font-family:var(--sans);font-size:19.5px;line-height:1.5;min-height:100vh;overflow-x:hidden}
+main{width:100%;max-width:1160px;margin:0 auto;padding:clamp(14px,2.8vw,28px) clamp(12px,3.5vw,32px) 80px}
+
+/* ===== HERO CLOCK (Very Big Clock with Date, Next Alarm, Countdown) ===== */
+.hero{position:relative;padding:clamp(16px,2.8vw,28px) clamp(16px,3.5vw,36px) clamp(14px,2.4vw,22px);border:1px solid var(--line);border-radius:26px;background:#000;margin-bottom:14px;overflow:hidden}
+.hero::before{content:"";position:absolute;top:-1px;left:8%;right:8%;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0.45}
+.clock-row{display:flex;align-items:baseline;justify-content:flex-start;gap:clamp(6px,1.8vw,16px);flex-wrap:nowrap;padding-bottom:0;margin-bottom:0}
+
+/* Precision Numerals — Massive, Crisp, Specular */
+.chrome{font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,sans-serif;font-weight:800;line-height:0.88;white-space:nowrap;font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;letter-spacing:-.04em}
+.chrome span{display:inline-block;width:.58em;text-align:center}
+.chrome span.c{width:.22em;transform:translateY(-.04em)}
+
+/* ══════════════════════════════════════════════════════════════
+   15 BESPOKE CLOCK TYPOGRAPHIES & METALLIC STYLES
+   ══════════════════════════════════════════════════════════════ */
+
+/* Choice 1: Executive Chrome 3D (Plus Jakarta Sans Variable Bold) */
+body[data-clock-theme="chrome-3d"] .chrome,
+body[data-clock-theme="chrome"] .chrome{
+  font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,sans-serif !important;
+  font-weight:800;
+  letter-spacing:-.04em;
+  filter:drop-shadow(0 4px 10px rgba(0,0,0,0.92));
+}
+body[data-clock-theme="chrome-3d"] .chrome span,
+body[data-clock-theme="chrome"] .chrome span{
+  background:linear-gradient(180deg,#FFFFFF 0%,#F1F5F9 16%,#CBD5E1 38%,#475569 52%,#1E293B 56%,#334155 64%,#94A3B8 82%,#E2E8F0 96%,#FFFFFF 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  -webkit-text-stroke:1.3px rgba(255,255,255,0.45);
+}
+
+/* Choice 2: Royal 24K Radiant Gold (Outfit Extra Bold) */
+body[data-clock-theme="gold"] .chrome{
+  font-family:'Outfit',-apple-system,BlinkMacSystemFont,sans-serif !important;
+  font-weight:800;
+  letter-spacing:-.03em;
+  filter:drop-shadow(0 4px 10px rgba(0,0,0,0.9)) drop-shadow(0 0 25px rgba(217,185,92,0.25));
+}
+body[data-clock-theme="gold"] .chrome span{
+  background:linear-gradient(180deg,#FFFBEB 0%,#FDE68A 18%,#F59E0B 48%,#78350F 70%,#FBBF24 88%,#FDE68A 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  -webkit-text-stroke:1.2px rgba(253,230,138,0.5);
+}
+
+/* Choice 3: Cyberpunk Emerald Matrix (Chakra Petch Bold) */
+body[data-clock-theme="cyber-emerald"] .chrome,
+body[data-clock-theme="cyberpunk"] .chrome{
+  font-family:'Chakra Petch',monospace,sans-serif !important;
+  font-weight:700;
+  letter-spacing:0.02em;
+  filter:drop-shadow(0 0 10px rgba(52,211,153,0.7)) drop-shadow(0 0 28px rgba(16,185,129,0.35));
+}
+body[data-clock-theme="cyber-emerald"] .chrome span,
+body[data-clock-theme="cyberpunk"] .chrome span{
+  width:.62em;
+  background:linear-gradient(180deg,#F0FDF4 0%,#A7F3D0 22%,#34D399 52%,#059669 82%,#10B981 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  -webkit-text-stroke:0;
+}
+
+/* Choice 4: Glacial Titanium & Ice Blue (Space Grotesk Bold) */
+body[data-clock-theme="ice-titanium"] .chrome,
+body[data-clock-theme="glacial"] .chrome{
+  font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,sans-serif !important;
+  font-weight:700;
+  letter-spacing:-.04em;
+  filter:drop-shadow(0 4px 8px rgba(0,0,0,0.85)) drop-shadow(0 0 20px rgba(56,189,248,0.3));
+}
+body[data-clock-theme="ice-titanium"] .chrome span,
+body[data-clock-theme="glacial"] .chrome span{
+  background:linear-gradient(180deg,#F0F9FF 0%,#BAE6FD 20%,#38BDF8 50%,#0C4A6E 74%,#0284C7 88%,#7DD3FC 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  -webkit-text-stroke:1.2px rgba(186,230,253,0.5);
+}
+
+/* Choice 5: Imperial Amethyst Purple (Outfit Extra Bold) */
+body[data-clock-theme="amethyst"] .chrome,
+body[data-clock-theme="purple"] .chrome{
+  font-family:'Outfit',-apple-system,BlinkMacSystemFont,sans-serif !important;
+  font-weight:800;
+  letter-spacing:0.01em;
+  filter:drop-shadow(0 4px 10px rgba(0,0,0,0.9)) drop-shadow(0 0 22px rgba(192,132,252,0.4));
+}
+body[data-clock-theme="amethyst"] .chrome span,
+body[data-clock-theme="purple"] .chrome span{
+  width:.62em;
+  background:linear-gradient(180deg,#FAF5FF 0%,#E9D5FF 22%,#C084FC 50%,#7E22CE 76%,#A855F7 90%,#E9D5FF 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  -webkit-text-stroke:0;
+}
+
+/* Choice 6: Sunset Rose Gold (Lexend Bold) */
+body[data-clock-theme="sunset-rose"] .chrome,
+body[data-clock-theme="pink"] .chrome{
+  font-family:'Lexend',-apple-system,BlinkMacSystemFont,sans-serif !important;
+  font-weight:700;
+  letter-spacing:-.03em;
+  filter:drop-shadow(0 4px 8px rgba(0,0,0,0.85)) drop-shadow(0 0 18px rgba(244,114,182,0.25));
+}
+body[data-clock-theme="sunset-rose"] .chrome span,
+body[data-clock-theme="pink"] .chrome span{
+  background:linear-gradient(180deg,#FFF1F2 0%,#FECDD3 22%,#FB7185 50%,#4C0519 74%,#E11D48 88%,#FDA4AF 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  -webkit-text-stroke:1.2px rgba(254,205,211,0.5);
+}
+
+/* Choice 7: Pure Minimalist Studio White (Inter Display Black) */
+body[data-clock-theme="minimal-white"] .chrome,
+body[data-clock-theme="pure-white"] .chrome{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif !important;
+  font-weight:900;
+  letter-spacing:-.04em;
+  filter:drop-shadow(0 4px 10px rgba(0,0,0,0.85)) drop-shadow(0 0 20px rgba(255,255,255,0.15));
+}
+body[data-clock-theme="minimal-white"] .chrome span,
+body[data-clock-theme="pure-white"] .chrome span{
+  color:#FFFFFF !important;
+  -webkit-text-fill-color:#FFFFFF !important;
+  -webkit-text-stroke:1.4px rgba(255,255,255,0.6);
+}
+
+/* Choice 8: German Chronometer DIN (Bahnschrift / DIN 1451) */
+body[data-clock-theme="chronometer-din"] .chrome,
+body[data-clock-theme="din"] .chrome{
+  font-family:'Bahnschrift','DIN Alternate','DIN 1451 Mittelschrift',-apple-system,sans-serif !important;
+  font-weight:700;
+  letter-spacing:-.02em;
+  filter:drop-shadow(0 4px 8px rgba(0,0,0,0.9));
+}
+body[data-clock-theme="chronometer-din"] .chrome span,
+body[data-clock-theme="din"] .chrome span{
+  background:linear-gradient(180deg,#FFFFFF 0%,#E2E8F0 25%,#94A3B8 54%,#334155 76%,#64748B 90%,#CBD5E1 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  -webkit-text-stroke:1.2px rgba(226,232,240,0.45);
+}
+
+/* Choice 9: Blazing Sunset Amber (Rajdhani Bold) */
+body[data-clock-theme="sunset-amber"] .chrome,
+body[data-clock-theme="amber"] .chrome{
+  font-family:'Rajdhani',-apple-system,BlinkMacSystemFont,sans-serif !important;
+  font-weight:700;
+  letter-spacing:-.02em;
+  filter:drop-shadow(0 4px 10px rgba(0,0,0,0.9)) drop-shadow(0 0 25px rgba(245,158,11,0.35));
+}
+body[data-clock-theme="sunset-amber"] .chrome span,
+body[data-clock-theme="amber"] .chrome span{
+  background:linear-gradient(180deg,#FFFBEB 0%,#FDE68A 20%,#F59E0B 52%,#451A03 76%,#D97706 90%,#FCD34D 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  -webkit-text-stroke:1.2px rgba(253,230,138,0.5);
+}
+
+/* Choice 10: Midnight Gold Dual-Tone Rim (Inter Display Black) */
+body[data-clock-theme="midnight-gold"] .chrome{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif !important;
+  font-weight:900;
+  letter-spacing:0.01em;
+  filter:drop-shadow(0 4px 10px rgba(0,0,0,0.95));
+}
+body[data-clock-theme="midnight-gold"] .chrome span{
+  width:.62em;
+  color:#FFFFFF !important;
+  -webkit-text-fill-color:#FFFFFF !important;
+  -webkit-text-stroke:0 !important;
+  text-shadow:
+    -1.5px -1.5px 0 #D9B95C,
+     1.5px -1.5px 0 #D9B95C,
+    -1.5px  1.5px 0 #D9B95C,
+     1.5px  1.5px 0 #D9B95C,
+     0px   -1.8px 0 #D9B95C,
+     0px    1.8px 0 #D9B95C,
+    -1.8px  0px   0 #D9B95C,
+     1.8px  0px   0 #D9B95C,
+     0 0 18px rgba(217,185,92,0.45);
+}
+
+/* Choice 11: Pure Platinum (Uploaded Image Specular Masterpiece) */
+body[data-clock-theme="platinum"] .chrome{
+  font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,sans-serif !important;
+  font-weight:800;
+  letter-spacing:-.04em;
+  filter:drop-shadow(0 4px 10px rgba(0,0,0,0.92));
+}
+body[data-clock-theme="platinum"] .chrome span{
+  background:linear-gradient(180deg,#FFFFFF 0%,#F1F5F9 18%,#CBD5E1 42%,#475569 64%,#1E293B 70%,#64748B 82%,#E2E8F0 96%,#FFFFFF 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  -webkit-text-stroke:1.3px rgba(255,255,255,0.45);
+}
+
+/* Choice 12: Prismatic Rainbow Shining */
+body[data-clock-theme="rainbow"] .chrome{
+  font-family:'Outfit',sans-serif !important;
+  font-weight:800;
+  filter:drop-shadow(0 4px 10px rgba(0,0,0,0.9));
+}
+body[data-clock-theme="rainbow"] .chrome span{
+  background:linear-gradient(135deg,#FF7675 0%,#FDCB6E 20%,#55EFC4 40%,#74B9FF 60%,#A29BFE 80%,#FD79A8 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  -webkit-text-stroke:1.1px rgba(255,255,255,0.45);
+}
+
+/* Choice 13: Green Nature Matrix */
+body[data-clock-theme="green-nature"] .chrome{
+  font-family:'Space Grotesk',sans-serif !important;
+  font-weight:700;
+  filter:drop-shadow(0 4px 8px rgba(0,0,0,0.85));
+}
+body[data-clock-theme="green-nature"] .chrome span{
+  background:linear-gradient(180deg,#F0FDF4 0%,#86EFAC 22%,#22C55E 50%,#14532D 74%,#4ADE80 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  -webkit-text-stroke:1.2px rgba(134,239,172,0.45);
+}
+
+/* Choice 14: Royal Sapphire & Cobalt Chrono (Space Grotesk Bold) */
+body[data-clock-theme="royal-sapphire"] .chrome{
+  font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,sans-serif !important;
+  font-weight:700;
+  letter-spacing:0.01em;
+  filter:drop-shadow(0 4px 10px rgba(0,0,0,0.9)) drop-shadow(0 0 24px rgba(59,130,246,0.5));
+}
+body[data-clock-theme="royal-sapphire"] .chrome span{
+  width:.62em;
+  background:linear-gradient(180deg,#EFF6FF 0%,#BFDBFE 18%,#60A5FA 46%,#1E3A8A 72%,#2563EB 88%,#93C5FD 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  -webkit-text-stroke:0;
+}
+
+/* Choice 15: Cyberpunk Crimson Laser (Chakra Petch Bold) */
+body[data-clock-theme="crimson-laser"] .chrome{
+  font-family:'Chakra Petch',monospace,sans-serif !important;
+  font-weight:700;
+  letter-spacing:0.02em;
+  filter:drop-shadow(0 0 12px rgba(239,68,68,0.7)) drop-shadow(0 0 32px rgba(220,38,38,0.35));
+}
+body[data-clock-theme="crimson-laser"] .chrome span{
+  width:.62em;
+  background:linear-gradient(180deg,#FEF2F2 0%,#FECACA 20%,#F87171 48%,#7F1D1D 74%,#EF4444 88%,#FCA5A5 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  -webkit-text-stroke:0;
+}
+
+/* Choice 16: Titanium Obsidian Noir (Inter Display Black) */
+body[data-clock-theme="obsidian-noir"] .chrome{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif !important;
+  font-weight:900;
+  letter-spacing:0.01em;
+  filter:drop-shadow(0 6px 14px rgba(0,0,0,0.95)) drop-shadow(0 0 16px rgba(148,163,184,0.3));
+}
+body[data-clock-theme="obsidian-noir"] .chrome span{
+  width:.62em;
+  background:linear-gradient(180deg,#FFFFFF 0%,#E2E8F0 18%,#94A3B8 46%,#0F172A 72%,#475569 88%,#CBD5E1 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  -webkit-text-stroke:0;
+}
+
+/* Choice 17: Solis Radiant 18K Yellow Gold (Outfit Extra Bold) */
+body[data-clock-theme="solis-gold"] .chrome{
+  font-family:'Outfit',-apple-system,BlinkMacSystemFont,sans-serif !important;
+  font-weight:800;
+  letter-spacing:0.01em;
+  filter:drop-shadow(0 4px 10px rgba(0,0,0,0.92)) drop-shadow(0 0 28px rgba(234,179,8,0.4));
+}
+body[data-clock-theme="solis-gold"] .chrome span{
+  width:.62em;
+  background:linear-gradient(180deg,#FEFCE8 0%,#FEF08A 18%,#FACC15 48%,#713F12 74%,#EAB308 88%,#FDE047 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  -webkit-text-stroke:0;
+}
+
+/* Gigantic Clock Geometry (Calibrated for Perfect Viewport Fit Across All Fonts) */
+#clock{font-size:clamp(4.6rem,14.2vw,13.2rem);line-height:0.88;letter-spacing:-.03em;flex-shrink:0}
+#ampm{font-family:inherit;font-weight:800;font-size:clamp(1.4rem,3.4vw,2.8rem);color:var(--gold);margin-top:0;letter-spacing:.02em;margin-left:clamp(6px,1.2vw,14px);align-self:flex-end;margin-bottom:.1em;flex-shrink:0}
+#date{font-size:clamp(1.15rem,2.2vw,1.65rem);color:var(--dim);margin-top:6px;font-weight:600;line-height:1.25}
+
+.next{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);display:flex;align-items:flex-end;justify-content:space-between;gap:12px 24px;width:100%}
+.next > div:first-child{flex:1;min-width:220px}
+.label{font-size:.75rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+#nextLabel{font-size:clamp(1.2rem,2.4vw,1.85rem);font-weight:800;margin-top:2px;letter-spacing:-.01em;color:#FFFFFF}
+#count{font-family:var(--font-clock);font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;letter-spacing:-.01em;font-size:clamp(2rem,4.4vw,3.4rem);font-weight:800;color:var(--gold);white-space:nowrap;text-align:right;margin-left:auto;align-self:flex-end;flex-shrink:0}
+
+/* ===== CONTROL BAR (Streamlined Clock Style & Audio Status) ===== */
+.cockpit-bar{display:flex;justify-content:center;align-items:center;margin-bottom:6px;gap:6px;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:5px 10px}
+.cockpit-pills{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;width:100%}
+
+.pill-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:5px 12px;border-radius:14px;font-size:.82rem;font-weight:600;background:#000;border:1px solid var(--line2);color:var(--dim);cursor:pointer;transition:all .2s;font-family:var(--sans);min-height:34px}
+.pill-btn:hover{border-color:var(--gold-soft);color:var(--text)}
+.pill-btn.live{color:#5de8a0;border-color:rgba(93,232,160,.4);box-shadow:0 0 10px rgba(93,232,160,.15)}
+.pill-btn.live .status-dot{background:#5de8a0;box-shadow:0 0 6px #5de8a0}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--mute);flex:none}
+
+/* Sleep & Meditation Soundscapes (BetterSleep-Style Multi-Track Mixer) */
+.soundscapes-box{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:10px 14px;margin-bottom:10px;transition:all .3s}
+.soundscapes-box[hidden]{display:none}
+.soundscapes-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:10px;flex-wrap:wrap}
+.soundscapes-title{font-size:.88rem;font-weight:700;color:var(--gold);display:flex;align-items:center;gap:8px}
+.sound-chips{display:flex;gap:6px;flex-wrap:wrap}
+.sound-chip{background:#000;border:1px solid var(--line2);color:var(--dim);padding:5px 11px;border-radius:12px;font-size:.80rem;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .2s;font-family:var(--sans)}
+.sound-chip:hover{color:var(--text);border-color:var(--gold-soft)}
+.sound-chip.on{background:rgba(93,232,160,.12);border-color:#5de8a0;color:#5de8a0;box-shadow:0 0 14px rgba(93,232,160,.25)}
+
+/* Soundscape Mixer Rack */
+.sound-mixer-rack{margin-top:10px;padding-top:10px;border-top:1px solid var(--line2)}
+.mixer-rack-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px}
+.mixer-rack-label{font-size:.80rem;font-weight:700;color:var(--gold);letter-spacing:.05em;text-transform:uppercase}
+.mixer-rack-hint{font-size:.76rem;color:var(--mute)}
+.mixer-tracks{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px}
+.mixer-row{display:flex;align-items:center;gap:10px;background:#000;border:1px solid var(--line2);border-radius:12px;padding:8px 12px}
+.mixer-name{display:flex;align-items:center;gap:6px;font-size:.84rem;font-weight:600;min-width:105px}
+.mixer-slider{-webkit-appearance:none;appearance:none;flex:1;height:5px;border-radius:3px;cursor:pointer;background:linear-gradient(90deg,var(--gold) 0%,var(--gold) var(--p,60%),var(--line2) var(--p,60%))}
+.mixer-slider::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px rgba(217,185,92,.7);cursor:pointer}
+.mixer-slider::-moz-range-thumb{width:16px;height:16px;border:0;border-radius:50%;background:var(--gold);box-shadow:0 0 8px rgba(217,185,92,.7);cursor:pointer}
+.mixer-val{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:.82rem;font-weight:700;color:var(--dim);min-width:2.8em;text-align:right}
+.mixer-remove{background:none;border:none;color:var(--mute);cursor:pointer;font-size:1rem;padding:2px 6px;line-height:1;border-radius:6px;transition:color .2s}
+.mixer-remove:hover{color:#ff6b6b}
+
+/* App Distribution & Operations Suite */
+.app-dist{margin-top:44px;padding:32px;border:1px solid var(--line);border-radius:28px;background:var(--surface);position:relative;overflow:hidden}
+.app-dist::before{content:"";position:absolute;top:0;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);box-shadow:0 0 16px var(--gold)}
+.dist-head{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:24px}
+.dist-title{font-size:1.35rem;font-weight:700;color:var(--text);display:flex;align-items:center;gap:10px}
+.dist-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:12px;font-size:.78rem;font-weight:700;background:rgba(93,232,160,.12);color:#5de8a0;border:1px solid rgba(93,232,160,.3)}
+.dist-subtitle{font-size:.9rem;color:var(--dim);margin-top:4px}
+.dist-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+.dist-card{background:#000;border:1px solid var(--line2);border-radius:18px;padding:20px;display:flex;flex-direction:column;justify-content:space-between;gap:16px;transition:all .2s cubic-bezier(.4,0,.2,1)}
+.dist-card:hover{border-color:var(--gold-soft);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.6)}
+.dist-card-top{display:flex;align-items:flex-start;gap:14px}
+.dist-icon{font-size:1.6rem;line-height:1;width:44px;height:44px;border-radius:12px;background:var(--surface-2);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;flex:none}
+.dist-name{font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:3px}
+.dist-desc{font-size:.86rem;color:var(--dim);line-height:1.45}
+.dist-btn{width:100%;font-size:.92rem;font-weight:700;padding:12px 18px;border-radius:12px;text-align:center;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--sans)}
+
+/* Modals (QR Code & Install Guide) */
+.modal-wrap{position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:220;padding:20px}
+.modal-wrap.open{display:flex}
+.modal-box{background:var(--surface);border:1px solid var(--gold-soft);box-shadow:0 0 50px rgba(217,185,92,.25);border-radius:26px;padding:32px;max-width:440px;width:100%;text-align:center;position:relative}
+.modal-close{position:absolute;top:16px;right:18px;background:none;border:none;color:var(--mute);font-size:1.4rem;cursor:pointer;padding:4px 8px;line-height:1;border-radius:8px}
+.modal-close:hover{color:var(--text)}
+.modal-qr-frame{background:#fff;padding:14px;border-radius:16px;display:inline-block;margin:18px 0;box-shadow:0 0 30px rgba(255,255,255,.1)}
+.modal-qr-frame img{display:block;width:210px;height:210px}
+.modal-title{font-size:1.3rem;font-weight:700;color:var(--gold);text-shadow:var(--glow-g);margin-bottom:6px}
+.modal-text{font-size:.92rem;color:var(--dim);line-height:1.5}
+.modal-actions{display:flex;gap:10px;margin-top:20px;justify-content:center}
+
+/* Toast */
+#toastBox{position:fixed;bottom:24px;right:24px;z-index:350;display:flex;flex-direction:column;gap:10px;pointer-events:none}
+.toast{pointer-events:auto;background:var(--surface-2);color:var(--text);border:1px solid var(--gold);box-shadow:0 8px 30px rgba(0,0,0,.8),0 0 20px var(--gold-glow);border-radius:14px;padding:12px 20px;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:10px;animation:toastIn .25s ease-out}
+@keyframes toastIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* Primary Controls (Streamlined Height) */
+.controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+button{font-family:var(--sans);font-size:1.05rem;font-weight:700;cursor:pointer;border:0;border-radius:16px;padding:14px 22px;transition:all .22s cubic-bezier(.4,0,.2,1)}
+.controls > button{padding:8px 16px;font-size:.92rem;border-radius:12px}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.primary{background:var(--gold);color:#000;box-shadow:0 0 20px rgba(217,185,92,.35)}
+.primary:hover{transform:translateY(-1px);box-shadow:0 0 30px rgba(217,185,92,.55)}
+.primary.on{background:#000;color:var(--gold);box-shadow:inset 0 0 0 2px var(--gold),0 0 18px rgba(217,185,92,.3);text-shadow:var(--glow-g)}
+.ghost{background:#000;color:var(--text);border:1px solid var(--line2)}
+.ghost:hover{border-color:var(--gold-soft);box-shadow:0 0 16px var(--gold-glow);transform:translateY(-1px)}
+.ghost.active{border-color:var(--gold);color:var(--gold);text-shadow:var(--glow-g);background:var(--surface-2)}
+.btn-save{background:#48C774;color:#000;box-shadow:0 0 18px rgba(72,199,116,.4)}
+.btn-save:hover{transform:translateY(-1px);box-shadow:0 0 24px rgba(72,199,116,.6)}
+.btn-cancel{background:#000;color:#ff6b6b;border:1px solid rgba(255,107,107,.4)}
+.btn-cancel:hover{border-color:#ff6b6b;box-shadow:0 0 14px rgba(255,107,107,.3)}
+
+/* Volume (Streamlined Compact) */
+.vol{display:flex;align-items:center;gap:10px;margin-left:auto;border:1px solid var(--line2);border-radius:12px;padding:6px 12px;background:#000}
+#volIcon{background:none;padding:2px;font-size:1.15rem;line-height:1;border-radius:8px;box-shadow:none}
+#volSlider{-webkit-appearance:none;appearance:none;width:100px;height:5px;border-radius:3px;cursor:pointer;
+  background:linear-gradient(90deg,var(--gold) 0%,var(--gold) var(--p,70%),var(--line2) var(--p,70%))}
+#volSlider::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px rgba(217,185,92,.7);cursor:pointer}
+#volSlider::-moz-range-thumb{width:16px;height:16px;border:0;border-radius:50%;background:var(--gold);box-shadow:0 0 10px rgba(217,185,92,.7);cursor:pointer}
+#volPct{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:700;font-size:.88rem;color:var(--dim);min-width:2.8em;text-align:right}
+
+/* Player Bar (Compact Height) */
+.player{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:14px;padding:8px 14px;margin-bottom:10px;background:#000}
+.eq{display:flex;align-items:flex-end;gap:3px;height:18px;width:22px;flex:none}
+.eq i{flex:1;background:var(--gold);border-radius:2px;height:25%;box-shadow:0 0 6px var(--gold);opacity:.5}
+.player.playing .eq i{opacity:1;animation:eq .9s ease-in-out infinite}
+.player.playing .eq i:nth-child(2){animation-delay:-.3s}.player.playing .eq i:nth-child(3){animation-delay:-.6s}.player.playing .eq i:nth-child(4){animation-delay:-.45s}
+@keyframes eq{0%,100%{height:20%}50%{height:100%}}
+.player .label{display:block;font-size:.70rem;margin-bottom:1px}
+#songTitle{font-size:1.02rem;font-weight:700;color:var(--gold);text-shadow:var(--glow-g)}
+#songArtist{color:var(--dim);font-size:.90rem}
+#skip{margin-left:auto;padding:6px 12px;font-size:.84rem;border-radius:10px}
+
+/* Days (Compact Grid) */
+.days{display:flex;gap:6px;margin:6px 0 6px}
+.days button{flex:1;padding:8px 0;font-size:.92rem;background:#000;color:var(--mute);border:1px solid var(--line2);border-radius:10px}
+.days button:hover{color:var(--dim);border-color:var(--mute)}
+.days button.on{background:var(--gold);color:#000;border-color:var(--gold);box-shadow:0 0 16px rgba(217,185,92,.35)}
+#status{color:var(--dim);font-size:.86rem;margin:4px 0 10px}
+
+/* Routine Presets Bar (Single-Line Compact Deck) */
+.preset-bar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 12px;margin:6px 0 12px;background:var(--surface-2);border:1px solid var(--line2);border-radius:14px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.preset-bar::-webkit-scrollbar{height:3px}
+.preset-bar::-webkit-scrollbar-thumb{background:var(--line2);border-radius:2px}
+.preset-cluster-left{display:flex;align-items:center;gap:6px;flex:1;min-width:0;flex-wrap:nowrap}
+.preset-cluster-label{font-size:.74rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;flex-shrink:0}
+#presetSelect{background:var(--surface-3);color:var(--text);border:1px solid var(--line2);border-radius:8px;padding:5px 8px;font-family:var(--sans);font-size:.82rem;font-weight:600;outline:none;cursor:pointer;flex:1;min-width:120px;max-width:320px;text-overflow:ellipsis;white-space:nowrap}
+#presetDaysBadge{font-size:.74rem;font-weight:700;padding:3px 8px;border-radius:8px;background:var(--surface-3);color:var(--gold);border:1px solid var(--line2);display:inline-flex;align-items:center;gap:4px;white-space:nowrap;flex-shrink:0}
+.preset-cluster-right{display:flex;gap:6px;align-items:center;flex-wrap:nowrap;flex-shrink:0}
+.preset-cluster-right button{padding:5px 10px;font-size:.78rem;font-weight:600;white-space:nowrap;border-radius:8px}
+
+/* Schedule Section Header & Action Buttons */
+.sched-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:12px}
+h2{font-size:clamp(1.5rem,2.6vw,2.1rem);font-weight:700;display:flex;align-items:center;gap:14px;text-shadow:var(--glow-w);margin:0}
+.sched-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+
+/* Legend & Category Filter Pills */
+.legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}
+.cat-pill{display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line2);color:var(--dim);border-radius:20px;padding:8px 16px;font-size:.92rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:var(--sans)}
+.cat-pill b{width:11px;height:11px;border-radius:50%;background:var(--c);box-shadow:0 0 8px var(--c)}
+.cat-pill:hover{color:var(--text);border-color:var(--c)}
+.cat-pill.active{background:var(--surface-2);color:var(--text);border-color:var(--c);box-shadow:0 0 14px color-mix(in srgb,var(--c) 30%,transparent)}
+
+/* Schedule List */
+ul{list-style:none}
+li{--c:var(--work);display:flex;align-items:center;gap:20px;background:#000;border:1px solid var(--line);border-left:5px solid var(--c);border-radius:18px;padding:18px 24px;margin-bottom:12px;transition:transform .2s,box-shadow .2s,opacity .3s}
+li:hover{transform:translateX(3px);box-shadow:-6px 0 24px -8px var(--c)}
+li.rest{--c:var(--rest)}   /* Green for Recharge */
+li.class{--c:var(--class)} /* Blue for Class */
+li.work{--c:var(--work)}   /* Purple for Work */
+li.err{--c:var(--err)}     /* Silver for Task */
+li.night{--c:var(--night)} /* Gold for Wind-down */
+li.past{opacity:.35}
+li.cur{opacity:1;border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 34px rgba(217,185,92,.25)}
+
+/* Time Typography: Clean, optical, professional numbers (Choice 6: Lexend Bold) */
+.t{font-family:var(--font-clock);font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;letter-spacing:-.01em;font-weight:700;font-size:1.35rem;min-width:7.2em;color:var(--c)}
+.l{flex:1;font-size:1.25rem;font-weight:600}
+
+/* Inline Edit Controls in rows */
+.edit-row-ctrls{display:flex;align-items:center;gap:10px;flex:1;flex-wrap:wrap}
+.edit-time-in{font-family:var(--font-clock);font-size:1.1rem;font-weight:700;background:var(--surface-2);color:var(--text);border:1px solid var(--line2);border-radius:10px;padding:8px 12px;width:125px}
+.edit-cat-sel{font-family:var(--sans);font-size:.95rem;font-weight:600;background:var(--surface-2);color:var(--text);border:1px solid var(--line2);border-radius:10px;padding:8px 12px;cursor:pointer}
+.edit-title-in{font-family:var(--sans);font-size:1.1rem;font-weight:600;background:var(--surface-2);color:var(--text);border:1px solid var(--line2);border-radius:10px;padding:8px 14px;flex:1;min-width:180px}
+.row-icon-btn{background:none;border:1px solid var(--line2);color:var(--mute);padding:6px 10px;font-size:1rem;cursor:pointer;border-radius:8px}
+.row-icon-btn:hover{color:var(--text);border-color:var(--gold)}
+
+.sw{position:relative;width:58px;height:34px;flex:none}
+.sw input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer;z-index:2}
+.sw i{position:absolute;inset:0;border-radius:17px;background:var(--line2);transition:all .2s}
+.sw i::after{content:"";position:absolute;left:4px;top:4px;width:26px;height:26px;border-radius:50%;background:var(--mute);transition:all .2s}
+.sw input:checked+i{background:var(--gold);box-shadow:0 0 16px rgba(217,185,92,.5)}
+.sw input:checked+i::after{transform:translateX(24px);background:#000}
+
+/* Rest Mode Screen */
+#rest{position:fixed;inset:0;background:#000;display:none;align-items:center;justify-content:center;z-index:90;cursor:pointer}
+#rest.show{display:flex}
+#rest.idle{cursor:none}
+#restWrap{display:flex;flex-direction:column;align-items:center;transition:transform 3s ease}
+#restClock{font-size:min(15.5vw,36vh)}
+#restAmpm{font-family:var(--font-clock);font-weight:600;font-size:min(3.4vw,6vh);letter-spacing:.35em;color:var(--gold);margin-top:.6em;opacity:.85}
+#restHint{position:fixed;left:0;right:0;bottom:28px;text-align:center;color:var(--mute);font-size:1rem;transition:opacity 1.2s}
+
+/* Alarm overlay */
+#ov{position:fixed;inset:0;background:#000;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;z-index:100}
+#ov.show{display:flex}
+.ring{width:130px;height:130px;border-radius:50%;border:3px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:3.2rem;animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(217,185,92,.4)}50%{transform:scale(1.12);box-shadow:0 0 60px 14px rgba(217,185,92,.25)}}
+#ovT{font-size:clamp(2.2rem,5.5vw,4.2rem);font-weight:700;letter-spacing:-.02em;margin:30px 0 6px}
+#ovM{font-family:var(--font-clock);font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;font-size:clamp(1.8rem,3.2vw,2.6rem);font-weight:700;letter-spacing:.01em;color:var(--gold)}
+.ov-actions{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+#ovS{font-size:1.35rem;padding:18px 38px}
+.ov-keys{margin-top:22px;color:var(--mute);font-size:.95rem}
+#ovSong{color:var(--dim);font-size:1.2rem;margin:22px 0 36px}
+#ovSong b{color:var(--gold)}
+#ovB{font-size:1.35rem;padding:18px 58px}
+@media (prefers-reduced-motion:reduce){.ring,.player.playing .eq i{animation:none}}
+
+/* Responsive */
+@media (max-width:820px){
+  body{font-size:19.5px}
+  main{padding:20px 16px 60px}
+  .hero{padding:24px 20px 26px;border-radius:24px}
+  .vol{margin-left:0;width:100%}
+  #volSlider{flex:1;width:auto}
+  .controls button{flex:1}
+  li{padding:14px 16px;gap:12px;flex-wrap:wrap}
+  .t{font-size:1.25rem}.l{font-size:1.15rem}
+  .t{min-width:6.2em}
+  .days{gap:6px}.days button{font-size:.95rem;padding:12px 0}
+  .edit-row-ctrls{width:100%}
+}
+
+/* ══════════════════════════════════════════════════════════════
+   APPLE STUDIO SILK & ALABASTER LIGHT THEME (Colorist Masterpiece)
+   ══════════════════════════════════════════════════════════════ */
+body.light-theme{
+  /* Canvas & Elevation System */
+  --black:#F5F5F7;          /* Apple signature Studio Silk canvas */
+  --surface:#FFFFFF;        /* Pristine primary card surface */
+  --surface-2:#F0F0F3;      /* Elevated well / input background */
+  --surface-3:#E5E5EB;      /* Interactive hover / secondary well */
+  --line:#E2E2E7;           /* Ultra-crisp structural divider */
+  --line2:#D1D1D6;          /* Form border & card outline */
+  
+  /* Colorist Gold: Warm Imperial Champagne Bronze (Contrast 6.8:1 on light) */
+  --gold:#8B6508;           /* Deep chromatic bronze gold */
+  --gold-soft:rgba(139,101,8,0.45);
+  --gold-glow:rgba(139,101,8,0.12);
+
+  /* Optical Typography Hierarchy (WCAG AAA Compliant) */
+  --text:#1D1D1F;           /* Obsidian Charcoal Ink (16:1 contrast) */
+  --dim:#48484A;            /* Refined Neutral Slate (9:1 contrast) */
+  --mute:#6E6E73;           /* Apple System Mid-Tone Gray (5.5:1 contrast) */
+
+  /* Harmonized Category Color Wheel (Light Mode Calibrated) */
+  --class:#0056B3;          /* Sapphire Blue (High-contrast lecture/study) */
+  --rest:#15803D;           /* Deep Forest Green (Restorative, calming) */
+  --work:#6D28D9;           /* Royal Amethyst Violet (Deep work & focus) */
+  --err:#475569;            /* Deep Graphite Slate (Tasks & duties) */
+  --night:#B45309;          /* Warm Amber Cognac (Evening recovery) */
+
+  background:#F5F5F7 !important;
+  color:#1D1D1F !important;
+  color-scheme:light;
+}
+
+/* Light Theme Hero Clock & Rest Mode Elevation */
+body.light-theme .hero,
+body.light-theme #rest{
+  background:#FFFFFF !important;
+  border:1px solid #E2E2E7 !important;
+  box-shadow:0 4px 20px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.02) !important;
+}
+body.light-theme .hero::before{
+  background:linear-gradient(90deg,transparent,rgba(139,101,8,0.4),transparent) !important;
+}
+
+/* Perfect Legibility for Clock Labels in Light Mode */
+body.light-theme #nextLabel{
+  color:#1D1D1F !important;
+}
+body.light-theme #count{
+  color:#8B6508 !important;
+}
+body.light-theme #ampm{
+  color:#8B6508 !important;
+}
+body.light-theme #date{
+  color:#515154 !important;
+}
+body.light-theme .label{
+  color:#8B6508 !important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   LIGHT MODE CLOCK STYLES (Zero Blurry Shadow, Pure Typographic Elegance)
+   ══════════════════════════════════════════════════════════════ */
+body.light-theme .chrome,
+body.light-theme .chrome span,
+body.light-theme #clock,
+body.light-theme #restClock {
+  filter: none !important;
+  -webkit-filter: none !important;
+  text-shadow: none !important;
+  box-shadow: none !important;
+}
+
+body.light-theme[data-clock-theme="platinum"] .chrome span,
+body.light-theme[data-clock-theme="chrome-3d"] .chrome span,
+body.light-theme[data-clock-theme="chrome"] .chrome span {
+  background: linear-gradient(180deg, #111827 0%, #1F2937 38%, #374151 68%, #111827 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  -webkit-text-stroke: 1px rgba(17,24,39,0.25) !important;
+}
+
+body.light-theme[data-clock-theme="gold"] .chrome span {
+  background: linear-gradient(180deg, #78350F 0%, #92400E 28%, #B45309 62%, #D97706 82%, #78350F 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  -webkit-text-stroke: 1px rgba(120,53,15,0.25) !important;
+}
+
+body.light-theme[data-clock-theme="cyber-emerald"] .chrome span,
+body.light-theme[data-clock-theme="cyberpunk"] .chrome span {
+  width: .62em;
+  background: linear-gradient(180deg, #064E3B 0%, #065F46 30%, #047857 65%, #059669 85%, #064E3B 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  -webkit-text-stroke: 0 !important;
+  filter: drop-shadow(0 2px 4px rgba(16,185,129,0.25)) !important;
+}
+
+body.light-theme[data-clock-theme="ice-titanium"] .chrome span {
+  background: linear-gradient(180deg, #082F49 0%, #075985 30%, #0284C7 65%, #0369A1 85%, #082F49 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  -webkit-text-stroke: 1px rgba(8,47,73,0.2) !important;
+}
+
+body.light-theme[data-clock-theme="amethyst"] .chrome span,
+body.light-theme[data-clock-theme="purple"] .chrome span {
+  width: .62em;
+  background: linear-gradient(180deg, #3B0764 0%, #581C87 30%, #7C3AED 65%, #6D28D9 85%, #3B0764 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  -webkit-text-stroke: 0 !important;
+  filter: drop-shadow(0 2px 4px rgba(124,58,237,0.2)) !important;
+}
+
+body.light-theme[data-clock-theme="sunset-rose"] .chrome span,
+body.light-theme[data-clock-theme="pink"] .chrome span {
+  background: linear-gradient(180deg, #881337 0%, #9F1239 30%, #BE123C 65%, #E11D48 85%, #881337 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  -webkit-text-stroke: 1px rgba(136,19,55,0.2) !important;
+}
+
+body.light-theme[data-clock-theme="minimal-white"] .chrome span,
+body.light-theme[data-clock-theme="pure-white"] .chrome span {
+  color: #111827 !important;
+  -webkit-text-fill-color: #111827 !important;
+  -webkit-text-stroke: 0 !important;
+}
+
+body.light-theme[data-clock-theme="chronometer-din"] .chrome span {
+  background: linear-gradient(180deg, #0F172A 0%, #1E293B 35%, #334155 65%, #0F172A 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  -webkit-text-stroke: 1px rgba(15,23,42,0.2) !important;
+}
+
+body.light-theme[data-clock-theme="sunset-amber"] .chrome span {
+  background: linear-gradient(180deg, #78350F 0%, #9A3412 30%, #C2410C 65%, #EA580C 85%, #78350F 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  -webkit-text-stroke: 1px rgba(120,53,15,0.2) !important;
+}
+
+body.light-theme[data-clock-theme="midnight-gold"] .chrome span {
+  width: .62em;
+  color: #111827 !important;
+  -webkit-text-fill-color: #111827 !important;
+  -webkit-text-stroke: 0 !important;
+  text-shadow:
+    -1.5px -1.5px 0 #B45309,
+     1.5px -1.5px 0 #B45309,
+    -1.5px  1.5px 0 #B45309,
+     1.5px  1.5px 0 #B45309,
+     0px   -1.8px 0 #B45309,
+     0px    1.8px 0 #B45309,
+    -1.8px  0px   0 #B45309,
+     1.8px  0px   0 #B45309,
+     0 0 10px rgba(180,83,9,0.25) !important;
+}
+
+body.light-theme[data-clock-theme="rainbow"] .chrome span {
+  background: linear-gradient(135deg, #DC2626 0%, #D97706 20%, #059669 40%, #2563EB 60%, #7C3AED 80%, #DB2777 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  -webkit-text-stroke: 0.5px rgba(0,0,0,0.1) !important;
+}
+
+body.light-theme[data-clock-theme="green-nature"] .chrome span {
+  background: linear-gradient(180deg, #064E3B 0%, #14532D 35%, #15803D 65%, #064E3B 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  -webkit-text-stroke: 1px rgba(6,78,59,0.2) !important;
+}
+
+body.light-theme[data-clock-theme="royal-sapphire"] .chrome span {
+  background: linear-gradient(180deg, #1E3A8A 0%, #1D4ED8 35%, #2563EB 65%, #172554 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  -webkit-text-stroke: 1px rgba(30,58,138,0.2) !important;
+}
+
+body.light-theme[data-clock-theme="crimson-laser"] .chrome span {
+  background: linear-gradient(180deg, #991B1B 0%, #DC2626 35%, #EF4444 65%, #7F1D1D 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  -webkit-text-stroke: 1px rgba(153,27,27,0.2) !important;
+}
+
+body.light-theme[data-clock-theme="obsidian-noir"] .chrome span {
+  background: linear-gradient(180deg, #0F172A 0%, #334155 35%, #1E293B 70%, #020617 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  -webkit-text-stroke: 1px rgba(15,23,42,0.25) !important;
+}
+
+body.light-theme[data-clock-theme="solis-gold"] .chrome span {
+  background: linear-gradient(180deg, #713F12 0%, #A16207 35%, #CA8A04 65%, #854D0E 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  -webkit-text-stroke: 1px rgba(113,63,18,0.25) !important;
+}
+
+/* Light Mode Cockpit & Pills */
+body.light-theme .cockpit-bar{
+  background:#FFFFFF !important;
+  border:1px solid #E2E2E7 !important;
+  box-shadow:0 2px 10px rgba(0,0,0,0.03) !important;
+}
+body.light-theme .pill-btn{
+  background:#F0F0F3 !important;
+  border-color:#E2E2E7 !important;
+  color:#1D1D1F !important;
+}
+body.light-theme .pill-btn:hover{
+  background:#E5E5EB !important;
+  border-color:#8B6508 !important;
+}
+body.light-theme .pill-btn.live{
+  background:rgba(22,163,74,0.08) !important;
+  color:#15803D !important;
+  border-color:rgba(22,163,74,0.35) !important;
+}
+body.light-theme .pill-btn.live .status-dot{
+  background:#16A34A !important;
+  box-shadow:0 0 6px rgba(22,163,74,0.5) !important;
+}
+
+/* Light Mode Soundscapes Deck */
+body.light-theme .soundscapes-box{
+  background:#FFFFFF !important;
+  border-color:#E2E2E7 !important;
+  box-shadow:0 2px 12px rgba(0,0,0,0.03) !important;
+}
+body.light-theme .soundscapes-title{
+  color:#1D1D1F !important;
+}
+body.light-theme .sound-chip{
+  background:#F0F0F3 !important;
+  border-color:#E2E2E7 !important;
+  color:#1D1D1F !important;
+}
+body.light-theme .sound-chip:hover{
+  background:#E5E5EB !important;
+  border-color:#8B6508 !important;
+}
+body.light-theme .sound-chip.active{
+  background:#8B6508 !important;
+  color:#FFFFFF !important;
+  border-color:#8B6508 !important;
+  box-shadow:0 2px 8px rgba(139,101,8,0.25) !important;
+}
+body.light-theme .sound-mixer-rack{
+  background:#F8F8FA !important;
+  border-color:#E2E2E7 !important;
+}
+body.light-theme .mixer-track-row{
+  background:#FFFFFF !important;
+  border-color:#E2E2E7 !important;
+}
+body.light-theme .mixer-track-name{
+  color:#1D1D1F !important;
+}
+body.light-theme .mixer-slider{
+  accent-color:#8B6508 !important;
+}
+
+/* Light Mode Primary Controls & Sliders */
+body.light-theme .controls {
+  background: #FFFFFF !important;
+  border-color: #E2E2E7 !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.03) !important;
+}
+
+/* Universal Ghost Buttons & Links in Light Mode (Zero Black Boxes!) */
+body.light-theme .ghost,
+body.light-theme button.ghost,
+body.light-theme a.ghost,
+body.light-theme .dist-btn.ghost,
+body.light-theme .dist-card a.ghost,
+body.light-theme .dist-card button.ghost {
+  background: #F0F0F3 !important;
+  color: #1D1D1F !important;
+  border: 1px solid #D1D1D6 !important;
+  box-shadow: none !important;
+}
+
+body.light-theme .ghost:hover,
+body.light-theme button.ghost:hover,
+body.light-theme a.ghost:hover,
+body.light-theme .dist-btn.ghost:hover,
+body.light-theme .dist-card a.ghost:hover,
+body.light-theme .dist-card button.ghost:hover {
+  background: #E5E5EB !important;
+  color: #8B6508 !important;
+  border-color: #8B6508 !important;
+}
+
+body.light-theme button.primary,
+body.light-theme .dist-btn.primary,
+body.light-theme .dist-card .primary {
+  background: #8B6508 !important;
+  color: #FFFFFF !important;
+  border: 1px solid #725206 !important;
+  box-shadow: 0 4px 14px rgba(139,101,8,0.28) !important;
+}
+
+body.light-theme button.primary:hover,
+body.light-theme .dist-btn.primary:hover,
+body.light-theme .dist-card .primary:hover {
+  background: #725206 !important;
+}
+
+body.light-theme .vol {
+  background: #F0F0F3 !important;
+  border-color: #E2E2E7 !important;
+}
+body.light-theme #volSlider {
+  accent-color: #8B6508 !important;
+}
+body.light-theme #volPct {
+  color: #1D1D1F !important;
+}
+
+/* Light Mode Player Bar */
+body.light-theme .player{
+  background:#FFFFFF !important;
+  border-color:#E2E2E7 !important;
+  box-shadow:0 2px 10px rgba(0,0,0,0.03) !important;
+}
+body.light-theme #songTitle{
+  color:#1D1D1F !important;
+  font-weight:700;
+}
+body.light-theme #songArtist{
+  color:#515154 !important;
+}
+
+/* Light Mode Active Days & Status */
+body.light-theme .days button{
+  background:#FFFFFF !important;
+  border-color:#D1D1D6 !important;
+  color:#48484A !important;
+}
+body.light-theme .days button.on{
+  background:#8B6508 !important;
+  color:#FFFFFF !important;
+  border-color:#8B6508 !important;
+  box-shadow:0 2px 8px rgba(139,101,8,0.25) !important;
+}
+body.light-theme #status{
+  background:#FFFFFF !important;
+  border-color:#E2E2E7 !important;
+  color:#1D1D1F !important;
+  box-shadow:0 2px 8px rgba(0,0,0,0.02) !important;
+}
+
+/* Light Mode Routine Presets Bar */
+body.light-theme .preset-bar{
+  background:#FFFFFF !important;
+  border-color:#E2E2E7 !important;
+  box-shadow:0 2px 10px rgba(0,0,0,0.03) !important;
+}
+body.light-theme #presetSelect{
+  background:#F0F0F3 !important;
+  color:#1D1D1F !important;
+  border-color:#D1D1D6 !important;
+}
+body.light-theme #presetDaysBadge{
+  background:#F0F0F3 !important;
+  color:#8B6508 !important;
+  border-color:#D1D1D6 !important;
+}
+
+/* Light Mode Schedule Items */
+body.light-theme li{
+  background:#FFFFFF !important;
+  border-color:#E5E5EB !important;
+  color:#1D1D1F !important;
+  box-shadow:0 1px 4px rgba(0,0,0,0.02) !important;
+}
+body.light-theme li:hover{
+  background:#FDFDFE !important;
+  border-color:#8B6508 !important;
+}
+body.light-theme li .t{
+  color:#111827 !important;
+}
+body.light-theme li .l{
+  color:#1D1D1F !important;
+}
+body.light-theme li.past{
+  opacity:0.55 !important;
+  background:#F8F8FA !important;
+}
+body.light-theme li.cur{
+  border-color:#8B6508 !important;
+  box-shadow:0 0 0 2px rgba(139,101,8,0.35), 0 4px 12px rgba(0,0,0,0.05) !important;
+  background:#FFFDF8 !important;
+}
+
+/* Light Mode Category Filter Pills */
+body.light-theme .cat-pill{
+  background:#FFFFFF !important;
+  border-color:#D1D1D6 !important;
+  color:#48484A !important;
+}
+body.light-theme .cat-pill.active{
+  background:#1D1D1F !important;
+  color:#FFFFFF !important;
+  border-color:#1D1D1F !important;
+}
+
+/* Light Mode Distribution Cards */
+body.light-theme .dist-card{
+  background:#FFFFFF !important;
+  border-color:#E2E2E7 !important;
+  box-shadow:0 2px 12px rgba(0,0,0,0.03) !important;
+}
+body.light-theme .dist-name{
+  color:#1D1D1F !important;
+}
+body.light-theme .dist-desc{
+  color:#515154 !important;
+}
+body.light-theme .dist-head .dist-title{
+  color:#1D1D1F !important;
+}
+body.light-theme .dist-head .dist-subtitle{
+  color:#6E6E73 !important;
+}
+
+/* Light Mode Modals */
+body.light-theme .modal-wrap{
+  background:rgba(0,0,0,0.45) !important;
+  backdrop-filter:blur(12px) !important;
+}
+body.light-theme .modal-box{
+  background:#FFFFFF !important;
+  border-color:#E2E2E7 !important;
+  color:#1D1D1F !important;
+  box-shadow:0 20px 48px rgba(0,0,0,0.16) !important;
+}
+body.light-theme .modal-title{
+  color:#1D1D1F !important;
+}
+body.light-theme .modal-text{
+  color:#515154 !important;
+}
+body.light-theme .modal-close{
+  background:#F0F0F3 !important;
+  color:#515154 !important;
+  border-color:#E2E2E7 !important;
+}
+body.light-theme .modal-close:hover{
+  background:#E5E5EB !important;
+  color:#1D1D1F !important;
+}
+body.light-theme .modal-box input,
+body.light-theme .modal-box select,
+body.light-theme .modal-box textarea{
+  background:#F0F0F3 !important;
+  color:#1D1D1F !important;
+  border-color:#D1D1D6 !important;
+}
+.class-count-btn.active{
+  background:var(--gold) !important;
+  color:#000 !important;
+  border-color:var(--gold) !important;
+  font-weight:700 !important;
+  box-shadow:0 0 14px rgba(217,185,92,.4) !important;
+}
+body.light-theme .preset-chip{
+  background:#F0F0F3 !important;
+  border-color:#E2E2E7 !important;
+  color:#48484A !important;
+}
+body.light-theme .preset-chip:hover{
+  background:#E5E5EB !important;
+  color:#1D1D1F !important;
+  border-color:#8B6508 !important;
+}
+
+/* Status Active Pulse Animation */
+.status-active-pulse{
+  display:inline-block;
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:#34d399;
+  box-shadow:0 0 10px #34d399;
+  margin-right:6px;
+  animation:statusPulse 2s infinite ease-in-out;
+  vertical-align:middle;
+}
+@keyframes statusPulse{
+  0%,100%{transform:scale(1);opacity:1}
+  50%{transform:scale(1.25);opacity:0.75}
+}
+.status-paused-dot{
+  display:inline-block;
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  border:2px solid var(--mute);
+  margin-right:6px;
+  vertical-align:middle;
+}
+
+
+.highlight-card{
+  margin-top:16px;
+  border-color:rgba(217,185,92,.5);
+  background:linear-gradient(180deg,#14151f 0%,#0c0c0e 100%);
+}
+body.light-theme .highlight-card{
+  background:#FFFFFF !important;
+  border:1.5px solid rgba(139,101,8,0.45) !important;
+  box-shadow:0 4px 20px rgba(139,101,8,0.08) !important;
+}
+body.light-theme .highlight-card .dist-icon{
+  background:#F5F5F7 !important;
+  border-color:rgba(139,101,8,0.3) !important;
+  color:#8B6508 !important;
+}
+
+</style>
+</head>
+<body data-clock-theme="platinum">
+<main>
+
+  <!-- 1. HERO CLOCK (Live time, AM/PM, Date, Next Alarm) -->
+  <section class="hero" aria-live="off">
+    <div class="clock-row"><div id="clock" class="chrome"></div><div id="ampm"></div></div>
+    <div id="date"></div>
+
+    <div class="next">
+      <div>
+        <div class="label">NEXT ALARM</div>
+        <div id="nextLabel">Loading…</div>
+      </div>
+      <div id="count"></div>
+    </div>
+  </section>
+
+  <!-- 2. CONTROL BAR -->
+  <div class="cockpit-bar">
+    <div class="cockpit-pills">
+      <button class="pill-btn live" id="audioBadge" title="Browser audio is ready to play alarms">
+        <span class="status-dot"></span>
+        <span id="audioBadgeText">🔊 Sound Ready</span>
+      </button>
+      <button class="pill-btn" id="themeBtn" title="Cycle Clock Font & Visual Appearance">
+        <span>🎨 Clock Style: <b id="themeLabel">Pure Platinum</b></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Auxiliary Preferences (Dark/Light Mode, Text Size, Tour) -->
+  <div class="quick-prefs-bar" style="display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:8px;flex-wrap:wrap">
+    <button class="pill-btn" id="themeModeBtn" title="Toggle Light / Dark Mode" style="font-size:.78rem;padding:4px 12px;min-height:28px">
+      <span id="themeModeIcon">🌙</span>
+      <span id="themeModeLabel">Dark</span>
+    </button>
+    <button class="pill-btn" id="tourBtn" title="First-Run Walkthrough & Help" style="font-size:.78rem;padding:4px 12px;min-height:28px">
+      <span>✨</span>
+      <span>Tour & Help</span>
+    </button>
+  </div>
+
+  <!-- 5. PRIMARY APPLICATION CONTROLS -->
+  <div class="controls">
+    <button class="primary on" id="arm">✓ Alarms Are On</button>
+    <button class="ghost" id="test">▶ Test Sound</button>
+    <button class="ghost" id="restBtn" title="Full screen clock only">⛶ Rest Mode</button>
+    <div class="vol">
+      <button id="volIcon" title="Mute / unmute" aria-label="Mute">🔊</button>
+      <input type="range" id="volSlider" min="0" max="100" value="70" aria-label="Volume">
+      <span id="volPct">70%</span>
+    </div>
+  </div>
+
+  <!-- 6. MUSIC PLAYER BAR (Song Clip Only) -->
+  <div class="player" id="player">
+    <div class="eq"><i></i><i></i><i></i><i></i></div>
+    <div>
+      <span class="label" id="playerLabel">Up next</span>
+      <div><span id="songTitle">—</span> <span id="songArtist"></span></div>
+    </div>
+    <button class="ghost" id="skip" title="Choose a different song">Shuffle ⟳</button>
+  </div>
+
+  <div class="label">Active days</div>
+  <div class="days" id="days" role="group" aria-label="Alarm days"></div>
+
+  <!-- ROUTINE PRESETS & CLOUD SHARE BAR (Single-Line Compact Deck) -->
+  <div class="preset-bar">
+    <div class="preset-cluster-left">
+      <span class="preset-cluster-label">
+        <span>📋</span> Routine Preset:
+      </span>
+      <select id="presetSelect" aria-label="Choose routine preset">
+        <option value="class">🎓 Class Day (DepEd Master — 23 Blocks · Mon–Fri)</option>
+        <option value="weekend">🌿 Weekend Recharge (Nature &amp; Rest — 10 Blocks · Sat–Sun)</option>
+        <option value="gym">🏋️‍♂️ Gymmers &amp; Athletic Vitality (10 Blocks · Mon–Sun)</option>
+        <option value="holiday">🌴 Holidays &amp; Vacation Renewal (9 Blocks · Mon–Sun)</option>
+        <option value="seminar">🎤 Seminar &amp; Workshop (10 Blocks · Mon–Sun)</option>
+        <option value="deeprest">🧘 Deep Rest &amp; Reset (8 Blocks · Mon–Sun)</option>
+        <option value="creative">🎨 Creative Flow &amp; Craft (9 Blocks · Fri–Sun)</option>
+        <option value="exam">⚡ Exam Week (Study Sprints — 10 Blocks · Mon–Sat)</option>
+        <option value="sunday">🌊 Sunday Sanctuary &amp; Sabbath (7 Blocks · Sun Only)</option>
+        <option value="morning">🏃 Morning Momentum (6 Blocks · Mon–Fri)</option>
+        <option value="minimal">🎯 Minimalist Routine (4 Anchor Blocks · Mon–Sun)</option>
+        <option value="blank">📝 Blank Canvas (Start Fresh — 0 Blocks)</option>
+      </select>
+      <span id="presetDaysBadge" title="Active days for this routine"><span>📅</span> <b>Active: Mon — Fri</b></span>
+    </div>
+    <div class="preset-cluster-right">
+      <button class="ghost" id="shareRoutineBtn" title="Copy instant share link for this routine">🔗 Share Routine</button>
+      <button class="primary" id="openClassEncoderBtn" title="Easily type and encode 1 to 8 classes">📚 Encode Classes</button>
+    </div>
+  </div>
+
+  <!-- 7. SCHEDULE SECTION -->
+  <div class="sched-head">
+    <h2>Today's Schedule</h2>
+    <div class="sched-actions" id="schedActionsNormal">
+      <button class="ghost" id="editScheduleBtn">✎ Edit Schedule</button>
+      <button class="ghost" id="addAlarmBtn">+ Add Alarm</button>
+      <button class="ghost" id="resetSchedBtn">↺ Reset Default</button>
+    </div>
+    <div class="sched-actions" id="schedActionsEdit" style="display:none">
+      <button class="btn-save" id="saveScheduleBtn">💾 Save Changes</button>
+      <button class="btn-cancel" id="cancelScheduleBtn">✕ Cancel Edit</button>
+      <button class="ghost" id="addAlarmEditBtn">+ Add Alarm</button>
+    </div>
+  </div>
+
+  <!-- Category Filter Pills (Blue for Class, Green for Recharge, Purple for Work, Silver for Task, Gold for Wind-down) -->
+  <div class="legend" id="categoryFilters">
+    <button class="cat-pill active" data-cat="all" style="--c:var(--gold)"><b></b>All (23)</button>
+    <button class="cat-pill" data-cat="class" style="--c:var(--class)"><b></b>Class (Blue)</button>
+    <button class="cat-pill" data-cat="rest" style="--c:var(--rest)"><b></b>Recharge (Green)</button>
+    <button class="cat-pill" data-cat="work" style="--c:var(--work)"><b></b>Work (Purple)</button>
+    <button class="cat-pill" data-cat="err" style="--c:var(--err)"><b></b>Task (Silver)</button>
+    <button class="cat-pill" data-cat="night" style="--c:var(--night)"><b></b>Wind-down (Gold)</button>
+  </div>
+
+  <!-- The Interactive Schedule List -->
+  <ul id="list"></ul>
+
+  <!-- 8. APP DISTRIBUTION & COMMAND SUITE (Install, Share, QR, Backup, Publish) -->
+  <section class="app-dist" aria-labelledby="distTitle">
+    <div class="dist-head">
+      <div>
+        <div class="dist-title" id="distTitle">
+          <span>📲 App Distribution & Command Suite</span>
+          <span class="dist-badge">● PWA Ready</span>
+        </div>
+        <div class="dist-subtitle">Installed, offline-cached, shareable, and verified for Sir Orlando V. Pasion, Jr.</div>
+      </div>
+    </div>
+
+    <div class="dist-grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
+      <!-- Card 1: Install Desktop & Mobile Application -->
+      <div class="dist-card">
+        <div class="dist-card-top">
+          <div class="dist-icon">💻</div>
+          <div>
+            <div class="dist-name">Install to Device</div>
+            <div class="dist-desc">Install onto your Windows PC, Mac, Android phone, or iPhone with zero security warnings.</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="primary dist-btn" id="installAppBtn">⚡ 1-Click Install App (Zero Warnings)</button>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <a class="ghost dist-btn" href="downloads/Install-OrlandoRecharge-Windows.cmd" download style="flex:1;min-width:130px;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;font-size:.82rem" title="1-Click Windows Setup Script">⚡ Windows Setup (.cmd)</a>
+            <a class="ghost dist-btn" href="downloads/DailyRecharge-Setup.exe" download style="flex:1;min-width:130px;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;font-size:.82rem" title="Standalone .exe for Windows">⬇ Windows (.exe)</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Mobile QR Code & Link Sharing -->
+      <div class="dist-card">
+        <div class="dist-card-top">
+          <div class="dist-icon">📲</div>
+          <div>
+            <div class="dist-name">Mobile QR & Share</div>
+            <div class="dist-desc">Instant phone camera scanner to open on mobile, or copy the direct web link to share.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="ghost dist-btn" id="openQrBtn" style="flex:1">📷 Open Phone QR</button>
+          <button class="ghost dist-btn" id="shareAppBtn" style="flex:1">↗ Copy Link</button>
+        </div>
+      </div>
+
+      <!-- Card 3: Backup & Restore Schedule -->
+      <div class="dist-card">
+        <div class="dist-card-top">
+          <div class="dist-icon">💾</div>
+          <div>
+            <div class="dist-name">Backup & Restore</div>
+            <div class="dist-desc">Save a secure JSON backup of your custom alarms to your computer, or restore a saved schedule.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="ghost dist-btn" id="exportBackupBtn" style="flex:1">💾 Export (.json)</button>
+          <button class="ghost dist-btn" id="importBackupBtn" style="flex:1">📂 Import</button>
+          <input type="file" id="importBackupFile" accept=".json" style="display:none">
+        </div>
+      </div>
+    </div>
+
+    <!-- Highlight Banner: Clean Blank Edition (For Friends & Students) -->
+    <div class="dist-card highlight-card">
+      <div class="dist-card-top">
+        <div class="dist-icon" style="background:rgba(217,185,92,.15);color:var(--gold);border-color:rgba(217,185,92,.3)">🎁</div>
+        <div>
+          <div class="dist-name" style="color:var(--gold)">Clean Blank Edition (For Anyone)</div>
+          <div class="dist-desc">A 100% clean, schedule-free app with isolated storage. Zero personal data — ready for anyone to enter their own schedule.</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <a class="primary dist-btn" href="recharge-clean.html" target="_blank" rel="noopener" style="flex:1;min-width:140px;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center">🚀 Open Blank Web App</a>
+        <a class="ghost dist-btn" href="downloads/DailyRecharge-Clean-Setup.exe" download style="flex:1;min-width:140px;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;font-size:.85rem">⬇ Windows (.exe)</a>
+        <button class="ghost dist-btn" id="downloadBlankAppBtn" style="flex:1;min-width:140px;font-size:.85rem">💾 Standalone (.html)</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER & LEGAL LINKS (App Store Ready) -->
+  <footer style="margin-top:40px;padding-top:24px;border-top:1px solid var(--line2);text-align:center;font-size:.85rem;color:var(--dim);display:flex;flex-direction:column;gap:10px">
+    <div style="display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap">
+      <a href="privacy-policy.html" style="color:var(--gold);text-decoration:none;font-weight:600">Privacy Policy</a>
+      <span style="opacity:.4">•</span>
+      <a href="terms.html" style="color:var(--gold);text-decoration:none;font-weight:600">Terms of Service</a>
+      <span style="opacity:.4">•</span>
+      <a href="https://github.com/orlandopasion000/orlandopasion000.github.io" target="_blank" rel="noopener" style="color:var(--dim);text-decoration:none">GitHub Source</a>
+    </div>
+    <div style="font-size:.78rem;color:var(--mute)">
+      🛡️ 100% On-Device · Zero Telemetry · Offline Service Worker v8 · Screen Wake Lock Active
+    </div>
+  </footer>
+
+</main>
+
+<!-- Rest Mode Screen -->
+<div id="rest" aria-label="Rest mode clock. Tap to exit.">
+  <div id="restWrap"><div id="restClock" class="chrome"></div><div id="restAmpm"></div></div>
+  <div id="restHint">
+    <span>Tap anywhere or press Esc to exit</span>
+  </div>
+</div>
+
+<!-- Ringing Alarm Overlay -->
+<div id="ov" role="alertdialog" aria-modal="true" aria-labelledby="ovT" aria-live="assertive">
+  <div class="ring">🔔</div>
+  <div id="ovT"></div>
+  <div id="ovM"></div>
+  <div id="ovSong">♪ <b id="ovSongName"></b></div>
+  <div class="ov-actions">
+    <button class="ghost" id="ovS">Snooze 5 min</button>
+    <button class="primary" id="ovB">Dismiss</button>
+  </div>
+  <div class="ov-keys">S = snooze · Esc = dismiss</div>
+</div>
+
+<!-- Interactive Add Alarm Modal (Drop-Down Category, Custom Time, No Browser Prompt) -->
+<div class="modal-wrap" id="addAlarmModal" role="dialog" aria-modal="true" aria-label="Add New Alarm">
+  <div class="modal-box" style="text-align:left;max-width:440px">
+    <button class="modal-close" id="closeAddAlarmModal" aria-label="Close modal">✕</button>
+    <div class="modal-title" style="text-align:center;display:flex;align-items:center;justify-content:center;gap:8px">
+      <span>⏰</span>
+      <span>Add New Alarm</span>
+    </div>
+    <div class="modal-text" style="margin-bottom:16px;text-align:center">Set the time, activity title, and category for your schedule.</div>
+
+    <form id="addAlarmForm" onsubmit="return false;" style="display:flex;flex-direction:column;gap:14px">
+      <!-- Time Input -->
+      <div>
+        <label for="newAlarmTime" style="display:block;font-size:.80rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Alarm Time</label>
+        <input type="time" id="newAlarmTime" value="08:00" required style="font-family:var(--font-clock);font-size:1.25rem;font-weight:700;background:var(--surface-2);color:var(--text);border:1px solid var(--line2);border-radius:12px;padding:10px 14px;width:100%">
+      </div>
+
+      <!-- Activity Title Input -->
+      <div>
+        <label for="newAlarmTitle" style="display:block;font-size:.80rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Activity Title</label>
+        <input type="text" id="newAlarmTitle" placeholder="e.g. Short recharge — 10 min, Math 8" required style="font-family:var(--sans);font-size:1.02rem;font-weight:600;background:var(--surface-2);color:var(--text);border:1px solid var(--line2);border-radius:12px;padding:11px 14px;width:100%">
+        <!-- Quick Preset Suggestion Chips -->
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
+          <button type="button" class="preset-chip" data-title="Short recharge — 10 min" data-cat="rest" style="background:var(--surface-2);border:1px solid var(--line2);border-radius:8px;padding:4px 9px;font-size:.76rem;color:var(--dim);cursor:pointer;font-family:var(--sans)">+ 🌿 Recharge</button>
+          <button type="button" class="preset-chip" data-title="Class Lecture" data-cat="class" style="background:var(--surface-2);border:1px solid var(--line2);border-radius:8px;padding:4px 9px;font-size:.76rem;color:var(--dim);cursor:pointer;font-family:var(--sans)">+ 🔵 Class</button>
+          <button type="button" class="preset-chip" data-title="Work & Admin" data-cat="work" style="background:var(--surface-2);border:1px solid var(--line2);border-radius:8px;padding:4px 9px;font-size:.76rem;color:var(--dim);cursor:pointer;font-family:var(--sans)">+ 🟣 Work</button>
+          <button type="button" class="preset-chip" data-title="Task & Duty" data-cat="err" style="background:var(--surface-2);border:1px solid var(--line2);border-radius:8px;padding:4px 9px;font-size:.76rem;color:var(--dim);cursor:pointer;font-family:var(--sans)">+ ⚪ Task</button>
+          <button type="button" class="preset-chip" data-title="Evening Wind-down" data-cat="night" style="background:var(--surface-2);border:1px solid var(--line2);border-radius:8px;padding:4px 9px;font-size:.76rem;color:var(--dim);cursor:pointer;font-family:var(--sans)">+ 🟡 Wind-down</button>
+        </div>
+      </div>
+
+      <!-- Category Dropdown Selector with Arrow and Colors -->
+      <div>
+        <label for="newAlarmCategory" style="display:block;font-size:.80rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Category (Class, Recharge, Work, Task, Wind-down)</label>
+        <div style="position:relative">
+          <select id="newAlarmCategory" style="font-family:var(--sans);font-size:1rem;font-weight:600;background:var(--surface-2);color:var(--text);border:1px solid var(--line2);border-radius:12px;padding:11px 14px;width:100%;cursor:pointer;-webkit-appearance:none;appearance:none;padding-right:36px">
+            <option value="rest">🟢 Recharge (Green) — Rest, nap & meditation</option>
+            <option value="class">🔵 Class (Blue) — Teaching & lectures</option>
+            <option value="work">🟣 Work (Purple) — Admin, print & grading</option>
+            <option value="err">⚪ Task (Silver) — Quick errands & duties</option>
+            <option value="night">🟡 Wind-down (Gold) — Evening relaxation & sleep</option>
+          </select>
+          <span style="position:absolute;right:14px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--gold);font-size:.85rem">▼</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div style="display:flex;gap:10px;margin-top:8px">
+        <button type="submit" class="primary" id="confirmAddAlarmBtn" style="flex:1;padding:12px 18px;font-size:.98rem;font-weight:700">✓ Add Alarm</button>
+        <button type="button" class="ghost" id="cancelAddAlarmBtn" style="flex:1;padding:12px 18px;font-size:.98rem">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Quick Class Schedule Encoder Modal (1 to 8 Classes or Free-Form Text) -->
+<div class="modal-wrap" id="classScheduleModal" role="dialog" aria-modal="true" aria-label="Encode Class Schedule">
+  <div class="modal-box" style="text-align:left;max-width:540px;max-height:88vh;overflow-y:auto;display:flex;flex-direction:column;gap:14px">
+    <button class="modal-close" id="closeClassModal" aria-label="Close modal">✕</button>
+    
+    <div style="text-align:center">
+      <div style="font-size:2rem;margin-bottom:4px">📚</div>
+      <div class="modal-title" style="margin-bottom:4px">Encode Class Schedule</div>
+      <div class="modal-text" style="color:var(--dim);font-size:.88rem">
+        Easily type or configure your 1 to 8 daily teaching classes with automatic recharge buffers.
+      </div>
+    </div>
+
+    <!-- Quick Class Count Picker (1 to 8 Buttons) -->
+    <div>
+      <div style="font-size:.80rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center">
+        <span>Number of Classes Today:</span>
+        <span id="classCountDisplay" style="color:var(--text);font-size:.85rem;font-weight:600">4 Classes</span>
+      </div>
+      <div id="classCountButtons" style="display:flex;gap:6px;flex-wrap:wrap">
+        <button type="button" class="cat-pill class-count-btn" data-count="1" style="flex:1;min-width:38px;padding:6px 0;justify-content:center">1</button>
+        <button type="button" class="cat-pill class-count-btn" data-count="2" style="flex:1;min-width:38px;padding:6px 0;justify-content:center">2</button>
+        <button type="button" class="cat-pill class-count-btn" data-count="3" style="flex:1;min-width:38px;padding:6px 0;justify-content:center">3</button>
+        <button type="button" class="cat-pill class-count-btn active" data-count="4" style="flex:1;min-width:38px;padding:6px 0;justify-content:center">4</button>
+        <button type="button" class="cat-pill class-count-btn" data-count="5" style="flex:1;min-width:38px;padding:6px 0;justify-content:center">5</button>
+        <button type="button" class="cat-pill class-count-btn" data-count="6" style="flex:1;min-width:38px;padding:6px 0;justify-content:center">6</button>
+        <button type="button" class="cat-pill class-count-btn" data-count="7" style="flex:1;min-width:38px;padding:6px 0;justify-content:center">7</button>
+        <button type="button" class="cat-pill class-count-btn" data-count="8" style="flex:1;min-width:38px;padding:6px 0;justify-content:center">8</button>
+      </div>
+    </div>
+
+    <!-- Mode Switcher -->
+    <div style="display:flex;gap:8px;border-bottom:1px solid var(--line2);padding-bottom:10px;margin-top:2px">
+      <button type="button" class="ghost" id="classModeRowsBtn" style="flex:1;padding:7px 12px;font-size:.84rem;font-weight:700;border-color:var(--gold);color:var(--gold);background:var(--surface-3)">📝 Visual Rows (1–8)</button>
+      <button type="button" class="ghost" id="classModeTextBtn" style="flex:1;padding:7px 12px;font-size:.84rem;font-weight:600">⌨️ Free-Form Type / Paste</button>
+    </div>
+
+    <!-- Container A: Dynamic Interactive Rows (1 to 8 rows) -->
+    <div id="classRowsContainer" style="display:flex;flex-direction:column;gap:10px">
+      <!-- Injected by JavaScript -->
+    </div>
+
+    <!-- Container B: Free-Form Type / Paste Box -->
+    <div id="classTextContainer" style="display:none;flex-direction:column;gap:8px">
+      <div style="font-size:.80rem;color:var(--dim)">Type or paste lines (e.g. <code>8:30 AM Math 8</code> or <code>10:45 Math 10</code>):</div>
+      <textarea id="classFreeText" rows="6" placeholder="8:30 AM Math 8&#10;10:45 AM Math 10&#10;1:00 PM Math 8&#10;3:15 PM Gen Math 11" style="font-family:var(--mono);font-size:.9rem;background:var(--surface-2);color:var(--text);border:1px solid var(--line2);border-radius:12px;padding:10px 12px;width:100%;resize:vertical"></textarea>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span id="classTextParsedCount" style="font-size:.78rem;color:var(--gold);font-weight:600">Detected: 4 classes</span>
+        <button type="button" class="ghost" id="syncTextToRowsBtn" style="padding:4px 10px;font-size:.78rem">⚡ Sync to Rows</button>
+      </div>
+    </div>
+
+    <!-- Quick Subject Fillers -->
+    <div style="background:var(--surface-2);border:1px solid var(--line2);border-radius:12px;padding:10px 12px">
+      <div style="font-size:.76rem;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">Quick Subject Fillers (Tap to apply to active row):</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button type="button" class="preset-chip class-quick-subject" data-sub="Math 8" style="background:var(--surface-3);border:1px solid var(--line2);border-radius:8px;padding:4px 8px;font-size:.76rem;color:var(--text);cursor:pointer">+ Math 8</button>
+        <button type="button" class="preset-chip class-quick-subject" data-sub="Math 10" style="background:var(--surface-3);border:1px solid var(--line2);border-radius:8px;padding:4px 8px;font-size:.76rem;color:var(--text);cursor:pointer">+ Math 10</button>
+        <button type="button" class="preset-chip class-quick-subject" data-sub="Gen Math 11" style="background:var(--surface-3);border:1px solid var(--line2);border-radius:8px;padding:4px 8px;font-size:.76rem;color:var(--text);cursor:pointer">+ Gen Math 11</button>
+        <button type="button" class="preset-chip class-quick-subject" data-sub="Science" style="background:var(--surface-3);border:1px solid var(--line2);border-radius:8px;padding:4px 8px;font-size:.76rem;color:var(--text);cursor:pointer">+ Science</button>
+        <button type="button" class="preset-chip class-quick-subject" data-sub="English" style="background:var(--surface-3);border:1px solid var(--line2);border-radius:8px;padding:4px 8px;font-size:.76rem;color:var(--text);cursor:pointer">+ English</button>
+        <button type="button" class="preset-chip class-quick-subject" data-sub="Advisory" style="background:var(--surface-3);border:1px solid var(--line2);border-radius:8px;padding:4px 8px;font-size:.76rem;color:var(--text);cursor:pointer">+ Advisory</button>
+        <button type="button" class="preset-chip class-quick-subject" data-sub="Homeroom" style="background:var(--surface-3);border:1px solid var(--line2);border-radius:8px;padding:4px 8px;font-size:.76rem;color:var(--text);cursor:pointer">+ Homeroom</button>
+      </div>
+    </div>
+
+    <!-- Smart Teaching Rhythm Options -->
+    <div style="background:var(--surface-2);border:1px solid var(--line2);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px;font-size:.84rem;color:var(--text)">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+        <input type="checkbox" id="classOptRecharge" checked style="accent-color:var(--gold);width:16px;height:16px">
+        <span>🔋 <b>Auto-add 10-minute micro-recharge</b> before each class</span>
+      </label>
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+        <input type="checkbox" id="classOptLunch" checked style="accent-color:var(--gold);width:16px;height:16px">
+        <span>🥗 <b>Include Lunch &amp; Recharge</b> at 12:00 PM (45 min)</span>
+      </label>
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+        <input type="checkbox" id="classOptDays" checked style="accent-color:var(--gold);width:16px;height:16px">
+        <span>📅 <b>Set Active Days to Monday — Friday</b> (DepEd teaching days)</span>
+      </label>
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+        <input type="checkbox" id="classOptWinddown" checked style="accent-color:var(--gold);width:16px;height:16px">
+        <span>🌙 <b>Include evening wind-down</b> (8:30 PM) &amp; Bedtime (9:30 PM)</span>
+      </label>
+    </div>
+
+    <!-- Action Buttons -->
+    <div style="display:flex;gap:10px;margin-top:6px;flex-wrap:wrap">
+      <button type="button" class="primary" id="applyClassScheduleBtn" style="flex:2;min-width:180px;padding:12px 18px;font-size:.96rem;font-weight:700">💾 Build Teaching Schedule</button>
+      <button type="button" class="ghost" id="appendClassScheduleBtn" style="flex:1;min-width:130px;padding:12px 14px;font-size:.88rem;font-weight:600" title="Add these classes to existing schedule">➕ Append Only</button>
+      <button type="button" class="ghost" id="cancelClassModalBtn" style="padding:12px 16px;font-size:.88rem">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Mobile Camera QR Code Modal -->
+<div class="modal-wrap" id="qrModal" role="dialog" aria-modal="true" aria-label="Mobile QR Code">
+  <div class="modal-box">
+    <button class="modal-close" id="closeQrModal" aria-label="Close modal">✕</button>
+    <div class="modal-title">Mobile Camera QR</div>
+    <div class="modal-text">Point your iPhone or Android camera at the QR code below to immediately open OrlandoRecharge.</div>
+    <div class="modal-qr-frame">
+      <img src="assets/qr-code.svg" alt="OrlandoRecharge QR Code" width="210" height="210">
+    </div>
+    <div style="font-family:var(--mono);font-size:.82rem;color:var(--gold);word-break:break-all;margin-bottom:14px">
+      https://orlandopasion000.github.io/orlandorecharge
+    </div>
+    <div class="modal-actions">
+      <button class="primary" id="copyQrLinkBtn" style="padding:10px 20px;font-size:.9rem">Copy Web Link</button>
+      <button class="ghost" id="doneQrBtn" style="padding:10px 20px;font-size:.9rem">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- Install Guide Modal (Safari / Desktop / Android) -->
+<div class="modal-wrap" id="installGuideModal" role="dialog" aria-modal="true" aria-label="Install App Guide">
+  <div class="modal-box" style="text-align:left">
+    <button class="modal-close" id="closeInstallGuide" aria-label="Close modal">✕</button>
+    <div class="modal-title" style="text-align:center">Install OrlandoRecharge</div>
+    <div class="modal-text" style="margin-bottom:16px;text-align:center">Follow the quick step for your device:</div>
+    <div style="display:flex;flex-direction:column;gap:12px;font-size:.9rem;color:var(--text)">
+      <div style="background:#0c0c0e;border:1px solid rgba(217,185,92,.45);border-radius:14px;padding:14px">
+        <b style="color:var(--gold)">⚡ Windows 1-Line Instant Setup (Zero Warnings):</b><br>
+        Open PowerShell and paste:<br>
+        <code style="display:block;margin-top:6px;padding:8px 10px;background:#000;border:1px solid var(--line2);border-radius:8px;color:#4ADE80;font-size:.8rem;word-break:break-all">irm https://orlandopasion000.github.io/orlandorecharge/install.ps1 | iex</code>
+      </div>
+      <div style="background:#000;border:1px solid var(--line2);border-radius:14px;padding:14px">
+        <b style="color:var(--gold)">💻 Windows, Mac & Chromebook (Chrome / Edge):</b><br>
+        Click the <b>Install</b> icon (⊞) in your address bar, or click Menu (⋮) → <b>Install OrlandoRecharge</b>.
+      </div>
+      <div style="background:#000;border:1px solid var(--line2);border-radius:14px;padding:14px">
+        <b style="color:var(--gold)">🍎 iPhone & iPad (Safari):</b><br>
+        1. Tap the <b>Share</b> button (<span style="font-size:1.1rem">⎙</span>) at the bottom.<br>
+        2. Scroll down and tap <b>Add to Home Screen</b> (⊞).<br>
+        3. Tap <b>Add</b> in the top right.
+      </div>
+      <div style="background:#000;border:1px solid var(--line2);border-radius:14px;padding:14px">
+        <b style="color:var(--gold)">🤖 Android (Chrome):</b><br>
+        Tap the menu dots (⋮) in the top-right corner, then tap <b>Install app</b> or <b>Add to Home Screen</b>.
+      </div>
+    </div>
+    <div class="modal-actions" style="margin-top:20px">
+      <button class="primary" id="dismissInstallGuide" style="width:100%;padding:12px">Got It</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Notifications Container -->
+<!-- Onboarding Welcome Tour Modal -->
+<div class="modal-wrap" id="onboardingModal" role="dialog" aria-modal="true" aria-label="Welcome Tour">
+  <div class="modal-box" style="text-align:left;max-width:480px">
+    <button class="modal-close" id="closeOnboardingModal" aria-label="Close modal">✕</button>
+    <div style="text-align:center;margin-bottom:16px">
+      <div style="font-size:2.4rem;margin-bottom:8px">⏰✨</div>
+      <div class="modal-title">Welcome to OrlandoRecharge</div>
+      <div class="modal-text" style="color:var(--dim);font-size:.92rem">Your science-backed rhythm for peak focus, timely recharges, and restful recovery.</div>
+    </div>
+
+    <!-- 3 Highlight Features -->
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px">
+      <div style="background:var(--surface-2);border:1px solid var(--line2);border-radius:12px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start">
+        <span style="font-size:1.3rem">🛡️</span>
+        <div>
+          <b style="color:var(--text);font-size:.92rem">Screen-Off Reliability</b>
+          <div style="font-size:.82rem;color:var(--dim)">Screen Wake Lock and continuous audio keep-alive ensure your alarms ring even when your device is resting or screen is locked.</div>
+        </div>
+      </div>
+      <div style="background:var(--surface-2);border:1px solid var(--line2);border-radius:12px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start">
+        <span style="font-size:1.3rem">⚡</span>
+        <div>
+          <b style="color:var(--text);font-size:.92rem">1-Tap Curated Routine Presets</b>
+          <div style="font-size:.82rem;color:var(--dim)">Switch effortlessly between Weekend Recharge, Gymmers, Holidays, Seminar, Deep Rest, Class Day, and more.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-actions" style="margin-top:16px">
+      <button class="primary" id="startTourBtn" style="width:100%;padding:13px;font-size:1rem;font-weight:700">Get Started · Arm Alarms ⚡</button>
+    </div>
+  </div>
+</div>
+
+<!-- Shared Routine Detected Modal -->
+<div class="modal-wrap" id="sharedRoutineModal" role="dialog" aria-modal="true" aria-label="Shared Routine Imported">
+  <div class="modal-box" style="text-align:left;max-width:440px">
+    <button class="modal-close" id="closeSharedRoutineModal" aria-label="Close modal">✕</button>
+    <div style="text-align:center;margin-bottom:14px">
+      <div style="font-size:2.2rem;margin-bottom:6px">📥</div>
+      <div class="modal-title">Shared Routine Detected</div>
+      <div class="modal-text" id="sharedRoutineDesc" style="color:var(--dim);font-size:.92rem">Someone shared a Daily Recharge routine with you.</div>
+    </div>
+    <div id="sharedRoutinePreview" style="max-height:180px;overflow-y:auto;background:var(--surface-2);border:1px solid var(--line2);border-radius:12px;padding:12px;margin-bottom:16px;font-size:.85rem;color:var(--text)"></div>
+    <div style="display:flex;gap:10px">
+      <button class="primary" id="confirmLoadSharedRoutineBtn" style="flex:1;padding:12px;font-weight:700">Load This Routine</button>
+      <button class="ghost" id="cancelLoadSharedRoutineBtn" style="flex:1;padding:12px">Dismiss</button>
+    </div>
+  </div>
+</div>
+
+<div id="toastBox" aria-live="polite"></div>
+
+<script>
+/* ───────── MASTER SCHEDULE (Sir Orlando V. Pasion, Jr.) ───────── */
+var DEFAULT_SCHEDULE = [
+  [7,0,"work","Arrive — read, learn, develop"],
+  [8,0,"rest","Short recharge — 10 min"],
+  [8,10,"work","Work and print"],
+  [8,20,"rest","Recharge before class — 10 min"],
+  [8,30,"class","Class: Math 8"],
+  [9,30,"rest","Long recharge — 40 min"],
+  [10,11,"work","Work and print"],
+  [10,30,"rest","Recharge before class — 15 min"],
+  [10,45,"class","Class: Math 10"],
+  [11,45,"err","Principal’s office — log out/in"],
+  [12,0,"rest","Lunch and recharge — 45 min"],
+  [12,45,"err","Personal hygiene"],
+  [12,50,"rest","Recharge before class — 10 min"],
+  [13,0,"class","Class: Math 8"],
+  [14,0,"rest","Longest recharge — 60 min"],
+  [15,0,"work","Work and print"],
+  [15,10,"rest","Quick recharge — 5 min"],
+  [15,15,"class","Class: Gen Math 11"],
+  [16,16,"err","Organize files"],
+  [16,21,"rest","Recharge, then go home"],
+  [20,0,"night","Shutdown — write tomorrow’s top 3"],
+  [20,30,"night","Wind-down — no screens"],
+  [21,30,"night","Bedtime"]
+];
+
+var S = DEFAULT_SCHEDULE.slice(0);
+try {
+  var saved = localStorage.getItem("dra-schedule");
+  if (saved) {
+    var parsed = JSON.parse(saved);
+    if (Array.isArray(parsed) && parsed.length > 0) S = parsed;
+  }
+} catch(e){}
+
+// Sanitize schedule: automatically remove any test alarms matching "dgsdhsd"
+S = S.filter(function(item){
+  if (!item || !item[3]) return false;
+  var title = String(item[3]).toLowerCase().trim();
+  if (title.indexOf("dgsdhsd") !== -1) return false;
+  return true;
+});
+try { localStorage.setItem("dra-schedule", JSON.stringify(S)); } catch(e){}
+
+function sortSchedule(){
+  S.sort(function(a,b){ return (a[0]*60+a[1]) - (b[0]*60+b[1]); });
+}
+sortSchedule();
+
+/* ───────── SONGS (30-second clips, cut near the chorus) ───────── */
+var SONGS = [
+  {file:"music/palagi.mp3",title:"Palagi",artist:"TJ Monterde & KZ Tandingan"},
+  {file:"music/na-para-bang.mp3",title:"Na Para Bang",artist:"Mariah Deborah"},
+  {file:"music/what-if-i-miss-you.mp3",title:"What If I Miss You",artist:"Janine Berdin"},
+  {file:"music/okay.mp3",title:"OKAY!",artist:"Forrest Frank"},
+  {file:"music/training-season.mp3",title:"Training Season",artist:"Dua Lipa"},
+  {file:"music/stop-the-wedding.mp3",title:"Stop The Wedding!",artist:"Ashe"},
+  {file:"music/malibu-nights.mp3",title:"Malibu Nights",artist:"LANY"},
+  {file:"music/enchanted.mp3",title:"Enchanted",artist:"Taylor Swift"},
+  {file:"music/the-man-who-cant-be-moved.mp3",title:"The Man Who Can’t Be Moved",artist:"The Script"},
+  {file:"music/youre-still-the-one.mp3",title:"You’re Still The One",artist:"Shania Twain"}
+];
+
+function $(i){return document.getElementById(i)}
+function p2(n){return n<10?"0"+n:""+n}
+function fmt(h,m){return (h%12||12)+":"+p2(m)+" "+(h>=12?"PM":"AM")}
+
+/* ───────── STATE: ALARMS ALWAYS ON BY DEFAULT ───────── */
+var DN=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+var off={},days={1:1,2:1,3:1,4:1,5:1},armed=true,fired={};
+var volume=.7,muted=false,clockTheme="platinum";
+var activeFilter="all",isEditing=false,editingBackup=null;
+
+try{
+  off=JSON.parse(localStorage.getItem("dra-off")||"{}");
+  var d=localStorage.getItem("dra-days");if(d)days=JSON.parse(d);
+  var v=localStorage.getItem("dra-vol");if(v!==null&&!isNaN(+v))volume=+v;
+  muted=localStorage.getItem("dra-mute")==="1";
+  var ct=localStorage.getItem("dra-clock-theme");if(ct)clockTheme=ct;
+  armed=true; // Always default to true every time site is opened
+}catch(e){}
+
+function save(){try{
+  localStorage.setItem("dra-off",JSON.stringify(off));
+  localStorage.setItem("dra-days",JSON.stringify(days));
+  localStorage.setItem("dra-vol",""+volume);
+  localStorage.setItem("dra-mute",muted?"1":"0");
+  localStorage.setItem("dra-clock-theme",clockTheme);
+  localStorage.setItem("dra-schedule",JSON.stringify(S));
+}catch(e){}}
+
+/* ───────── CLOCK THEME CONTROLLER (Color Theory Harmonized Masterworks) ───────── */
+var THEMES = [
+  "platinum",         // Choice 11: Pure Platinum (Specular Masterpiece from Reference)
+  "gold",             // Choice 2: Royal 24K Radiant Gold (Split-Complementary Luxury)
+  "royal-sapphire",   // Choice 14: Royal Sapphire & Cobalt Chrono (Space Grotesk Bold)
+  "crimson-laser",    // Choice 15: Cyberpunk Crimson Laser (Chakra Petch Bold)
+  "obsidian-noir",    // Choice 16: Titanium Obsidian Noir (Inter Display Black)
+  "solis-gold",       // Choice 17: Solis Radiant 18K Yellow Gold (Outfit Extra Bold)
+  "rainbow",          // Choice 12: Prismatic Rainbow (Triadic 120° Harmonic Spectrum)
+  "chrome-3d",        // Choice 1: Executive Chrome 3D (Monochromatic Specular Silver)
+  "cyber-emerald",    // Choice 3: Cyberpunk Emerald Matrix (Analogous Mint & Forest Neon)
+  "ice-titanium",     // Choice 4: Glacial Titanium & Ice Blue (Complementary Cyan & Titanium)
+  "amethyst",         // Choice 5: Imperial Amethyst Purple (Analogous Royal Violet)
+  "sunset-rose",      // Choice 6: Sunset Rose Gold (Analogous Serene Copper Blush)
+  "minimal-white",    // Choice 7: Pure Minimalist Studio (Monochromatic High-Key Swiss Bauhaus)
+  "chronometer-din",  // Choice 8: German Chronometer DIN (Monochromatic Precision Tool Steel)
+  "sunset-amber",     // Choice 9: Blazing Sunset Amber (Complementary Molten Bronze Tachometer)
+  "midnight-gold",    // Choice 10: Midnight Gold Dual-Tone Rim (Split-Complementary Core & 24K Rim)
+  "green-nature"      // Choice 13: Green Nature Matrix (Biophilic Restorative Forest)
+];
+
+var THEME_NAMES = {
+  "platinum": "Pure Platinum",
+  "gold": "Royal 24K Radiant Gold",
+  "royal-sapphire": "Royal Sapphire & Cobalt Chrono",
+  "crimson-laser": "Cyberpunk Crimson Laser",
+  "obsidian-noir": "Titanium Obsidian Noir",
+  "solis-gold": "Solis Radiant 18K Gold",
+  "rainbow": "Prismatic Rainbow",
+  "chrome-3d": "Executive Chrome 3D",
+  "cyber-emerald": "Cyberpunk Emerald Matrix",
+  "ice-titanium": "Glacial Titanium & Ice Blue",
+  "amethyst": "Imperial Amethyst Purple",
+  "sunset-rose": "Sunset Rose Gold",
+  "minimal-white": "Pure Minimalist Studio",
+  "chronometer-din": "German Chronometer DIN",
+  "sunset-amber": "Blazing Sunset Amber",
+  "midnight-gold": "Midnight Gold Dual-Tone Rim",
+  "green-nature": "Green Nature Matrix"
+};
+
+function applyClockTheme(theme){
+  if(theme === "chrome") theme = "chrome-3d";
+  else if(theme === "rose") theme = "sunset-rose";
+  else if(theme === "pink") theme = "sunset-rose";
+  else if(theme === "purple") theme = "amethyst";
+  else if(theme === "white" || theme === "pure-white") theme = "minimal-white";
+  else if(theme === "din") theme = "chronometer-din";
+  else if(theme === "amber") theme = "sunset-amber";
+  else if(theme === "cyberpunk") theme = "cyber-emerald";
+  else if(theme === "glacial") theme = "ice-titanium";
+  else if(theme === "sapphire" || theme === "blue") theme = "royal-sapphire";
+  else if(theme === "crimson" || theme === "laser" || theme === "red") theme = "crimson-laser";
+  else if(theme === "obsidian" || theme === "noir" || theme === "dark") theme = "obsidian-noir";
+  else if(theme === "solis") theme = "solis-gold";
+
+  if(!THEME_NAMES[theme]) theme = "platinum";
+  clockTheme = theme;
+  document.body.setAttribute("data-clock-theme", theme);
+  if ($("themeLabel")) $("themeLabel").textContent = THEME_NAMES[theme];
+  save();
+}
+
+if ($("themeBtn")) {
+  $("themeBtn").onclick = function(){
+    var idx = (THEMES.indexOf(clockTheme) + 1) % THEMES.length;
+    applyClockTheme(THEMES[idx]);
+    showToast("Clock Style: " + THEME_NAMES[THEMES[idx]], "🎨");
+  };
+}
+applyClockTheme(clockTheme);
+
+/* ───────── SHUFFLE BAG: every song plays once before any repeats ───────── */
+var bag=[],lastIdx=-1,queued;
+function refill(){
+  bag=SONGS.map(function(_,i){return i});
+  for(var i=bag.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=bag[i];bag[i]=bag[j];bag[j]=t}
+  if(bag[0]===lastIdx||(queued&&bag[0]===idx(queued)))bag.push(bag.shift());
+}
+function peekIdx(){if(!bag.length)refill();return bag[0]}
+function nextSong(){
+  if(!bag.length)refill();
+  lastIdx=bag.shift();
+  return SONGS[lastIdx];
+}
+
+/* ───────── AUDIO ENGINE (Web Audio API) ───────── */
+var AC=window.AudioContext||window.webkitAudioContext;
+var ac=null,master=null,raw={},bufs={},ready={},curSrc=null,curFade=null,fallback=null;
+var current=null,onDone=null,mode=null;
+
+function target(){return muted?0:volume}
+function initAudio(){
+  if(ac||!AC)return;
+  try{
+    ac=new AC({latencyHint:"interactive"});
+    master=ac.createGain();master.gain.value=target();master.connect(ac.destination);
+    initAmbientEngine();
+    if(ac.state==="suspended"){
+      ac.resume().catch(function(){});
+    }
+  }catch(e){}
+  updateAudioBadge();
+}
+function unlock(){
+  initAudio();
+  if(ac&&ac.state!=="running"){
+    ac.resume().then(function(){
+      updateAudioBadge();
+      prepare();
+      if(armed) startAudioKeepAlive();
+    }).catch(function(){});
+  }else{
+    updateAudioBadge();
+    prepare();
+    if(armed) startAudioKeepAlive();
+  }
+}
+["pointerdown","keydown","touchstart","scroll"].forEach(function(ev){document.addEventListener(ev,unlock,{passive:true,capture:true})});
+
+function updateAudioBadge(){
+  var badge=$("audioBadge"),text=$("audioBadgeText");
+  if(!badge||!text)return;
+  badge.className="pill-btn live";
+  text.textContent="🔊 Sound Ready";
+  badge.title="Sound is active and ready to play alarms";
+}
+$("audioBadge").onclick=function(){
+  unlock();
+  showToast("Sound is active and ready", "🔊");
+};
+
+// Initialize audio immediately so Sound Ready is permanently on by default
+initAudio();
+
+function stopAllSounds(){}
+
+/* ───────── SONG PLAYER ENGINE (Song Clip Only) ───────── */
+var songAudioCache = {};
+function getSongAudioElement(song){
+  if(!songAudioCache[song.file]){
+    var el = new Audio(song.file);
+    el.preload = "auto";
+    try{ el.load(); }catch(e){}
+    songAudioCache[song.file] = el;
+  }
+  return songAudioCache[song.file];
+}
+
+var loading=SONGS.map(function(s,i){
+  getSongAudioElement(s);
+  return fetch(s.file).then(function(r){if(!r.ok)throw 0;return r.arrayBuffer()}).then(function(x){raw[i]=x}).catch(function(){});
+});
+function idx(song){return SONGS.indexOf(song)}
+function decode(i){
+  if(bufs[i])return bufs[i];
+  initAudio();
+  var pr=loading[i].then(function(){
+    if(!raw[i]||!ac)throw new Error("not loaded");
+    return new Promise(function(res,rej){ac.decodeAudioData(raw[i].slice(0),res,rej)});
+  });
+  bufs[i]=pr;
+  pr.then(function(buf){if(bufs[i]===pr)ready[i]=buf}).catch(function(){if(bufs[i]===pr)delete bufs[i]});
+  return pr;
+}
+function prepare(){
+  var keep={};
+  if(current)keep[idx(current)]=1;
+  if(queued)keep[idx(queued)]=1;
+  keep[peekIdx()]=1;
+  Object.keys(keep).forEach(function(i){decode(+i)});
+  Object.keys(bufs).forEach(function(i){if(!keep[i]){delete bufs[i];delete ready[i]}});
+}
+function startBuf(buf){
+  var src=ac.createBufferSource(),g=ac.createGain(),t=ac.currentTime+.005,d=buf.duration;
+  src.buffer=buf;src.connect(g);g.connect(master);
+  g.gain.setValueAtTime(0,t);
+  g.gain.linearRampToValueAtTime(1,t+.04);
+  g.gain.setValueAtTime(1,Math.max(t+.05,t+d-1.5));
+  g.gain.linearRampToValueAtTime(0,t+d);
+  src.onended=function(){if(src===curSrc)finished()};
+  src.start(t);curSrc=src;curFade=g;
+}
+function startFallback(song){
+  var el=getSongAudioElement(song);
+  el.currentTime=0;
+  el.volume=target();
+  fallback=el;
+  el.onended=function(){if(fallback===el){fallback=null;finished()}};
+  var p=el.play();
+  if(p&&p.catch){
+    p.catch(function(err){
+      console.warn("Audio element play blocked, attempting Web Audio buffer:", err);
+      if(ac){
+        ac.resume().then(function(){
+          var i=idx(song);
+          if(ready[i])startBuf(ready[i]);
+        }).catch(function(){});
+      }
+    });
+  }
+}
+function playSong(song,done,m){
+  stopSong();
+  current=song;onDone=done||null;mode=m||"test";
+  unlock();
+  if(ac&&ac.state==="suspended"){
+    ac.resume().catch(function(){});
+  }
+  var i=idx(song);
+  if(ac&&ac.state==="running"&&ready[i]){
+    startBuf(ready[i]);
+  } else {
+    startFallback(song);
+    if(ac&&!ready[i]){
+      decode(i).then(function(buf){
+        if(current===song&&(!fallback||fallback.paused))startBuf(buf);
+      }).catch(function(){});
+    }
+  }
+  showSong();
+}
+function finished(){
+  var cb=onDone;curSrc=curFade=null;current=null;onDone=null;mode=null;showSong();cb&&cb();
+}
+function stopSong(){
+  if(curSrc){
+    var sr=curSrc,g=curFade,t=ac.currentTime;sr.onended=null;
+    g.gain.cancelScheduledValues(t);g.gain.setValueAtTime(g.gain.value,t);g.gain.linearRampToValueAtTime(0,t+.06);
+    try{sr.stop(t+.08)}catch(e){}
+  }
+  if(fallback){fallback.onended=null;fallback.pause();fallback=null}
+  curSrc=curFade=null;current=null;onDone=null;mode=null;
+  showSong();
+}
+function showSong(){
+  var s=current||queued;
+  $("songTitle").textContent=s.title;
+  $("songArtist").textContent="— "+s.artist;
+  $("playerLabel").textContent=current?"Now playing":"Up next";
+  $("player").classList.toggle("playing",!!current);
+  var t=mode==="test";
+  $("test").textContent=t?"■ Stop":"▶ Test Sound";
+  $("test").classList.toggle("active",t);
+  prepare();
+}
+
+/* ───────── VOLUME ───────── */
+function applyVol(){
+  if(master&&ac)master.gain.setTargetAtTime(target(),ac.currentTime,.03);
+  if(fallback)fallback.volume=target();
+}
+function showVol(){
+  var pct=Math.round(volume*100);
+  $("volSlider").value=pct;
+  $("volSlider").style.setProperty("--p",(muted?0:pct)+"%");
+  $("volPct").textContent=muted?"Muted":pct+"%";
+  $("volIcon").textContent=muted||volume===0?"🔇":volume<.4?"🔉":"🔊";
+  applyVol();
+}
+$("volSlider").addEventListener("input",function(){volume=this.value/100;muted=false;showVol();save()});
+$("volIcon").onclick=function(){muted=!muted;showVol();save()};
+
+/* ───────── IN-PLACE SCHEDULE RENDERING & EDITING ─────────
+   Categories & Colors:
+   Class: Blue (#5B9EF5)
+   Recharge: Green (#48C774)
+   Work: Purple (#AF69EE)
+   Task: Silver (#C2C5D1)
+   Wind-down: Gold (#F0CF7A)
+*/
+var CAT_LABELS = {
+  "class":"Class (Blue)",
+  "rest":"Recharge (Green)",
+  "work":"Work (Purple)",
+  "err":"Task (Silver)",
+  "night":"Wind-down (Gold)"
+};
+
+function renderList(){
+  var list=$("list");list.innerHTML="";
+  var counts={all:S.length,class:0,rest:0,work:0,err:0,night:0};
+  S.forEach(function(s){if(counts[s[2]]!==undefined)counts[s[2]]++});
+
+  // Update category pill counts
+  document.querySelectorAll(".cat-pill").forEach(function(p){
+    var cat=p.getAttribute("data-cat");
+    if(cat==="all")p.querySelector("b").nextSibling.textContent="All ("+counts.all+")";
+    else if(counts[cat]!==undefined){
+      p.querySelector("b").nextSibling.textContent=CAT_LABELS[cat]+" ("+counts[cat]+")";
+    }
+  });
+
+  S.forEach(function(s,i){
+    if(activeFilter!=="all"&&s[2]!==activeFilter)return;
+    var li=document.createElement("li");li.className=s[2];li.id="r"+i;
+
+    if(!isEditing){
+      // Normal peaceful view
+      li.innerHTML=
+        '<div class="t">'+fmt(s[0],s[1])+'</div>'+
+        '<div class="l">'+s[3]+'</div>'+
+        '<label class="sw"><input type="checkbox" aria-label="Alarm at '+fmt(s[0],s[1])+'"><i></i></label>';
+      var cb=li.querySelector("input");cb.checked=!off[i];
+      cb.onchange=function(){if(cb.checked)delete off[i];else off[i]=1;save()};
+    } else {
+      // In-Place Edit Mode: direct inputs in the row
+      var timeVal=p2(s[0])+":"+p2(s[1]);
+      li.innerHTML=
+        '<div class="edit-row-ctrls">'+
+          '<input type="time" class="edit-time-in" value="'+timeVal+'">'+
+          '<select class="edit-cat-sel">'+
+            '<option value="class" '+(s[2]==="class"?"selected":"")+'>📚 Class (Blue)</option>'+
+            '<option value="rest" '+(s[2]==="rest"?"selected":"")+'>🌿 Recharge (Green)</option>'+
+            '<option value="work" '+(s[2]==="work"?"selected":"")+'>💼 Work (Purple)</option>'+
+            '<option value="err" '+(s[2]==="err"?"selected":"")+'>📋 Task (Silver)</option>'+
+            '<option value="night" '+(s[2]==="night"?"selected":"")+'>🌙 Wind-down (Gold)</option>'+
+          '</select>'+
+          '<input type="text" class="edit-title-in" value="'+s[3].replace(/"/g,"&quot;")+'">'+
+          '<button class="row-icon-btn move-up" title="Move Up">↑</button>'+
+          '<button class="row-icon-btn move-down" title="Move Down">↓</button>'+
+          '<button class="row-icon-btn del-row" title="Delete" style="color:#ff6b6b">✕</button>'+
+        '</div>';
+
+      var tIn=li.querySelector(".edit-time-in");
+      var cSel=li.querySelector(".edit-cat-sel");
+      var lIn=li.querySelector(".edit-title-in");
+
+      tIn.onchange=function(){
+        var parts=tIn.value.split(":");
+        s[0]=+parts[0];s[1]=+parts[1];
+      };
+      cSel.onchange=function(){
+        s[2]=cSel.value;
+        li.className=s[2];
+      };
+      lIn.oninput=function(){
+        s[3]=lIn.value.trim()||s[3];
+      };
+      li.querySelector(".move-up").onclick=function(){
+        if(i>0){var tmp=S[i];S[i]=S[i-1];S[i-1]=tmp;renderList()}
+      };
+      li.querySelector(".move-down").onclick=function(){
+        if(i<S.length-1){var tmp=S[i];S[i]=S[i+1];S[i+1]=tmp;renderList()}
+      };
+      li.querySelector(".del-row").onclick=function(){
+        S.splice(i,1);delete off[i];renderList();
+      };
+    }
+    list.appendChild(li);
+  });
+  try{ updatePresetSelectorUI(); }catch(e){}
+}
+
+/* Edit Mode Controls (Save & Cancel buttons next to Today's Schedule) */
+$("editScheduleBtn").onclick=function(){
+  editingBackup=JSON.parse(JSON.stringify(S));
+  isEditing=true;
+  $("schedActionsNormal").style.display="none";
+  $("schedActionsEdit").style.display="flex";
+  $("status").textContent="Editing schedule: edit items below, then click “Save Changes” or “Cancel”.";
+  renderList();
+};
+
+$("cancelScheduleBtn").onclick=function(){
+  if(editingBackup)S=editingBackup;
+  isEditing=false;
+  $("schedActionsNormal").style.display="flex";
+  $("schedActionsEdit").style.display="none";
+  $("status").textContent="Edit cancelled. Schedule unchanged.";
+  renderList();
+  tick();
+};
+
+$("saveScheduleBtn").onclick=function(){
+  sortSchedule();
+  isEditing=false;
+  save();
+  $("schedActionsNormal").style.display="flex";
+  $("schedActionsEdit").style.display="none";
+  $("status").textContent="✓ Schedule changes saved successfully.";
+  renderList();
+  tick();
+};
+
+/* Interactive Add Alarm Modal Logic */
+function openAddAlarmModal(){
+  var m=$("addAlarmModal");
+  if(!m)return;
+  var now=new Date();
+  var nextH=(now.getHours()+1)%24;
+  $("newAlarmTime").value=p2(nextH)+":00";
+  $("newAlarmTitle").value="";
+  $("newAlarmCategory").value="rest";
+  m.classList.add("open");
+  setTimeout(function(){
+    try{$("newAlarmTitle").focus();}catch(e){}
+  },100);
+}
+
+function closeAddAlarmModal(){
+  var m=$("addAlarmModal");
+  if(m)m.classList.remove("open");
+}
+
+$("closeAddAlarmModal").onclick=closeAddAlarmModal;
+$("cancelAddAlarmBtn").onclick=closeAddAlarmModal;
+$("addAlarmModal").onclick=function(e){
+  if(e.target===this)closeAddAlarmModal();
+};
+
+document.querySelectorAll(".preset-chip").forEach(function(chip){
+  chip.onclick=function(){
+    var t=this.getAttribute("data-title");
+    var c=this.getAttribute("data-cat");
+    if(t)$("newAlarmTitle").value=t;
+    if(c)$("newAlarmCategory").value=c;
+    $("newAlarmTitle").focus();
+  };
+});
+
+$("addAlarmForm").onsubmit=function(e){
+  e.preventDefault();
+  var t=$("newAlarmTime").value;
+  var title=$("newAlarmTitle").value.trim();
+  var cat=$("newAlarmCategory").value;
+  if(!t||!/^\d{1,2}:\d{2}$/.test(t)){
+    alert("Please select a valid alarm time.");
+    $("newAlarmTime").focus();
+    return;
+  }
+  if(!title){
+    alert("Please enter a title or description for this alarm.");
+    $("newAlarmTitle").focus();
+    return;
+  }
+  var parts=t.split(":");
+  var h=+parts[0],min=+parts[1];
+  S.push([h,min,cat,title]);
+  sortSchedule();
+  save();
+  renderList();
+  tick();
+  closeAddAlarmModal();
+  $("status").textContent="✓ Added “"+title+"” at "+fmt(h,min);
+  showToast("Added “"+title+"” at "+fmt(h,min), "⏰");
+};
+
+$("addAlarmBtn").onclick=openAddAlarmModal;
+$("addAlarmEditBtn").onclick=openAddAlarmModal;
+
+/* ══════════════════════════════════════════════════════════════
+   QUICK CLASS SCHEDULE ENCODER (1 to 8 Classes + Smart Buffers)
+   ══════════════════════════════════════════════════════════════ */
+var activeClassCount = 4;
+var lastFocusedClassInputIndex = 0;
+var defaultClassTemplates = [
+  { time: "08:30", title: "Math 8" },
+  { time: "10:45", title: "Math 10" },
+  { time: "13:00", title: "Math 8" },
+  { time: "15:15", title: "Gen Math 11" },
+  { time: "09:30", title: "Math 8 Remedial" },
+  { time: "14:00", title: "Math 10 Consultation" },
+  { time: "16:15", title: "Advisory Class" },
+  { time: "17:00", title: "Homeroom / Clubs" }
+];
+var userClassList = [
+  { time: "08:30", title: "Math 8" },
+  { time: "10:45", title: "Math 10" },
+  { time: "13:00", title: "Math 8" },
+  { time: "15:15", title: "Gen Math 11" }
+];
+
+function openClassEncoderModal() {
+  var m = $("classScheduleModal");
+  if (!m) return;
+  syncClassesToText();
+  renderClassRows();
+  m.classList.add("open");
+}
+
+function closeClassEncoderModal() {
+  var m = $("classScheduleModal");
+  if (m) m.classList.remove("open");
+}
+
+function setClassCount(num) {
+  if (num < 1) num = 1;
+  if (num > 8) num = 8;
+  activeClassCount = num;
+  if ($("classCountDisplay")) {
+    $("classCountDisplay").textContent = num + " " + (num === 1 ? "Class" : "Classes");
+  }
+  document.querySelectorAll(".class-count-btn").forEach(function(b) {
+    var c = parseInt(b.getAttribute("data-count"), 10);
+    b.classList.toggle("active", c === num);
+  });
+  while (userClassList.length < num) {
+    var nextIdx = userClassList.length;
+    var tpl = defaultClassTemplates[nextIdx] || { time: "08:00", title: "Class " + (nextIdx + 1) };
+    userClassList.push({ time: tpl.time, title: tpl.title });
+  }
+  if (userClassList.length > num) {
+    userClassList = userClassList.slice(0, num);
+  }
+  renderClassRows();
+  syncClassesToText();
+}
+
+function renderClassRows() {
+  var container = $("classRowsContainer");
+  if (!container) return;
+  container.innerHTML = "";
+  userClassList.forEach(function(item, idx) {
+    var row = document.createElement("div");
+    row.style.cssText = "display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--line2);border-radius:12px;padding:8px 12px;";
+    row.innerHTML =
+      '<span style="font-size:.82rem;font-weight:700;color:var(--gold);min-width:32px">#' + (idx + 1) + '</span>' +
+      '<input type="time" class="class-row-time" value="' + item.time + '" style="font-family:var(--font-clock);font-size:1.05rem;font-weight:700;background:var(--surface-3);color:var(--text);border:1px solid var(--line2);border-radius:8px;padding:7px 10px;outline:none">' +
+      '<input type="text" class="class-row-title" value="' + item.title.replace(/"/g, '&quot;') + '" placeholder="e.g. Math 8, Gen Math 11" style="flex:1;font-family:var(--sans);font-size:.95rem;font-weight:600;background:var(--surface-3);color:var(--text);border:1px solid var(--line2);border-radius:8px;padding:7px 12px;outline:none">' +
+      (userClassList.length > 1 ? '<button type="button" class="del-class-row" title="Remove class" style="background:none;border:none;color:var(--dim);cursor:pointer;font-size:1.1rem;padding:4px 8px;line-height:1">✕</button>' : '');
+
+    var tIn = row.querySelector(".class-row-time");
+    var lIn = row.querySelector(".class-row-title");
+    var delBtn = row.querySelector(".del-class-row");
+
+    tIn.onchange = function() {
+      item.time = tIn.value;
+      syncClassesToText();
+    };
+    lIn.oninput = function() {
+      item.title = lIn.value;
+      syncClassesToText();
+    };
+    lIn.onfocus = function() {
+      lastFocusedClassInputIndex = idx;
+    };
+    if (delBtn) {
+      delBtn.onclick = function() {
+        userClassList.splice(idx, 1);
+        setClassCount(userClassList.length);
+      };
+    }
+    container.appendChild(row);
+  });
+}
+
+function syncClassesToText() {
+  var area = $("classFreeText");
+  if (!area) return;
+  var lines = userClassList.map(function(item) {
+    return item.time + " " + item.title;
+  });
+  area.value = lines.join("\n");
+  if ($("classTextParsedCount")) {
+    $("classTextParsedCount").textContent = "Detected: " + userClassList.length + " classes";
+  }
+}
+
+function parseClassFreeText() {
+  var area = $("classFreeText");
+  if (!area) return [];
+  var lines = area.value.split("\n");
+  var list = [];
+  lines.forEach(function(l) {
+    var s = l.trim();
+    if (!s) return;
+    var m = s.match(/^(\d{1,2}):(\d{2})\s*(AM|PM|am|pm)?[\s\-–—:]*(.*)$/);
+    if (m) {
+      var h = parseInt(m[1], 10);
+      var min = parseInt(m[2], 10);
+      var ampm = m[3] ? m[3].toUpperCase() : null;
+      var title = (m[4] || "").trim();
+      if (ampm === "PM" && h < 12) h += 12;
+      if (ampm === "AM" && h === 12) h = 0;
+      var hh = h < 10 ? "0" + h : "" + h;
+      var mm = min < 10 ? "0" + min : "" + min;
+      if (!title) title = "Class " + (list.length + 1);
+      list.push({ time: hh + ":" + mm, title: title });
+    }
+  });
+  return list;
+}
+
+if ($("openClassEncoderBtn")) $("openClassEncoderBtn").onclick = openClassEncoderModal;
+if ($("closeClassModal")) $("closeClassModal").onclick = closeClassEncoderModal;
+if ($("cancelClassModalBtn")) $("cancelClassModalBtn").onclick = closeClassEncoderModal;
+
+document.querySelectorAll(".class-count-btn").forEach(function(btn) {
+  btn.onclick = function() {
+    var c = parseInt(btn.getAttribute("data-count"), 10);
+    setClassCount(c);
+  };
+});
+
+if ($("classModeRowsBtn")) {
+  $("classModeRowsBtn").onclick = function() {
+    $("classRowsContainer").style.display = "flex";
+    $("classTextContainer").style.display = "none";
+    this.style.borderColor = "var(--gold)";
+    this.style.color = "var(--gold)";
+    this.style.background = "var(--surface-3)";
+    $("classModeTextBtn").style.borderColor = "var(--line2)";
+    $("classModeTextBtn").style.color = "var(--dim)";
+    $("classModeTextBtn").style.background = "transparent";
+  };
+}
+if ($("classModeTextBtn")) {
+  $("classModeTextBtn").onclick = function() {
+    $("classRowsContainer").style.display = "none";
+    $("classTextContainer").style.display = "flex";
+    this.style.borderColor = "var(--gold)";
+    this.style.color = "var(--gold)";
+    this.style.background = "var(--surface-3)";
+    $("classModeRowsBtn").style.borderColor = "var(--line2)";
+    $("classModeRowsBtn").style.color = "var(--dim)";
+    $("classModeRowsBtn").style.background = "transparent";
+  };
+}
+
+if ($("classFreeText")) {
+  $("classFreeText").oninput = function() {
+    var parsed = parseClassFreeText();
+    if ($("classTextParsedCount")) {
+      $("classTextParsedCount").textContent = "Detected: " + parsed.length + " classes";
+    }
+  };
+}
+if ($("syncTextToRowsBtn")) {
+  $("syncTextToRowsBtn").onclick = function() {
+    var parsed = parseClassFreeText();
+    if (parsed.length > 0) {
+      userClassList = parsed.slice(0, 8);
+      setClassCount(userClassList.length);
+      if ($("classModeRowsBtn")) $("classModeRowsBtn").click();
+      showToast("Synced " + userClassList.length + " classes to rows!", "⚡");
+    } else {
+      alert("No valid class times detected in text. Example: 8:30 AM Math 8");
+    }
+  };
+}
+
+document.querySelectorAll(".class-quick-subject").forEach(function(chip) {
+  chip.onclick = function() {
+    var sub = chip.getAttribute("data-sub");
+    if (!sub) return;
+    if (userClassList[lastFocusedClassInputIndex]) {
+      userClassList[lastFocusedClassInputIndex].title = sub;
+      renderClassRows();
+      syncClassesToText();
+      showToast("Applied “" + sub + "” to Class #" + (lastFocusedClassInputIndex + 1), "✏️");
+    }
+  };
+});
+
+function buildScheduleFromClasses(appendOnly) {
+  var classesToUse = userClassList;
+  if ($("classTextContainer") && $("classTextContainer").style.display === "flex") {
+    var parsed = parseClassFreeText();
+    if (parsed.length > 0) classesToUse = parsed;
+  }
+  if (!classesToUse || classesToUse.length === 0) {
+    alert("Please enter at least 1 class with time and subject.");
+    return;
+  }
+
+  var optRecharge = $("classOptRecharge") ? $("classOptRecharge").checked : true;
+  var optLunch = $("classOptLunch") ? $("classOptLunch").checked : true;
+  var optDays = $("classOptDays") ? $("classOptDays").checked : true;
+  var optWinddown = $("classOptWinddown") ? $("classOptWinddown").checked : true;
+
+  var newBlocks = [];
+
+  classesToUse.forEach(function(c, i) {
+    var parts = c.time.split(":");
+    var h = parseInt(parts[0], 10);
+    var min = parseInt(parts[1], 10);
+    var title = c.title.trim() || ("Class " + (i + 1));
+    var classLabel = title.toLowerCase().indexOf("class:") === 0 ? title : ("Class: " + title);
+
+    if (optRecharge) {
+      var recMin = min - 10;
+      var recH = h;
+      if (recMin < 0) {
+        recMin += 60;
+        recH -= 1;
+        if (recH < 0) recH += 24;
+      }
+      newBlocks.push([recH, recMin, "rest", "Recharge before " + title + " — 10 min"]);
+    }
+    newBlocks.push([h, min, "class", classLabel]);
+  });
+
+  if (!appendOnly) {
+    if (optLunch) {
+      newBlocks.push([12, 0, "rest", "Lunch and recharge — 45 min"]);
+      newBlocks.push([12, 45, "err", "Personal hygiene & prep"]);
+    }
+    if (optWinddown) {
+      newBlocks.push([20, 30, "night", "Wind-down — no screens"]);
+      newBlocks.push([21, 30, "night", "Bedtime"]);
+    }
+    S = newBlocks;
+  } else {
+    newBlocks.forEach(function(b) { S.push(b); });
+  }
+
+  sortSchedule();
+  if (optDays) {
+    days = { 1: 1, 2: 1, 3: 1, 4: 1, 5: 1 };
+  }
+  off = {};
+  try { localStorage.setItem("dra-preset-key", "custom"); } catch(e){}
+  save();
+  renderList();
+  renderDays();
+  tick();
+  updatePresetSelectorUI();
+  updatePresetDaysBadge();
+  closeClassEncoderModal();
+  showToast("Loaded " + classesToUse.length + " classes into schedule!", "📚");
+}
+
+if ($("applyClassScheduleBtn")) {
+  $("applyClassScheduleBtn").onclick = function() {
+    buildScheduleFromClasses(false);
+  };
+}
+if ($("appendClassScheduleBtn")) {
+  $("appendClassScheduleBtn").onclick = function() {
+    buildScheduleFromClasses(true);
+  };
+}
+
+/* Reset to DepEd Default Schedule */
+$("resetSchedBtn").onclick=function(){
+  if(confirm("Reset entire schedule back to Sir Orlando’s Default Schedule?")){
+    S=DEFAULT_SCHEDULE.slice(0);
+    days={1:1,2:1,3:1,4:1,5:1};
+    off={};
+    try{ localStorage.setItem("dra-preset-key", "class"); }catch(e){}
+    save();
+    renderList();
+    renderDays();
+    tick();
+    updatePresetSelectorUI();
+    $("status").textContent="Schedule reset to default 23 blocks.";
+    showToast("Schedule reset to default 23 blocks.", "↺");
+  }
+};
+
+/* Category Filter Pills */
+document.querySelectorAll(".cat-pill").forEach(function(pill){
+  pill.onclick=function(){
+    document.querySelectorAll(".cat-pill").forEach(function(p){p.classList.remove("active")});
+    pill.classList.add("active");
+    activeFilter=pill.getAttribute("data-cat");
+    renderList();
+    tick();
+  };
+});
+
+/* ───────── ACTIVE DAYS ───────── */
+function renderDays() {
+  var container = $("days");
+  if (!container) return;
+  container.innerHTML = "";
+  [1,2,3,4,5,6,0].forEach(function(n){
+    var b = document.createElement("button");
+    b.textContent = DN[n];
+    b.className = days[n] ? "on" : "";
+    b.setAttribute("aria-pressed", !!days[n]);
+    b.onclick = function(){
+      if (days[n]) delete days[n];
+      else days[n] = 1;
+      b.className = days[n] ? "on" : "";
+      b.setAttribute("aria-pressed", !!days[n]);
+      save();
+      tick();
+      if (typeof updatePresetDaysBadge === "function") updatePresetDaysBadge();
+    };
+    container.appendChild(b);
+  });
+}
+renderDays();
+
+/* ───────── ALARM TRIGGERING (Song Clip Only) ───────── */
+var ringing=-1,snoozes=[];
+var ringTitleTimer=null;
+function ring(i,snoozed){
+  var s=S[i],plays=0;ringing=i;
+  $("ovT").textContent=(snoozed?"Snoozed — ":"")+s[3];
+  $("ovM").textContent=fmt(s[0],s[1]);
+  $("ov").className="show";
+  function go(){
+    var song=queued;queued=nextSong();
+    $("ovSongName").textContent=song.title+" — "+song.artist;
+    playSong(song,function(){if(++plays<4&&$("ov").className==="show")go()},"alarm");
+    if(navigator.vibrate)navigator.vibrate([400,200,400]);
+  }
+  go();
+  setTimeout(function(){if($("ov").className==="show")$("ovB").focus()},50);
+  notify(s[3],fmt(s[0],s[1])+" — tap Snooze or Dismiss");
+
+  // Minimized / background taskbar flash alert
+  clearInterval(ringTitleTimer);
+  var flashOn = false;
+  ringTitleTimer = setInterval(function(){
+    if($("ov").className !== "show"){
+      clearInterval(ringTitleTimer);
+      return;
+    }
+    flashOn = !flashOn;
+    document.title = (flashOn ? "🔔 ALARM: " : "⏰ ") + fmt(s[0],s[1]) + " " + s[3];
+  }, 750);
+}
+function notify(title,body){
+  try{
+    if(!window.Notification) return;
+    if(Notification.permission === "default"){
+      Notification.requestPermission();
+    }
+    if(Notification.permission !== "granted") return;
+    var opt={
+      body: body,
+      tag: "dra-" + Date.now(),
+      renotify: true,
+      requireInteraction: true,
+      icon: "assets/recharge-icon-192.png",
+      badge: "assets/recharge-icon-192.png",
+      vibrate: [500,250,500,250,500],
+      actions: [
+        { action: "snooze", title: "Snooze 5 min" },
+        { action: "dismiss", title: "Dismiss" }
+      ]
+    };
+    if(swReg && swReg.showNotification){
+      swReg.showNotification(title, opt);
+    } else {
+      delete opt.actions;
+      new Notification(title, opt);
+    }
+  }catch(e){}
+}
+function clearNotes(){
+  if(swReg&&swReg.getNotifications){
+    swReg.getNotifications().then(function(l){
+      l.forEach(function(x){if(x.tag && x.tag.indexOf("dra")===0) x.close();});
+    }).catch(function(){});
+  }
+}
+function dismiss(){
+  if($("ov").className!=="show")return;
+  $("ov").className="";
+  ringing=-1;
+  clearInterval(ringTitleTimer);
+  stopSong();
+  clearNotes();
+  if(navigator.vibrate)navigator.vibrate(0);
+}
+function snooze(){
+  if($("ov").className!=="show")return;
+  var i=ringing;
+  dismiss();
+  snoozes.push({i:i,at:Date.now()+5*60000,title:S[i]?S[i][3]:"Alarm"});
+  saveSnoozes();
+  showToast("Snoozed for 5 minutes", "⏰");
+}
+$("ovB").onclick=dismiss;
+$("ovS").onclick=snooze;
+document.addEventListener("keydown",function(e){
+  if($("ov").className!=="show")return;
+  if(e.key==="Escape"){e.preventDefault();dismiss()}
+  else if(e.key==="s"||e.key==="S"){e.preventDefault();snooze()}
+});
+
+/* ───────── CONTROLS ───────── */
+function setStatus(){
+  if ($("arm")) {
+    $("arm").textContent = armed ? "✓ Alarms Are On" : "Turn Alarms On";
+    $("arm").className = "primary" + (armed ? " on" : "");
+  }
+  updateAudioBadge();
+}
+$("arm").onclick=function(){
+  armed=!armed;
+  setStatus();
+  if(armed){
+    unlock();
+    requestWakeLock();
+    startAudioKeepAlive();
+    try{if(window.Notification&&Notification.permission==="default")Notification.requestPermission()}catch(e){}
+    showToast("Alarms Armed & Screen Wake Active", "🛡️");
+  } else {
+    releaseWakeLock();
+    stopAudioKeepAlive();
+    showToast("Alarms Paused", "⏸️");
+  }
+};
+$("test").onclick=function(){
+  if(mode==="test"){stopSong();return}
+  var song=queued;queued=nextSong();
+  playSong(song,null,"test");
+};
+$("skip").onclick=function(){
+  if(current){var song=nextSong();playSong(song,onDone,mode)}
+  else{queued=nextSong();showSong()}
+};
+
+/* ───────── CLOCK LOOP ───────── */
+var lastT="";
+function tick(){
+  var n=new Date(),sec=n.getHours()*3600+n.getMinutes()*60+n.getSeconds(),on=!!days[n.getDay()];
+  var tstr=p2(n.getHours()%12||12)+":"+p2(n.getMinutes())+":"+p2(n.getSeconds()),ap=n.getHours()>=12?"PM":"AM";
+  if(tstr!==lastT){lastT=tstr;var html=chromeHTML(tstr);$("clock").innerHTML=html;if(restOn)$("restClock").innerHTML=html}
+  $("ampm").textContent=ap;$("restAmpm").textContent=ap;
+  $("date").textContent=n.toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric",year:"numeric"});
+
+  var cur=-1;
+  S.forEach(function(s,i){
+    var t=s[0]*3600+s[1]*60;
+    if(on&&t<=sec)cur=i;
+    var el=$("r"+i);
+    if(el)el.classList.toggle("past",on&&t<=sec);
+    if(armed&&on&&!off[i]){var k=n.toDateString()+i;if(!fired[k]&&sec>=t&&sec-t<90){fired[k]=1;ring(i)}}
+  });
+  S.forEach(function(s,i){var el=$("r"+i);if(el)el.classList.toggle("cur",i===cur)});
+
+  /* Process snoozes */
+  for(var z=snoozes.length-1;z>=0;z--){
+    if(n.getTime()>=snoozes[z].at){var zi=snoozes[z].i;snoozes.splice(z,1);saveSnoozes();if(armed)ring(zi,true)}
+  }
+
+  /* Next alarm countdown */
+  var found=null;
+  for(var dd=0;dd<8&&!found;dd++){
+    var dt=new Date(n.getFullYear(),n.getMonth(),n.getDate()+dd);
+    if(!days[dt.getDay()])continue;
+    for(var i=0;i<S.length;i++){
+      if(off[i])continue;
+      var at=new Date(dt.getFullYear(),dt.getMonth(),dt.getDate(),S[i][0],S[i][1],0);
+      if(at>n){found={i:i,at:at};break}
+    }
+  }
+  if(!found){$("nextLabel").textContent="No alarms set";$("count").textContent="";document.title="Daily Recharge Alarm";return}
+  var diff=Math.round((found.at-n)/1000),h=Math.floor(diff/3600),m=Math.floor(diff%3600/60),s2=diff%60;
+  $("nextLabel").textContent=fmt(S[found.i][0],S[found.i][1])+" — "+S[found.i][3];
+  $("count").textContent="in "+(h?h+"h ":"")+(h||m?p2(m)+"m ":"")+p2(s2)+"s";
+  document.title=($("ov").className==="show"?"🔔 ":armed?"":"⏸ ")+(h?h+"h ":"")+p2(m)+"m — "+S[found.i][3];
+}
+
+function chromeHTML(str){
+  return str.split("").map(function(c){return c===":"?'<span class="c">:</span>':'<span>'+c+'</span>'}).join("");
+}
+
+/* ───────── REST MODE (Fullscreen Ambient Clock) ───────── */
+var restOn=false,idleT=null,driftT=null;
+function restIdle(){
+  $("rest").classList.remove("idle");$("restHint").style.opacity=1;
+  clearTimeout(idleT);idleT=setTimeout(function(){$("rest").classList.add("idle");$("restHint").style.opacity=0},2500);
+}
+function drift(){
+  var x=(Math.random()*4-2).toFixed(2),y=(Math.random()*4-2).toFixed(2);
+  $("restWrap").style.transform="translate("+x+"vw,"+y+"vh)";
+}
+function enterRest(){
+  restOn=true;lastT="";document.documentElement.classList.add("resting");$("rest").className="show";restIdle();drift();
+  driftT=setInterval(drift,60000);tick();
+  var el=document.documentElement;
+  try{(el.requestFullscreen||el.webkitRequestFullscreen).call(el)}catch(e){}
+}
+function exitRest(){
+  if(!restOn)return;
+  restOn=false;$("rest").className="";document.documentElement.classList.remove("resting");clearInterval(driftT);clearTimeout(idleT);
+  try{if(document.fullscreenElement||document.webkitFullscreenElement)(document.exitFullscreen||document.webkitExitFullscreen).call(document)}catch(e){}
+}
+$("restBtn").onclick=enterRest;
+$("rest").onclick=exitRest;
+$("rest").addEventListener("mousemove",restIdle);
+document.addEventListener("keydown",function(e){
+  if(e.key==="Escape"&&$("ov").className!=="show"){
+    if($("addAlarmModal")&&$("addAlarmModal").classList.contains("open")){closeAddAlarmModal();return;}
+    if($("qrModal")&&$("qrModal").classList.contains("open")){$("qrModal").classList.remove("open");return;}
+    if($("installGuideModal")&&$("installGuideModal").classList.contains("open")){$("installGuideModal").classList.remove("open");return;}
+    exitRest();
+  }
+});
+document.addEventListener("fullscreenchange",function(){if(!document.fullscreenElement)exitRest()});
+document.addEventListener("webkitfullscreenchange",function(){if(!document.webkitFullscreenElement)exitRest()});
+
+
+
+/* ───────── EXECUTIVE TOAST NOTIFICATIONS ───────── */
+function showToast(msg, icon){
+  var box=$("toastBox");
+  if(!box)return;
+  var t=document.createElement("div");
+  t.className="toast";
+  t.innerHTML=(icon?"<span>"+icon+"</span>":"<span>✓</span>")+"<span>"+msg+"</span>";
+  box.appendChild(t);
+  setTimeout(function(){
+    t.style.opacity="0";
+    t.style.transition="opacity .3s ease";
+    setTimeout(function(){try{t.remove()}catch(e){}},350);
+  },3000);
+}
+
+/* ───────── APP DISTRIBUTION & COMMAND SUITE ───────── */
+var deferredInstallPrompt=null;
+window.addEventListener("beforeinstallprompt",function(e){
+  e.preventDefault();
+  deferredInstallPrompt=e;
+  var b=$("installAppBtn");
+  if(b)b.textContent="⬇ Install Now (Ready)";
+});
+
+$("installAppBtn").onclick=function(){
+  if(deferredInstallPrompt){
+    deferredInstallPrompt.prompt();
+    deferredInstallPrompt.userChoice.then(function(choice){
+      if(choice.outcome==="accepted"){
+        showToast("Installation started! Adding to home screen...", "📲");
+      }
+      deferredInstallPrompt=null;
+    });
+  }else{
+    $("installGuideModal").classList.add("open");
+  }
+};
+$("closeInstallGuide").onclick=function(){$("installGuideModal").classList.remove("open")};
+$("dismissInstallGuide").onclick=function(){$("installGuideModal").classList.remove("open")};
+
+/* Mobile QR Code Modal */
+$("openQrBtn").onclick=function(){$("qrModal").classList.add("open")};
+$("closeQrModal").onclick=function(){$("qrModal").classList.remove("open")};
+$("doneQrBtn").onclick=function(){$("qrModal").classList.remove("open")};
+$("copyQrLinkBtn").onclick=function(){
+  copyAppUrl();
+};
+
+function copyAppUrl(){
+  var url="https://orlandopasion000.github.io/orlandorecharge";
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(url).then(function(){
+      showToast("Link copied to clipboard!", "📋");
+    }).catch(function(){fallbackCopy(url)});
+  }else{
+    fallbackCopy(url);
+  }
+}
+function fallbackCopy(text){
+  var ta=document.createElement("textarea");
+  ta.value=text;ta.style.position="fixed";ta.style.opacity="0";
+  document.body.appendChild(ta);ta.select();
+  try{document.execCommand("copy");showToast("Link copied to clipboard!", "📋")}catch(e){}
+  document.body.removeChild(ta);
+}
+
+/* Share Cockpit */
+$("shareAppBtn").onclick=function(){
+  var shareData={
+    title:"OrlandoRecharge — Sir Orlando V. Pasion, Jr.",
+    text:"Rest, recharge, and master your daily teaching and work rhythm.",
+    url:"https://orlandopasion000.github.io/orlandorecharge"
+  };
+  if(navigator.share){
+    navigator.share(shareData).catch(function(err){
+      if(err.name!=="AbortError")copyAppUrl();
+    });
+  }else{
+    copyAppUrl();
+  }
+};
+
+/* Export Backup JSON */
+$("exportBackupBtn").onclick=function(){
+  var backupData={
+    app:"Daily Recharge Alarm",
+    version:"2.4.0",
+    owner:"Sir Orlando V. Pasion, Jr.",
+    exportedAt:new Date().toISOString(),
+    theme:clockTheme,
+    armed:armed,
+    days:days,
+    schedule:S
+  };
+  var blob=new Blob([JSON.stringify(backupData,null,2)],{type:"application/json"});
+  var a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="daily-recharge-schedule-backup.json";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(a.href);
+  showToast("Schedule backup downloaded!", "💾");
+};
+
+/* Download Clean Blank Edition (.html) */
+if($("downloadBlankAppBtn")){
+  $("downloadBlankAppBtn").onclick=function(){
+    fetch("recharge-clean.html")
+      .then(function(res){
+        if(!res.ok) throw new Error("HTTP " + res.status);
+        return res.text();
+      })
+      .then(function(html){
+        var blob=new Blob([html],{type:"text/html;charset=utf-8"});
+        var a=document.createElement("a");
+        a.href=URL.createObjectURL(blob);
+        a.download="daily-recharge-blank.html";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(a.href);
+        showToast("Blank Edition downloaded! Completely clean and schedule-free.", "🎁");
+      })
+      .catch(function(){
+        window.open("recharge-clean.html","_blank");
+      });
+  };
+}
+
+/* Import Backup JSON */
+$("importBackupBtn").onclick=function(){
+  $("importBackupFile").click();
+};
+$("importBackupFile").onchange=function(e){
+  var file=e.target.files&&e.target.files[0];
+  if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(evt){
+    try{
+      var data=JSON.parse(evt.target.result);
+      if(data&&Array.isArray(data.schedule)&&data.schedule.length>0){
+        S=data.schedule.slice(0);
+        if(data.days)days=data.days;
+        if(data.theme&&THEMES.indexOf(data.theme)!==-1)applyClockTheme(data.theme);
+        save();
+        renderList();
+        renderDays();
+        tick();
+        showToast("Schedule restored successfully ("+S.length+" alarms)!", "✓");
+      }else{
+        alert("Invalid backup file format. Expected a valid schedule array.");
+      }
+    }catch(err){
+      alert("Error reading backup file: "+err.message);
+    }
+    $("importBackupFile").value="";
+  };
+  reader.readAsText(file);
+};
+
+
+/* ───────── SERVICE WORKER & PWA INSTALL ───────── */
+var swReg=null;
+if("serviceWorker" in navigator&&location.protocol!=="file:"){
+  navigator.serviceWorker.register("recharge-sw.js",{scope:"./"}).then(function(r){swReg=r}).catch(function(){});
+  navigator.serviceWorker.addEventListener("message",function(e){
+    var d=e.data||{};if(d.type!=="alarm-action")return;
+    if(d.action==="snooze")snooze();else if(d.action==="dismiss")dismiss();else window.focus();
+  });
+}
+
+if(/[?&]rest=1/.test(location.search))enterRest();
+
+
+/* ══════════════════════════════════════════════════════════════
+   RELIABILITY SUITE: SCREEN WAKE LOCK & BACKGROUND AUDIO KEEP-ALIVE
+   ══════════════════════════════════════════════════════════════ */
+var wakeLock = null;
+async function requestWakeLock() {
+  if ('wakeLock' in navigator) {
+    try {
+      wakeLock = await navigator.wakeLock.request('screen');
+      wakeLock.addEventListener('release', function() {
+        wakeLock = null;
+      });
+    } catch(err) {
+      // Ignore wake lock denial
+    }
+  }
+}
+function releaseWakeLock() {
+  if (wakeLock) {
+    try {
+      wakeLock.release().then(function() { wakeLock = null; }).catch(function(){});
+    } catch(e){}
+  }
+}
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'visible' && armed) {
+    requestWakeLock();
+  }
+});
+
+var keepAliveOsc = null;
+var keepAliveGain = null;
+var keepAliveAudio = null;
+function startAudioKeepAlive() {
+  try {
+    // 1. Web Audio Engine Keep-Alive with continuous non-zero sub-audible oscillator (15 Hz)
+    if (!ac && (window.AudioContext || window.webkitAudioContext)) {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      ac = new AC({ latencyHint: "interactive" });
+    }
+    if (ac) {
+      if (ac.state === 'suspended') {
+        ac.resume().catch(function(){});
+      }
+      if (!keepAliveOsc) {
+        keepAliveOsc = ac.createOscillator();
+        keepAliveOsc.type = "sine";
+        keepAliveOsc.frequency.setValueAtTime(15, ac.currentTime); // 15 Hz sub-audible tone
+        keepAliveGain = ac.createGain();
+        keepAliveGain.gain.setValueAtTime(0.0001, ac.currentTime); // inaudible
+        keepAliveOsc.connect(keepAliveGain);
+        keepAliveGain.connect(ac.destination);
+        keepAliveOsc.start();
+      }
+    }
+
+    // 2. HTML5 Audio Media Session Anchor
+    // Plays an inaudible 44.1kHz loop so the OS and browser register an active audio stream
+    if (!keepAliveAudio) {
+      keepAliveAudio = new Audio();
+      keepAliveAudio.src = "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==";
+      keepAliveAudio.loop = true;
+      keepAliveAudio.volume = 0.01;
+    }
+    var p = keepAliveAudio.play();
+    if (p && p.catch) p.catch(function(){});
+
+    // 3. Register Media Session to exempt tab from OS background discarding
+    if ("mediaSession" in navigator) {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: "Daily Recharge Alarm (Armed)",
+        artist: "Active Schedule Alarm",
+        album: "Always-On Alarm Engine"
+      });
+      navigator.mediaSession.playbackState = "playing";
+    }
+  } catch(e){}
+}
+function stopAudioKeepAlive() {
+  try {
+    if (keepAliveOsc) {
+      keepAliveOsc.stop();
+      keepAliveOsc.disconnect();
+      keepAliveOsc = null;
+    }
+    if (keepAliveGain) {
+      keepAliveGain.disconnect();
+      keepAliveGain = null;
+    }
+    if (keepAliveAudio) {
+      keepAliveAudio.pause();
+      keepAliveAudio = null;
+    }
+    if ("mediaSession" in navigator) {
+      navigator.mediaSession.playbackState = "paused";
+    }
+  } catch(e){}
+}
+
+/* ══════════════════════════════════════════════════════════════
+   BACKGROUND WORKER TICKER (Immune to Tab Minimization / Throttling)
+   ══════════════════════════════════════════════════════════════ */
+var tickerWorker = null;
+function startWorkerTicker() {
+  if (tickerWorker) return;
+  try {
+    var blobCode = "var timer=null;self.onmessage=function(e){if(e.data==='start'){if(!timer){timer=setInterval(function(){self.postMessage('tick')},1000)}}else if(e.data==='stop'){if(timer){clearInterval(timer);timer=null}}};";
+    var blob = new Blob([blobCode], { type: "application/javascript" });
+    tickerWorker = new Worker(URL.createObjectURL(blob));
+    tickerWorker.onmessage = function(e) {
+      if (e.data === "tick") {
+        tick();
+      }
+    };
+    tickerWorker.postMessage("start");
+  } catch(e) {
+    console.warn("Web worker ticker unavailable, falling back to window interval:", e);
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PERSISTENT SNOOZE (Survives Restarts & Refreshes)
+   ══════════════════════════════════════════════════════════════ */
+function saveSnoozes() {
+  try { localStorage.setItem("dra-snoozes", JSON.stringify(snoozes)); } catch(e){}
+}
+function loadSnoozes() {
+  try {
+    var saved = localStorage.getItem("dra-snoozes");
+    if (saved) {
+      var parsed = JSON.parse(saved);
+      var now = Date.now();
+      snoozes = parsed.filter(function(item){ return item.at > (now - 10*60000); });
+    }
+  } catch(e) { snoozes = []; }
+}
+loadSnoozes();
+
+/* ══════════════════════════════════════════════════════════════
+   SCHEDULE PRESETS SYSTEM (12 Curated Rest & Rhythm Presets)
+   ══════════════════════════════════════════════════════════════ */
+var SCHEDULE_PRESETS = {
+  class: {
+    name: "Class Day (DepEd Master)",
+    icon: "🎓",
+    days: { 1: 1, 2: 1, 3: 1, 4: 1, 5: 1 },
+    daysLabel: "Mon — Fri",
+    desc: "23-block daily teaching, paperwork, and structured recharge schedule.",
+    schedules: [
+      [7,0,"work","Arrive — read, learn, develop"],
+      [8,0,"rest","Short recharge — 10 min"],
+      [8,10,"work","Work and print"],
+      [8,20,"rest","Recharge before class — 10 min"],
+      [8,30,"class","Class: Math 8"],
+      [9,30,"rest","Long recharge — 40 min"],
+      [10,11,"work","Work and print"],
+      [10,30,"rest","Recharge before class — 15 min"],
+      [10,45,"class","Class: Math 10"],
+      [11,45,"err","Principal’s office — log out/in"],
+      [12,0,"rest","Lunch and recharge — 45 min"],
+      [12,45,"err","Personal hygiene"],
+      [12,50,"rest","Recharge before class — 10 min"],
+      [13,0,"class","Class: Math 8"],
+      [14,0,"rest","Longest recharge — 60 min"],
+      [15,0,"work","Work and print"],
+      [15,10,"rest","Quick recharge — 5 min"],
+      [15,15,"class","Class: Gen Math 11"],
+      [16,16,"err","Organize files"],
+      [16,21,"rest","Recharge, then go home"],
+      [20,0,"night","Shutdown — write tomorrow’s top 3"],
+      [20,30,"night","Wind-down — no screens"],
+      [21,30,"night","Bedtime"]
+    ]
+  },
+  weekend: {
+    name: "Weekend Recharge (Nature & Rest)",
+    icon: "🌿",
+    days: { 6: 1, 0: 1 },
+    daysLabel: "Sat & Sun",
+    desc: "10 restorative recovery blocks for outdoor walks, mindfulness, wholesome meals, and deep rest.",
+    schedules: [
+      [8,0,"rest","Morning gentle stretch, sunshine & deep hydration (15 min)"],
+      [9,30,"rest","Sunlight barefoot grass walk & fresh nature air (30 min)"],
+      [11,0,"rest","Mindful tea break & unhurried quiet reflection"],
+      [12,30,"err","Wholesome organic midday meal & relaxed dining"],
+      [13,45,"rest","Restorative somatic power nap & meditation (30 min)"],
+      [15,30,"work","Passion project, joyful reading & creative hobby (60 min)"],
+      [17,30,"rest","Golden hour sunset walk & deep breathing reset"],
+      [19,0,"err","Light nourishing dinner & hydration check"],
+      [20,30,"night","Candlelight gratitude journal & family wind-down"],
+      [22,0,"night","Complete screen-off rest & deep cellular sleep transition"]
+    ]
+  },
+  gym: {
+    name: "Gymmers & Athletic Vitality",
+    icon: "🏋️‍♂️",
+    days: { 0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1 },
+    daysLabel: "Mon — Sun",
+    desc: "10-block athletic rhythm: pre-workout fueling, peak training, anabolic recovery, hydration checkpoints, foam rolling, and deep growth-hormone sleep.",
+    schedules: [
+      [6,0,"rest","Pre-workout hydration, electrolytes & dynamic joint warmup (15 min)"],
+      [6,30,"work","Peak Gym Workout: Strength training, hypertrophy & cardio"],
+      [8,0,"err","Post-workout anabolic fuel: Whey protein, complex carbs & cold shower"],
+      [10,30,"rest","Hydration checkpoint (1L water) & postural spine decompression"],
+      [12,30,"err","High-protein recovery lunch (Lean protein, healthy fats & greens)"],
+      [14,30,"rest","CNS recovery power nap & nervous system reset (20 min)"],
+      [16,30,"rest","Electrolyte & amino acid hydration booster + brisk mobility stroll"],
+      [18,30,"rest","Full-body foam rolling, trigger point massage & yoga stretching"],
+      [20,0,"err","Nutrient-rich dinner with magnesium & zinc recovery booster"],
+      [21,45,"night","Blue-light shield, deep sleep prep & 8-hour growth hormone recovery"]
+    ]
+  },
+  holiday: {
+    name: "Holidays & Vacation Renewal",
+    icon: "🌴",
+    days: { 0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1 },
+    daysLabel: "Mon — Sun",
+    desc: "9 serene vacation blocks: slow mornings without alarm stress, leisure brunch, nature discovery, sunset acoustics, and peaceful slumber.",
+    schedules: [
+      [8,30,"rest","Gentle waking without alarm pressure, warm tea & open window sunlight"],
+      [10,0,"err","Leisurely holiday gourmet brunch with coffee or fresh fruit juice"],
+      [11,30,"rest","Scenic outdoor discovery: Beach, forest trail, or sightseeing walk"],
+      [13,30,"rest","Afternoon hammock siesta & relaxing holiday reading"],
+      [15,30,"err","Local cultural exploration, artisan shopping, or fun casual hobby"],
+      [17,30,"rest","Golden hour sunset viewing, ocean breeze & acoustic melodies"],
+      [19,30,"err","Celebratory evening dinner & heartfelt conversations"],
+      [21,30,"night","Stargazing, warm herbal tea & calm holiday reflection"],
+      [22,45,"night","Tranquil holiday slumber with ambient ocean sounds"]
+    ]
+  },
+  seminar: {
+    name: "Seminar & Professional Workshop",
+    icon: "🎤",
+    days: { 0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1 },
+    daysLabel: "Mon — Sun",
+    desc: "10-block symposium flow: registration, keynote lecture, coffee networking, breakout workshops, panel Q&A, and post-conference decompression.",
+    schedules: [
+      [7,0,"err","Seminar badge check-in, event materials review & energizing breakfast"],
+      [8,30,"class","Morning Keynote & Plenary Session: Core speaker lecture"],
+      [10,15,"rest","Mid-morning coffee networking break & mental refresh (20 min)"],
+      [10,45,"work","Interactive Breakout Workshop: Collaborative exercises & hands-on lab"],
+      [12,15,"err","Networking banquet lunch & informal peer discussions"],
+      [13,30,"class","Afternoon Symposium / Panel Discussions & expert deep dive"],
+      [15,15,"rest","Brain consolidation break: Water hydration, eye rest & movement"],
+      [15,45,"work","Action Plan Synthesis: Distill top 5 takeaways & next steps"],
+      [17,30,"rest","Post-seminar decompression walk & mental clutter discharge"],
+      [21,30,"night","Review day’s key insights, organize contacts & restful sleep"]
+    ]
+  },
+  deeprest: {
+    name: "Deep Rest & Nervous System Reset",
+    icon: "🧘",
+    days: { 0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1 },
+    daysLabel: "Mon — Sun",
+    desc: "8 healing recovery blocks: box breathing (4-7-8), soundscapes, somatic release, zero screens, and restorative sleep.",
+    schedules: [
+      [8,30,"rest","Pranayama box breathing (4-7-8) & warm lemon water hydration"],
+      [10,0,"rest","Sensory grounding: Silent patio sitting & birdsong listening (30 min)"],
+      [12,0,"err","Anti-inflammatory warm soup, whole greens & herbal infusion"],
+      [13,30,"rest","Vagus nerve reset: Green noise soundscape immersion & 30-min nap"],
+      [16,0,"rest","Gentle somatic floor stretches & restorative Yin yoga postures"],
+      [18,30,"err","Light comfort dinner eaten in calm, mindful silence"],
+      [20,0,"night","Digital detox: Turn off screens, warm chamomile tea & paper book"],
+      [21,30,"night","Weighted blanket, lavender aromatherapy & restorative cellular sleep"]
+    ]
+  },
+  creative: {
+    name: "Creative Flow & Passion Craft",
+    icon: "🎨",
+    days: { 5: 1, 6: 1, 0: 1 },
+    daysLabel: "Fri — Sun",
+    desc: "9 uninterrupted flow blocks: lo-fi ambient drafting, divergent thinking walks, prototyping, milestone commit, and artistic wind-down.",
+    schedules: [
+      [8,30,"rest","Creative mind-clearing: Matcha/coffee, ambient lo-fi & freewriting journal"],
+      [9,15,"work","Deep Creative Flow Block 1: Raw drafting, prototyping & creation"],
+      [11,30,"rest","Divergent thinking walk: Let subconscious mind connect creative dots"],
+      [12,30,"err","Clean energizing lunch & creative playlist listening"],
+      [13,45,"work","Deep Creative Flow Block 2: Iteration, refinement & fine craftsmanship"],
+      [16,0,"rest","Aesthetic pause: Explore visual art, listen to acoustic vinyl, or sketch"],
+      [17,0,"work","Creative finishing polish, git commit / save milestone & portfolio log"],
+      [19,30,"err","Celebratory relaxed dinner & creative milestone reflection"],
+      [21,45,"night","Subconscious dream prep: Sketch tomorrow’s ideas & peaceful slumber"]
+    ]
+  },
+  exam: {
+    name: "Exam Week (Study Sprints)",
+    icon: "⚡",
+    days: { 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1 },
+    daysLabel: "Mon — Sat",
+    desc: "10 high-performance sprint blocks: Pomodoro intervals, active recall, memory consolidation walks, and neuro-rest sleep.",
+    schedules: [
+      [7,0,"err","High-protein brain breakfast, omega-3s & daily exam target review"],
+      [8,0,"work","Study Sprint 1: Deep concept mastering & high-yield topics (90 min)"],
+      [9,30,"rest","Eye strain relief, neck/shoulder release & cool hydration (15 min)"],
+      [9,45,"work","Study Sprint 2: Hard problem solving & past exam question analysis"],
+      [11,30,"rest","Hippocampus memory consolidation walk — zero screens (20 min)"],
+      [12,0,"err","Nourishing balanced lunch & brain fuel hydration"],
+      [13,0,"work","Study Sprint 3: Mock exam simulation under timed test conditions"],
+      [14,45,"rest","Brain reset power nap in dark room (25 min)"],
+      [15,30,"work","Active recall blitz: Flashcard drills & formula rapid review"],
+      [21,30,"night","Cognitive shutdown ritual: No late cramming, 8 hours restorative sleep"]
+    ]
+  },
+  sunday: {
+    name: "Sunday Sanctuary & Sabbath Rest",
+    icon: "🌊",
+    days: { 0: 1 },
+    daysLabel: "Sun Only",
+    desc: "7 sacred rest blocks: quiet sunrise prayer, spiritual fellowship, family feast, deep afternoon siesta, and tranquil mind prep.",
+    schedules: [
+      [8,0,"rest","Serene Sunday morning: Sunrise prayer, gratitude & quiet contemplation"],
+      [9,30,"class","Spiritual fellowship, inspiring sermon, or uplifting book chapter"],
+      [12,0,"err","Sunday family feast & joy-filled fellowship"],
+      [13,30,"rest","Deep Sabbath afternoon siesta with gentle piano soundscape (60 min)"],
+      [16,30,"rest","Sunday sunset stroll, garden tending & breath of cool fresh air"],
+      [19,0,"err","Light comforting evening soup & peaceful family conversation"],
+      [21,0,"night","Sunday night peace: Surrender all worries, serene heart & early bedtime"]
+    ]
+  },
+  morning: {
+    name: "Morning Momentum & Vitality",
+    icon: "🏃",
+    days: { 1: 1, 2: 1, 3: 1, 4: 1, 5: 1 },
+    daysLabel: "Mon — Fri",
+    desc: "6 high-energy launch blocks: hydration, 15-min cardio activation, contrast shower, protein fuel, and daily top-3 priorities.",
+    schedules: [
+      [5,30,"rest","Awakening 500ml water chug & 5 deep revitalizing diaphragmatic breaths"],
+      [5,45,"rest","Brisk 15-minute outdoor cardio walk or calisthenics vitality jumpstart"],
+      [6,15,"err","Invigorating contrast shower & crisp grooming"],
+      [6,45,"err","High-protein breakfast, fresh berries & green tea booster"],
+      [7,15,"work","Daily Priority Matrix: Write the 3 Non-Negotiable Wins for today"],
+      [7,45,"work","Launch prime mission with 100% focus and unstoppable momentum"]
+    ]
+  },
+  minimal: {
+    name: "Minimalist Routine (4 Anchors)",
+    icon: "🎯",
+    days: { 0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1 },
+    daysLabel: "Mon — Sun",
+    desc: "4 essential daily pillars for simple, uncluttered flow and consistent rhythm.",
+    schedules: [
+      [7,0,"work","Morning Energy Launch & Daily Intention"],
+      [12,0,"rest","Midday Recharge, Nutrition & Mindful Pause (45 min)"],
+      [17,30,"work","Evening Wrap-up, Log Accomplishments & Transition"],
+      [22,0,"night","Deep Sleep Wind-down & Cellular Recovery"]
+    ]
+  },
+  blank: {
+    name: "Blank Canvas",
+    icon: "📝",
+    days: { 0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1 },
+    daysLabel: "Mon — Sun",
+    desc: "Starts empty with 0 alarms so you can create your own custom routine from scratch.",
+    schedules: []
+  }
+};
+
+function getCurrentPresetKey() {
+  for (var key in SCHEDULE_PRESETS) {
+    var p = SCHEDULE_PRESETS[key];
+    if (p.schedules.length === S.length) {
+      var match = true;
+      for (var k = 0; k < S.length; k++) {
+        if (S[k][0] !== p.schedules[k][0] || S[k][1] !== p.schedules[k][1] || S[k][3] !== p.schedules[k][3]) {
+          match = false; break;
+        }
+      }
+      if (match) return key;
+    }
+    // Also match legacy 8-block weekend recharge schedule
+    if (key === "weekend" && S.length === 8 && S[0] && S[0][3] && S[0][3].indexOf("Morning gentle stretch") !== -1) {
+      return "weekend";
+    }
+  }
+  return "custom";
+}
+
+function getDaysSummaryText(dObj) {
+  var d = dObj || days;
+  var count = [0,1,2,3,4,5,6].filter(function(n){ return !!d[n]; }).length;
+  if (count === 7) return "Mon — Sun";
+  if (count === 5 && d[1] && d[2] && d[3] && d[4] && d[5] && !d[6] && !d[0]) return "Mon — Fri";
+  if (count === 2 && d[6] && d[0] && !d[1] && !d[2] && !d[3] && !d[4] && !d[5]) return "Sat & Sun";
+  if (count === 1 && d[0]) return "Sun Only";
+  if (count === 3 && d[5] && d[6] && d[0]) return "Fri — Sun";
+  if (count === 6 && !d[0]) return "Mon — Sat";
+  if (count === 0) return "None";
+  return [1,2,3,4,5,6,0].filter(function(n){ return !!d[n]; }).map(function(n){ return DN[n]; }).join(", ");
+}
+
+function updatePresetDaysBadge() {
+  var badge = $("presetDaysBadge");
+  if (!badge) return;
+  var key = getCurrentPresetKey();
+  var p = SCHEDULE_PRESETS[key];
+  if (p && p.daysLabel) {
+    badge.innerHTML = "<span>📅</span> <b>Active: " + p.daysLabel + "</b>";
+  } else {
+    badge.innerHTML = "<span>📅</span> <b>Active: " + getDaysSummaryText(days) + "</b>";
+  }
+}
+
+function updatePresetSelectorUI() {
+  var sel = $("presetSelect");
+  if (!sel) return;
+  var key = getCurrentPresetKey();
+  if (key === "custom") {
+    if (!sel.querySelector('option[value="custom"]')) {
+      var opt = document.createElement("option");
+      opt.value = "custom";
+      opt.textContent = "✏️ Custom Routine (" + S.length + " Blocks)";
+      sel.appendChild(opt);
+    }
+    sel.value = "custom";
+  } else {
+    sel.value = key;
+  }
+  updatePresetDaysBadge();
+}
+
+function applyPreset(presetKey, skipConfirm) {
+  var p = SCHEDULE_PRESETS[presetKey];
+  if (!p) return;
+  if (!skipConfirm && S.length > 0) {
+    if (!confirm("Switch to '" + p.name + "'? Your schedule and active days (" + (p.daysLabel || "custom") + ") will be loaded. You can restore your current schedule anytime via Export backup.")) {
+      updatePresetSelectorUI();
+      return;
+    }
+  }
+  S = p.schedules.slice(0);
+  if (p.days) {
+    days = Object.assign({}, p.days);
+  }
+  off = {};
+  try { localStorage.setItem("dra-preset-key", presetKey); } catch(e){}
+  save();
+  renderList();
+  renderDays();
+  tick();
+  updatePresetSelectorUI();
+  updatePresetDaysBadge();
+  showToast("Loaded " + p.name + " (" + S.length + " alarms · " + (p.daysLabel || "") + ")", p.icon);
+}
+
+if ($("presetSelect")) {
+  $("presetSelect").onchange = function() {
+    var val = this.value;
+    if (val === "custom") return;
+    applyPreset(val);
+  };
+}
+
+/* ══════════════════════════════════════════════════════════════
+   CLOUD LINK SYNC & SHARE ROUTINE (#s=HASH)
+   ══════════════════════════════════════════════════════════════ */
+function escapeHtml(str) {
+  return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function generateShareUrl() {
+  try {
+    var payload = JSON.stringify(S);
+    var b64 = btoa(encodeURIComponent(payload).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+      return String.fromCharCode('0x' + p1);
+    }));
+    return window.location.origin + window.location.pathname + '#s=' + b64;
+  } catch(e) {
+    return window.location.href;
+  }
+}
+
+if ($("shareRoutineBtn")) {
+  $("shareRoutineBtn").onclick = function() {
+    var url = generateShareUrl();
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(function() {
+        showToast("Shareable routine link copied to clipboard!", "🔗");
+      }).catch(function() { fallbackCopy(url); });
+    } else {
+      fallbackCopy(url);
+    }
+  };
+}
+
+var pendingImportedSchedule = null;
+function showSharedRoutineModal(imported) {
+  pendingImportedSchedule = imported;
+  var preview = $("sharedRoutinePreview");
+  var desc = $("sharedRoutineDesc");
+  if (desc) desc.textContent = "This link contains a routine with " + imported.length + " scheduled alarms.";
+  if (preview) {
+    preview.innerHTML = imported.map(function(item){
+      return '<div style="padding:4px 0;display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.06)">' +
+             '<b style="color:var(--gold)">' + fmt(item[0], item[1]) + '</b>' +
+             '<span style="color:var(--dim);text-align:right">' + escapeHtml(item[3]) + '</span>' +
+             '</div>';
+    }).join('');
+  }
+  $("sharedRoutineModal").classList.add("open");
+}
+
+function closeSharedRoutineModal() {
+  $("sharedRoutineModal").classList.remove("open");
+  pendingImportedSchedule = null;
+  try {
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState(null, null, window.location.pathname);
+    }
+  } catch(e){}
+}
+if ($("closeSharedRoutineModal")) $("closeSharedRoutineModal").onclick = closeSharedRoutineModal;
+if ($("cancelLoadSharedRoutineBtn")) $("cancelLoadSharedRoutineBtn").onclick = closeSharedRoutineModal;
+if ($("confirmLoadSharedRoutineBtn")) {
+  $("confirmLoadSharedRoutineBtn").onclick = function() {
+    if (pendingImportedSchedule && Array.isArray(pendingImportedSchedule)) {
+      S = pendingImportedSchedule.slice(0);
+      off = {};
+      save();
+      renderList();
+      renderDays();
+      tick();
+      updatePresetSelectorUI();
+      updatePresetDaysBadge();
+      showToast("Shared routine loaded (" + S.length + " alarms)!", "✓");
+      closeSharedRoutineModal();
+    }
+  };
+}
+
+function checkUrlHashRoutine() {
+  if (window.location.hash && window.location.hash.indexOf('#s=') === 0) {
+    var raw = window.location.hash.substring(3);
+    try {
+      var decoded = decodeURIComponent(Array.prototype.map.call(atob(raw), function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+      var importedS = JSON.parse(decoded);
+      if (Array.isArray(importedS) && importedS.length >= 0) {
+        setTimeout(function(){ showSharedRoutineModal(importedS); }, 300);
+      }
+    } catch(err) {
+      console.warn("Could not parse shared routine from URL hash:", err);
+    }
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   THEME MODE: OBSIDIAN DARK 🌙 <-> PORCELAIN LIGHT ☀️
+   ══════════════════════════════════════════════════════════════ */
+var currentThemeMode = localStorage.getItem("dra-theme-mode") || "dark";
+function applyThemeMode(mode) {
+  currentThemeMode = mode;
+  try { localStorage.setItem("dra-theme-mode", mode); } catch(e){}
+  if (mode === "light") {
+    document.body.classList.add("light-theme");
+    if ($("themeModeIcon")) $("themeModeIcon").textContent = "☀️";
+    if ($("themeModeLabel")) $("themeModeLabel").textContent = "Light";
+  } else {
+    document.body.classList.remove("light-theme");
+    if ($("themeModeIcon")) $("themeModeIcon").textContent = "🌙";
+    if ($("themeModeLabel")) $("themeModeLabel").textContent = "Dark";
+  }
+}
+if ($("themeModeBtn")) {
+  $("themeModeBtn").onclick = function() {
+    var nextMode = currentThemeMode === "dark" ? "light" : "dark";
+    applyThemeMode(nextMode);
+    showToast("Switched to " + (nextMode === "light" ? "Porcelain Light" : "Obsidian Dark") + " theme", nextMode === "light" ? "☀️" : "🌙");
+  };
+}
+applyThemeMode(currentThemeMode);
+
+/* Base typography is now naturally larger and high-contrast across all views */
+
+/* ══════════════════════════════════════════════════════════════
+   FIRST-RUN ONBOARDING TOUR
+   ══════════════════════════════════════════════════════════════ */
+function openOnboardingModal() {
+  var m = $("onboardingModal");
+  if (m) m.classList.add("open");
+}
+function closeOnboardingModal() {
+  var m = $("onboardingModal");
+  if (m) m.classList.remove("open");
+  try { localStorage.setItem("dra-tour-done", "1"); } catch(e){}
+}
+if ($("tourBtn")) $("tourBtn").onclick = openOnboardingModal;
+if ($("closeOnboardingModal")) $("closeOnboardingModal").onclick = closeOnboardingModal;
+if ($("startTourBtn")) {
+  $("startTourBtn").onclick = function() {
+    closeOnboardingModal();
+    if (!armed && $("arm")) $("arm").click();
+    showToast("Alarms Armed & Screen Wake Active", "🛡️");
+  };
+}
+if (!localStorage.getItem("dra-tour-done")) {
+  setTimeout(openOnboardingModal, 500);
+}
+
+/* ───────── INITIAL BOOTSTRAP (Zero-Delay Immediate Clock Render) ───────── */
+// Self-healing migration: if user previously had Weekend Recharge loaded with Mon-Fri active,
+// automatically activate Saturday & Sunday and turn off Monday to Friday.
+try {
+  var initPresetKey = getCurrentPresetKey();
+  if (initPresetKey === "weekend") {
+    if (days[1] || days[2] || days[3] || days[4] || days[5] || !days[6] || !days[0]) {
+      days = Object.assign({}, SCHEDULE_PRESETS.weekend.days);
+      save();
+    }
+  }
+} catch(e){}
+
+try { renderDays(); } catch(e){}
+try { tick(); } catch(e){ console.error("Initial tick error:", e); }
+try { setInterval(tick, 1000); } catch(e){}
+try { startWorkerTicker(); } catch(e){}
+
+try { queued = nextSong(); } catch(e){}
+try { renderList(); } catch(e){}
+try { showVol(); } catch(e){}
+try { showSong(); } catch(e){}
+try { setStatus(); } catch(e){}
+try { updatePresetSelectorUI(); } catch(e){}
+try { updatePresetDaysBadge(); } catch(e){}
+try {
+  if (armed) {
+    requestWakeLock();
+    startAudioKeepAlive();
+  }
+} catch(e){}
+try { checkUrlHashRoutine(); } catch(e){}
+</script>
+</body>
+</html>

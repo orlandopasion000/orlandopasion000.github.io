@@ -1,16 +1,17 @@
 @echo off
-title Installing Daily Recharge Alarm Desktop Application
+title Installing OrlandoRecharge Desktop Application
 cls
 echo ========================================================
-echo   DAILY RECHARGE ALARM - WINDOWS APP INSTALLER
+echo   ORLANDORECHARGE - WINDOWS APP INSTALLER
 echo   Sir Orlando V. Pasion, Jr. - Executive Edition
 echo ========================================================
 echo.
 echo Installing native Windows desktop application...
 
-set "APP_URL=https://orlandopasion000.github.io/daily-recharge-alarm.html"
-set "APP_NAME=Daily Recharge Alarm"
-set "APP_ICON=%~dp0assets\app-icon.ico"
+set "APP_URL=https://orlandopasion000.github.io/orlandorecharge"
+set "APP_NAME=OrlandoRecharge"
+set "APP_ICON=%~dp0..\assets\app-icon.ico"
+if not exist "%APP_ICON%" set "APP_ICON=%~dp0assets\app-icon.ico"
 
 :: Find Microsoft Edge
 set "EDGE_EXE="
@@ -25,23 +26,23 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -Command ^
   "$sc = $ws.CreateShortcut((Join-Path $desk '%APP_NAME%.lnk')); " ^
   "$sc.TargetPath = '%EDGE_EXE%'; " ^
   "$sc.Arguments = '--app=\"%APP_URL%\" --window-size=1260,880'; " ^
-  "$sc.Description = 'Daily Recharge Alarm Desktop Application'; " ^
+  "$sc.Description = 'OrlandoRecharge Desktop Application'; " ^
   "if (Test-Path '%APP_ICON%') { $sc.IconLocation = '%APP_ICON%,0'; } " ^
   "$sc.Save(); " ^
   "$startMenu = [Environment]::GetFolderPath('Programs'); " ^
   "$sc2 = $ws.CreateShortcut((Join-Path $startMenu '%APP_NAME%.lnk')); " ^
   "$sc2.TargetPath = '%EDGE_EXE%'; " ^
   "$sc2.Arguments = '--app=\"%APP_URL%\" --window-size=1260,880'; " ^
-  "$sc2.Description = 'Daily Recharge Alarm Desktop Application'; " ^
+  "$sc2.Description = 'OrlandoRecharge Desktop Application'; " ^
   "if (Test-Path '%APP_ICON%') { $sc2.IconLocation = '%APP_ICON%,0'; } " ^
   "$sc2.Save();"
 
 echo.
-echo [SUCCESS] Daily Recharge Alarm installed successfully!
+echo [SUCCESS] OrlandoRecharge installed successfully!
 echo   - Desktop Shortcut created: %USERPROFILE%\Desktop\%APP_NAME%.lnk
 echo   - Start Menu shortcut added to Windows Programs
 echo.
-echo Launching Daily Recharge Desktop Application...
+echo Launching OrlandoRecharge Desktop Application...
 start "" "%EDGE_EXE%" --app="%APP_URL%" --window-size=1260,880
 ping 127.0.0.1 -n 2 >nul
 exit

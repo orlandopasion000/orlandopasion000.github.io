@@ -9,19 +9,19 @@ let src = fs.readFileSync(srcFile, 'utf8');
 
 // Replace Title
 src = src.replace(
-  /<title>Daily Recharge Alarm — Sir Orlando V\. Pasion, Jr\.<\/title>/,
-  '<title>Daily Recharge Alarm — Personal Rhythm & Rest Deck</title>'
+  /<title>.*?<\/title>/,
+  '<title>OrlandoRecharge — Personal Rhythm & Rest Deck</title>'
 );
 
 // Replace Manifest
 src = src.replace(
-  /<link rel="manifest" href="recharge-manifest\.webmanifest">/,
+  /<link rel="manifest" href=".*?">/,
   '<link rel="manifest" href="recharge-clean-manifest.webmanifest">'
 );
 
 // Replace Description
 src = src.replace(
-  /<meta name="description" content="Daily schedule alarm cockpit with music clips and Rest Mode clock\.">/,
+  /<meta name="description" content=".*?">/,
   '<meta name="description" content="Clean, customizable daily alarm schedule with luxury metallic clocks and Rest Mode.">'
 );
 
@@ -37,7 +37,7 @@ src = src.replace(
   'href="downloads/DailyRecharge-Clean-Setup.exe"'
 );
 src = src.replace(
-  /href="downloads\/Install-DailyRecharge-Windows\.cmd"/g,
+  /href="downloads\/Install-.*?\.cmd"/g,
   'href="downloads/Install-DailyRecharge-Clean-Windows.cmd"'
 );
 
@@ -118,8 +118,8 @@ src = src.replace(/"dra-preset-key"/g, '"dra-clean-preset-key"');
 
 // Replace any remaining personal references in strings
 src = src.replace(/owner:"Sir Orlando V\. Pasion, Jr\."/g, 'owner:"Public Clean Edition"');
-src = src.replace(/title:"Daily Recharge Alarm — Sir Orlando V\. Pasion, Jr\."/g, 'title:"Daily Recharge Alarm — Personal Rhythm & Rest Deck"');
-src = src.replace(/https:\/\/orlandopasion000\.github\.io\/daily-recharge-alarm\.html/g, 'https://orlandopasion000.github.io/recharge-clean.html');
+src = src.replace(/title:"(Daily Recharge Alarm|OrlandoRecharge) — Sir Orlando V\. Pasion, Jr\."/g, 'title:"OrlandoRecharge — Personal Rhythm & Rest Deck"');
+src = src.replace(/https:\/\/orlandopasion000\.github\.io\/(daily-recharge-alarm\.html|orlandorecharge)/g, 'https://orlandopasion000.github.io/recharge-clean.html');
 src = src.replace(/daily-recharge-schedule-backup\.json/g, 'daily-recharge-clean-backup.json');
 
 // Wire up explorePresetsBtn and clearScheduleBtn if present

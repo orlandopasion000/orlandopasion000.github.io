@@ -1,6 +1,6 @@
 {
-  "name": "Daily Recharge Alarm",
-  "short_name": "Daily Recharge",
+  "name": "OrlandoRecharge",
+  "short_name": "OrlandoRecharge",
   "description": "Daily schedule alarms with song clips — by Sir Orlando V. Pasion, Jr.",
   "id": "daily-recharge-master-pwa",
   "start_url": "./daily-recharge-alarm.html",

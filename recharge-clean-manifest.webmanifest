@@ -1,6 +1,6 @@
 {
-  "name": "Daily Recharge (Clean Edition)",
-  "short_name": "Daily Recharge",
+  "name": "OrlandoRecharge (Clean Edition)",
+  "short_name": "OrlandoRecharge",
   "description": "Clean, customizable personal daily alarm schedule with sleep soundscapes and luxury metallic clocks.",
   "id": "recharge-clean-pwa",
   "start_url": "./recharge-clean.html",
