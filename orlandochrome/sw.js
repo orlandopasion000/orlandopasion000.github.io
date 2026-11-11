@@ -1,5 +1,5 @@
 /* OrlandoChrome · Offline-First Service Worker (PWA Ready) */
-const CACHE_NAME = 'orlandochrome-pwa-v3';
+const CACHE_NAME = 'orlandochrome-pwa-v4';
 const ASSETS = [
   './',
   './index.html',
@@ -8,8 +8,10 @@ const ASSETS = [
   './app.js',
   './sound.js',
   './oc-logo.svg',
+  './favicon.ico',
   './recharge-icon.png',
-  './manifest.json'
+  './manifest.json',
+  './manifest-clean.json'
 ];
 
 self.addEventListener('install', (event) => {

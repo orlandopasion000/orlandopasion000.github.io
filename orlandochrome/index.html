@@ -3,16 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>OrlandoChrome</title>
+  <title id="pageTitle">OrlandoChrome (Main Version)</title>
   <meta name="theme-color" content="#000000">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="OrlandoChrome">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="description" content="OrlandoChrome · Taskbar Chrome Profile Messenger, AI Cooldown Timers & Wispr Flow Pro Dictation Suite.">
-  <link rel="manifest" href="manifest.json">
+  <link rel="manifest" id="manifestLink" href="manifest.json">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/svg+xml" href="oc-logo.svg">
-  <link rel="apple-touch-icon" href="oc-logo.svg">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
   <link rel="stylesheet" href="styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -82,6 +83,100 @@
       <!-- Rendered dynamically -->
     </main>
   </div>
+
+  <!-- 8. APP DISTRIBUTION & COMMAND SUITE (Install, Share, QR, Backup, Blank Edition) -->
+  <section class="app-dist oc-app-dist" id="appDistSection" aria-labelledby="distTitle">
+    <div class="dist-head">
+      <div class="dist-head-left">
+        <div class="dist-oc-mini">OC</div>
+        <div>
+          <div class="dist-title" id="distTitle">
+            <span>App Distribution &amp; Live Sync Suite</span>
+            <span class="dist-badge">● PWA Ready</span>
+          </div>
+          <div class="dist-subtitle" id="distSubtitle">Installed, offline-cached, zero-warning install &amp; holographic device sync</div>
+        </div>
+      </div>
+      <div class="dist-head-actions">
+        <button type="button" class="dist-toggle-btn" id="distMinimizeBtn" title="Toggle Minimized View" aria-expanded="true">
+          <span id="distMinIcon">▾</span> <span id="distMinText">Minimize</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="dist-body" id="distBody">
+      <div class="dist-grid">
+        <!-- Card 1: Main Executive Workspace -->
+        <div class="dist-card" id="distCardMain">
+          <div class="dist-card-top">
+            <div class="dist-icon">⚡</div>
+            <div class="dist-card-meta">
+              <div class="dist-name" id="distCardMainTitle">Main Executive App</div>
+              <div class="dist-desc" id="distCardMainDesc">Complete 22-profile main workspace</div>
+            </div>
+          </div>
+          <div class="dist-btn-stack" id="distMainBtnStack">
+            <a class="primary dist-btn" id="installAppBtn" href="https://orlandopasion000.github.io/orlandochrome/" target="_blank" rel="noopener">⚡ 1-Click Install App</a>
+            <div class="dist-btn-row">
+              <a class="ghost dist-btn" id="distCmdSetupBtn" href="../downloads/Install-OrlandoChrome-Windows.cmd" download title="1-Click Windows Setup Script">⚡ Setup (.cmd)</a>
+              <a class="ghost dist-btn" id="distExeBtn" href="../downloads/Install-OrlandoChrome-Windows.cmd" download title="Standalone App Launcher for Windows">⬇ .exe</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Mobile QR Code & Link Sharing -->
+        <div class="dist-card">
+          <div class="dist-card-top">
+            <div class="dist-icon">📲</div>
+            <div class="dist-card-meta">
+              <div class="dist-name">Holographic QR</div>
+              <div class="dist-desc">Instant phone scanner &amp; device sync</div>
+            </div>
+          </div>
+          <div class="dist-btn-stack">
+            <button type="button" class="ghost dist-btn dist-btn-holo" id="openQrBtn">📷 Open Phone QR</button>
+            <button type="button" class="ghost dist-btn" id="shareAppBtn">↗ Share / Copy Link</button>
+          </div>
+        </div>
+
+        <!-- Card 3: Backup & Restore Workspace -->
+        <div class="dist-card">
+          <div class="dist-card-top">
+            <div class="dist-icon">💾</div>
+            <div class="dist-card-meta">
+              <div class="dist-name">Backup &amp; Restore</div>
+              <div class="dist-desc">Encrypted local workspace backup</div>
+            </div>
+          </div>
+          <div class="dist-btn-stack">
+            <div class="dist-btn-row">
+              <button type="button" class="ghost dist-btn" id="exportBackupBtn">💾 Export</button>
+              <button type="button" class="ghost dist-btn" id="importBackupBtn">📁 Import</button>
+            </div>
+            <input type="file" id="importBackupFile" accept=".json,application/json" style="display:none">
+          </div>
+        </div>
+
+        <!-- Card 4: Clean Blank Edition -->
+        <div class="dist-card dist-card-blank" id="distCardBlank">
+          <div class="dist-card-top">
+            <div class="dist-icon dist-icon-gold">🎁</div>
+            <div class="dist-card-meta">
+              <div class="dist-name" id="distCardBlankTitle" style="color:var(--nf-gold, #f59e0b)">Clean Blank Edition</div>
+              <div class="dist-desc" id="distCardBlankDesc">100% blank canvas (0 notes / clean routine)</div>
+            </div>
+          </div>
+          <div class="dist-btn-stack" id="distBlankBtnStack">
+            <a class="primary dist-btn" id="openBlankAppBtn" href="https://orlandopasion000.github.io/orlandochrome/?edition=blank" target="_blank" rel="noopener">🚀 Open Blank Web App</a>
+            <div class="dist-btn-row">
+              <a class="ghost dist-btn" id="distCleanExeBtn" href="../downloads/Install-OrlandoChrome-Clean-Windows.cmd" download title="Clean Edition Setup Launcher">⬇ .exe</a>
+              <button type="button" class="ghost dist-btn" id="btnDownloadSingleHtml" title="Standalone Single-File Offline HTML">💾 .html</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- Hidden Photo Upload Input (Profile Avatar) -->
   <input type="file" id="globalPhotoInput" accept="image/*" style="display:none;">

@@ -1,18 +1,37 @@
 {
-  "name": "OrlandoChrome · Taskbar Command Center",
+  "name": "OrlandoChrome (Main Version)",
   "short_name": "OrlandoChrome",
-  "description": "OLED Taskbar Chrome Profile Messenger, AI Cooldown Timers & Wispr Flow Pro Dictation Suite.",
-  "start_url": "./index.html",
-  "scope": "./",
+  "description": "OrlandoChrome · Taskbar Chrome Profile Messenger, AI Cooldown Timers & Wispr Flow Pro Dictation Suite.",
+  "start_url": "https://orlandopasion000.github.io/orlandochrome/",
+  "scope": "https://orlandopasion000.github.io/orlandochrome/",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
   "orientation": "any",
   "background_color": "#000000",
   "theme_color": "#000000",
-  "categories": ["productivity", "utilities", "education"],
+  "categories": ["productivity", "utilities"],
   "icons": [
     {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
       "src": "oc-logo.svg",
-      "sizes": "160x160 512x512",
+      "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
     }

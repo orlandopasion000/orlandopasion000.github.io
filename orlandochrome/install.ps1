@@ -1,15 +1,15 @@
-﻿# OrlandoChrome · Taskbar Notes - 1-Line Windows Installer
+﻿# OrlandoChrome (Main Version) · Taskbar Notes - 1-Line Windows Installer
 # Run: irm https://orlandopasion000.github.io/orlandochrome/install.ps1 | iex
 
 Write-Host "========================================================" -ForegroundColor Yellow
-Write-Host "  ORLANDOCHROME - TASKBAR NOTES APP INSTALLER" -ForegroundColor Cyan
+Write-Host "  ORLANDOCHROME (MAIN VERSION) - APP INSTALLER" -ForegroundColor Cyan
 Write-Host "  Sir Orlando V. Pasion, Jr. - Executive Edition" -ForegroundColor Gray
 Write-Host "========================================================" -ForegroundColor Yellow
 Write-Host ""
 Write-Host "Installing native Windows desktop application with zero warnings..." -ForegroundColor White
 
 $AppUrl = "https://orlandopasion000.github.io/orlandochrome/"
-$AppName = "OrlandoChrome - Taskbar Notes"
+$AppName = "OrlandoChrome (Main Version)"
 $IconUrl = "https://orlandopasion000.github.io/orlandochrome/assets/icon.ico"
 $AppDir = Join-Path $env:LOCALAPPDATA "OrlandoChrome"
 $IconPath = Join-Path $AppDir "icon.ico"
@@ -43,7 +43,7 @@ $DesktopPath = [Environment]::GetFolderPath('Desktop')
 $Shortcut = $WshShell.CreateShortcut((Join-Path $DesktopPath "$AppName.lnk"))
 $Shortcut.TargetPath = $BrowserExe
 $Shortcut.Arguments = "--app=`"$AppUrl`" --window-size=1120,820"
-$Shortcut.Description = "OrlandoChrome - Taskbar Notes Desktop Application"
+$Shortcut.Description = "OrlandoChrome (Main Version) - Taskbar Notes Desktop Application"
 if (Test-Path $IconPath) { $Shortcut.IconLocation = "$IconPath,0" }
 $Shortcut.Save()
 
@@ -52,12 +52,12 @@ $ProgramsPath = [Environment]::GetFolderPath('Programs')
 $StartShortcut = $WshShell.CreateShortcut((Join-Path $ProgramsPath "$AppName.lnk"))
 $StartShortcut.TargetPath = $BrowserExe
 $StartShortcut.Arguments = "--app=`"$AppUrl`" --window-size=1120,820"
-$StartShortcut.Description = "OrlandoChrome - Taskbar Notes Desktop Application"
+$StartShortcut.Description = "OrlandoChrome (Main Version) - Taskbar Notes Desktop Application"
 if (Test-Path $IconPath) { $StartShortcut.IconLocation = "$IconPath,0" }
 $StartShortcut.Save()
 
 Write-Host ""
-Write-Host "[SUCCESS] OrlandoChrome installed successfully!" -ForegroundColor Green
+Write-Host "[SUCCESS] OrlandoChrome (Main Version) installed successfully!" -ForegroundColor Green
 Write-Host "  ✓ Desktop Shortcut: $DesktopPath\$AppName.lnk" -ForegroundColor Gray
 Write-Host "  ✓ Start Menu Shortcut: $ProgramsPath\$AppName.lnk" -ForegroundColor Gray
 Write-Host ""

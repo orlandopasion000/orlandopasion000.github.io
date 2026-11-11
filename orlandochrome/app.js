@@ -3883,10 +3883,198 @@ ${jsRes}
     });
   }
 
+  // ─── App Distribution & Live Sync Suite Dock Controls ───
+  function initAppDistSection() {
+    const distSec = $('#appDistSection');
+    const distMinBtn = $('#distMinimizeBtn');
+    const distMinIcon = $('#distMinIcon');
+    const distMinText = $('#distMinText');
+
+    if (!distSec) return;
+
+    // Synchronize UI according to Edition (Main Version vs Clean Blank Edition)
+    if (IS_BLANK_EDITION) {
+      document.title = 'OrlandoChrome (Clean Edition) — Blank Canvas';
+      const pTitle = $('#pageTitle');
+      if (pTitle) pTitle.textContent = 'OrlandoChrome (Clean Edition) — Blank Canvas';
+      const mLink = $('#manifestLink');
+      if (mLink) mLink.href = 'manifest-clean.json';
+
+      const sub = $('#distSubtitle');
+      if (sub) sub.textContent = '100% clean, schedule-free blank canvas (0 notes). Clean storage ready for external laptops.';
+
+      // Card 1 becomes switch to Main
+      const c1Name = $('#distCardMainTitle');
+      if (c1Name) c1Name.textContent = 'Main Executive App';
+      const c1Desc = $('#distCardMainDesc');
+      if (c1Desc) c1Desc.textContent = 'Switch to complete 22-profile main workspace';
+
+      // Card 4 becomes Clean Blank Canvas (Active)
+      const c4Name = $('#distCardBlankTitle');
+      if (c4Name) {
+        c4Name.textContent = 'Clean Blank Canvas (Active)';
+        c4Name.style.color = 'var(--nf-gold, #f59e0b)';
+      }
+      const c4Desc = $('#distCardBlankDesc');
+      if (c4Desc) c4Desc.textContent = 'Currently active: 0 notes / clean routine';
+
+      // Card 4 primary button becomes Reset Blank Canvas
+      const c4Stack = $('#distBlankBtnStack');
+      if (c4Stack) {
+        c4Stack.innerHTML = `
+          <button type="button" class="primary dist-btn" id="cleanResetCanvasBtn" style="width:100%">⟲ Clear &amp; Reset Blank Canvas</button>
+          <div class="dist-btn-row">
+            <a class="ghost dist-btn" href="../downloads/Install-OrlandoChrome-Clean-Windows.cmd" download title="Clean Edition Setup Launcher">⬇ .exe</a>
+            <button type="button" class="ghost dist-btn" id="btnDownloadSingleHtmlBlank" title="Standalone Single-File Offline HTML">💾 .html</button>
+          </div>
+        `;
+        const resetBtn = $('#cleanResetCanvasBtn');
+        if (resetBtn) {
+          resetBtn.onclick = () => {
+            if (confirm('Are you sure you want to clear and reset the blank canvas? All notes in this blank session will be cleared.')) {
+              state.profiles = JSON.parse(JSON.stringify(BLANK_STARTER_PROFILES));
+              saveState();
+              renderSidebar();
+              renderMainChat();
+              showToast('✨ Clean Blank Canvas reset successfully!');
+            }
+          };
+        }
+        const sHtml = $('#btnDownloadSingleHtmlBlank');
+        if (sHtml) {
+          sHtml.onclick = () => downloadStandaloneHtml(true);
+        }
+      }
+    } else {
+      document.title = 'OrlandoChrome (Main Version)';
+      const pTitle = $('#pageTitle');
+      if (pTitle) pTitle.textContent = 'OrlandoChrome (Main Version)';
+      const mLink = $('#manifestLink');
+      if (mLink) mLink.href = 'manifest.json';
+    }
+
+    // Minimized state toggle & persistence
+    function updateDistMinUI(isMin) {
+      if (isMin) {
+        distSec.classList.add('minimized');
+        if (distMinIcon) distMinIcon.textContent = '▸';
+        if (distMinText) distMinText.textContent = 'Expand';
+        if (distMinBtn) distMinBtn.setAttribute('aria-expanded', 'false');
+      } else {
+        distSec.classList.remove('minimized');
+        if (distMinIcon) distMinIcon.textContent = '▾';
+        if (distMinText) distMinText.textContent = 'Minimize';
+        if (distMinBtn) distMinBtn.setAttribute('aria-expanded', 'true');
+      }
+    }
+
+    let savedMin = false;
+    try {
+      savedMin = localStorage.getItem('orlandochrome_dist_minimized') === '1';
+    } catch(e){}
+    updateDistMinUI(savedMin);
+
+    if (distMinBtn) {
+      distMinBtn.onclick = () => {
+        const nowMin = !distSec.classList.contains('minimized');
+        updateDistMinUI(nowMin);
+        try { localStorage.setItem('orlandochrome_dist_minimized', nowMin ? '1' : '0'); } catch(e){}
+      };
+    }
+
+    // 1-Click Install App Button
+    const installBtn = $('#installAppBtn');
+    if (installBtn) {
+      installBtn.onclick = async (e) => {
+        if (deferredInstallPrompt) {
+          e.preventDefault();
+          deferredInstallPrompt.prompt();
+          const choice = await deferredInstallPrompt.userChoice.catch(() => null);
+          deferredInstallPrompt = null;
+          if (choice && choice.outcome === 'accepted') {
+            showToast('✅ OrlandoChrome installed as a native app!');
+          }
+        }
+      };
+    }
+
+    // Holographic QR Button -> opens full interactive QR & device sync modal
+    const qrBtn = $('#openQrBtn');
+    if (qrBtn) {
+      qrBtn.onclick = () => openAppDistributionSuiteModal();
+    }
+
+    // Share / Copy Link
+    const shareBtn = $('#shareAppBtn');
+    if (shareBtn) {
+      shareBtn.onclick = () => {
+        const shareUrl = IS_BLANK_EDITION ? BLANK_APP_URL : LIVE_APP_URL;
+        if (navigator.share) {
+          navigator.share({
+            title: IS_BLANK_EDITION ? 'OrlandoChrome (Clean Edition)' : 'OrlandoChrome (Main Version)',
+            text: 'Taskbar Chrome Profile Messenger, AI Cooldown Timers & Wispr Flow Pro Dictation Suite.',
+            url: shareUrl
+          }).catch(err => {
+            if (err.name !== 'AbortError') {
+              navigator.clipboard.writeText(shareUrl).then(() => showToast('📋 App link copied to clipboard!'));
+            }
+          });
+        } else {
+          navigator.clipboard.writeText(shareUrl).then(() => showToast('📋 App link copied to clipboard!'));
+        }
+      };
+    }
+
+    // Backup & Restore
+    const expBtn = $('#exportBackupBtn');
+    if (expBtn) {
+      expBtn.onclick = () => exportFullBackupJson();
+    }
+    const impBtn = $('#importBackupBtn');
+    const impFile = $('#importBackupFile');
+    if (impBtn && impFile) {
+      impBtn.onclick = () => impFile.click();
+      impFile.onchange = (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          try {
+            const data = JSON.parse(ev.target.result);
+            if (data && Array.isArray(data.profiles)) {
+              state.profiles = data.profiles;
+              if (Array.isArray(data.quickTemplates)) state.quickTemplates = data.quickTemplates;
+              if (data.wispr) {
+                state.wispr = { ...state.wispr, ...data.wispr };
+              }
+              saveState();
+              renderSidebar();
+              renderMainChat();
+              showToast('💾 Backup restored successfully!');
+            } else {
+              showToast('⚠️ Invalid JSON backup format.');
+            }
+          } catch(err) {
+            showToast('❌ Error parsing backup JSON.');
+          }
+        };
+        reader.readAsText(file);
+        impFile.value = '';
+      };
+    }
+
+    // Standalone Single-File HTML Download
+    const singleHtmlBtn = $('#btnDownloadSingleHtml');
+    if (singleHtmlBtn) {
+      singleHtmlBtn.onclick = () => downloadStandaloneHtml(IS_BLANK_EDITION);
+    }
+  }
+
   // Initializer
   function init() {
     loadState();
     initEvents();
+    initAppDistSection();
     renderSidebar();
     renderMainChat();
     renderClockBox();

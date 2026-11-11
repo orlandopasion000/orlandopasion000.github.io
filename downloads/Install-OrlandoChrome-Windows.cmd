@@ -1,15 +1,15 @@
 @echo off
-title Installing OrlandoChrome - Taskbar Notes Desktop Application
+title Installing OrlandoChrome (Main Version) - Desktop Application
 cls
 echo ========================================================
-echo   ORLANDOCHROME - TASKBAR NOTES APP INSTALLER
+echo   ORLANDOCHROME (MAIN VERSION) - APP INSTALLER
 echo   Sir Orlando V. Pasion, Jr. - Executive Edition
 echo ========================================================
 echo.
 echo Installing native Windows desktop application...
 
 set "APP_URL=https://orlandopasion000.github.io/orlandochrome/"
-set "APP_NAME=OrlandoChrome - Taskbar Notes"
+set "APP_NAME=OrlandoChrome (Main Version)"
 set "ICON_URL=https://orlandopasion000.github.io/orlandochrome/assets/icon.ico"
 set "APP_DIR=%LOCALAPPDATA%\OrlandoChrome"
 set "APP_ICON=%APP_DIR%\icon.ico"
@@ -37,19 +37,19 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -Command ^
   "$sc = $ws.CreateShortcut((Join-Path $desk '%APP_NAME%.lnk')); " ^
   "$sc.TargetPath = '%BROWSER_EXE%'; " ^
   "$sc.Arguments = '--app=\"%APP_URL%\" --window-size=1120,820'; " ^
-  "$sc.Description = 'OrlandoChrome - Taskbar Notes Desktop Application'; " ^
+  "$sc.Description = 'OrlandoChrome (Main Version) - Taskbar Notes Desktop Application'; " ^
   "if (Test-Path '%APP_ICON%') { $sc.IconLocation = '%APP_ICON%,0'; } " ^
   "$sc.Save(); " ^
   "$startMenu = [Environment]::GetFolderPath('Programs'); " ^
   "$sc2 = $ws.CreateShortcut((Join-Path $startMenu '%APP_NAME%.lnk')); " ^
   "$sc2.TargetPath = '%BROWSER_EXE%'; " ^
   "$sc2.Arguments = '--app=\"%APP_URL%\" --window-size=1120,820'; " ^
-  "$sc2.Description = 'OrlandoChrome - Taskbar Notes Desktop Application'; " ^
+  "$sc2.Description = 'OrlandoChrome (Main Version) - Taskbar Notes Desktop Application'; " ^
   "if (Test-Path '%APP_ICON%') { $sc2.IconLocation = '%APP_ICON%,0'; } " ^
   "$sc2.Save();"
 
 echo.
-echo [SUCCESS] OrlandoChrome installed successfully!
+echo [SUCCESS] OrlandoChrome (Main Version) installed successfully!
 echo   - Desktop Shortcut created: %USERPROFILE%\Desktop\%APP_NAME%.lnk
 echo   - Start Menu shortcut added to Windows Programs
 echo.
