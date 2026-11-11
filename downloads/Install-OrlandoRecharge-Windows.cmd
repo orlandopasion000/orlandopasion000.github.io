@@ -6,43 +6,50 @@ echo   ORLANDORECHARGE - WINDOWS APP INSTALLER
 echo   Sir Orlando V. Pasion, Jr. - Executive Edition
 echo ========================================================
 echo.
-echo Installing native Windows desktop application...
+echo Installing native Windows desktop application with taskbar support...
 
 set "APP_URL=https://orlandopasion000.github.io/orlandorecharge"
 set "APP_NAME=OrlandoRecharge"
-set "APP_ICON=%~dp0..\assets\app-icon.ico"
-if not exist "%APP_ICON%" set "APP_ICON=%~dp0assets\app-icon.ico"
+set "APP_DIR=%LOCALAPPDATA%\OrlandoRecharge"
+if not exist "%APP_DIR%" mkdir "%APP_DIR%"
+set "APP_ICON=%APP_DIR%\app-icon.ico"
 
-:: Find Microsoft Edge
-set "EDGE_EXE="
-if exist "%ProgramFiles(x86)%\Microsoft\Edge\Application\msedge.exe" set "EDGE_EXE=%ProgramFiles(x86)%\Microsoft\Edge\Application\msedge.exe"
-if not defined EDGE_EXE if exist "%ProgramFiles%\Microsoft\Edge\Application\msedge.exe" set "EDGE_EXE=%ProgramFiles%\Microsoft\Edge\Application\msedge.exe"
-if not defined EDGE_EXE set "EDGE_EXE=msedge.exe"
+:: Download high-res multi-resolution gold icon if not present or update it
+powershell -NoProfile -Command "try { Invoke-WebRequest -Uri 'https://orlandopasion000.github.io/assets/app-icon.ico' -OutFile '%APP_ICON%' -UseBasicParsing } catch {}"
 
-:: Create Desktop Shortcut using PowerShell
+:: Find Microsoft Edge or Google Chrome
+set "BROWSER_EXE="
+if exist "%ProgramFiles(x86)%\Microsoft\Edge\Application\msedge.exe" set "BROWSER_EXE=%ProgramFiles(x86)%\Microsoft\Edge\Application\msedge.exe"
+if not defined BROWSER_EXE if exist "%ProgramFiles%\Microsoft\Edge\Application\msedge.exe" set "BROWSER_EXE=%ProgramFiles%\Microsoft\Edge\Application\msedge.exe"
+if not defined BROWSER_EXE if exist "%ProgramFiles%\Google\Chrome\Application\chrome.exe" set "BROWSER_EXE=%ProgramFiles%\Google\Chrome\Application\chrome.exe"
+if not defined BROWSER_EXE if exist "%ProgramFiles(x86)%\Google\Chrome\Application\chrome.exe" set "BROWSER_EXE=%ProgramFiles(x86)%\Google\Chrome\Application\chrome.exe"
+if not defined BROWSER_EXE set "BROWSER_EXE=msedge.exe"
+
+:: Create Desktop and Start Menu Shortcuts with custom Gold OR Icon
 powershell.exe -NoProfile -ExecutionPolicy Bypass -Command ^
   "$ws = New-Object -ComObject WScript.Shell; " ^
   "$desk = [Environment]::GetFolderPath('Desktop'); " ^
   "$sc = $ws.CreateShortcut((Join-Path $desk '%APP_NAME%.lnk')); " ^
-  "$sc.TargetPath = '%EDGE_EXE%'; " ^
-  "$sc.Arguments = '--app=\"%APP_URL%\" --window-size=1260,880'; " ^
-  "$sc.Description = 'OrlandoRecharge Desktop Application'; " ^
+  "$sc.TargetPath = '%BROWSER_EXE%'; " ^
+  "$sc.Arguments = '--app="%APP_URL%" --window-size=1280,880'; " ^
+  "$sc.Description = 'OrlandoRecharge Executive Application'; " ^
   "if (Test-Path '%APP_ICON%') { $sc.IconLocation = '%APP_ICON%,0'; } " ^
   "$sc.Save(); " ^
   "$startMenu = [Environment]::GetFolderPath('Programs'); " ^
   "$sc2 = $ws.CreateShortcut((Join-Path $startMenu '%APP_NAME%.lnk')); " ^
-  "$sc2.TargetPath = '%EDGE_EXE%'; " ^
-  "$sc2.Arguments = '--app=\"%APP_URL%\" --window-size=1260,880'; " ^
-  "$sc2.Description = 'OrlandoRecharge Desktop Application'; " ^
+  "$sc2.TargetPath = '%BROWSER_EXE%'; " ^
+  "$sc2.Arguments = '--app="%APP_URL%" --window-size=1280,880'; " ^
+  "$sc2.Description = 'OrlandoRecharge Executive Application'; " ^
   "if (Test-Path '%APP_ICON%') { $sc2.IconLocation = '%APP_ICON%,0'; } " ^
   "$sc2.Save();"
 
 echo.
 echo [SUCCESS] OrlandoRecharge installed successfully!
-echo   - Desktop Shortcut created: %USERPROFILE%\Desktop\%APP_NAME%.lnk
-echo   - Start Menu shortcut added to Windows Programs
+echo   - Desktop Shortcut: %USERPROFILE%\Desktop\%APP_NAME%.lnk
+echo   - Start Menu: Added to Windows Programs
 echo.
-echo Launching OrlandoRecharge Desktop Application...
-start "" "%EDGE_EXE%" --app="%APP_URL%" --window-size=1260,880
-ping 127.0.0.1 -n 2 >nul
+echo Launching OrlandoRecharge...
+echo TIP: Once opened, right-click its gold OR icon on your taskbar and click "Pin to taskbar"!
+start "" "%BROWSER_EXE%" --app="%APP_URL%" --window-size=1280,880
+ping 127.0.0.1 -n 3 >nul
 exit

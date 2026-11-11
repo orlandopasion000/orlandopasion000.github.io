@@ -10,7 +10,7 @@ let src = fs.readFileSync(srcFile, 'utf8');
 // 1. Replace Title & Meta Title to clearly mark Clean Blank Edition
 src = src.replace(
   /<title>.*?<\/title>/,
-  '<title>Daily Recharge Alarm — Clean Blank Edition</title>'
+  '<title>OrlandoRecharge (Clean Edition) — Blank Canvas</title>'
 );
 src = src.replace(
   /<meta name="apple-mobile-web-app-title" content=".*?">/,
@@ -45,9 +45,9 @@ const card1CleanReplacement = `<!-- Card 1: Main Executive Schedule -->
             </div>
           </div>
           <div class="dist-btn-stack">
-            <a class="primary dist-btn" id="installAppBtn" href="https://orlandopasion000.github.io/orlandorecharge" target="_blank" rel="noopener">⚡ Open Main Executive App (23 Blocks)</a>
+            <a class="primary dist-btn" id="installAppBtn" href="https://orlandopasion000.github.io/orlandorecharge" target="_blank" rel="noopener">⚡ 1-Click Install App</a>
             <div class="dist-btn-row">
-              <a class="ghost dist-btn" href="downloads/Install-DailyRecharge-Windows.cmd" download title="1-Click Windows Setup Script">⚡ Setup (.cmd)</a>
+              <a class="ghost dist-btn" href="downloads/Install-OrlandoRecharge-Windows.cmd" download title="1-Click Windows Setup Script">⚡ Setup (.cmd)</a>
               <a class="ghost dist-btn" href="downloads/DailyRecharge-Setup.exe" download title="Standalone .exe for Windows">⬇ .exe</a>
             </div>
           </div>
