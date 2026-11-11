@@ -120,6 +120,20 @@ src = src.replace(/"dra-preset-key"/g, '"dra-clean-preset-key"');
 src = src.replace(/owner:"Sir Orlando V\. Pasion, Jr\."/g, 'owner:"Public Clean Edition"');
 src = src.replace(/title:"(Daily Recharge Alarm|OrlandoRecharge) — Sir Orlando V\. Pasion, Jr\."/g, 'title:"OrlandoRecharge — Personal Rhythm & Rest Deck"');
 src = src.replace(/https:\/\/orlandopasion000\.github\.io\/(daily-recharge-alarm\.html|orlandorecharge)/g, 'https://orlandopasion000.github.io/recharge-clean.html');
+
+// Ensure installAppBtn, quickAppBtn, and themeAppBtn in clean edition point directly to the main app in new window
+src = src.replace(
+  'id="installAppBtn" href="https://orlandopasion000.github.io/recharge-clean.html"',
+  'id="installAppBtn" href="https://orlandopasion000.github.io/orlandorecharge"'
+);
+src = src.replace(
+  'id="quickAppBtn" href="https://orlandopasion000.github.io/recharge-clean.html"',
+  'id="quickAppBtn" href="https://orlandopasion000.github.io/orlandorecharge"'
+);
+src = src.replace(
+  'id="themeAppBtn" href="https://orlandopasion000.github.io/recharge-clean.html"',
+  'id="themeAppBtn" href="https://orlandopasion000.github.io/orlandorecharge"'
+);
 src = src.replace(/daily-recharge-schedule-backup\.json/g, 'daily-recharge-clean-backup.json');
 
 // Wire up explorePresetsBtn and clearScheduleBtn if present

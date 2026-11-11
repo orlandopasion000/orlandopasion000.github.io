@@ -386,6 +386,9 @@ body[data-clock-theme="solis-gold"] .chrome span{
   border-color: rgba(217, 185, 92, 0.45);
   background: rgba(217, 185, 92, 0.12);
   font-weight: 800;
+  text-decoration: none !important;
+  display: inline-flex;
+  align-items: center;
 }
 .console-mini-pill.highlight:hover,
 .pill-btn.highlight:hover {
@@ -2078,9 +2081,9 @@ body.light-theme .highlight-card .dist-icon{
         <button class="console-mini-pill" id="consoleThemeBadge" title="Cycle Clock Font & Visual Appearance">
           <span>🎨 <b id="consoleThemeLabel">Titanium Obsidian Noir</b></span>
         </button>
-        <button class="console-mini-pill highlight" id="quickAppBtn" title="Open or Install OrlandoRecharge Desktop App in Windows">
+        <a class="console-mini-pill highlight" id="quickAppBtn" href="https://orlandopasion000.github.io/orlandorecharge" target="_blank" rel="noopener" title="Open Main App in New Window">
           <span>💻 App</span>
-        </button>
+        </a>
       </div>
 
       <div class="console-head-right">
@@ -2122,9 +2125,9 @@ body.light-theme .highlight-card .dist-icon{
           <button class="pill-btn" id="themeBtn" title="Cycle Clock Font & Visual Appearance">
             <span>🎨 Clock Style: <b id="themeLabel">Titanium Obsidian Noir</b></span>
           </button>
-          <button class="pill-btn highlight" id="themeAppBtn" title="Open or Install OrlandoRecharge Desktop App in Windows">
+          <a class="pill-btn highlight" id="themeAppBtn" href="https://orlandopasion000.github.io/orlandorecharge" target="_blank" rel="noopener" title="Open Main App in New Window">
             <span>💻 App</span>
-          </button>
+          </a>
           <button class="pill-btn" id="themeModeBtn" title="Toggle Light / Dark Mode">
             <span id="themeModeIcon">🌙</span> <span id="themeModeLabel">Dark</span>
           </button>
@@ -2228,7 +2231,7 @@ body.light-theme .highlight-card .dist-icon{
             </div>
           </div>
           <div class="dist-btn-stack">
-            <button class="primary dist-btn" id="installAppBtn">⚡ 1-Click Install App</button>
+            <a class="primary dist-btn" id="installAppBtn" href="https://orlandopasion000.github.io/orlandorecharge" target="_blank" rel="noopener">⚡ 1-Click Install App</a>
             <div class="dist-btn-row">
               <a class="ghost dist-btn" href="downloads/Install-DailyRecharge-Clean-Windows.cmd" download title="1-Click Windows Setup Script">⚡ Setup (.cmd)</a>
               <a class="ghost dist-btn" href="downloads/DailyRecharge-Clean-Setup.exe" download title="Standalone .exe for Windows">⬇ .exe</a>
@@ -3735,9 +3738,6 @@ function launchDesktopApp() {
   } catch(e){}
 }
 
-if ($("quickAppBtn")) $("quickAppBtn").onclick = function(e){ e.stopPropagation(); launchDesktopApp(); };
-if ($("themeAppBtn")) $("themeAppBtn").onclick = function(e){ e.stopPropagation(); launchDesktopApp(); };
-if ($("installAppBtn")) $("installAppBtn").onclick = launchDesktopApp;
 if ($("closeInstallGuide")) $("closeInstallGuide").onclick=function(){$("installGuideModal").classList.remove("open")};
 if ($("dismissInstallGuide")) $("dismissInstallGuide").onclick=function(){$("installGuideModal").classList.remove("open")};
 
