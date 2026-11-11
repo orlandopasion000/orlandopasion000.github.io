@@ -9,9 +9,9 @@ Write-Host ""
 Write-Host "Installing native Windows desktop application with zero warnings..." -ForegroundColor White
 
 $AppUrl = "https://orlandopasion000.github.io/orlandorecharge"
-$AppName = "OrlandoRecharge"
+$AppName = "Daily Recharge Alarm"
 $IconUrl = "https://orlandopasion000.github.io/assets/app-icon.ico"
-$AppDir = Join-Path $env:LOCALAPPDATA "OrlandoRecharge"
+$AppDir = Join-Path $env:LOCALAPPDATA "DailyRechargeAlarm"
 $IconPath = Join-Path $AppDir "app-icon.ico"
 
 if (-not (Test-Path $AppDir)) {

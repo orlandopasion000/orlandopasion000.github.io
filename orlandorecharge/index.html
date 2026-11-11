@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#000000">
-<title>OrlandoRecharge — Sir Orlando V. Pasion, Jr.</title>
+<title>Daily Recharge Alarm — Sir Orlando V. Pasion, Jr.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="icon" href="assets/recharge-icon-192.png">
@@ -2486,32 +2486,39 @@ body.light-theme .highlight-card .dist-icon{
 
 <!-- Install Guide Modal (Safari / Desktop / Android) -->
 <div class="modal-wrap" id="installGuideModal" role="dialog" aria-modal="true" aria-label="Install App Guide">
-  <div class="modal-box" style="text-align:left">
+  <div class="modal-box" style="text-align:left;max-width:520px">
     <button class="modal-close" id="closeInstallGuide" aria-label="Close modal">✕</button>
-    <div class="modal-title" style="text-align:center">Install OrlandoRecharge</div>
-    <div class="modal-text" style="margin-bottom:16px;text-align:center">Follow the quick step for your device:</div>
+    <div class="modal-title" style="text-align:center">Install Daily Recharge Alarm</div>
+    <div class="modal-text" style="margin-bottom:14px;text-align:center;color:var(--dim)">Add the gold clock app directly to your Windows Taskbar:</div>
+
     <div style="display:flex;flex-direction:column;gap:12px;font-size:.9rem;color:var(--text)">
-      <div style="background:#0c0c0e;border:1px solid rgba(217,185,92,.45);border-radius:14px;padding:14px">
-        <b style="color:var(--gold)">⚡ Windows 1-Line Instant Setup (Zero Warnings):</b><br>
-        Open PowerShell and paste:<br>
-        <code style="display:block;margin-top:6px;padding:8px 10px;background:#000;border:1px solid var(--line2);border-radius:8px;color:#4ADE80;font-size:.8rem;word-break:break-all">irm https://orlandopasion000.github.io/orlandorecharge/install.ps1 | iex</code>
+      <!-- 1. Direct Edge/Chrome in-browser install -->
+      <div style="background:#0c0c0e;border:1px solid rgba(217,185,92,.65);border-radius:14px;padding:14px;box-shadow:0 0 20px rgba(217,185,92,.15)">
+        <b style="color:var(--gold);font-size:.96rem">💻 Microsoft Edge (Your Current Browser):</b><br>
+        <span style="font-size:.86rem;color:var(--text)">Look at the <b>top-right of your address bar</b> (beside the star/favorite icon):</span>
+        <div style="margin:8px 0;padding:8px 12px;background:#000;border:1px solid var(--line2);border-radius:8px;display:flex;align-items:center;gap:10px">
+          <span style="font-size:1.3rem">⊞</span>
+          <span>Click the <b>App available / Install</b> icon $\rightarrow$ Click <b>Install</b></span>
+        </div>
+        <span style="font-size:.82rem;color:var(--dim)">Or click Edge menu (···) $\rightarrow$ <b>Apps</b> $\rightarrow$ <b>Install Daily Recharge Alarm</b>.</span>
       </div>
+
+      <!-- 2. Windows 1-Click .cmd file -->
       <div style="background:#000;border:1px solid var(--line2);border-radius:14px;padding:14px">
-        <b style="color:var(--gold)">💻 Windows, Mac & Chromebook (Chrome / Edge):</b><br>
-        Click the <b>Install</b> icon (⊞) in your address bar, or click Menu (⋮) → <b>Install OrlandoRecharge</b>.
+        <b style="color:var(--gold)">⚡ 1-Click Windows Taskbar Installer (.cmd):</b><br>
+        <span style="font-size:.84rem;color:var(--dim)">Creates a dedicated desktop app with the gold clock icon and pins it to your taskbar:</span>
+        <div style="margin-top:8px">
+          <a class="primary dist-btn" href="downloads/Install-DailyRecharge-Windows.cmd" download style="display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 16px;text-decoration:none;border-radius:10px;font-weight:700">⚡ Download &amp; Run Installer (.cmd)</a>
+        </div>
       </div>
-      <div style="background:#000;border:1px solid var(--line2);border-radius:14px;padding:14px">
-        <b style="color:var(--gold)">🍎 iPhone & iPad (Safari):</b><br>
-        1. Tap the <b>Share</b> button (<span style="font-size:1.1rem">⎙</span>) at the bottom.<br>
-        2. Scroll down and tap <b>Add to Home Screen</b> (⊞).<br>
-        3. Tap <b>Add</b> in the top right.
-      </div>
-      <div style="background:#000;border:1px solid var(--line2);border-radius:14px;padding:14px">
-        <b style="color:var(--gold)">🤖 Android (Chrome):</b><br>
-        Tap the menu dots (⋮) in the top-right corner, then tap <b>Install app</b> or <b>Add to Home Screen</b>.
+
+      <!-- 3. Windows PowerShell 1-liner -->
+      <div style="background:#000;border:1px solid var(--line2);border-radius:14px;padding:12px 14px">
+        <b style="color:var(--gold)">⚡ PowerShell 1-Line Setup:</b><br>
+        <code style="display:block;margin-top:6px;padding:8px 10px;background:#0c0c0e;border:1px solid var(--line2);border-radius:8px;color:#4ADE80;font-size:.78rem;word-break:break-all">irm https://orlandopasion000.github.io/orlandorecharge/install.ps1 | iex</code>
       </div>
     </div>
-    <div class="modal-actions" style="margin-top:20px">
+    <div class="modal-actions" style="margin-top:18px">
       <button class="primary" id="dismissInstallGuide" style="width:100%;padding:12px">Got It</button>
     </div>
   </div>
@@ -3697,35 +3704,35 @@ window.addEventListener("beforeinstallprompt",function(e){
 
 function launchDesktopApp() {
   if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) {
-    showToast("You are already inside the Windows Desktop App! 💻✨", "💻");
+    showToast("You are already inside the Daily Recharge Windows App! ⏰✨", "💻");
     return;
   }
   if (deferredInstallPrompt) {
     deferredInstallPrompt.prompt();
     deferredInstallPrompt.userChoice.then(function(choice){
       if(choice.outcome==="accepted"){
-        showToast("Opening Windows Desktop App... 🚀", "💻");
+        showToast("Installing Daily Recharge Alarm to Windows Taskbar... 🚀", "💻");
       }
       deferredInstallPrompt=null;
     });
     return;
   }
-  try {
-    var win = window.open(
-      location.href,
-      "OrlandoRechargeApp",
-      "width=1320,height=820,menubar=no,toolbar=no,location=no,status=no,scrollbars=yes,resizable=yes"
-    );
-    if (win) {
-      showToast("Opened OrlandoRecharge Desktop Window 💻", "💻");
-      return;
-    }
-  } catch(e){}
+
+  // Open the interactive installation guide
   if ($("installGuideModal")) {
     $("installGuideModal").classList.add("open");
-  } else {
-    showToast("Install via Chrome Menu (⋮) → 'Install App'", "📥");
   }
+
+  // Automatically trigger download of the 1-click Windows taskbar installer
+  try {
+    var a = document.createElement("a");
+    a.href = "downloads/Install-DailyRecharge-Windows.cmd";
+    a.download = "Install-DailyRecharge-Windows.cmd";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    showToast("Downloaded 1-Click Windows Taskbar App installer (.cmd)! 💻", "📥");
+  } catch(e){}
 }
 
 if ($("quickAppBtn")) $("quickAppBtn").onclick = function(e){ e.stopPropagation(); launchDesktopApp(); };
