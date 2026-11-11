@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<base href="../">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#000000">
@@ -2469,7 +2468,7 @@ $("editScheduleBtn").onclick=function(){
   isEditing=true;
   $("schedActionsNormal").style.display="none";
   $("schedActionsEdit").style.display="flex";
-  $("status").textContent="Editing schedule: edit items below, then click “Save Changes” or “Cancel”.";
+  if($("status")) $("status").textContent="Editing schedule: edit items below, then click “Save Changes” or “Cancel”.";
   renderList();
 };
 
@@ -2478,7 +2477,7 @@ $("cancelScheduleBtn").onclick=function(){
   isEditing=false;
   $("schedActionsNormal").style.display="flex";
   $("schedActionsEdit").style.display="none";
-  $("status").textContent="Edit cancelled. Schedule unchanged.";
+  if($("status")) $("status").textContent="Edit cancelled. Schedule unchanged.";
   renderList();
   tick();
 };
@@ -2489,7 +2488,7 @@ $("saveScheduleBtn").onclick=function(){
   save();
   $("schedActionsNormal").style.display="flex";
   $("schedActionsEdit").style.display="none";
-  $("status").textContent="✓ Schedule changes saved successfully.";
+  if($("status")) $("status").textContent="✓ Schedule changes saved successfully.";
   renderList();
   tick();
 };
@@ -2553,7 +2552,7 @@ $("addAlarmForm").onsubmit=function(e){
   renderList();
   tick();
   closeAddAlarmModal();
-  $("status").textContent="✓ Added “"+title+"” at "+fmt(h,min);
+  if($("status")) $("status").textContent="✓ Added “"+title+"” at "+fmt(h,min);
   showToast("Added “"+title+"” at "+fmt(h,min), "⏰");
 };
 
@@ -2855,7 +2854,7 @@ $("resetSchedBtn").onclick=function(){
     renderDays();
     tick();
     updatePresetSelectorUI();
-    $("status").textContent="Schedule reset to default 23 blocks.";
+    if($("status")) $("status").textContent="Schedule reset to default 23 blocks.";
     showToast("Schedule reset to default 23 blocks.", "↺");
   }
 };
@@ -3539,14 +3538,16 @@ function renderRechargeHoloSuite(isBlank) {
 }
 
 
-$("openQrBtn").onclick=function(){
-  renderRechargeHoloSuite(false);
-  $("qrModal").classList.add("open");
-};
+if ($("openQrBtn")) {
+  $("openQrBtn").onclick=function(){
+    renderRechargeHoloSuite(false);
+    $("qrModal").classList.add("open");
+  };
+}
 
-$("closeQrModal").onclick=function(){$("qrModal").classList.remove("open")};
-$("doneQrBtn").onclick=function(){$("qrModal").classList.remove("open")};
-$("copyQrLinkBtn").onclick=function(){
+if ($("closeQrModal")) $("closeQrModal").onclick=function(){$("qrModal").classList.remove("open")};
+if ($("doneQrBtn")) $("doneQrBtn").onclick=function(){$("qrModal").classList.remove("open")};
+if ($("copyQrLinkBtn")) $("copyQrLinkBtn").onclick=function(){
   copyAppUrl();
 };
 
