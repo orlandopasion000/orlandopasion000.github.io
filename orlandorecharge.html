@@ -316,6 +316,215 @@ body[data-clock-theme="solis-gold"] .chrome span{
   #nextLabel{order:3;width:100%;margin-top:4px;font-size:clamp(0.82rem,3.2vw,1rem);white-space:nowrap !important;overflow:hidden !important;text-overflow:ellipsis !important}
 }
 
+/* ===== RECHARGE COMMAND CONSOLE (Compressed, Transparent, Collapsible) ===== */
+.command-console {
+  margin: 10px 0 14px;
+  background: rgba(10, 10, 14, 0.70);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  overflow: hidden;
+  opacity: 0.82;
+  transition: opacity 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.command-console:hover,
+.command-console:focus-within {
+  opacity: 1;
+  border-color: rgba(217, 185, 92, 0.35);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 18px rgba(217, 185, 92, 0.08);
+}
+
+.console-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  gap: 10px;
+  background: rgba(0, 0, 0, 0.45);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+  flex-wrap: wrap;
+}
+.command-console.minimized .console-head {
+  border-bottom: none;
+}
+.console-quick-stats {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.console-mini-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--dim);
+  font-family: var(--sans);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.console-mini-pill:hover {
+  background: rgba(217, 185, 92, 0.12);
+  border-color: var(--gold);
+  color: var(--text);
+}
+.console-mini-pill.live {
+  color: #5de8a0;
+  border-color: rgba(93, 232, 160, 0.35);
+  background: rgba(93, 232, 160, 0.10);
+}
+.console-divider {
+  color: rgba(255, 255, 255, 0.15);
+  font-size: 0.75rem;
+  margin: 0 2px;
+}
+.console-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  background: rgba(217, 185, 92, 0.12);
+  border: 1px solid rgba(217, 185, 92, 0.35);
+  color: var(--gold);
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.console-toggle-btn:hover {
+  background: var(--gold);
+  color: #000;
+  box-shadow: 0 0 12px rgba(217, 185, 92, 0.4);
+}
+
+.console-body {
+  padding: 10px 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: max-height 0.35s ease, opacity 0.3s ease, padding 0.3s ease;
+  max-height: 1000px;
+  overflow: hidden;
+}
+.command-console.minimized .console-body {
+  max-height: 0;
+  opacity: 0;
+  padding: 0 14px;
+  pointer-events: none;
+}
+
+.console-row-primary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.console-btn-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.console-btn-group button {
+  padding: 6px 12px;
+  font-size: 0.82rem;
+  border-radius: 10px;
+}
+.console-vol {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid var(--line2);
+  border-radius: 10px;
+  padding: 4px 10px;
+}
+.console-vol #volSlider {
+  width: 90px;
+}
+
+.console-row-player {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.console-player {
+  flex: 1;
+  min-width: 240px;
+  margin-bottom: 0 !important;
+  padding: 6px 12px !important;
+  background: rgba(0, 0, 0, 0.6) !important;
+}
+.console-prefs-strip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.console-prefs-strip .pill-btn {
+  min-height: 30px;
+  padding: 4px 10px;
+  font-size: 0.78rem;
+}
+
+.console-days-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 2px 0;
+}
+.console-days-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--gold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.console-days-row .days {
+  flex: 1;
+  margin: 0 !important;
+}
+.console-days-row .days button {
+  padding: 5px 0 !important;
+  font-size: 0.82rem !important;
+}
+
+.console-preset-bar {
+  margin: 0 !important;
+  padding: 5px 10px !important;
+}
+
+/* Light Mode Overrides for Command Console */
+body.light-theme .command-console {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border-color: #E2E2E7 !important;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.04) !important;
+}
+body.light-theme .console-head {
+  background: rgba(240, 240, 245, 0.7) !important;
+  border-color: #E2E2E7 !important;
+}
+body.light-theme .console-mini-pill {
+  background: #FFFFFF !important;
+  border-color: #D1D1D6 !important;
+  color: #1D1D1F !important;
+}
+
 /* ===== CONTROL BAR (Streamlined Clock Style & Audio Status) ===== */
 .cockpit-bar{display:flex;justify-content:center;align-items:center;margin-bottom:6px;gap:6px;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:5px 10px}
 .cockpit-pills{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;width:100%}
@@ -1825,81 +2034,106 @@ body.light-theme .highlight-card .dist-icon{
     </div>
   </section>
 
-  <!-- 2. CONTROL BAR -->
-  <div class="cockpit-bar">
-    <div class="cockpit-pills">
-      <button class="pill-btn live" id="audioBadge" title="Browser audio is ready to play alarms">
-        <span class="status-dot"></span>
-        <span id="audioBadgeText">🔊 Sound Ready</span>
-      </button>
-      <button class="pill-btn" id="themeBtn" title="Cycle Clock Font & Visual Appearance">
-        <span>🎨 Clock Style: <b id="themeLabel">Pure Platinum</b></span>
-      </button>
+  <!-- 2. RECHARGE COMMAND CONSOLE (Compressed, Transparent, Collapsible) -->
+  <div class="command-console" id="controlsConsole">
+    <!-- Console Status Header (Always Visible, 38px, High-Tech Micro-Bar) -->
+    <div class="console-head" id="consoleHead">
+      <div class="console-quick-stats">
+        <button class="console-mini-pill live" id="consoleArmBadge" title="Toggle Alarms On/Off">
+          <span class="status-dot"></span>
+          <span id="consoleArmText">✓ Alarms Active</span>
+        </button>
+        <button class="console-mini-pill" id="audioBadge" title="Browser Audio Status">
+          <span id="audioBadgeText">🔊 Sound Ready</span>
+        </button>
+        <span class="console-divider">|</span>
+        <button class="console-mini-pill" id="consoleDaysBadge" title="Current Active Days">
+          <span id="consoleDaysText">📅 Mon–Fri</span>
+        </button>
+        <button class="console-mini-pill" id="consoleThemeBadge" title="Cycle Clock Font & Visual Appearance">
+          <span>🎨 <b id="consoleThemeLabel">Titanium Obsidian Noir</b></span>
+        </button>
+      </div>
+
+      <div class="console-head-right">
+        <button type="button" class="console-toggle-btn" id="consoleToggleBtn" title="Toggle Controls View" aria-expanded="true">
+          <span id="consoleToggleIcon">▾</span> <span id="consoleToggleText">Minimize Controls</span>
+        </button>
+      </div>
     </div>
-  </div>
 
-  <!-- Auxiliary Preferences (Dark/Light Mode, Text Size, Tour) -->
-  <div class="quick-prefs-bar" style="display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:8px;flex-wrap:wrap">
-    <button class="pill-btn" id="themeModeBtn" title="Toggle Light / Dark Mode" style="font-size:.78rem;padding:4px 12px;min-height:28px">
-      <span id="themeModeIcon">🌙</span>
-      <span id="themeModeLabel">Dark</span>
-    </button>
-    <button class="pill-btn" id="tourBtn" title="First-Run Walkthrough & Help" style="font-size:.78rem;padding:4px 12px;min-height:28px">
-      <span>✨</span>
-      <span>Tour & Help</span>
-    </button>
-  </div>
+    <!-- Collapsible Controls Body -->
+    <div class="console-body" id="consoleBody">
+      <!-- Row 1: Primary Actions (Arm Alarms, Test Sound, Rest Mode, Volume Slider) -->
+      <div class="console-row-primary">
+        <div class="console-btn-group">
+          <button class="primary on" id="arm">✓ Alarms Are On</button>
+          <button class="ghost" id="test">▶ Test Sound</button>
+          <button class="ghost" id="restBtn" title="Full screen clock only">⛶ Rest Mode</button>
+        </div>
 
-  <!-- 5. PRIMARY APPLICATION CONTROLS -->
-  <div class="controls">
-    <button class="primary on" id="arm">✓ Alarms Are On</button>
-    <button class="ghost" id="test">▶ Test Sound</button>
-    <button class="ghost" id="restBtn" title="Full screen clock only">⛶ Rest Mode</button>
-    <div class="vol">
-      <button id="volIcon" title="Mute / unmute" aria-label="Mute">🔊</button>
-      <input type="range" id="volSlider" min="0" max="100" value="70" aria-label="Volume">
-      <span id="volPct">70%</span>
-    </div>
-  </div>
+        <div class="vol console-vol">
+          <button id="volIcon" title="Mute / unmute" aria-label="Mute">🔊</button>
+          <input type="range" id="volSlider" min="0" max="100" value="70" aria-label="Volume">
+          <span id="volPct">70%</span>
+        </div>
+      </div>
 
-  <!-- 6. MUSIC PLAYER BAR (Song Clip Only) -->
-  <div class="player" id="player">
-    <div class="eq"><i></i><i></i><i></i><i></i></div>
-    <div>
-      <span class="label" id="playerLabel">Up next</span>
-      <div><span id="songTitle">—</span> <span id="songArtist"></span></div>
-    </div>
-    <button class="ghost" id="skip" title="Choose a different song">Shuffle ⟳</button>
-  </div>
+      <!-- Row 2: Up Next Player & Preferences Strip -->
+      <div class="console-row-player">
+        <div class="player console-player" id="player">
+          <div class="eq"><i></i><i></i><i></i><i></i></div>
+          <div style="flex:1;min-width:0;overflow:hidden">
+            <span class="label" id="playerLabel">Up next</span>
+            <div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><span id="songTitle">—</span> <span id="songArtist"></span></div>
+          </div>
+          <button class="ghost" id="skip" title="Choose a different song">Shuffle ⟳</button>
+        </div>
 
-  <div class="label">Active days</div>
-  <div class="days" id="days" role="group" aria-label="Alarm days"></div>
+        <div class="console-prefs-strip">
+          <button class="pill-btn" id="themeBtn" title="Cycle Clock Font & Visual Appearance">
+            <span>🎨 Clock Style: <b id="themeLabel">Titanium Obsidian Noir</b></span>
+          </button>
+          <button class="pill-btn" id="themeModeBtn" title="Toggle Light / Dark Mode">
+            <span id="themeModeIcon">🌙</span> <span id="themeModeLabel">Dark</span>
+          </button>
+          <button class="pill-btn" id="tourBtn" title="First-Run Walkthrough & Help">
+            <span>✨ Tour &amp; Help</span>
+          </button>
+        </div>
+      </div>
 
-  <!-- ROUTINE PRESETS & CLOUD SHARE BAR (Single-Line Compact Deck) -->
-  <div class="preset-bar">
-    <div class="preset-cluster-left">
-      <span class="preset-cluster-label">
-        <span>📋</span> Routine Preset:
-      </span>
-      <select id="presetSelect" aria-label="Choose routine preset">
-        <option value="class">🎓 Class Day (DepEd Master — 23 Blocks · Mon–Fri)</option>
-        <option value="weekend">🌿 Weekend Recharge (Nature &amp; Rest — 10 Blocks · Sat–Sun)</option>
-        <option value="gym">🏋️‍♂️ Gymmers &amp; Athletic Vitality (10 Blocks · Mon–Sun)</option>
-        <option value="holiday">🌴 Holidays &amp; Vacation Renewal (9 Blocks · Mon–Sun)</option>
-        <option value="seminar">🎤 Seminar &amp; Workshop (10 Blocks · Mon–Sun)</option>
-        <option value="deeprest">🧘 Deep Rest &amp; Reset (8 Blocks · Mon–Sun)</option>
-        <option value="creative">🎨 Creative Flow &amp; Craft (9 Blocks · Fri–Sun)</option>
-        <option value="exam">⚡ Exam Week (Study Sprints — 10 Blocks · Mon–Sat)</option>
-        <option value="sunday">🌊 Sunday Sanctuary &amp; Sabbath (7 Blocks · Sun Only)</option>
-        <option value="morning">🏃 Morning Momentum (6 Blocks · Mon–Fri)</option>
-        <option value="minimal">🎯 Minimalist Routine (4 Anchor Blocks · Mon–Sun)</option>
-        <option value="blank">📝 Blank Canvas (Start Fresh — 0 Blocks)</option>
-      </select>
-      <span id="presetDaysBadge" title="Active days for this routine"><span>📅</span> <b>Active: Mon — Fri</b></span>
-    </div>
-    <div class="preset-cluster-right">
-      <button class="ghost" id="shareRoutineBtn" title="Copy instant share link for this routine">🔗 Share Routine</button>
-      <button class="primary" id="openClassEncoderBtn" title="Easily type and encode 1 to 8 classes">📚 Encode Classes</button>
+      <!-- Row 3: Active Days (Mon - Sun) -->
+      <div class="console-days-row">
+        <div class="console-days-label">Active Days:</div>
+        <div class="days" id="days" role="group" aria-label="Alarm days"></div>
+      </div>
+
+      <!-- Row 4: Routine Presets & Cloud Share Bar -->
+      <div class="preset-bar console-preset-bar">
+        <div class="preset-cluster-left">
+          <span class="preset-cluster-label"><span>📋</span> Preset:</span>
+          <select id="presetSelect" aria-label="Choose routine preset">
+            <option value="class">🎓 Class Day (DepEd Master — 23 Blocks · Mon–Fri)</option>
+            <option value="weekend">🌿 Weekend Recharge (Nature &amp; Rest — 10 Blocks · Sat–Sun)</option>
+            <option value="gym">🏋️‍♂️ Gymmers &amp; Athletic Vitality (10 Blocks · Mon–Sun)</option>
+            <option value="holiday">🌴 Holidays &amp; Vacation Renewal (9 Blocks · Mon–Sun)</option>
+            <option value="seminar">🎤 Seminar &amp; Workshop (10 Blocks · Mon–Sun)</option>
+            <option value="deeprest">🧘 Deep Rest &amp; Reset (8 Blocks · Mon–Sun)</option>
+            <option value="creative">🎨 Creative Flow &amp; Craft (9 Blocks · Fri–Sun)</option>
+            <option value="exam">⚡ Exam Week (Study Sprints — 10 Blocks · Mon–Sat)</option>
+            <option value="sunday">🌊 Sunday Sanctuary &amp; Sabbath (7 Blocks · Sun Only)</option>
+            <option value="morning">🏃 Morning Momentum (6 Blocks · Mon–Fri)</option>
+            <option value="minimal">🎯 Minimalist Routine (4 Anchor Blocks · Mon–Sun)</option>
+            <option value="blank">📝 Blank Canvas (Start Fresh — 0 Blocks)</option>
+          </select>
+          <span id="presetDaysBadge" title="Active days for this routine"><span>📅</span> <b>Active: Mon — Fri</b></span>
+        </div>
+        <div class="preset-cluster-right">
+          <button class="ghost" id="shareRoutineBtn" title="Copy instant share link for this routine">🔗 Share</button>
+          <button class="primary" id="openClassEncoderBtn" title="Easily type and encode 1 to 8 classes">📚 Encode</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -2460,6 +2694,7 @@ function applyClockTheme(theme){
   clockTheme = theme;
   document.body.setAttribute("data-clock-theme", theme);
   if ($("themeLabel")) $("themeLabel").textContent = THEME_NAMES[theme];
+  if ($("consoleThemeLabel")) $("consoleThemeLabel").textContent = THEME_NAMES[theme];
   save();
 }
 
@@ -2523,7 +2758,7 @@ function unlock(){
 function updateAudioBadge(){
   var badge=$("audioBadge"),text=$("audioBadgeText");
   if(!badge||!text)return;
-  badge.className="pill-btn live";
+  badge.className="console-mini-pill live";
   text.textContent="🔊 Sound Ready";
   badge.title="Sound is active and ready to play alarms";
 }
@@ -3281,6 +3516,15 @@ function setStatus(){
   if ($("arm")) {
     $("arm").textContent = armed ? "✓ Alarms Are On" : "Turn Alarms On";
     $("arm").className = "primary" + (armed ? " on" : "");
+  }
+  if ($("consoleArmBadge")) {
+    if (armed) {
+      $("consoleArmBadge").className = "console-mini-pill live";
+      if ($("consoleArmText")) $("consoleArmText").textContent = "✓ Alarms Active";
+    } else {
+      $("consoleArmBadge").className = "console-mini-pill";
+      if ($("consoleArmText")) $("consoleArmText").textContent = "⏸ Alarms Paused";
+    }
   }
   updateAudioBadge();
 }
@@ -4393,13 +4637,15 @@ function getDaysSummaryText(dObj) {
 
 function updatePresetDaysBadge() {
   var badge = $("presetDaysBadge");
-  if (!badge) return;
+  var cDays = $("consoleDaysText");
   var key = getCurrentPresetKey();
   var p = SCHEDULE_PRESETS[key];
-  if (p && p.daysLabel) {
-    badge.innerHTML = "<span>📅</span> <b>Active: " + p.daysLabel + "</b>";
-  } else {
-    badge.innerHTML = "<span>📅</span> <b>Active: " + getDaysSummaryText(days) + "</b>";
+  var labelText = (p && p.daysLabel) ? p.daysLabel : getDaysSummaryText(days);
+  if (badge) {
+    badge.innerHTML = "<span>📅</span> <b>Active: " + labelText + "</b>";
+  }
+  if (cDays) {
+    cDays.textContent = "📅 " + labelText;
   }
 }
 
@@ -4598,6 +4844,89 @@ if ($("startTourBtn")) {
 }
 if (!localStorage.getItem("dra-tour-done")) {
   setTimeout(openOnboardingModal, 500);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RECHARGE COMMAND CONSOLE (Compressed, Transparent, Collapsible)
+   ══════════════════════════════════════════════════════════════ */
+var controlsConsole = $("controlsConsole");
+var consoleToggleBtn = $("consoleToggleBtn");
+var consoleToggleIcon = $("consoleToggleIcon");
+var consoleToggleText = $("consoleToggleText");
+var consoleHead = $("consoleHead");
+
+function updateConsoleMinUI(isMin) {
+  if (!controlsConsole) return;
+  if (isMin) {
+    controlsConsole.classList.add("minimized");
+    if (consoleToggleIcon) consoleToggleIcon.textContent = "▸";
+    if (consoleToggleText) consoleToggleText.textContent = "Expand Controls";
+    if (consoleToggleBtn) {
+      consoleToggleBtn.setAttribute("aria-expanded", "false");
+      consoleToggleBtn.title = "Expand Controls Bar";
+    }
+  } else {
+    controlsConsole.classList.remove("minimized");
+    if (consoleToggleIcon) consoleToggleIcon.textContent = "▾";
+    if (consoleToggleText) consoleToggleText.textContent = "Minimize Controls";
+    if (consoleToggleBtn) {
+      consoleToggleBtn.setAttribute("aria-expanded", "true");
+      consoleToggleBtn.title = "Minimize Controls Bar";
+    }
+  }
+}
+
+if (controlsConsole && consoleToggleBtn) {
+  var savedConsoleMin = false;
+  try {
+    savedConsoleMin = localStorage.getItem("dra-console-minimized") === "1";
+  } catch(e){}
+  updateConsoleMinUI(savedConsoleMin);
+
+  consoleToggleBtn.onclick = function(e) {
+    e.stopPropagation();
+    var nowMin = !controlsConsole.classList.contains("minimized");
+    updateConsoleMinUI(nowMin);
+    try { localStorage.setItem("dra-console-minimized", nowMin ? "1" : "0"); } catch(e){}
+    showToast(nowMin ? "Controls minimized — Schedule moved up" : "Controls expanded", "🗜️");
+  };
+
+  if (consoleHead) {
+    consoleHead.onclick = function(e) {
+      if (e.target.closest("button")) return;
+      var nowMin = !controlsConsole.classList.contains("minimized");
+      updateConsoleMinUI(nowMin);
+      try { localStorage.setItem("dra-console-minimized", nowMin ? "1" : "0"); } catch(e){}
+    };
+  }
+}
+
+if ($("consoleArmBadge")) {
+  $("consoleArmBadge").onclick = function(e) {
+    e.stopPropagation();
+    if ($("arm")) $("arm").click();
+  };
+}
+
+if ($("consoleThemeBadge")) {
+  $("consoleThemeBadge").onclick = function(e) {
+    e.stopPropagation();
+    if ($("themeBtn")) $("themeBtn").click();
+  };
+}
+
+if ($("consoleDaysBadge")) {
+  $("consoleDaysBadge").onclick = function(e) {
+    e.stopPropagation();
+    if (controlsConsole && controlsConsole.classList.contains("minimized")) {
+      updateConsoleMinUI(false);
+      try { localStorage.setItem("dra-console-minimized", "0"); } catch(e){}
+    }
+    var daysEl = $("days");
+    if (daysEl && typeof daysEl.scrollIntoView === "function") {
+      daysEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+  };
 }
 
 /* ───────── INITIAL BOOTSTRAP (Zero-Delay Immediate Clock Render) ───────── */
