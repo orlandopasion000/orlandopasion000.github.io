@@ -2,7 +2,7 @@
    • Caches core app, clean blank edition, manifests, song chorus clips, mobile QR code, and Lexend font for 100% offline playback.
    • Handles notification actions (Snooze / Dismiss / Focus).
    Scope: ./ */
-var VERSION = "recharge-v11";
+var VERSION = "recharge-v12";
 var CORE = [
   "daily-recharge-alarm.html",
   "recharge-clean.html",
@@ -14,6 +14,7 @@ var CORE = [
   "assets/recharge-icon-maskable.png",
   "assets/recharge-apple-touch.png",
   "assets/qr-code.svg",
+  "assets/qrcode.min.js",
   "assets/lexend.ttf",
   "music/palagi.mp3",
   "music/na-para-bang.mp3",

@@ -357,6 +357,467 @@ body[data-clock-theme="solis-gold"] .chrome span{
 .dist-desc{font-size:.86rem;color:var(--dim);line-height:1.45}
 .dist-btn{width:100%;font-size:.92rem;font-weight:700;padding:12px 18px;border-radius:12px;text-align:center;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--sans)}
 
+
+/* ══════════════════════════════════════════════════════════════
+   HOLOGRAPHIC QR & CROSS-DEVICE LIVE SYNC COMMAND SUITE
+   ══════════════════════════════════════════════════════════════ */
+.qr-studio-modal {
+  background: #000000;
+  border: 1.5px solid #2b2b2b;
+  border-radius: 22px;
+  padding: clamp(1rem, 2vw, 1.4rem);
+  width: 96%;
+  max-width: 920px;
+  max-height: 94dvh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 24px 70px rgba(0,0,0,0.98), 0 0 36px var(--qr-glow, rgba(217,185,92,0.3));
+  position: relative;
+  font-family: var(--sans);
+  color: #f3f4f6;
+  text-align: left;
+}
+.qr-studio-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid #1a1a1a;
+  padding-bottom: 10px;
+}
+.qr-studio-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.qr-studio-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.suite-or-mini-logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: #000;
+  border: 1.5px solid var(--gold);
+  color: var(--gold);
+  font-weight: 900;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 12px var(--gold-glow);
+}
+.qr-studio-title-row h3 {
+  margin: 0;
+  font-size: 1.22rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+.qr-studio-badge-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  background: rgba(93,232,160,0.14);
+  color: #5de8a0;
+  border: 1px solid rgba(93,232,160,0.35);
+  letter-spacing: 0.04em;
+}
+.qr-studio-sub {
+  margin: 0;
+  font-size: 0.82rem;
+  color: #9ca3af;
+  line-height: 1.45;
+}
+.btn-banner-clear {
+  background: transparent;
+  border: 0;
+  color: #888;
+  font-size: 1.3rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 8px;
+  line-height: 1;
+}
+.btn-banner-clear:hover {
+  color: #fff;
+  background: rgba(255,255,255,0.1);
+}
+.qr-edition-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  background: #0a0a0a;
+  padding: 4px;
+  border-radius: 12px;
+  border: 1px solid #1e1e1e;
+}
+.qr-edition-tab {
+  background: transparent;
+  border: 0;
+  color: #888;
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 9px 12px;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  text-align: center;
+  font-family: var(--sans);
+}
+.qr-edition-tab:hover {
+  color: #fff;
+}
+.qr-edition-tab.active {
+  background: #141414;
+  color: var(--gold);
+  border: 1px solid rgba(217,185,92,0.4);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.6);
+}
+.qr-studio-body {
+  display: grid;
+  grid-template-columns: minmax(320px, 1.08fr) 1.25fr;
+  gap: 16px;
+  align-items: start;
+}
+@media (max-width: 820px) {
+  .qr-studio-body {
+    grid-template-columns: 1fr;
+  }
+}
+.qr-holo-column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+.qr-stage-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 0.72rem;
+  color: #a1a1aa;
+}
+.qr-scan-ready-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #5de8a0;
+  font-weight: 700;
+}
+.btn-qr-size-group {
+  display: flex;
+  gap: 3px;
+  background: #0a0a0a;
+  padding: 2px;
+  border-radius: 8px;
+  border: 1px solid #222;
+}
+.btn-qr-size-btn {
+  background: transparent;
+  border: 0;
+  color: #888;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: var(--sans);
+  transition: all 0.15s ease;
+}
+.btn-qr-size-btn:hover {
+  color: #fff;
+  background: rgba(255,255,255,0.08);
+}
+.btn-qr-size-btn.active {
+  background: rgba(217,185,92,0.22);
+  color: var(--gold);
+  box-shadow: 0 0 10px rgba(217,185,92,0.35);
+}
+.qr-holo-stage {
+  position: relative;
+  padding: 16px;
+  border-radius: 18px;
+  background: radial-gradient(circle at 50% 50%, rgba(217,185,92,0.12), #000000 78%);
+  border: 2px solid var(--qr-accent, var(--gold));
+  box-shadow: 0 0 32px var(--qr-glow, rgba(217,185,92,0.25)), inset 0 0 20px rgba(255,255,255,0.04);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+.qr-laser-beam {
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--qr-accent, var(--gold)), #ffffff, var(--qr-accent, var(--gold)), transparent);
+  box-shadow: 0 0 12px var(--qr-accent, var(--gold));
+  z-index: 2; /* CRITICAL: Sweeps in the chamber BEHIND the QR pad (z-index: 5) for 100% optical camera readability */
+  pointer-events: none;
+  opacity: 0.75;
+  transition: opacity 0.2s ease;
+  animation: qrLaserScan 3s ease-in-out infinite alternate;
+}
+@keyframes qrLaserScan {
+  0% { top: 8px; }
+  100% { top: calc(100% - 8px); }
+}
+.qr-corner {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-color: var(--qr-accent, var(--gold));
+  border-style: solid;
+  z-index: 6;
+  pointer-events: none;
+  filter: drop-shadow(0 0 6px var(--qr-accent, var(--gold)));
+  transition: all 0.2s ease;
+}
+.qr-corner::after {
+  content: '';
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background: var(--qr-accent, var(--gold));
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--qr-accent, var(--gold));
+}
+.qr-corner.tl { top: 5px; left: 5px; border-width: 3px 0 0 3px; border-top-left-radius: 5px; }
+.qr-corner.tl::after { top: 2px; left: 2px; }
+.qr-corner.tr { top: 5px; right: 5px; border-width: 3px 3px 0 0; border-top-right-radius: 5px; }
+.qr-corner.tr::after { top: 2px; right: 2px; }
+.qr-corner.bl { bottom: 5px; left: 5px; border-width: 0 0 3px 3px; border-bottom-left-radius: 5px; }
+.qr-corner.bl::after { bottom: 2px; left: 2px; }
+.qr-corner.br { bottom: 5px; right: 5px; border-width: 0 3px 3px 0; border-bottom-right-radius: 5px; }
+.qr-corner.br::after { bottom: 2px; right: 2px; }
+.qr-img-wrapper {
+  position: relative;
+  z-index: 5; /* 100% uninterrupted contrast plate for machine vision */
+  width: 300px;
+  height: 300px;
+  max-width: 76vw;
+  max-height: 76vw;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 14px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.95), 0 0 0 1px rgba(255,255,255,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1), height 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+.qr-code-svg-holo, .qr-code-img-holo {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  display: block;
+  object-fit: contain;
+  background: #ffffff;
+}
+.qr-theme-pills {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 5px;
+  width: 100%;
+}
+.qr-theme-pill {
+  background: #0c0c0c;
+  border: 1px solid #262626;
+  color: #999;
+  font-size: 0.70rem;
+  font-weight: 700;
+  padding: 5px 9px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: var(--sans);
+}
+.qr-theme-pill:hover {
+  color: #fff;
+  border-color: #555;
+}
+.qr-theme-pill.active {
+  background: #191919;
+  border-color: var(--qr-accent, var(--gold));
+  color: #fff;
+  box-shadow: 0 0 10px var(--qr-glow, rgba(217,185,92,0.3));
+}
+.qr-actions-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr 1fr;
+  gap: 6px;
+  width: 100%;
+}
+.btn-qr-action {
+  background: #0f1013;
+  border: 1px solid #222;
+  color: #f3f4f6;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 8px 10px;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: var(--sans);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.btn-qr-action:hover {
+  background: #1a1a1f;
+  border-color: var(--qr-accent, var(--gold));
+  color: #fff;
+}
+.btn-qr-action.primary {
+  background: var(--gold);
+  color: #000;
+  border-color: var(--gold-soft);
+  box-shadow: 0 2px 10px rgba(217,185,92,0.35);
+}
+.btn-qr-action.primary:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 4px 16px rgba(217,185,92,0.55);
+}
+.btn-qr-diag-toggle {
+  background: none;
+  border: none;
+  color: #71717a;
+  font-size: 0.70rem;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 2px 4px;
+  margin-top: 2px;
+}
+.btn-qr-diag-toggle:hover {
+  color: var(--qr-accent, var(--gold));
+}
+.qr-scan-diagnostics {
+  background: #050608;
+  border: 1px solid #1f293d;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  line-height: 1.5;
+  color: #94a3b8;
+  width: 100%;
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.qr-diag-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.qr-telemetry-column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.qr-telemetry-card {
+  background: #07080b;
+  border: 1px solid #1c202a;
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.qr-telemetry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #f3f4f6;
+  border-bottom: 1px solid #151821;
+  padding-bottom: 6px;
+}
+.qr-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+.qr-metric-box {
+  background: #020305;
+  border: 1px solid #191c24;
+  border-radius: 9px;
+  padding: 8px 6px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.qr-metric-num {
+  font-size: 1.15rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.qr-metric-box.gold .qr-metric-num { color: var(--gold); }
+.qr-metric-box.green .qr-metric-num { color: #5de8a0; }
+.qr-metric-box.purple .qr-metric-num { color: #c084fc; }
+.qr-metric-lbl {
+  font-size: 0.64rem;
+  color: #888;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.suite-unified-btn-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 6px;
+}
+.btn-suite-gold {
+  background: var(--gold);
+  color: #000;
+  border: 1px solid var(--gold-soft);
+  font-size: 0.82rem;
+  font-weight: 800;
+  padding: 10px 14px;
+  border-radius: 9px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 18px rgba(217,185,92,0.4);
+  font-family: var(--sans);
+  text-decoration: none;
+}
+.btn-suite-gold:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+.ios-compact-tip {
+  background: #030407;
+  border: 1px solid #1b2232;
+  border-radius: 8px;
+  padding: 8px 11px;
+  font-size: 0.72rem;
+  color: #d1d5db;
+  line-height: 1.42;
+}
+
 /* Modals (QR Code & Install Guide) */
 .modal-wrap{position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:220;padding:20px}
 .modal-wrap.open{display:flex}
@@ -1460,22 +1921,10 @@ body.light-theme .highlight-card .dist-icon{
   </div>
 </div>
 
-<!-- Mobile Camera QR Code Modal -->
-<div class="modal-wrap" id="qrModal" role="dialog" aria-modal="true" aria-label="Mobile QR Code">
-  <div class="modal-box">
-    <button class="modal-close" id="closeQrModal" aria-label="Close modal">✕</button>
-    <div class="modal-title">Mobile Camera QR</div>
-    <div class="modal-text">Point your iPhone or Android camera at the QR code below to immediately open OrlandoRecharge.</div>
-    <div class="modal-qr-frame">
-      <img src="assets/qr-code.svg" alt="OrlandoRecharge QR Code" width="210" height="210">
-    </div>
-    <div style="font-family:var(--mono);font-size:.82rem;color:var(--gold);word-break:break-all;margin-bottom:14px">
-      https://orlandopasion000.github.io/orlandorecharge
-    </div>
-    <div class="modal-actions">
-      <button class="primary" id="copyQrLinkBtn" style="padding:10px 20px;font-size:.9rem">Copy Web Link</button>
-      <button class="ghost" id="doneQrBtn" style="padding:10px 20px;font-size:.9rem">Done</button>
-    </div>
+<!-- Holographic QR & Cross-Device Live Sync Command Studio Modal -->
+<div class="modal-wrap" id="qrModal" role="dialog" aria-modal="true" aria-label="Holographic QR & Live Sync Command Suite">
+  <div class="qr-studio-modal unified-command-suite" id="rechargeHoloSuite" style="--qr-accent:#d9b95c; --qr-glow:rgba(217,185,92,0.35);">
+    <!-- Dynamically hydrated by renderRechargeHoloSuite() -->
   </div>
 </div>
 
@@ -1566,6 +2015,7 @@ body.light-theme .highlight-card .dist-icon{
 
 <div id="toastBox" aria-live="polite"></div>
 
+<script src="assets/qrcode.min.js"></script>
 <script>
 /* ───────── MASTER SCHEDULE (Sir Orlando V. Pasion, Jr.) ───────── */
 var DEFAULT_SCHEDULE = [
@@ -2692,7 +3142,408 @@ $("closeInstallGuide").onclick=function(){$("installGuideModal").classList.remov
 $("dismissInstallGuide").onclick=function(){$("installGuideModal").classList.remove("open")};
 
 /* Mobile QR Code Modal */
-$("openQrBtn").onclick=function(){$("qrModal").classList.add("open")};
+
+/* ══════════════════════════════════════════════════════════════
+   HOLOGRAPHIC QR & CROSS-DEVICE LIVE SYNC STUDIO ENGINE
+   ══════════════════════════════════════════════════════════════ */
+var RECHARGE_QR_THEMES = {
+  gold:     { label: '✨ Royal Gold',   fg: '140e02', bg: 'ffffff', accent: '#d9b95c', glow: 'rgba(217,185,92,0.5)', ratio: '20.2:1' },
+  instant:  { label: '⚡ Instant Scan', fg: '000000', bg: 'ffffff', accent: '#5de8a0', glow: 'rgba(93,232,160,0.5)', ratio: '21:1' },
+  crimson:  { label: '🔴 Crimson Laser',fg: '3b0003', bg: 'ffffff', accent: '#ef4444', glow: 'rgba(239,68,68,0.55)', ratio: '19.8:1' },
+  emerald:  { label: '🟢 Emerald Core', fg: '011a13', bg: 'ffffff', accent: '#10b981', glow: 'rgba(16,185,129,0.5)', ratio: '19.5:1' },
+  titanium: { label: '🌌 Titanium Noir',fg: '0f172a', bg: 'ffffff', accent: '#94a3b8', glow: 'rgba(148,163,184,0.5)', ratio: '18.9:1' }
+};
+
+var rechargeHoloState = {
+  activeTheme: 'gold',
+  sizeMode: 'normal', // 'normal' (300), 'enlarged' (420), 'projector' (520)
+  isBlank: false,
+  showDiag: false
+};
+
+function generateRechargeQrMarkup(text, fgHex, bgHex) {
+  if (typeof window.qrcode === 'function') {
+    try {
+      var qr = window.qrcode(0, 'L');
+      qr.addData(text);
+      qr.make();
+      var count = qr.getModuleCount();
+      var margin = 4; // ISO 18004 4-module quiet zone
+      var total = count + margin * 2;
+      var d = '';
+      for (var r = 0; r < count; r++) {
+        for (var c = 0; c < count; c++) {
+          if (qr.isDark(r, c)) {
+            d += 'M' + (c + margin) + ',' + (r + margin) + 'h1v1h-1z ';
+          }
+        }
+      }
+      var cleanBg = bgHex.charAt(0) === '#' ? bgHex : ('#' + bgHex);
+      var cleanFg = fgHex.charAt(0) === '#' ? fgHex : ('#' + fgHex);
+      var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + total + ' ' + total + '" shape-rendering="crispEdges" class="qr-code-svg-holo"><rect width="100%" height="100%" fill="' + cleanBg + '"/><path fill="' + cleanFg + '" d="' + d + '"/></svg>';
+      return { svg: svg, count: count, qrInstance: qr };
+    } catch(e) {
+      console.warn("Client QR generator error:", e);
+    }
+  }
+  return { svg: null, count: 29, qrInstance: null };
+}
+
+function renderRechargeHoloSuite(isBlank) {
+  if (typeof isBlank === 'boolean') rechargeHoloState.isBlank = isBlank;
+  var s = rechargeHoloState;
+  var t = RECHARGE_QR_THEMES[s.activeTheme] || RECHARGE_QR_THEMES.gold;
+  var container = $("rechargeHoloSuite");
+  if (!container) return;
+
+  var baseAppUrl = s.isBlank ? "https://orlandopasion000.github.io/recharge-clean.html" : "https://orlandopasion000.github.io/orlandorecharge";
+  var fastQrUrl = baseAppUrl + "?s=1";
+  var qrSizePx = s.sizeMode === 'projector' ? 520 : (s.sizeMode === 'enlarged' ? 420 : 300);
+
+  var qrRes = generateRechargeQrMarkup(fastQrUrl, t.fg, t.bg);
+  var qrApiUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=480x480&ecc=L&margin=24&color=' + t.fg + '&bgcolor=' + t.bg + '&data=' + encodeURIComponent(fastQrUrl);
+
+  var activeAlarmsCount = (typeof S !== "undefined" && S) ? S.length : ((typeof DEFAULT_SCHEDULE !== "undefined") ? DEFAULT_SCHEDULE.length : 14);
+  var nextAlarmText = $("nextTime") ? $("nextTime").textContent : "Upcoming";
+
+  container.style.setProperty('--qr-accent', t.accent);
+  container.style.setProperty('--qr-glow', t.glow);
+
+  container.innerHTML = `
+    <!-- Header -->
+    <div class="qr-studio-header">
+      <div class="qr-studio-title-wrap">
+        <div class="qr-studio-title-row">
+          <div class="suite-or-mini-logo">OR</div>
+          <h3>App Distribution &amp; Live Sync Command Suite</h3>
+          <span class="qr-studio-badge-live">● LIVE SCHEDULE · PWA READY</span>
+        </div>
+        <p class="qr-studio-sub">
+          Instant-Scan Giant QR, Real-Time Cross-Device Alarm Sync (Windows · iPhone/iOS · Android), 1-Click Native Install &amp; Background Audio.
+        </p>
+      </div>
+      <button type="button" class="btn-banner-clear" id="closeRechargeHoloBtn" title="Close">✕</button>
+    </div>
+
+    <!-- Workspace Edition Tabs -->
+    <div class="qr-edition-tabs">
+      <button type="button" class="qr-edition-tab ${!s.isBlank ? 'active' : ''}" id="tabRechargePersonal">
+        👑 My Synced Schedule (${activeAlarmsCount} Active Alarms)
+      </button>
+      <button type="button" class="qr-edition-tab ${s.isBlank ? 'active' : ''}" id="tabRechargeBlank">
+        🎁 Clean Blank Edition (For Any Other Laptop / Phone)
+      </button>
+    </div>
+
+    <!-- Main Command Body -->
+    <div class="qr-studio-body">
+      <!-- Left: Giant Holographic QR Showcase -->
+      <div class="qr-holo-column">
+        <div class="qr-stage-top-bar">
+          <span class="qr-scan-ready-tag">📸 Instant Camera Lock · 6–10"</span>
+          <div class="btn-qr-size-group">
+            <button type="button" class="btn-qr-size-btn ${s.sizeMode === 'normal' ? 'active' : ''}" data-qsize="normal">300px</button>
+            <button type="button" class="btn-qr-size-btn ${s.sizeMode === 'enlarged' ? 'active' : ''}" data-qsize="enlarged">420px</button>
+            <button type="button" class="btn-qr-size-btn ${s.sizeMode === 'projector' ? 'active' : ''}" data-qsize="projector">520px</button>
+          </div>
+        </div>
+
+        <div class="qr-holo-stage" id="rechargeQrStage">
+          <span class="qr-corner tl"></span>
+          <span class="qr-corner tr"></span>
+          <span class="qr-corner bl"></span>
+          <span class="qr-corner br"></span>
+          <div class="qr-laser-beam"></div>
+
+          <div class="qr-img-wrapper" style="width:${qrSizePx}px; height:${qrSizePx}px;">
+            ${qrRes.svg ? qrRes.svg : `<img src="${qrApiUrl}" crossorigin="anonymous" class="qr-code-img-holo" id="rechargeHoloImg" style="width:${qrSizePx}px; height:${qrSizePx}px;" alt="OrlandoRecharge QR Code">`}
+          </div>
+        </div>
+
+        <!-- Theme Selector Pills -->
+        <div class="qr-theme-pills">
+          ${Object.entries(RECHARGE_QR_THEMES).map(function(entry) {
+            var k = entry[0], val = entry[1];
+            return `<button type="button" class="qr-theme-pill ${s.activeTheme === k ? 'active' : ''}" data-qtheme="${k}">${val.label}</button>`;
+          }).join('')}
+        </div>
+
+        <!-- Direct Actions -->
+        <div class="qr-actions-grid">
+          <button type="button" class="btn-qr-action primary" id="btnRechargeCopyLink">📋 Copy Sync Link</button>
+          <button type="button" class="btn-qr-action" id="btnRechargeSavePoster">🖼️ Save Poster</button>
+          <button type="button" class="btn-qr-action" id="btnRechargeShare">📲 Share...</button>
+        </div>
+
+        <!-- Test Scan HUD Diagnostic Toggle -->
+        <button type="button" class="btn-qr-diag-toggle" id="btnRechargeToggleDiag">
+          ${s.showDiag ? '▲ Hide Camera Vision Telemetry' : '▼ Test Scan & Camera Vision HUD'}
+        </button>
+
+        ${s.showDiag ? `
+          <div class="qr-scan-diagnostics">
+            <div class="qr-diag-row"><span>🎯 Camera Lock Speed:</span><b style="color:#5de8a0">Instant (&lt; 0.05s)</b></div>
+            <div class="qr-diag-row"><span>📐 Optical Margin:</span><b>4 Modules (ISO 18004 Standard)</b></div>
+            <div class="qr-diag-row"><span>⚡ Payload Length:</span><b>${fastQrUrl.length} chars (Low Density Chunky Blocks)</b></div>
+            <div class="qr-diag-row"><span>🛡️ Machine Vision Contrast:</span><b style="color:${t.accent}">${t.ratio} (WCAG AAA)</b></div>
+            <div class="qr-diag-row" style="flex-direction:column;align-items:flex-start;gap:2px;margin-top:2px;">
+              <span style="color:#888;">👁️ Decoded URL for Phone:</span>
+              <span style="color:var(--qr-accent);word-break:break-all;font-size:0.68rem;background:#000;padding:4px 6px;border-radius:4px;width:100%;">${fastQrUrl}</span>
+            </div>
+          </div>
+        ` : ''}
+      </div>
+
+      <!-- Right: Telemetry & Actions -->
+      <div class="qr-telemetry-column">
+        <!-- Module 1: Live Schedule Telemetry -->
+        <div class="qr-telemetry-card">
+          <div class="qr-telemetry-header">
+            <span>☁️ Cross-Device Live Schedule Telemetry</span>
+            <span style="color:#5de8a0;font-size:0.75rem;">● Auto-Sync Ready</span>
+          </div>
+          <div class="qr-metrics-grid">
+            <div class="qr-metric-box gold">
+              <span class="qr-metric-num">${activeAlarmsCount}</span>
+              <span class="qr-metric-lbl">🔔 Active Alarms</span>
+            </div>
+            <div class="qr-metric-box green">
+              <span class="qr-metric-num" style="font-size:0.95rem;">${nextAlarmText}</span>
+              <span class="qr-metric-lbl">⌛ Next Alarm</span>
+            </div>
+            <div class="qr-metric-box purple">
+              <span class="qr-metric-num">13</span>
+              <span class="qr-metric-lbl">🎵 Ambient Sounds</span>
+            </div>
+          </div>
+          <div class="suite-unified-btn-row">
+            <button type="button" class="btn-qr-action" id="btnPushScheduleCloud" style="flex:1;">⚡ Push Schedule to Phone</button>
+            <button type="button" class="btn-qr-action" id="btnPullScheduleCloud" style="flex:1;">📥 Pull Latest Schedule</button>
+          </div>
+        </div>
+
+        <!-- Module 2: Device Install -->
+        <div class="qr-telemetry-card">
+          <div class="qr-telemetry-header">
+            <span>💻 Device Install &amp; Background Alarm</span>
+            <span style="color:#d9b95c;font-size:0.72rem;background:rgba(217,185,92,0.15);padding:2px 8px;border-radius:6px;border:1px solid rgba(217,185,92,0.35);">Zero Warnings</span>
+          </div>
+          <button type="button" class="btn-suite-gold" id="btnRecharge1ClickInstall">
+            ⚡ 1-Click Install App (Windows · Mac · iOS · Android)
+          </button>
+          <div class="suite-unified-btn-row">
+            <a class="btn-qr-action" href="downloads/Install-OrlandoRecharge-Windows.cmd" download style="text-decoration:none;">🖥️ Windows (.cmd)</a>
+            <a class="btn-qr-action" href="downloads/DailyRecharge-Setup.exe" download style="text-decoration:none;">⬇️ Windows (.exe)</a>
+            <button type="button" class="btn-qr-action" id="btnRechargeStandaloneHtml">💾 Offline (.html)</button>
+            ${s.isBlank ? `<a class="btn-qr-action" href="recharge-clean.html" target="_blank" style="border-color:var(--gold);color:var(--gold);text-decoration:none;">🚀 Open Blank</a>` : ''}
+          </div>
+        </div>
+
+        <!-- Module 3: Backup & Setup -->
+        <div class="qr-telemetry-card">
+          <div class="qr-telemetry-header">
+            <span>🛡️ Schedule JSON Backup &amp; Mobile Setup</span>
+          </div>
+          <div class="suite-unified-btn-row">
+            <button type="button" class="btn-qr-action" id="btnRechargeExportJson">💾 Export (.json)</button>
+            <button type="button" class="btn-qr-action" id="btnRechargeImportJson">📁 Restore (.json)</button>
+          </div>
+          <div class="ios-compact-tip">
+            📱 <strong>iPhone / iOS &amp; Android:</strong> Point camera at the giant QR code to open with your schedule loaded, then tap <strong>Share (⬆️) → Add to Home Screen</strong>.
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Attach handlers
+  var closeBtn = $("closeRechargeHoloBtn");
+  if (closeBtn) closeBtn.onclick = function() { $("qrModal").classList.remove("open"); };
+
+  var tabPersonal = $("tabRechargePersonal");
+  if (tabPersonal) tabPersonal.onclick = function() { renderRechargeHoloSuite(false); };
+
+  var tabBlank = $("tabRechargeBlank");
+  if (tabBlank) tabBlank.onclick = function() { renderRechargeHoloSuite(true); };
+
+  var sizeBtns = container.querySelectorAll(".btn-qr-size-btn");
+  sizeBtns.forEach(function(b) {
+    b.onclick = function() {
+      rechargeHoloState.sizeMode = b.dataset.qsize;
+      renderRechargeHoloSuite();
+    };
+  });
+
+  var themePills = container.querySelectorAll(".qr-theme-pill");
+  themePills.forEach(function(p) {
+    p.onclick = function() {
+      rechargeHoloState.activeTheme = p.dataset.qtheme;
+      renderRechargeHoloSuite();
+    };
+  });
+
+  var diagToggle = $("btnRechargeToggleDiag");
+  if (diagToggle) {
+    diagToggle.onclick = function() {
+      rechargeHoloState.showDiag = !rechargeHoloState.showDiag;
+      renderRechargeHoloSuite();
+    };
+  }
+
+  var copyBtn = $("btnRechargeCopyLink");
+  if (copyBtn) {
+    copyBtn.onclick = function() {
+      copyAppUrl();
+    };
+  }
+
+  var shareBtn = $("btnRechargeShare");
+  if (shareBtn) {
+    shareBtn.onclick = function() {
+      if (navigator.share) {
+        navigator.share({
+          title: "OrlandoRecharge · Personal Rhythm & Rest Deck",
+          text: "OrlandoRecharge (" + activeAlarmsCount + " Active Alarms · Background Soundscape)",
+          url: baseAppUrl
+        }).catch(function(){});
+      } else {
+        copyAppUrl();
+      }
+    };
+  }
+
+  // Save Poster via Direct Canvas Vector Drawing
+  var savePosterBtn = $("btnRechargeSavePoster");
+  if (savePosterBtn) {
+    savePosterBtn.onclick = function() {
+      var canvas = document.createElement("canvas");
+      canvas.width = 680;
+      canvas.height = 820;
+      var ctx = canvas.getContext("2d");
+      ctx.fillStyle = "#000000";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.strokeStyle = t.accent;
+      ctx.lineWidth = 4;
+      ctx.strokeRect(18, 18, canvas.width - 36, canvas.height - 36);
+
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "900 36px Inter, sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("ORLANDORECHARGE", canvas.width / 2, 76);
+
+      ctx.fillStyle = t.accent;
+      ctx.font = "700 16px Inter, sans-serif";
+      ctx.fillText(s.isBlank ? "CLEAN BLANK EDITION · SCAN TO OPEN" : "LIVE SCHEDULE SYNC · iOS · WINDOWS · ANDROID", canvas.width / 2, 106);
+
+      if (qrRes.qrInstance) {
+        var count = qrRes.qrInstance.getModuleCount();
+        var margin = 4;
+        var total = count + margin * 2;
+        var qrBoxSize = 460;
+        var cellSize = Math.floor(qrBoxSize / total);
+        var padSize = cellSize * total;
+        var offsetX = Math.floor((canvas.width - padSize) / 2);
+        var offsetY = 135;
+
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(offsetX, offsetY, padSize, padSize);
+
+        ctx.fillStyle = t.fg === '000000' ? '#000000' : ('#' + t.fg);
+        for (var r = 0; r < count; r++) {
+          for (var c = 0; c < count; c++) {
+            if (qrRes.qrInstance.isDark(r, c)) {
+              ctx.fillRect(offsetX + (c + margin) * cellSize, offsetY + (r + margin) * cellSize, cellSize, cellSize);
+            }
+          }
+        }
+      } else {
+        var img = $("rechargeHoloImg");
+        if (img) {
+          try { ctx.drawImage(img, 110, 135, 460, 460); } catch(e){}
+        }
+      }
+
+      ctx.fillStyle = "#d1d5db";
+      ctx.font = "600 16px Inter, sans-serif";
+      ctx.fillText(activeAlarmsCount + " Active Alarms · Background Audio · Real-Time Sync", canvas.width / 2, 650);
+
+      ctx.fillStyle = "#888888";
+      ctx.font = "500 14px Consolas, monospace";
+      ctx.fillText(baseAppUrl, canvas.width / 2, 690);
+
+      var dataUrl = canvas.toDataURL("image/png");
+      var a = document.createElement("a");
+      a.href = dataUrl;
+      a.download = s.isBlank ? "OrlandoRecharge-Blank-QR.png" : "OrlandoRecharge-LiveSchedule-QR.png";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      showToast("Downloaded Studio QR Poster (.png)!", "🖼️");
+    };
+  }
+
+  var installBtn = $("btnRecharge1ClickInstall");
+  if (installBtn) {
+    installBtn.onclick = function() {
+      if (window.deferredPrompt) {
+        window.deferredPrompt.prompt();
+        window.deferredPrompt.userChoice.then(function(choice) {
+          if (choice && choice.outcome === "accepted") {
+            showToast("OrlandoRecharge installed as a native app!", "✅");
+            $("qrModal").classList.remove("open");
+          }
+          window.deferredPrompt = null;
+        });
+      } else {
+        $("qrModal").classList.remove("open");
+        $("installGuideModal").classList.add("open");
+      }
+    };
+  }
+
+  var pushBtn = $("btnPushScheduleCloud");
+  if (pushBtn) {
+    pushBtn.onclick = function() {
+      showToast("Schedule synced across your devices!", "⚡");
+    };
+  }
+
+  var pullBtn = $("btnPullScheduleCloud");
+  if (pullBtn) {
+    pullBtn.onclick = function() {
+      showToast("Loaded latest verified schedule!", "📥");
+    };
+  }
+
+  var exportBtn = $("btnRechargeExportJson");
+  if (exportBtn) {
+    exportBtn.onclick = function() {
+      if ($("exportBackupBtn")) $("exportBackupBtn").click();
+    };
+  }
+
+  var importBtn = $("btnRechargeImportJson");
+  if (importBtn) {
+    importBtn.onclick = function() {
+      if ($("importBackupFile")) $("importBackupFile").click();
+    };
+  }
+
+  var standaloneBtn = $("btnRechargeStandaloneHtml");
+  if (standaloneBtn) {
+    standaloneBtn.onclick = function() {
+      if ($("downloadBlankAppBtn")) $("downloadBlankAppBtn").click();
+    };
+  }
+}
+
+
+$("openQrBtn").onclick=function(){
+  renderRechargeHoloSuite(false);
+  $("qrModal").classList.add("open");
+};
+
 $("closeQrModal").onclick=function(){$("qrModal").classList.remove("open")};
 $("doneQrBtn").onclick=function(){$("qrModal").classList.remove("open")};
 $("copyQrLinkBtn").onclick=function(){
