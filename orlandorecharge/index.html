@@ -480,17 +480,20 @@ body[data-clock-theme="solis-gold"] .chrome span{
 
 .dist-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
+  width: 100%;
 }
-@media (max-width: 1080px) {
+@media (max-width: 1200px) {
   .dist-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
   }
 }
-@media (max-width: 600px) {
+@media (max-width: 580px) {
   .dist-grid {
     grid-template-columns: 1fr;
+    gap: 10px;
   }
 }
 
@@ -505,6 +508,8 @@ body[data-clock-theme="solis-gold"] .chrome span{
   gap: 10px;
   transition: all 0.2s ease;
   position: relative;
+  min-width: 0;
+  overflow: hidden;
 }
 .dist-card:hover {
   border-color: rgba(217, 185, 92, 0.4);
@@ -537,6 +542,7 @@ body[data-clock-theme="solis-gold"] .chrome span{
 .dist-card-meta {
   flex: 1;
   min-width: 0;
+  overflow: hidden;
 }
 .dist-name {
   font-size: 0.90rem;
@@ -560,14 +566,21 @@ body[data-clock-theme="solis-gold"] .chrome span{
   display: flex;
   flex-direction: column;
   gap: 6px;
+  width: 100%;
 }
 .dist-btn-row {
   display: flex;
   gap: 6px;
+  width: 100%;
+}
+.dist-btn-row > * {
+  flex: 1;
+  min-width: 0;
 }
 
 .dist-btn {
   width: 100%;
+  min-width: 0;
   font-size: 0.78rem;
   font-weight: 700;
   padding: 7px 10px;
@@ -583,6 +596,9 @@ body[data-clock-theme="solis-gold"] .chrome span{
   transition: all 0.18s ease;
   line-height: 1.2;
   box-sizing: border-box;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .dist-btn.primary {
   background: linear-gradient(135deg, #d9b95c 0%, #b89738 100%);
