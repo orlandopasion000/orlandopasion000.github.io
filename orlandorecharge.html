@@ -380,6 +380,20 @@ body[data-clock-theme="solis-gold"] .chrome span{
   border-color: rgba(93, 232, 160, 0.35);
   background: rgba(93, 232, 160, 0.10);
 }
+.console-mini-pill.highlight,
+.pill-btn.highlight {
+  color: var(--gold);
+  border-color: rgba(217, 185, 92, 0.45);
+  background: rgba(217, 185, 92, 0.12);
+  font-weight: 800;
+}
+.console-mini-pill.highlight:hover,
+.pill-btn.highlight:hover {
+  background: var(--gold);
+  color: #000;
+  box-shadow: 0 0 14px rgba(217, 185, 92, 0.45);
+  transform: translateY(-1px);
+}
 .console-divider {
   color: rgba(255, 255, 255, 0.15);
   font-size: 0.75rem;
@@ -523,6 +537,17 @@ body.light-theme .console-mini-pill {
   background: #FFFFFF !important;
   border-color: #D1D1D6 !important;
   color: #1D1D1F !important;
+}
+body.light-theme .console-mini-pill.highlight,
+body.light-theme .pill-btn.highlight {
+  background: rgba(184, 134, 11, 0.12) !important;
+  border-color: rgba(184, 134, 11, 0.35) !important;
+  color: #8b6914 !important;
+}
+body.light-theme .console-mini-pill.highlight:hover,
+body.light-theme .pill-btn.highlight:hover {
+  background: #8b6914 !important;
+  color: #fff !important;
 }
 
 /* ===== CONTROL BAR (Streamlined Clock Style & Audio Status) ===== */
@@ -2053,6 +2078,9 @@ body.light-theme .highlight-card .dist-icon{
         <button class="console-mini-pill" id="consoleThemeBadge" title="Cycle Clock Font & Visual Appearance">
           <span>🎨 <b id="consoleThemeLabel">Titanium Obsidian Noir</b></span>
         </button>
+        <button class="console-mini-pill highlight" id="quickAppBtn" title="Open or Install OrlandoRecharge Desktop App in Windows">
+          <span>💻 App</span>
+        </button>
       </div>
 
       <div class="console-head-right">
@@ -2093,6 +2121,9 @@ body.light-theme .highlight-card .dist-icon{
         <div class="console-prefs-strip">
           <button class="pill-btn" id="themeBtn" title="Cycle Clock Font & Visual Appearance">
             <span>🎨 Clock Style: <b id="themeLabel">Titanium Obsidian Noir</b></span>
+          </button>
+          <button class="pill-btn highlight" id="themeAppBtn" title="Open or Install OrlandoRecharge Desktop App in Windows">
+            <span>💻 App</span>
           </button>
           <button class="pill-btn" id="themeModeBtn" title="Toggle Light / Dark Mode">
             <span id="themeModeIcon">🌙</span> <span id="themeModeLabel">Dark</span>
@@ -3658,23 +3689,50 @@ window.addEventListener("beforeinstallprompt",function(e){
   deferredInstallPrompt=e;
   var b=$("installAppBtn");
   if(b)b.textContent="⬇ Install Now (Ready)";
+  var q=$("quickAppBtn");
+  if(q){ q.classList.add("ready"); q.title="Click to install & open Windows Desktop App"; }
+  var t=$("themeAppBtn");
+  if(t){ t.classList.add("ready"); t.title="Click to install & open Windows Desktop App"; }
 });
 
-$("installAppBtn").onclick=function(){
-  if(deferredInstallPrompt){
+function launchDesktopApp() {
+  if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) {
+    showToast("You are already inside the Windows Desktop App! 💻✨", "💻");
+    return;
+  }
+  if (deferredInstallPrompt) {
     deferredInstallPrompt.prompt();
     deferredInstallPrompt.userChoice.then(function(choice){
       if(choice.outcome==="accepted"){
-        showToast("Installation started! Adding to home screen...", "📲");
+        showToast("Opening Windows Desktop App... 🚀", "💻");
       }
       deferredInstallPrompt=null;
     });
-  }else{
-    $("installGuideModal").classList.add("open");
+    return;
   }
-};
-$("closeInstallGuide").onclick=function(){$("installGuideModal").classList.remove("open")};
-$("dismissInstallGuide").onclick=function(){$("installGuideModal").classList.remove("open")};
+  try {
+    var win = window.open(
+      location.href,
+      "OrlandoRechargeApp",
+      "width=1320,height=820,menubar=no,toolbar=no,location=no,status=no,scrollbars=yes,resizable=yes"
+    );
+    if (win) {
+      showToast("Opened OrlandoRecharge Desktop Window 💻", "💻");
+      return;
+    }
+  } catch(e){}
+  if ($("installGuideModal")) {
+    $("installGuideModal").classList.add("open");
+  } else {
+    showToast("Install via Chrome Menu (⋮) → 'Install App'", "📥");
+  }
+}
+
+if ($("quickAppBtn")) $("quickAppBtn").onclick = function(e){ e.stopPropagation(); launchDesktopApp(); };
+if ($("themeAppBtn")) $("themeAppBtn").onclick = function(e){ e.stopPropagation(); launchDesktopApp(); };
+if ($("installAppBtn")) $("installAppBtn").onclick = launchDesktopApp;
+if ($("closeInstallGuide")) $("closeInstallGuide").onclick=function(){$("installGuideModal").classList.remove("open")};
+if ($("dismissInstallGuide")) $("dismissInstallGuide").onclick=function(){$("installGuideModal").classList.remove("open")};
 
 /* Mobile QR Code Modal */
 
