@@ -7,78 +7,111 @@ const destFile = path.join(repoDir, 'recharge-clean.html');
 
 let src = fs.readFileSync(srcFile, 'utf8');
 
-// Replace Title
+// 1. Replace Title & Meta Title to clearly mark Clean Blank Edition
 src = src.replace(
   /<title>.*?<\/title>/,
-  '<title>OrlandoRecharge — Personal Rhythm & Rest Deck</title>'
+  '<title>Daily Recharge Alarm — Clean Blank Edition</title>'
+);
+src = src.replace(
+  /<meta name="apple-mobile-web-app-title" content=".*?">/,
+  '<meta name="apple-mobile-web-app-title" content="Clean Recharge">'
 );
 
-// Replace Manifest
+// 2. Replace Manifest
 src = src.replace(
   /<link rel="manifest" href=".*?">/,
   '<link rel="manifest" href="recharge-clean-manifest.webmanifest">'
 );
 
-// Replace Description
+// 3. Replace Description & Subtitle
 src = src.replace(
   /<meta name="description" content=".*?">/,
-  '<meta name="description" content="Clean, customizable daily alarm schedule with luxury metallic clocks and Rest Mode.">'
-);
-
-// Replace Subtitle
-src = src.replace(
-  /<div class="dist-subtitle">Installed, offline-cached, shareable, and verified for Sir Orlando V\. Pasion, Jr\.<\/div>/,
-  '<div class="dist-subtitle">Installed, offline-cached, shareable, and 100% customizable for your personal daily rhythm.</div>'
-);
-
-// Replace Downloads in Card 1
-src = src.replace(
-  /href="downloads\/DailyRecharge-Setup\.exe"/g,
-  'href="downloads/DailyRecharge-Clean-Setup.exe"'
+  '<meta name="description" content="Clean, 100% blank daily alarm schedule (0 alarms). Zero personal data — fresh canvas ready for anyone.">'
 );
 src = src.replace(
-  /href="downloads\/Install-.*?\.cmd"/g,
-  'href="downloads/Install-DailyRecharge-Clean-Windows.cmd"'
+  /<div class="dist-subtitle">.*?<\/div>/,
+  '<div class="dist-subtitle">100% clean, schedule-free blank canvas (0 alarms). Clean storage ready for your personal routine.</div>'
 );
 
-// Replace Clean Blank Edition Highlight Card with Master Preset Highlight Card
-const oldHighlightCard = `    <!-- Highlight Banner: Clean Blank Edition (For Friends & Students) -->
-    <div class="dist-card highlight-card">
-      <div class="dist-card-top">
-        <div class="dist-icon" style="background:rgba(217,185,92,.15);color:var(--gold);border-color:rgba(217,185,92,.3)">🎁</div>
-        <div>
-          <div class="dist-name" style="color:var(--gold)">Clean Blank Edition (For Anyone)</div>
-          <div class="dist-desc">A 100% clean, schedule-free app with isolated storage. Zero personal data — ready for anyone to enter their own schedule.</div>
+// 4. Card 1 in Clean Edition: Open Sir Orlando's Main Executive Schedule (23 Blocks)
+const card1Search = /<!-- Card 1: Main Executive Schedule -->[\s\S]*?<!-- Card 2:/;
+const card1CleanReplacement = `<!-- Card 1: Main Executive Schedule -->
+        <div class="dist-card">
+          <div class="dist-card-top">
+            <div class="dist-icon">⚡</div>
+            <div class="dist-card-meta">
+              <div class="dist-name">Main Executive App</div>
+              <div class="dist-desc">Switch to complete 23-block schedule</div>
+            </div>
+          </div>
+          <div class="dist-btn-stack">
+            <a class="primary dist-btn" id="installAppBtn" href="https://orlandopasion000.github.io/orlandorecharge" target="_blank" rel="noopener">⚡ Open Main Executive App (23 Blocks)</a>
+            <div class="dist-btn-row">
+              <a class="ghost dist-btn" href="downloads/Install-DailyRecharge-Windows.cmd" download title="1-Click Windows Setup Script">⚡ Setup (.cmd)</a>
+              <a class="ghost dist-btn" href="downloads/DailyRecharge-Setup.exe" download title="Standalone .exe for Windows">⬇ .exe</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2:`;
+src = src.replace(card1Search, card1CleanReplacement);
+
+// 5. Card 4 in Clean Edition: Active Clean Blank Canvas with Reset button
+const card4Search = /<!-- Card 4: Clean Blank Edition[\s\S]*?<\/div>\s*<\/div>\s*<\/section>/;
+const card4CleanReplacement = `<!-- Card 4: Clean Blank Edition (Active) -->
+        <div class="dist-card dist-card-blank">
+          <div class="dist-card-top">
+            <div class="dist-icon dist-icon-gold">📝</div>
+            <div class="dist-card-meta">
+              <div class="dist-name" style="color:var(--gold)">Clean Blank Canvas (Active)</div>
+              <div class="dist-desc">Currently active: 0 alarms scheduled</div>
+            </div>
+          </div>
+          <div class="dist-btn-stack">
+            <button type="button" class="primary dist-btn" id="cleanResetCanvasBtn" style="width:100%">↺ Clear &amp; Reset Blank Canvas</button>
+            <div class="dist-btn-row">
+              <a class="ghost dist-btn" href="downloads/DailyRecharge-Clean-Setup.exe" download title="Clean Edition .exe">⬇ .exe</a>
+              <button class="ghost dist-btn" id="downloadBlankAppBtn" title="Clean Standalone HTML">💾 .html</button>
+            </div>
+          </div>
         </div>
       </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <a class="primary dist-btn" href="recharge-clean.html" target="_blank" rel="noopener" style="flex:1;min-width:140px;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center">🚀 Open Blank Web App</a>
-        <a class="ghost dist-btn" href="downloads/DailyRecharge-Clean-Setup.exe" download style="flex:1;min-width:140px;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;font-size:.85rem">⬇ Windows (.exe)</a>
-        <button class="ghost dist-btn" id="downloadBlankAppBtn" style="flex:1;min-width:140px;font-size:.85rem">💾 Standalone (.html)</button>
-      </div>
-    </div>`;
+    </div>
+  </section>`;
+src = src.replace(card4Search, card4CleanReplacement);
 
-const newHighlightCard = `    <!-- Highlight Banner: Preset Routines (Class Day, Weekend, Gymmers, Holidays, Seminar) -->
-    <div class="dist-card highlight-card">
-      <div class="dist-card-top">
-        <div class="dist-icon" style="background:rgba(217,185,92,.15);color:var(--gold);border-color:rgba(217,185,92,.3)">🎓</div>
-        <div>
-          <div class="dist-name" style="color:var(--gold)">11+ Routine Presets Ready</div>
-          <div class="dist-desc">Choose from curated presets: Weekend Recharge, Gymmers, Holidays, Seminar, Deep Rest, Class Day, and more.</div>
-        </div>
-      </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="primary dist-btn" id="explorePresetsBtn" style="flex:1;min-width:140px;text-align:center">📋 Switch Routine Preset</button>
-        <button class="ghost dist-btn" id="clearScheduleBtn" style="flex:1;min-width:140px;font-size:.85rem">📝 Start Blank</button>
-      </div>
-    </div>`;
+// 6. Replace default schedule with 0 alarms & add self-healing storage purge
+const scheduleLoadCode = `var DEFAULT_SCHEDULE = [];
+var S = [];
+try {
+  var cleanInit = localStorage.getItem("dra-clean-blank-v5");
+  if (!cleanInit) {
+    S = [];
+    localStorage.setItem("dra-clean-schedule", JSON.stringify([]));
+    localStorage.setItem("dra-clean-preset-key", "blank");
+    localStorage.setItem("dra-clean-blank-v5", "1");
+  } else {
+    var savedClean = localStorage.getItem("dra-clean-schedule");
+    if (savedClean) {
+      var parsedClean = JSON.parse(savedClean);
+      if (Array.isArray(parsedClean)) {
+        // If contaminated with the 23-block main schedule, purge it completely
+        if (parsedClean.length === 23 && parsedClean[0] && parsedClean[0][3] && String(parsedClean[0][3]).indexOf("Arrive — read") !== -1) {
+          S = [];
+          localStorage.setItem("dra-clean-schedule", JSON.stringify([]));
+          localStorage.setItem("dra-clean-preset-key", "blank");
+        } else {
+          S = parsedClean;
+        }
+      }
+    }
+  }
+} catch(e){ S = []; }`;
 
-src = src.replace(oldHighlightCard, newHighlightCard);
+const origSchedLoadRegex = /var DEFAULT_SCHEDULE\s*=\s*\[[\s\S]*?var S\s*=\s*DEFAULT_SCHEDULE\.slice\(0\);[\s\S]*?catch\(e\)\{\}/;
+src = src.replace(origSchedLoadRegex, scheduleLoadCode);
 
-// Replace default schedule in recharge-clean.html so it starts with a 100% blank canvas (0 alarms)
-src = src.replace(/var DEFAULT_SCHEDULE\s*=\s*\[[\s\S]*?\];/, 'var DEFAULT_SCHEDULE = [];');
-
-// Change storage keys so clean edition is 100% isolated
+// 7. Change storage keys so clean edition is 100% isolated
 src = src.replace(/"dra-schedule"/g, '"dra-clean-schedule"');
 src = src.replace(/"dra-days"/g, '"dra-clean-days"');
 src = src.replace(/"dra-theme"/g, '"dra-clean-theme"');
@@ -88,45 +121,29 @@ src = src.replace(/"dra-font-scale"/g, '"dra-clean-font-scale"');
 src = src.replace(/"dra-tour-done"/g, '"dra-clean-tour-done"');
 src = src.replace(/"dra-preset-key"/g, '"dra-clean-preset-key"');
 
-// Replace any remaining personal references in strings
+// 8. Replace personal strings
 src = src.replace(/owner:"Sir Orlando V\. Pasion, Jr\."/g, 'owner:"Public Clean Edition"');
-src = src.replace(/title:"(Daily Recharge Alarm|OrlandoRecharge) — Sir Orlando V\. Pasion, Jr\."/g, 'title:"OrlandoRecharge — Personal Rhythm & Rest Deck"');
-src = src.replace(/https:\/\/orlandopasion000\.github\.io\/(daily-recharge-alarm\.html|orlandorecharge)/g, 'https://orlandopasion000.github.io/recharge-clean.html');
-
-// Ensure installAppBtn, quickAppBtn, and themeAppBtn in clean edition point directly to the main app in new window
-src = src.replace(
-  'id="installAppBtn" href="https://orlandopasion000.github.io/recharge-clean.html"',
-  'id="installAppBtn" href="https://orlandopasion000.github.io/orlandorecharge"'
-);
-src = src.replace(
-  'id="quickAppBtn" href="https://orlandopasion000.github.io/recharge-clean.html"',
-  'id="quickAppBtn" href="https://orlandopasion000.github.io/orlandorecharge"'
-);
-src = src.replace(
-  'id="themeAppBtn" href="https://orlandopasion000.github.io/recharge-clean.html"',
-  'id="themeAppBtn" href="https://orlandopasion000.github.io/orlandorecharge"'
-);
 src = src.replace(/daily-recharge-schedule-backup\.json/g, 'daily-recharge-clean-backup.json');
 
-// Wire up explorePresetsBtn and clearScheduleBtn if present
+// 9. Wire cleanResetCanvasBtn before initial bootstrap
 const cleanHooks = `
-if ($("explorePresetsBtn")) {
-  $("explorePresetsBtn").onclick = function() {
-    var p = $("presetSelect");
-    if (p) {
-      p.scrollIntoView({ behavior: "smooth", block: "center" });
-      p.focus();
-    }
-  };
-}
-if ($("clearScheduleBtn")) {
-  $("clearScheduleBtn").onclick = function() {
-    applyPreset("blank", true);
+if ($("cleanResetCanvasBtn")) {
+  $("cleanResetCanvasBtn").onclick = function() {
+    S = [];
+    try {
+      localStorage.setItem("dra-clean-schedule", JSON.stringify([]));
+      localStorage.setItem("dra-clean-preset-key", "blank");
+    } catch(e){}
+    renderList();
+    if (typeof updatePresetSelectorUI === "function") updatePresetSelectorUI();
+    if (typeof updatePresetDaysBadge === "function") updatePresetDaysBadge();
+    tick();
+    showToast("Schedule reset to blank canvas (0 alarms)", "📝");
   };
 }
 `;
+src = src.replace('/* ───────── INITIAL BOOTSTRAP', cleanHooks + '\n/* ───────── INITIAL BOOTSTRAP');
 
-src = src.replace('/* ───────── INITIAL BOOTSTRAP ───────── */', cleanHooks + '\n/* ───────── INITIAL BOOTSTRAP ───────── */');
-
+// 10. Write file
 fs.writeFileSync(destFile, src, 'utf8');
 console.log('Successfully generated recharge-clean.html from orlandorecharge.html');
