@@ -75,36 +75,8 @@ const newHighlightCard = `    <!-- Highlight Banner: Preset Routines (Class Day,
 
 src = src.replace(oldHighlightCard, newHighlightCard);
 
-// Replace default schedule in recharge-clean.html so it starts with a clean starter or blank
-const defaultSchedDecl = `var DEFAULT_SCHEDULE = [
-  [7,0,"work","Arrive — read, learn, develop"],
-  [8,0,"rest","Short recharge — 10 min"],
-  [8,10,"work","Work and print"],
-  [8,20,"rest","Recharge before class — 10 min"],
-  [8,30,"class","Class: Math 8"],
-  [9,30,"rest","Long recharge — 40 min"],
-  [10,11,"work","Work and print"],
-  [10,30,"rest","Recharge before class — 15 min"],
-  [10,45,"class","Class: Math 10"],
-  [11,45,"err","Principal’s office — log out/in"],
-  [12,0,"rest","Lunch and recharge — 45 min"],
-  [12,45,"err","Personal hygiene"],
-  [12,50,"rest","Recharge before class — 10 min"],
-  [13,0,"class","Class: Math 8"],
-  [14,0,"rest","Longest recharge — 60 min"],
-  [15,0,"work","Work and print"],
-  [15,10,"rest","Quick recharge — 5 min"],
-  [15,15,"class","Class: Gen Math 11"],
-  [16,16,"err","Organize files"],
-  [16,21,"rest","Recharge, then go home"],
-  [20,0,"night","Shutdown — write tomorrow’s top 3"],
-  [20,30,"night","Wind-down — no screens"],
-  [21,30,"night","Bedtime"]
-];`;
-
-const cleanDefaultSchedDecl = `var DEFAULT_SCHEDULE = [];`; // Starts blank canvas
-
-src = src.replace(defaultSchedDecl, cleanDefaultSchedDecl);
+// Replace default schedule in recharge-clean.html so it starts with a 100% blank canvas (0 alarms)
+src = src.replace(/var DEFAULT_SCHEDULE\s*=\s*\[[\s\S]*?\];/, 'var DEFAULT_SCHEDULE = [];');
 
 // Change storage keys so clean edition is 100% isolated
 src = src.replace(/"dra-schedule"/g, '"dra-clean-schedule"');
