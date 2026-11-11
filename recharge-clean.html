@@ -351,21 +351,272 @@ body[data-clock-theme="solis-gold"] .chrome span{
 .mixer-remove{background:none;border:none;color:var(--mute);cursor:pointer;font-size:1rem;padding:2px 6px;line-height:1;border-radius:6px;transition:color .2s}
 .mixer-remove:hover{color:#ff6b6b}
 
-/* App Distribution & Operations Suite */
-.app-dist{margin-top:44px;padding:32px;border:1px solid var(--line);border-radius:28px;background:var(--surface);position:relative;overflow:hidden}
-.app-dist::before{content:"";position:absolute;top:0;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);box-shadow:0 0 16px var(--gold)}
-.dist-head{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:24px}
-.dist-title{font-size:1.35rem;font-weight:700;color:var(--text);display:flex;align-items:center;gap:10px}
-.dist-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:12px;font-size:.78rem;font-weight:700;background:rgba(93,232,160,.12);color:#5de8a0;border:1px solid rgba(93,232,160,.3)}
-.dist-subtitle{font-size:.9rem;color:var(--dim);margin-top:4px}
-.dist-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
-.dist-card{background:#000;border:1px solid var(--line2);border-radius:18px;padding:20px;display:flex;flex-direction:column;justify-content:space-between;gap:16px;transition:all .2s cubic-bezier(.4,0,.2,1)}
-.dist-card:hover{border-color:var(--gold-soft);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.6)}
-.dist-card-top{display:flex;align-items:flex-start;gap:14px}
-.dist-icon{font-size:1.6rem;line-height:1;width:44px;height:44px;border-radius:12px;background:var(--surface-2);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;flex:none}
-.dist-name{font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:3px}
-.dist-desc{font-size:.86rem;color:var(--dim);line-height:1.45}
-.dist-btn{width:100%;font-size:.92rem;font-weight:700;padding:12px 18px;border-radius:12px;text-align:center;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--sans)}
+/* App Distribution & Holographic Operations Suite — Minimized, Low-Key & Semi-Transparent */
+.app-dist {
+  margin-top: 32px;
+  padding: 16px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  background: rgba(10, 10, 14, 0.70);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  position: relative;
+  overflow: hidden;
+  opacity: 0.65;
+  transition: opacity 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease, transform 0.25s ease;
+}
+.app-dist:hover,
+.app-dist:focus-within {
+  opacity: 1;
+  border-color: rgba(217, 185, 92, 0.35);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.7), 0 0 24px rgba(217, 185, 92, 0.08);
+}
+.app-dist::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0.55;
+  box-shadow: 0 0 12px var(--gold);
+}
+
+.dist-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.dist-head-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.dist-or-mini {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: #000;
+  border: 1.5px solid var(--gold);
+  color: var(--gold);
+  font-family: 'Inter', sans-serif;
+  font-weight: 900;
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 12px rgba(217, 185, 92, 0.25);
+  flex-shrink: 0;
+}
+.dist-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: -0.01em;
+}
+.dist-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: 8px;
+  font-size: .70rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  background: rgba(93, 232, 160, 0.12);
+  color: #5de8a0;
+  border: 1px solid rgba(93, 232, 160, 0.3);
+}
+.dist-subtitle {
+  font-size: .78rem;
+  color: var(--dim);
+  margin-top: 1px;
+}
+
+.dist-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--dim);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.dist-toggle-btn:hover {
+  background: rgba(217, 185, 92, 0.12);
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.dist-body {
+  transition: max-height 0.35s ease, opacity 0.3s ease, margin 0.3s ease;
+  overflow: hidden;
+  max-height: 800px;
+}
+.app-dist.minimized .dist-body {
+  max-height: 0;
+  opacity: 0;
+  margin: 0;
+  pointer-events: none;
+}
+.app-dist.minimized {
+  padding-bottom: 14px;
+}
+
+.dist-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+@media (max-width: 1080px) {
+  .dist-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 600px) {
+  .dist-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.dist-card {
+  background: rgba(0, 0, 0, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+.dist-card:hover {
+  border-color: rgba(217, 185, 92, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5), 0 0 12px rgba(217, 185, 92, 0.08);
+}
+.dist-card-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.dist-icon {
+  font-size: 1.25rem;
+  line-height: 1;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.dist-icon-gold {
+  background: rgba(217, 185, 92, 0.12) !important;
+  border-color: rgba(217, 185, 92, 0.3) !important;
+  color: var(--gold) !important;
+}
+.dist-card-meta {
+  flex: 1;
+  min-width: 0;
+}
+.dist-name {
+  font-size: 0.90rem;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dist-desc {
+  font-size: 0.73rem;
+  color: var(--dim);
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dist-btn-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.dist-btn-row {
+  display: flex;
+  gap: 6px;
+}
+
+.dist-btn {
+  width: 100%;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 7px 10px;
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: var(--sans);
+  transition: all 0.18s ease;
+  line-height: 1.2;
+  box-sizing: border-box;
+}
+.dist-btn.primary {
+  background: linear-gradient(135deg, #d9b95c 0%, #b89738 100%);
+  color: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 12px rgba(217, 185, 92, 0.25);
+}
+.dist-btn.primary:hover {
+  background: linear-gradient(135deg, #ebd17c 0%, #c9a947 100%);
+  box-shadow: 0 0 16px rgba(217, 185, 92, 0.45);
+  transform: translateY(-1px);
+}
+.dist-btn.ghost {
+  background: #0d0d12;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+}
+.dist-btn.ghost:hover {
+  border-color: rgba(217, 185, 92, 0.4);
+  color: #ffffff;
+  background: #14141c;
+}
+.dist-btn-holo {
+  border-color: rgba(93, 232, 160, 0.35) !important;
+  color: #5de8a0 !important;
+}
+.dist-btn-holo:hover {
+  background: rgba(93, 232, 160, 0.12) !important;
+  border-color: #5de8a0 !important;
+  box-shadow: 0 0 12px rgba(93, 232, 160, 0.25) !important;
+}
+.dist-card-blank {
+  border-color: rgba(217, 185, 92, 0.2);
+}
 
 
 /* ══════════════════════════════════════════════════════════════
@@ -1665,81 +1916,95 @@ body.light-theme .highlight-card .dist-icon{
   <ul id="list"></ul>
 
   <!-- 8. APP DISTRIBUTION & COMMAND SUITE (Install, Share, QR, Backup, Publish) -->
-  <section class="app-dist" aria-labelledby="distTitle">
+  <section class="app-dist" id="appDistSection" aria-labelledby="distTitle">
     <div class="dist-head">
-      <div>
-        <div class="dist-title" id="distTitle">
-          <span>📲 App Distribution & Command Suite</span>
-          <span class="dist-badge">● PWA Ready</span>
-        </div>
-        <div class="dist-subtitle">Installed, offline-cached, shareable, and 100% customizable for your personal daily rhythm.</div>
-      </div>
-    </div>
-
-    <div class="dist-grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
-      <!-- Card 1: Install Desktop & Mobile Application -->
-      <div class="dist-card">
-        <div class="dist-card-top">
-          <div class="dist-icon">💻</div>
-          <div>
-            <div class="dist-name">Install to Device</div>
-            <div class="dist-desc">Install onto your Windows PC, Mac, Android phone, or iPhone with zero security warnings.</div>
-          </div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:8px">
-          <button class="primary dist-btn" id="installAppBtn">⚡ 1-Click Install App (Zero Warnings)</button>
-          <div style="display:flex;gap:6px;flex-wrap:wrap">
-            <a class="ghost dist-btn" href="downloads/Install-DailyRecharge-Clean-Windows.cmd" download style="flex:1;min-width:130px;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;font-size:.82rem" title="1-Click Windows Setup Script">⚡ Windows Setup (.cmd)</a>
-            <a class="ghost dist-btn" href="downloads/DailyRecharge-Clean-Setup.exe" download style="flex:1;min-width:130px;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;font-size:.82rem" title="Standalone .exe for Windows">⬇ Windows (.exe)</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 2: Mobile QR Code & Link Sharing -->
-      <div class="dist-card">
-        <div class="dist-card-top">
-          <div class="dist-icon">📲</div>
-          <div>
-            <div class="dist-name">Mobile QR & Share</div>
-            <div class="dist-desc">Instant phone camera scanner to open on mobile, or copy the direct web link to share.</div>
-          </div>
-        </div>
-        <div style="display:flex;gap:8px">
-          <button class="ghost dist-btn" id="openQrBtn" style="flex:1">📷 Open Phone QR</button>
-          <button class="ghost dist-btn" id="shareAppBtn" style="flex:1">↗ Copy Link</button>
-        </div>
-      </div>
-
-      <!-- Card 3: Backup & Restore Schedule -->
-      <div class="dist-card">
-        <div class="dist-card-top">
-          <div class="dist-icon">💾</div>
-          <div>
-            <div class="dist-name">Backup & Restore</div>
-            <div class="dist-desc">Save a secure JSON backup of your custom alarms to your computer, or restore a saved schedule.</div>
-          </div>
-        </div>
-        <div style="display:flex;gap:8px">
-          <button class="ghost dist-btn" id="exportBackupBtn" style="flex:1">💾 Export (.json)</button>
-          <button class="ghost dist-btn" id="importBackupBtn" style="flex:1">📂 Import</button>
-          <input type="file" id="importBackupFile" accept=".json" style="display:none">
-        </div>
-      </div>
-    </div>
-
-    <!-- Highlight Banner: Clean Blank Edition (For Friends & Students) -->
-    <div class="dist-card highlight-card">
-      <div class="dist-card-top">
-        <div class="dist-icon" style="background:rgba(217,185,92,.15);color:var(--gold);border-color:rgba(217,185,92,.3)">🎁</div>
+      <div class="dist-head-left">
+        <div class="dist-or-mini">OR</div>
         <div>
-          <div class="dist-name" style="color:var(--gold)">Clean Blank Edition (For Anyone)</div>
-          <div class="dist-desc">A 100% clean, schedule-free app with isolated storage. Zero personal data — ready for anyone to enter their own schedule.</div>
+          <div class="dist-title" id="distTitle">
+            <span>App Distribution &amp; Live Sync Suite</span>
+            <span class="dist-badge">● PWA Ready</span>
+          </div>
+          <div class="dist-subtitle">Installed, offline-cached, zero-warning install &amp; holographic device sync</div>
         </div>
       </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <a class="primary dist-btn" href="recharge-clean.html" target="_blank" rel="noopener" style="flex:1;min-width:140px;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center">🚀 Open Blank Web App</a>
-        <a class="ghost dist-btn" href="downloads/DailyRecharge-Clean-Setup.exe" download style="flex:1;min-width:140px;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;font-size:.85rem">⬇ Windows (.exe)</a>
-        <button class="ghost dist-btn" id="downloadBlankAppBtn" style="flex:1;min-width:140px;font-size:.85rem">💾 Standalone (.html)</button>
+      <div class="dist-head-actions">
+        <button type="button" class="dist-toggle-btn" id="distMinimizeBtn" title="Toggle Minimized View" aria-expanded="true">
+          <span id="distMinIcon">▾</span> <span id="distMinText">Minimize</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="dist-body" id="distBody">
+      <div class="dist-grid">
+        <!-- Card 1: Install Desktop & Mobile Application -->
+        <div class="dist-card">
+          <div class="dist-card-top">
+            <div class="dist-icon">💻</div>
+            <div class="dist-card-meta">
+              <div class="dist-name">Device Install</div>
+              <div class="dist-desc">Zero warnings · PC, Mac, iOS &amp; Android</div>
+            </div>
+          </div>
+          <div class="dist-btn-stack">
+            <button class="primary dist-btn" id="installAppBtn">⚡ 1-Click Install App</button>
+            <div class="dist-btn-row">
+              <a class="ghost dist-btn" href="downloads/Install-DailyRecharge-Clean-Windows.cmd" download title="1-Click Windows Setup Script">⚡ Setup (.cmd)</a>
+              <a class="ghost dist-btn" href="downloads/DailyRecharge-Clean-Setup.exe" download title="Standalone .exe for Windows">⬇ .exe</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Mobile QR Code & Link Sharing -->
+        <div class="dist-card">
+          <div class="dist-card-top">
+            <div class="dist-icon">📲</div>
+            <div class="dist-card-meta">
+              <div class="dist-name">Holographic QR</div>
+              <div class="dist-desc">Instant phone scanner &amp; device sync</div>
+            </div>
+          </div>
+          <div class="dist-btn-stack">
+            <button class="ghost dist-btn dist-btn-holo" id="openQrBtn">📷 Open Phone QR</button>
+            <button class="ghost dist-btn" id="shareAppBtn">↗ Share / Copy Link</button>
+          </div>
+        </div>
+
+        <!-- Card 3: Backup & Restore Schedule -->
+        <div class="dist-card">
+          <div class="dist-card-top">
+            <div class="dist-icon">💾</div>
+            <div class="dist-card-meta">
+              <div class="dist-name">Backup &amp; Restore</div>
+              <div class="dist-desc">Encrypted local schedule backup</div>
+            </div>
+          </div>
+          <div class="dist-btn-stack">
+            <div class="dist-btn-row">
+              <button class="ghost dist-btn" id="exportBackupBtn">💾 Export</button>
+              <button class="ghost dist-btn" id="importBackupBtn">📂 Import</button>
+            </div>
+            <input type="file" id="importBackupFile" accept=".json" style="display:none">
+          </div>
+        </div>
+
+        <!-- Card 4: Clean Blank Edition (For Friends & Students) -->
+        <div class="dist-card dist-card-blank">
+          <div class="dist-card-top">
+            <div class="dist-icon dist-icon-gold">🎁</div>
+            <div class="dist-card-meta">
+              <div class="dist-name" style="color:var(--gold)">Clean Blank Edition</div>
+              <div class="dist-desc">Schedule-free app with clean storage</div>
+            </div>
+          </div>
+          <div class="dist-btn-stack">
+            <a class="primary dist-btn" href="recharge-clean.html" target="_blank" rel="noopener">🚀 Open Blank Web App</a>
+            <div class="dist-btn-row">
+              <a class="ghost dist-btn" href="downloads/DailyRecharge-Clean-Setup.exe" download title="Clean Edition .exe">⬇ .exe</a>
+              <button class="ghost dist-btn" id="downloadBlankAppBtn" title="Clean Standalone HTML">💾 .html</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -3561,6 +3826,38 @@ if ($("doneQrBtn")) $("doneQrBtn").onclick=function(){$("qrModal").classList.rem
 if ($("copyQrLinkBtn")) $("copyQrLinkBtn").onclick=function(){
   copyAppUrl();
 };
+
+/* Collapsible / Minimized Command Suite */
+var distMinBtn = $("distMinimizeBtn");
+var distSec = $("appDistSection");
+var distMinIcon = $("distMinIcon");
+var distMinText = $("distMinText");
+
+function updateDistMinUI(isMin) {
+  if (!distSec) return;
+  if (isMin) {
+    distSec.classList.add("minimized");
+    if (distMinIcon) distMinIcon.textContent = "▸";
+    if (distMinText) distMinText.textContent = "Expand";
+    if (distMinBtn) distMinBtn.setAttribute("aria-expanded", "false");
+  } else {
+    distSec.classList.remove("minimized");
+    if (distMinIcon) distMinIcon.textContent = "▾";
+    if (distMinText) distMinText.textContent = "Minimize";
+    if (distMinBtn) distMinBtn.setAttribute("aria-expanded", "true");
+  }
+}
+
+if (distMinBtn && distSec) {
+  var savedMin = false;
+  try { savedMin = localStorage.getItem("dra-dist-minimized") === "1"; } catch(e){}
+  updateDistMinUI(savedMin);
+  distMinBtn.onclick = function() {
+    var nowMin = !distSec.classList.contains("minimized");
+    updateDistMinUI(nowMin);
+    try { localStorage.setItem("dra-dist-minimized", nowMin ? "1" : "0"); } catch(e){}
+  };
+}
 
 function copyAppUrl(){
   var url="https://orlandopasion000.github.io/recharge-clean.html";
