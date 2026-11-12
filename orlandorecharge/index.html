@@ -1543,6 +1543,232 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 .btn-cancel{background:#000;color:#ff6b6b;border:1px solid rgba(255,107,107,.4)}
 .btn-cancel:hover{border-color:#ff6b6b;box-shadow:0 0 14px rgba(255,107,107,.3)}
 
+/* ───────── NEXT-GEN "PLAY MUSIC" FUTURISTIC BUTTON & PARTICLE ENGINE ───────── */
+.play-music-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 18px;
+  background: linear-gradient(135deg, rgba(8, 12, 22, 0.90) 0%, rgba(15, 23, 42, 0.85) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 12px;
+  color: #f1f5f9;
+  font-family: 'Lexend', var(--sans);
+  font-size: 0.90rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  overflow: visible;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), 0 0 12px rgba(56, 189, 248, 0.12);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 2;
+}
+
+.play-music-btn:hover {
+  border-color: rgba(56, 189, 248, 0.80);
+  background: linear-gradient(135deg, rgba(14, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.92) 100%);
+  box-shadow: 0 6px 25px rgba(56, 189, 248, 0.35), 0 0 20px rgba(245, 158, 11, 0.25);
+  transform: translateY(-2px);
+}
+
+.play-music-btn:active {
+  transform: translateY(0px) scale(0.98);
+}
+
+.pm-bg-aurora {
+  position: absolute;
+  inset: -1px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, rgba(56, 189, 248, 0.18), rgba(245, 158, 11, 0.18), rgba(236, 72, 153, 0.18), rgba(56, 189, 248, 0.18));
+  background-size: 300% 100%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  z-index: -1;
+}
+
+.play-music-btn.is-playing {
+  border-color: rgba(56, 189, 248, 0.90) !important;
+  background: linear-gradient(135deg, rgba(8, 20, 36, 0.95) 0%, rgba(12, 18, 32, 0.98) 100%) !important;
+  box-shadow: 0 0 25px rgba(56, 189, 248, 0.45), 0 0 50px rgba(245, 158, 11, 0.25), inset 0 0 15px rgba(56, 189, 248, 0.20) !important;
+  animation: pmPulseGlow 2.4s ease-in-out infinite;
+}
+
+.play-music-btn.is-playing .pm-bg-aurora {
+  opacity: 1;
+  animation: pmAuroraShift 4s linear infinite;
+}
+
+@keyframes pmPulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.35), 0 0 35px rgba(245, 158, 11, 0.20), inset 0 0 12px rgba(56, 189, 248, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 35px rgba(56, 189, 248, 0.60), 0 0 60px rgba(245, 158, 11, 0.40), inset 0 0 20px rgba(56, 189, 248, 0.30);
+  }
+}
+
+@keyframes pmAuroraShift {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
+
+.pm-icon-wrap {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.pm-futuristic-icon {
+  width: 24px;
+  height: 24px;
+  filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.6));
+  transition: transform 0.3s ease;
+}
+
+.play-music-btn:hover .pm-futuristic-icon {
+  filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.9));
+  transform: scale(1.08);
+}
+
+.pm-icon-core-play {
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  transform-origin: 12px 12px;
+}
+
+.pm-icon-wave {
+  transition: opacity 0.25s ease, stroke 0.25s ease;
+}
+
+.pm-icon-eq-bars {
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.play-music-btn.is-playing .pm-icon-core-play {
+  opacity: 0;
+  transform: scale(0.6);
+}
+
+.play-music-btn.is-playing .pm-icon-wave {
+  opacity: 0.3;
+}
+
+.play-music-btn.is-playing .pm-icon-eq-bars {
+  opacity: 1;
+}
+
+.play-music-btn.is-playing .pm-eq-b.b-1 {
+  animation: pmEqDance1 0.8s ease-in-out infinite alternate;
+  transform-origin: bottom;
+}
+.play-music-btn.is-playing .pm-eq-b.b-2 {
+  animation: pmEqDance2 0.65s ease-in-out infinite alternate 0.15s;
+  transform-origin: bottom;
+}
+.play-music-btn.is-playing .pm-eq-b.b-3 {
+  animation: pmEqDance3 0.9s ease-in-out infinite alternate 0.08s;
+  transform-origin: bottom;
+}
+.play-music-btn.is-playing .pm-eq-b.b-4 {
+  animation: pmEqDance4 0.75s ease-in-out infinite alternate 0.2s;
+  transform-origin: bottom;
+}
+
+@keyframes pmEqDance1 { 0% { height: 3px; y: 15px; } 100% { height: 11px; y: 7px; } }
+@keyframes pmEqDance2 { 0% { height: 12px; y: 6px; } 100% { height: 4px; y: 14px; } }
+@keyframes pmEqDance3 { 0% { height: 4px; y: 14px; } 100% { height: 13px; y: 5px; } }
+@keyframes pmEqDance4 { 0% { height: 8px; y: 10px; } 100% { height: 3px; y: 15px; } }
+
+.pm-text-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pm-letters {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  user-select: none;
+  z-index: 1;
+}
+
+.pm-char {
+  display: inline-block;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s ease, filter 0.2s ease, opacity 0.2s ease;
+  will-change: transform, filter, opacity;
+}
+
+.pm-space {
+  display: inline-block;
+  width: 5px;
+}
+
+.play-music-btn.is-playing .pm-char {
+  background: linear-gradient(135deg, #ffffff 0%, #38bdf8 35%, #fbbf24 70%, #ec4899 100%);
+  background-size: 250% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.85)) drop-shadow(0 0 14px rgba(245, 158, 11, 0.65));
+  animation: pmTextDance 1.6s ease-in-out infinite, pmTextGradient 3.5s linear infinite;
+  animation-delay: calc(var(--ci, 0) * 0.12s);
+}
+
+@keyframes pmTextDance {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg) scale(1);
+  }
+  30% {
+    transform: translateY(-3.5px) rotate(-3deg) scale(1.08);
+  }
+  70% {
+    transform: translateY(2px) rotate(2.5deg) scale(0.96);
+  }
+}
+
+@keyframes pmTextGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.pm-particle-canvas {
+  position: absolute;
+  top: -24px;
+  bottom: -24px;
+  left: -20px;
+  right: -20px;
+  width: calc(100% + 40px);
+  height: calc(100% + 48px);
+  pointer-events: none;
+  z-index: 4;
+}
+
+body.light-theme .play-music-btn {
+  background: linear-gradient(135deg, rgba(240, 249, 255, 0.95) 0%, rgba(224, 242, 254, 0.90) 100%);
+  border-color: rgba(14, 165, 233, 0.45);
+  color: #0369a1;
+  box-shadow: 0 4px 15px rgba(14, 165, 233, 0.15);
+}
+body.light-theme .play-music-btn:hover {
+  border-color: rgba(14, 165, 233, 0.85);
+  box-shadow: 0 6px 20px rgba(14, 165, 233, 0.25);
+}
+body.light-theme .play-music-btn.is-playing {
+  background: linear-gradient(135deg, rgba(224, 242, 254, 0.98) 0%, rgba(186, 230, 253, 0.95) 100%) !important;
+  border-color: rgba(2, 132, 199, 0.85) !important;
+}
+
 /* Volume (Streamlined Compact) */
 .vol{display:flex;align-items:center;gap:10px;margin-left:auto;border:1px solid var(--line2);border-radius:12px;padding:6px 12px;background:#000}
 #volIcon{background:none;padding:2px;font-size:1.15rem;line-height:1;border-radius:8px;box-shadow:none}
@@ -2708,16 +2934,12 @@ body.light-theme .highlight-card .dist-icon{
 
     <!-- Collapsible Controls Body -->
     <div class="console-body" id="consoleBody">
-      <!-- Row 1: Primary Actions (Arm Alarms, Test Sound, Rest Mode, Volume Slider) -->
+      <!-- Row 1: Primary Actions (Arm Alarms, Rest Mode, Volume Slider) -->
       <div class="console-row-primary">
         <div class="console-btn-group">
           <button class="primary on" id="arm">
             <svg class="modern-icon modern-icon-emerald" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
             <span>Alarms Are On</span>
-          </button>
-          <button class="ghost" id="test">
-            <svg class="modern-icon modern-icon-cyan" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-            <span>Test Sound</span>
           </button>
           <button class="ghost" id="restBtn" title="Full screen clock only">
             <svg class="modern-icon modern-icon-gold" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
@@ -2815,6 +3037,41 @@ body.light-theme .highlight-card .dist-icon{
   <div class="sched-head">
     <h2>Today's Schedule</h2>
     <div class="sched-actions" id="schedActionsNormal">
+      <!-- Play Music: Next-Gen Futuristic Interactive Button & Particle Dancing Suite -->
+      <button class="ghost play-music-btn" id="test" title="Play Curated Alarm Music & Antigravity Beats" aria-label="Play Music">
+        <span class="pm-bg-aurora"></span>
+        <span class="pm-icon-wrap" id="pmIconWrap">
+          <svg class="pm-futuristic-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="pm-icon-frame" d="M12 2.2L20.5 6.8V17.2L12 21.8L3.5 17.2V6.8L12 2.2Z" stroke="url(#pmCyberGrad)" stroke-width="1.6" stroke-linejoin="round"/>
+            <polygon class="pm-icon-core-play" points="10 8 16 12 10 16" fill="url(#pmCoreGrad)"/>
+            <path class="pm-icon-wave wave-1" d="M17.5 9.5C18.4 10.2 19 11 19 12C19 13 18.4 13.8 17.5 14.5" stroke="#38bdf8" stroke-width="1.4" stroke-linecap="round"/>
+            <path class="pm-icon-wave wave-2" d="M6.5 9.5C5.6 10.2 5 11 5 12C5 13 5.6 13.8 6.5 14.5" stroke="#f59e0b" stroke-width="1.4" stroke-linecap="round"/>
+            <g class="pm-icon-eq-bars">
+              <rect class="pm-eq-b b-1" x="7" y="10" width="2" height="4" rx="1" fill="#38bdf8"/>
+              <rect class="pm-eq-b b-2" x="10" y="7" width="2" height="10" rx="1" fill="#f59e0b"/>
+              <rect class="pm-eq-b b-3" x="13" y="9" width="2" height="6" rx="1" fill="#38bdf8"/>
+              <rect class="pm-eq-b b-4" x="16" y="11" width="2" height="2" rx="1" fill="#ec4899"/>
+            </g>
+            <defs>
+              <linearGradient id="pmCyberGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#38bdf8"/>
+                <stop offset="50%" stop-color="#818cf8"/>
+                <stop offset="100%" stop-color="#f59e0b"/>
+              </linearGradient>
+              <linearGradient id="pmCoreGrad" x1="10" y1="8" x2="16" y2="16" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#ffffff"/>
+                <stop offset="100%" stop-color="#38bdf8"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </span>
+        <span class="pm-text-wrap" id="pmTextWrap">
+          <span class="pm-letters" id="pmLetters">
+            <span class="pm-char" data-char="P" style="--ci:0">P</span><span class="pm-char" data-char="l" style="--ci:1">l</span><span class="pm-char" data-char="a" style="--ci:2">a</span><span class="pm-char" data-char="y" style="--ci:3">y</span><span class="pm-space">&nbsp;</span><span class="pm-char" data-char="M" style="--ci:4">M</span><span class="pm-char" data-char="u" style="--ci:5">u</span><span class="pm-char" data-char="s" style="--ci:6">s</span><span class="pm-char" data-char="i" style="--ci:7">i</span><span class="pm-char" data-char="c" style="--ci:8">c</span>
+          </span>
+          <canvas class="pm-particle-canvas" id="pmParticleCanvas"></canvas>
+        </span>
+      </button>
       <button class="ghost" id="editScheduleBtn">
         <svg class="modern-icon modern-icon-gold" viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
         <span>Edit Schedule</span>
@@ -3870,8 +4127,12 @@ function showSong(){
   $("playerLabel").textContent=current?"Now playing":"Up next";
   $("player").classList.toggle("playing",!!current);
   var t=mode==="test";
-  $("test").textContent=t?"■ Stop":"▶ Test Sound";
-  $("test").classList.toggle("active",t);
+  if (window.playMusicBtnController) {
+    window.playMusicBtnController.setPlaying(t);
+  } else if ($("test")) {
+    $("test").classList.toggle("active", t);
+    $("test").classList.toggle("is-playing", t);
+  }
   prepare();
 }
 
@@ -4660,8 +4921,9 @@ $("arm").onclick=function(){
 };
 $("test").onclick=function(){
   if(mode==="test"){stopSong();return}
+  var btnRect = $("test").getBoundingClientRect();
   if (window.antigravityFX && typeof window.antigravityFX.triggerShockwave === "function") {
-    window.antigravityFX.triggerShockwave(window.innerWidth / 2, window.innerHeight * 0.28, 42);
+    window.antigravityFX.triggerShockwave(btnRect.left + btnRect.width / 2, btnRect.top + btnRect.height / 2, 42);
   }
   var song=queued;queued=nextSong();
   playSong(song,null,"test");
@@ -6126,6 +6388,264 @@ try {
   }
 } catch(e){}
 try { checkUrlHashRoutine(); } catch(e){}
+
+/* ───────── "PLAY MUSIC" FUTURISTIC PARTICLE & BEAT-DANCE SUITE ───────── */
+(function initPlayMusicSuite() {
+  var btn = document.getElementById("test");
+  if (!btn) return;
+
+  var canvas = document.getElementById("pmParticleCanvas");
+  var ctx = canvas ? canvas.getContext("2d") : null;
+  var lettersWrap = document.getElementById("pmLetters");
+  var charEls = lettersWrap ? lettersWrap.querySelectorAll(".pm-char") : [];
+
+  var isPlaying = false;
+  var animFrameId = null;
+  var particles = [];
+  var dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+  // High-performance particle palette
+  var MAX_PARTICLES = 120;
+  var HUES = [198, 42, 335, 275, 160]; // Cyan, Celestial Gold, Radiant Rose, Electric Violet, Emerald
+
+  function resizeCanvas() {
+    if (!canvas || !ctx) return;
+    var rect = canvas.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) return;
+    var w = Math.round(rect.width * dpr);
+    var h = Math.round(rect.height * dpr);
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width = w;
+      canvas.height = h;
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.scale(dpr, dpr);
+    }
+  }
+
+  function getLiveMetrics() {
+    if (typeof getAudioBeatTelemetry === "function") {
+      try {
+        var m = getAudioBeatTelemetry();
+        if (m) return m;
+      } catch(e) {}
+    }
+    return {
+      active: isPlaying,
+      bass: isPlaying ? 0.35 : 0,
+      subBass: isPlaying ? 0.25 : 0,
+      strum: isPlaying ? 0.28 : 0,
+      piano: isPlaying ? 0.22 : 0,
+      energy: isPlaying ? 0.32 : 0
+    };
+  }
+
+  function spawnLetterBurst(countPerLetter) {
+    if (!canvas || charEls.length === 0) return;
+    var canvasRect = canvas.getBoundingClientRect();
+    charEls.forEach(function(charEl, charIdx) {
+      var cRect = charEl.getBoundingClientRect();
+      var cX = (cRect.left + cRect.width / 2) - canvasRect.left;
+      var cY = (cRect.top + cRect.height / 2) - canvasRect.top;
+
+      for (var k = 0; k < countPerLetter; k++) {
+        var angle = Math.random() * Math.PI * 2;
+        var speed = 0.8 + Math.random() * 2.5;
+        var hue = HUES[(charIdx + k) % HUES.length];
+        particles.push({
+          x: cX + (Math.random() - 0.5) * cRect.width * 0.8,
+          y: cY + (Math.random() - 0.5) * cRect.height * 0.8,
+          originX: cX,
+          originY: cY,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed - 0.6,
+          size: 0.9 + Math.random() * 2.2,
+          hue: hue,
+          alpha: 0.95,
+          decay: 0.012 + Math.random() * 0.018,
+          dancePhase: Math.random() * Math.PI * 2,
+          danceSpeed: 0.05 + Math.random() * 0.08,
+          orbitR: 3 + Math.random() * 12,
+          charIdx: charIdx
+        });
+      }
+    });
+  }
+
+  function emitHarmonicDancers(metrics) {
+    if (!canvas || charEls.length === 0 || particles.length >= MAX_PARTICLES) return;
+    var canvasRect = canvas.getBoundingClientRect();
+    var energyFactor = Math.max(0.2, metrics.energy || 0.3);
+
+    charEls.forEach(function(charEl, charIdx) {
+      if (Math.random() > 0.45 * energyFactor) return;
+      var cRect = charEl.getBoundingClientRect();
+      var cX = (cRect.left + cRect.width * (0.15 + Math.random() * 0.7)) - canvasRect.left;
+      var cY = (cRect.top + cRect.height * (0.1 + Math.random() * 0.8)) - canvasRect.top;
+
+      var hue = HUES[(charIdx + Math.floor(Math.random() * 2)) % HUES.length];
+      var size = 0.9 + Math.random() * 1.8;
+
+      particles.push({
+        x: cX,
+        y: cY,
+        originX: cX,
+        originY: cY,
+        vx: (Math.random() - 0.5) * 0.8,
+        vy: -0.4 - Math.random() * 0.9 * (1 + (metrics.bass || 0)),
+        size: size,
+        hue: hue,
+        alpha: 0.9,
+        decay: 0.014 + Math.random() * 0.016,
+        dancePhase: Math.random() * Math.PI * 2,
+        danceSpeed: 0.04 + Math.random() * 0.07,
+        orbitR: 4 + Math.random() * 10,
+        charIdx: charIdx
+      });
+    });
+  }
+
+  var lastFrameTime = performance.now();
+
+  function loop(now) {
+    if (!isPlaying && particles.length === 0) {
+      if (ctx && canvas) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      animFrameId = null;
+      return;
+    }
+
+    var dt = Math.min((now - lastFrameTime) / 1000, 0.1);
+    lastFrameTime = now;
+
+    resizeCanvas();
+    var metrics = getLiveMetrics();
+    var canvasRect = canvas.getBoundingClientRect();
+    var w = canvasRect.width;
+    var h = canvasRect.height;
+
+    ctx.clearRect(0, 0, w, h);
+
+    if (isPlaying) {
+      emitHarmonicDancers(metrics);
+
+      // Real-time beat dance on individual letter typography
+      var bassBounce = (metrics.bass || 0) * 4.5;
+      var strumWobble = (metrics.strum || 0) * 3;
+      var timeSec = now * 0.003;
+
+      charEls.forEach(function(charEl, idx) {
+        var waveOffset = Math.sin(timeSec * 2.5 + idx * 0.65);
+        var yShift = waveOffset * (2.5 + bassBounce);
+        var rot = Math.cos(timeSec * 2 + idx * 0.8) * (2.8 + strumWobble);
+        var scale = 1 + Math.sin(timeSec * 3 + idx) * 0.06 * (1 + (metrics.energy || 0.3));
+        charEl.style.transform = "translate3d(0, " + yShift.toFixed(2) + "px, 0) rotate(" + rot.toFixed(2) + "deg) scale(" + scale.toFixed(2) + ")";
+        charEl.style.opacity = (0.85 + Math.abs(waveOffset) * 0.15).toFixed(2);
+      });
+    } else {
+      charEls.forEach(function(charEl) {
+        charEl.style.transform = "";
+        charEl.style.opacity = "";
+      });
+    }
+
+    // Update and draw particles
+    for (var i = particles.length - 1; i >= 0; i--) {
+      var p = particles[i];
+      p.dancePhase += p.danceSpeed * (1 + (metrics.energy || 0.3) * 1.8);
+
+      p.x += p.vx + Math.sin(p.dancePhase) * 0.7;
+      p.y += p.vy + Math.cos(p.dancePhase * 0.8) * 0.4;
+      p.vy -= 0.03 * (1 + (metrics.bass || 0));
+      p.alpha -= p.decay;
+
+      if (p.alpha <= 0 || p.y < -30 || p.x < -30 || p.x > w + 30) {
+        particles.splice(i, 1);
+        continue;
+      }
+
+      var rad = p.size * (1 + (metrics.energy || 0.2) * 0.5);
+      var grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, rad * 2.4);
+      grad.addColorStop(0, "hsla(" + p.hue + ", 100%, 75%, " + p.alpha + ")");
+      grad.addColorStop(0.45, "hsla(" + p.hue + ", 95%, 60%, " + (p.alpha * 0.6) + ")");
+      grad.addColorStop(1, "hsla(" + p.hue + ", 90%, 50%, 0)");
+
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, rad * 2.4, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "rgba(255, 255, 255, " + (p.alpha * 0.95) + ")";
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, rad * 0.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Micro constellation links between neighboring letter particles when energy is high
+    if (particles.length > 4 && (metrics.energy || 0.3) > 0.2) {
+      ctx.lineWidth = 0.75;
+      for (var a = 0; a < Math.min(particles.length, 30); a++) {
+        for (var b = a + 1; b < Math.min(particles.length, 30); b++) {
+          var p1 = particles[a];
+          var p2 = particles[b];
+          if (Math.abs(p1.charIdx - p2.charIdx) === 1) {
+            var dx = p1.x - p2.x;
+            var dy = p1.y - p2.y;
+            var distSq = dx * dx + dy * dy;
+            if (distSq < 484) {
+              var linkAlpha = (1 - Math.sqrt(distSq) / 22) * 0.45 * Math.min(p1.alpha, p2.alpha);
+              ctx.strokeStyle = "rgba(56, 189, 248, " + linkAlpha + ")";
+              ctx.beginPath();
+              ctx.moveTo(p1.x, p1.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.stroke();
+            }
+          }
+        }
+      }
+    }
+
+    animFrameId = requestAnimationFrame(loop);
+  }
+
+  function setPlayingState(playing) {
+    if (isPlaying === playing) return;
+    isPlaying = playing;
+    btn.classList.toggle("is-playing", isPlaying);
+    btn.classList.toggle("active", isPlaying);
+    btn.title = isPlaying ? "Playing Music · Click to Stop" : "Play Curated Alarm Music & Antigravity Beats";
+
+    if (isPlaying) {
+      resizeCanvas();
+      spawnLetterBurst(6);
+      if (!animFrameId) {
+        lastFrameTime = performance.now();
+        animFrameId = requestAnimationFrame(loop);
+      }
+    } else {
+      particles.forEach(function(p) {
+        p.decay *= 2.5;
+        p.vy += 1.2;
+      });
+    }
+  }
+
+  window.playMusicBtnController = {
+    setPlaying: function(val) {
+      setPlayingState(!!val);
+    },
+    isPlaying: function() {
+      return isPlaying;
+    },
+    triggerShockwave: function() {
+      var r = btn.getBoundingClientRect();
+      spawnLetterBurst(8);
+      if (window.antigravityFX && typeof window.antigravityFX.triggerShockwave === "function") {
+        window.antigravityFX.triggerShockwave(r.left + r.width / 2, r.top + r.height / 2, 45);
+      }
+    }
+  };
+})();
 
 /* ───────── ANTIGRAVITY PARTICLE DEFLECTOR ENGINE (Masterpiece Futuristic Suite) ───────── */
 (function initAntigravityEngine() {
