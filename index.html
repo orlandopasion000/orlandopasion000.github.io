@@ -306,6 +306,85 @@
       text-shadow: 0 0 12px rgba(255, 42, 42, 0.9) !important;
     }
 
+    /* ORLANDORECHARGE FLAGSHIP APP INTEGRATION */
+    .btn-recharge-hero {
+      background: linear-gradient(135deg, #041d2d 0%, #030712 100%);
+      color: #ffffff;
+      border: 1.5px solid rgba(56, 189, 248, 0.7);
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 15px 28px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 700;
+      box-shadow: 0 8px 30px rgba(56, 189, 248, 0.35);
+      transition: all 0.3s ease;
+    }
+    .btn-recharge-hero:hover {
+      background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
+      border-color: #7dd3fc;
+      color: #ffffff;
+      box-shadow: 0 12px 40px rgba(56, 189, 248, 0.65), 0 0 20px rgba(56, 189, 248, 0.4);
+      transform: translateY(-2px);
+    }
+    .btn-recharge-hero img {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      box-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+      object-fit: cover;
+    }
+    .nav-recharge-link {
+      color: #7dd3fc !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 7px;
+      font-weight: 700;
+      transition: all 0.3s !important;
+    }
+    .nav-recharge-link:hover {
+      color: #ffffff !important;
+      text-shadow: 0 0 12px rgba(56, 189, 248, 0.8) !important;
+      transform: translateY(-1px);
+    }
+    .nav-recharge-link img {
+      width: 17px;
+      height: 17px;
+      border-radius: 4px;
+      box-shadow: 0 0 6px rgba(56, 189, 248, 0.5);
+      object-fit: cover;
+    }
+    .mobile-menu-recharge {
+      display: flex !important;
+      align-items: center !important;
+      gap: 14px !important;
+      color: #7dd3fc !important;
+      border: 1px solid rgba(56, 189, 248, 0.4) !important;
+      padding: 10px 24px !important;
+      border-radius: 999px !important;
+      background: rgba(56, 189, 248, 0.1) !important;
+    }
+    .mobile-menu-recharge img {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      box-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+      object-fit: cover;
+    }
+    .hub-card.is-orlandorecharge {
+      border-color: rgba(56, 189, 248, 0.5) !important;
+      background: linear-gradient(135deg, rgba(4, 29, 45, 0.85) 0%, rgba(3, 7, 18, 0.95) 100%) !important;
+      box-shadow: 0 8px 30px rgba(56, 189, 248, 0.22) !important;
+    }
+    .hub-card.is-orlandorecharge:hover {
+      border-color: #38bdf8 !important;
+      box-shadow: 0 16px 45px rgba(56, 189, 248, 0.45), 0 0 20px rgba(56, 189, 248, 0.3) !important;
+      transform: translateY(-4px);
+    }
+
     /* ORLANDOCHROME FLAGSHIP APP INTEGRATION */
     .btn-oc-hero {
       background: linear-gradient(135deg, #1b0305 0%, #000000 100%);
@@ -408,9 +487,15 @@
     <a href="#hero" class="nav-brand">OVP</a>
     <ul class="nav-links">
       <li>
+        <a href="https://orlandopasion000.github.io/orlandorecharge" target="_blank" class="nav-recharge-link" id="navRechargeLink" title="Launch OrlandoRecharge (Main Version)">
+          <img src="assets/recharge-icon-192.png" alt="OrlandoRecharge Logo">
+          <span id="navRechargeText">OrlandoRecharge</span>
+        </a>
+      </li>
+      <li>
         <a href="https://orlandopasion000.github.io/orlandochrome/" target="_blank" class="nav-oc-link" id="navOcLink" title="Launch OrlandoChrome (Main Version)">
           <img src="assets/oc-logo.svg" alt="OrlandoChrome Logo">
-          <span id="navOcText">OrlandoChrome (Main Version)</span>
+          <span id="navOcText">OrlandoChrome</span>
         </a>
       </li>
       <li><a href="#about">About</a></li>
@@ -421,6 +506,10 @@
     <button class="nav-hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
   </nav>
   <div class="mobile-menu" id="mobileMenu">
+    <a href="https://orlandopasion000.github.io/orlandorecharge" target="_blank" onclick="closeMenu()" class="mobile-menu-recharge" id="mobileRechargeLink">
+      <img src="assets/recharge-icon-192.png" alt="OrlandoRecharge Logo">
+      <span id="mobileRechargeText">OrlandoRecharge (Main Version)</span>
+    </a>
     <a href="https://orlandopasion000.github.io/orlandochrome/" target="_blank" onclick="closeMenu()" class="mobile-menu-oc" id="mobileOcLink">
       <img src="assets/oc-logo.svg" alt="OrlandoChrome Logo">
       <span id="mobileOcText">OrlandoChrome (Main Version)</span>
@@ -441,6 +530,10 @@
     <div class="hero-bar"></div>
     <p class="hero-subtitle"><strong>Teacher VI</strong> at Nancalobasaan National High School — advancing Mathematics education through innovation, technology, and a commitment to every Filipino learner.</p>
     <div class="hero-cta">
+      <a href="https://orlandopasion000.github.io/orlandorecharge" target="_blank" class="btn btn-recharge-hero" id="heroRechargeLink" title="Launch OrlandoRecharge (Main Version)">
+        <img src="assets/recharge-icon-192.png" alt="OrlandoRecharge Logo">
+        <span>OrlandoRecharge (Main Version)</span>
+      </a>
       <a href="https://orlandopasion000.github.io/orlandochrome/" target="_blank" class="btn btn-oc-hero" id="heroOcLink" title="Launch OrlandoChrome (Main Version)">
         <img src="assets/oc-logo.svg" alt="OrlandoChrome Logo">
         <span id="heroOcText">OrlandoChrome (Main Version)</span>
@@ -715,7 +808,7 @@
     };
 
     // Files to EXCLUDE from the resource listing
-    var EXCLUDE_FILES = ['index.html', 'daily-recharge-alarm.html'];
+    var EXCLUDE_FILES = ['index.html', 'daily-recharge-alarm.html', 'orlandorecharge.html', 'orlandorecharge'];
 
     // Auto-icons for unknown files (cycles through these)
     var AUTO_ICONS = ['📄', '📋', '📊', '🔖', '📐', '🧮', '📑', '🗂️'];
@@ -740,7 +833,7 @@
       var a = document.createElement('a');
       a.href = config.href;
       a.target = '_blank';
-      a.className = 'hub-card' + (config.featured ? ' is-featured' : '') + (config.isOrlandoChrome ? ' is-orlandochrome' : '');
+      a.className = 'hub-card' + (config.featured ? ' is-featured' : '') + (config.isOrlandoChrome ? ' is-orlandochrome' : '') + (config.isOrlandoRecharge ? ' is-orlandorecharge' : '');
       a.setAttribute('data-questions', config.questions || 0);
       a.setAttribute('data-search', (config.search || config.title + ' ' + config.desc + ' ' + (config.tags || []).join(' ')).toLowerCase());
 
@@ -771,6 +864,19 @@
 
     
     var FLAGSHIP_APPS = [
+      {
+        href: 'https://orlandopasion000.github.io/orlandorecharge',
+        icon: '<img src="assets/recharge-icon-192.png" alt="OrlandoRecharge" style="width:34px;height:34px;border-radius:8px;object-fit:cover;box-shadow:0 0 10px rgba(56,189,248,0.55);border:1px solid rgba(56,189,248,0.4);">',
+        badge: '★ FLAGSHIP APP · PWA READY',
+        featured: true,
+        isOrlandoRecharge: true,
+        order: -2,
+        title: 'OrlandoRecharge (Main Version)',
+        desc: 'Executive daily schedule cockpit with 10 music alarms, 3D Antigravity particle dancers, real-time beat matching, and Wake Lock Rest Mode.',
+        tags: ['Productivity', 'Daily Rhythm', '3D Antigravity', 'PWA Ready'],
+        questions: 0,
+        search: 'orlandorecharge main version 1 daily recharge alarm schedule music wake lock antigravity particles'
+      },
       {
         href: 'https://orlandopasion000.github.io/orlandochrome/',
         icon: '<img src="assets/oc-logo.svg" alt="OrlandoChrome" style="width:34px;height:34px;border-radius:8px;object-fit:contain;filter:drop-shadow(0 0 6px rgba(229,9,20,0.6));">',
