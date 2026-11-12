@@ -9,6 +9,8 @@
   <meta property="og:description" content="NASH reviewers, mock tests, mathematics tools, and professional learning resources in one curated library.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://orlandopasion000.github.io/">
+  <meta property="og:image" content="https://orlandopasion000.github.io/assets/ovpj-official-masterpiece-hd.png">
+  <link rel="icon" type="image/png" href="assets/ovpj-official-masterpiece-hd.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Syne:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
@@ -478,23 +480,80 @@
       color: #ff858d !important;
       text-shadow: 0 0 8px rgba(229, 9, 20, 0.6);
     }
-</style>
+
+    /* OVPJ OFFICIAL MASTERPIECE EMBLEM STYLES */
+    .nav-brand {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 10px !important;
+      font-family: var(--font-display) !important;
+      font-size: 20px !important;
+      font-weight: 700 !important;
+      letter-spacing: 2.5px !important;
+      text-transform: uppercase !important;
+      color: var(--white) !important;
+      text-decoration: none !important;
+    }
+    .nav-brand-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 0 12px rgba(0, 255, 102, 0.65);
+      border: 1.5px solid rgba(0, 255, 102, 0.7);
+      flex-shrink: 0;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .nav-brand:hover .nav-brand-logo {
+      transform: scale(1.1) rotate(4deg);
+      box-shadow: 0 0 18px rgba(0, 255, 102, 0.9);
+    }
+    .hero-insignia-wrap {
+      margin-bottom: 26px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+    .hero-insignia-img {
+      width: clamp(120px, 14vw, 150px);
+      height: clamp(120px, 14vw, 150px);
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 0 45px rgba(0, 255, 102, 0.45), 0 0 90px rgba(0, 255, 102, 0.22);
+      border: 2px solid rgba(0, 255, 102, 0.75);
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
+      animation: ovpjAuraPulse 4s ease-in-out infinite alternate;
+    }
+    .hero-insignia-img:hover {
+      transform: scale(1.08) rotate(3deg);
+      box-shadow: 0 0 65px rgba(0, 255, 102, 0.8), 0 0 130px rgba(0, 255, 102, 0.4);
+    }
+    @keyframes ovpjAuraPulse {
+      0% { box-shadow: 0 0 38px rgba(0, 255, 102, 0.4), 0 0 75px rgba(0, 255, 102, 0.18); }
+      100% { box-shadow: 0 0 55px rgba(0, 255, 102, 0.7), 0 0 110px rgba(0, 255, 102, 0.35); }
+    }
+
+  </style>
 </head>
 <body>
 
   <!-- NAV -->
   <nav class="nav">
-    <a href="#hero" class="nav-brand">OVP</a>
+    <a href="#hero" class="nav-brand" title="Sir Orlando V. Pasion, Jr. — Official Portfolio">
+      <img src="assets/ovpj-official-masterpiece-hd.png" alt="OVPJ Official Emblem" class="nav-brand-logo">
+      <span>OVPJ</span>
+    </a>
     <ul class="nav-links">
       <li>
         <a href="https://orlandopasion000.github.io/orlandorecharge" target="_blank" class="nav-recharge-link" id="navRechargeLink" title="Launch OrlandoRecharge (Main Version)">
-          <img src="assets/recharge-icon-192.png" alt="OrlandoRecharge Logo">
+          <img src="assets/orlandorecharge-master-photoshop-hd.png" alt="OrlandoRecharge Logo">
           <span id="navRechargeText">OrlandoRecharge</span>
         </a>
       </li>
       <li>
         <a href="https://orlandopasion000.github.io/orlandochrome/" target="_blank" class="nav-oc-link" id="navOcLink" title="Launch OrlandoChrome (Main Version)">
-          <img src="assets/oc-logo.svg" alt="OrlandoChrome Logo">
+          <img src="assets/orlandochrome-master-photoshop-hd.png" alt="OrlandoChrome Logo">
           <span id="navOcText">OrlandoChrome</span>
         </a>
       </li>
@@ -507,11 +566,11 @@
   </nav>
   <div class="mobile-menu" id="mobileMenu">
     <a href="https://orlandopasion000.github.io/orlandorecharge" target="_blank" onclick="closeMenu()" class="mobile-menu-recharge" id="mobileRechargeLink">
-      <img src="assets/recharge-icon-192.png" alt="OrlandoRecharge Logo">
+      <img src="assets/orlandorecharge-master-photoshop-hd.png" alt="OrlandoRecharge Logo">
       <span id="mobileRechargeText">OrlandoRecharge (Main Version)</span>
     </a>
     <a href="https://orlandopasion000.github.io/orlandochrome/" target="_blank" onclick="closeMenu()" class="mobile-menu-oc" id="mobileOcLink">
-      <img src="assets/oc-logo.svg" alt="OrlandoChrome Logo">
+      <img src="assets/orlandochrome-master-photoshop-hd.png" alt="OrlandoChrome Logo">
       <span id="mobileOcText">OrlandoChrome (Main Version)</span>
     </a>
     <a href="#about" onclick="closeMenu()">About</a>
@@ -522,6 +581,9 @@
 
   <!-- HERO -->
   <section class="hero" id="hero">
+    <div class="hero-insignia-wrap">
+      <img src="assets/ovpj-official-masterpiece-hd.png" alt="OVPJ Official Masterpiece Emblem" class="hero-insignia-img" title="Sir Orlando V. Pasion, Jr. — Master Brand Crest">
+    </div>
     <div class="hero-overtitle">Teacher VI · Mathematics Educator · EdTech Innovator</div>
     <h1 class="hero-name">
       <span class="line">Sir Orlando V.</span>
@@ -531,11 +593,11 @@
     <p class="hero-subtitle"><strong>Teacher VI</strong> at Nancalobasaan National High School — advancing Mathematics education through innovation, technology, and a commitment to every Filipino learner.</p>
     <div class="hero-cta">
       <a href="https://orlandopasion000.github.io/orlandorecharge" target="_blank" class="btn btn-recharge-hero" id="heroRechargeLink" title="Launch OrlandoRecharge (Main Version)">
-        <img src="assets/recharge-icon-192.png" alt="OrlandoRecharge Logo">
+        <img src="assets/orlandorecharge-master-photoshop-hd.png" alt="OrlandoRecharge Logo">
         <span>OrlandoRecharge (Main Version)</span>
       </a>
       <a href="https://orlandopasion000.github.io/orlandochrome/" target="_blank" class="btn btn-oc-hero" id="heroOcLink" title="Launch OrlandoChrome (Main Version)">
-        <img src="assets/oc-logo.svg" alt="OrlandoChrome Logo">
+        <img src="assets/orlandochrome-master-photoshop-hd.png" alt="OrlandoChrome Logo">
         <span id="heroOcText">OrlandoChrome (Main Version)</span>
       </a>
       <a href="#resources" class="btn btn-gold">▸ View Resources</a>
@@ -716,7 +778,7 @@
     // Any file NOT listed here will still appear — with an auto-generated card!
     var KNOWN_FILES = {
       'orlandochrome': {
-        icon: '<img src="assets/oc-logo.svg" alt="OrlandoChrome" style="width:34px;height:34px;border-radius:8px;object-fit:contain;filter:drop-shadow(0 0 6px rgba(229,9,20,0.6));">',
+        icon: '<img src="assets/orlandochrome-master-photoshop-hd.png" alt="OrlandoChrome" style="width:34px;height:34px;border-radius:8px;object-fit:contain;filter:drop-shadow(0 0 6px rgba(229,9,20,0.6));">',
         badge: '★ FLAGSHIP APP · PWA READY',
         featured: true,
         isOrlandoChrome: true,
@@ -866,7 +928,7 @@
     var FLAGSHIP_APPS = [
       {
         href: 'https://orlandopasion000.github.io/orlandorecharge',
-        icon: '<img src="assets/recharge-icon-192.png" alt="OrlandoRecharge" style="width:34px;height:34px;border-radius:8px;object-fit:cover;box-shadow:0 0 10px rgba(56,189,248,0.55);border:1px solid rgba(56,189,248,0.4);filter:drop-shadow(0 0 6px rgba(56,189,248,0.5));">',
+        icon: '<img src="assets/orlandorecharge-master-photoshop-hd.png" alt="OrlandoRecharge" style="width:34px;height:34px;border-radius:8px;object-fit:cover;box-shadow:0 0 10px rgba(56,189,248,0.55);border:1px solid rgba(56,189,248,0.4);filter:drop-shadow(0 0 6px rgba(56,189,248,0.5));">',
         badge: '★ FLAGSHIP APP · PWA READY',
         featured: true,
         isOrlandoRecharge: true,
@@ -879,7 +941,7 @@
       },
       {
         href: 'https://orlandopasion000.github.io/orlandochrome/',
-        icon: '<img src="assets/oc-logo.svg" alt="OrlandoChrome" style="width:34px;height:34px;border-radius:8px;object-fit:contain;filter:drop-shadow(0 0 6px rgba(229,9,20,0.6));">',
+        icon: '<img src="assets/orlandochrome-master-photoshop-hd.png" alt="OrlandoChrome" style="width:34px;height:34px;border-radius:8px;object-fit:contain;filter:drop-shadow(0 0 6px rgba(229,9,20,0.6));">',
         badge: '★ FLAGSHIP APP · PWA READY',
         featured: true,
         isOrlandoChrome: true,
