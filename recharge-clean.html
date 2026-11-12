@@ -4200,6 +4200,9 @@ function ring(i,snoozed){
   $("ovT").textContent=(snoozed?"Snoozed — ":"")+s[3];
   $("ovM").textContent=fmt(s[0],s[1]);
   $("ov").className="show";
+  if (window.antigravityFX && typeof window.antigravityFX.triggerShockwave === "function") {
+    window.antigravityFX.triggerShockwave(window.innerWidth / 2, window.innerHeight * 0.28, 42);
+  }
   function go(){
     var song=queued;queued=nextSong();
     $("ovSongName").textContent=song.title+" — "+song.artist;
@@ -4318,6 +4321,9 @@ $("arm").onclick=function(){
 };
 $("test").onclick=function(){
   if(mode==="test"){stopSong();return}
+  if (window.antigravityFX && typeof window.antigravityFX.triggerShockwave === "function") {
+    window.antigravityFX.triggerShockwave(window.innerWidth / 2, window.innerHeight * 0.28, 42);
+  }
   var song=queued;queued=nextSong();
   playSong(song,null,"test");
 };
@@ -5798,7 +5804,7 @@ try {
 } catch(e){}
 try { checkUrlHashRoutine(); } catch(e){}
 
-/* ───────── ANTIGRAVITY PARTICLE DEFLECTOR ENGINE (Google Antigravity FX) ───────── */
+/* ───────── ANTIGRAVITY PARTICLE DEFLECTOR ENGINE (5-Feature Quantum Suite) ───────── */
 (function initAntigravityEngine() {
   var canvas = document.getElementById("antigravityCanvas");
   if (!canvas) return;
@@ -5844,6 +5850,41 @@ try { checkUrlHashRoutine(); } catch(e){}
     resize();
   }, { passive: true });
 
+  /* ── 1. CIRCADIAN CHROMATIC HARMONIZATION PALETTES ── */
+  var CIRCADIAN_PALETTES = {
+    morning: [ // 05:00 - 11:30 (Solar Amber, 24K Gold, Warm Sunrise Coral)
+      { h: 38,  s: 94, l: 62 },
+      { h: 48,  s: 92, l: 64 },
+      { h: 22,  s: 90, l: 62 },
+      { h: 14,  s: 88, l: 60 }
+    ],
+    afternoon: [ // 11:30 - 17:00 (Electric Cyan, Glacial Ice, Cobalt Executive)
+      { h: 195, s: 92, l: 60 },
+      { h: 182, s: 88, l: 58 },
+      { h: 220, s: 86, l: 68 },
+      { h: 160, s: 85, l: 58 }
+    ],
+    evening: [ // 17:00 - 21:30 (Quantum Amethyst, Twilight Iris, Sunset Magenta)
+      { h: 275, s: 84, l: 68 },
+      { h: 255, s: 82, l: 72 },
+      { h: 320, s: 85, l: 64 },
+      { h: 40,  s: 90, l: 60 }
+    ],
+    night: [ // 21:30 - 05:00 (Deep Obsidian Slate, Subdued Velvet Violet, Lunar Silver)
+      { h: 245, s: 50, l: 65 },
+      { h: 280, s: 45, l: 62 },
+      { h: 210, s: 35, l: 70 }
+    ]
+  };
+
+  function getActiveCircadianPalette() {
+    var nowH = (new Date()).getHours() + (new Date()).getMinutes() / 60;
+    if (nowH >= 5 && nowH < 11.5) return CIRCADIAN_PALETTES.morning;
+    if (nowH >= 11.5 && nowH < 17.0) return CIRCADIAN_PALETTES.afternoon;
+    if (nowH >= 17.0 && nowH < 21.5) return CIRCADIAN_PALETTES.evening;
+    return CIRCADIAN_PALETTES.night;
+  }
+
   // Mouse & Touch coordinates with smooth inertia interpolation
   var mouse = {
     x: -9999,
@@ -5854,31 +5895,22 @@ try { checkUrlHashRoutine(); } catch(e){}
     lastActiveTime: 0
   };
 
-  // Antigravity constants matching Google Antigravity landing page
+  // Kinetic Jet Cursor Velocity Tracking
+  var lastCursorX = -9999, lastCursorY = -9999;
+  var cursorSpeed = 0;
+
   var SHIELD_RADIUS = Math.min(95, Math.max(68, width * 0.085)); // Hard repulsion bubble
   var INFLUENCE_RADIUS = SHIELD_RADIUS * 2.3;                    // Outer orbital field
   var PARTICLE_COUNT = width < 768 ? 95 : (width < 1200 ? 150 : 210);
 
-  // Iridescent chromatic spectrum (Amber -> Coral -> Magenta -> Violet -> Cyan -> Emerald)
-  var PALETTE = [
-    { h: 38,  s: 92, l: 62 }, // Radiant Amber Gold
-    { h: 14,  s: 88, l: 62 }, // Vibrant Coral Orange
-    { h: 340, s: 85, l: 64 }, // Neon Crimson Rose
-    { h: 285, s: 80, l: 68 }, // Quantum Amethyst Violet
-    { h: 250, s: 82, l: 72 }, // Royal Iris Lavender
-    { h: 195, s: 90, l: 60 }, // Electric Cyan Pulse
-    { h: 160, s: 85, l: 58 }  // Cyber Emerald Mint
-  ];
-
   function createParticle() {
     var x = Math.random() * width;
     var y = Math.random() * height;
-    var colorDef = PALETTE[Math.floor(Math.random() * PALETTE.length)];
+    var pal = getActiveCircadianPalette();
+    var colorDef = pal[Math.floor(Math.random() * pal.length)];
     var driftAngle = Math.random() * Math.PI * 2;
     var driftSpeed = 0.35 + Math.random() * 0.55;
-    // Selective radiance: only ~26% of particles are radiant gradient nodes to prevent visual clutter
     var isRadiant = Math.random() < 0.26;
-    // Harmonic secondary hue for dual-tone linear gradient
     var hue2 = (colorDef.h + 24 + Math.floor(Math.random() * 18)) % 360;
 
     return {
@@ -5895,10 +5927,12 @@ try { checkUrlHashRoutine(); } catch(e){}
       glowBlur: 7 + Math.random() * 7,
       hue: colorDef.h,
       hue2: hue2,
+      targetHue: colorDef.h,
       sat: colorDef.s,
       lit: colorDef.l,
       alpha: isRadiant ? (0.65 + Math.random() * 0.30) : (0.40 + Math.random() * 0.40),
-      pulsePhase: Math.random() * Math.PI * 2
+      pulsePhase: Math.random() * Math.PI * 2,
+      trail: [] // Micro-history for Kinetic Jet Trails
     };
   }
 
@@ -5919,6 +5953,29 @@ try { checkUrlHashRoutine(); } catch(e){}
   window.addEventListener("pointerleave", function() {
     mouse.active = false;
   });
+
+  /* ── 2. HYPERSPACE SHOCKWAVES ── */
+  var shockwaves = [];
+  function triggerHyperspaceShockwave(originX, originY, colorHue) {
+    if (!enabled) return;
+    shockwaves.push({
+      x: (originX !== undefined && originX !== null) ? originX : (width / 2),
+      y: (originY !== undefined && originY !== null) ? originY : (height * 0.28),
+      radius: 14,
+      maxRadius: Math.max(width, height) * 0.85,
+      speed: 15,
+      alpha: 0.92,
+      hue: colorHue || 42
+    });
+  }
+
+  /* ── 5. AUDIO-HARMONIC PULSE DETECTION ── */
+  var audioEnvelope = 0;
+  function isAudioActive() {
+    return (typeof current !== "undefined" && current !== null) ||
+           (typeof chimeTimer !== "undefined" && chimeTimer !== null) ||
+           (typeof ringing !== "undefined" && ringing !== -1);
+  }
 
   var animId = null;
   var isTabActive = true;
@@ -5941,6 +5998,20 @@ try { checkUrlHashRoutine(); } catch(e){}
     ctx.clearRect(0, 0, width, height);
 
     var now = Date.now();
+
+    // ── Kinetic Jet Cursor Velocity Calculation ──
+    if (mouse.active) {
+      if (lastCursorX > -1000) {
+        var cvx = mouse.targetX - lastCursorX;
+        var cvy = mouse.targetY - lastCursorY;
+        cursorSpeed = Math.hypot(cvx, cvy);
+      }
+      lastCursorX = mouse.targetX;
+      lastCursorY = mouse.targetY;
+    } else {
+      cursorSpeed = 0;
+    }
+
     // Fade out cursor activity if mouse hasn't moved in 3 seconds
     if (mouse.active && (now - mouse.lastActiveTime > 3000)) {
       mouse.active = false;
@@ -5960,10 +6031,51 @@ try { checkUrlHashRoutine(); } catch(e){}
     var mx = mouse.x;
     var my = mouse.y;
     var mActive = mouse.active;
+    var isHighSpeedCursor = cursorSpeed > 8.5;
 
+    // ── Audio Resonance Envelope Calculation ──
+    var targetAudio = isAudioActive() ? 1.0 : 0.0;
+    audioEnvelope += (targetAudio - audioEnvelope) * 0.08;
+    var beatPulse = audioEnvelope > 0.01 ? (Math.sin(now * 0.0075) * 0.5 + 0.5) : 0;
+
+    // ── Update & Render Hyperspace Shockwaves ──
+    for (var sIdx = shockwaves.length - 1; sIdx >= 0; sIdx--) {
+      var sw = shockwaves[sIdx];
+      sw.radius += sw.speed;
+      sw.speed *= 0.982;
+      sw.alpha *= 0.962;
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
+      ctx.strokeStyle = "hsla(" + sw.hue + ", 95%, 72%, " + (sw.alpha * 0.45).toFixed(2) + ")";
+      ctx.lineWidth = 1.6;
+      ctx.shadowColor = "hsla(" + sw.hue + ", 95%, 65%, " + (sw.alpha * 0.70).toFixed(2) + ")";
+      ctx.shadowBlur = 12;
+      ctx.stroke();
+      ctx.restore();
+
+      if (sw.alpha < 0.02 || sw.radius > sw.maxRadius) {
+        shockwaves.splice(sIdx, 1);
+      }
+    }
+
+    // Circadian Palette interpolation check
+    var activePal = getActiveCircadianPalette();
+
+    var radiantNodes = [];
+
+    // ── Particle Physics & Repulsion Loop ──
     for (var i = 0; i < particles.length; i++) {
       var p = particles[i];
       p.pulsePhase += 0.025;
+
+      // Smooth Circadian Hue transition
+      if (Math.random() < 0.02) {
+        var palColor = activePal[Math.floor(Math.random() * activePal.length)];
+        p.targetHue = palColor.h;
+      }
+      p.hue += (p.targetHue - p.hue) * 0.03;
 
       if (mActive) {
         var dx = p.x - mx;
@@ -5971,38 +6083,62 @@ try { checkUrlHashRoutine(); } catch(e){}
         var dist = Math.hypot(dx, dy);
 
         if (dist < SHIELD_RADIUS) {
-          // ── 1. HARD ANTIGRAVITY EXCLUSION (Never Touches The Cursor) ──
+          // Hard Antigravity Exclusion Bubble
           var angle = Math.atan2(dy, dx);
-          // Clamp directly to the outer surface of the shield bubble
           p.x = mx + Math.cos(angle) * SHIELD_RADIUS;
           p.y = my + Math.sin(angle) * SHIELD_RADIUS;
 
-          // Tangential orbital slipstream (rotates particles smoothly around perimeter)
           var tanX = -Math.sin(angle);
           var tanY = Math.cos(angle);
           var spinMag = 3.2;
           p.vx = p.vx * 0.5 + tanX * spinMag;
           p.vy = p.vy * 0.5 + tanY * spinMag;
 
+          // Kinetic Jet Micro-Trail record on rapid swipe
+          if (isHighSpeedCursor && p.isRadiant) {
+            p.trail.push({ x: p.x, y: p.y, alpha: 0.65 });
+            if (p.trail.length > 3) p.trail.shift();
+          }
+
         } else if (dist < INFLUENCE_RADIUS) {
-          // ── 2. GRADIENT REPULSION FIELD ──
+          // Outer Gradient Repulsion Field
           var norm = (dist - SHIELD_RADIUS) / (INFLUENCE_RADIUS - SHIELD_RADIUS);
           var force = Math.pow(1 - norm, 1.8) * 3.8;
           var angle = Math.atan2(dy, dx);
           var tanX = -Math.sin(angle);
           var tanY = Math.cos(angle);
 
-          // Combination of radial push-away and tangential swirling orbit
           p.vx += (Math.cos(angle) * 1.6 + tanX * 1.3) * force * 0.38;
           p.vy += (Math.sin(angle) * 1.6 + tanY * 1.3) * force * 0.38;
         }
       }
 
-      // ── 3. NATURAL AMBIENT DRIFT & RELAXATION ──
+      // Shockwave Particle Displacement
+      for (var swi = 0; swi < shockwaves.length; swi++) {
+        var csw = shockwaves[swi];
+        var swdx = p.x - csw.x;
+        var swdy = p.y - csw.y;
+        var swdist = Math.hypot(swdx, swdy);
+        if (Math.abs(swdist - csw.radius) < 38) {
+          var swAngle = Math.atan2(swdy, swdx);
+          var swForce = csw.alpha * 4.2;
+          p.vx += Math.cos(swAngle) * swForce;
+          p.vy += Math.sin(swAngle) * swForce;
+          p.alpha = Math.min(1, p.alpha + 0.30);
+        }
+      }
+
+      // Natural Ambient Drift
       p.vx += (p.baseVx - p.vx) * 0.035;
       p.vy += (p.baseVy - p.vy) * 0.035;
 
-      // Friction damping to prevent wild runaway velocities
+      // Audio-Harmonic subtle drift ripple
+      if (audioEnvelope > 0.01) {
+        p.vx += Math.cos(p.pulsePhase) * (0.15 * beatPulse * audioEnvelope);
+        p.vy += Math.sin(p.pulsePhase) * (0.15 * beatPulse * audioEnvelope);
+      }
+
+      // Damping
       p.vx *= 0.94;
       p.vy *= 0.94;
 
@@ -6016,10 +6152,34 @@ try { checkUrlHashRoutine(); } catch(e){}
       if (p.y < -pad) p.y = height + pad;
       else if (p.y > height + pad) p.y = -pad;
 
-      // ── 4. RENDER DIRECTIONAL DASH / CAPSULE (Oriented to velocity vector) ──
+      if (p.isRadiant) radiantNodes.push(p);
+
+      // ── Render Kinetic Jet Trails ──
+      if (p.trail.length > 0) {
+        for (var tIdx = p.trail.length - 1; tIdx >= 0; tIdx--) {
+          var tr = p.trail[tIdx];
+          tr.alpha *= 0.74;
+          if (tr.alpha > 0.05) {
+            ctx.beginPath();
+            ctx.arc(tr.x, tr.y, 1.2, 0, Math.PI * 2);
+            ctx.fillStyle = "hsla(" + Math.round(p.hue) + ", 95%, 72%, " + tr.alpha.toFixed(2) + ")";
+            ctx.fill();
+          } else {
+            p.trail.splice(tIdx, 1);
+          }
+        }
+      }
+
+      // ── Render Directional Capsule ──
       var currentSpeed = Math.hypot(p.vx, p.vy);
       var currentAngle = Math.atan2(p.vy, p.vx);
       var dynamicLength = Math.max(p.length, Math.min(15, p.length + currentSpeed * 2.2));
+
+      // Audio-Harmonic Breathing
+      if (audioEnvelope > 0.01) {
+        dynamicLength *= (1 + beatPulse * 0.35 * audioEnvelope);
+      }
+
       var currentAlpha = Math.min(0.96, p.alpha * (0.82 + Math.sin(p.pulsePhase) * 0.18));
 
       ctx.save();
@@ -6034,22 +6194,47 @@ try { checkUrlHashRoutine(); } catch(e){}
       }
 
       if (p.isRadiant) {
-        // Radiant Quantum Node: Head-to-tail linear gradient with soft halo glow
         var grad = ctx.createLinearGradient(-dynamicLength / 2, 0, dynamicLength / 2, 0);
-        grad.addColorStop(0, "hsla(" + p.hue + "," + p.sat + "%," + p.lit + "%," + (currentAlpha * 0.90).toFixed(2) + ")");
-        grad.addColorStop(1, "hsla(" + p.hue2 + ",95%,75%," + Math.min(1, currentAlpha * 1.25).toFixed(2) + ")");
+        grad.addColorStop(0, "hsla(" + Math.round(p.hue) + "," + p.sat + "%," + p.lit + "%," + (currentAlpha * 0.90).toFixed(2) + ")");
+        grad.addColorStop(1, "hsla(" + Math.round(p.hue2) + ",95%,75%," + Math.min(1, currentAlpha * 1.25).toFixed(2) + ")");
 
-        ctx.shadowColor = "hsla(" + p.hue + ",92%,62%," + (currentAlpha * 0.60).toFixed(2) + ")";
-        ctx.shadowBlur = p.glowBlur;
+        var curGlow = p.glowBlur;
+        if (audioEnvelope > 0.01) {
+          curGlow *= (1 + beatPulse * 0.60 * audioEnvelope);
+        }
+
+        ctx.shadowColor = "hsla(" + Math.round(p.hue) + ",92%,62%," + (currentAlpha * 0.60).toFixed(2) + ")";
+        ctx.shadowBlur = curGlow;
         ctx.fillStyle = grad;
       } else {
-        // Ambient Micro-Dash: Clean, crisp, non-distracting solid fill with zero shadow overhead
         ctx.shadowBlur = 0;
-        ctx.fillStyle = "hsla(" + p.hue + "," + p.sat + "%," + p.lit + "%," + currentAlpha.toFixed(2) + ")";
+        ctx.fillStyle = "hsla(" + Math.round(p.hue) + "," + p.sat + "%," + p.lit + "%," + currentAlpha.toFixed(2) + ")";
       }
 
       ctx.fill();
       ctx.restore();
+    }
+
+    // ── 4. MICRO-CONSTELLATION FILAMENTS (Fleeting Quantum HUD Web) ──
+    var maxFilamentDist = 58;
+    for (var r1 = 0; r1 < radiantNodes.length; r1++) {
+      var pA = radiantNodes[r1];
+      for (var r2 = r1 + 1; r2 < radiantNodes.length; r2++) {
+        var pB = radiantNodes[r2];
+        var fdx = pA.x - pB.x;
+        var fdy = pA.y - pB.y;
+        var fdist = Math.hypot(fdx, fdy);
+        if (fdist < maxFilamentDist) {
+          var fNorm = 1 - (fdist / maxFilamentDist);
+          var fAlpha = Math.pow(fNorm, 1.6) * 0.16;
+          ctx.beginPath();
+          ctx.moveTo(pA.x, pA.y);
+          ctx.lineTo(pB.x, pB.y);
+          ctx.strokeStyle = "hsla(" + Math.round(pA.hue) + ", 85%, 68%, " + fAlpha.toFixed(2) + ")";
+          ctx.lineWidth = 0.75;
+          ctx.stroke();
+        }
+      }
     }
   }
 
@@ -6068,6 +6253,14 @@ try { checkUrlHashRoutine(); } catch(e){}
         if (typeof showToast === "function") showToast("Antigravity Particle FX Active", "✦");
       }
     };
+  }
+
+  // Hook Hero Clock click for interactive tactile micro-shockwave
+  var clockEl = document.getElementById("clock");
+  if (clockEl) {
+    clockEl.addEventListener("click", function(e) {
+      triggerHyperspaceShockwave(e.clientX, e.clientY, 48);
+    }, { passive: true });
   }
 
   // Global controller object
@@ -6091,6 +6284,9 @@ try { checkUrlHashRoutine(); } catch(e){}
       if (enabled) this.disable();
       else this.enable();
       return enabled;
+    },
+    triggerShockwave: function(x, y, hue) {
+      triggerHyperspaceShockwave(x, y, hue);
     },
     isEnabled: function() {
       return enabled;
