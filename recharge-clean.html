@@ -1562,12 +1562,64 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 h2{font-size:clamp(1.5rem,2.6vw,2.1rem);font-weight:700;display:flex;align-items:center;gap:14px;text-shadow:var(--glow-w);margin:0}
 .sched-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 
-/* Legend & Category Filter Pills */
-.legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}
-.cat-pill{display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line2);color:var(--dim);border-radius:20px;padding:8px 16px;font-size:.92rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:var(--sans)}
-.cat-pill b{width:11px;height:11px;border-radius:50%;background:var(--c);box-shadow:0 0 8px var(--c)}
-.cat-pill:hover{color:var(--text);border-color:var(--c)}
-.cat-pill.active{background:var(--surface-2);color:var(--text);border-color:var(--c);box-shadow:0 0 14px color-mix(in srgb,var(--c) 30%,transparent)}
+/* Legend & Tactical HUD Command Chips */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.cat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(14, 14, 20, 0.70);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--dim);
+  border-radius: 10px;
+  padding: 6px 12px;
+  font-size: 0.80rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-family: var(--sans);
+  backdrop-filter: blur(8px);
+}
+.cat-pill .cat-chip-icon {
+  font-size: 0.88rem;
+  color: var(--c);
+  line-height: 1;
+}
+.cat-pill .cat-chip-label {
+  font-weight: 700;
+}
+.cat-pill .cat-chip-count {
+  font-family: var(--font-clock, sans-serif);
+  font-size: 0.72rem;
+  font-weight: 800;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--mute);
+  padding: 1px 6px;
+  border-radius: 5px;
+  margin-left: 2px;
+}
+.cat-pill:hover {
+  color: var(--text);
+  border-color: var(--c);
+  transform: translateY(-1px);
+}
+.cat-pill.active {
+  background: rgba(20, 20, 30, 0.95);
+  border-color: var(--c);
+  color: #FFFFFF;
+  box-shadow: 0 0 16px color-mix(in srgb, var(--c) 35%, transparent), inset 0 0 10px color-mix(in srgb, var(--c) 15%, transparent);
+}
+.cat-pill.active .cat-chip-count {
+  background: color-mix(in srgb, var(--c) 25%, transparent);
+  color: #FFFFFF;
+}
 
 /* Schedule List — 2-Column Responsive Executive Grid */
 #list {
@@ -1584,19 +1636,249 @@ h2{font-size:clamp(1.5rem,2.6vw,2.1rem);font-weight:700;display:flex;align-items
 .empty-schedule-card {
   grid-column: 1 / -1;
 }
-li{--c:var(--work);display:flex;align-items:center;gap:14px;background:#000;border:1px solid var(--line);border-left:4.5px solid var(--c);border-radius:12px;padding:10px 16px;margin-bottom:0;min-width:0;transition:transform .2s ease,box-shadow .2s ease,opacity .3s ease}
-li:hover{transform:translateY(-2px);box-shadow:-4px 0 20px -6px var(--c),0 4px 16px rgba(0,0,0,0.5)}
-li.rest{--c:var(--rest)}   /* Green for Recharge */
-li.class{--c:var(--class)} /* Blue for Class */
-li.work{--c:var(--work)}   /* Purple for Work */
-li.err{--c:var(--err)}     /* Silver for Task */
-li.night{--c:var(--night)} /* Gold for Wind-down */
-li.past{opacity:.35}
-li.cur{opacity:1;border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 26px rgba(217,185,92,.22)}
 
-/* Time Typography: Clean, optical, professional numbers */
-.t{font-family:var(--font-clock);font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;letter-spacing:-.01em;font-weight:700;font-size:1.12rem;min-width:5.8em;color:var(--c);flex-shrink:0}
-.l{flex:1;font-size:1.04rem;font-weight:600;line-height:1.35;min-width:0;word-break:break-word}
+/* Day Horizon Milestones */
+.day-horizon-header {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0 6px;
+  padding: 4px 2px;
+  user-select: none;
+}
+.day-horizon-header:first-child {
+  margin-top: 4px;
+}
+.horizon-badge {
+  font-family: var(--font-clock, 'Inter', sans-serif);
+  font-size: 0.70rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: rgba(217, 185, 92, 0.10);
+  border: 1px solid rgba(217, 185, 92, 0.35);
+  border-radius: 6px;
+  padding: 3px 8px;
+  white-space: nowrap;
+  box-shadow: 0 0 10px rgba(217, 185, 92, 0.15);
+}
+.horizon-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.74rem;
+  color: var(--mute);
+  white-space: nowrap;
+}
+.horizon-time {
+  color: var(--dim);
+  font-weight: 600;
+}
+.horizon-divider {
+  opacity: 0.35;
+}
+.horizon-subtitle {
+  font-weight: 500;
+  opacity: 0.8;
+}
+.horizon-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(217, 185, 92, 0.35), rgba(255, 255, 255, 0.05), transparent);
+}
+@media (max-width: 600px) {
+  .horizon-subtitle { display: none; }
+  .horizon-divider { display: none; }
+}
+
+/* Holographic Cyber-Glass Schedule Cards */
+li {
+  --c: var(--work);
+  --c-glow: rgba(175, 105, 238, 0.35);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(10, 10, 15, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 4.5px solid var(--c);
+  border-radius: 12px;
+  padding: 9px 14px;
+  margin-bottom: 0;
+  min-width: 0;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: transform .25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow .25s ease, border-color .25s ease, opacity .3s ease;
+}
+li::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 90px;
+  background: radial-gradient(ellipse at 0% 50%, var(--c-glow), transparent 75%);
+  opacity: 0.18;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+li:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7), 0 0 16px var(--c-glow);
+}
+li:hover::before {
+  opacity: 0.35;
+}
+
+li.rest{--c:var(--rest);--c-glow:rgba(72,199,116,0.35)}
+li.class{--c:var(--class);--c-glow:rgba(91,158,245,0.35)}
+li.work{--c:var(--work);--c-glow:rgba(175,105,238,0.35)}
+li.err{--c:var(--err);--c-glow:rgba(194,197,209,0.35)}
+li.night{--c:var(--night);--c-glow:rgba(240,207,122,0.35)}
+
+li.past{opacity:.38}
+
+/* Active Living HUD Card */
+li.cur {
+  opacity: 1 !important;
+  border-color: var(--gold) !important;
+  box-shadow: 0 0 0 1px var(--gold), 0 0 28px rgba(217, 185, 92, 0.35), inset 0 0 16px rgba(217, 185, 92, 0.08) !important;
+  animation: activeAuraPulse 3s ease-in-out infinite alternate;
+}
+@keyframes activeAuraPulse {
+  0% { box-shadow: 0 0 0 1px var(--gold), 0 0 20px rgba(217, 185, 92, 0.25); }
+  100% { box-shadow: 0 0 0 1.5px var(--gold), 0 0 34px rgba(217, 185, 92, 0.55), inset 0 0 16px rgba(217, 185, 92, 0.12); }
+}
+
+li.next-up {
+  border-color: rgba(217, 185, 92, 0.45);
+  box-shadow: 0 0 14px rgba(217, 185, 92, 0.18);
+}
+
+/* Card Laser Progress Bar along bottom */
+.card-progress-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.04);
+  overflow: hidden;
+  pointer-events: none;
+}
+.card-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--c), var(--gold));
+  box-shadow: 0 0 8px var(--c);
+  transition: width 0.8s ease;
+}
+
+/* Futuristic Vector Icon Badge */
+.card-icon-badge {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--c);
+  transition: all 0.2s ease;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+li:hover .card-icon-badge {
+  border-color: var(--c);
+  box-shadow: 0 0 12px var(--c-glow);
+  transform: scale(1.05);
+}
+.futuristic-icon {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+/* Time Typography */
+.t {
+  font-family: var(--font-clock);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  letter-spacing: -0.01em;
+  font-weight: 700;
+  font-size: 1.12rem;
+  min-width: 5.8em;
+  color: var(--c);
+  flex-shrink: 0;
+}
+
+/* Title & Live Status Tag */
+.l {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.block-title-text {
+  font-size: 1.04rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--text);
+  word-break: break-word;
+}
+.block-live-tag {
+  display: none;
+}
+.block-live-tag.active {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-clock, sans-serif);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--gold);
+  background: rgba(217, 185, 92, 0.12);
+  border: 1px solid rgba(217, 185, 92, 0.35);
+  border-radius: 6px;
+  padding: 1px 6px;
+  white-space: nowrap;
+  box-shadow: 0 0 8px rgba(217, 185, 92, 0.2);
+}
+.live-pulse-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #48c774;
+  box-shadow: 0 0 6px #48c774;
+  animation: liveDotPulse 1.2s infinite;
+}
+@keyframes liveDotPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(0.7); }
+}
+.block-live-tag.next .next-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-family: var(--font-clock, sans-serif);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  color: #00f2fe;
+  background: rgba(0, 242, 254, 0.10);
+  border: 1px solid rgba(0, 242, 254, 0.30);
+  border-radius: 6px;
+  padding: 1px 6px;
+  white-space: nowrap;
+}
 
 /* Inline Edit Controls in rows */
 .edit-row-ctrls{display:flex;align-items:center;gap:8px;flex:1;flex-wrap:wrap}
@@ -2097,6 +2379,30 @@ body.light-theme .cat-pill.active{
   color:#FFFFFF !important;
   border-color:#1D1D1F !important;
 }
+body.light-theme li {
+  background: rgba(255, 255, 255, 0.90) !important;
+  border-color: #E2E2E7 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+}
+body.light-theme li:hover {
+  background: #FFFFFF !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08) !important;
+}
+body.light-theme .card-icon-badge {
+  background: #F0F0F3 !important;
+  border-color: #E2E2E7 !important;
+}
+body.light-theme .day-horizon-header {
+  border-color: #E2E2E7 !important;
+}
+body.light-theme .horizon-badge {
+  background: rgba(184, 134, 11, 0.10) !important;
+  border-color: rgba(184, 134, 11, 0.35) !important;
+  color: #8b6508 !important;
+}
+body.light-theme .horizon-line {
+  background: linear-gradient(90deg, rgba(184, 134, 11, 0.3), #E2E2E7, transparent) !important;
+}
 
 /* Light Mode Distribution Cards */
 body.light-theme .dist-card{
@@ -2425,14 +2731,14 @@ body.light-theme .highlight-card .dist-icon{
     </div>
   </div>
 
-  <!-- Category Filter Pills (Blue for Class, Green for Recharge, Purple for Work, Silver for Task, Gold for Wind-down) -->
+  <!-- 7. NEXT-GEN COMMAND FILTER HUD (Tactical HUD Chips) -->
   <div class="legend" id="categoryFilters">
-    <button class="cat-pill active" data-cat="all" style="--c:var(--gold)"><b></b>All (23)</button>
-    <button class="cat-pill" data-cat="class" style="--c:var(--class)"><b></b>Class (Blue)</button>
-    <button class="cat-pill" data-cat="rest" style="--c:var(--rest)"><b></b>Recharge (Green)</button>
-    <button class="cat-pill" data-cat="work" style="--c:var(--work)"><b></b>Work (Purple)</button>
-    <button class="cat-pill" data-cat="err" style="--c:var(--err)"><b></b>Task (Silver)</button>
-    <button class="cat-pill" data-cat="night" style="--c:var(--night)"><b></b>Wind-down (Gold)</button>
+    <button type="button" class="cat-pill active" data-cat="all" style="--c:var(--gold)"><span class="cat-chip-icon">⚡</span><span class="cat-chip-label">All Blocks</span><span class="cat-chip-count" id="count-all">23</span></button>
+    <button type="button" class="cat-pill" data-cat="class" style="--c:var(--class)"><span class="cat-chip-icon">◈</span><span class="cat-chip-label">Classes</span><span class="cat-chip-count" id="count-class">4</span></button>
+    <button type="button" class="cat-pill" data-cat="rest" style="--c:var(--rest)"><span class="cat-chip-icon">✦</span><span class="cat-chip-label">Recharges</span><span class="cat-chip-count" id="count-rest">9</span></button>
+    <button type="button" class="cat-pill" data-cat="work" style="--c:var(--work)"><span class="cat-chip-icon">◆</span><span class="cat-chip-label">Work</span><span class="cat-chip-count" id="count-work">4</span></button>
+    <button type="button" class="cat-pill" data-cat="err" style="--c:var(--err)"><span class="cat-chip-icon">⬡</span><span class="cat-chip-label">Tasks</span><span class="cat-chip-count" id="count-err">3</span></button>
+    <button type="button" class="cat-pill" data-cat="night" style="--c:var(--night)"><span class="cat-chip-icon">✧</span><span class="cat-chip-label">Wind-Down</span><span class="cat-chip-count" id="count-night">3</span></button>
   </div>
 
   <!-- The Interactive Schedule List -->
@@ -3251,24 +3557,85 @@ $("volIcon").onclick=function(){muted=!muted;showVol();save()};
    Wind-down: Gold (#F0CF7A)
 */
 var CAT_LABELS = {
-  "class":"Class (Blue)",
-  "rest":"Recharge (Green)",
-  "work":"Work (Purple)",
-  "err":"Task (Silver)",
-  "night":"Wind-down (Gold)"
+  "class":"Classes",
+  "rest":"Recharges",
+  "work":"Work",
+  "err":"Tasks",
+  "night":"Wind-Down"
 };
+
+function getFuturisticCategoryIcon(cat) {
+  if (cat === "class") {
+    // Quantum Hex-Nexus (Class)
+    return '<svg class="futuristic-icon icon-class" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' +
+      '<polygon points="12 2 21 7 21 17 12 22 3 17 3 7 12 2"></polygon>' +
+      '<circle cx="12" cy="12" r="3.5" fill="currentColor" fill-opacity="0.25"></circle>' +
+      '<line x1="12" y1="2" x2="12" y2="8.5"></line>' +
+      '<line x1="12" y1="15.5" x2="12" y2="22"></line>' +
+      '<line x1="21" y1="17" x2="15.5" y2="13.5"></line>' +
+      '<line x1="3" y1="7" x2="8.5" y2="10.5"></line>' +
+    '</svg>';
+  } else if (cat === "rest") {
+    // Plasma Ionic Core (Recharge)
+    return '<svg class="futuristic-icon icon-recharge" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' +
+      '<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>' +
+      '<circle cx="12" cy="12" r="8" stroke-dasharray="2 3" opacity="0.5"></circle>' +
+    '</svg>';
+  } else if (cat === "work") {
+    // Orbital Command Bezel (Work)
+    return '<svg class="futuristic-icon icon-work" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' +
+      '<rect x="3" y="4" width="18" height="15" rx="3" stroke-width="1.8"></rect>' +
+      '<polyline points="8 10 12 14 16 10"></polyline>' +
+      '<line x1="12" y1="14" x2="12" y2="6"></line>' +
+      '<circle cx="12" cy="19" r="1" fill="currentColor"></circle>' +
+    '</svg>';
+  } else if (cat === "err") {
+    // Precision HUD Reticle (Task)
+    return '<svg class="futuristic-icon icon-task" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' +
+      '<circle cx="12" cy="12" r="9"></circle>' +
+      '<circle cx="12" cy="12" r="4"></circle>' +
+      '<line x1="12" y1="2" x2="12" y2="5"></line>' +
+      '<line x1="12" y1="19" x2="12" y2="22"></line>' +
+      '<line x1="2" y1="12" x2="5" y2="12"></line>' +
+      '<line x1="19" y1="12" x2="22" y2="12"></line>' +
+    '</svg>';
+  } else {
+    // Celestial Orbital Stasis (Wind-Down / Recovery)
+    return '<svg class="futuristic-icon icon-winddown" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' +
+      '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>' +
+      '<circle cx="17.5" cy="6.5" r="1.5" fill="currentColor"></circle>' +
+      '<path d="M15 15l2 2 4-4" opacity="0.7"></path>' +
+    '</svg>';
+  }
+}
+
+var DAY_HORIZONS = [
+  { id: "morning", name: "MORNING HORIZON", timeRange: "07:00 AM – 11:30 AM", subtitle: "Cognitive Focus & Peak Readiness", startHour: 0, endHour: 11.5 },
+  { id: "midday", name: "MIDDAY EXECUTIVE", timeRange: "11:45 AM – 03:00 PM", subtitle: "High-Performance Classes & Core Recharge", startHour: 11.5, endHour: 15.0 },
+  { id: "afternoon", name: "AFTERNOON MASTERY", timeRange: "03:00 PM – 06:30 PM", subtitle: "Teaching, Evaluation & Departure Wrap-Up", startHour: 15.0, endHour: 18.5 },
+  { id: "evening", name: "EVENING RECOVERY", timeRange: "07:00 PM – 10:00 PM", subtitle: "Circadian Restoration & Rest Mode", startHour: 18.5, endHour: 24.0 }
+];
+
+function getHorizonIdx(h, m) {
+  var d = h + m / 60;
+  if (d < 11.5) return 0;
+  if (d < 15.0) return 1;
+  if (d < 18.5) return 2;
+  return 3;
+}
 
 function renderList(){
   var list=$("list");list.innerHTML="";list.classList.toggle("editing-mode",!!isEditing);
   var counts={all:S.length,class:0,rest:0,work:0,err:0,night:0};
   S.forEach(function(s){if(counts[s[2]]!==undefined)counts[s[2]]++});
 
-  // Update category pill counts
+  // Update category chip counts in tactical HUD
   document.querySelectorAll(".cat-pill").forEach(function(p){
     var cat=p.getAttribute("data-cat");
-    if(cat==="all")p.querySelector("b").nextSibling.textContent="All ("+counts.all+")";
-    else if(counts[cat]!==undefined){
-      p.querySelector("b").nextSibling.textContent=CAT_LABELS[cat]+" ("+counts[cat]+")";
+    var countEl = p.querySelector(".cat-chip-count");
+    if(countEl){
+      if(cat==="all") countEl.textContent = counts.all;
+      else if(counts[cat]!==undefined) countEl.textContent = counts[cat];
     }
   });
 
@@ -3291,16 +3658,41 @@ function renderList(){
     return;
   }
 
+  var renderedHorizons = {};
   S.forEach(function(s,i){
     if(activeFilter!=="all"&&s[2]!==activeFilter)return;
+
+    // Render Circadian Day Horizon Dividers
+    if(!isEditing){
+      var hIdx = getHorizonIdx(s[0], s[1]);
+      if(!renderedHorizons[hIdx]){
+        renderedHorizons[hIdx] = true;
+        var hObj = DAY_HORIZONS[hIdx];
+        var hDiv = document.createElement("div");
+        hDiv.className = "day-horizon-header";
+        hDiv.innerHTML =
+          '<div class="horizon-badge">' + hObj.name + '</div>' +
+          '<div class="horizon-info">' +
+            '<span class="horizon-time">' + hObj.timeRange + '</span>' +
+            '<span class="horizon-divider">·</span>' +
+            '<span class="horizon-subtitle">' + hObj.subtitle + '</span>' +
+          '</div>' +
+          '<div class="horizon-line"></div>';
+        list.appendChild(hDiv);
+      }
+    }
+
     var li=document.createElement("li");li.className=s[2];li.id="r"+i;
 
     if(!isEditing){
-      // Normal peaceful view
+      // Holographic Cyber-Glass Card with Laser Progress Bar & Vector HUD Icon
+      var iconSvg = getFuturisticCategoryIcon(s[2]);
       li.innerHTML=
+        '<div class="card-icon-badge" title="Category: '+s[2]+'">'+iconSvg+'</div>'+
         '<div class="t">'+fmt(s[0],s[1])+'</div>'+
-        '<div class="l">'+s[3]+'</div>'+
-        '<label class="sw"><input type="checkbox" aria-label="Alarm at '+fmt(s[0],s[1])+'"><i></i></label>';
+        '<div class="l"><span class="block-title-text">'+s[3]+'</span><span class="block-live-tag" id="liveTag'+i+'"></span></div>'+
+        '<label class="sw"><input type="checkbox" aria-label="Alarm at '+fmt(s[0],s[1])+'"><i></i></label>'+
+        '<div class="card-progress-bar"><div class="card-progress-fill" id="progFill'+i+'"></div></div>';
       var cb=li.querySelector("input");cb.checked=!off[i];
       cb.onchange=function(){if(cb.checked)delete off[i];else off[i]=1;save()};
     } else {
@@ -3955,16 +4347,67 @@ function tick(){
   }
 
   /* Next alarm countdown */
-  var found=null;
+  var found=null, foundDd=0;
   for(var dd=0;dd<8&&!found;dd++){
     var dt=new Date(n.getFullYear(),n.getMonth(),n.getDate()+dd);
     if(!days[dt.getDay()])continue;
     for(var i=0;i<S.length;i++){
       if(off[i])continue;
       var at=new Date(dt.getFullYear(),dt.getMonth(),dt.getDate(),S[i][0],S[i][1],0);
-      if(at>n){found={i:i,at:at};break}
+      if(at>n){found={i:i,at:at};foundDd=dd;break}
     }
   }
+
+  // Live HUD Telemetry & Progress updates on schedule cards
+  var nextAlarmIdx = (found && foundDd === 0) ? found.i : -1;
+  var nextDiff = found ? Math.max(0, Math.round((found.at - n) / 1000)) : 0;
+  var nextH = Math.floor(nextDiff / 3600), nextM = Math.floor(nextDiff % 3600 / 60), nextS = nextDiff % 60;
+
+  S.forEach(function(s, i){
+    var el = $("r" + i);
+    if (!el) return;
+    var isCur = (i === cur);
+    var isNext = (i === nextAlarmIdx);
+    el.classList.toggle("cur", isCur);
+    el.classList.toggle("next-up", isNext && !isCur);
+
+    var liveTag = $("liveTag" + i);
+    var progFill = $("progFill" + i);
+
+    if (isCur) {
+      // Calculate real-time elapsed percentage for current block
+      var startSec = s[0] * 3600 + s[1] * 60;
+      var nextSec = (i < S.length - 1) ? (S[i+1][0] * 3600 + S[i+1][1] * 60) : (startSec + 3600);
+      if (nextSec < startSec) nextSec += 86400;
+      var blockDur = Math.max(60, nextSec - startSec);
+      var blockElapsed = Math.max(0, Math.min(blockDur, sec - startSec));
+      var pct = Math.round((blockElapsed / blockDur) * 100);
+      var remSec = Math.max(0, blockDur - blockElapsed);
+      var remM = Math.floor(remSec / 60);
+      var remS = remSec % 60;
+
+      if (liveTag) {
+        liveTag.className = "block-live-tag active";
+        liveTag.innerHTML = '<span class="live-pulse-dot"></span><span>LIVE · ' + pct + '% (' + (remM > 0 ? remM + 'm ' : '') + remS + 's left)</span>';
+      }
+      if (progFill) progFill.style.width = pct + "%";
+    } else if (isNext) {
+      if (liveTag) {
+        liveTag.className = "block-live-tag next";
+        liveTag.innerHTML = '<span class="next-pill">⚡ IN ' + (nextH ? nextH + 'h ' : '') + p2(nextM) + 'm ' + p2(nextS) + 's</span>';
+      }
+      if (progFill) progFill.style.width = "0%";
+    } else {
+      if (liveTag) {
+        liveTag.className = "block-live-tag";
+        liveTag.innerHTML = "";
+      }
+      if (progFill) {
+        var isPast = on && (s[0] * 3600 + s[1] * 60) <= sec;
+        progFill.style.width = isPast ? "100%" : "0%";
+      }
+    }
+  });
   if(!found){
     var isBlankCanvas = (S.length === 0);
     $("nextLabel").textContent = isBlankCanvas ? "Blank Canvas (0 Alarms)" : "No alarms set";
