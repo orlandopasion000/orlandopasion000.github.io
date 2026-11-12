@@ -3380,7 +3380,6 @@ var SONG_CHOREOGRAPHY = {
     motionType: "waltz-undulate",
     danceForce: 0.50,
     elasticity: 1.25,
-    ribbonFlex: 2.35, // Deep romantic liquid s-curves
     glowMultiplier: 1.8,
     focus: "guitar-vocal",
     palette: [
@@ -3396,7 +3395,6 @@ var SONG_CHOREOGRAPHY = {
     motionType: "acoustic-sway",
     danceForce: 0.45,
     elasticity: 1.15,
-    ribbonFlex: 1.95, // Warm strumming body arcs
     glowMultiplier: 1.7,
     focus: "strum",
     palette: [
@@ -3412,7 +3410,6 @@ var SONG_CHOREOGRAPHY = {
     motionType: "pop-bounce",
     danceForce: 1.15,
     elasticity: 1.95,
-    ribbonFlex: 1.45, // Snappy spring reflex
     glowMultiplier: 2.8,
     focus: "bass-kick",
     palette: [
@@ -3428,7 +3425,6 @@ var SONG_CHOREOGRAPHY = {
     motionType: "piano-subbass",
     danceForce: 0.58,
     elasticity: 1.45,
-    ribbonFlex: 2.10, // Atmospheric piano wave curvature
     glowMultiplier: 2.4,
     focus: "piano-sub",
     palette: [
@@ -3444,7 +3440,6 @@ var SONG_CHOREOGRAPHY = {
     motionType: "disco-vortex",
     danceForce: 1.18,
     elasticity: 1.88,
-    ribbonFlex: 1.70, // Disco orbital whipping flex
     glowMultiplier: 2.6,
     focus: "disco-beat",
     palette: [
@@ -3460,7 +3455,6 @@ var SONG_CHOREOGRAPHY = {
     motionType: "riff-headbob",
     danceForce: 0.80,
     elasticity: 1.50,
-    ribbonFlex: 1.60, // Rock riff harmonic bow
     glowMultiplier: 2.1,
     focus: "guitar-rock",
     palette: [
@@ -3476,7 +3470,6 @@ var SONG_CHOREOGRAPHY = {
     motionType: "sparkle-crescendo",
     danceForce: 0.90,
     elasticity: 1.65,
-    ribbonFlex: 2.25, // Celestial orchestral ribbons
     glowMultiplier: 2.5,
     focus: "orchestral",
     palette: [
@@ -3492,7 +3485,6 @@ var SONG_CHOREOGRAPHY = {
     motionType: "heartbeat-swell",
     danceForce: 0.70,
     elasticity: 1.40,
-    ribbonFlex: 1.85, // Heartbeat ribbon pulse
     glowMultiplier: 2.1,
     focus: "piano-vocal",
     palette: [
@@ -3508,7 +3500,6 @@ var SONG_CHOREOGRAPHY = {
     motionType: "staccato-burst",
     danceForce: 1.00,
     elasticity: 1.75,
-    ribbonFlex: 1.55, // Staccato dynamic snaps
     glowMultiplier: 2.4,
     focus: "piano-pop",
     palette: [
@@ -3524,7 +3515,6 @@ var SONG_CHOREOGRAPHY = {
     motionType: "leaf-drift",
     danceForce: 0.48,
     elasticity: 1.20,
-    ribbonFlex: 2.20, // Soft leaf fluttering flex
     glowMultiplier: 1.7,
     focus: "strum",
     palette: [
@@ -6062,7 +6052,7 @@ try {
 } catch(e){}
 try { checkUrlHashRoutine(); } catch(e){}
 
-/* ───────── ANTIGRAVITY PARTICLE DEFLECTOR ENGINE (Elastic Ribbon Bending & Quantum Suite) ───────── */
+/* ───────── ANTIGRAVITY PARTICLE DEFLECTOR ENGINE (Sleek Straight Capsules & Subtle Turn-Flex Suite) ───────── */
 (function initAntigravityEngine() {
   var backCanvas = document.getElementById("antigravityCanvas");
   var frontCanvas = document.getElementById("antigravityFrontCanvas");
@@ -6164,7 +6154,7 @@ try { checkUrlHashRoutine(); } catch(e){}
     return CIRCADIAN_PALETTES.deepnight;
   }
 
-  /* ── 2. PARTICLE DYNAMICS & ELASTIC RIBBON SETUP ── */
+  /* ── 2. PARTICLE DYNAMICS SETUP ── */
   var SHIELD_RADIUS = 76;
   var INFLUENCE_RADIUS = 168;
 
@@ -6182,8 +6172,6 @@ try { checkUrlHashRoutine(); } catch(e){}
   var cursorSpeed = 0;
 
   var shockwaves = [];
-  var photonicEmbers = [];
-
   function triggerHyperspaceShockwave(originX, originY, baseHue) {
     var pal = getActiveCircadianPalette();
     var hue = (baseHue !== undefined) ? baseHue : pal[Math.floor(Math.random() * pal.length)].h;
@@ -6196,29 +6184,6 @@ try { checkUrlHashRoutine(); } catch(e){}
       alpha: 1.0,
       hue: hue
     });
-  }
-
-  // Interactive Quantum Gravitational Singularity Ripple
-  function triggerGravitationalVortex(clickX, clickY) {
-    var pal = getActiveCircadianPalette();
-    var hue = pal[Math.floor(Math.random() * pal.length)].h;
-    triggerHyperspaceShockwave(clickX, clickY, hue);
-
-    for (var k = 0; k < particles.length; k++) {
-      var pt = particles[k];
-      var vdx = pt.x - clickX;
-      var vdy = pt.y - clickY;
-      var vdist = Math.hypot(vdx, vdy);
-      if (vdist < 240 && vdist > 5) {
-        var vAngle = Math.atan2(vdy, vdx);
-        var vTanX = -Math.sin(vAngle);
-        var vTanY = Math.cos(vAngle);
-        var vForce = Math.pow(1 - vdist / 240, 1.4) * 5.4;
-        pt.vx += (vTanX * 2.6 + Math.cos(vAngle) * 1.8) * vForce * 0.35;
-        pt.vy += (vTanY * 2.6 + Math.sin(vAngle) * 1.8) * vForce * 0.35;
-        pt.curvature = (pt.curvature || 0) + (Math.random() > 0.5 ? 0.75 : -0.75);
-      }
-    }
   }
 
   // Dual-Layer Population: Ambient backdrop + Dedicated 3D Weaver Dancers
@@ -6260,7 +6225,7 @@ try { checkUrlHashRoutine(); } catch(e){}
       isFront: isFront,
       baseSize: isWeaver ? (2.4 + Math.random() * 0.5) : (isRadiant ? (2.0 + Math.random() * 0.4) : (1.5 + Math.random() * 0.35)),
       size: 2.0,
-      baseLength: isWeaver ? (10.0 + Math.random() * 4.5) : (isRadiant ? (7.5 + Math.random() * 3.5) : (5.5 + Math.random() * 2.5)),
+      baseLength: isWeaver ? (9.5 + Math.random() * 4.5) : (isRadiant ? (7.0 + Math.random() * 3.5) : (5.0 + Math.random() * 2.5)),
       length: 8.0,
       isRadiant: isRadiant,
       glowBlur: isWeaver ? (18 + Math.random() * 8) : (isRadiant ? (9 + Math.random() * 7) : 0),
@@ -6272,7 +6237,7 @@ try { checkUrlHashRoutine(); } catch(e){}
       alpha: isWeaver ? (0.85 + Math.random() * 0.15) : (isRadiant ? (0.65 + Math.random() * 0.25) : (0.38 + Math.random() * 0.35)),
       pulsePhase: Math.random() * Math.PI * 2,
       dancePhase: Math.random() * Math.PI * 2,
-      curvature: 0, // Instantaneous elastic ribbon curvature
+      turnFlex: 0, // Subtle momentary flex strictly during turns/reversals; 0 = perfectly straight
       prevAngle: driftAngle,
       fadeMode: "normal", // "normal", "fading", "emerging"
       fadeProgress: 1.0,
@@ -6301,14 +6266,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   }
 
   window.addEventListener("pointermove", onPointerMove, { passive: true });
-  window.addEventListener("pointerdown", function(e) {
-    onPointerMove(e);
-    // Tactile Quantum Singularity Ripple (bends nearby particles in graceful spiral arcs)
-    if (e.target && !e.target.closest("button, input, select, a, .alarm-toggle-btn")) {
-      triggerGravitationalVortex(e.clientX, e.clientY);
-    }
-  }, { passive: true });
-
+  window.addEventListener("pointerdown", onPointerMove, { passive: true });
   window.addEventListener("pointerleave", function() {
     mouse.active = false;
     mouse.x = -9999;
@@ -6422,26 +6380,6 @@ try { checkUrlHashRoutine(); } catch(e){}
       }
     }
 
-    // ── Update & Render Photonic Flex Embers (Micro-Starlight Dust from Bending Turns) ──
-    for (var emIdx = photonicEmbers.length - 1; emIdx >= 0; emIdx--) {
-      var ember = photonicEmbers[emIdx];
-      ember.x += ember.vx;
-      ember.y += ember.vy;
-      ember.alpha *= 0.86;
-      ember.size *= 0.95;
-      var embCtx = (ember.isFront && frontCtx) ? frontCtx : backCtx;
-      if (ember.alpha > 0.04) {
-        embCtx.beginPath();
-        embCtx.arc(ember.x, ember.y, ember.size, 0, Math.PI * 2);
-        embCtx.fillStyle = "hsla(" + Math.round(ember.hue) + ", 96%, 76%, " + ember.alpha.toFixed(2) + ")";
-        embCtx.shadowColor = "hsla(" + Math.round(ember.hue) + ", 100%, 70%, " + (ember.alpha * 0.8).toFixed(2) + ")";
-        embCtx.shadowBlur = 6;
-        embCtx.fill();
-      } else {
-        photonicEmbers.splice(emIdx, 1);
-      }
-    }
-
     var activePal = (isAudioHot && curChoreo && curChoreo.palette) ? curChoreo.palette : getActiveCircadianPalette();
 
     var radiantBackNodes = [];
@@ -6502,28 +6440,6 @@ try { checkUrlHashRoutine(); } catch(e){}
         // z > 0.05 rises into Foreground Canvas (z-index: 3, floating in front of cards & clock)
         // z <= 0.05 dives into Background Canvas (z-index: 1, dancing behind cards & clock)
         p.isFront = (p.z > 0.05);
-
-        // ── 5. QUANTUM RESONANCE ENTANGLEMENT (Weaver Orbit Pairs) ──
-        if (!p.isFront) {
-          for (var w2 = i + 1; w2 < particles.length; w2++) {
-            var p2 = particles[w2];
-            if (p2.isWeaver && !p2.isFront) {
-              var wdx = p.x - p2.x;
-              var wdy = p.y - p2.y;
-              var wdist = Math.hypot(wdx, wdy);
-              if (wdist < 46 && wdist > 8) {
-                var pull = (1 - wdist / 46) * 0.08;
-                var wAngle = Math.atan2(wdy, wdx);
-                var wTanX = -Math.sin(wAngle);
-                var wTanY = Math.cos(wAngle);
-                p.vx += (-Math.cos(wAngle) * 0.4 + wTanX * 0.8) * pull;
-                p.vy += (-Math.sin(wAngle) * 0.4 + wTanY * 0.8) * pull;
-                p2.vx += (Math.cos(wAngle) * 0.4 - wTanX * 0.8) * pull;
-                p2.vy += (Math.sin(wAngle) * 0.4 - wTanY * 0.8) * pull;
-              }
-            }
-          }
-        }
       }
 
       // ── Immediate Fade & Emergence Transitions ──
@@ -6566,7 +6482,7 @@ try { checkUrlHashRoutine(); } catch(e){}
       }
       p.hue += (p.targetHue - p.hue) * 0.03;
 
-      // Antigravity Mouse Repulsion (Supple curved trajectory deflection)
+      // Antigravity Mouse Repulsion
       if (mActive) {
         var dx = p.x - mx;
         var dy = p.y - my;
@@ -6582,6 +6498,9 @@ try { checkUrlHashRoutine(); } catch(e){}
           var spinMag = p.isFront ? 3.8 : 3.2;
           p.vx = p.vx * 0.5 + tanX * spinMag;
           p.vy = p.vy * 0.5 + tanY * spinMag;
+
+          // Subtle momentary flex specifically when banking around mouse shield
+          p.turnFlex = Math.sign(tanY || 1) * 0.75;
 
           if (isHighSpeedCursor && p.isRadiant) {
             p.trail.push({ x: p.x, y: p.y, alpha: p.isFront ? 0.85 : 0.65 });
@@ -6612,7 +6531,7 @@ try { checkUrlHashRoutine(); } catch(e){}
           p.vx += Math.cos(swAngle) * swForce;
           p.vy += Math.sin(swAngle) * swForce;
           p.alpha = Math.min(1, p.alpha + 0.30);
-          p.curvature = (p.curvature || 0) + (Math.random() > 0.5 ? 0.6 : -0.6);
+          p.turnFlex = (Math.random() > 0.5 ? 0.6 : -0.6);
         }
       }
 
@@ -6672,7 +6591,7 @@ try { checkUrlHashRoutine(); } catch(e){}
       p.x += p.vx;
       p.y += p.vy;
 
-      // ── LINE-OF-SIGHT SCREEN CONTAINMENT (Never Escape Outside the Screen!) ──
+      // ── LINE-OF-SIGHT SCREEN CONTAINMENT (Subtle flex strictly when bouncing to opposite side) ──
       if (p.x < MIN_X + 60) p.vx += (MIN_X + 60 - p.x) * 0.014;
       else if (p.x > MAX_X - 60) p.vx -= (p.x - (MAX_X - 60)) * 0.014;
       if (p.y < MIN_Y + 60) p.vy += (MIN_Y + 60 - p.y) * 0.014;
@@ -6681,20 +6600,20 @@ try { checkUrlHashRoutine(); } catch(e){}
       if (p.x < MIN_X) {
         p.x = MIN_X;
         p.vx = Math.abs(p.vx) * 0.75 + 0.25;
-        p.curvature = (p.curvature || 0) + 0.5;
+        p.turnFlex = 0.85; // Subtle bend when reflecting to the opposite side
       } else if (p.x > MAX_X) {
         p.x = MAX_X;
         p.vx = -Math.abs(p.vx) * 0.75 - 0.25;
-        p.curvature = (p.curvature || 0) - 0.5;
+        p.turnFlex = -0.85; // Subtle bend when reflecting to the opposite side
       }
       if (p.y < MIN_Y) {
         p.y = MIN_Y;
         p.vy = Math.abs(p.vy) * 0.75 + 0.25;
-        p.curvature = (p.curvature || 0) + 0.5;
+        p.turnFlex = 0.85;
       } else if (p.y > MAX_Y) {
         p.y = MAX_Y;
         p.vy = -Math.abs(p.vy) * 0.75 - 0.25;
-        p.curvature = (p.curvature || 0) - 0.5;
+        p.turnFlex = -0.85;
       }
 
       if (!p.isFront && p.isRadiant) radiantBackNodes.push(p);
@@ -6715,21 +6634,29 @@ try { checkUrlHashRoutine(); } catch(e){}
         }
       }
 
-      // ── AERODYNAMIC ELASTIC RIBBON CURVATURE DYNAMICS (Supple Bezier Bending) ──
+      // ── SLEEK STRAIGHT CAPSULES WITH SUBTLE TURN-FLEX ──
       var currentSpeed = Math.hypot(p.vx, p.vy);
       var currentAngle = Math.atan2(p.vy, p.vx);
 
+      // Detect sharp directional turns / reversals (moving to the opposite side)
       if (p.prevAngle !== undefined) {
         var angleDelta = currentAngle - p.prevAngle;
         while (angleDelta > Math.PI) angleDelta -= Math.PI * 2;
         while (angleDelta < -Math.PI) angleDelta += Math.PI * 2;
-        var flexMultiplier = curChoreo ? (curChoreo.ribbonFlex || 1.8) : 1.8;
-        // Supple angular rate integration with elastic spring damping
-        p.curvature = (p.curvature || 0) * 0.74 + angleDelta * (flexMultiplier * 1.8);
-      } else {
-        p.curvature = 0;
+        // Trigger a tiny flex ONLY when making an actual sharp turn (> ~20 degrees)
+        if (Math.abs(angleDelta) > 0.35) {
+          p.turnFlex = Math.max(-1.0, Math.min(1.0, (p.turnFlex || 0) + angleDelta * 0.7));
+        }
       }
       p.prevAngle = currentAngle;
+
+      // Fast elastic relaxation: immediately snaps back to a straight line!
+      p.turnFlex = (p.turnFlex || 0) * 0.68;
+      if (Math.abs(p.turnFlex) < 0.04) p.turnFlex = 0;
+
+      // Bow offset is strictly clamped to a tiny subtle flex (max 1.5px), 0 when moving straight
+      var bowOffset = p.turnFlex * 1.5;
+      var isCurved = Math.abs(bowOffset) > 0.12;
 
       var dynamicLength = Math.max(baseLength, Math.min(p.isFront ? 18 : 15, baseLength + currentSpeed * 2.2));
 
@@ -6743,29 +6670,6 @@ try { checkUrlHashRoutine(); } catch(e){}
         dynamicLength *= (1 + primaryInstEnergy * elas);
       }
 
-      // Harmonic song flex wave
-      var audioFlex = isAudioHot ? Math.sin(now * 0.006 + i * 0.45) * (liveBass * 0.38 + liveMid * 0.25 + beatKickImpulse * 0.35) : 0;
-      var totalCurvature = (p.curvature || 0) + audioFlex;
-      // Clamp curvature so it bows into an organic, elegant arc without folding
-      totalCurvature = Math.max(-1.15, Math.min(1.15, totalCurvature));
-      var bowOffset = totalCurvature * dynamicLength * 0.36;
-
-      // Photonic flex embers: shed micro-luminescent starlight dust on sharp turns or kicks
-      if ((Math.abs(totalCurvature) > 0.26 || beatKickImpulse > 0.30) && Math.random() < 0.22) {
-        var tailWorldX = p.x - Math.cos(currentAngle) * (dynamicLength * 0.45);
-        var tailWorldY = p.y - Math.sin(currentAngle) * (dynamicLength * 0.45);
-        photonicEmbers.push({
-          x: tailWorldX,
-          y: tailWorldY,
-          vx: -Math.cos(currentAngle) * 0.25 + (Math.random() - 0.5) * 0.35,
-          vy: -Math.sin(currentAngle) * 0.25 + (Math.random() - 0.5) * 0.35,
-          hue: p.hue,
-          alpha: 0.70 * p.fadeProgress,
-          size: p.isFront ? 1.4 : 0.95,
-          isFront: p.isFront
-        });
-      }
-
       var currentAlpha = Math.min(0.98, p.alpha * (0.82 + Math.sin(p.pulsePhase) * 0.18)) * p.fadeProgress;
       if (isAudioHot) {
         currentAlpha = Math.min(1.0, currentAlpha + liveBass * 0.25);
@@ -6776,16 +6680,23 @@ try { checkUrlHashRoutine(); } catch(e){}
       targetCtx.rotate(currentAngle);
 
       targetCtx.beginPath();
-      // Curved ribbon spine from tail (-L/2, 0) through bowed control point (0, bowOffset) to head (+L/2, 0)
-      targetCtx.moveTo(-dynamicLength / 2, 0);
-      targetCtx.quadraticCurveTo(0, bowOffset, dynamicLength / 2, 0);
-
-      targetCtx.lineWidth = curSize;
-      targetCtx.lineCap = "round";
-      targetCtx.lineJoin = "round";
+      if (isCurved) {
+        // Subtle momentary flex strictly during turns/reversals
+        targetCtx.moveTo(-dynamicLength / 2, 0);
+        targetCtx.quadraticCurveTo(0, bowOffset, dynamicLength / 2, 0);
+        targetCtx.lineWidth = curSize;
+        targetCtx.lineCap = "round";
+      } else {
+        // Pristine, clean, straight geometric capsule (the look you prefer!)
+        if (typeof targetCtx.roundRect === "function") {
+          targetCtx.roundRect(-dynamicLength / 2, -curSize / 2, dynamicLength, curSize, curSize / 2);
+        } else {
+          targetCtx.rect(-dynamicLength / 2, -curSize / 2, dynamicLength, curSize);
+        }
+      }
 
       if (p.isFront) {
-        // ── FOREGROUND 3D DANCER (Extra Radiant Luminous Glow, Curved Ribbon & Diamond Core) ──
+        // ── FOREGROUND 3D DANCER (Extra Radiant Luminous Glow & Diamond Core) ──
         var fGrad = targetCtx.createLinearGradient(-dynamicLength / 2, 0, dynamicLength / 2, 0);
         var fLitBoost = isAudioHot ? (liveBass * 24 + beatKickImpulse * 16) : 0;
         var fHeadLit = Math.min(98, 80 + fLitBoost);
@@ -6805,19 +6716,25 @@ try { checkUrlHashRoutine(); } catch(e){}
 
         targetCtx.shadowColor = "hsla(" + Math.round(p.hue) + ",100%,66%," + Math.min(1, currentAlpha * (0.75 + liveBass * 0.30)).toFixed(2) + ")";
         targetCtx.shadowBlur = fGlow;
-        targetCtx.strokeStyle = fGrad;
-        targetCtx.stroke();
 
-        // White-hot starlight core at the curved leading tip
+        if (isCurved) {
+          targetCtx.strokeStyle = fGrad;
+          targetCtx.stroke();
+        } else {
+          targetCtx.fillStyle = fGrad;
+          targetCtx.fill();
+        }
+
+        // Diamond white-hot leading spark
         targetCtx.beginPath();
-        targetCtx.arc(dynamicLength / 2, 0, curSize * 0.68, 0, Math.PI * 2);
+        targetCtx.arc(dynamicLength / 2, 0, curSize * 0.65, 0, Math.PI * 2);
         targetCtx.fillStyle = "rgba(255,255,255," + (currentAlpha * 0.96).toFixed(2) + ")";
         targetCtx.shadowColor = "hsla(" + Math.round(p.hue2) + ",100%,75%,0.95)";
         targetCtx.shadowBlur = fGlow * 1.2;
         targetCtx.fill();
 
       } else if (p.isRadiant) {
-        // Radiant Quantum Node (Curved Ribbon Behind Cards or Ambient)
+        // Radiant Background Node
         var grad = targetCtx.createLinearGradient(-dynamicLength / 2, 0, dynamicLength / 2, 0);
         var litBoost = isAudioHot ? (liveBass * 20 + beatKickImpulse * 12) : 0;
         var satBoost = isAudioHot ? 98 : p.sat;
@@ -6841,11 +6758,17 @@ try { checkUrlHashRoutine(); } catch(e){}
 
         targetCtx.shadowColor = "hsla(" + Math.round(p.hue) + ",94%,64%," + Math.min(1, currentAlpha * (0.65 + liveBass * 0.35)).toFixed(2) + ")";
         targetCtx.shadowBlur = curGlow;
-        targetCtx.strokeStyle = grad;
-        targetCtx.stroke();
+
+        if (isCurved) {
+          targetCtx.strokeStyle = grad;
+          targetCtx.stroke();
+        } else {
+          targetCtx.fillStyle = grad;
+          targetCtx.fill();
+        }
 
       } else {
-        // Ambient Micro-Dash (Curved Ribbon)
+        // Ambient Micro-Dash (Clean straight line)
         if (isAudioHot && (liveBass > 0.25 || beatKickImpulse > 0.25)) {
           var ambBeat = Math.max(liveBass, beatKickImpulse);
           var aGrad = targetCtx.createLinearGradient(-dynamicLength / 2, 0, dynamicLength / 2, 0);
@@ -6854,12 +6777,23 @@ try { checkUrlHashRoutine(); } catch(e){}
 
           targetCtx.shadowColor = "hsla(" + Math.round(p.hue) + ",92%,65%," + (ambBeat * 0.60).toFixed(2) + ")";
           targetCtx.shadowBlur = ambBeat * 10;
-          targetCtx.strokeStyle = aGrad;
+          if (isCurved) {
+            targetCtx.strokeStyle = aGrad;
+            targetCtx.stroke();
+          } else {
+            targetCtx.fillStyle = aGrad;
+            targetCtx.fill();
+          }
         } else {
           targetCtx.shadowBlur = p.emergeBloom > 0.02 ? (p.emergeBloom * 12) : 0;
-          targetCtx.strokeStyle = "hsla(" + Math.round(p.hue) + "," + p.sat + "%," + p.lit + "%," + currentAlpha.toFixed(2) + ")";
+          if (isCurved) {
+            targetCtx.strokeStyle = "hsla(" + Math.round(p.hue) + "," + p.sat + "%," + p.lit + "%," + currentAlpha.toFixed(2) + ")";
+            targetCtx.stroke();
+          } else {
+            targetCtx.fillStyle = "hsla(" + Math.round(p.hue) + "," + p.sat + "%," + p.lit + "%," + currentAlpha.toFixed(2) + ")";
+            targetCtx.fill();
+          }
         }
-        targetCtx.stroke();
       }
 
       targetCtx.restore();
