@@ -1,0 +1,256 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Background Gradient: Pure OLED Black with Subtle Deep Emerald Vignette -->
+    <radialGradient id="ovpjBgRefined" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#051409"/>
+      <stop offset="55%" stop-color="#020703"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </radialGradient>
+
+    <!-- 1. NEON BRIGHT GREEN RADIANT GRADIENT (Surrounding Circle) -->
+    <linearGradient id="neonGreenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F4FFF2"/>
+      <stop offset="14%" stop-color="#66FF33"/>
+      <stop offset="40%" stop-color="#00FF66"/>
+      <stop offset="72%" stop-color="#00D64B"/>
+      <stop offset="100%" stop-color="#03541A"/>
+    </linearGradient>
+
+    <linearGradient id="neonGreenGleam" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.9)"/>
+      <stop offset="35%" stop-color="rgba(102,255,51,0.6)"/>
+      <stop offset="70%" stop-color="rgba(0,255,102,0.15)"/>
+      <stop offset="100%" stop-color="rgba(0,60,18,0.85)"/>
+    </linearGradient>
+
+    <!-- 2. BLACK RADIANT GRADIENT (Obsidian Titanium with Platinum Edge) -->
+    <linearGradient id="blackRadiant" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#70707B"/>
+      <stop offset="18%" stop-color="#44444C"/>
+      <stop offset="45%" stop-color="#232328"/>
+      <stop offset="80%" stop-color="#121215"/>
+      <stop offset="100%" stop-color="#050506"/>
+    </linearGradient>
+
+    <linearGradient id="blackSpecRim" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.85)"/>
+      <stop offset="40%" stop-color="rgba(212,168,83,0.4)"/>
+      <stop offset="75%" stop-color="rgba(255,30,39,0.3)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0.1)"/>
+    </linearGradient>
+
+    <!-- 3. GOLD RADIANT GRADIENT (Imperial 24K Luxury) -->
+    <linearGradient id="goldRadiant" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="14%" stop-color="#FFF4BF"/>
+      <stop offset="35%" stop-color="#FFD54F"/>
+      <stop offset="65%" stop-color="#D49A24"/>
+      <stop offset="88%" stop-color="#8C5C0D"/>
+      <stop offset="100%" stop-color="#3B2403"/>
+    </linearGradient>
+
+    <!-- 4. RED RADIANT GRADIENT (Crimson Ruby Fire) -->
+    <linearGradient id="redRadiant" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="14%" stop-color="#FFCCD2"/>
+      <stop offset="36%" stop-color="#FF1E27"/>
+      <stop offset="68%" stop-color="#B30008"/>
+      <stop offset="100%" stop-color="#3D0002"/>
+    </linearGradient>
+
+    <!-- 5. MIXED TRI-METALLIC FACET GRADIENTS -->
+    <!-- Red-to-Gold Transition Gradient -->
+    <linearGradient id="redGoldBlend" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFD54F"/>
+      <stop offset="40%" stop-color="#D49A24"/>
+      <stop offset="65%" stop-color="#FF1E27"/>
+      <stop offset="100%" stop-color="#7A0005"/>
+    </linearGradient>
+
+    <!-- Gold-to-Black Bevel Gradient -->
+    <linearGradient id="goldBlackBlend" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF2B2"/>
+      <stop offset="30%" stop-color="#D49A24"/>
+      <stop offset="65%" stop-color="#2A2A30"/>
+      <stop offset="100%" stop-color="#0B0B0E"/>
+    </linearGradient>
+
+    <!-- FILTERS -->
+    <filter id="neonBrightGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="30" result="blurWide"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="14" result="blurMid"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blurSharp"/>
+      <feMerge>
+        <feMergeNode in="blurWide"/>
+        <feMergeNode in="blurMid"/>
+        <feMergeNode in="blurSharp"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="ovpjDropShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="20" stdDeviation="18" flood-color="#000000" flood-opacity="0.95"/>
+      <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#000000" flood-opacity="0.8"/>
+    </filter>
+
+    <filter id="letterShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="-8" dy="6" stdDeviation="7" flood-color="#000000" flood-opacity="0.95"/>
+    </filter>
+  </defs>
+
+  <!-- Deep Background Canvas -->
+  <rect x="0" y="0" width="512" height="512" fill="url(#ovpjBgRefined)"/>
+
+  <!-- ======================================================== -->
+  <!-- SURROUNDING CIRCLE OF NEON BRIGHT GREEN RADIANT GRADIENT -->
+  <!-- ======================================================== -->
+  <!-- Outer Ambient Neon Green Aura -->
+  <circle cx="256" cy="256" r="226" fill="none" stroke="#00FF66" stroke-width="20" opacity="0.32" filter="url(#neonBrightGlow)"/>
+
+  <!-- Main Radiant Ring -->
+  <circle cx="256" cy="256" r="226" fill="none" stroke="url(#neonGreenGrad)" stroke-width="17" filter="url(#neonBrightGlow)"/>
+
+  <!-- Specular Chrome Gleam on Green Ring -->
+  <circle cx="256" cy="256" r="226" fill="none" stroke="url(#neonGreenRingGleam)" stroke-width="6" opacity="0.75"/>
+
+  <!-- Concentric Precision Dial Details -->
+  <circle cx="256" cy="256" r="210" fill="none" stroke="rgba(0, 255, 102, 0.45)" stroke-width="2.5" stroke-dasharray="6 8"/>
+  <circle cx="256" cy="256" r="202" fill="none" stroke="rgba(255, 255, 255, 0.22)" stroke-width="1.5"/>
+
+  <!-- 4 Cardinal Celestial / Compass Markers -->
+  <polygon points="256,15 263,30 256,45 249,30" fill="#FFFFFF" filter="url(#neonBrightGlow)"/>
+  <polygon points="256,497 263,482 256,467 249,482" fill="#00FF66" filter="url(#neonBrightGlow)"/>
+  <polygon points="15,256 30,249 45,256 30,263" fill="#00FF66" filter="url(#neonBrightGlow)"/>
+  <polygon points="497,256 482,249 467,256 482,263" fill="#00FF66" filter="url(#neonBrightGlow)"/>
+
+  <!-- Inner Dark Stage Disc -->
+  <circle cx="256" cy="256" r="195" fill="#000000" opacity="0.82"/>
+
+  <!-- ======================================================== -->
+  <!-- LETTERS O - V - P - J: MASTERPIECE SEQUENTIAL INTERLOCK  -->
+  <!-- ======================================================== -->
+  <g filter="url(#ovpjDropShadow)">
+    
+    <!-- 1. LETTER "O" — In BLACK RADIANT GRADIENT with Tri-Metallic Specular Bevel -->
+    <g>
+      <path d="M 125 140 
+               C 160 140, 185 170, 185 215
+               L 185 297
+               C 185 342, 160 372, 125 372
+               C 90 372, 65 342, 65 297
+               L 65 215
+               C 65 170, 90 140, 125 140 Z
+               M 125 178
+               C 107 178, 97 194, 97 215
+               L 97 297
+               C 97 318, 107 334, 125 334
+               C 143 334, 153 318, 153 297
+               L 153 215
+               C 153 194, 143 178, 125 178 Z"
+            fill="url(#blackRadiant)"
+            stroke="url(#blackSpecRim)"
+            stroke-width="3"
+            fill-rule="evenodd"/>
+
+      <!-- Inner gold metallic reflection on O's right inner crest -->
+      <path d="M 125 178 C 143 178, 153 194, 153 215 L 153 297 C 153 318, 143 334, 125 334 Z"
+            stroke="url(#goldRadiant)" stroke-width="2" fill="none" opacity="0.35"/>
+    </g>
+
+    <!-- 2. LETTER "V" — In RED RADIANT GRADIENT (Center Chevron) -->
+    <g filter="url(#letterShadow)">
+      <path d="M 172 142
+               L 208 142
+               L 232 308
+               C 236 328, 240 334, 246 334
+               C 252 334, 256 328, 260 308
+               L 284 142
+               L 320 142
+               L 272 348
+               C 264 366, 256 372, 246 372
+               C 236 372, 228 366, 220 348
+               L 172 142 Z"
+            fill="url(#redRadiant)"/>
+
+      <!-- Gold apex accent on V bottom -->
+      <polygon points="246,334 260,308 272,348 246,372 220,348 232,308" fill="url(#goldRadiant)" opacity="0.35"/>
+
+      <!-- Top horizontal serifs on V -->
+      <rect x="168" y="137" width="18" height="8" rx="2" fill="#FF858D" opacity="0.85"/>
+      <rect x="306" y="137" width="18" height="8" rx="2" fill="#FF858D" opacity="0.85"/>
+    </g>
+
+    <!-- 3. LETTER "P" — In GOLD RADIANT GRADIENT (Mid Right Column) -->
+    <g filter="url(#letterShadow)">
+      <path d="M 292 142
+               L 364 142
+               C 394 142, 414 160, 414 196
+               C 414 232, 394 250, 364 250
+               L 326 250
+               L 326 366
+               C 326 372, 322 376, 316 376
+               L 302 376
+               C 296 376, 292 372, 292 366
+               L 292 142 Z
+               M 326 174
+               L 326 218
+               L 360 218
+               C 374 218, 382 210, 382 196
+               C 382 182, 374 174, 360 174
+               L 326 174 Z"
+            fill="url(#goldRadiant)"
+            fill-rule="evenodd"/>
+
+      <!-- Precision specular bevel rim on P -->
+      <path d="M 364 142 C 394 142, 414 160, 414 196 C 414 232, 394 250, 364 250" 
+            stroke="#FFFDF0" stroke-width="3" fill="none" opacity="0.9"/>
+
+      <!-- Top and bottom serifs on P -->
+      <rect x="286" y="137" width="24" height="8" rx="2" fill="#FFF2B2" opacity="0.9"/>
+      <rect x="286" y="370" width="24" height="8" rx="2" fill="#FFE27A" opacity="0.9"/>
+    </g>
+
+    <!-- 4. LETTER "J" — In RED-GOLD-BLACK RADIANT BLEND (Far Right Anchor) -->
+    <g filter="url(#letterShadow)">
+      <!-- Main J stem in Gold Radiant -->
+      <path d="M 406 142
+               L 436 142
+               L 436 302
+               C 436 348, 410 376, 368 376
+               C 342 376, 322 364, 312 344
+               C 309 338, 313 332, 321 332
+               L 337 332
+               C 342 332, 345 335, 349 340
+               C 354 347, 360 352, 368 352
+               C 386 352, 404 338, 404 308
+               L 404 142 Z"
+            fill="url(#goldRadiant)"/>
+
+      <!-- Lower dynamic section transitions to Red Radiant Gradient -->
+      <path d="M 406 254
+               L 436 254
+               L 436 302
+               C 436 348, 410 376, 368 376
+               C 342 376, 322 364, 312 344
+               C 309 338, 313 332, 321 332
+               L 337 332
+               C 342 332, 345 335, 349 340
+               C 354 347, 360 352, 368 352
+               C 386 352, 404 338, 404 308
+               L 404 254 Z"
+            fill="url(#redRadiant)"
+            opacity="0.88"/>
+
+      <!-- Bottom inner bevel in Black Radiant Gradient for tri-metallic depth -->
+      <path d="M 337 332 C 342 332, 345 335, 349 340 C 354 347, 360 352, 368 352 C 386 352, 404 338, 404 308 L 404 290 C 395 315, 380 326, 364 326 C 352 326, 344 322, 337 318 Z"
+            fill="url(#blackRadiant)" opacity="0.75"/>
+
+      <!-- Top horizontal serif on J -->
+      <rect x="398" y="137" width="48" height="8" rx="2" fill="#FFF2B2" opacity="0.9"/>
+    </g>
+
+    <!-- Center Intersecting Diamond Core Star (Brilliant White Nova) -->
+    <polygon points="256,224 260,234 270,238 260,242 256,252 252,242 242,238 252,234" 
+             fill="#FFFFFF" filter="url(#neonBrightGlow)"/>
+  </g>
+</svg>
