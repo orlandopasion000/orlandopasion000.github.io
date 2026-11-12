@@ -3329,9 +3329,9 @@ function nextSong(){
   return SONGS[lastIdx];
 }
 
-/* ───────── AUDIO ENGINE (Web Audio API) ───────── */
+/* ───────── AUDIO ENGINE (Web Audio API + FFT Beat Analyser) ───────── */
 var AC=window.AudioContext||window.webkitAudioContext;
-var ac=null,master=null,raw={},bufs={},ready={},curSrc=null,curFade=null,fallback=null;
+var ac=null,master=null,audioAnalyser=null,analyserDataArray=null,raw={},bufs={},ready={},curSrc=null,curFade=null,fallback=null;
 var current=null,onDone=null,mode=null;
 
 function target(){return muted?0:volume}
@@ -3339,13 +3339,69 @@ function initAudio(){
   if(ac||!AC)return;
   try{
     ac=new AC({latencyHint:"interactive"});
-    master=ac.createGain();master.gain.value=target();master.connect(ac.destination);
+    master=ac.createGain();
+    master.gain.value=target();
+
+    // 100% Live Hardware FFT Frequency & Beat Analyser
+    audioAnalyser=ac.createAnalyser();
+    audioAnalyser.fftSize=256;
+    audioAnalyser.smoothingTimeConstant=0.68;
+    analyserDataArray=new Uint8Array(audioAnalyser.frequencyBinCount);
+
+    master.connect(audioAnalyser);
+    audioAnalyser.connect(ac.destination);
+
     initAmbientEngine();
     if(ac.state==="suspended"){
       ac.resume().catch(function(){});
     }
   }catch(e){}
   updateAudioBadge();
+}
+
+// Global 100% Real-Time Beat Telemetry Extractor
+function getAudioBeatTelemetry(){
+  var isPlaying = (typeof current !== "undefined" && current !== null) ||
+                  (typeof chimeTimer !== "undefined" && chimeTimer !== null) ||
+                  (typeof ringing !== "undefined" && ringing !== -1);
+
+  if(!audioAnalyser || !analyserDataArray || !ac || ac.state !== "running"){
+    return {
+      active: isPlaying,
+      bass: isPlaying ? 0.35 : 0,
+      mid: isPlaying ? 0.25 : 0,
+      treble: isPlaying ? 0.15 : 0,
+      energy: isPlaying ? 0.30 : 0
+    };
+  }
+
+  audioAnalyser.getByteFrequencyData(analyserDataArray);
+
+  // Bass & Kick Drum: Bins 1 to 5 (~40Hz - 250Hz)
+  var bSum = 0;
+  for(var b = 1; b <= 5; b++) bSum += analyserDataArray[b];
+  var bass = bSum / (5 * 255);
+
+  // Mid-range & Vocals/Guitars: Bins 6 to 24 (~250Hz - 1200Hz)
+  var mSum = 0;
+  for(var m = 6; m <= 24; m++) mSum += analyserDataArray[m];
+  var mid = mSum / (19 * 255);
+
+  // Treble & High Hats: Bins 25 to 64 (~1200Hz - 6000Hz)
+  var tSum = 0;
+  for(var tr = 25; tr <= 64; tr++) tSum += analyserDataArray[tr];
+  var treble = tSum / (40 * 255);
+
+  var energy = (bass * 0.55 + mid * 0.30 + treble * 0.15);
+  var active = isPlaying || energy > 0.02;
+
+  return {
+    active: active,
+    bass: bass,
+    mid: mid,
+    treble: treble,
+    energy: energy
+  };
 }
 function unlock(){
   initAudio();
@@ -3430,6 +3486,13 @@ function startFallback(song){
   el.currentTime=0;
   el.volume=target();
   fallback=el;
+  if(ac && master && !el._mediaSourceNode){
+    try {
+      el._mediaSourceNode = ac.createMediaElementSource(el);
+      el._mediaSourceNode.connect(master);
+      el.volume = 1;
+    } catch(e){}
+  }
   el.onended=function(){if(fallback===el){fallback=null;finished()}};
   var p=el.play();
   if(p&&p.catch){
@@ -5961,13 +6024,9 @@ try { checkUrlHashRoutine(); } catch(e){}
     });
   }
 
-  /* ── 5. AUDIO-HARMONIC PULSE DETECTION ── */
-  var audioEnvelope = 0;
-  function isAudioActive() {
-    return (typeof current !== "undefined" && current !== null) ||
-           (typeof chimeTimer !== "undefined" && chimeTimer !== null) ||
-           (typeof ringing !== "undefined" && ringing !== -1);
-  }
+  /* ── 5. 100% LIVE AUDIO FFT BEAT & DANCE ENGINE ── */
+  var prevBassEnergy = 0;
+  var beatKickImpulse = 0;
 
   var animId = null;
   var isTabActive = true;
@@ -6025,10 +6084,20 @@ try { checkUrlHashRoutine(); } catch(e){}
     var mActive = mouse.active;
     var isHighSpeedCursor = cursorSpeed > 8.5;
 
-    // ── Audio Resonance Envelope Calculation ──
-    var targetAudio = isAudioActive() ? 1.0 : 0.0;
-    audioEnvelope += (targetAudio - audioEnvelope) * 0.08;
-    var beatPulse = audioEnvelope > 0.01 ? (Math.sin(now * 0.0075) * 0.5 + 0.5) : 0;
+    // ── 100% Real-Time FFT Beat & Harmonic Analysis ──
+    var audioData = (typeof getAudioBeatTelemetry === "function") ? getAudioBeatTelemetry() : { active: false, bass: 0, mid: 0, treble: 0, energy: 0 };
+    var liveBass = audioData.bass;        // 0.0 to 1.0 direct kick drum & bass transients
+    var liveMid = audioData.mid;          // 0.0 to 1.0 vocals & rhythm melody
+    var liveTreble = audioData.treble;    // 0.0 to 1.0 crisp percussive snap
+    var liveEnergy = audioData.energy;
+    var isAudioHot = audioData.active && (liveEnergy > 0.02 || liveBass > 0.04);
+
+    // Instantaneous beat transient kick detection
+    if (liveBass > prevBassEnergy + 0.07 && liveBass > 0.22) {
+      beatKickImpulse = Math.min(1.0, beatKickImpulse + liveBass * 0.85);
+    }
+    prevBassEnergy = liveBass;
+    beatKickImpulse *= 0.86; // smooth kinetic decay
 
     // ── Update & Render Hyperspace Shockwaves ──
     for (var sIdx = shockwaves.length - 1; sIdx >= 0; sIdx--) {
@@ -6124,10 +6193,12 @@ try { checkUrlHashRoutine(); } catch(e){}
       p.vx += (p.baseVx - p.vx) * 0.035;
       p.vy += (p.baseVy - p.vy) * 0.035;
 
-      // Audio-Harmonic subtle drift ripple
-      if (audioEnvelope > 0.01) {
-        p.vx += Math.cos(p.pulsePhase) * (0.15 * beatPulse * audioEnvelope);
-        p.vy += Math.sin(p.pulsePhase) * (0.15 * beatPulse * audioEnvelope);
+      // ── Physical Music Dance Wave: 100% sync to audio beat & bass kicks ──
+      if (isAudioHot) {
+        var danceAngle = p.pulsePhase + (i % 2 === 0 ? 0.785 : -0.785);
+        var dancePush = (liveBass * 0.65 + liveMid * 0.35 + beatKickImpulse * 0.45);
+        p.vx += Math.cos(danceAngle) * (dancePush * 0.28);
+        p.vy += Math.sin(danceAngle) * (dancePush * 0.28);
       }
 
       // Damping
@@ -6162,17 +6233,20 @@ try { checkUrlHashRoutine(); } catch(e){}
         }
       }
 
-      // ── Render Directional Capsule ──
+      // ── Render Directional Capsule (Dancing 100% With Audio Beat) ──
       var currentSpeed = Math.hypot(p.vx, p.vy);
       var currentAngle = Math.atan2(p.vy, p.vx);
       var dynamicLength = Math.max(p.length, Math.min(15, p.length + currentSpeed * 2.2));
 
-      // Audio-Harmonic Breathing
-      if (audioEnvelope > 0.01) {
-        dynamicLength *= (1 + beatPulse * 0.35 * audioEnvelope);
+      // 100% Live Beat Length Expansion: dashes stretch dynamically on kick drums & bass drops
+      if (isAudioHot) {
+        dynamicLength *= (1 + liveBass * 1.65 + liveMid * 0.65 + beatKickImpulse * 0.45);
       }
 
-      var currentAlpha = Math.min(0.96, p.alpha * (0.82 + Math.sin(p.pulsePhase) * 0.18));
+      var currentAlpha = Math.min(0.98, p.alpha * (0.82 + Math.sin(p.pulsePhase) * 0.18));
+      if (isAudioHot) {
+        currentAlpha = Math.min(1.0, currentAlpha + liveBass * 0.25);
+      }
 
       ctx.save();
       ctx.translate(p.x, p.y);
@@ -6186,21 +6260,42 @@ try { checkUrlHashRoutine(); } catch(e){}
       }
 
       if (p.isRadiant) {
+        // Radiant Quantum Node: Head-to-tail linear gradient dancing 100% with the beat!
         var grad = ctx.createLinearGradient(-dynamicLength / 2, 0, dynamicLength / 2, 0);
-        grad.addColorStop(0, "hsla(" + Math.round(p.hue) + "," + p.sat + "%," + p.lit + "%," + (currentAlpha * 0.90).toFixed(2) + ")");
-        grad.addColorStop(1, "hsla(" + Math.round(p.hue2) + ",95%,75%," + Math.min(1, currentAlpha * 1.25).toFixed(2) + ")");
 
+        // Chromatic light excitation on kick drums
+        var litBoost = isAudioHot ? (liveBass * 20 + beatKickImpulse * 12) : 0;
+        var satBoost = isAudioHot ? 98 : p.sat;
+        var headLit = Math.min(96, 75 + litBoost);
+        var tailLit = Math.min(88, p.lit + litBoost * 0.6);
+
+        grad.addColorStop(0, "hsla(" + Math.round(p.hue) + "," + satBoost + "%," + tailLit + "%," + (currentAlpha * 0.90).toFixed(2) + ")");
+        grad.addColorStop(1, "hsla(" + Math.round(p.hue2) + ",98%," + headLit + "%," + Math.min(1, currentAlpha * 1.35).toFixed(2) + ")");
+
+        // Radiant halo glow blooms and flares in 100% sync with real audio bass transients
         var curGlow = p.glowBlur;
-        if (audioEnvelope > 0.01) {
-          curGlow *= (1 + beatPulse * 0.60 * audioEnvelope);
+        if (isAudioHot) {
+          curGlow *= (1 + liveBass * 2.6 + liveMid * 0.9 + beatKickImpulse * 1.4);
         }
 
-        ctx.shadowColor = "hsla(" + Math.round(p.hue) + ",92%,62%," + (currentAlpha * 0.60).toFixed(2) + ")";
+        ctx.shadowColor = "hsla(" + Math.round(p.hue) + ",94%,64%," + Math.min(1, currentAlpha * (0.65 + liveBass * 0.35)).toFixed(2) + ")";
         ctx.shadowBlur = curGlow;
         ctx.fillStyle = grad;
       } else {
-        ctx.shadowBlur = 0;
-        ctx.fillStyle = "hsla(" + Math.round(p.hue) + "," + p.sat + "%," + p.lit + "%," + currentAlpha.toFixed(2) + ")";
+        // Ambient Micro-Dash: Catch a subtle radiant micro-glow & gradient on powerful beats!
+        if (isAudioHot && (liveBass > 0.25 || beatKickImpulse > 0.25)) {
+          var ambBeat = Math.max(liveBass, beatKickImpulse);
+          var aGrad = ctx.createLinearGradient(-dynamicLength / 2, 0, dynamicLength / 2, 0);
+          aGrad.addColorStop(0, "hsla(" + Math.round(p.hue) + "," + p.sat + "%," + p.lit + "%," + currentAlpha.toFixed(2) + ")");
+          aGrad.addColorStop(1, "hsla(" + Math.round(p.hue2) + ",94%," + Math.min(88, p.lit + 18) + "%," + currentAlpha.toFixed(2) + ")");
+
+          ctx.shadowColor = "hsla(" + Math.round(p.hue) + ",92%,65%," + (ambBeat * 0.60).toFixed(2) + ")";
+          ctx.shadowBlur = ambBeat * 10;
+          ctx.fillStyle = aGrad;
+        } else {
+          ctx.shadowBlur = 0;
+          ctx.fillStyle = "hsla(" + Math.round(p.hue) + "," + p.sat + "%," + p.lit + "%," + currentAlpha.toFixed(2) + ")";
+        }
       }
 
       ctx.fill();
