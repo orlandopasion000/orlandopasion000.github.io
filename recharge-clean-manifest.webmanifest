@@ -2,7 +2,7 @@
   "name": "OrlandoRecharge (Main Version)",
   "short_name": "OrlandoRecharge",
   "description": "Clean, customizable personal daily alarm schedule with sleep soundscapes and luxury metallic clocks.",
-  "id": "orlandorecharge-clean-edition",
+  "id": "orlandorecharge-main-version",
   "start_url": "https://orlandopasion000.github.io/recharge-clean.html",
   "scope": "https://orlandopasion000.github.io/recharge-clean.html",
   "display": "standalone",
