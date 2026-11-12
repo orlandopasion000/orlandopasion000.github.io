@@ -1569,10 +1569,23 @@ h2{font-size:clamp(1.5rem,2.6vw,2.1rem);font-weight:700;display:flex;align-items
 .cat-pill:hover{color:var(--text);border-color:var(--c)}
 .cat-pill.active{background:var(--surface-2);color:var(--text);border-color:var(--c);box-shadow:0 0 14px color-mix(in srgb,var(--c) 30%,transparent)}
 
-/* Schedule List — Compact, High-Density Executive Spacing */
-ul{list-style:none}
-li{--c:var(--work);display:flex;align-items:center;gap:16px;background:#000;border:1px solid var(--line);border-left:4.5px solid var(--c);border-radius:12px;padding:9px 18px;margin-bottom:6px;transition:transform .2s,box-shadow .2s,opacity .3s}
-li:hover{transform:translateX(3px);box-shadow:-6px 0 20px -8px var(--c)}
+/* Schedule List — 2-Column Responsive Executive Grid */
+#list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 14px;
+  padding: 0;
+  margin: 0;
+}
+#list.editing-mode {
+  grid-template-columns: 1fr;
+}
+.empty-schedule-card {
+  grid-column: 1 / -1;
+}
+li{--c:var(--work);display:flex;align-items:center;gap:14px;background:#000;border:1px solid var(--line);border-left:4.5px solid var(--c);border-radius:12px;padding:10px 16px;margin-bottom:0;min-width:0;transition:transform .2s ease,box-shadow .2s ease,opacity .3s ease}
+li:hover{transform:translateY(-2px);box-shadow:-4px 0 20px -6px var(--c),0 4px 16px rgba(0,0,0,0.5)}
 li.rest{--c:var(--rest)}   /* Green for Recharge */
 li.class{--c:var(--class)} /* Blue for Class */
 li.work{--c:var(--work)}   /* Purple for Work */
@@ -1582,8 +1595,8 @@ li.past{opacity:.35}
 li.cur{opacity:1;border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 26px rgba(217,185,92,.22)}
 
 /* Time Typography: Clean, optical, professional numbers */
-.t{font-family:var(--font-clock);font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;letter-spacing:-.01em;font-weight:700;font-size:1.15rem;min-width:6.2em;color:var(--c)}
-.l{flex:1;font-size:1.06rem;font-weight:600;line-height:1.35}
+.t{font-family:var(--font-clock);font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;letter-spacing:-.01em;font-weight:700;font-size:1.12rem;min-width:5.8em;color:var(--c);flex-shrink:0}
+.l{flex:1;font-size:1.04rem;font-weight:600;line-height:1.35;min-width:0;word-break:break-word}
 
 /* Inline Edit Controls in rows */
 .edit-row-ctrls{display:flex;align-items:center;gap:8px;flex:1;flex-wrap:wrap}
@@ -1626,16 +1639,17 @@ li.cur{opacity:1;border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 2
 @media (prefers-reduced-motion:reduce){.ring,.player.playing .eq i{animation:none}}
 
 /* Responsive */
-@media (max-width:820px){
+@media (max-width:860px){
+  #list{grid-template-columns:1fr;gap:6px}
   body{font-size:19.5px}
   main{padding:20px 16px 60px}
   .hero{padding:24px 20px 26px;border-radius:24px}
   .vol{margin-left:0;width:100%}
   #volSlider{flex:1;width:auto}
   .controls button{flex:1}
-  li{padding:8px 12px;gap:10px;margin-bottom:5px;border-radius:10px;flex-wrap:wrap}
+  li{padding:8px 12px;gap:10px;margin-bottom:0;border-radius:10px;flex-wrap:wrap}
   .t{font-size:1.05rem}.l{font-size:0.98rem}
-  .t{min-width:5.6em}
+  .t{min-width:5.4em}
   .days{gap:6px}.days button{font-size:.95rem;padding:12px 0}
   .edit-row-ctrls{width:100%}
 }
@@ -3253,7 +3267,7 @@ var CAT_LABELS = {
 };
 
 function renderList(){
-  var list=$("list");list.innerHTML="";
+  var list=$("list");list.innerHTML="";list.classList.toggle("editing-mode",!!isEditing);
   var counts={all:S.length,class:0,rest:0,work:0,err:0,night:0};
   S.forEach(function(s){if(counts[s[2]]!==undefined)counts[s[2]]++});
 
