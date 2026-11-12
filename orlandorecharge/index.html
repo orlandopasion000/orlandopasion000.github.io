@@ -2590,8 +2590,8 @@ body.light-theme .highlight-card .dist-icon{
         </button>
         <span class="console-divider">|</span>
         <button class="console-mini-pill" id="consoleDaysBadge" title="Current Active Days">
-          <svg class="modern-icon modern-icon-cyan" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-          <span id="consoleDaysText">Mon–Fri</span>
+          <svg class="modern-icon modern-icon-cyan" viewBox="0 0 24 24"><path d="M4 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12.5l-4.5 4.5H6a2 2 0 0 1-2-2V4z"></path><line x1="8" y1="1" x2="8" y2="4"></line><line x1="16" y1="1" x2="16" y2="4"></line><line x1="4" y1="8.5" x2="20" y2="8.5"></line><line x1="7.5" y1="12.5" x2="9.5" y2="12.5"></line><line x1="12.5" y1="12.5" x2="16.5" y2="12.5"></line><line x1="7.5" y1="16" x2="11.5" y2="16"></line><circle cx="14.5" cy="16" r="1" fill="currentColor"></circle></svg>
+          <span id="consoleDaysText">Mon — Fri</span>
         </button>
         <button class="console-mini-pill" id="consoleThemeBadge" title="Cycle Clock Font & Visual Appearance">
           <svg class="modern-icon modern-icon-gold" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a10 10 0 0 0-4 19.19V17a3 3 0 0 1 3-3h1a2 2 0 0 0 2-2 2 2 0 0 0-2-2z"></path></svg>
@@ -2689,7 +2689,7 @@ body.light-theme .highlight-card .dist-icon{
             <option value="blank">📝 Blank Canvas (Start Fresh — 0 Blocks)</option>
           </select>
           <span id="presetDaysBadge" title="Active days for this routine">
-            <svg class="modern-icon modern-icon-cyan" viewBox="0 0 24 24" style="margin-right:3px"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            <svg class="modern-icon modern-icon-cyan" viewBox="0 0 24 24" style="margin-right:4px"><path d="M4 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12.5l-4.5 4.5H6a2 2 0 0 1-2-2V4z"></path><line x1="8" y1="1" x2="8" y2="4"></line><line x1="16" y1="1" x2="16" y2="4"></line><line x1="4" y1="8.5" x2="20" y2="8.5"></line><line x1="7.5" y1="12.5" x2="9.5" y2="12.5"></line><line x1="12.5" y1="12.5" x2="16.5" y2="12.5"></line><line x1="7.5" y1="16" x2="11.5" y2="16"></line><circle cx="14.5" cy="16" r="1" fill="currentColor"></circle></svg>
             <b>Active: Mon — Fri</b>
           </span>
         </div>
@@ -5449,28 +5449,32 @@ function getCurrentPresetKey() {
 
 function getDaysSummaryText(dObj) {
   var d = dObj || days;
-  var count = [0,1,2,3,4,5,6].filter(function(n){ return !!d[n]; }).length;
+  var active = [1,2,3,4,5,6,0].filter(function(n){ return !!d[n]; });
+  var count = active.length;
   if (count === 7) return "Mon — Sun";
   if (count === 5 && d[1] && d[2] && d[3] && d[4] && d[5] && !d[6] && !d[0]) return "Mon — Fri";
-  if (count === 2 && d[6] && d[0] && !d[1] && !d[2] && !d[3] && !d[4] && !d[5]) return "Sat & Sun";
-  if (count === 1 && d[0]) return "Sun Only";
-  if (count === 3 && d[5] && d[6] && d[0]) return "Fri — Sun";
   if (count === 6 && !d[0]) return "Mon — Sat";
-  if (count === 0) return "None";
-  return [1,2,3,4,5,6,0].filter(function(n){ return !!d[n]; }).map(function(n){ return DN[n]; }).join(", ");
+  if (count === 6 && !d[6]) return "Sun — Fri";
+  if (count === 2 && d[6] && d[0] && !d[1] && !d[2] && !d[3] && !d[4] && !d[5]) return "Sat & Sun";
+  if (count === 3 && d[5] && d[6] && d[0] && !d[1] && !d[2] && !d[3] && !d[4]) return "Fri — Sun";
+  if (count === 4 && d[1] && d[2] && d[3] && d[4] && !d[5] && !d[6] && !d[0]) return "Mon — Thu";
+  if (count === 5 && !d[1] && d[2] && d[3] && d[4] && d[5] && d[6] && !d[0]) return "Tue — Sat";
+  if (count === 1) return DN[active[0]] + " Only";
+  if (count === 0) return "None (Muted)";
+  return active.map(function(n){ return DN[n]; }).join(", ");
 }
 
 function updatePresetDaysBadge() {
   var badge = $("presetDaysBadge");
   var cDays = $("consoleDaysText");
-  var key = getCurrentPresetKey();
-  var p = SCHEDULE_PRESETS[key];
-  var labelText = (p && p.daysLabel) ? p.daysLabel : getDaysSummaryText(days);
+  var labelText = getDaysSummaryText(days);
+  var futCalendarSvg = '<svg class="modern-icon modern-icon-cyan" viewBox="0 0 24 24" style="margin-right:4px"><path d="M4 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12.5l-4.5 4.5H6a2 2 0 0 1-2-2V4z"></path><line x1="8" y1="1" x2="8" y2="4"></line><line x1="16" y1="1" x2="16" y2="4"></line><line x1="4" y1="8.5" x2="20" y2="8.5"></line><line x1="7.5" y1="12.5" x2="9.5" y2="12.5"></line><line x1="12.5" y1="12.5" x2="16.5" y2="12.5"></line><line x1="7.5" y1="16" x2="11.5" y2="16"></line><circle cx="14.5" cy="16" r="1" fill="currentColor"></circle></svg>';
+
   if (badge) {
-    badge.innerHTML = "<span>📅</span> <b>Active: " + labelText + "</b>";
+    badge.innerHTML = futCalendarSvg + "<b>Active: " + labelText + "</b>";
   }
   if (cDays) {
-    cDays.textContent = "📅 " + labelText;
+    cDays.textContent = labelText;
   }
 }
 
