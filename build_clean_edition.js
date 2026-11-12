@@ -47,9 +47,9 @@ const card1CleanReplacement = `<!-- Card 1: Main Executive Schedule -->
             </div>
           </div>
           <div class="dist-btn-stack">
-            <a class="primary dist-btn" id="installAppBtn" href="https://orlandopasion000.github.io/orlandorecharge" target="_blank" rel="noopener">
-              <svg class="modern-icon" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-              <span>1-Click Install App</span>
+            <a class="primary dist-btn" id="openMainAppBtn" href="https://orlandopasion000.github.io/orlandorecharge" target="_blank" rel="noopener" title="Open Complete 23-Block Main Schedule in New Window">
+              <svg class="modern-icon" viewBox="0 0 24 24" style="width:14px;height:14px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+              <span>Open Main Web App</span>
             </a>
           </div>
         </div>
