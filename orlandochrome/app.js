@@ -8,6 +8,14 @@
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const uid = () => Math.random().toString(36).slice(2, 9) + Date.now().toString(36).slice(-3);
   const now = () => Date.now();
+  const playSoundClick = () => {
+    try {
+      if (window.soundMgr) {
+        if (typeof window.soundMgr.playClickSoft === "function") window.soundMgr.playClickSoft();
+        else if (typeof window.soundMgr.playClick === "function") window.soundMgr.playClick();
+      }
+    } catch (e) {}
+  };
 
   // Check if running in Clean Blank Edition mode (?edition=blank) for any external laptop
   const URL_PARAMS = new URLSearchParams(window.location.search);
@@ -288,7 +296,7 @@
     const pending = totalPendingCount();
     const resets = state.profiles.filter(p => p.isReset).length;
     const totalAlerts = pending + resets;
-    const baseName = IS_BLANK_EDITION ? 'OrlandoChrome · Blank Edition' : 'OrlandoChrome';
+    const baseName = IS_BLANK_EDITION ? 'OrlandoChrome (Clean Edition)' : 'OrlandoChrome (Main Version)';
     document.title = totalAlerts > 0 ? `(${totalAlerts}) ${baseName}` : baseName;
   }
 
@@ -2548,6 +2556,7 @@
   function promptAddTemplate() {
     const backdrop = document.createElement('div');
     backdrop.className = 'rename-dialog-backdrop';
+    backdrop.style.zIndex = '9999';
     backdrop.innerHTML = `
       <div class="rename-dialog">
         <h3>⚡ Add 1-Click Quick-Task Template</h3>
@@ -3277,7 +3286,7 @@ ${jsRes}
 
   // High-Contrast Instant-Scan QR Theme Palette Definitions (All Dark-on-Light for 0.05s Camera Lock!)
   const QR_THEMES = {
-    instant:  { label: '⚡ Instant Scan',  fg: '000000', bg: 'ffffff', accent: '#ff2e38', glow: 'rgba(229, 9, 20, 0.55)', ratio: '21:1' },
+    cyan:     { label: '⚡ Cyber Cyan',   fg: '001524', bg: 'ffffff', accent: '#00f2fe', glow: 'rgba(0, 242, 254, 0.55)', ratio: '20.8:1' },
     crimson:  { label: '🔴 Crimson Core',  fg: '3b0003', bg: 'ffffff', accent: '#ff2e38', glow: 'rgba(229, 9, 20, 0.65)', ratio: '19.8:1' },
     emerald:  { label: '🟢 Emerald Core',  fg: '011a13', bg: 'ffffff', accent: '#10b981', glow: 'rgba(16, 185, 129, 0.55)', ratio: '19.5:1' },
     gold:     { label: '✨ Royal Gold',    fg: '140e02', bg: 'ffffff', accent: '#e5c97b', glow: 'rgba(226, 200, 125, 0.5)', ratio: '20.2:1' },
@@ -3285,10 +3294,10 @@ ${jsRes}
   };
 
   // Pure Client-Side Zero-Dependency Vector QR Generator (0ms Offline + Instant Render)
-  function generateQrMarkup(text, fgHex, bgHex) {
+  function generateQrMarkup(text, fgHex = '#000000', bgHex = '#ffffff') {
     if (typeof window.qrcode === 'function') {
       try {
-        const qr = window.qrcode(0, 'L');
+        const qr = window.qrcode(0, 'M');
         qr.addData(text);
         qr.make();
         const count = qr.getModuleCount();
@@ -3304,52 +3313,121 @@ ${jsRes}
         }
         const cleanBg = bgHex.startsWith('#') ? bgHex : ('#' + bgHex);
         const cleanFg = fgHex.startsWith('#') ? fgHex : ('#' + fgHex);
-        const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${total} ${total}" shape-rendering="crispEdges" class="qr-code-svg-holo" style="width:100%;height:100%;display:block;border-radius:10px;"><rect width="100%" height="100%" fill="${cleanBg}"/><path fill="${cleanFg}" d="${d}"/></svg>`;
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${total} ${total}" shape-rendering="crispEdges" class="qr-code-svg-holo" style="width:100%;height:100%;display:block;"><rect width="100%" height="100%" fill="${cleanBg}"/><path fill="${cleanFg}" d="${d}"/></svg>`;
         return { svg, count, qrInstance: qr };
       } catch (e) {
         console.warn('Local QR engine error, falling back to API:', e);
       }
     }
-    return { svg: null, count: 29, qrInstance: null };
+    return { svg: null, count: 33, qrInstance: null };
   }
 
   // App Distribution & Live Sync Command Suite (Removed per user request)
+  
+  // Helper: Copy text to clipboard with robust textarea fallback
+  function copyToClipboard(text, successMsg = '📋 App link copied to clipboard!') {
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(() => {
+        showToast(successMsg);
+      }).catch(() => fallbackCopyText(text, successMsg));
+    } else {
+      fallbackCopyText(text, successMsg);
+    }
+  }
+
+  function fallbackCopyText(text, successMsg) {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      ta.style.top = '-9999px';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      const ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      if (ok) {
+        showToast(successMsg);
+        return;
+      }
+    } catch (err) {}
+    prompt('Copy link to clipboard:', text);
+  }
+
+  function openInstallGuideModal() {
+    const modal = $('#installGuideModal');
+    if (modal) {
+      modal.classList.add('active');
+      modal.style.display = 'flex';
+    }
+  }
+
+  function closeInstallGuideModal() {
+    const modal = $('#installGuideModal');
+    if (modal) {
+      modal.classList.remove('active');
+      modal.style.display = 'none';
+    }
+  }
+
   // Direct Desktop App Launcher (Standalone window with no browser tabs / URL bar)
   function launchDesktopApp() {
-    if (window.soundMgr) window.soundMgr.playClickSoft();
-    showToast('🚀 Launching OrlandoChrome Desktop App...');
-    const appUrl = window.location.href.split('#')[0];
+    playSoundClick();
+    showToast('🚀 Launching OrlandoChrome (Main Version)...');
+    const appUrl = 'https://orlandopasion000.github.io/orlandochrome/';
     const winFeatures = 'popup=yes,menubar=no,toolbar=no,location=no,status=no,personalbar=no,directories=no,resizable=yes,scrollbars=yes,width=1380,height=880,left=100,top=60';
-    const appWin = window.open(appUrl, 'OrlandoChromeDesktopAppWindow', winFeatures);
+    const appWin = window.open(appUrl, '_blank', winFeatures);
     if (appWin) {
       try { appWin.focus(); } catch (e) {}
     }
   }
 
   function openAppDistributionSuiteModal() {
-    if (window.soundMgr) window.soundMgr.playClickSoft();
+    playSoundClick();
     const shareUrl = IS_BLANK_EDITION ? BLANK_APP_URL : LIVE_APP_URL;
-    const qrRes = generateQrMarkup(shareUrl, '#ffffff', '#000000');
-    const qrSvg = qrRes.svg || `<img src="https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=${encodeURIComponent(shareUrl)}" alt="QR Code" style="width:260px;height:260px;border-radius:12px;">`;
+    // Pure black (#000000) modules on pure white (#ffffff) background for 100% instant camera detection!
+    const qrRes = generateQrMarkup(shareUrl, '#000000', '#ffffff');
+    const qrSvg = qrRes.svg || `<img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=8&data=${encodeURIComponent(shareUrl)}" alt="QR Code" style="width:100%;height:100%;display:block;border-radius:10px;">`;
 
     const backdrop = document.createElement('div');
     backdrop.className = 'rename-dialog-backdrop';
     backdrop.innerHTML = `
-      <div class="qr-studio-modal" style="max-width:440px; text-align:center; padding:24px; background:#0c0c10; border:1px solid rgba(217, 185, 92, 0.4); border-radius:18px; box-shadow:0 12px 40px rgba(0,0,0,0.85), 0 0 30px rgba(217,185,92,0.2);">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+      <div class="qr-studio-modal" style="max-width:380px; width:100%; text-align:center; padding:20px; background:#0c0c10; border:1px solid rgba(255, 77, 88, 0.45); border-radius:18px; box-shadow:0 16px 48px rgba(0,0,0,0.9), 0 0 35px rgba(229,9,20,0.3); animation:modalPopIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
           <div style="display:flex; align-items:center; gap:8px;">
-            <span style="font-size:1.4rem;">📲</span>
-            <span style="font-size:1.05rem; font-weight:800; color:#fff;">Phone QR Scanner</span>
+            <img src="oc-logo.svg" alt="OC" style="width:26px; height:26px; border-radius:6px; box-shadow:0 0 10px rgba(229,9,20,0.5);">
+            <span style="font-size:0.98rem; font-weight:800; color:#fff;">Holographic QR Scanner</span>
           </div>
-          <button type="button" class="btn-banner-clear" id="btnCloseQrModal" style="color:#aaa; font-size:1.2rem; cursor:pointer; background:none; border:none;">✕</button>
+          <button type="button" class="btn-banner-clear" id="btnCloseQrModal" style="color:#aaa; font-size:1.2rem; cursor:pointer; background:none; border:none; padding:4px 8px;">✕</button>
         </div>
-        <p style="font-size:0.82rem; color:#999; margin-bottom:18px;">Scan with your iPhone or Android camera to open OrlandoChrome instantly on your phone.</p>
-        <div style="width:260px; height:260px; margin:0 auto 18px; padding:12px; background:#000; border:1px solid rgba(255,255,255,0.12); border-radius:16px; display:flex; align-items:center; justify-content:center;">
-          ${qrSvg}
+        <p style="font-size:0.78rem; color:#94a3b8; margin:0 0 14px; line-height:1.4;">Point your iPhone or Android camera to open and live-sync OrlandoChrome instantly.</p>
+        
+        <!-- High-Tech HUD Viewfinder with glowing red brackets -->
+        <div class="qr-hud-box" id="qrViewfinderBox" style="position:relative; width:236px; height:236px; margin:0 auto 12px; padding:12px; background:rgba(20, 10, 14, 0.6); border:1px solid rgba(255,77,88,0.25); border-radius:16px; display:flex; align-items:center; justify-content:center; box-shadow:0 0 20px rgba(229,9,20,0.2); cursor:pointer;" title="Click to open app or copy link">
+          <div class="qr-hud-corner tl" style="position:absolute; top:6px; left:6px; width:14px; height:14px; border-top:2.5px solid #ff4d58; border-left:2.5px solid #ff4d58; border-top-left-radius:4px;"></div>
+          <div class="qr-hud-corner tr" style="position:absolute; top:6px; right:6px; width:14px; height:14px; border-top:2.5px solid #ff4d58; border-right:2.5px solid #ff4d58; border-top-right-radius:4px;"></div>
+          <div class="qr-hud-corner bl" style="position:absolute; bottom:6px; left:6px; width:14px; height:14px; border-bottom:2.5px solid #ff4d58; border-left:2.5px solid #ff4d58; border-bottom-left-radius:4px;"></div>
+          <div class="qr-hud-corner br" style="position:absolute; bottom:6px; right:6px; width:14px; height:14px; border-bottom:2.5px solid #ff4d58; border-right:2.5px solid #ff4d58; border-bottom-right-radius:4px;"></div>
+          <div class="qr-hud-laser"></div>
+          
+          <!-- Pure White Card with pitch-black modules for 100% instant scanner lock -->
+          <div style="width:204px; height:204px; background:#ffffff; border-radius:12px; padding:8px; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 16px rgba(0,0,0,0.6);">
+            ${qrSvg}
+          </div>
         </div>
-        <div style="display:flex; gap:10px;">
-          <button type="button" class="primary dist-btn" id="btnCopyQrLinkModal" style="flex:1;">↗ Copy App Link</button>
-          <button type="button" class="ghost dist-btn" id="btnDismissQrModal" style="flex:1;">Done</button>
+
+        <div style="font-size:0.72rem; color:#cbd5e1; margin-bottom:8px; font-weight:700; letter-spacing:0.04em;">
+          <span style="color:#5de8a0;">●</span> INSTANT CAMERA DETECTION · ZERO WARNINGS
+        </div>
+
+        <div style="font-size:0.72rem; color:#94a3b8; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:6px; padding:5px 8px; margin-bottom:14px; font-family:monospace; word-break:break-all;">
+          ${esc(shareUrl)}
+        </div>
+
+        <div style="display:flex; gap:8px;">
+          <button type="button" class="primary dist-btn dist-btn-install" id="btnCopyQrLinkModal" style="flex:1; padding:7px 10px; font-size:0.78rem; font-weight:800;">↗ Copy App Link</button>
+          <button type="button" class="ghost dist-btn" id="btnDismissQrModal" style="flex:1; padding:7px 10px; font-size:0.78rem;">Done</button>
         </div>
       </div>
     `;
@@ -3359,15 +3437,23 @@ ${jsRes}
     backdrop.onclick = (e) => { if (e.target === backdrop) close(); };
     const btnClose = $('#btnCloseQrModal', backdrop);
     if (btnClose) btnClose.onclick = close;
+    const qrViewfinder = $('#qrViewfinderBox', backdrop);
+    if (qrViewfinder) {
+      qrViewfinder.onclick = () => {
+        playSoundClick();
+        copyToClipboard(shareUrl, '📋 App link copied to clipboard!');
+        window.open(shareUrl, '_blank', 'noopener');
+      };
+    }
     const btnDismiss = $('#btnDismissQrModal', backdrop);
     if (btnDismiss) btnDismiss.onclick = close;
     const btnCopy = $('#btnCopyQrLinkModal', backdrop);
     if (btnCopy) {
       btnCopy.onclick = () => {
-        navigator.clipboard.writeText(shareUrl).then(() => {
-          showToast('📋 App link copied to clipboard!');
-          close();
-        });
+        copyToClipboard(shareUrl, '📋 App link copied to clipboard!');
+        btnCopy.innerHTML = '✓ Copied to Clipboard!';
+        btnCopy.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+        setTimeout(() => close(), 1200);
       };
     }
   }
@@ -3933,32 +4019,58 @@ ${jsRes}
     if (btnNextReady) btnNextReady.onclick = () => jumpToNextReadyProfile();
 
     const btnLaunchDesktop = $('#btnTopbarLaunchApp');
-    if (btnLaunchDesktop) btnLaunchDesktop.onclick = () => launchDesktopApp();
+    if (btnLaunchDesktop) {
+      btnLaunchDesktop.onclick = () => {
+        playSoundClick();
+        showToast('🚀 Opening OrlandoChrome (Main Version)...');
+      };
+    }
 
     const btnOpenSuite = $('#btnOpenAppSuite');
     if (btnOpenSuite) btnOpenSuite.onclick = () => openAppDistributionSuiteModal();
 
-    // 4-Card Dock & App Distribution controls
-            deferredInstallPrompt = null;
-          }).catch(() => launchDesktopApp());
-        } else {
-          launchDesktopApp();
-        }
+    // 4-Card Dock & App Distribution controls (Open Main Web App · No installation needed)
+    const mainAppBtn = $('#openMainAppBtn') || $('#installAppBtn');
+    if (mainAppBtn) {
+      mainAppBtn.onclick = () => {
+        playSoundClick();
+        showToast('🚀 Opening OrlandoChrome (Main Version)...');
       };
     }
 
     const openQrBtn = $('#openQrBtn');
-    if (openQrBtn) openQrBtn.onclick = () => openAppDistributionSuiteModal();
+    if (openQrBtn) {
+      openQrBtn.onclick = (e) => {
+        if (e) e.stopPropagation();
+        openAppDistributionSuiteModal();
+      };
+    }
+
+    const cardHoloQr = $('#cardHoloQr') || $('.dist-card-holo');
+    if (cardHoloQr) {
+      cardHoloQr.style.cursor = 'pointer';
+      cardHoloQr.onclick = (e) => {
+        if (e && e.target && e.target.closest('#shareAppBtn')) return;
+        openAppDistributionSuiteModal();
+      };
+    }
 
     const shareAppBtn = $('#shareAppBtn');
     if (shareAppBtn) {
       shareAppBtn.onclick = () => {
+        playSoundClick();
         const shareUrl = IS_BLANK_EDITION ? BLANK_APP_URL : LIVE_APP_URL;
-        if (navigator.clipboard) {
-          navigator.clipboard.writeText(shareUrl).then(() => {
-            showToast('?? App link copied to clipboard!');
-          });
-        }
+        copyToClipboard(shareUrl, '📋 App link copied to clipboard!');
+        const origText = shareAppBtn.innerHTML;
+        shareAppBtn.innerHTML = `
+          <svg class="modern-icon modern-icon-emerald" viewBox="0 0 24 24" style="width:13px;height:13px"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span style="color:#5de8a0;">✓ Link Copied!</span>
+        `;
+        shareAppBtn.style.borderColor = 'rgba(93, 232, 160, 0.6)';
+        setTimeout(() => {
+          shareAppBtn.innerHTML = origText;
+          shareAppBtn.style.borderColor = '';
+        }, 2200);
       };
     }
 
@@ -3981,12 +4093,12 @@ ${jsRes}
               saveState();
               renderSidebar();
               renderMainChat();
-              showToast(`? Restored ${data.profiles.length} profiles from backup!`);
+              showToast(`✓ Restored ${data.profiles.length} profiles from backup!`);
             } else {
-              showToast('?? Invalid backup JSON format.');
+              showToast('⚠️ Invalid backup JSON format.');
             }
           } catch (err) {
-            showToast('? Failed to parse backup JSON.');
+            showToast('⚠️ Failed to parse backup JSON.');
           }
         };
         reader.readAsText(file);
@@ -3994,35 +4106,59 @@ ${jsRes}
     }
 
     const distSection = $('#appDistSection');
+    const distHead = $('#distHead');
     const distMinBtn = $('#distMinimizeBtn');
     const distMinIcon = $('#distMinIcon');
     const distMinText = $('#distMinText');
-    const DIST_MIN_KEY = 'orlandochrome_dist_minimized_v1';
+    const DIST_MIN_KEY = 'orlandochrome_dist_minimized_v2';
     if (distSection && distMinBtn) {
       const applyMinState = (isMin) => {
         if (isMin) {
           distSection.classList.add('minimized');
-          if (distMinIcon) distMinIcon.textContent = '?';
+          if (distMinIcon) distMinIcon.textContent = '▸';
           if (distMinText) distMinText.textContent = 'Expand';
           distMinBtn.setAttribute('aria-expanded', 'false');
+          distSection.setAttribute('title', 'Click anywhere on this bar to expand App Distribution Suite');
         } else {
           distSection.classList.remove('minimized');
-          if (distMinIcon) distMinIcon.textContent = '?';
+          if (distMinIcon) distMinIcon.textContent = '▾';
           if (distMinText) distMinText.textContent = 'Minimize';
           distMinBtn.setAttribute('aria-expanded', 'true');
+          distSection.removeAttribute('title');
         }
       };
 
-      if (localStorage.getItem(DIST_MIN_KEY) === '1') {
-        applyMinState(true);
-      }
+      // By default, it is MINIMIZED (true) unless user explicitly chose to expand ('0')
+      const savedMin = localStorage.getItem(DIST_MIN_KEY);
+      const isDefaultMin = savedMin === null ? true : savedMin === '1';
+      applyMinState(isDefaultMin);
 
-      distMinBtn.onclick = () => {
+      const toggleMin = (e) => {
+        if (e) e.stopPropagation();
+        playSoundClick();
         const willMin = !distSection.classList.contains('minimized');
         applyMinState(willMin);
         try {
           localStorage.setItem(DIST_MIN_KEY, willMin ? '1' : '0');
-        } catch (e) {}
+        } catch (err) {}
+      };
+
+      // 1. Explicit minimize/expand button
+      distMinBtn.onclick = toggleMin;
+
+      // 2. Omni-Click Header: Clicking anywhere on the header bar toggles minimize/expand
+      if (distHead) {
+        distHead.onclick = (e) => {
+          if (e.target.closest('#distMinimizeBtn')) return;
+          toggleMin(e);
+        };
+      }
+
+      // 3. When minimized, clicking ANYWHERE on the entire dock bar expands it
+      distSection.onclick = (e) => {
+        if (distSection.classList.contains('minimized')) {
+          toggleMin(e);
+        }
       };
     }
 

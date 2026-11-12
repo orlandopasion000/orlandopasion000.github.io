@@ -665,17 +665,17 @@ body.light-theme .pill-btn.highlight:hover {
 
 /* App Distribution & Holographic Operations Suite — Minimized, Low-Key & Semi-Transparent */
 .app-dist {
-  margin-top: 32px;
-  padding: 16px 20px;
+  margin-top: 24px;
+  padding: 0;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 20px;
+  border-radius: 18px;
   background: rgba(10, 10, 14, 0.70);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   position: relative;
   overflow: hidden;
-  opacity: 0.65;
-  transition: opacity 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease, transform 0.25s ease;
+  opacity: 0.75;
+  transition: opacity 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 .app-dist:hover,
 .app-dist:focus-within {
@@ -693,6 +693,7 @@ body.light-theme .pill-btn.highlight:hover {
   background: linear-gradient(90deg, transparent, var(--gold), transparent);
   opacity: 0.55;
   box-shadow: 0 0 12px var(--gold);
+  pointer-events: none;
 }
 
 .dist-head {
@@ -701,9 +702,15 @@ body.light-theme .pill-btn.highlight:hover {
   align-items: center;
   flex-wrap: wrap;
   gap: 10px;
-  margin-bottom: 12px;
+  padding: 10px 16px;
+  background: rgba(0, 0, 0, 0.45);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   cursor: pointer;
   user-select: none;
+  transition: background 0.2s ease;
+}
+.dist-head:hover {
+  background: rgba(255, 255, 255, 0.04);
 }
 .dist-head-left {
   display: flex;
@@ -778,15 +785,16 @@ body.light-theme .pill-btn.highlight:hover {
 }
 
 .dist-body {
-  transition: max-height 0.35s ease, opacity 0.3s ease, margin 0.3s ease;
+  padding: 14px 16px 16px;
+  transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, padding 0.3s ease;
   overflow: hidden;
   max-height: 800px;
 }
 
 /* ===== APP DISTRIBUTION SUITE: ULTRA-COMPACT, HIGH-TRANSPARENCY MINIMIZED STATE ===== */
 .app-dist.minimized {
-  margin-top: 14px;
-  padding: 5px 12px;
+  margin-top: 10px;
+  padding: 0;
   border-radius: 12px;
   background: rgba(10, 10, 14, 0.30);
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -809,9 +817,11 @@ body.light-theme .pill-btn.highlight:hover {
   opacity: 0.25;
 }
 .app-dist.minimized .dist-head {
-  margin-bottom: 0;
-  gap: 6px;
+  padding: 3px 10px;
+  background: transparent;
+  border-bottom: none;
   min-height: 26px;
+  gap: 6px;
 }
 .app-dist.minimized .dist-head-left {
   gap: 7px;
@@ -853,6 +863,7 @@ body.light-theme .pill-btn.highlight:hover {
 .app-dist.minimized .dist-body {
   max-height: 0;
   opacity: 0;
+  padding: 0 16px;
   margin: 0;
   pointer-events: none;
 }
@@ -4380,42 +4391,63 @@ function updateDistMinUI(isMin) {
     distSec.classList.add("minimized");
     if (distMinIcon) distMinIcon.textContent = "▸";
     if (distMinText) distMinText.textContent = "Expand";
-    if (distMinBtn) distMinBtn.setAttribute("aria-expanded", "false");
+    if (distMinBtn) {
+      distMinBtn.setAttribute("aria-expanded", "false");
+      distMinBtn.title = "Expand App Distribution Suite";
+    }
+    distSec.setAttribute("title", "Click anywhere on this bar to expand App Distribution Suite");
   } else {
     distSec.classList.remove("minimized");
     if (distMinIcon) distMinIcon.textContent = "▾";
     if (distMinText) distMinText.textContent = "Minimize";
-    if (distMinBtn) distMinBtn.setAttribute("aria-expanded", "true");
+    if (distMinBtn) {
+      distMinBtn.setAttribute("aria-expanded", "true");
+      distMinBtn.title = "Minimize App Distribution Suite";
+    }
+    distSec.removeAttribute("title");
   }
 }
 
-if (distMinBtn && distSec) {
+if (distSec) {
   // Always default to MINIMIZED every time app or website opens
   updateDistMinUI(true);
 
-  distMinBtn.onclick = function(e) {
+  var toggleSuite = function(e) {
     if (e && e.stopPropagation) e.stopPropagation();
-    var nowMin = !distSec.classList.contains("minimized");
-    updateDistMinUI(nowMin);
+    var willMin = !distSec.classList.contains("minimized");
+    updateDistMinUI(willMin);
+    showToast(willMin ? "App Distribution dock minimized" : "App Distribution dock expanded", "🗜️");
   };
 
-  // Expand or collapse when clicking ANY part of the header bar (logo, title, subtitle, or background)
-  var distHead = $("distHead") || distSec.querySelector(".dist-head");
-  if (distHead) {
-    distHead.onclick = function(e) {
-      if (e.target.closest("button") || e.target.closest("a") || e.target.closest("input")) return;
-      var nowMin = !distSec.classList.contains("minimized");
-      updateDistMinUI(nowMin);
+  // 1. Dedicated Minimize/Expand toggle button
+  if (distMinBtn) {
+    distMinBtn.onclick = function(e) {
+      toggleSuite(e);
     };
   }
 
-  // When minimized, clicking ANY part of the entire suite container expands it immediately
-  distSec.addEventListener("click", function(e) {
+  // 2. Omni-Click Header: Click ANYWHERE on the top header bar (logo, title, subtitle, badge, or header background)
+  // to toggle smoothly between minimized and expanded (exact 1:1 parity with Recharge Command Console)
+  var distHead = $("distHead") || distSec.querySelector(".dist-head");
+  if (distHead) {
+    distHead.onclick = function(e) {
+      // Don't toggle if user clicked an interactive anchor or input
+      if (e.target.closest("a") || e.target.closest("input") || e.target.closest("select")) return;
+      var btn = e.target.closest("button");
+      if (btn && btn !== distMinBtn) return;
+      toggleSuite(e);
+    };
+  }
+
+  // 3. Broad Hit Target: When minimized, clicking ANYWHERE on the entire dock bar expands it immediately
+  distSec.onclick = function(e) {
     if (distSec.classList.contains("minimized")) {
-      if (e.target.closest("button") || e.target.closest("a") || e.target.closest("input")) return;
-      updateDistMinUI(false);
+      if (e.target.closest("a") || e.target.closest("input") || e.target.closest("select")) return;
+      var btn = e.target.closest("button");
+      if (btn && btn !== distMinBtn) return;
+      toggleSuite(e);
     }
-  });
+  };
 }
 
 function copyAppUrl(){

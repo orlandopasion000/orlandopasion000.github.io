@@ -5532,3 +5532,607 @@ button:hover .modern-icon,
 .dist-btn:hover .modern-icon {
   transform: scale(1.15);
 }
+
+
+/* ───────── RED RADIANT GRADIENT SUITE & DOCK OVERRIDES ───────── */
+.oc-app-dist {
+  padding: 10px 16px 12px;
+  border-top: 1px solid rgba(255, 77, 88, 0.25) !important;
+  background: rgba(8, 8, 10, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+  z-index: 20;
+}
+
+.oc-app-dist::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #ff4d58 20%, #e50914 50%, #ff1a24 80%, transparent) !important;
+  box-shadow: 0 0 15px rgba(229, 9, 20, 0.6) !important;
+}
+
+.dist-oc-mini {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 9px !important;
+  background: #000000 !important;
+  border: 1.5px solid rgba(255, 77, 88, 0.6) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 0 14px rgba(229, 9, 20, 0.45) !important;
+  flex-shrink: 0 !important;
+  overflow: hidden !important;
+  padding: 3px !important;
+}
+
+.dist-oc-logo-img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  display: block !important;
+  filter: drop-shadow(0 0 6px rgba(229, 9, 20, 0.6)) !important;
+}
+
+.dist-badge {
+  background: rgba(229, 9, 20, 0.16) !important;
+  color: #ff858d !important;
+  border: 1px solid rgba(255, 77, 88, 0.35) !important;
+  border-radius: 999px !important;
+  font-size: 0.65rem !important;
+  font-weight: 800 !important;
+  padding: 2px 7px !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+}
+
+.dist-card {
+  background: rgba(10, 10, 14, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 8px;
+  transition: all 0.2s ease;
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.dist-card:hover {
+  border-color: rgba(255, 77, 88, 0.5) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6), 0 0 14px rgba(229, 9, 20, 0.25) !important;
+}
+
+.dist-icon-red {
+  background: rgba(229, 9, 20, 0.16) !important;
+  border-color: rgba(255, 77, 88, 0.45) !important;
+  color: #ff4d58 !important;
+  box-shadow: 0 0 10px rgba(229, 9, 20, 0.3) !important;
+}
+
+.modern-icon-red {
+  stroke: #ff4d58 !important;
+  filter: drop-shadow(0 0 4px rgba(229, 9, 20, 0.6)) !important;
+}
+
+.dist-btn-install,
+.dist-btn.primary {
+  background: linear-gradient(135deg, #ff1a24 0%, #b8000a 60%, #4a0003 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 100, 110, 0.6) !important;
+  box-shadow: 0 0 14px rgba(229, 9, 20, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.3) !important;
+  font-weight: 800 !important;
+}
+
+.dist-btn-install:hover,
+.dist-btn.primary:hover {
+  background: linear-gradient(135deg, #ff4d58 0%, #e50914 60%, #6e0006 100%) !important;
+  box-shadow: 0 0 20px rgba(229, 9, 20, 0.75), inset 0 1px 2px rgba(255, 255, 255, 0.5) !important;
+  transform: translateY(-1px) !important;
+  color: #ffffff !important;
+}
+
+.dist-btn.ghost {
+  background: #0d0d12;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+}
+
+.dist-btn.ghost:hover {
+  border-color: rgba(255, 77, 88, 0.5) !important;
+  background: #171720 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 10px rgba(229, 9, 20, 0.2) !important;
+}
+
+.dist-btn-holo {
+  border-color: rgba(255, 77, 88, 0.5) !important;
+  color: #ffffff !important;
+  background: rgba(229, 9, 20, 0.12) !important;
+}
+
+.dist-btn-holo:hover {
+  background: rgba(229, 9, 20, 0.25) !important;
+  border-color: rgba(255, 77, 88, 0.9) !important;
+  box-shadow: 0 0 12px rgba(229, 9, 20, 0.4) !important;
+}
+
+.dist-toggle-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 77, 88, 0.3) !important;
+  color: #cbd5e1;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s ease;
+}
+
+.dist-toggle-btn:hover {
+  background: rgba(229, 9, 20, 0.2) !important;
+  border-color: rgba(255, 77, 88, 0.6) !important;
+  color: #ffffff !important;
+}
+
+.oc-app-dist.minimized .dist-body {
+  display: none !important;
+}
+
+.oc-app-dist.minimized {
+  padding-bottom: 8px !important;
+}
+
+/* Install Guide Modal Styling */
+.install-guide-modal-wrap {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  padding: 16px;
+}
+.install-guide-modal-wrap.active {
+  display: flex !important;
+}
+.install-guide-box {
+  background: #0d0d12;
+  border: 1px solid rgba(255, 77, 88, 0.4);
+  border-radius: 18px;
+  max-width: 500px;
+  width: 100%;
+  padding: 24px;
+  position: relative;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.9), 0 0 30px rgba(229, 9, 20, 0.3);
+  animation: modalPopIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+@keyframes modalPopIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+.install-guide-cards-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+.install-card-highlight {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 77, 88, 0.35);
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: 0 0 14px rgba(229, 9, 20, 0.15);
+}
+.install-card-title {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #ff4d58;
+}
+.install-card-sub {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  line-height: 1.4;
+}
+.install-card-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  color: #cbd5e1;
+}
+
+.btn-topbar-desktop { text-decoration: none !important; }
+
+
+/* ───────── COLLAPSIBLE COMMAND DOCK & FLUID ACCORDION DRAWER ───────── */
+.oc-app-dist {
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  z-index: 25;
+  border-top: 1px solid rgba(255, 77, 88, 0.22) !important;
+  background: rgba(8, 8, 12, 0.68) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.6);
+  transition: padding 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.3s ease,
+              border-color 0.3s ease,
+              box-shadow 0.3s ease,
+              opacity 0.3s ease;
+  opacity: 0.8;
+}
+
+.oc-app-dist:hover,
+.oc-app-dist:focus-within {
+  opacity: 1 !important;
+  background: rgba(10, 8, 14, 0.96) !important;
+  border-top-color: rgba(255, 77, 88, 0.5) !important;
+  box-shadow: 0 -6px 28px rgba(0, 0, 0, 0.8), 0 0 16px rgba(229, 9, 20, 0.25);
+}
+
+.oc-app-dist::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #ff4d58 20%, #e50914 50%, #ff1a24 80%, transparent) !important;
+  box-shadow: 0 0 12px rgba(229, 9, 20, 0.5) !important;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.oc-app-dist:hover::before {
+  opacity: 1 !important;
+}
+
+/* Expanded State */
+.oc-app-dist:not(.minimized) {
+  padding: 8px 18px 10px !important;
+}
+
+/* Minimized State (Compact Low-Key Bar) */
+.oc-app-dist.minimized {
+  padding: 5px 18px 5px !important;
+  cursor: pointer;
+}
+
+.oc-app-dist.minimized:hover {
+  background: rgba(18, 10, 14, 0.95) !important;
+  border-top-color: rgba(255, 77, 88, 0.6) !important;
+}
+
+/* Omni-Click Header: Entire header bar is a broad interactive hit target */
+.dist-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 0 !important;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  padding: 3px 6px;
+  border-radius: 8px;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.dist-head:hover {
+  background: rgba(255, 77, 88, 0.08);
+}
+
+.dist-head:active {
+  transform: scale(0.998);
+}
+
+.dist-head-left {
+  display: flex;
+  align-items: center;
+  gap: 10px !important;
+}
+
+.dist-oc-mini {
+  width: 24px !important;
+  height: 24px !important;
+  border-radius: 6px !important;
+  background: #000000 !important;
+  border: 1px solid rgba(255, 77, 88, 0.5) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 0 8px rgba(229, 9, 20, 0.35) !important;
+  flex-shrink: 0 !important;
+  overflow: hidden !important;
+  padding: 2px !important;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.dist-head:hover .dist-oc-mini {
+  transform: scale(1.08);
+  box-shadow: 0 0 12px rgba(229, 9, 20, 0.6) !important;
+}
+
+.dist-title {
+  font-size: 0.82rem !important;
+  font-weight: 750 !important;
+  color: #f1f5f9 !important;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dist-badge {
+  background: rgba(229, 9, 20, 0.16) !important;
+  color: #ff858d !important;
+  border: 1px solid rgba(255, 77, 88, 0.35) !important;
+  border-radius: 999px !important;
+  font-size: 0.58rem !important;
+  font-weight: 800 !important;
+  padding: 1.5px 6px !important;
+  letter-spacing: 0.05em !important;
+}
+
+/* Progressive Disclosure Hint when Minimized */
+.dist-collapse-hint {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #94a3b8;
+  letter-spacing: 0.03em;
+  transition: max-width 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+  display: inline-block;
+  opacity: 0;
+  max-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.oc-app-dist.minimized .dist-collapse-hint {
+  opacity: 0.85;
+  max-width: 240px;
+  margin-left: 4px;
+}
+
+.dist-subtitle {
+  font-size: 0.68rem !important;
+  color: #94a3b8 !important;
+  transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease, margin 0.3s ease;
+  max-height: 24px;
+  opacity: 0.85;
+  overflow: hidden;
+}
+
+.oc-app-dist.minimized .dist-subtitle {
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* Expand / Minimize Toggle Button with Rotating Chevron */
+.dist-toggle-btn {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 77, 88, 0.28) !important;
+  color: #cbd5e1 !important;
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  padding: 2.5px 10px !important;
+  border-radius: 999px !important;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.25s ease;
+}
+
+.dist-head:hover .dist-toggle-btn,
+.dist-toggle-btn:hover {
+  background: rgba(229, 9, 20, 0.24) !important;
+  border-color: rgba(255, 77, 88, 0.65) !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 10px rgba(229, 9, 20, 0.35) !important;
+}
+
+.dist-min-icon {
+  display: inline-block;
+  font-size: 0.72rem;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: center;
+}
+
+.oc-app-dist:not(.minimized) .dist-min-icon {
+  transform: rotate(90deg);
+}
+
+.oc-app-dist.minimized .dist-min-icon {
+  transform: rotate(0deg);
+}
+
+/* ───────── FLUID MORPHING ACCORDION DRAWER ───────── */
+.dist-drawer-wrapper {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.3s ease,
+              margin 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 1;
+  margin-top: 8px;
+}
+
+.dist-body {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.oc-app-dist.minimized .dist-drawer-wrapper {
+  grid-template-rows: 0fr;
+  opacity: 0;
+  margin-top: 0;
+  pointer-events: none;
+}
+
+/* Compact, Low-Key Cards When Expanded */
+.dist-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px !important;
+  width: 100%;
+}
+
+@media (max-width: 1080px) {
+  .dist-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px !important;
+  }
+}
+
+@media (max-width: 580px) {
+  .dist-grid {
+    grid-template-columns: 1fr;
+    gap: 6px !important;
+  }
+}
+
+.dist-card {
+  background: rgba(10, 10, 14, 0.75) !important;
+  border: 1px solid rgba(255, 255, 255, 0.07) !important;
+  border-radius: 10px !important;
+  padding: 8px 10px !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 5px !important;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.28s ease,
+              border-color 0.2s ease,
+              background 0.2s ease,
+              box-shadow 0.2s ease;
+  min-width: 0;
+  overflow: hidden;
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.oc-app-dist.minimized .dist-card {
+  transform: translateY(14px);
+  opacity: 0;
+}
+
+.dist-card:hover {
+  border-color: rgba(255, 77, 88, 0.45) !important;
+  background: rgba(15, 12, 18, 0.88) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6), 0 0 10px rgba(229, 9, 20, 0.2) !important;
+}
+
+.dist-card-top {
+  display: flex;
+  align-items: center;
+  gap: 6px !important;
+}
+
+.dist-icon {
+  width: 24px !important;
+  height: 24px !important;
+  border-radius: 6px !important;
+  font-size: 1rem;
+}
+
+.dist-name {
+  font-size: 0.75rem !important;
+  font-weight: 750 !important;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dist-desc {
+  font-size: 0.65rem !important;
+  color: #94a3b8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dist-btn-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 4px !important;
+  width: 100%;
+}
+
+.dist-btn-row {
+  display: flex;
+  gap: 4px !important;
+  width: 100%;
+}
+
+.dist-btn {
+  padding: 5px 8px !important;
+  font-size: 0.71rem !important;
+  border-radius: 6px !important;
+  gap: 4px !important;
+}
+
+/* HUD Laser Animation in Holographic QR Modal */
+.qr-hud-laser {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #ff1a24 50%, transparent);
+  box-shadow: 0 0 8px #ff1a24;
+  animation: qrLaserScan 2.4s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 5;
+}
+
+@keyframes qrLaserScan {
+  0% { top: 14px; opacity: 0.2; }
+  50% { opacity: 0.85; }
+  100% { top: 216px; opacity: 0.2; }
+}
+  50% { opacity: 0.85; }
+  100% { top: 216px; opacity: 0.2; }
+}
+
+
+/* Holographic QR Card & Interactive Viewfinder */
+.dist-card-holo {
+  cursor: pointer !important;
+}
+.dist-card-holo:hover {
+  border-color: rgba(255, 77, 88, 0.6) !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.7), 0 0 16px rgba(229, 9, 20, 0.35) !important;
+}
+#qrViewfinderBox:hover .qr-code-interactive-card,
+#qrViewfinderBox:hover .qr-code-svg-holo {
+  transform: scale(1.02);
+  transition: transform 0.2s ease;
+}
