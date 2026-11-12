@@ -4686,7 +4686,7 @@ function tick(){
     var isBlankCanvas = (S.length === 0);
     $("nextLabel").textContent = isBlankCanvas ? "Blank Canvas (0 Alarms)" : "No alarms set";
     $("count").textContent = isBlankCanvas ? "Tap + Add Alarm" : "";
-    document.title = isBlankCanvas ? "OrlandoRecharge (Clean Edition) — Blank Canvas" : "OrlandoRecharge (Main Version) — No Alarms Scheduled";
+    document.title = isBlankCanvas ? "OrlandoRecharge (Main Version) — Blank Canvas" : "OrlandoRecharge (Main Version) — No Alarms Scheduled";
     return;
   }
   var diff=Math.round((found.at-n)/1000),h=Math.floor(diff/3600),m=Math.floor(diff%3600/60),s2=diff%60;

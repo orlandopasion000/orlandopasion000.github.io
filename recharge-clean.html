@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#000000">
-<title>OrlandoRecharge (Clean Edition) — Blank Canvas</title>
+<title>OrlandoRecharge (Main Version) — Blank Canvas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="icon" type="image/png" sizes="192x192" href="assets/recharge-icon-192.png?v=or3">
@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
-<meta name="apple-mobile-web-app-title" content="Clean Recharge">
+<meta name="apple-mobile-web-app-title" content="OrlandoRecharge (Main Version)">
 <meta name="description" content="Clean, 100% blank daily alarm schedule (0 alarms). Zero personal data — fresh canvas ready for anyone.">
 <!-- Choice 6: Lexend Bold (Geometric, Modern, High-Legibility) -->
 <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700;800&family=Inter:wght@400;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&family=Montserrat:wght@600;700;800;900&family=Orbitron:wght@700;800;900&family=Outfit:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@600;700;800&family=Rajdhani:wght@600;700&family=Space+Grotesk:wght@600;700&family=Unbounded:wght@700;800;900&display=swap" rel="stylesheet">
@@ -4478,7 +4478,7 @@ function ring(i,snoozed){
       return;
     }
     flashOn = !flashOn;
-    document.title = (flashOn ? "🔔 ALARM: " : "⏰ ") + fmt(s[0],s[1]) + " " + s[3] + " · OrlandoRecharge (Clean Edition)";
+    document.title = (flashOn ? "🔔 ALARM: " : "⏰ ") + fmt(s[0],s[1]) + " " + s[3] + " · OrlandoRecharge (Main Version)";
   }, 750);
 }
 function notify(title,body){
@@ -4678,13 +4678,13 @@ function tick(){
     var isBlankCanvas = (S.length === 0);
     $("nextLabel").textContent = isBlankCanvas ? "Blank Canvas (0 Alarms)" : "No alarms set";
     $("count").textContent = isBlankCanvas ? "Tap + Add Alarm" : "";
-    document.title = isBlankCanvas ? "OrlandoRecharge (Clean Edition) — Blank Canvas" : "OrlandoRecharge (Clean Edition) — No Alarms Scheduled";
+    document.title = isBlankCanvas ? "OrlandoRecharge (Main Version) — Blank Canvas" : "OrlandoRecharge (Main Version) — No Alarms Scheduled";
     return;
   }
   var diff=Math.round((found.at-n)/1000),h=Math.floor(diff/3600),m=Math.floor(diff%3600/60),s2=diff%60;
   $("nextLabel").textContent=fmt(S[found.i][0],S[found.i][1])+" — "+S[found.i][3];
   $("count").textContent="in "+(h?h+"h ":"")+(h||m?p2(m)+"m ":"")+p2(s2)+"s";
-  document.title = "OrlandoRecharge (Clean Edition) · " + ($("ov").className==="show"?"🔔 ":armed?"":"⏸ ")+(h?h+"h ":"")+p2(m)+"m — "+S[found.i][3];
+  document.title = "OrlandoRecharge (Main Version) · " + ($("ov").className==="show"?"🔔 ":armed?"":"⏸ ")+(h?h+"h ":"")+p2(m)+"m — "+S[found.i][3];
 }
 
 function chromeHTML(str){
@@ -5320,7 +5320,7 @@ $("exportBackupBtn").onclick=function(){
   var backupData={
     app:"Daily Recharge Alarm",
     version:"2.4.0",
-    owner:"Public Clean Edition",
+    owner:"Public Main Version",
     exportedAt:new Date().toISOString(),
     theme:clockTheme,
     armed:armed,

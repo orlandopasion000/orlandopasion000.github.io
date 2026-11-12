@@ -7,14 +7,14 @@ const destFile = path.join(repoDir, 'recharge-clean.html');
 
 let src = fs.readFileSync(srcFile, 'utf8');
 
-// 1. Replace Title & Meta Title to clearly mark Clean Blank Edition
+// 1. Replace Title & Meta Title to clearly mark Blank Canvas (Main Version)
 src = src.replace(
   /<title>.*?<\/title>/,
-  '<title>OrlandoRecharge (Clean Edition) — Blank Canvas</title>'
+  '<title>OrlandoRecharge (Main Version) — Blank Canvas</title>'
 );
 src = src.replace(
   /<meta name="apple-mobile-web-app-title" content=".*?">/,
-  '<meta name="apple-mobile-web-app-title" content="Clean Recharge">'
+  '<meta name="apple-mobile-web-app-title" content="OrlandoRecharge (Main Version)">'
 );
 
 // 2. Replace Manifest
@@ -124,11 +124,11 @@ src = src.replace(/"dra-tour-done"/g, '"dra-clean-tour-done"');
 src = src.replace(/"dra-preset-key"/g, '"dra-clean-preset-key"');
 
 // 8. Replace personal strings
-src = src.replace(/owner:"Sir Orlando V\. Pasion, Jr\."/g, 'owner:"Public Clean Edition"');
+src = src.replace(/owner:"Sir Orlando V\. Pasion, Jr\."/g, 'owner:"Public Main Version"');
 src = src.replace(/daily-recharge-schedule-backup\.json/g, 'daily-recharge-clean-backup.json');
 
-// 9. Enforce OrlandoRecharge (Clean Edition) in all document.title strings in recharge-clean.html
-src = src.replace(/OrlandoRecharge \(Main Version\)/g, 'OrlandoRecharge (Clean Edition)');
+// 9. Enforce OrlandoRecharge (Main Version) everywhere
+src = src.split('OrlandoRecharge (Clean Edition)').join('OrlandoRecharge (Main Version)');
 
 // 10. Wire cleanResetCanvasBtn before initial bootstrap
 const cleanHooks = `
@@ -151,7 +151,7 @@ src = src.replace('/* ───────── INITIAL BOOTSTRAP', cleanHooks
 
 // 11. Write file
 fs.writeFileSync(destFile, src, 'utf8');
-console.log('Successfully generated recharge-clean.html from orlandorecharge.html');
+console.log('Successfully generated recharge-clean.html from orlandorecharge.html with OrlandoRecharge (Main Version)');
 
 // 12. Copy orlandorecharge.html to orlandorecharge/index.html
 const subfolderIndex = path.join(repoDir, 'orlandorecharge', 'index.html');
