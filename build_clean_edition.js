@@ -46,10 +46,6 @@ const card1CleanReplacement = `<!-- Card 1: Main Executive Schedule -->
           </div>
           <div class="dist-btn-stack">
             <a class="primary dist-btn" id="installAppBtn" href="https://orlandopasion000.github.io/orlandorecharge" target="_blank" rel="noopener">⚡ 1-Click Install App</a>
-            <div class="dist-btn-row">
-              <a class="ghost dist-btn" href="downloads/Install-OrlandoRecharge-Windows.cmd" download title="1-Click Windows Setup Script">⚡ Setup (.cmd)</a>
-              <a class="ghost dist-btn" href="downloads/DailyRecharge-Setup.exe" download title="Standalone .exe for Windows">⬇ .exe</a>
-            </div>
           </div>
         </div>
 
@@ -61,18 +57,14 @@ const card4Search = /<!-- Card 4: Clean Blank Edition[\s\S]*?<\/div>\s*<\/div>\s
 const card4CleanReplacement = `<!-- Card 4: Clean Blank Edition (Active) -->
         <div class="dist-card dist-card-blank">
           <div class="dist-card-top">
-            <div class="dist-icon dist-icon-gold">📝</div>
+            <div class="dist-icon dist-icon-gold">🎁</div>
             <div class="dist-card-meta">
               <div class="dist-name" style="color:var(--gold)">Clean Blank Canvas (Active)</div>
               <div class="dist-desc">Currently active: 0 alarms scheduled</div>
             </div>
           </div>
           <div class="dist-btn-stack">
-            <button type="button" class="primary dist-btn" id="cleanResetCanvasBtn" style="width:100%">↺ Clear &amp; Reset Blank Canvas</button>
-            <div class="dist-btn-row">
-              <a class="ghost dist-btn" href="downloads/DailyRecharge-Clean-Setup.exe" download title="Clean Edition .exe">⬇ .exe</a>
-              <button class="ghost dist-btn" id="downloadBlankAppBtn" title="Clean Standalone HTML">💾 .html</button>
-            </div>
+            <button type="button" class="primary dist-btn" id="cleanResetCanvasBtn" style="width:100%">⟲ Clear &amp; Reset Blank Canvas</button>
           </div>
         </div>
       </div>
@@ -138,7 +130,7 @@ if ($("cleanResetCanvasBtn")) {
     if (typeof updatePresetSelectorUI === "function") updatePresetSelectorUI();
     if (typeof updatePresetDaysBadge === "function") updatePresetDaysBadge();
     tick();
-    showToast("Schedule reset to blank canvas (0 alarms)", "📝");
+    showToast("Schedule reset to blank canvas (0 alarms)", "📋");
   };
 }
 `;
@@ -147,3 +139,8 @@ src = src.replace('/* ───────── INITIAL BOOTSTRAP', cleanHooks
 // 10. Write file
 fs.writeFileSync(destFile, src, 'utf8');
 console.log('Successfully generated recharge-clean.html from orlandorecharge.html');
+
+// 11. Copy orlandorecharge.html to orlandorecharge/index.html
+const subfolderIndex = path.join(repoDir, 'orlandorecharge', 'index.html');
+fs.writeFileSync(subfolderIndex, fs.readFileSync(srcFile, 'utf8'), 'utf8');
+console.log('Successfully copied orlandorecharge.html to orlandorecharge/index.html');

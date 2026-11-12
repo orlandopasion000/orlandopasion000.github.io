@@ -2235,10 +2235,6 @@ body.light-theme .highlight-card .dist-icon{
           </div>
           <div class="dist-btn-stack">
             <a class="primary dist-btn" id="installAppBtn" href="https://orlandopasion000.github.io/orlandorecharge" target="_blank" rel="noopener">⚡ 1-Click Install App</a>
-            <div class="dist-btn-row">
-              <a class="ghost dist-btn" href="downloads/Install-OrlandoRecharge-Windows.cmd" download title="1-Click Windows Setup Script">⚡ Setup (.cmd)</a>
-              <a class="ghost dist-btn" href="downloads/DailyRecharge-Setup.exe" download title="Standalone .exe for Windows">⬇ .exe</a>
-            </div>
           </div>
         </div>
 
@@ -2278,18 +2274,14 @@ body.light-theme .highlight-card .dist-icon{
         <!-- Card 4: Clean Blank Edition (Active) -->
         <div class="dist-card dist-card-blank">
           <div class="dist-card-top">
-            <div class="dist-icon dist-icon-gold">📝</div>
+            <div class="dist-icon dist-icon-gold">🎁</div>
             <div class="dist-card-meta">
               <div class="dist-name" style="color:var(--gold)">Clean Blank Canvas (Active)</div>
               <div class="dist-desc">Currently active: 0 alarms scheduled</div>
             </div>
           </div>
           <div class="dist-btn-stack">
-            <button type="button" class="primary dist-btn" id="cleanResetCanvasBtn" style="width:100%">↺ Clear &amp; Reset Blank Canvas</button>
-            <div class="dist-btn-row">
-              <a class="ghost dist-btn" href="downloads/DailyRecharge-Clean-Setup.exe" download title="Clean Edition .exe">⬇ .exe</a>
-              <button class="ghost dist-btn" id="downloadBlankAppBtn" title="Clean Standalone HTML">💾 .html</button>
-            </div>
+            <button type="button" class="primary dist-btn" id="cleanResetCanvasBtn" style="width:100%">⟲ Clear &amp; Reset Blank Canvas</button>
           </div>
         </div>
       </div>
@@ -2492,36 +2484,37 @@ body.light-theme .highlight-card .dist-icon{
 
 <!-- Install Guide Modal (Safari / Desktop / Android) -->
 <div class="modal-wrap" id="installGuideModal" role="dialog" aria-modal="true" aria-label="Install App Guide">
-  <div class="modal-box" style="text-align:left;max-width:520px">
+  <div class="modal-box" style="text-align:left;max-width:500px">
     <button class="modal-close" id="closeInstallGuide" aria-label="Close modal">✕</button>
-    <div class="modal-title" style="text-align:center">Install Daily Recharge Alarm</div>
-    <div class="modal-text" style="margin-bottom:14px;text-align:center;color:var(--dim)">Add the gold clock app directly to your Windows Taskbar:</div>
+    <div class="modal-title" style="text-align:center">Install OrlandoRecharge App</div>
+    <div class="modal-text" style="margin-bottom:14px;text-align:center;color:var(--dim)">Run distraction-free in its own desktop window:</div>
 
     <div style="display:flex;flex-direction:column;gap:12px;font-size:.9rem;color:var(--text)">
-      <!-- 1. Direct Edge/Chrome in-browser install -->
+      <!-- 1. Microsoft Edge -->
       <div style="background:#0c0c0e;border:1px solid rgba(217,185,92,.65);border-radius:14px;padding:14px;box-shadow:0 0 20px rgba(217,185,92,.15)">
-        <b style="color:var(--gold);font-size:.96rem">💻 Microsoft Edge (Your Current Browser):</b><br>
-        <span style="font-size:.86rem;color:var(--text)">Look at the <b>top-right of your address bar</b> (beside the star/favorite icon):</span>
+        <b style="color:var(--gold);font-size:.96rem">💻 Microsoft Edge:</b><br>
+        <span style="font-size:.86rem;color:var(--text)">Click the <b>Install app (⊞)</b> icon at the top-right of your address bar.</span>
         <div style="margin:8px 0;padding:8px 12px;background:#000;border:1px solid var(--line2);border-radius:8px;display:flex;align-items:center;gap:10px">
           <span style="font-size:1.3rem">⊞</span>
-          <span>Click the <b>App available / Install</b> icon $\rightarrow$ Click <b>Install</b></span>
+          <span>Click <b>Install</b> → Check <b>"Create Desktop shortcut"</b></span>
         </div>
-        <span style="font-size:.82rem;color:var(--dim)">Or click Edge menu (···) $\rightarrow$ <b>Apps</b> $\rightarrow$ <b>Install Daily Recharge Alarm</b>.</span>
+        <span style="font-size:.82rem;color:var(--dim)">Or click Edge menu (···) → <b>Apps</b> → <b>Install OrlandoRecharge</b>.</span>
       </div>
 
-      <!-- 2. Windows 1-Click .cmd file -->
+      <!-- 2. Google Chrome -->
       <div style="background:#000;border:1px solid var(--line2);border-radius:14px;padding:14px">
-        <b style="color:var(--gold)">⚡ 1-Click Windows Taskbar Installer (.cmd):</b><br>
-        <span style="font-size:.84rem;color:var(--dim)">Creates a dedicated desktop app with the gold clock icon and pins it to your taskbar:</span>
-        <div style="margin-top:8px">
-          <a class="primary dist-btn" href="downloads/Install-DailyRecharge-Windows.cmd" download style="display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 16px;text-decoration:none;border-radius:10px;font-weight:700">⚡ Download &amp; Run Installer (.cmd)</a>
+        <b style="color:#60A5FA;font-size:.96rem">🌐 Google Chrome:</b><br>
+        <span style="font-size:.86rem;color:var(--text)">Click the <b>Install app (💻)</b> icon in the address bar.</span>
+        <div style="margin:8px 0;padding:8px 12px;background:#0c0c0e;border:1px solid var(--line2);border-radius:8px;display:flex;align-items:center;gap:10px">
+          <span style="font-size:1.3rem">💻</span>
+          <span>Click Chrome menu (⋮) → <b>Save and share</b> → <b>Install OrlandoRecharge...</b></span>
         </div>
       </div>
 
-      <!-- 3. Windows PowerShell 1-liner -->
+      <!-- 3. Mobile iPhone / iPad & Android -->
       <div style="background:#000;border:1px solid var(--line2);border-radius:14px;padding:12px 14px">
-        <b style="color:var(--gold)">⚡ PowerShell 1-Line Setup:</b><br>
-        <code style="display:block;margin-top:6px;padding:8px 10px;background:#0c0c0e;border:1px solid var(--line2);border-radius:8px;color:#4ADE80;font-size:.78rem;word-break:break-all">irm https://orlandopasion000.github.io/orlandorecharge/install.ps1 | iex</code>
+        <b style="color:#5de8a0;font-size:.92rem">📱 iPhone / iPad & Android:</b><br>
+        <span style="font-size:.82rem;color:var(--dim)">On Safari tap <b>Share (↑) → Add to Home Screen</b>. On Android tap <b>Menu (⋮) → Install app</b>.</span>
       </div>
     </div>
     <div class="modal-actions" style="margin-top:18px">
@@ -3717,45 +3710,40 @@ var deferredInstallPrompt=null;
 window.addEventListener("beforeinstallprompt",function(e){
   e.preventDefault();
   deferredInstallPrompt=e;
-  var b=$("installAppBtn");
-  if(b)b.textContent="⬇ Install Now (Ready)";
-  var q=$("quickAppBtn");
-  if(q){ q.classList.add("ready"); q.title="Click to install & open Windows Desktop App"; }
-  var t=$("themeAppBtn");
+  var b = $("installAppBtn");
+  if (b) {
+    b.textContent = "⬇ Install Now (Ready)";
+    b.onclick = function(e) {
+      if (e) e.preventDefault();
+      launchDesktopApp();
+    };
+  }
+  var q = $("quickAppBtn");
+  if (q) { q.classList.add("ready"); q.title = "Click to install & open Windows Desktop App"; }
+  var t = $("themeAppBtn");
   if(t){ t.classList.add("ready"); t.title="Click to install & open Windows Desktop App"; }
 });
 
 function launchDesktopApp() {
   if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) {
-    showToast("You are already inside the Daily Recharge Windows App! ⏰✨", "💻");
+    showToast("You are already inside the OrlandoRecharge Windows App! ⏰✨", "💻");
     return;
   }
   if (deferredInstallPrompt) {
     deferredInstallPrompt.prompt();
     deferredInstallPrompt.userChoice.then(function(choice){
-      if(choice.outcome==="accepted"){
-        showToast("Installing Daily Recharge Alarm to Windows Taskbar... 🚀", "💻");
+      if(choice.outcome === "accepted"){
+        showToast("Installing OrlandoRecharge to Windows Taskbar... 🚀", "💻");
       }
-      deferredInstallPrompt=null;
+      deferredInstallPrompt = null;
     });
     return;
   }
 
-  // Open the interactive installation guide
+  // Open the interactive installation guide modal
   if ($("installGuideModal")) {
     $("installGuideModal").classList.add("open");
   }
-
-  // Automatically trigger download of the 1-click Windows taskbar installer
-  try {
-    var a = document.createElement("a");
-    a.href = "downloads/Install-DailyRecharge-Windows.cmd";
-    a.download = "Install-DailyRecharge-Windows.cmd";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    showToast("Downloaded 1-Click Windows Taskbar App installer (.cmd)! 💻", "📥");
-  } catch(e){}
 }
 
 if ($("closeInstallGuide")) $("closeInstallGuide").onclick=function(){$("installGuideModal").classList.remove("open")};
@@ -3936,27 +3924,7 @@ function renderRechargeHoloSuite(isBlank) {
               <span class="qr-metric-lbl">🎵 Ambient Sounds</span>
             </div>
           </div>
-          <div class="suite-unified-btn-row">
-            <button type="button" class="btn-qr-action" id="btnPushScheduleCloud" style="flex:1;">⚡ Push Schedule to Phone</button>
-            <button type="button" class="btn-qr-action" id="btnPullScheduleCloud" style="flex:1;">📥 Pull Latest Schedule</button>
-          </div>
-        </div>
-
-        <!-- Module 2: Device Install -->
-        <div class="qr-telemetry-card">
-          <div class="qr-telemetry-header">
-            <span>💻 Device Install &amp; Background Alarm</span>
-            <span style="color:#d9b95c;font-size:0.72rem;background:rgba(217,185,92,0.15);padding:2px 8px;border-radius:6px;border:1px solid rgba(217,185,92,0.35);">Zero Warnings</span>
-          </div>
-          <button type="button" class="btn-suite-gold" id="btnRecharge1ClickInstall">
-            ⚡ 1-Click Install App (Windows · Mac · iOS · Android)
-          </button>
-          <div class="suite-unified-btn-row">
-            <a class="btn-qr-action" href="downloads/Install-OrlandoRecharge-Windows.cmd" download style="text-decoration:none;">🖥️ Windows (.cmd)</a>
-            <a class="btn-qr-action" href="downloads/DailyRecharge-Setup.exe" download style="text-decoration:none;">⬇️ Windows (.exe)</a>
-            <button type="button" class="btn-qr-action" id="btnRechargeStandaloneHtml">💾 Offline (.html)</button>
-            ${s.isBlank ? `<a class="btn-qr-action" href="recharge-clean.html" target="_blank" style="border-color:var(--gold);color:var(--gold);text-decoration:none;">🚀 Open Blank</a>` : ''}
-          </div>
+          
         </div>
 
         <!-- Module 3: Backup & Setup -->
@@ -4150,12 +4118,6 @@ function renderRechargeHoloSuite(isBlank) {
     };
   }
 
-  var standaloneBtn = $("btnRechargeStandaloneHtml");
-  if (standaloneBtn) {
-    standaloneBtn.onclick = function() {
-      if ($("downloadBlankAppBtn")) $("downloadBlankAppBtn").click();
-    };
-  }
 }
 
 
@@ -4222,6 +4184,13 @@ function fallbackCopy(text){
   document.body.removeChild(ta);
 }
 
+if ($("installAppBtn")) {
+  $("installAppBtn").onclick = function(e) {
+    if (e) e.preventDefault();
+    launchDesktopApp();
+  };
+}
+
 /* Share Cockpit */
 $("shareAppBtn").onclick=function(){
   var shareData={
@@ -4261,92 +4230,6 @@ $("exportBackupBtn").onclick=function(){
   showToast("Schedule backup downloaded!", "💾");
 };
 
-/* Download Clean Blank Edition (.html) */
-if($("downloadBlankAppBtn")){
-  $("downloadBlankAppBtn").onclick=function(){
-    fetch("recharge-clean.html")
-      .then(function(res){
-        if(!res.ok) throw new Error("HTTP " + res.status);
-        return res.text();
-      })
-      .then(function(html){
-        var blob=new Blob([html],{type:"text/html;charset=utf-8"});
-        var a=document.createElement("a");
-        a.href=URL.createObjectURL(blob);
-        a.download="daily-recharge-blank.html";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(a.href);
-        showToast("Blank Edition downloaded! Completely clean and schedule-free.", "🎁");
-      })
-      .catch(function(){
-        window.open("recharge-clean.html","_blank");
-      });
-  };
-}
-
-/* Import Backup JSON */
-$("importBackupBtn").onclick=function(){
-  $("importBackupFile").click();
-};
-$("importBackupFile").onchange=function(e){
-  var file=e.target.files&&e.target.files[0];
-  if(!file)return;
-  var reader=new FileReader();
-  reader.onload=function(evt){
-    try{
-      var data=JSON.parse(evt.target.result);
-      if(data&&Array.isArray(data.schedule)&&data.schedule.length>0){
-        S=data.schedule.slice(0);
-        if(data.days)days=data.days;
-        if(data.theme&&THEMES.indexOf(data.theme)!==-1)applyClockTheme(data.theme);
-        save();
-        renderList();
-        renderDays();
-        tick();
-        showToast("Schedule restored successfully ("+S.length+" alarms)!", "✓");
-      }else{
-        alert("Invalid backup file format. Expected a valid schedule array.");
-      }
-    }catch(err){
-      alert("Error reading backup file: "+err.message);
-    }
-    $("importBackupFile").value="";
-  };
-  reader.readAsText(file);
-};
-
-
-/* ───────── SERVICE WORKER & PWA INSTALL ───────── */
-var swReg=null;
-if("serviceWorker" in navigator&&location.protocol!=="file:"){
-  navigator.serviceWorker.register("recharge-sw.js",{scope:"./"}).then(function(r){swReg=r}).catch(function(){});
-  navigator.serviceWorker.addEventListener("message",function(e){
-    var d=e.data||{};if(d.type!=="alarm-action")return;
-    if(d.action==="snooze")snooze();else if(d.action==="dismiss")dismiss();else window.focus();
-  });
-}
-
-if(/[?&]rest=1/.test(location.search))enterRest();
-
-
-/* ══════════════════════════════════════════════════════════════
-   RELIABILITY SUITE: SCREEN WAKE LOCK & BACKGROUND AUDIO KEEP-ALIVE
-   ══════════════════════════════════════════════════════════════ */
-var wakeLock = null;
-async function requestWakeLock() {
-  if ('wakeLock' in navigator) {
-    try {
-      wakeLock = await navigator.wakeLock.request('screen');
-      wakeLock.addEventListener('release', function() {
-        wakeLock = null;
-      });
-    } catch(err) {
-      // Ignore wake lock denial
-    }
-  }
-}
 function releaseWakeLock() {
   if (wakeLock) {
     try {
@@ -5026,7 +4909,7 @@ if ($("cleanResetCanvasBtn")) {
     if (typeof updatePresetSelectorUI === "function") updatePresetSelectorUI();
     if (typeof updatePresetDaysBadge === "function") updatePresetDaysBadge();
     tick();
-    showToast("Schedule reset to blank canvas (0 alarms)", "📝");
+    showToast("Schedule reset to blank canvas (0 alarms)", "📋");
   };
 }
 

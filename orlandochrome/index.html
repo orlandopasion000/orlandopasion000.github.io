@@ -14,7 +14,7 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/svg+xml" href="oc-logo.svg">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=22">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -38,6 +38,19 @@
       </button>
 
       <!-- App Distribution, Live QR & Command Suite Trigger (Single Unified Button — No Redundancy) -->
+      <button type="button" class="btn-topbar-suite" id="btnOpenAppSuite" title="Open App Distribution, Live QR Scanner &amp; Cross-Device Cloud Sync Suite">
+        <span>📲 App Suite</span>
+        <span class="pwa-ready-mini-badge"><span class="sync-status-dot synced" id="topbarSyncDot"></span> <span id="topbarSyncLabel">Synced</span></span>
+      </button>
+
+      
+      <!-- Launch Desktop App Button (Clickable Icon + Word leading directly to OrlandoChrome Desktop App) -->
+      <button type="button" class="btn-topbar-desktop" id="btnTopbarLaunchApp" title="Launch OrlandoChrome Desktop App (Opens the standalone app directly without any browser tabs)">
+        <span class="desktop-btn-icon">🚀</span>
+        <span class="desktop-btn-label">Launch App</span>
+      </button>
+
+      <!-- App Distribution, Live QR & Command Suite Trigger -->
       <button type="button" class="btn-topbar-suite" id="btnOpenAppSuite" title="Open App Distribution, Live QR Scanner &amp; Cross-Device Cloud Sync Suite">
         <span>📲 App Suite</span>
         <span class="pwa-ready-mini-badge"><span class="sync-status-dot synced" id="topbarSyncDot"></span> <span id="topbarSyncLabel">Synced</span></span>
@@ -116,11 +129,7 @@
             </div>
           </div>
           <div class="dist-btn-stack" id="distMainBtnStack">
-            <a class="primary dist-btn" id="installAppBtn" href="https://orlandopasion000.github.io/orlandochrome/" target="_blank" rel="noopener">⚡ 1-Click Install App</a>
-            <div class="dist-btn-row">
-              <a class="ghost dist-btn" id="distCmdSetupBtn" href="../downloads/Install-OrlandoChrome-Windows.cmd" download title="1-Click Windows Setup Script">⚡ Setup (.cmd)</a>
-              <a class="ghost dist-btn" id="distExeBtn" href="../downloads/Install-OrlandoChrome-Windows.cmd" download title="Standalone App Launcher for Windows">⬇ .exe</a>
-            </div>
+            <button type="button" class="primary dist-btn" id="installAppBtn" title="Install as standalone desktop application">⚡ 1-Click Install App</button>
           </div>
         </div>
 
@@ -168,10 +177,6 @@
           </div>
           <div class="dist-btn-stack" id="distBlankBtnStack">
             <a class="primary dist-btn" id="openBlankAppBtn" href="https://orlandopasion000.github.io/orlandochrome/?edition=blank" target="_blank" rel="noopener">🚀 Open Blank Web App</a>
-            <div class="dist-btn-row">
-              <a class="ghost dist-btn" id="distCleanExeBtn" href="../downloads/Install-OrlandoChrome-Clean-Windows.cmd" download title="Clean Edition Setup Launcher">⬇ .exe</a>
-              <button type="button" class="ghost dist-btn" id="btnDownloadSingleHtml" title="Standalone Single-File Offline HTML">💾 .html</button>
-            </div>
           </div>
         </div>
       </div>
@@ -191,8 +196,8 @@
   <div id="toast"></div>
 
   <!-- Scripts -->
-  <script src="sound.js"></script>
+  <script src="sound.js?v=22"></script>
   <script src="qrcode.min.js"></script>
-  <script src="app.js"></script>
+  <script src="app.js?v=22"></script>
 </body>
 </html>

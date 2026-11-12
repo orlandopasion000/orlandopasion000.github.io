@@ -99,35 +99,35 @@
 
   // The 22 Real Chrome Profiles in exact physical order from Windows Taskband & Local State
   const DEFAULT_PROFILES = [
-    { id: "p_tb_3", profileDir: "Default", chromeNo: 1, taskbarSlot: 3, winShortcut: "Win + 3", name: "A0 1994", email: "orlandopasion1994@gmail.com", gaia: "Orlando Pasion", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, notes: [] },
-    { id: "p_tb_4", profileDir: "Profile 16", chromeNo: 2, taskbarSlot: 4, winShortcut: "Win + 4", name: "A1 001 DepEd", email: "orlando.pasion001@deped.gov.ph", gaia: "Orlando Pasion", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, notes: [] },
-    { id: "p_tb_5", profileDir: "Profile 1", chromeNo: 3, taskbarSlot: 5, winShortcut: "Win + 5", name: "A2 000", email: "orlandopasion000@gmail.com", gaia: "Orlando Pasion", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, notes: [] },
-    { id: "p_tb_6", profileDir: "Profile 2", chromeNo: 4, taskbarSlot: 6, winShortcut: "Win + 6", name: "A3 0817", email: "orlandopasion0817@gmail.com", gaia: "Orlando Pasion", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, notes: [] },
-    { id: "p_tb_7", profileDir: "Profile 24", chromeNo: 5, taskbarSlot: 7, winShortcut: "Win + 7", name: "A4 A Hero", email: "heroesmeraldaepicalu@gmail.com", gaia: "Orlando Pasion", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, notes: [] },
-    { id: "p_tb_8", profileDir: "Profile 22", chromeNo: 6, taskbarSlot: 8, winShortcut: "Win + 8", name: "A4 B Yify", email: "yifyyts7@gmail.com", gaia: "Yify Yify", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, notes: [] },
-    { id: "p_tb_9", profileDir: "Profile 20", chromeNo: 7, taskbarSlot: 9, winShortcut: "Win + 9", name: "A4 C NASH", email: "revnash0@gmail.com", gaia: "Nash Rev", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, notes: [] },
-    { id: "p_tb_10", profileDir: "Profile 48", chromeNo: 8, taskbarSlot: 10, winShortcut: "Slot #10", name: "A4 D Gwapo", email: "gwapocpogi@gmail.com", gaia: "Gwapo Pogi", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, notes: [] },
-    { id: "p_tb_11", profileDir: "Profile 9", chromeNo: 9, taskbarSlot: 11, winShortcut: "Slot #11", name: "A5 001 Gmail", email: "orlandopasion001@gmail.com", gaia: "Orlando Pasion", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, notes: [] },
-    { id: "p_tb_12", profileDir: "Profile 39", chromeNo: 10, taskbarSlot: 12, winShortcut: "Slot #12", name: "A5 002 Gmail", email: "orlandopasion002@gmail.com", gaia: "Orlando Pasion", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, notes: [] },
-    { id: "p_tb_13", profileDir: "Profile 40", chromeNo: 11, taskbarSlot: 13, winShortcut: "Slot #13", name: "A5 003 Gmail", email: "orlandopasion003@gmail.com", gaia: "Orlando Pasion", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, notes: [] },
-    { id: "p_tb_14", profileDir: "Profile 41", chromeNo: 12, taskbarSlot: 14, winShortcut: "Slot #14", name: "A5 004 Gmail", email: "orlandopasion004@gmail.com", gaia: "Orlando Pasion", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, notes: [] },
-    { id: "p_tb_15", profileDir: "Profile 52", chromeNo: 13, taskbarSlot: 15, winShortcut: "Slot #15", name: "A5 005 Gmail", email: "orlandopasion005@gmail.com", gaia: "Orlando Pasion", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, notes: [] },
-    { id: "p_tb_16", profileDir: "Profile 53", chromeNo: 14, taskbarSlot: 16, winShortcut: "Slot #16", name: "A5 006 Gmail", email: "orlandopasion006@gmail.com", gaia: "Orlando Pasion", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, notes: [] },
-    { id: "p_tb_17", profileDir: "Profile 49", chromeNo: 15, taskbarSlot: 17, winShortcut: "Slot #17", name: "A6 scite003 Gmail Gold Cloud", email: "goldcloudblack@gmail.com", gaia: "Gold Cloud Black", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, notes: [] },
-    { id: "p_tb_18", profileDir: "Profile 45", chromeNo: 16, taskbarSlot: 18, winShortcut: "Slot #18", name: "A6 scite001 Gmail", email: "scite.orlandopasion001@gmail.com", gaia: "Orlando Pasion", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, notes: [] },
-    { id: "p_tb_19", profileDir: "Profile 46", chromeNo: 17, taskbarSlot: 19, winShortcut: "Slot #19", name: "A6 scite002 Gmail", email: "scite.orlandopasion002@gmail.com", gaia: "Orlando Pasion", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, notes: [] },
-    { id: "p_tb_20", profileDir: "Profile 44", chromeNo: 18, taskbarSlot: 20, winShortcut: "Slot #20", name: "A6 scite003 Gmail", email: "scite.orlandopasion003@gmail.com", gaia: "Orlando Pasion", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, notes: [] },
-    { id: "p_tb_21", profileDir: "Profile 56", chromeNo: 19, taskbarSlot: 21, winShortcut: "Slot #21", name: "A7 A pogiorlandopasion@gmail.com", email: "pogiorlandopasion@gmail.com", gaia: "Orlando Pasion", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, notes: [] },
-    { id: "p_tb_22", profileDir: "Profile 57", chromeNo: 20, taskbarSlot: 22, winShortcut: "Slot #22", name: "A7 B watchonlineapple", email: "watchonlineapple@gmail.com", gaia: "Watch Online", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, notes: [] },
-    { id: "p_tb_23", profileDir: "Profile 58", chromeNo: 21, taskbarSlot: 23, winShortcut: "Slot #23", name: "A7 C grammarlyquillbot001@gmail.com", email: "grammarlyquillbot001@gmail.com", gaia: "Orlando Pasion", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, notes: [] },
-    { id: "p_tb_24", profileDir: "Profile 59", chromeNo: 22, taskbarSlot: 24, winShortcut: "Slot #24", name: "A7 D netflixpasion", email: "netflixpasion1994@gmail.com", gaia: "Orlando Pasion", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, notes: [] }
+    { id: "p_tb_3", profileDir: "Default", chromeNo: 1, taskbarSlot: 3, winShortcut: "Win + 3", name: "A0 1994", email: "orlandopasion1994@gmail.com", gaia: "Orlando Pasion", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, statusNote: null, notes: [] },
+    { id: "p_tb_4", profileDir: "Profile 16", chromeNo: 2, taskbarSlot: 4, winShortcut: "Win + 4", name: "A1 001 DepEd", email: "orlando.pasion001@deped.gov.ph", gaia: "Orlando Pasion", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, statusNote: null, notes: [] },
+    { id: "p_tb_5", profileDir: "Profile 1", chromeNo: 3, taskbarSlot: 5, winShortcut: "Win + 5", name: "A2 000", email: "orlandopasion000@gmail.com", gaia: "Orlando Pasion", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, statusNote: null, notes: [] },
+    { id: "p_tb_6", profileDir: "Profile 2", chromeNo: 4, taskbarSlot: 6, winShortcut: "Win + 6", name: "A3 0817", email: "orlandopasion0817@gmail.com", gaia: "Orlando Pasion", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, statusNote: null, notes: [] },
+    { id: "p_tb_7", profileDir: "Profile 24", chromeNo: 5, taskbarSlot: 7, winShortcut: "Win + 7", name: "A4 A Hero", email: "heroesmeraldaepicalu@gmail.com", gaia: "Orlando Pasion", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, statusNote: null, notes: [] },
+    { id: "p_tb_8", profileDir: "Profile 22", chromeNo: 6, taskbarSlot: 8, winShortcut: "Win + 8", name: "A4 B Yify", email: "yifyyts7@gmail.com", gaia: "Yify Yify", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, statusNote: null, notes: [] },
+    { id: "p_tb_9", profileDir: "Profile 20", chromeNo: 7, taskbarSlot: 9, winShortcut: "Win + 9", name: "A4 C NASH", email: "revnash0@gmail.com", gaia: "Nash Rev", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, statusNote: null, notes: [] },
+    { id: "p_tb_10", profileDir: "Profile 48", chromeNo: 8, taskbarSlot: 10, winShortcut: "Slot #10", name: "A4 D Gwapo", email: "gwapocpogi@gmail.com", gaia: "Gwapo Pogi", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, statusNote: null, notes: [] },
+    { id: "p_tb_11", profileDir: "Profile 9", chromeNo: 9, taskbarSlot: 11, winShortcut: "Slot #11", name: "A5 001 Gmail", email: "orlandopasion001@gmail.com", gaia: "Orlando Pasion", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, statusNote: null, notes: [] },
+    { id: "p_tb_12", profileDir: "Profile 39", chromeNo: 10, taskbarSlot: 12, winShortcut: "Slot #12", name: "A5 002 Gmail", email: "orlandopasion002@gmail.com", gaia: "Orlando Pasion", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, statusNote: null, notes: [] },
+    { id: "p_tb_13", profileDir: "Profile 40", chromeNo: 11, taskbarSlot: 13, winShortcut: "Slot #13", name: "A5 003 Gmail", email: "orlandopasion003@gmail.com", gaia: "Orlando Pasion", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, statusNote: null, notes: [] },
+    { id: "p_tb_14", profileDir: "Profile 41", chromeNo: 12, taskbarSlot: 14, winShortcut: "Slot #14", name: "A5 004 Gmail", email: "orlandopasion004@gmail.com", gaia: "Orlando Pasion", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, statusNote: null, notes: [] },
+    { id: "p_tb_15", profileDir: "Profile 52", chromeNo: 13, taskbarSlot: 15, winShortcut: "Slot #15", name: "A5 005 Gmail", email: "orlandopasion005@gmail.com", gaia: "Orlando Pasion", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, statusNote: null, notes: [] },
+    { id: "p_tb_16", profileDir: "Profile 53", chromeNo: 14, taskbarSlot: 16, winShortcut: "Slot #16", name: "A5 006 Gmail", email: "orlandopasion006@gmail.com", gaia: "Orlando Pasion", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, statusNote: null, notes: [] },
+    { id: "p_tb_17", profileDir: "Profile 49", chromeNo: 15, taskbarSlot: 17, winShortcut: "Slot #17", name: "A6 Gold Cloud Black", email: "goldcloudblack@gmail.com", gaia: "Gold Cloud Black", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, statusNote: null, notes: [] },
+    { id: "p_tb_18", profileDir: "Profile 45", chromeNo: 16, taskbarSlot: 18, winShortcut: "Slot #18", name: "A6 scite001 Gmail", email: "scite.orlandopasion001@gmail.com", gaia: "Orlando Pasion", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, statusNote: null, notes: [] },
+    { id: "p_tb_19", profileDir: "Profile 46", chromeNo: 17, taskbarSlot: 19, winShortcut: "Slot #19", name: "A6 scite002 Gmail", email: "scite.orlandopasion002@gmail.com", gaia: "Orlando Pasion", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, statusNote: null, notes: [] },
+    { id: "p_tb_20", profileDir: "Profile 44", chromeNo: 18, taskbarSlot: 20, winShortcut: "Slot #20", name: "A6 scite003 Gmail", email: "scite.orlandopasion003@gmail.com", gaia: "Orlando Pasion", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, statusNote: null, notes: [] },
+    { id: "p_tb_21", profileDir: "Profile 56", chromeNo: 19, taskbarSlot: 21, winShortcut: "Slot #21", name: "A7 A pogiorlandopasion@gmail.com", email: "pogiorlandopasion@gmail.com", gaia: "Orlando Pasion", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, statusNote: null, notes: [] },
+    { id: "p_tb_22", profileDir: "Profile 57", chromeNo: 20, taskbarSlot: 22, winShortcut: "Slot #22", name: "A7 B watchonlineapple", email: "watchonlineapple@gmail.com", gaia: "Watch Online", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, statusNote: null, notes: [] },
+    { id: "p_tb_23", profileDir: "Profile 58", chromeNo: 21, taskbarSlot: 23, winShortcut: "Slot #23", name: "A7 C grammarlyquillbot001@gmail.com", email: "grammarlyquillbot001@gmail.com", gaia: "Orlando Pasion", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, statusNote: null, notes: [] },
+    { id: "p_tb_24", profileDir: "Profile 59", chromeNo: 22, taskbarSlot: 24, winShortcut: "Slot #24", name: "A7 D netflixpasion", email: "netflixpasion1994@gmail.com", gaia: "Orlando Pasion", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, statusNote: null, notes: [] }
   ];
 
   // Clean Blank Edition starter profiles (zero personal data — ready to auto-scan installed laptop's taskbar)
   const BLANK_STARTER_PROFILES = [
-    { id: "b_slot_1", profileDir: "", chromeNo: 1, taskbarSlot: 1, winShortcut: "Win + 1", name: "Chrome Profile #1", email: "Click 'Scan Laptop Taskbar' to auto-detect", gaia: "", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, notes: [] },
-    { id: "b_slot_2", profileDir: "", chromeNo: 2, taskbarSlot: 2, winShortcut: "Win + 2", name: "Chrome Profile #2", email: "Taskbar Slot #2", gaia: "", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, notes: [] },
-    { id: "b_slot_3", profileDir: "", chromeNo: 3, taskbarSlot: 3, winShortcut: "Win + 3", name: "Chrome Profile #3", email: "Taskbar Slot #3", gaia: "", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, notes: [] }
+    { id: "b_slot_1", profileDir: "", chromeNo: 1, taskbarSlot: 1, winShortcut: "Win + 1", name: "Chrome Profile #1", email: "Click 'Scan Laptop Taskbar' to auto-detect", gaia: "", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, statusNote: null, notes: [] },
+    { id: "b_slot_2", profileDir: "", chromeNo: 2, taskbarSlot: 2, winShortcut: "Win + 2", name: "Chrome Profile #2", email: "Taskbar Slot #2", gaia: "", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, statusNote: null, notes: [] },
+    { id: "b_slot_3", profileDir: "", chromeNo: 3, taskbarSlot: 3, winShortcut: "Win + 3", name: "Chrome Profile #3", email: "Taskbar Slot #3", gaia: "", timerUntil: null, timerDurationMs: null, isReset: false, isPinned: false, pinnedAt: null, isUnread: false, stickyNote: "", customAvatar: null, statusNote: null, notes: [] }
   ];
 
   // Old sample text to purge
@@ -423,12 +423,25 @@
       }
     }
 
+    let draSync = undefined;
+    if (!forQrCode) {
+      try {
+        draSync = {
+          ct: localStorage.getItem('dra-clock-theme') || 'platinum',
+          off: JSON.parse(localStorage.getItem('dra-off') || '[]'),
+          days: JSON.parse(localStorage.getItem('dra-days') || '[0,1,2,3,4,5,6]'),
+          sched: JSON.parse(localStorage.getItem('dra-schedule') || 'null')
+        };
+      } catch (e) {}
+    }
+
     return {
       v: 2,
       cid: CLIENT_ID,
       ts: state.lastModified || now(),
       ed: IS_BLANK_EDITION ? 'b' : 'p',
       tpl: forQrCode ? undefined : state.quickTemplates,
+      dra: draSync,
       p: activeProfs
     };
   }
@@ -436,6 +449,17 @@
   // Apply Sync Packet from QR Code URL (?sync=...) or Real-Time Cloud Sync
   function applySyncPacket(packet, sourceLabel = 'Cloud Sync') {
     if (!packet || !Array.isArray(packet.p)) return false;
+
+    if (packet.dra) {
+      try {
+        if (packet.dra.ct) localStorage.setItem('dra-clock-theme', packet.dra.ct);
+        if (Array.isArray(packet.dra.off)) localStorage.setItem('dra-off', JSON.stringify(packet.dra.off));
+        if (Array.isArray(packet.dra.days)) localStorage.setItem('dra-days', JSON.stringify(packet.dra.days));
+        if (Array.isArray(packet.dra.sched) && packet.dra.sched.length > 0) {
+          localStorage.setItem('dra-schedule', JSON.stringify(packet.dra.sched));
+        }
+      } catch (e) {}
+    }
 
     const mapByChromeNo = new Map();
     packet.p.forEach(item => {
@@ -874,29 +898,45 @@
     }
 
     const urlImported = checkUrlImportedProfiles();
-    if (urlImported && IS_BLANK_EDITION) {
-      state.profiles = urlImported.map((p, idx) => ({
-        id: p.id || `b_slot_${idx + 1}`,
-        profileDir: p.profileDir || `Profile ${idx + 1}`,
-        chromeNo: idx + 1,
-        taskbarSlot: p.taskbarSlot || (idx + 1),
-        winShortcut: p.winShortcut || ((idx + 1) <= 9 ? `Win + ${idx + 1}` : `Slot #${idx + 1}`),
-        name: p.name || `Chrome #${idx + 1}`,
-        email: p.email || '',
-        gaia: p.gaia || '',
-        timerUntil: null,
-        timerDurationMs: null,
-        isReset: false,
-        isPinned: false,
-        pinnedAt: null,
-        isUnread: false,
-        stickyNote: '',
-        customAvatar: p.customAvatar || null,
-        notes: []
-      }));
+    if (urlImported && urlImported.length > 0) {
+      if (IS_BLANK_EDITION) {
+        state.profiles = urlImported.map((p, idx) => ({
+          id: p.id || `b_slot_${idx + 1}`,
+          profileDir: p.profileDir || `Profile ${idx + 1}`,
+          chromeNo: idx + 1,
+          taskbarSlot: p.taskbarSlot || (idx + 1),
+          winShortcut: p.winShortcut || ((idx + 1) <= 9 ? `Win + ${idx + 1}` : `Slot #${idx + 1}`),
+          name: p.name || `Chrome #${idx + 1}`,
+          email: p.email || '',
+          gaia: p.gaia || '',
+          timerUntil: null,
+          timerDurationMs: null,
+          isReset: false,
+          isPinned: false,
+          pinnedAt: null,
+          isUnread: false,
+          stickyNote: '',
+          customAvatar: p.customAvatar || null,
+          notes: []
+        }));
+      } else {
+        // Merge names & emails into personal profiles without losing notes, timers, or avatars!
+        let updatedCount = 0;
+        state.profiles = DEFAULT_PROFILES.map(def => {
+          const matched = urlImported.find(u => (u.profileDir && u.profileDir === def.profileDir) || (u.chromeNo && u.chromeNo === def.chromeNo));
+          const nameToUse = (matched && matched.name) ? matched.name : def.name;
+          const emailToUse = (matched && matched.email) ? matched.email : def.email;
+          if (matched && (nameToUse !== def.name || emailToUse !== def.email)) updatedCount++;
+          return {
+            ...def,
+            name: nameToUse,
+            email: emailToUse
+          };
+        });
+      }
       state.activeProfileId = state.profiles[0].id;
       saveState();
-      setTimeout(() => showToast(`✅ Synced ${state.profiles.length} taskbar Chrome profiles from this laptop!`), 300);
+      setTimeout(() => showToast(`✅ Auto-synced Chrome profiles & taskbar names from this laptop!`), 300);
       return;
     }
 
@@ -930,6 +970,7 @@
           taskbarSlot: p.taskbarSlot || (idx + 1),
           winShortcut: p.winShortcut || ((idx + 1) <= 9 ? `Win + ${idx + 1}` : `Slot #${idx + 1}`),
           stickyNote: p.stickyNote || '',
+          statusNote: p.statusNote || null,
           isUnread: !!(p.isUnread && Array.isArray(p.notes) && p.notes.length > 0),
           notes: (p.notes || []).map(n => ({
             ...n,
@@ -964,11 +1005,16 @@
           forwardedFrom: n.forwardedFrom || null
         }));
 
+        let resolvedName = (found.name && found.name.trim()) ? found.name : def.name;
+        if (def.taskbarSlot === 17) {
+          resolvedName = 'A6 Gold Cloud Black';
+        }
+
         return {
           ...def,
-          // Always keep the true verified laptop name and email from ground truth
-          name: def.name,
-          email: def.email,
+          // Respect user-renamed profile name & email while defaulting to ground truth
+          name: resolvedName,
+          email: (found.email && found.email.trim()) ? found.email : def.email,
           taskbarSlot: def.taskbarSlot,
           winShortcut: def.winShortcut,
           timerUntil: found.timerUntil || null,
@@ -979,6 +1025,7 @@
           isUnread: !!(found.isUnread && cleanedNotes.length > 0),
           stickyNote: found.stickyNote || '',
           customAvatar: found.customAvatar || null,
+          statusNote: found.statusNote || null,
           notes: cleanedNotes
         };
       });
@@ -1093,56 +1140,175 @@
     return `${mins}m`;
   }
 
-  // Daily Recharge Alarm Schedule Calculator
-  function getNextAlarmInfo() {
-    const d = new Date();
-    const curMinutes = d.getHours() * 60 + d.getMinutes();
+  // =========================================================================
+  // ⌚ ORLANDORECHARGE CLOCK & SCHEDULE ENGINE (Exact Alignment with daily-recharge-alarm.html)
+  // =========================================================================
+  const DRA_CLOCK_THEMES = [
+    'platinum', 'gold', 'royal-sapphire', 'crimson-laser', 'obsidian-noir',
+    'solis-gold', 'rainbow', 'chrome-3d', 'cyber-emerald', 'ice-titanium',
+    'amethyst', 'sunset-rose', 'minimal-white', 'chronometer-din', 'sunset-amber',
+    'midnight-gold', 'green-nature'
+  ];
 
-    for (const item of RECHARGE_SCHEDULE) {
-      const itemMinutes = item[0] * 60 + item[1];
-      if (itemMinutes > curMinutes) {
-        return {
-          diffMin: itemMinutes - curMinutes,
-          title: item[3],
-          type: item[2]
-        };
+  const DRA_THEME_NAMES = {
+    'platinum': 'Platinum Mirror',
+    'gold': 'Champagne Gold',
+    'royal-sapphire': 'Royal Sapphire',
+    'crimson-laser': 'Crimson Laser',
+    'obsidian-noir': 'Obsidian Noir',
+    'solis-gold': 'Solis Gold',
+    'rainbow': 'Prism Spectrum',
+    'chrome-3d': 'Liquid Chrome 3D',
+    'cyber-emerald': 'Cyber Emerald',
+    'ice-titanium': 'Ice Titanium',
+    'amethyst': 'Royal Amethyst',
+    'sunset-rose': 'Sunset Rose',
+    'minimal-white': 'Pure White',
+    'chronometer-din': 'Chronometer Silver',
+    'sunset-amber': 'Sunset Amber',
+    'midnight-gold': 'Midnight Gold Outline',
+    'green-nature': 'Botanical Emerald'
+  };
+
+  function getActiveDraClockTheme() {
+    try {
+      const saved = localStorage.getItem('dra-clock-theme');
+      if (saved && DRA_CLOCK_THEMES.includes(saved)) return saved;
+    } catch (e) {}
+    return 'platinum';
+  }
+
+  function p2(n) {
+    return String(n).padStart(2, '0');
+  }
+
+  function chromeDigitsHTML(str) {
+    return [...str].map(c => c === ':' ? '<span class="c">:</span>' : `<span>${c}</span>`).join('');
+  }
+
+  // Daily Recharge Alarm Schedule Calculator — Aligned 100% with daily-recharge-alarm.html
+  // Reads user's live dra-schedule, dra-off, and dra-days from shared origin localStorage!
+  function getNextAlarmInfo() {
+    const n = new Date();
+    let sched = RECHARGE_SCHEDULE;
+    let offKeys = new Set();
+    let activeDays = new Set([0, 1, 2, 3, 4, 5, 6]);
+
+    try {
+      const rawSched = localStorage.getItem('dra-schedule');
+      if (rawSched) {
+        const parsed = JSON.parse(rawSched);
+        if (Array.isArray(parsed) && parsed.length > 0) sched = parsed;
+      }
+      const rawOff = localStorage.getItem('dra-off');
+      if (rawOff) {
+        const parsedOff = JSON.parse(rawOff);
+        if (Array.isArray(parsedOff)) offKeys = new Set(parsedOff);
+      }
+      const rawDays = localStorage.getItem('dra-days');
+      if (rawDays) {
+        const parsedDays = JSON.parse(rawDays);
+        if (Array.isArray(parsedDays) && parsedDays.length > 0) activeDays = new Set(parsedDays);
+      }
+    } catch (e) {}
+
+    let found = null;
+    for (let dayOffset = 0; dayOffset <= 7 && !found; dayOffset++) {
+      const d = new Date(n);
+      d.setDate(n.getDate() + dayOffset);
+      if (!activeDays.has(d.getDay())) continue;
+
+      for (const item of sched) {
+        const h = Number(item[0]);
+        const m = Number(item[1]);
+        const key = `${p2(h)}:${p2(m)}`;
+        if (offKeys.has(key)) continue;
+
+        const at = new Date(d);
+        at.setHours(h, m, 0, 0);
+        if (at > n) {
+          found = {
+            at,
+            type: item[2] || 'break',
+            title: item[3] || 'Scheduled Recharge'
+          };
+          break;
+        }
       }
     }
-    const minutesUntilTomorrow7am = (24 * 60 - curMinutes) + 7 * 60;
+
+    if (!found) {
+      const fallback = sched[0] || [7, 0, 'start', 'Breakfast & morning prep — ease into the day'];
+      const at = new Date(n);
+      at.setDate(n.getDate() + 1);
+      at.setHours(Number(fallback[0]), Number(fallback[1]), 0, 0);
+      found = {
+        at,
+        type: fallback[2] || 'start',
+        title: fallback[3] || 'Breakfast & morning prep — ease into the day'
+      };
+    }
+
+    // Exact formula from daily-recharge-alarm.html: Math.round((found.at - n) / 1000)
+    const diffSec = Math.max(0, Math.round((found.at - n) / 1000));
+    const h = Math.floor(diffSec / 3600);
+    const m = Math.floor((diffSec % 3600) / 60);
+    const diffText = (h ? `${h}h ` : '') + `${p2(m)}m`;
+
     return {
-      diffMin: minutesUntilTomorrow7am,
-      title: RECHARGE_SCHEDULE[0][3],
-      type: RECHARGE_SCHEDULE[0][2]
+      diffSec,
+      diffText,
+      title: found.title,
+      type: found.type
     };
   }
 
-  // Render Top Nav Clock Box
+  // Render Top Nav Clock Box (OrlandoRecharge Font Style, 17 Colorways, & Official OR Logo)
   function renderClockBox() {
     const box = $('#navClockBox');
     if (!box) return;
-    const d = new Date();
-    const timeStr = d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', second: '2-digit' });
+    const n = new Date();
+    const h12 = n.getHours() % 12 || 12;
+    const digitsStr = `${p2(h12)}:${p2(n.getMinutes())}:${p2(n.getSeconds())}`;
+    const ampmStr = n.getHours() >= 12 ? 'PM' : 'AM';
+    const clockTheme = getActiveDraClockTheme();
+    const themeLabel = DRA_THEME_NAMES[clockTheme] || 'Platinum Mirror';
+
     if (IS_BLANK_EDITION) {
-      box.innerHTML = `<div class="nf-clock-digital">${timeStr}</div>`;
-      return;
-    }
-    const alarm = getNextAlarmInfo();
-
-    let diffText = '';
-    if (alarm.diffMin >= 60) {
-      const h = Math.floor(alarm.diffMin / 60);
-      const m = alarm.diffMin % 60;
-      diffText = `${h}h ${m}m`;
+      box.innerHTML = `
+        <div class="nf-clock-digital" id="topClockWidget" data-clock-theme="${esc(clockTheme)}" title="Click to cycle OrlandoRecharge Clock Style (${esc(themeLabel)})">
+          <span class="chrome">${chromeDigitsHTML(digitsStr)}</span>
+          <span class="nf-clock-ampm">${ampmStr}</span>
+        </div>
+      `;
     } else {
-      diffText = `${alarm.diffMin}m`;
+      const alarm = getNextAlarmInfo();
+      box.innerHTML = `
+        <div class="nf-clock-digital" id="topClockWidget" data-clock-theme="${esc(clockTheme)}" title="Click to cycle OrlandoRecharge Clock Style (${esc(themeLabel)})">
+          <span class="chrome">${chromeDigitsHTML(digitsStr)}</span>
+          <span class="nf-clock-ampm">${ampmStr}</span>
+        </div>
+        <a href="https://orlandopasion000.github.io/orlandorecharge" target="_blank" rel="noopener noreferrer" class="nf-alarm-pill" id="topAlarmPill" title="Open OrlandoRecharge — Synced Live Schedule">
+          <img src="recharge-icon.png" class="alarm-pill-logo" alt="OR">
+          <span class="alarm-pill-text"><strong class="alarm-pill-countdown">${alarm.diffText}</strong> — ${esc(alarm.title)}</span>
+        </a>
+      `;
     }
 
-    box.innerHTML = `
-      <div class="nf-clock-digital">${timeStr}</div>
-      <a href="https://orlandopasion000.github.io/orlandorecharge" target="_blank" rel="noopener noreferrer" class="nf-alarm-pill" title="OrlandoRecharge — Live Schedule & Alarms">
-        ⏰ ${diffText} — ${esc(alarm.title)}
-      </a>
-    `;
+    const clockEl = $('#topClockWidget', box);
+    if (clockEl) {
+      clockEl.onclick = () => {
+        const curTheme = getActiveDraClockTheme();
+        const nextIdx = (DRA_CLOCK_THEMES.indexOf(curTheme) + 1) % DRA_CLOCK_THEMES.length;
+        const nextTheme = DRA_CLOCK_THEMES[nextIdx];
+        try {
+          localStorage.setItem('dra-clock-theme', nextTheme);
+        } catch (e) {}
+        renderClockBox();
+        scheduleCloudPush();
+        showToast(`⌚ Clock Style: ${DRA_THEME_NAMES[nextTheme] || nextTheme}`);
+      };
+    }
   }
 
   // Small Green & White Radiant Gradient Orb (Replaces flat 🟢 emoji on Limit Reset)
@@ -1241,6 +1407,61 @@
       `</span>`;
   }
 
+  // Return profiles sorted in canonical order (Pinned with pending messages first, then Taskbar Slot order)
+  function getSortedProfiles(listToSort = state.profiles) {
+    return [...listToSort].sort((a, b) => {
+      const aPin = !!(a.isPinned && countPending(a) > 0);
+      const bPin = !!(b.isPinned && countPending(b) > 0);
+      if (aPin !== bPin) return aPin ? -1 : 1;
+      if (aPin && bPin) return (b.pinnedAt || 0) - (a.pinnedAt || 0);
+      return a.taskbarSlot - b.taskbarSlot;
+    });
+  }
+
+  // Select Profile while ALWAYS keeping the Left Profile List & Right Message Pane Side-by-Side
+  function openMobileChatWithSlide(profileId) {
+    if (profileId) {
+      state.activeProfileId = profileId;
+    }
+    document.body.classList.remove('mobile-chat-open');
+    renderSidebar();
+    renderMainChat();
+  }
+
+  function closeMobileChatWithSlide() {
+    document.body.classList.remove('mobile-chat-open');
+    renderSidebar();
+  }
+
+  // Step to Previous (-1) or Next (+1) Chrome Profile (Paging Gesture / Header Tap)
+  function stepProfile(delta) {
+    const sorted = getSortedProfiles();
+    if (!sorted.length) return;
+    const curIdx = sorted.findIndex(p => p.id === state.activeProfileId);
+    const nextIdx = (curIdx + delta + sorted.length) % sorted.length;
+    const nextProf = sorted[nextIdx];
+    state.activeProfileId = nextProf.id;
+    renderSidebar();
+    renderMainChat();
+    const activeRow = $(`#profileList .profile-item[data-id="${nextProf.id}"]`);
+    if (activeRow) {
+      try {
+        activeRow.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      } catch (e) {}
+    }
+    const chatMain = $('#chatMain');
+    if (chatMain) {
+      chatMain.classList.remove('paging-slide-left', 'paging-slide-right');
+      void chatMain.offsetWidth;
+      chatMain.classList.add(delta > 0 ? 'paging-slide-left' : 'paging-slide-right');
+      setTimeout(() => {
+        chatMain.classList.remove('paging-slide-left', 'paging-slide-right');
+      }, 260);
+    }
+    if (window.soundMgr) window.soundMgr.playClick();
+    showToast(`${delta > 0 ? '▶' : '◀'} Chrome #${nextProf.chromeNo}: ${nextProf.name}`);
+  }
+
   // Render Sidebar Profiles List
   function renderSidebar() {
     const list = $('#profileList');
@@ -1290,6 +1511,8 @@
       return;
     }
 
+    const activeProf = getProfile(state.activeProfileId);
+
     list.innerHTML = filtered.map(p => {
       const isActive = p.id === state.activeProfileId;
       const pendingCount = countPending(p);
@@ -1299,15 +1522,18 @@
       const isReset = p.isReset;
       const isUnread = !!(p.isUnread && canUnread);
       const avatarSrc = getAvatarSrc(p);
+      const statusNote = getActiveStatusNote(p);
 
-      const pendingNotes = (p.notes || []).filter(n => !n.done);
+      const allNotes = p.notes || [];
+      const pendingNotes = allNotes.filter(n => !n.done);
       let snippetHtml = '';
       let snippetClass = '';
 
       if (pendingNotes.length > 0) {
         const firstNote = pendingNotes[0];
         const mediaPrefix = firstNote.image ? '📸 ' : (firstNote.voiceClip ? '🎙️ ' : '');
-        const displayMsg = firstNote.text ? `${mediaPrefix}${firstNote.text}` : (firstNote.image ? '📸 Screenshot attached' : '🎙️ Voice note');
+        const subCount = (firstNote.subItems || []).length;
+        const displayMsg = firstNote.text ? `${mediaPrefix}${firstNote.text}` : (firstNote.image ? '📸 Screenshot attached' : (subCount > 0 ? `☑ Checklist (${subCount} items)` : '🎙️ Voice note'));
         const reactBadges = getSidebarReactionBadgesHtml(pendingNotes);
         snippetHtml = `${renderPinButton(p)}<span class="snippet-msg-text">${esc(displayMsg)}</span>${reactBadges}`;
         snippetClass = isPinned ? 'pinned-glow' : 'pending-glow';
@@ -1321,6 +1547,20 @@
       } else if (isUnread) {
         snippetHtml = '● Marked as Unread — Check window next';
         snippetClass = 'unread-glow';
+      } else if (statusNote) {
+        snippetHtml = `<span class="snippet-msg-text snippet-msg-note" title="24h Note: ${esc(statusNote.text)}">💭 "${esc(statusNote.text)}" <span style="opacity:0.6; font-size:11px;">· ${formatRemainingNoteTime(statusNote.expiresAt - cur)}</span></span>`;
+        snippetClass = 'note-row';
+      } else if (allNotes.length > 0) {
+        // Messenger Standard: After reading/completing task, show latest note in transparent/dim style like email
+        const lastNote = allNotes[allNotes.length - 1];
+        const mediaPrefix = lastNote.image ? '📸 ' : (lastNote.voiceClip ? '🎙️ ' : '');
+        const subCount = (lastNote.subItems || []).length;
+        const lastMsg = lastNote.text ? `${mediaPrefix}${lastNote.text}` : (lastNote.image ? '📸 Photo' : (subCount > 0 ? `☑ Checklist (${subCount} items)` : '🎙️ Voice note'));
+        snippetHtml = `<span class="snippet-msg-text snippet-msg-read" title="Completed note">${esc(lastMsg)}</span>`;
+        snippetClass = 'read-row';
+      } else {
+        snippetHtml = `<span class="snippet-msg-text snippet-msg-idle">${esc(p.email || 'Ready · Tap to add notes')}</span>`;
+        snippetClass = 'idle-row';
       }
 
       // Short slot tag e.g. W+3, W+4, #10
@@ -1328,18 +1568,16 @@
         ? `W+${p.winShortcut.replace('Win + ', '')}`
         : `#${p.taskbarSlot}`;
 
-      const hasSubRowContent = Boolean(snippetHtml || pendingCount > 0 || isTimer || isReset);
-
       return `
-        <div class="profile-item ${isActive ? 'active' : ''} ${isPinned ? 'is-pinned' : ''} ${isUnread ? 'is-unread' : ''}" data-id="${p.id}" ${canUnread ? 'title="Right-click to toggle Unread dot"' : ''}>
-          <!-- Bigger Picture Avatar (52px) -->
+        <div class="profile-item ${isActive ? 'active' : ''} ${isPinned ? 'is-pinned' : ''} ${isUnread ? 'is-unread' : ''}" data-id="${p.id}" style="flex-shrink:0;" ${canUnread ? 'title="Right-click to toggle Unread dot"' : ''}>
+          <!-- Bigger Picture Avatar (56px) -->
           <div class="profile-avatar-wrap">
             <img src="${avatarSrc}" class="profile-avatar-img" alt="${esc(p.name)}" onerror="this.src='data:image/svg+xml,<svg xmlns=\\'http://www.w3.org/2000/svg\\' viewBox=\\'0 0 100 100\\'><rect width=\\'100\\' height=\\'100\\' fill=\\'%23111\\'/><text x=\\'50\\' y=\\'65\\' font-size=\\'40\\' text-anchor=\\'middle\\' fill=\\'%23fff\\'>${esc(p.name ? p.name[0] : 'C')}</text></svg>'">
             <span class="profile-slot-badge">${esc(slotTag)}</span>
             ${isUnread ? `<span class="avatar-unread-dot" title="Unread Bookmark"></span>` : ''}
           </div>
 
-          <!-- Profile Details -->
+          <!-- Profile Details (Messenger Standard · Full Generous Height) -->
           <div class="profile-text-content">
             <div class="profile-row-header">
               <span class="profile-name">${esc(p.name)}</span>
@@ -1348,18 +1586,26 @@
                 <span class="profile-shortcut">${esc(p.winShortcut)}</span>
               </div>
             </div>
-            ${hasSubRowContent ? `
-              <div class="profile-row-sub">
-                <div class="profile-snippet ${snippetClass}">${snippetHtml}</div>
-                ${pendingCount > 0 ? `<span class="badge-pending-count">${pendingCount}</span>` : ''}
-                ${isTimer ? `<span class="badge-timer-pill">⏳ ${formatRemainingShort(p.timerUntil - cur)}</span>` : ''}
-                ${isReset ? `<span class="badge-reset-pill">${renderGreenWhiteOrb()}<span class="reset-pill-text">Reset</span></span>` : ''}
-              </div>
-            ` : ''}
+            <div class="profile-row-sub">
+              <div class="profile-snippet ${snippetClass}">${snippetHtml}</div>
+              ${pendingCount > 0 ? `<span class="badge-pending-count">${pendingCount}</span>` : ''}
+              ${isTimer ? `<span class="badge-timer-pill">⏳ ${formatRemainingShort(p.timerUntil - cur)}</span>` : ''}
+              ${isReset ? `<span class="badge-reset-pill">${renderGreenWhiteOrb()}<span class="reset-pill-text">Reset</span></span>` : ''}
+            </div>
           </div>
         </div>
       `;
     }).join('');
+
+    // Attach profile avatar & note bubble click to open Messenger Note
+    $$('.profile-avatar-wrap', list).forEach(wrap => {
+      wrap.onclick = (e) => {
+        e.stopPropagation();
+        const pid = wrap.dataset.pid;
+        const prof = getProfile(pid);
+        if (prof) promptMessengerNote(prof);
+      };
+    });
 
     // Attach interactive Pin click handlers
     $$('.pin-btn', list).forEach(btn => {
@@ -1375,6 +1621,7 @@
           saveState();
           if (window.soundMgr) window.soundMgr.playClick();
           renderSidebar();
+          renderMainChat();
           showToast(`Returned ${prof.name} to ${prof.winShortcut}`);
         } else {
           prof.isPinned = true;
@@ -1382,6 +1629,7 @@
           saveState();
           if (window.soundMgr) window.soundMgr.playClick();
           renderSidebar();
+          renderMainChat();
           list.scrollTo({ top: 0, behavior: 'smooth' });
           showToast(`Pinned ${prof.name} to top`);
         }
@@ -1407,12 +1655,11 @@
     // Attach item click & right-click (contextmenu) handlers
     $$('.profile-item', list).forEach(item => {
       item.onclick = () => {
-        state.activeProfileId = item.dataset.id;
-        if (window.innerWidth <= 768) {
-          document.body.classList.add('mobile-chat-open');
+        if (item.dataset.justSwiped === '1') {
+          item.dataset.justSwiped = '0';
+          return;
         }
-        renderSidebar();
-        renderMainChat();
+        openMobileChatWithSlide(item.dataset.id);
       };
       item.oncontextmenu = (e) => {
         const prof = getProfile(item.dataset.id);
@@ -1433,33 +1680,58 @@
     const main = $('#chatMain');
     if (!main) return;
 
+    // Preserve mobile profile dock scroll position before re-render
+    const prevDockScroll = $('#mobileProfileDockScroll', main);
+    if (prevDockScroll) {
+      state.mobileDockScrollLeft = prevDockScroll.scrollLeft;
+    }
+
     const p = getProfile(state.activeProfileId);
     const cur = now();
     const isTimer = p.timerUntil && p.timerUntil > cur;
     const isReset = p.isReset;
     const rem = isTimer ? formatRemaining(p.timerUntil - cur) : '';
     const avatarSrc = getAvatarSrc(p);
+    const statusNote = getActiveStatusNote(p);
     const notes = p.notes || [];
     const canUnread = hasMessages(p);
     const isUnread = !!(p.isUnread && canUnread);
     const w = state.wispr;
 
     main.innerHTML = `
-      <!-- Header with Bigger Picture (60px), Sticky Note, Unread Bookmark & Rename Action -->
-      <header class="chat-header">
+      <!-- Header with Bigger Picture (60px), Prev/Next Paging, Sticky Note, Unread Bookmark & Rename Action -->
+      <header class="chat-header" id="chatHeaderBar">
         <div class="chat-header-profile">
-          <button type="button" class="btn-mobile-back" id="btnMobileBackToList" title="Back to all profiles">
-            ← Profiles
-          </button>
-          <img src="${avatarSrc}" class="chat-header-avatar" id="headerAvatarImg" title="Click to upload/change photo" alt="${esc(p.name)}">
+          <div class="chat-header-avatar-wrap" id="headerAvatarWrap" title="${statusNote ? `💭 24h Note: "${esc(statusNote.text)}" (${formatRemainingNoteTime(statusNote.expiresAt - cur)}) · Tap to edit` : 'Tap avatar to add 24h Messenger Note'}">
+            ${statusNote ? `
+              <div class="header-note-bubble" id="headerNoteBubble" title="Tap to view/edit note">
+                <span class="header-note-text">${esc(statusNote.text)}</span>
+              </div>
+            ` : `
+              <div class="header-note-add-badge" id="headerNoteAddBadge" title="Add 24h Note">
+                <span>💭+</span>
+              </div>
+            `}
+            <img src="${avatarSrc}" class="chat-header-avatar" id="headerAvatarImg" alt="${esc(p.name)}">
+          </div>
           <div class="chat-header-info">
             <div class="chat-header-title">
               <span>Chrome #${p.chromeNo}: ${esc(p.name)}</span>
               ${isUnread ? `<span class="header-unread-pill">● UNREAD</span>` : ''}
+              ${statusNote ? `
+                <span class="header-note-pill" id="headerNotePill" title="Active 24-Hour Note · Tap to edit">
+                  💭 "${esc(statusNote.text)}" <span class="note-pill-timer">· ${formatRemainingNoteTime(statusNote.expiresAt - cur)}</span>
+                </span>
+              ` : ''}
             </div>
             <div class="chat-header-meta">
               ${esc(p.email)} · Taskbar Slot #${p.taskbarSlot}
             </div>
+          </div>
+          <!-- Quick Prev / Next Profile Stepper Buttons -->
+          <div class="header-profile-stepper" title="Tap or swipe header left/right to switch profiles">
+            <button type="button" class="btn-step-profile" id="btnPrevProfile" title="Previous Chrome Profile">‹</button>
+            <button type="button" class="btn-step-profile" id="btnNextProfile" title="Next Chrome Profile">›</button>
           </div>
         </div>
 
@@ -1469,6 +1741,9 @@
               ➕ Add Profile
             </button>
           ` : ''}
+          <button class="btn-header-action ${statusNote ? 'note-active' : ''}" id="btnMessengerNote" title="Messenger 24-Hour Note (lasts 24 hours)">
+            💭 ${statusNote ? 'Edit Note' : 'Add Note'}
+          </button>
           <button class="btn-header-action ${p.stickyNote ? 'sticky-active' : ''}" id="btnStickyNote" title="Set a permanent sticky header note for ${esc(p.name)}">
             📌 ${p.stickyNote ? 'Edit Sticky' : 'Sticky Note'}
           </button>
@@ -1491,11 +1766,8 @@
             <span>Auto-detect and load the Chrome profiles of this laptop in 1 click.</span>
           </div>
           <div class="blank-scanner-actions">
-            <button type="button" class="btn-scanner-action primary" id="btnSelectLocalState" title="Select %LOCALAPPDATA%\\Google\\Chrome\\User Data\\Local State to import all Chrome profiles">
-              📂 Load Chrome "Local State"
-            </button>
-            <button type="button" class="btn-scanner-action" id="btnDownloadTaskbarScanner" title="Download 1-Click Windows Taskbar Scanner (.cmd)">
-              ⚡ 1-Click Taskbar Scanner (.cmd)
+            <button type="button" class="btn-scanner-action primary" id="btnSelectLocalState" title="Select %LOCALAPPDATA%\Google\Chrome\User Data\Local State to import all Chrome profiles">
+              📂 Load Chrome "Local State" (Zero Warnings)
             </button>
           </div>
         </div>
@@ -1558,6 +1830,8 @@
 
           return `
           <div class="note-item-wrap" data-nid="${n.id}">
+            <div class="note-swipe-indicator left-ind"><span>${n.done ? '↩ Reopen' : '✓ Done'}</span></div>
+            <div class="note-swipe-indicator right-ind"><span>↪ Forward</span></div>
             <div class="note-bubble ${n.done ? 'done' : ''} ${isEditing ? 'editing' : ''}">
               <!-- Hover Quick Reaction Bar (Messenger / Discord Style) -->
               <div class="note-reaction-picker" title="Tag message with priority reaction">
@@ -1778,21 +2052,57 @@
     }
 
     // Hook up interactive handlers
-    // 0. Mobile Back to Profiles List button
+    // 0. Mobile Back to Profiles List button & Always-Visible Quick-Tap Profile Dock
     const btnMobileBack = $('#btnMobileBackToList');
     if (btnMobileBack) {
-      btnMobileBack.onclick = () => {
-        document.body.classList.remove('mobile-chat-open');
-      };
+      btnMobileBack.onclick = () => closeMobileChatWithSlide();
+    }
+    const btnDockList = $('#btnDockAllList', main);
+    if (btnDockList) {
+      btnDockList.onclick = () => closeMobileChatWithSlide();
+    }
+    const dockScroll = $('#mobileProfileDockScroll', main);
+    if (dockScroll) {
+      if (typeof state.mobileDockScrollLeft === 'number') {
+        dockScroll.scrollLeft = state.mobileDockScrollLeft;
+      }
+      const activeDockBtn = $(`.mobile-dock-item[data-dock-pid="${p.id}"]`, dockScroll);
+      if (activeDockBtn) {
+        requestAnimationFrame(() => {
+          try {
+            activeDockBtn.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
+          } catch (e) {}
+        });
+      }
+      $$('.mobile-dock-item', dockScroll).forEach(btn => {
+        btn.onclick = () => {
+          const targetId = btn.dataset.dockPid;
+          if (!targetId) return;
+          state.mobileDockScrollLeft = dockScroll.scrollLeft;
+          openMobileChatWithSlide(targetId);
+          if (window.soundMgr) window.soundMgr.playClick();
+        };
+      });
     }
 
-    // 1. Photo upload via clicking avatar
-    const avatarImg = $('#headerAvatarImg');
-    if (avatarImg) {
-      avatarImg.onclick = () => {
-        state.uploadTargetId = p.id;
-        $('#globalPhotoInput').click();
-      };
+    // 0b. Header Prev / Next Profile Paging Buttons
+    const btnPrevProf = $('#btnPrevProfile', main);
+    if (btnPrevProf) btnPrevProf.onclick = () => stepProfile(-1);
+    const btnNextProf = $('#btnNextProfile', main);
+    if (btnNextProf) btnNextProf.onclick = () => stepProfile(1);
+
+    // 1. Messenger Note & Photo upload via clicking avatar wrap or note bubble
+    const headerAvatarWrap = $('#headerAvatarWrap');
+    if (headerAvatarWrap) {
+      headerAvatarWrap.onclick = () => promptMessengerNote(p);
+    }
+    const btnMessengerNote = $('#btnMessengerNote');
+    if (btnMessengerNote) {
+      btnMessengerNote.onclick = () => promptMessengerNote(p);
+    }
+    const headerNotePill = $('#headerNotePill');
+    if (headerNotePill) {
+      headerNotePill.onclick = () => promptMessengerNote(p);
     }
 
     // 1b. Toggle Unread from header
@@ -2257,6 +2567,225 @@
     backdrop.onclick = (e) => { if (e.target === backdrop) close(); };
   }
 
+
+  // Messenger 24-Hour Notes Helpers
+  function getActiveStatusNote(profile) {
+    if (!profile || !profile.statusNote) return null;
+    const cur = now();
+    if (profile.statusNote.expiresAt && cur >= profile.statusNote.expiresAt) {
+      profile.statusNote = null;
+      return null;
+    }
+    return profile.statusNote;
+  }
+
+  function formatRemainingNoteTime(ms) {
+    if (ms <= 0) return 'Expired';
+    const hours = Math.floor(ms / (1000 * 60 * 60));
+    const mins = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+    if (hours > 0) return `${hours}h ${mins}m left`;
+    return `${Math.max(1, mins)}m left`;
+  }
+
+  // Messenger Standard 24-Hour Note Modal (Tap avatar or note bubble)
+  function promptMessengerNote(profile) {
+    const cur = now();
+    const currentNote = getActiveStatusNote(profile);
+    const avatarSrc = getAvatarSrc(profile);
+
+    const backdrop = document.createElement('div');
+    backdrop.className = 'rename-dialog-backdrop';
+    backdrop.innerHTML = `
+      <div class="rename-dialog messenger-note-dialog">
+        <div class="messenger-note-header">
+          <div class="note-modal-avatar-preview">
+            <div class="note-preview-bubble-wrap">
+              <div class="avatar-note-bubble preview-bubble" id="noteLivePreviewBubble" style="${currentNote ? '' : 'display:none;'}">
+                <span id="notePreviewText">${esc(currentNote ? currentNote.text : '')}</span>
+              </div>
+              <img src="${avatarSrc}" class="note-modal-avatar-img" alt="${esc(profile.name)}">
+            </div>
+            <div class="note-modal-titles">
+              <h3 style="margin:0; font-size:16px; font-weight:800; color:#fff;">💭 Messenger Note</h3>
+              <span style="font-size:12px; color:var(--nf-text-muted);">${esc(profile.name)} · ${esc(profile.winShortcut)}</span>
+            </div>
+          </div>
+          <button type="button" class="btn-subcheck-del" id="btnCloseNoteModal" title="Close" style="font-size:18px;">✕</button>
+        </div>
+
+        ${currentNote ? `
+          <div class="current-note-status-banner">
+            <div class="status-banner-row">
+              <span class="status-banner-title">Active 24h Note:</span>
+              <span class="status-banner-expires">⏳ ${formatRemainingNoteTime(currentNote.expiresAt - cur)}</span>
+            </div>
+            <div class="status-banner-text">"${esc(currentNote.text)}"</div>
+          </div>
+        ` : ''}
+
+        <div class="note-input-container">
+          <label for="messengerNoteInput" class="note-input-label">
+            <span>Share a thought... (shown above avatar)</span>
+            <span class="note-char-counter"><span id="noteCharCount">${currentNote ? currentNote.text.length : 0}</span> / 60</span>
+          </label>
+          <input type="text" id="messengerNoteInput" class="rename-input note-composer-input" maxlength="60" value="${esc(currentNote ? currentNote.text : '')}" placeholder="What's on your mind? (e.g. Focused on work 💻)">
+        </div>
+
+        <!-- Quick Emoji Tap Bar -->
+        <div class="note-emoji-bar">
+          <span class="emoji-bar-label">Quick Emojis:</span>
+          <div class="emoji-chips">
+            ${['☕', '📚', '💻', '🚀', '💡', '🔥', '⚡', '🎧', '💤', '🍕', '🎯', '✨'].map(em => `
+              <button type="button" class="btn-emoji-chip" data-emoji="${em}">${em}</button>
+            `).join('')}
+          </div>
+        </div>
+
+        <div class="note-modal-hint">
+          ℹ️ In Messenger standard, your note floats as a thought bubble above your profile picture for <strong>24 hours</strong>, then disappears automatically (or sooner if deleted). Only 1 active note per profile.
+        </div>
+
+        <div class="rename-actions note-dialog-actions">
+          ${currentNote ? `
+            <button type="button" class="btn-banner-clear btn-delete-note" id="btnDeleteNote" style="color:#ef4444; border-color:rgba(239,68,68,0.4);">
+              🗑️ Delete Note
+            </button>
+            <button type="button" class="btn-banner-clear" id="btnSendNoteToChat" title="Copy this thought as a message note into chat">
+              💬 Send to Chat
+            </button>
+          ` : ''}
+          <button type="button" class="btn-banner-clear" id="btnCancelNote">Cancel</button>
+          <button type="button" class="btn-composer-send" id="btnSaveNote" style="padding:9px 20px;">
+            ${currentNote ? 'Update Note 💭' : 'Share Note 💭'}
+          </button>
+        </div>
+
+        <div class="note-modal-footer">
+          <button type="button" class="btn-link-action" id="btnChangeAvatarFromNote">📷 Change Profile Photo</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(backdrop);
+    const inp = $('#messengerNoteInput', backdrop);
+    const charCount = $('#noteCharCount', backdrop);
+    const previewBubble = $('#noteLivePreviewBubble', backdrop);
+    const previewText = $('#notePreviewText', backdrop);
+    inp.focus();
+    inp.select();
+
+    const updatePreview = () => {
+      const val = inp.value;
+      charCount.textContent = val.length;
+      if (val.trim()) {
+        previewText.textContent = val;
+        previewBubble.style.display = 'block';
+      } else {
+        previewBubble.style.display = 'none';
+      }
+    };
+
+    inp.oninput = updatePreview;
+
+    // Quick emoji insertion
+    $$('.btn-emoji-chip', backdrop).forEach(btn => {
+      btn.onclick = () => {
+        const emoji = btn.dataset.emoji;
+        if (inp.value.length + emoji.length <= 60) {
+          inp.value += (inp.value.length > 0 && !inp.value.endsWith(' ') ? ' ' : '') + emoji;
+          updatePreview();
+          inp.focus();
+        }
+      };
+    });
+
+    const close = () => { if (backdrop.parentNode) backdrop.parentNode.removeChild(backdrop); };
+
+    const saveNote = () => {
+      const trimmed = inp.value.trim().slice(0, 60);
+      if (!trimmed) {
+        if (profile.statusNote) {
+          profile.statusNote = null;
+          saveState();
+          renderSidebar();
+          renderMainChat();
+          showToast(`🗑️ Note cleared for ${profile.name}`);
+        }
+        close();
+        return;
+      }
+      const postTime = now();
+      profile.statusNote = {
+        text: trimmed,
+        createdAt: postTime,
+        expiresAt: postTime + (24 * 60 * 60 * 1000)
+      };
+      saveState();
+      if (window.soundMgr) window.soundMgr.playClick();
+      renderSidebar();
+      renderMainChat();
+      showToast(`💭 Note shared on ${profile.name} (lasts 24 hours)`);
+      close();
+    };
+
+    $('#btnSaveNote', backdrop).onclick = saveNote;
+    $('#btnCancelNote', backdrop).onclick = close;
+    $('#btnCloseNoteModal', backdrop).onclick = close;
+
+    const delBtn = $('#btnDeleteNote', backdrop);
+    if (delBtn) {
+      delBtn.onclick = () => {
+        profile.statusNote = null;
+        saveState();
+        if (window.soundMgr) window.soundMgr.playClick();
+        renderSidebar();
+        renderMainChat();
+        showToast(`🗑️ Note deleted for ${profile.name}`);
+        close();
+      };
+    }
+
+    const sendToChatBtn = $('#btnSendNoteToChat', backdrop);
+    if (sendToChatBtn && currentNote) {
+      sendToChatBtn.onclick = () => {
+        profile.notes.push({
+          id: `note_${now()}_${Math.random().toString(36).substr(2, 4)}`,
+          text: `💭 24h Note: ${currentNote.text}`,
+          done: false,
+          createdAt: now(),
+          reactions: [],
+          subItems: []
+        });
+        saveState();
+        if (window.soundMgr) window.soundMgr.playClick();
+        renderSidebar();
+        renderMainChat();
+        showToast(`💬 Note posted to ${profile.name}'s task chat!`);
+        close();
+      };
+    }
+
+    const changePhotoBtn = $('#btnChangeAvatarFromNote', backdrop);
+    if (changePhotoBtn) {
+      changePhotoBtn.onclick = () => {
+        close();
+        state.uploadTargetId = profile.id;
+        const photoInp = $('#globalPhotoInput');
+        if (photoInp) photoInp.click();
+      };
+    }
+
+    inp.onkeydown = (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        saveNote();
+      } else if (e.key === 'Escape') {
+        close();
+      }
+    };
+    backdrop.onclick = (e) => { if (e.target === backdrop) close(); };
+  }
+
   // Enhancement #2 Modal: Permanent Sticky Note Per Profile
   function promptStickyNote(profile) {
     const backdrop = document.createElement('div');
@@ -2339,33 +2868,176 @@
     backdrop.onclick = (e) => { if (e.target === backdrop) close(); };
   }
 
-  // Enhancement #6: Jump to Next Profile with Pending Note or Limit Reset
-  function jumpToNextReadyProfile() {
-    const actionable = state.profiles.filter(p => countPending(p) > 0 || p.isReset || p.isUnread);
-    if (!actionable.length) {
-      showToast('✨ All 22 profiles are clear — no pending notes or active resets!');
-      return;
-    }
-    const curIdx = actionable.findIndex(p => p.id === state.activeProfileId);
-    const nextProf = actionable[(curIdx + 1) % actionable.length];
-    state.activeProfileId = nextProf.id;
-    renderSidebar();
-    renderMainChat();
-    const activeEl = $(`.profile-item[data-id="${nextProf.id}"]`);
-    if (activeEl) activeEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-    showToast(`⚡ Jumped to ${nextProf.name} (${nextProf.winShortcut})`);
+  // Helper: check if a profile is ready or actionable (Pending Notes, Active Timer [Red], or Expired/Reset Timer [Green])
+  function isActionableProfile(p, cur = now()) {
+    const hasPending = countPending(p) > 0;
+    const hasActiveTimer = Boolean(p.timerUntil && p.timerUntil > cur);
+    const hasExpiredOrReset = Boolean(p.isReset || (p.timerUntil && p.timerUntil <= cur));
+    const isUnread = Boolean(p.isUnread);
+    return hasPending || hasActiveTimer || hasExpiredOrReset || isUnread;
   }
 
-  // Full-Screen Lightbox Modal for Pasted/Dropped Screenshots
+  // Enhancement #6: Jump to Next Profile with Pending Note or Timer (Active Countdown or Expired/Reset)
+  function jumpToNextReadyProfile() {
+    const cur = now();
+    const actionable = state.profiles.filter(p => isActionableProfile(p, cur));
+    if (!actionable.length) {
+      showToast('✨ All 22 profiles are clear — no pending notes or active timers!');
+      return;
+    }
+
+    // Find next actionable profile in cyclic order starting from active profile
+    const curFullIdx = state.profiles.findIndex(p => p.id === state.activeProfileId);
+    let nextProf = null;
+    if (curFullIdx !== -1) {
+      for (let i = 1; i <= state.profiles.length; i++) {
+        const candidate = state.profiles[(curFullIdx + i) % state.profiles.length];
+        if (isActionableProfile(candidate, cur)) {
+          nextProf = candidate;
+          break;
+        }
+      }
+    }
+    if (!nextProf) {
+      nextProf = actionable[0];
+    }
+
+    const wasSameProfile = (nextProf.id === state.activeProfileId);
+    state.activeProfileId = nextProf.id;
+
+    // Ensure nextProf is visible if currently filtered out by filter tabs
+    const curTab = state.currentFilter;
+    const curMatchesFilter = (curTab === 'all') ||
+      (curTab === 'pending' && (countPending(nextProf) > 0 || nextProf.isUnread)) ||
+      (curTab === 'timers' && ((nextProf.timerUntil && nextProf.timerUntil > cur) || nextProf.isReset));
+
+    if (!curMatchesFilter) {
+      state.currentFilter = 'all';
+      const allTabs = $$('.filter-tab');
+      if (allTabs && allTabs.length) allTabs.forEach(t => t.classList.remove('active'));
+      const tabAll = $('#tabAll');
+      if (tabAll) tabAll.classList.add('active');
+    }
+
+    renderSidebar();
+    renderMainChat();
+
+    const activeEl = $(`#profileList .profile-item[data-id="${nextProf.id}"]`);
+    if (activeEl) activeEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+
+    // Informative toast explaining what's on this profile
+    const pCount = countPending(nextProf);
+    const hasActiveTimer = Boolean(nextProf.timerUntil && nextProf.timerUntil > cur);
+    const hasExpiredOrReset = Boolean(nextProf.isReset || (nextProf.timerUntil && nextProf.timerUntil <= cur));
+    const details = [];
+    if (pCount > 0) details.push(`📌 ${pCount} Pending`);
+    if (hasActiveTimer) details.push(`⏳ ${formatRemainingShort(nextProf.timerUntil - cur)} left`);
+    else if (hasExpiredOrReset) details.push(`🟢 Reset Ready`);
+    if (nextProf.isUnread) details.push(`📬 Unread`);
+
+    const detailText = details.length ? ` • ${details.join(' · ')}` : '';
+    if (actionable.length === 1 && wasSameProfile) {
+      showToast(`⚡ Only 1 active profile: ${nextProf.name} (${nextProf.winShortcut})${detailText}`);
+    } else {
+      showToast(`⚡ Jumped to ${nextProf.name} (${nextProf.winShortcut})${detailText}`);
+    }
+  }
+
+  // Native iOS Swipe-Down-to-Dismiss for Full-Screen Photos, Sheets & Modals (Finger-Tracking + Mid-Swipe Cancel)
+  function attachSwipeDownToDismiss(backdrop, sheetEl, onClose) {
+    if (!backdrop || !sheetEl) return;
+    let startY = 0;
+    let startX = 0;
+    let currentDy = 0;
+    let lastY = 0;
+    let lastTime = 0;
+    let velocityY = 0;
+    let dragging = false;
+
+    sheetEl.addEventListener('touchstart', (e) => {
+      if (e.touches.length !== 1) return;
+      const scrollEl = e.target.closest('.forward-profiles-list, .qr-studio-body');
+      if (scrollEl && scrollEl.scrollTop > 2) return;
+      if (sheetEl.scrollTop > 2) return;
+      startY = e.touches[0].clientY;
+      startX = e.touches[0].clientX;
+      lastY = startY;
+      lastTime = performance.now();
+      currentDy = 0;
+      velocityY = 0;
+      dragging = false;
+    }, { passive: true });
+
+    sheetEl.addEventListener('touchmove', (e) => {
+      if (!startY || e.touches.length !== 1) return;
+      const y = e.touches[0].clientY;
+      const x = e.touches[0].clientX;
+      const dy = y - startY;
+      const dx = x - startX;
+
+      if (!dragging) {
+        if (dy > 10 && Math.abs(dy) > Math.abs(dx) * 1.25) {
+          dragging = true;
+          sheetEl.style.transition = 'none';
+        } else if (Math.abs(dx) > 12 || dy < -8) {
+          startY = 0;
+          return;
+        } else {
+          return;
+        }
+      }
+
+      if (e.cancelable) e.preventDefault();
+      const nowT = performance.now();
+      const dt = Math.max(1, nowT - lastTime);
+      velocityY = (y - lastY) / dt;
+      lastY = y;
+      lastTime = nowT;
+
+      currentDy = Math.max(0, dy);
+      const scale = Math.max(0.92, 1 - currentDy * 0.00028);
+      sheetEl.style.transform = `translate3d(0, ${currentDy}px, 0) scale(${scale})`;
+      const alpha = Math.max(0.2, 0.85 - (currentDy / 380) * 0.65);
+      backdrop.style.background = `rgba(0, 0, 0, ${alpha})`;
+    }, { passive: false });
+
+    const finishDrag = () => {
+      if (!dragging) {
+        startY = 0;
+        return;
+      }
+      dragging = false;
+      startY = 0;
+      const shouldDismiss = (currentDy > 90 || (currentDy > 35 && velocityY > 0.45)) && velocityY >= -0.15;
+      sheetEl.style.transition = 'transform 0.26s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.24s ease';
+      if (shouldDismiss) {
+        sheetEl.style.transform = `translate3d(0, ${window.innerHeight}px, 0) scale(0.92)`;
+        sheetEl.style.opacity = '0';
+        setTimeout(() => {
+          if (typeof onClose === 'function') onClose();
+        }, 220);
+      } else {
+        // Stop midway -> cancel and spring smoothly back into place!
+        sheetEl.style.transform = '';
+        backdrop.style.background = '';
+      }
+    };
+
+    sheetEl.addEventListener('touchend', finishDrag, { passive: true });
+    sheetEl.addEventListener('touchcancel', finishDrag, { passive: true });
+  }
+
+  // Full-Screen Lightbox Modal for Pasted/Dropped Screenshots (With iOS Swipe-Down-to-Dismiss)
   function openLightboxModal(imgSrc, caption) {
     if (!imgSrc) return;
     const backdrop = document.createElement('div');
     backdrop.className = 'rename-dialog-backdrop';
     backdrop.innerHTML = `
-      <div class="lightbox-modal">
+      <div class="lightbox-modal" id="lightboxSheet">
+        <div class="ios-sheet-grabber" title="Swipe down to dismiss"></div>
         <img src="${imgSrc}" class="lightbox-img" alt="Full screen screenshot">
         <div class="lightbox-footer">
-          <span class="lightbox-caption">${esc(caption || 'Screenshot')}</span>
+          <span class="lightbox-caption">${esc(caption || 'Screenshot · Swipe down to close')}</span>
           <button type="button" class="btn-composer-send" id="btnCloseLightbox" style="padding:7px 18px;">Close ✕</button>
         </div>
       </div>
@@ -2374,6 +3046,7 @@
     const close = () => { if (backdrop.parentNode) backdrop.parentNode.removeChild(backdrop); };
     $('#btnCloseLightbox', backdrop).onclick = close;
     backdrop.onclick = (e) => { if (e.target === backdrop) close(); };
+    attachSwipeDownToDismiss(backdrop, $('#lightboxSheet', backdrop), close);
   }
 
   // 🔄 Forward / Move Task to Another Chrome Profile Modal
@@ -2474,6 +3147,7 @@
     const close = () => { if (backdrop.parentNode) backdrop.parentNode.removeChild(backdrop); };
     $('#btnCloseForward', backdrop).onclick = close;
     backdrop.onclick = (e) => { if (e.target === backdrop) close(); };
+    attachSwipeDownToDismiss(backdrop, $('.forward-modal', backdrop), close);
 
     const quickBtn = $('#btnQuickMoveNext', backdrop);
     if (quickBtn && nextAvailable) {
@@ -2507,6 +3181,20 @@
   // =========================================================================
   // 📲 APP DISTRIBUTION & COMMAND SUITE (PWA Install, Mobile QR, iOS Guide, Backup, Blank Edition)
   // =========================================================================
+  // Open Interactive Installation Guide Modal (OrlandoRecharge Standard)
+  function openInstallGuideModal() {
+    const modal = $('#installGuideModal');
+    if (!modal) return;
+    modal.classList.add('open');
+
+    const close = () => modal.classList.remove('open');
+    const btnClose = $('#closeInstallGuide');
+    if (btnClose) btnClose.onclick = close;
+    const btnDismiss = $('#dismissInstallGuide');
+    if (btnDismiss) btnDismiss.onclick = close;
+    modal.onclick = (e) => { if (e.target === modal) close(); };
+  }
+
   function downloadTextFile(filename, content, mime = 'text/plain;charset=utf-8') {
     const blob = new Blob([content], { type: mime });
     const url = URL.createObjectURL(blob);
@@ -2521,32 +3209,26 @@
     }, 200);
   }
 
-  // Download Zero-Warning Windows Desktop App Launcher (.cmd)
+  // Download 100% Smart App Control-safe Windows Web App (.vbs / .url launcher)
   function downloadWindowsDesktopLauncherCmd(isBlank = false) {
     const targetUrl = isBlank ? BLANK_APP_URL : LIVE_APP_URL;
-    const appTitle = isBlank ? 'OrlandoChrome Blank Edition' : 'OrlandoChrome';
     const shortcutName = isBlank ? 'OrlandoChrome-Blank.url' : 'OrlandoChrome.url';
-    const cmdContent = [
-      '@echo off',
-      'title ' + appTitle + ' Desktop App Installer',
-      'echo ========================================================',
-      'echo   Installing ' + appTitle + ' to Desktop...',
-      'echo ========================================================',
-      'set "DESKTOP=%USERPROFILE%\\Desktop"',
-      '(',
-      '  echo [InternetShortcut]',
-      '  echo URL=' + targetUrl,
-      '  echo IconIndex=0',
-      ') > "%DESKTOP%\\' + shortcutName + '"',
-      'start "" chrome.exe --app="' + targetUrl + '" 2>nul || start "" msedge.exe --app="' + targetUrl + '" 2>nul || start "" "' + targetUrl + '"',
-      'exit'
+    const content = [
+      '[InternetShortcut]',
+      'URL=' + targetUrl,
+      'IconFile=https://orlandopasion000.github.io/orlandochrome/favicon.ico',
+      'IconIndex=0',
+      'HotKey=0',
+      '[{000214A0-0000-0000-C000-000000000046}]',
+      'Prop3=19,11'
     ].join('\r\n');
-    downloadTextFile(isBlank ? 'OrlandoChrome-Blank-Desktop-App.cmd' : 'OrlandoChrome-Desktop-App.cmd', cmdContent);
-    showToast('⬇ Downloaded Windows Desktop App Launcher (.cmd)!');
+    downloadTextFile(shortcutName, content, 'application/internet-shortcut');
+    showToast('🚀 Saved Windows App Shortcut (.url) — Zero Smart App Control warnings!');
   }
 
-  // Download 1-Click Laptop Taskbar Auto-Scanner (.cmd) that reads the installed laptop's Chrome profiles & opens Blank Edition synced!
-  function downloadLaptopTaskbarScannerCmd() {
+  // Download 1-Click Laptop Taskbar Auto-Scanner (.cmd) that reads the installed laptop's Chrome profiles & syncs names instantly!
+  function downloadLaptopTaskbarScannerCmd(isBlank = false) {
+    const targetUrl = isBlank ? BLANK_APP_URL : LIVE_APP_URL;
     const cmdContent = [
       '@echo off',
       'title OrlandoChrome - Laptop Taskbar Chrome Profile Auto-Scanner',
@@ -2570,7 +3252,7 @@
       '   $outFile = Join-Path $env:USERPROFILE \'Desktop\\my-laptop-chrome-profiles.json\'; ^',
       '   Set-Content -Path $outFile -Value $outJson -Encoding UTF8; ^',
       '   $b64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($outJson)); ^',
-      '   $url = \'' + BLANK_APP_URL + '&import_b64=\' + $b64; ^',
+      '   $url = \'' + targetUrl + (targetUrl.includes('?') ? '&' : '?') + 'import_b64=\' + $b64; ^',
       '   Start-Process \'chrome.exe\' -ArgumentList (\'--app=\'+$url)"',
       'exit'
     ].join('\r\n');
@@ -2668,397 +3350,65 @@ ${jsRes}
     return { svg: null, count: 29, qrInstance: null };
   }
 
-  // Unified Holographic App Distribution, Giant Instant-Scan QR & Cross-Device Live Sync Command Suite
-  function openAppDistributionSuiteModal() {
-    // Immediately push current state to cloud if this device has active notes/timers
-    if (hasAnyUserActivity(state.profiles)) {
-      pushToCloudNow(false);
-    } else {
-      pullFromCloud(false, false);
+  // App Distribution & Live Sync Command Suite (Removed per user request)
+  // Direct Desktop App Launcher (Standalone window with no browser tabs / URL bar)
+  function launchDesktopApp() {
+    if (window.soundMgr) window.soundMgr.playClickSoft();
+    showToast('🚀 Launching OrlandoChrome Desktop App...');
+    const appUrl = window.location.href.split('#')[0];
+    const winFeatures = 'popup=yes,menubar=no,toolbar=no,location=no,status=no,personalbar=no,directories=no,resizable=yes,scrollbars=yes,width=1380,height=880,left=100,top=60';
+    const appWin = window.open(appUrl, 'OrlandoChromeDesktopAppWindow', winFeatures);
+    if (appWin) {
+      try { appWin.focus(); } catch (e) {}
     }
+  }
 
-    let isBlankTarget = IS_BLANK_EDITION;
-    let activeThemeKey = (state.qrTheme && QR_THEMES[state.qrTheme]) ? state.qrTheme : 'instant';
-    let qrSizeMode = 'normal'; // 'normal' (300px), 'enlarged' (420px), 'projector' (520px)
-    let showDiagHud = false;
+  function openAppDistributionSuiteModal() {
+    if (window.soundMgr) window.soundMgr.playClickSoft();
+    const shareUrl = IS_BLANK_EDITION ? BLANK_APP_URL : LIVE_APP_URL;
+    const qrRes = generateQrMarkup(shareUrl, '#ffffff', '#000000');
+    const qrSvg = qrRes.svg || `<img src="https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=${encodeURIComponent(shareUrl)}" alt="QR Code" style="width:260px;height:260px;border-radius:12px;">`;
 
     const backdrop = document.createElement('div');
     backdrop.className = 'rename-dialog-backdrop';
-
-    const renderModalContent = () => {
-      const t = QR_THEMES[activeThemeKey] || QR_THEMES.instant;
-      const fastQrUrl = buildFastQrUrl(isBlankTarget, false);
-      const fullShareUrl = buildLiveSyncUrl(isBlankTarget);
-      const qrSizePx = qrSizeMode === 'projector' ? 520 : (qrSizeMode === 'enlarged' ? 420 : 300);
-
-      // Render crisp client-side vector SVG with fallback to API
-      const qrRes = generateQrMarkup(fastQrUrl, t.fg, t.bg);
-      const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=480x480&ecc=L&margin=24&color=${t.fg}&bgcolor=${t.bg}&data=${encodeURIComponent(fastQrUrl)}`;
-
-      const pendingTotal = totalPendingCount();
-      const timersTotal = totalTimersCount();
-      const pinnedTotal = state.profiles.filter(p => p.isPinned && countPending(p) > 0).length;
-
-      backdrop.innerHTML = `
-        <div class="qr-studio-modal unified-command-suite ${qrSizeMode === 'projector' ? 'qr-projector-deck' : ''}" style="--qr-accent:${t.accent}; --qr-glow:${t.glow};">
-          <!-- Unified Holographic Header -->
-          <div class="qr-studio-header">
-            <div class="qr-studio-title-wrap">
-              <div class="qr-studio-title-row">
-                <img src="oc-logo.svg" class="suite-oc-mini-logo" alt="OC">
-                <h3>App Distribution &amp; Live Sync Command Suite</h3>
-                <span class="qr-studio-badge-live">${renderGreenWhiteOrb()}<span>LIVE CLOUD · PWA READY</span></span>
-              </div>
-              <p class="qr-studio-sub">
-                Instant-Scan Giant QR, Real-Time Cross-Device Sync (Windows · iPhone/iOS · Android), 1-Click Native Install &amp; Taskbar Scanner.
-              </p>
-            </div>
-            <button type="button" class="btn-banner-clear" id="btnCloseAppSuite" title="Close">✕</button>
+    backdrop.innerHTML = `
+      <div class="qr-studio-modal" style="max-width:440px; text-align:center; padding:24px; background:#0c0c10; border:1px solid rgba(217, 185, 92, 0.4); border-radius:18px; box-shadow:0 12px 40px rgba(0,0,0,0.85), 0 0 30px rgba(217,185,92,0.2);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:1.4rem;">📲</span>
+            <span style="font-size:1.05rem; font-weight:800; color:#fff;">Phone QR Scanner</span>
           </div>
-
-          <!-- Workspace Edition Switcher (Replaces Redundant Bottom Blank Card) -->
-          <div class="qr-edition-tabs">
-            <button type="button" class="qr-edition-tab ${!isBlankTarget ? 'active' : ''}" id="tabQrPersonal">
-              👑 My Synced Workspace (${pendingTotal} Pending · ${timersTotal} Timers)
-            </button>
-            <button type="button" class="qr-edition-tab ${isBlankTarget ? 'active' : ''}" id="tabQrBlank">
-              🎁 Clean Blank Edition (For Any Other Laptop / Phone)
-            </button>
-          </div>
-
-          <!-- Main 2-Column Holographic Command Deck -->
-          <div class="qr-studio-body ${qrSizeMode !== 'normal' ? 'qr-zoomed-layout' : ''}">
-            <!-- Left Column: Giant Unobscured Instant-Scan QR Showcase -->
-            <div class="qr-holo-column">
-              <div class="qr-stage-top-bar">
-                <span class="qr-scan-ready-tag">📸 Instant Camera Lock · 6–10"</span>
-                <div class="btn-qr-size-group">
-                  <button type="button" class="btn-qr-size-btn ${qrSizeMode === 'normal' ? 'active' : ''}" data-qsize="normal" title="Standard 300px Size">300px</button>
-                  <button type="button" class="btn-qr-size-btn ${qrSizeMode === 'enlarged' ? 'active' : ''}" data-qsize="enlarged" title="Enlarge to 420px">420px</button>
-                  <button type="button" class="btn-qr-size-btn ${qrSizeMode === 'projector' ? 'active' : ''}" data-qsize="projector" title="Classroom & Projector Fullscreen 520px">520px</button>
-                </div>
-              </div>
-
-              <!-- Holographic Targeting Stage (Laser sweeps BEHIND the high-contrast quiet-zone pad) -->
-              <div class="qr-holo-stage" id="qrHoloStage">
-                <span class="qr-corner tl"></span>
-                <span class="qr-corner tr"></span>
-                <span class="qr-corner bl"></span>
-                <span class="qr-corner br"></span>
-                <div class="qr-laser-beam"></div>
-
-                <div class="qr-img-wrapper" style="width:${qrSizePx}px; height:${qrSizePx}px;">
-                  ${qrRes.svg ? qrRes.svg : `<img src="${qrApiUrl}" crossorigin="anonymous" class="qr-code-img-holo" id="qrHoloImg" style="width:${qrSizePx}px; height:${qrSizePx}px;" alt="OrlandoChrome Instant Scan QR Code">`}
-                </div>
-              </div>
-
-              <!-- QR Color Theme Selector Pills -->
-              <div class="qr-theme-pills">
-                ${Object.entries(QR_THEMES).map(([k, val]) => `
-                  <button type="button" class="qr-theme-pill ${activeThemeKey === k ? 'active' : ''}" data-qtheme="${k}">
-                    ${val.label}
-                  </button>
-                `).join('')}
-              </div>
-
-              <!-- Direct QR Share & Poster Row -->
-              <div class="qr-actions-grid" style="width:100%;">
-                <button type="button" class="btn-composer-send" id="btnQrCopyUrl" style="justify-content:center; padding:8px 10px; font-size:0.74rem;">
-                  📋 Copy Sync Link
-                </button>
-                <button type="button" class="btn-suite-dark" id="btnQrDownloadPng" style="padding:8px 10px; font-size:0.74rem;">
-                  🖼️ Save Poster
-                </button>
-                <button type="button" class="btn-suite-dark" id="btnQrNativeShare" style="padding:8px 10px; font-size:0.74rem;">
-                  📲 Share...
-                </button>
-              </div>
-
-              <!-- Test Scan HUD Diagnostic Toggle -->
-              <button type="button" class="btn-qr-diag-toggle" id="btnToggleDiagHud">
-                ${showDiagHud ? '▲ Hide Camera Vision Telemetry' : '▼ Test Scan & Camera Vision HUD'}
-              </button>
-
-              ${showDiagHud ? `
-                <div class="qr-scan-diagnostics">
-                  <div class="qr-diag-row"><span>🎯 Camera Lock Speed:</span><b style="color:#5de8a0">Instant (&lt; 0.05s)</b></div>
-                  <div class="qr-diag-row"><span>📐 Optical Margin:</span><b>4 Modules (ISO 18004 Standard)</b></div>
-                  <div class="qr-diag-row"><span>⚡ Payload Length:</span><b>${fastQrUrl.length} chars (Micro-Sync Low Density)</b></div>
-                  <div class="qr-diag-row"><span>🛡️ Machine Vision Contrast:</span><b style="color:${t.accent}">${t.ratio} (WCAG AAA)</b></div>
-                  <div class="qr-diag-row" style="flex-direction:column;align-items:flex-start;gap:2px;margin-top:2px;">
-                    <span style="color:#888;">👁️ Decoded URL for Phone:</span>
-                    <span style="color:var(--qr-accent);word-break:break-all;font-size:0.68rem;background:#000;padding:4px 6px;border-radius:4px;width:100%;">${fastQrUrl}</span>
-                  </div>
-                </div>
-              ` : ''}
-            </div>
-
-            <!-- Right Column: 3 Advanced Command Modules (Zero Redundancy) -->
-            <div class="qr-telemetry-column">
-              <!-- Module 1: Cross-Device Live Cloud Sync Telemetry -->
-              <div class="qr-telemetry-card">
-                <div class="qr-telemetry-header">
-                  <span>☁️ Cross-Device Live Cloud Sync (Windows · iOS · Android)</span>
-                  <span class="qr-telemetry-sub">● Auto-Sync Active</span>
-                </div>
-                <div class="qr-metrics-grid">
-                  <div class="qr-metric-box red">
-                    <span class="qr-metric-num">${pendingTotal}</span>
-                    <span class="qr-metric-lbl">🔴 Pending Notes</span>
-                  </div>
-                  <div class="qr-metric-box amber">
-                    <span class="qr-metric-num">${timersTotal}</span>
-                    <span class="qr-metric-lbl">⌛ Active Timers</span>
-                  </div>
-                  <div class="qr-metric-box green">
-                    <span class="qr-metric-num">${pinnedTotal}</span>
-                    <span class="qr-metric-lbl">📌 Pinned Top</span>
-                  </div>
-                </div>
-                <div class="qr-sync-btns-row">
-                  <button type="button" class="btn-qr-sync-now" id="btnQrForcePush">
-                    ⚡ Push to Phone / Cloud Now
-                  </button>
-                  <button type="button" class="btn-qr-pull-now" id="btnQrForcePull">
-                    📥 Pull Latest from Cloud
-                  </button>
-                </div>
-              </div>
-
-              <!-- Module 2: Install to Device & Laptop Taskbar Auto-Sync -->
-              <div class="qr-telemetry-card">
-                <div class="qr-telemetry-header">
-                  <span>💻 Device Install &amp; Laptop Taskbar Sync</span>
-                  <span class="qr-telemetry-sub" style="color:#ffd1d6; border-color:rgba(255,77,88,0.35); background:rgba(229,9,20,0.14);">Zero Warnings</span>
-                </div>
-                <button type="button" class="btn-suite-radiant-red" id="btnPwaOneClickInstall">
-                  ⚡ 1-Click Install App (Windows · Mac · iOS · Android)
-                </button>
-                <div class="suite-unified-btn-row">
-                  <button type="button" class="btn-suite-dark" id="btnSuiteWinApp" title="Download Windows Native App Launcher (.cmd)">
-                    🖥️ Windows (.cmd)
-                  </button>
-                  <button type="button" class="btn-suite-dark" id="btnSuiteTaskbarSync" title="Auto-Scan this laptop's Chrome Taskbar profiles">
-                    🔄 Taskbar Sync (.cmd)
-                  </button>
-                  <button type="button" class="btn-suite-dark" id="btnSuiteStandaloneHtml" title="Download Single-File Offline HTML">
-                    💾 Offline (.html)
-                  </button>
-                  ${isBlankTarget ? `
-                    <button type="button" class="btn-suite-dark" id="btnOpenBlankWebApp" style="border-color:#e5c97b; color:#e5c97b;">
-                      🚀 Open Blank App
-                    </button>
-                  ` : ''}
-                </div>
-              </div>
-
-              <!-- Module 3: Workspace Backup & Mobile Home Screen Quick Guide -->
-              <div class="qr-telemetry-card">
-                <div class="qr-telemetry-header">
-                  <span>🛡️ JSON Workspace Backup &amp; iPhone Setup</span>
-                </div>
-                <div class="suite-unified-btn-row" style="grid-template-columns: 1fr 1fr;">
-                  <button type="button" class="btn-suite-dark" id="btnSuiteExportJson">
-                    💾 Export Backup (.json)
-                  </button>
-                  <button type="button" class="btn-suite-dark" id="btnSuiteImportJson">
-                    📁 Restore Backup (.json)
-                  </button>
-                </div>
-                <div class="ios-compact-tip">
-                  📱 <strong>iPhone / iOS &amp; Android:</strong> Point your camera at the giant QR code to open with all Pending Notes &amp; Timers loaded, then tap <strong>Share (⬆️) → Add to Home Screen</strong>.
-                </div>
-              </div>
-            </div>
-          </div>
+          <button type="button" class="btn-banner-clear" id="btnCloseQrModal" style="color:#aaa; font-size:1.2rem; cursor:pointer; background:none; border:none;">✕</button>
         </div>
-      `;
+        <p style="font-size:0.82rem; color:#999; margin-bottom:18px;">Scan with your iPhone or Android camera to open OrlandoChrome instantly on your phone.</p>
+        <div style="width:260px; height:260px; margin:0 auto 18px; padding:12px; background:#000; border:1px solid rgba(255,255,255,0.12); border-radius:16px; display:flex; align-items:center; justify-content:center;">
+          ${qrSvg}
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button type="button" class="primary dist-btn" id="btnCopyQrLinkModal" style="flex:1;">↗ Copy App Link</button>
+          <button type="button" class="ghost dist-btn" id="btnDismissQrModal" style="flex:1;">Done</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(backdrop);
 
-      // Wire up interactive modal handlers
-      const close = () => { if (backdrop.parentNode) backdrop.parentNode.removeChild(backdrop); };
-      $('#btnCloseAppSuite', backdrop).onclick = close;
-      backdrop.onclick = (e) => { if (e.target === backdrop) close(); };
-
-      $('#tabQrPersonal', backdrop).onclick = () => {
-        isBlankTarget = false;
-        if (window.soundMgr) window.soundMgr.playClickSoft();
-        renderModalContent();
-      };
-      $('#tabQrBlank', backdrop).onclick = () => {
-        isBlankTarget = true;
-        if (window.soundMgr) window.soundMgr.playClickSoft();
-        renderModalContent();
-      };
-
-      $$('.btn-qr-size-btn', backdrop).forEach(btn => {
-        btn.onclick = () => {
-          qrSizeMode = btn.dataset.qsize;
-          if (window.soundMgr) window.soundMgr.playClickSoft();
-          renderModalContent();
-        };
-      });
-
-      const btnDiag = $('#btnToggleDiagHud', backdrop);
-      if (btnDiag) {
-        btnDiag.onclick = () => {
-          showDiagHud = !showDiagHud;
-          if (window.soundMgr) window.soundMgr.playClickSoft();
-          renderModalContent();
-        };
-      }
-
-      $$('.qr-theme-pill', backdrop).forEach(pill => {
-        pill.onclick = () => {
-          activeThemeKey = pill.dataset.qtheme;
-          state.qrTheme = activeThemeKey;
-          if (window.soundMgr) window.soundMgr.playClickSoft();
-          renderModalContent();
-        };
-      });
-
-      $('#btnQrForcePush', backdrop).onclick = async () => {
-        const btn = $('#btnQrForcePush', backdrop);
-        if (btn) btn.textContent = '🔄 Pushing to Cloud...';
-        await pushToCloudNow(true);
-        if (window.soundMgr) window.soundMgr.playReadyChime();
-        renderModalContent();
-      };
-
-      $('#btnQrForcePull', backdrop).onclick = async () => {
-        const btn = $('#btnQrForcePull', backdrop);
-        if (btn) btn.textContent = '🔄 Pulling from Cloud...';
-        await pullFromCloud(false, true);
-        if (window.soundMgr) window.soundMgr.playReadyChime();
-        renderModalContent();
-      };
-
-      $('#btnQrCopyUrl', backdrop).onclick = () => {
-        navigator.clipboard.writeText(fullShareUrl).then(() => {
-          if (window.soundMgr) window.soundMgr.playClickSoft();
-          showToast('🔗 Live Sync Link (with Pending Notes & Timers) copied!');
+    const close = () => { if (backdrop.parentNode) backdrop.parentNode.removeChild(backdrop); };
+    backdrop.onclick = (e) => { if (e.target === backdrop) close(); };
+    const btnClose = $('#btnCloseQrModal', backdrop);
+    if (btnClose) btnClose.onclick = close;
+    const btnDismiss = $('#btnDismissQrModal', backdrop);
+    if (btnDismiss) btnDismiss.onclick = close;
+    const btnCopy = $('#btnCopyQrLinkModal', backdrop);
+    if (btnCopy) {
+      btnCopy.onclick = () => {
+        navigator.clipboard.writeText(shareUrl).then(() => {
+          showToast('📋 App link copied to clipboard!');
+          close();
         });
       };
-
-      $('#btnQrNativeShare', backdrop).onclick = () => {
-        if (navigator.share) {
-          navigator.share({
-            title: 'OrlandoChrome · Live Synced Command Center',
-            text: `OrlandoChrome (${pendingTotal} Pending Notes · ${timersTotal} Active Timers)`,
-            url: fullShareUrl
-          }).catch(() => {});
-        } else {
-          navigator.clipboard.writeText(fullShareUrl).then(() => showToast('🔗 Live Sync Link copied!'));
-        }
-      };
-
-      // Download Branded High-Res QR Poster (.png) with Direct Canvas Matrix Drawing (Zero CORS Issues)
-      $('#btnQrDownloadPng', backdrop).onclick = () => {
-        if (window.soundMgr) window.soundMgr.playClickSoft();
-        const canvas = document.createElement('canvas');
-        canvas.width = 680;
-        canvas.height = 820;
-        const ctx = canvas.getContext('2d');
-        ctx.fillStyle = '#000000';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        ctx.strokeStyle = t.accent;
-        ctx.lineWidth = 4;
-        ctx.strokeRect(18, 18, canvas.width - 36, canvas.height - 36);
-
-        ctx.fillStyle = '#ffffff';
-        ctx.font = '900 36px Inter, sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText('ORLANDOCHROME', canvas.width / 2, 76);
-
-        ctx.fillStyle = t.accent;
-        ctx.font = '700 16px Inter, sans-serif';
-        ctx.fillText(isBlankTarget ? 'CLEAN BLANK EDITION · SCAN TO OPEN' : 'LIVE CLOUD SYNC · iOS · WINDOWS · ANDROID', canvas.width / 2, 106);
-
-        // Draw QR code with pure mathematical vectors if available, or fallback to img
-        if (qrRes.qrInstance) {
-          const count = qrRes.qrInstance.getModuleCount();
-          const margin = 4;
-          const total = count + margin * 2;
-          const qrBoxSize = 460;
-          const cellSize = Math.floor(qrBoxSize / total);
-          const padSize = cellSize * total;
-          const offsetX = Math.floor((canvas.width - padSize) / 2);
-          const offsetY = 135;
-
-          ctx.fillStyle = '#ffffff';
-          ctx.fillRect(offsetX, offsetY, padSize, padSize);
-
-          ctx.fillStyle = t.fg === '000000' ? '#000000' : ('#' + t.fg);
-          for (let r = 0; r < count; r++) {
-            for (let c = 0; c < count; c++) {
-              if (qrRes.qrInstance.isDark(r, c)) {
-                ctx.fillRect(offsetX + (c + margin) * cellSize, offsetY + (r + margin) * cellSize, cellSize, cellSize);
-              }
-            }
-          }
-        } else {
-          const qrImg = $('#qrHoloImg', backdrop);
-          if (qrImg) {
-            try { ctx.drawImage(qrImg, 110, 135, 460, 460); } catch (e) {}
-          }
-        }
-
-        ctx.fillStyle = '#d1d5db';
-        ctx.font = '600 16px Inter, sans-serif';
-        ctx.fillText(`${pendingTotal} Pending Notes · ${timersTotal} Active Timers · Real-Time Sync`, canvas.width / 2, 650);
-
-        ctx.fillStyle = '#888888';
-        ctx.font = '500 14px Consolas, monospace';
-        ctx.fillText(LIVE_APP_URL, canvas.width / 2, 690);
-
-        const dataUrl = canvas.toDataURL('image/png');
-        const a = document.createElement('a');
-        a.href = dataUrl;
-        a.download = isBlankTarget ? 'OrlandoChrome-Blank-QR.png' : 'OrlandoChrome-LiveSync-QR.png';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        showToast('🖼️ Downloaded Studio QR Poster (.png)!');
-      };
-
-      // 1-Click PWA Install
-      $('#btnPwaOneClickInstall', backdrop).onclick = async () => {
-        if (deferredInstallPrompt) {
-          deferredInstallPrompt.prompt();
-          const choice = await deferredInstallPrompt.userChoice.catch(() => null);
-          deferredInstallPrompt = null;
-          if (choice && choice.outcome === 'accepted') {
-            showToast('✅ OrlandoChrome installed as a native app!');
-            close();
-          }
-        } else {
-          downloadWindowsDesktopLauncherCmd(isBlankTarget);
-          showToast('💡 On iPhone Safari tap Share → "Add to Home Screen"; on Chrome click Install in the address bar!');
-        }
-      };
-
-      $('#btnSuiteWinApp', backdrop).onclick = () => downloadWindowsDesktopLauncherCmd(isBlankTarget);
-      $('#btnSuiteTaskbarSync', backdrop).onclick = () => downloadLaptopTaskbarScannerCmd();
-      $('#btnSuiteStandaloneHtml', backdrop).onclick = () => downloadStandaloneHtml(isBlankTarget);
-
-      const btnOpenBlank = $('#btnOpenBlankWebApp', backdrop);
-      if (btnOpenBlank) {
-        btnOpenBlank.onclick = () => window.open('?edition=blank', '_blank');
-      }
-
-      $('#btnSuiteExportJson', backdrop).onclick = () => exportFullBackupJson();
-      $('#btnSuiteImportJson', backdrop).onclick = () => {
-        close();
-        $('#backupJsonInput').click();
-      };
-    };
-
-    renderModalContent();
-    document.body.appendChild(backdrop);
+    }
   }
 
-
-  // Alias openMobileQrModal to openAppDistributionSuiteModal so there is zero duplication
   const openMobileQrModal = openAppDistributionSuiteModal;
 
   // =========================================================================
@@ -3628,10 +3978,16 @@ ${jsRes}
     const SIDEBAR_WIDTH_KEY = 'orlandochrome_sidebar_width_v1';
 
     if (sidebar) {
-      const savedWidth = parseInt(localStorage.getItem(SIDEBAR_WIDTH_KEY), 10);
-      if (!isNaN(savedWidth) && savedWidth >= 210 && savedWidth <= 900) {
-        document.documentElement.style.setProperty('--sidebar-width', `${savedWidth}px`);
-      }
+      const applyClampedSavedWidth = () => {
+        const savedWidth = parseInt(localStorage.getItem(SIDEBAR_WIDTH_KEY), 10);
+        if (!isNaN(savedWidth) && savedWidth >= 115 && savedWidth <= 900) {
+          const maxAllowed = Math.floor(window.innerWidth * (window.innerWidth <= 600 ? 0.44 : 0.56));
+          const clamped = Math.max(window.innerWidth <= 600 ? 115 : 155, Math.min(savedWidth, maxAllowed));
+          document.documentElement.style.setProperty('--sidebar-width', `${clamped}px`);
+        }
+      };
+      applyClampedSavedWidth();
+      window.addEventListener('resize', applyClampedSavedWidth);
     }
 
     if (resizer && sidebar) {
@@ -3640,8 +3996,8 @@ ${jsRes}
       const onPointerMove = (e) => {
         if (!isDragging) return;
         const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-        const minW = 210;
-        const maxW = Math.min(860, Math.floor(window.innerWidth * 0.7));
+        const minW = window.innerWidth <= 600 ? 115 : 155;
+        const maxW = Math.min(860, Math.floor(window.innerWidth * 0.64));
         const newWidth = Math.max(minW, Math.min(maxW, clientX));
         document.documentElement.style.setProperty('--sidebar-width', `${newWidth}px`);
       };
@@ -3652,7 +4008,7 @@ ${jsRes}
         resizer.classList.remove('dragging');
         document.body.classList.remove('is-resizing-pane');
         const currentW = sidebar.getBoundingClientRect().width;
-        if (currentW >= 210) {
+        if (currentW >= 115) {
           try {
             localStorage.setItem(SIDEBAR_WIDTH_KEY, String(Math.round(currentW)));
           } catch (err) {}
@@ -3664,7 +4020,6 @@ ${jsRes}
       };
 
       const startDrag = (e) => {
-        if (window.innerWidth <= 768) return;
         e.preventDefault();
         isDragging = true;
         resizer.classList.add('dragging');
@@ -3790,6 +4145,28 @@ ${jsRes}
               }));
             } else if (data && data.profile && data.profile.info_cache) {
               const cache = data.profile.info_cache;
+              let updatedCount = 0;
+              // If in Personal Edition (22 real profiles), merge names and emails by matching profileDir!
+              if (!IS_BLANK_EDITION && state.profiles.length > 0) {
+                state.profiles.forEach(p => {
+                  if (p.profileDir && cache[p.profileDir]) {
+                    const info = cache[p.profileDir];
+                    if (info.name && info.name !== p.name) {
+                      p.name = info.name;
+                      updatedCount++;
+                    }
+                    if (info.user_name) p.email = info.user_name;
+                    if (info.gaia_name) p.gaia = info.gaia_name;
+                  }
+                });
+                saveState();
+                renderSidebar();
+                renderMainChat();
+                showToast(`✅ Synced ${updatedCount} profile name(s) from Chrome Local State!`);
+                return;
+              }
+
+              // Otherwise in Blank Edition, build profile list from scratch
               const entries = Object.entries(cache);
               state.profiles = entries.map(([dir, info], idx) => {
                 const slot = idx + 3;
@@ -3881,200 +4258,334 @@ ${jsRes}
         jumpToNextReadyProfile();
       }
     });
+
+    // Live Cross-Tab Storage Sync for OrlandoRecharge (dra-schedule, dra-off, dra-days, dra-clock-theme)
+    window.addEventListener('storage', (e) => {
+      if (e.key && e.key.startsWith('dra-')) {
+        renderClockBox();
+      }
+    });
+
+    // Browser Back Button (popstate) support for Mobile Chat -> Profile List
+    window.addEventListener('popstate', () => {
+      if (window.innerWidth <= 768 && document.body.classList.contains('mobile-chat-open')) {
+        closeMobileChatWithSlide();
+      }
+    });
   }
 
-  // ─── App Distribution & Live Sync Suite Dock Controls ───
-  function initAppDistSection() {
-    const distSec = $('#appDistSection');
-    const distMinBtn = $('#distMinimizeBtn');
-    const distMinIcon = $('#distMinIcon');
-    const distMinText = $('#distMinText');
+  // =========================================================================
+  // 📱 NATIVE iOS MESSENGER / FACEBOOK GESTURE NAVIGATION ENGINE
+  // - Interactive Edge Swipe-Back (Finger-Tracking + Parallax + Mid-Swipe Cancel)
+  // - Right-Edge Swipe-In (Pull Active Chat Back from Profile List)
+  // - Swipe-to-Reply / Quick Action on Message Bubbles
+  // - Swipe-to-Reveal Actions on Sidebar Profile Rows
+  // - Horizontal Paging on Chat Header (Prev/Next Profile) & Filter Tabs
+  // =========================================================================
+  function initGestureNavigation() {
+    const workspace = $('#appWorkspace');
+    const edgeIndicator = $('#iosEdgeSwipeIndicator');
+    if (!workspace) return;
 
-    if (!distSec) return;
+    let mode = null; // 'edge-pop' | 'edge-push' | 'note-swipe' | 'profile-swipe' | 'header-page' | 'filter-page'
+    let startX = 0;
+    let startY = 0;
+    let lastX = 0;
+    let lastTime = 0;
+    let velocityX = 0;
+    let currentDx = 0;
+    let activeEl = null;
+    let activeContainer = null;
 
-    // Synchronize UI according to Edition (Main Version vs Clean Blank Edition)
-    if (IS_BLANK_EDITION) {
-      document.title = 'OrlandoChrome (Clean Edition) — Blank Canvas';
-      const pTitle = $('#pageTitle');
-      if (pTitle) pTitle.textContent = 'OrlandoChrome (Clean Edition) — Blank Canvas';
-      const mLink = $('#manifestLink');
-      if (mLink) mLink.href = 'manifest-clean.json';
+    workspace.addEventListener('touchstart', (e) => {
+      if (e.touches.length !== 1) return;
+      const touch = e.touches[0];
+      startX = touch.clientX;
+      startY = touch.clientY;
+      lastX = startX;
+      lastTime = performance.now();
+      velocityX = 0;
+      currentDx = 0;
+      mode = null;
+      activeEl = null;
+      activeContainer = null;
 
-      const sub = $('#distSubtitle');
-      if (sub) sub.textContent = '100% clean, schedule-free blank canvas (0 notes). Clean storage ready for external laptops.';
+      const isMobile = window.innerWidth <= 768;
+      const isChatOpen = document.body.classList.contains('mobile-chat-open');
+      const target = e.target;
 
-      // Card 1 becomes switch to Main
-      const c1Name = $('#distCardMainTitle');
-      if (c1Name) c1Name.textContent = 'Main Executive App';
-      const c1Desc = $('#distCardMainDesc');
-      if (c1Desc) c1Desc.textContent = 'Switch to complete 22-profile main workspace';
-
-      // Card 4 becomes Clean Blank Canvas (Active)
-      const c4Name = $('#distCardBlankTitle');
-      if (c4Name) {
-        c4Name.textContent = 'Clean Blank Canvas (Active)';
-        c4Name.style.color = 'var(--nf-gold, #f59e0b)';
+      // Ignore touches inside horizontal scroll strips, resizer, or text inputs/sliders
+      if (target.closest('#workspaceResizer, .templates-chips-scroll, input, textarea, audio')) {
+        startX = 0;
+        return;
       }
-      const c4Desc = $('#distCardBlankDesc');
-      if (c4Desc) c4Desc.textContent = 'Currently active: 0 notes / clean routine';
 
-      // Card 4 primary button becomes Reset Blank Canvas
-      const c4Stack = $('#distBlankBtnStack');
-      if (c4Stack) {
-        c4Stack.innerHTML = `
-          <button type="button" class="primary dist-btn" id="cleanResetCanvasBtn" style="width:100%">⟲ Clear &amp; Reset Blank Canvas</button>
-          <div class="dist-btn-row">
-            <a class="ghost dist-btn" href="../downloads/Install-OrlandoChrome-Clean-Windows.cmd" download title="Clean Edition Setup Launcher">⬇ .exe</a>
-            <button type="button" class="ghost dist-btn" id="btnDownloadSingleHtmlBlank" title="Standalone Single-File Offline HTML">💾 .html</button>
-          </div>
-        `;
-        const resetBtn = $('#cleanResetCanvasBtn');
-        if (resetBtn) {
-          resetBtn.onclick = () => {
-            if (confirm('Are you sure you want to clear and reset the blank canvas? All notes in this blank session will be cleared.')) {
-              state.profiles = JSON.parse(JSON.stringify(BLANK_STARTER_PROFILES));
-              saveState();
-              renderSidebar();
-              renderMainChat();
-              showToast('✨ Clean Blank Canvas reset successfully!');
-            }
-          };
-        }
-        const sHtml = $('#btnDownloadSingleHtmlBlank');
-        if (sHtml) {
-          sHtml.onclick = () => downloadStandaloneHtml(true);
-        }
+      // 1. Message Bubble Swipe Candidate (Messenger Swipe-to-Reply / Quick Action)
+      const noteWrap = target.closest('.note-item-wrap');
+      if (noteWrap && !target.closest('.note-inline-editor, .note-reaction-picker')) {
+        mode = 'note-candidate';
+        activeContainer = noteWrap;
+        activeEl = $('.note-bubble', noteWrap);
+        return;
       }
-    } else {
-      document.title = 'OrlandoChrome (Main Version)';
-      const pTitle = $('#pageTitle');
-      if (pTitle) pTitle.textContent = 'OrlandoChrome (Main Version)';
-      const mLink = $('#manifestLink');
-      if (mLink) mLink.href = 'manifest.json';
-    }
 
-    // Minimized state toggle & persistence
-    function updateDistMinUI(isMin) {
-      if (isMin) {
-        distSec.classList.add('minimized');
-        if (distMinIcon) distMinIcon.textContent = '▸';
-        if (distMinText) distMinText.textContent = 'Expand';
-        if (distMinBtn) distMinBtn.setAttribute('aria-expanded', 'false');
-      } else {
-        distSec.classList.remove('minimized');
-        if (distMinIcon) distMinIcon.textContent = '▾';
-        if (distMinText) distMinText.textContent = 'Minimize';
-        if (distMinBtn) distMinBtn.setAttribute('aria-expanded', 'true');
+      // 2. Sidebar Profile Row Swipe Candidate (Messenger Chat List Swipe Actions)
+      const profSwipeWrap = target.closest('.profile-item-swipe-container');
+      if (profSwipeWrap) {
+        mode = 'profile-candidate';
+        activeContainer = profSwipeWrap;
+        activeEl = $('.profile-item', profSwipeWrap);
+        return;
       }
-    }
 
-    let savedMin = false;
-    try {
-      savedMin = localStorage.getItem('orlandochrome_dist_minimized') === '1';
-    } catch(e){}
-    updateDistMinUI(savedMin);
+      // 3. Chat Header or Chat Area Horizontal Paging (Swipe Left/Right to Switch Profiles with Finger-Tracking & Cancel)
+      if (target.closest('#chatHeaderBar') || target.closest('#chatMain')) {
+        mode = 'header-candidate';
+        return;
+      }
 
-    if (distMinBtn) {
-      distMinBtn.onclick = () => {
-        const nowMin = !distSec.classList.contains('minimized');
-        updateDistMinUI(nowMin);
-        try { localStorage.setItem('orlandochrome_dist_minimized', nowMin ? '1' : '0'); } catch(e){}
-      };
-    }
+      // 4. Sidebar Header Filter Paging (All <-> Pending <-> Timers)
+      if (target.closest('.sidebar-header')) {
+        mode = 'filter-candidate';
+        return;
+      }
+    }, { passive: true });
 
-    // 1-Click Install App Button
-    const installBtn = $('#installAppBtn');
-    if (installBtn) {
-      installBtn.onclick = async (e) => {
-        if (deferredInstallPrompt) {
-          e.preventDefault();
-          deferredInstallPrompt.prompt();
-          const choice = await deferredInstallPrompt.userChoice.catch(() => null);
-          deferredInstallPrompt = null;
-          if (choice && choice.outcome === 'accepted') {
-            showToast('✅ OrlandoChrome installed as a native app!');
-          }
+    workspace.addEventListener('touchmove', (e) => {
+      if (!startX || !mode || e.touches.length !== 1) return;
+      const touch = e.touches[0];
+      const x = touch.clientX;
+      const y = touch.clientY;
+      const dx = x - startX;
+      const dy = y - startY;
+
+      const nowT = performance.now();
+      const dt = Math.max(1, nowT - lastTime);
+      velocityX = (x - lastX) / dt;
+      lastX = x;
+      lastTime = nowT;
+
+      const chatMain = $('#chatMain');
+
+      // Promote candidate to active gesture once horizontal intent is clear
+      if (mode.endsWith('-candidate')) {
+        if (Math.abs(dy) > 14 && Math.abs(dy) > Math.abs(dx)) {
+          startX = 0;
+          mode = null;
+          return;
         }
-      };
-    }
+        if (Math.abs(dx) < 10) return;
 
-    // Holographic QR Button -> opens full interactive QR & device sync modal
-    const qrBtn = $('#openQrBtn');
-    if (qrBtn) {
-      qrBtn.onclick = () => openAppDistributionSuiteModal();
-    }
-
-    // Share / Copy Link
-    const shareBtn = $('#shareAppBtn');
-    if (shareBtn) {
-      shareBtn.onclick = () => {
-        const shareUrl = IS_BLANK_EDITION ? BLANK_APP_URL : LIVE_APP_URL;
-        if (navigator.share) {
-          navigator.share({
-            title: IS_BLANK_EDITION ? 'OrlandoChrome (Clean Edition)' : 'OrlandoChrome (Main Version)',
-            text: 'Taskbar Chrome Profile Messenger, AI Cooldown Timers & Wispr Flow Pro Dictation Suite.',
-            url: shareUrl
-          }).catch(err => {
-            if (err.name !== 'AbortError') {
-              navigator.clipboard.writeText(shareUrl).then(() => showToast('📋 App link copied to clipboard!'));
-            }
-          });
+        if (mode === 'note-candidate' && Math.abs(dx) > Math.abs(dy) * 1.35) {
+          mode = 'note-swipe';
+        } else if (mode === 'profile-candidate' && Math.abs(dx) > Math.abs(dy) * 1.35) {
+          mode = 'profile-swipe';
+        } else if (mode === 'header-candidate' && Math.abs(dx) > Math.abs(dy) * 1.4) {
+          mode = 'header-page';
+        } else if (mode === 'filter-candidate' && Math.abs(dx) > Math.abs(dy) * 1.35) {
+          mode = 'filter-page';
         } else {
-          navigator.clipboard.writeText(shareUrl).then(() => showToast('📋 App link copied to clipboard!'));
+          return;
         }
-      };
-    }
+      }
 
-    // Backup & Restore
-    const expBtn = $('#exportBackupBtn');
-    if (expBtn) {
-      expBtn.onclick = () => exportFullBackupJson();
-    }
-    const impBtn = $('#importBackupBtn');
-    const impFile = $('#importBackupFile');
-    if (impBtn && impFile) {
-      impBtn.onclick = () => impFile.click();
-      impFile.onchange = (e) => {
-        const file = e.target.files && e.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = (ev) => {
-          try {
-            const data = JSON.parse(ev.target.result);
-            if (data && Array.isArray(data.profiles)) {
-              state.profiles = data.profiles;
-              if (Array.isArray(data.quickTemplates)) state.quickTemplates = data.quickTemplates;
-              if (data.wispr) {
-                state.wispr = { ...state.wispr, ...data.wispr };
-              }
+      currentDx = dx;
+
+      // Handle Active Gesture Modes
+      if (mode === 'header-page' && chatMain) {
+        if (e.cancelable) e.preventDefault();
+        const damped = Math.sign(dx) * Math.min(72, Math.pow(Math.abs(dx), 0.82) * 1.15);
+        chatMain.style.transition = 'none';
+        chatMain.style.transform = `translate3d(${damped}px, 0, 0)`;
+        if (edgeIndicator) {
+          const absDx = Math.abs(dx);
+          edgeIndicator.style.opacity = String(Math.min(1, absDx / 56));
+          edgeIndicator.style.transform = `translate3d(12px, -50%, 0) scale(${0.85 + Math.min(0.22, absDx / 220)})`;
+          const chev = $('.ios-edge-chevron', edgeIndicator);
+          if (chev) chev.textContent = dx > 0 ? '‹' : '›';
+          edgeIndicator.classList.toggle('ready', absDx >= 52);
+        }
+      } else if (mode === 'note-swipe' && activeEl && activeContainer) {
+        if (e.cancelable) e.preventDefault();
+        const damped = Math.sign(dx) * Math.min(130, Math.pow(Math.abs(dx), 0.86) * 1.45);
+        activeEl.style.transition = 'none';
+        activeEl.style.transform = `translate3d(${damped}px, 0, 0)`;
+
+        const leftInd = $('.note-swipe-indicator.left-ind', activeContainer);
+        const rightInd = $('.note-swipe-indicator.right-ind', activeContainer);
+        const nid = activeContainer.dataset.nid;
+        const prof = getProfile(state.activeProfileId);
+        const note = (prof.notes || []).find(n => n.id === nid);
+
+        if (dx > 0 && leftInd) {
+          leftInd.style.opacity = String(Math.min(1, dx / 58));
+          leftInd.style.transform = `translateY(-50%) scale(${Math.min(1.08, 0.8 + dx / 180)})`;
+          const span = $('span', leftInd);
+          if (span) {
+            span.textContent = dx > 108 ? '↪ Forward' : (note && note.done ? '↩ Reopen' : '✓ Done');
+          }
+          leftInd.classList.toggle('triggered', dx >= 58);
+          if (rightInd) rightInd.style.opacity = '0';
+        } else if (dx < 0 && rightInd) {
+          const absDx = Math.abs(dx);
+          rightInd.style.opacity = String(Math.min(1, absDx / 58));
+          rightInd.style.transform = `translateY(-50%) scale(${Math.min(1.08, 0.8 + absDx / 180)})`;
+          const span = $('span', rightInd);
+          if (span) {
+            span.textContent = absDx > 108 ? '✏️ Edit' : '↪ Forward';
+          }
+          rightInd.classList.toggle('triggered', absDx >= 58);
+          if (leftInd) leftInd.style.opacity = '0';
+        }
+      } else if (mode === 'profile-swipe' && activeEl && activeContainer) {
+        if (e.cancelable) e.preventDefault();
+        const damped = Math.sign(dx) * Math.min(115, Math.pow(Math.abs(dx), 0.86) * 1.35);
+        activeEl.style.transition = 'none';
+        activeEl.style.transform = `translate3d(${damped}px, 0, 0)`;
+        const leftTray = $('.profile-swipe-tray.left-tray', activeContainer);
+        const rightTray = $('.profile-swipe-tray.right-tray', activeContainer);
+        if (dx > 0 && leftTray) {
+          leftTray.style.opacity = String(Math.min(1, dx / 60));
+          leftTray.classList.toggle('triggered', dx >= 64);
+          if (rightTray) rightTray.style.opacity = '0';
+        } else if (dx < 0 && rightTray) {
+          const absDx = Math.abs(dx);
+          rightTray.style.opacity = String(Math.min(1, absDx / 60));
+          rightTray.classList.toggle('triggered', absDx >= 64);
+          if (leftTray) leftTray.style.opacity = '0';
+        }
+      }
+    }, { passive: false });
+
+    const finishGesture = () => {
+      if (!mode) {
+        startX = 0;
+        return;
+      }
+
+      const chatMain = $('#chatMain');
+
+      if (edgeIndicator) {
+        edgeIndicator.style.opacity = '0';
+        edgeIndicator.style.transform = 'translate3d(-24px, -50%, 0) scale(0.8)';
+        edgeIndicator.classList.remove('ready');
+      }
+
+      if (mode === 'header-page' && chatMain) {
+        chatMain.style.transition = 'transform 0.24s cubic-bezier(0.22, 1, 0.36, 1)';
+        chatMain.style.transform = '';
+        if ((currentDx <= -52 || (currentDx <= -28 && velocityX < -0.42)) && velocityX <= 0.1) {
+          stepProfile(1);
+        } else if ((currentDx >= 52 || (currentDx >= 28 && velocityX > 0.42)) && velocityX >= -0.1) {
+          stepProfile(-1);
+        }
+      } else if (mode === 'note-swipe' && activeEl && activeContainer) {
+        activeEl.style.transition = 'transform 0.26s cubic-bezier(0.22, 1, 0.36, 1)';
+        activeEl.style.transform = '';
+        const leftInd = $('.note-swipe-indicator.left-ind', activeContainer);
+        const rightInd = $('.note-swipe-indicator.right-ind', activeContainer);
+        if (leftInd) { leftInd.style.opacity = '0'; leftInd.classList.remove('triggered'); }
+        if (rightInd) { rightInd.style.opacity = '0'; rightInd.classList.remove('triggered'); }
+
+        const nid = activeContainer.dataset.nid;
+        const prof = getProfile(state.activeProfileId);
+        const note = (prof.notes || []).find(n => n.id === nid);
+        if (note) {
+          if (currentDx >= 108 && velocityX >= -0.15) {
+            openForwardModal(prof, note);
+          } else if (currentDx >= 58 && velocityX >= -0.15) {
+            note.done = !note.done;
+            if (note.done && window.soundMgr) window.soundMgr.playReadyChime();
+            if (countPending(prof) === 0) {
+              prof.isPinned = false;
+              prof.pinnedAt = null;
+            }
+            saveState();
+            renderSidebar();
+            renderMainChat();
+            showToast(note.done ? '✓ Marked note Done' : '↩ Reopened note');
+          } else if (currentDx <= -108 && velocityX <= 0.15) {
+            state.editingNoteId = note.id;
+            renderMainChat();
+          } else if (currentDx <= -58 && velocityX <= 0.15) {
+            openForwardModal(prof, note);
+          }
+        }
+      } else if (mode === 'profile-swipe' && activeEl && activeContainer) {
+        activeEl.style.transition = 'transform 0.26s cubic-bezier(0.22, 1, 0.36, 1)';
+        activeEl.style.transform = '';
+        const leftTray = $('.profile-swipe-tray.left-tray', activeContainer);
+        const rightTray = $('.profile-swipe-tray.right-tray', activeContainer);
+        if (leftTray) { leftTray.style.opacity = '0'; leftTray.classList.remove('triggered'); }
+        if (rightTray) { rightTray.style.opacity = '0'; rightTray.classList.remove('triggered'); }
+
+        const pid = activeContainer.dataset.swipePid;
+        const prof = getProfile(pid);
+        if (prof && Math.abs(currentDx) >= 64) {
+          activeEl.dataset.justSwiped = '1';
+          if (currentDx >= 64 && velocityX >= -0.15) {
+            if (countPending(prof) > 0) {
+              prof.isPinned = !prof.isPinned;
+              prof.pinnedAt = prof.isPinned ? now() : null;
               saveState();
               renderSidebar();
               renderMainChat();
-              showToast('💾 Backup restored successfully!');
+              showToast(prof.isPinned ? `📌 Pinned ${prof.name} to top` : `Returned ${prof.name} to ${prof.winShortcut}`);
+            } else if (hasMessages(prof)) {
+              prof.isUnread = !prof.isUnread;
+              saveState();
+              renderSidebar();
+              renderMainChat();
+              showToast(prof.isUnread ? `● Marked ${prof.name} as Unread` : `✓ Marked ${prof.name} as Read`);
             } else {
-              showToast('⚠️ Invalid JSON backup format.');
+              openMobileChatWithSlide(prof.id);
             }
-          } catch(err) {
-            showToast('❌ Error parsing backup JSON.');
+          } else if (currentDx <= -64 && velocityX <= 0.15) {
+            const cur = now();
+            if ((prof.timerUntil && prof.timerUntil > cur) || prof.isReset) {
+              prof.timerUntil = null;
+              prof.timerDurationMs = null;
+              prof.isReset = false;
+              saveState();
+              renderSidebar();
+              renderMainChat();
+              showToast(`✕ Cleared timer on ${prof.name}`);
+            } else {
+              startCooldown(prof, 45, '45m');
+            }
           }
-        };
-        reader.readAsText(file);
-        impFile.value = '';
-      };
-    }
+        }
+      } else if (mode === 'filter-page') {
+        const order = ['all', 'pending', 'timers'];
+        const idx = order.indexOf(state.currentFilter);
+        if (currentDx <= -48 && idx < order.length - 1) {
+          const nextTab = order[idx + 1];
+          const btn = nextTab === 'pending' ? $('#tabPending') : $('#tabTimers');
+          if (btn) btn.click();
+        } else if (currentDx >= 48 && idx > 0) {
+          const prevTab = order[idx - 1];
+          const btn = prevTab === 'all' ? $('#tabAll') : $('#tabPending');
+          if (btn) btn.click();
+        }
+      }
 
-    // Standalone Single-File HTML Download
-    const singleHtmlBtn = $('#btnDownloadSingleHtml');
-    if (singleHtmlBtn) {
-      singleHtmlBtn.onclick = () => downloadStandaloneHtml(IS_BLANK_EDITION);
-    }
+      mode = null;
+      startX = 0;
+      currentDx = 0;
+      activeEl = null;
+      activeContainer = null;
+    };
+
+    workspace.addEventListener('touchend', finishGesture, { passive: true });
+    workspace.addEventListener('touchcancel', finishGesture, { passive: true });
   }
 
   // Initializer
   function init() {
     loadState();
+    document.body.classList.remove('mobile-chat-open');
     initEvents();
-    initAppDistSection();
+    initGestureNavigation();
     renderSidebar();
     renderMainChat();
     renderClockBox();
