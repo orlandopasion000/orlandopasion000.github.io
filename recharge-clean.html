@@ -2030,6 +2030,45 @@ body.light-theme .preset-chip:hover{
 }
 
 
+
+/* ───────── MODERN LUXURY VECTOR ICONS ───────── */
+.modern-icon {
+  display: inline-block;
+  vertical-align: middle;
+  width: 15px;
+  height: 15px;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  flex-shrink: 0;
+  margin-right: 5px;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.22s ease;
+}
+.modern-icon-gold {
+  stroke: var(--gold);
+  filter: drop-shadow(0 0 4px rgba(217,185,92,0.45));
+}
+.modern-icon-emerald {
+  stroke: #34d399;
+  filter: drop-shadow(0 0 4px rgba(52,211,153,0.45));
+}
+.modern-icon-cyan {
+  stroke: #38bdf8;
+  filter: drop-shadow(0 0 4px rgba(56,189,248,0.45));
+}
+.modern-icon-violet {
+  stroke: #a78bfa;
+  filter: drop-shadow(0 0 4px rgba(167,139,250,0.45));
+}
+button:hover .modern-icon,
+.pill-btn:hover .modern-icon,
+.console-mini-pill:hover .modern-icon,
+.dist-btn:hover .modern-icon {
+  transform: scale(1.15);
+}
+
 .highlight-card{
   margin-top:16px;
   border-color:rgba(217,185,92,.5);
@@ -2075,18 +2114,18 @@ body.light-theme .highlight-card .dist-icon{
           <span id="consoleArmText">✓ Alarms Active</span>
         </button>
         <button class="console-mini-pill" id="audioBadge" title="Browser Audio Status">
-          <span id="audioBadgeText">🔊 Sound Ready</span>
+          <svg class="modern-icon modern-icon-emerald" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+          <span id="audioBadgeText">Sound Ready</span>
         </button>
         <span class="console-divider">|</span>
         <button class="console-mini-pill" id="consoleDaysBadge" title="Current Active Days">
-          <span id="consoleDaysText">📅 Mon–Fri</span>
+          <svg class="modern-icon modern-icon-cyan" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          <span id="consoleDaysText">Mon–Fri</span>
         </button>
         <button class="console-mini-pill" id="consoleThemeBadge" title="Cycle Clock Font & Visual Appearance">
-          <span>🎨 <b id="consoleThemeLabel">Titanium Obsidian Noir</b></span>
+          <svg class="modern-icon modern-icon-gold" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a10 10 0 0 0-4 19.19V17a3 3 0 0 1 3-3h1a2 2 0 0 0 2-2 2 2 0 0 0-2-2z"></path></svg>
+          <b id="consoleThemeLabel">Titanium Obsidian Noir</b>
         </button>
-        <a class="console-mini-pill highlight" id="quickAppBtn" href="https://orlandopasion000.github.io/orlandorecharge" target="_blank" rel="noopener" title="Open Main App in New Window">
-          <span>💻 App</span>
-        </a>
       </div>
 
       <div class="console-head-right">
@@ -2101,13 +2140,24 @@ body.light-theme .highlight-card .dist-icon{
       <!-- Row 1: Primary Actions (Arm Alarms, Test Sound, Rest Mode, Volume Slider) -->
       <div class="console-row-primary">
         <div class="console-btn-group">
-          <button class="primary on" id="arm">✓ Alarms Are On</button>
-          <button class="ghost" id="test">▶ Test Sound</button>
-          <button class="ghost" id="restBtn" title="Full screen clock only">⛶ Rest Mode</button>
+          <button class="primary on" id="arm">
+            <svg class="modern-icon modern-icon-emerald" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            <span>Alarms Are On</span>
+          </button>
+          <button class="ghost" id="test">
+            <svg class="modern-icon modern-icon-cyan" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <span>Test Sound</span>
+          </button>
+          <button class="ghost" id="restBtn" title="Full screen clock only">
+            <svg class="modern-icon modern-icon-gold" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+            <span>Rest Mode</span>
+          </button>
         </div>
 
         <div class="vol console-vol">
-          <button id="volIcon" title="Mute / unmute" aria-label="Mute">🔊</button>
+          <button id="volIcon" title="Mute / unmute" aria-label="Mute">
+            <svg class="modern-icon modern-icon-gold" viewBox="0 0 24 24" style="width:16px;height:16px;margin:0"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+          </button>
           <input type="range" id="volSlider" min="0" max="100" value="70" aria-label="Volume">
           <span id="volPct">70%</span>
         </div>
@@ -2126,16 +2176,16 @@ body.light-theme .highlight-card .dist-icon{
 
         <div class="console-prefs-strip">
           <button class="pill-btn" id="themeBtn" title="Cycle Clock Font & Visual Appearance">
-            <span>🎨 Clock Style: <b id="themeLabel">Titanium Obsidian Noir</b></span>
+            <svg class="modern-icon modern-icon-gold" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle><line x1="12" y1="2" x2="12" y2="4"></line><line x1="12" y1="20" x2="12" y2="22"></line><line x1="2" y1="12" x2="4" y2="12"></line><line x1="20" y1="12" x2="22" y2="12"></line></svg>
+            <span>Clock Style: <b id="themeLabel">Titanium Obsidian Noir</b></span>
           </button>
-          <a class="pill-btn highlight" id="themeAppBtn" href="https://orlandopasion000.github.io/orlandorecharge" target="_blank" rel="noopener" title="Open Main App in New Window">
-            <span>💻 App</span>
-          </a>
           <button class="pill-btn" id="themeModeBtn" title="Toggle Light / Dark Mode">
-            <span id="themeModeIcon">🌙</span> <span id="themeModeLabel">Dark</span>
+            <span id="themeModeIcon"><svg class="modern-icon modern-icon-gold" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
+            <span id="themeModeLabel">Dark</span>
           </button>
           <button class="pill-btn" id="tourBtn" title="First-Run Walkthrough & Help">
-            <span>✨ Tour &amp; Help</span>
+            <svg class="modern-icon modern-icon-cyan" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <span>Tour &amp; Help</span>
           </button>
         </div>
       </div>
@@ -2149,7 +2199,10 @@ body.light-theme .highlight-card .dist-icon{
       <!-- Row 4: Routine Presets & Cloud Share Bar -->
       <div class="preset-bar console-preset-bar">
         <div class="preset-cluster-left">
-          <span class="preset-cluster-label"><span>📋</span> Preset:</span>
+          <span class="preset-cluster-label">
+            <svg class="modern-icon modern-icon-gold" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+            <span>Preset:</span>
+          </span>
           <select id="presetSelect" aria-label="Choose routine preset">
             <option value="class">🎓 Class Day (DepEd Master — 23 Blocks · Mon–Fri)</option>
             <option value="weekend">🌿 Weekend Recharge (Nature &amp; Rest — 10 Blocks · Sat–Sun)</option>
@@ -2164,11 +2217,20 @@ body.light-theme .highlight-card .dist-icon{
             <option value="minimal">🎯 Minimalist Routine (4 Anchor Blocks · Mon–Sun)</option>
             <option value="blank">📝 Blank Canvas (Start Fresh — 0 Blocks)</option>
           </select>
-          <span id="presetDaysBadge" title="Active days for this routine"><span>📅</span> <b>Active: Mon — Fri</b></span>
+          <span id="presetDaysBadge" title="Active days for this routine">
+            <svg class="modern-icon modern-icon-cyan" viewBox="0 0 24 24" style="margin-right:3px"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            <b>Active: Mon — Fri</b>
+          </span>
         </div>
         <div class="preset-cluster-right">
-          <button class="ghost" id="shareRoutineBtn" title="Copy instant share link for this routine">🔗 Share</button>
-          <button class="primary" id="openClassEncoderBtn" title="Easily type and encode 1 to 8 classes">📚 Encode</button>
+          <button class="ghost" id="shareRoutineBtn" title="Copy instant share link for this routine">
+            <svg class="modern-icon modern-icon-cyan" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+            <span>Share</span>
+          </button>
+          <button class="primary" id="openClassEncoderBtn" title="Easily type and encode 1 to 8 classes">
+            <svg class="modern-icon" viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+            <span>Encode</span>
+          </button>
         </div>
       </div>
     </div>
@@ -2178,9 +2240,18 @@ body.light-theme .highlight-card .dist-icon{
   <div class="sched-head">
     <h2>Today's Schedule</h2>
     <div class="sched-actions" id="schedActionsNormal">
-      <button class="ghost" id="editScheduleBtn">✎ Edit Schedule</button>
-      <button class="ghost" id="addAlarmBtn">+ Add Alarm</button>
-      <button class="ghost" id="resetSchedBtn">↺ Reset Default</button>
+      <button class="ghost" id="editScheduleBtn">
+        <svg class="modern-icon modern-icon-gold" viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+        <span>Edit Schedule</span>
+      </button>
+      <button class="ghost" id="addAlarmBtn">
+        <svg class="modern-icon modern-icon-emerald" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+        <span>Add Alarm</span>
+      </button>
+      <button class="ghost" id="resetSchedBtn">
+        <svg class="modern-icon" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+        <span>Reset Default</span>
+      </button>
     </div>
     <div class="sched-actions" id="schedActionsEdit" style="display:none">
       <button class="btn-save" id="saveScheduleBtn">💾 Save Changes</button>
@@ -2206,7 +2277,7 @@ body.light-theme .highlight-card .dist-icon{
   <section class="app-dist" id="appDistSection" aria-labelledby="distTitle">
     <div class="dist-head">
       <div class="dist-head-left">
-        <div class="dist-or-mini">OR</div>
+        <img src="assets/recharge-icon-96.png" class="dist-or-logo" alt="OR" style="width:36px;height:36px;border-radius:10px;border:1px solid rgba(217,185,92,0.5);box-shadow:0 0 14px rgba(217,185,92,0.3);object-fit:cover;flex-shrink:0;">
         <div>
           <div class="dist-title" id="distTitle">
             <span>App Distribution &amp; Live Sync Suite</span>
@@ -2227,36 +2298,51 @@ body.light-theme .highlight-card .dist-icon{
         <!-- Card 1: Main Executive Schedule -->
         <div class="dist-card">
           <div class="dist-card-top">
-            <div class="dist-icon">⚡</div>
+            <div class="dist-icon dist-icon-gold">
+              <svg class="modern-icon modern-icon-gold" viewBox="0 0 24 24" style="width:19px;height:19px;margin:0"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+            </div>
             <div class="dist-card-meta">
               <div class="dist-name">Main Executive App</div>
               <div class="dist-desc">Switch to complete 23-block schedule</div>
             </div>
           </div>
           <div class="dist-btn-stack">
-            <a class="primary dist-btn" id="installAppBtn" href="https://orlandopasion000.github.io/orlandorecharge" target="_blank" rel="noopener">⚡ 1-Click Install App</a>
+            <a class="primary dist-btn" id="installAppBtn" href="https://orlandopasion000.github.io/orlandorecharge" target="_blank" rel="noopener">
+              <svg class="modern-icon" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              <span>1-Click Install App</span>
+            </a>
           </div>
         </div>
 
         <!-- Card 2: Mobile QR Code & Link Sharing -->
         <div class="dist-card">
           <div class="dist-card-top">
-            <div class="dist-icon">📲</div>
+            <div class="dist-icon">
+              <svg class="modern-icon modern-icon-cyan" viewBox="0 0 24 24" style="width:19px;height:19px;margin:0"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><line x1="7" y1="17" x2="7" y2="17.01"></line><line x1="17" y1="7" x2="17" y2="7.01"></line></svg>
+            </div>
             <div class="dist-card-meta">
               <div class="dist-name">Holographic QR</div>
               <div class="dist-desc">Instant phone scanner &amp; device sync</div>
             </div>
           </div>
           <div class="dist-btn-stack">
-            <button class="ghost dist-btn dist-btn-holo" id="openQrBtn">📷 Open Phone QR</button>
-            <button class="ghost dist-btn" id="shareAppBtn">↗ Share / Copy Link</button>
+            <button class="ghost dist-btn dist-btn-holo" id="openQrBtn">
+              <svg class="modern-icon modern-icon-cyan" viewBox="0 0 24 24" style="width:14px;height:14px"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+              <span>Open Phone QR</span>
+            </button>
+            <button class="ghost dist-btn" id="shareAppBtn">
+              <svg class="modern-icon" viewBox="0 0 24 24" style="width:14px;height:14px"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+              <span>Share / Copy Link</span>
+            </button>
           </div>
         </div>
 
         <!-- Card 3: Backup & Restore Schedule -->
         <div class="dist-card">
           <div class="dist-card-top">
-            <div class="dist-icon">💾</div>
+            <div class="dist-icon">
+              <svg class="modern-icon modern-icon-emerald" viewBox="0 0 24 24" style="width:19px;height:19px;margin:0"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></svg>
+            </div>
             <div class="dist-card-meta">
               <div class="dist-name">Backup &amp; Restore</div>
               <div class="dist-desc">Encrypted local schedule backup</div>
@@ -2264,8 +2350,14 @@ body.light-theme .highlight-card .dist-icon{
           </div>
           <div class="dist-btn-stack">
             <div class="dist-btn-row">
-              <button class="ghost dist-btn" id="exportBackupBtn">💾 Export</button>
-              <button class="ghost dist-btn" id="importBackupBtn">📂 Import</button>
+              <button class="ghost dist-btn" id="exportBackupBtn">
+                <svg class="modern-icon modern-icon-emerald" viewBox="0 0 24 24" style="width:13px;height:13px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                <span>Export</span>
+              </button>
+              <button class="ghost dist-btn" id="importBackupBtn">
+                <svg class="modern-icon" viewBox="0 0 24 24" style="width:13px;height:13px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                <span>Import</span>
+              </button>
             </div>
             <input type="file" id="importBackupFile" accept=".json" style="display:none">
           </div>
@@ -2274,14 +2366,19 @@ body.light-theme .highlight-card .dist-icon{
         <!-- Card 4: Clean Blank Edition (Active) -->
         <div class="dist-card dist-card-blank">
           <div class="dist-card-top">
-            <div class="dist-icon dist-icon-gold">🎁</div>
+            <div class="dist-icon dist-icon-gold">
+              <svg class="modern-icon modern-icon-gold" viewBox="0 0 24 24" style="width:19px;height:19px;margin:0"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            </div>
             <div class="dist-card-meta">
               <div class="dist-name" style="color:var(--gold)">Clean Blank Canvas (Active)</div>
               <div class="dist-desc">Currently active: 0 alarms scheduled</div>
             </div>
           </div>
           <div class="dist-btn-stack">
-            <button type="button" class="primary dist-btn" id="cleanResetCanvasBtn" style="width:100%">⟲ Clear &amp; Reset Blank Canvas</button>
+            <button type="button" class="primary dist-btn" id="cleanResetCanvasBtn" style="width:100%">
+              <svg class="modern-icon" viewBox="0 0 24 24" style="width:14px;height:14px"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+              <span>Clear &amp; Reset Blank Canvas</span>
+            </button>
           </div>
         </div>
       </div>
@@ -2788,7 +2885,7 @@ function updateAudioBadge(){
   var badge=$("audioBadge"),text=$("audioBadgeText");
   if(!badge||!text)return;
   badge.className="console-mini-pill live";
-  text.textContent="🔊 Sound Ready";
+  text.textContent="Sound Ready";
   badge.title="Sound is active and ready to play alarms";
 }
 $("audioBadge").onclick=function(){
@@ -3562,7 +3659,9 @@ document.addEventListener("keydown",function(e){
 /* ───────── CONTROLS ───────── */
 function setStatus(){
   if ($("arm")) {
-    $("arm").textContent = armed ? "✓ Alarms Are On" : "Turn Alarms On";
+    $("arm").innerHTML = armed 
+      ? '<svg class="modern-icon modern-icon-emerald" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> <span>Alarms Are On</span>'
+      : '<svg class="modern-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg> <span>Turn Alarms On</span>';
     $("arm").className = "primary" + (armed ? " on" : "");
   }
   if ($("consoleArmBadge")) {
@@ -3718,10 +3817,6 @@ window.addEventListener("beforeinstallprompt",function(e){
       launchDesktopApp();
     };
   }
-  var q = $("quickAppBtn");
-  if (q) { q.classList.add("ready"); q.title = "Click to install & open Windows Desktop App"; }
-  var t = $("themeAppBtn");
-  if(t){ t.classList.add("ready"); t.title="Click to install & open Windows Desktop App"; }
 });
 
 function launchDesktopApp() {
@@ -4770,11 +4865,11 @@ function applyThemeMode(mode) {
   try { localStorage.setItem("dra-clean-theme-mode", mode); } catch(e){}
   if (mode === "light") {
     document.body.classList.add("light-theme");
-    if ($("themeModeIcon")) $("themeModeIcon").textContent = "☀️";
+    if ($("themeModeIcon")) $("themeModeIcon").innerHTML = '<svg class="modern-icon modern-icon-gold" viewBox="0 0 24 24" style="margin-right:2px"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>';
     if ($("themeModeLabel")) $("themeModeLabel").textContent = "Light";
   } else {
     document.body.classList.remove("light-theme");
-    if ($("themeModeIcon")) $("themeModeIcon").textContent = "🌙";
+    if ($("themeModeIcon")) $("themeModeIcon").innerHTML = '<svg class="modern-icon modern-icon-gold" viewBox="0 0 24 24" style="margin-right:2px"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>';
     if ($("themeModeLabel")) $("themeModeLabel").textContent = "Dark";
   }
 }

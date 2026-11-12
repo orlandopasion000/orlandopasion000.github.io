@@ -38,14 +38,19 @@ const card1Search = /<!-- Card 1: Main Executive Schedule -->[\s\S]*?<!-- Card 2
 const card1CleanReplacement = `<!-- Card 1: Main Executive Schedule -->
         <div class="dist-card">
           <div class="dist-card-top">
-            <div class="dist-icon">⚡</div>
+            <div class="dist-icon dist-icon-gold">
+              <svg class="modern-icon modern-icon-gold" viewBox="0 0 24 24" style="width:19px;height:19px;margin:0"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+            </div>
             <div class="dist-card-meta">
               <div class="dist-name">Main Executive App</div>
               <div class="dist-desc">Switch to complete 23-block schedule</div>
             </div>
           </div>
           <div class="dist-btn-stack">
-            <a class="primary dist-btn" id="installAppBtn" href="https://orlandopasion000.github.io/orlandorecharge" target="_blank" rel="noopener">⚡ 1-Click Install App</a>
+            <a class="primary dist-btn" id="installAppBtn" href="https://orlandopasion000.github.io/orlandorecharge" target="_blank" rel="noopener">
+              <svg class="modern-icon" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              <span>1-Click Install App</span>
+            </a>
           </div>
         </div>
 
@@ -57,14 +62,19 @@ const card4Search = /<!-- Card 4: Clean Blank Edition[\s\S]*?<\/div>\s*<\/div>\s
 const card4CleanReplacement = `<!-- Card 4: Clean Blank Edition (Active) -->
         <div class="dist-card dist-card-blank">
           <div class="dist-card-top">
-            <div class="dist-icon dist-icon-gold">🎁</div>
+            <div class="dist-icon dist-icon-gold">
+              <svg class="modern-icon modern-icon-gold" viewBox="0 0 24 24" style="width:19px;height:19px;margin:0"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            </div>
             <div class="dist-card-meta">
               <div class="dist-name" style="color:var(--gold)">Clean Blank Canvas (Active)</div>
               <div class="dist-desc">Currently active: 0 alarms scheduled</div>
             </div>
           </div>
           <div class="dist-btn-stack">
-            <button type="button" class="primary dist-btn" id="cleanResetCanvasBtn" style="width:100%">⟲ Clear &amp; Reset Blank Canvas</button>
+            <button type="button" class="primary dist-btn" id="cleanResetCanvasBtn" style="width:100%">
+              <svg class="modern-icon" viewBox="0 0 24 24" style="width:14px;height:14px"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+              <span>Clear &amp; Reset Blank Canvas</span>
+            </button>
           </div>
         </div>
       </div>
