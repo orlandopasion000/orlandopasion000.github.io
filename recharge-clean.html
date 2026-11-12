@@ -2935,7 +2935,7 @@ body.light-theme .highlight-card .dist-icon{
 
     <!-- Collapsible Controls Body -->
     <div class="console-body" id="consoleBody">
-      <!-- Row 1: Primary Actions (Arm Alarms, Rest Mode, Volume Slider) -->
+      <!-- Row 1: Primary Actions (Arm Alarms, Rest Mode, Schedule Actions, Volume Slider) -->
       <div class="console-row-primary">
         <div class="console-btn-group">
           <button class="primary on" id="arm">
@@ -2945,6 +2945,18 @@ body.light-theme .highlight-card .dist-icon{
           <button class="ghost" id="restBtn" title="Full screen clock only">
             <svg class="modern-icon modern-icon-gold" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
             <span>Rest Mode</span>
+          </button>
+          <button class="ghost" id="editScheduleBtn" title="Edit individual schedule blocks">
+            <svg class="modern-icon modern-icon-gold" viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+            <span>Edit Schedule</span>
+          </button>
+          <button class="ghost" id="addAlarmBtn" title="Add a custom alarm or routine block">
+            <svg class="modern-icon modern-icon-emerald" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+            <span>Add Alarm</span>
+          </button>
+          <button class="ghost" id="resetSchedBtn" title="Reset to Sir Orlando's authentic 23-block routine">
+            <svg class="modern-icon" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+            <span>Reset Default</span>
           </button>
         </div>
 
@@ -3073,23 +3085,11 @@ body.light-theme .highlight-card .dist-icon{
           <canvas class="pm-particle-canvas" id="pmParticleCanvas"></canvas>
         </span>
       </button>
-      <button class="ghost" id="editScheduleBtn">
-        <svg class="modern-icon modern-icon-gold" viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-        <span>Edit Schedule</span>
-      </button>
-      <button class="ghost" id="addAlarmBtn">
-        <svg class="modern-icon modern-icon-emerald" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
-        <span>Add Alarm</span>
-      </button>
-      <button class="ghost" id="resetSchedBtn">
-        <svg class="modern-icon" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
-        <span>Reset Default</span>
-      </button>
-    </div>
-    <div class="sched-actions" id="schedActionsEdit" style="display:none">
-      <button class="btn-save" id="saveScheduleBtn">💾 Save Changes</button>
-      <button class="btn-cancel" id="cancelScheduleBtn">✕ Cancel Edit</button>
-      <button class="ghost" id="addAlarmEditBtn">+ Add Alarm</button>
+      <div id="schedActionsEdit" style="display:none;gap:8px;align-items:center;">
+        <button class="btn-save" id="saveScheduleBtn">💾 Save Changes</button>
+        <button class="btn-cancel" id="cancelScheduleBtn">✕ Cancel Edit</button>
+        <button class="ghost" id="addAlarmEditBtn">+ Add Alarm</button>
+      </div>
     </div>
   </div>
 
@@ -4345,8 +4345,8 @@ function renderList(){
 $("editScheduleBtn").onclick=function(){
   editingBackup=JSON.parse(JSON.stringify(S));
   isEditing=true;
-  $("schedActionsNormal").style.display="none";
-  $("schedActionsEdit").style.display="flex";
+  if ($("schedActionsEdit")) $("schedActionsEdit").style.display="inline-flex";
+  if ($("editScheduleBtn")) $("editScheduleBtn").classList.add("active");
   if($("status")) $("status").textContent="Editing schedule: edit items below, then click “Save Changes” or “Cancel”.";
   renderList();
 };
@@ -4354,8 +4354,8 @@ $("editScheduleBtn").onclick=function(){
 $("cancelScheduleBtn").onclick=function(){
   if(editingBackup)S=editingBackup;
   isEditing=false;
-  $("schedActionsNormal").style.display="flex";
-  $("schedActionsEdit").style.display="none";
+  if ($("schedActionsEdit")) $("schedActionsEdit").style.display="none";
+  if ($("editScheduleBtn")) $("editScheduleBtn").classList.remove("active");
   if($("status")) $("status").textContent="Edit cancelled. Schedule unchanged.";
   renderList();
   tick();
@@ -4365,8 +4365,8 @@ $("saveScheduleBtn").onclick=function(){
   sortSchedule();
   isEditing=false;
   save();
-  $("schedActionsNormal").style.display="flex";
-  $("schedActionsEdit").style.display="none";
+  if ($("schedActionsEdit")) $("schedActionsEdit").style.display="none";
+  if ($("editScheduleBtn")) $("editScheduleBtn").classList.remove("active");
   if($("status")) $("status").textContent="✓ Schedule changes saved successfully.";
   renderList();
   tick();

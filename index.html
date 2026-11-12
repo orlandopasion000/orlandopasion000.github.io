@@ -1179,11 +1179,17 @@
         }
 
         // Update in-memory models if resource hub re-renders
-        if (window.FLAGSHIP_APPS && window.FLAGSHIP_APPS[0]) {
-          window.FLAGSHIP_APPS[0].title = fullTitle;
-          window.FLAGSHIP_APPS[0].badge = num > 0
-            ? '★ FLAGSHIP APP · <span class="oc-live-badge-dot pending"></span> <strong>' + num + ' PENDING</strong>'
-            : '★ FLAGSHIP APP · <span class="oc-live-badge-dot synced"></span> <strong>LIVE SYNCED</strong>';
+        if (window.FLAGSHIP_APPS) {
+          window.FLAGSHIP_APPS.forEach(function(fApp) {
+            if (fApp.isOrlandoChrome) {
+              fApp.title = fullTitle;
+              fApp.badge = num > 0
+                ? '★ FLAGSHIP APP · <span class="oc-live-badge-dot pending"></span> <strong>' + num + ' PENDING</strong>'
+                : '★ FLAGSHIP APP · <span class="oc-live-badge-dot synced"></span> <strong>LIVE SYNCED</strong>';
+            } else if (fApp.isOrlandoRecharge) {
+              fApp.title = 'OrlandoRecharge (Main Version)';
+            }
+          });
         }
         if (window.KNOWN_FILES && window.KNOWN_FILES['orlandochrome']) {
           window.KNOWN_FILES['orlandochrome'].title = fullTitle;
