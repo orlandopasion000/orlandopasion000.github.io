@@ -349,8 +349,66 @@ body[data-clock-theme="solis-gold"] .chrome span{
   cursor: pointer;
   flex-wrap: wrap;
 }
+/* ===== COMMAND CONSOLE: ULTRA-COMPACT, HIGH-TRANSPARENCY MINIMIZED STATE ===== */
+.command-console.minimized {
+  margin: 4px 0 10px;
+  background: rgba(10, 10, 14, 0.30);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  opacity: 0.40;
+  box-shadow: none;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: opacity 0.25s ease, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.command-console.minimized:hover,
+.command-console.minimized:focus-within {
+  opacity: 0.95;
+  background: rgba(10, 10, 14, 0.75);
+  border-color: rgba(217, 185, 92, 0.35);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6), 0 0 14px rgba(217, 185, 92, 0.08);
+}
 .command-console.minimized .console-head {
+  padding: 3px 8px;
+  gap: 4px;
+  background: transparent;
   border-bottom: none;
+  min-height: 26px;
+}
+.command-console.minimized .console-quick-stats {
+  gap: 3px;
+}
+.command-console.minimized .console-mini-pill {
+  padding: 2px 5px;
+  font-size: 0.64rem;
+  font-weight: 600;
+  border-radius: 5px;
+  gap: 3px;
+  background: rgba(255, 255, 255, 0.02);
+  border-color: rgba(255, 255, 255, 0.05);
+  letter-spacing: -0.01em;
+}
+.command-console.minimized .console-mini-pill svg.modern-icon {
+  width: 9px !important;
+  height: 9px !important;
+}
+.command-console.minimized .console-mini-pill .status-dot {
+  width: 5px;
+  height: 5px;
+}
+.command-console.minimized .console-divider {
+  font-size: 0.58rem;
+  opacity: 0.2;
+  margin: 0 1px;
+}
+.command-console.minimized .console-toggle-btn {
+  padding: 2px 6px;
+  font-size: 0.63rem;
+  font-weight: 700;
+  border-radius: 5px;
+  gap: 3px;
+  background: rgba(217, 185, 92, 0.08);
+  border-color: rgba(217, 185, 92, 0.22);
 }
 .console-quick-stats {
   display: flex;
@@ -535,6 +593,20 @@ body.light-theme .command-console {
   border-color: #E2E2E7 !important;
   box-shadow: 0 4px 14px rgba(0,0,0,0.04) !important;
 }
+body.light-theme .command-console.minimized {
+  background: rgba(255, 255, 255, 0.40) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+body.light-theme .command-console.minimized:hover {
+  background: rgba(255, 255, 255, 0.92) !important;
+}
+body.light-theme .app-dist.minimized {
+  background: rgba(255, 255, 255, 0.40) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+body.light-theme .app-dist.minimized:hover {
+  background: rgba(255, 255, 255, 0.92) !important;
+}
 body.light-theme .console-head {
   background: rgba(240, 240, 245, 0.7) !important;
   border-color: #E2E2E7 !important;
@@ -708,14 +780,77 @@ body.light-theme .pill-btn.highlight:hover {
   overflow: hidden;
   max-height: 800px;
 }
+
+/* ===== APP DISTRIBUTION SUITE: ULTRA-COMPACT, HIGH-TRANSPARENCY MINIMIZED STATE ===== */
+.app-dist.minimized {
+  margin-top: 14px;
+  padding: 5px 12px;
+  border-radius: 12px;
+  background: rgba(10, 10, 14, 0.30);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  opacity: 0.40;
+  box-shadow: none;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: opacity 0.25s ease, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.app-dist.minimized:hover,
+.app-dist.minimized:focus-within {
+  opacity: 0.95;
+  background: rgba(10, 10, 14, 0.75);
+  border-color: rgba(217, 185, 92, 0.35);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.6), 0 0 18px rgba(217, 185, 92, 0.08);
+}
+.app-dist.minimized::before {
+  opacity: 0.25;
+}
+.app-dist.minimized .dist-head {
+  margin-bottom: 0;
+  gap: 6px;
+  min-height: 26px;
+}
+.app-dist.minimized .dist-head-left {
+  gap: 7px;
+}
+.app-dist.minimized .dist-or-logo {
+  width: 20px !important;
+  height: 20px !important;
+  border-radius: 5px !important;
+  box-shadow: none !important;
+  border-color: rgba(217, 185, 92, 0.3) !important;
+}
+.app-dist.minimized .dist-title {
+  font-size: 0.74rem !important;
+  font-weight: 700 !important;
+  gap: 5px !important;
+  letter-spacing: -0.01em;
+}
+.app-dist.minimized .dist-badge {
+  font-size: 0.58rem !important;
+  padding: 1px 5px !important;
+  border-radius: 4px !important;
+  letter-spacing: 0.02em;
+}
+.app-dist.minimized .dist-subtitle {
+  font-size: 0.62rem !important;
+  opacity: 0.65;
+  margin-top: 0;
+  line-height: 1.2;
+}
+.app-dist.minimized .dist-toggle-btn {
+  padding: 2px 6px !important;
+  font-size: 0.63rem !important;
+  font-weight: 700 !important;
+  border-radius: 5px !important;
+  gap: 3px !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
 .app-dist.minimized .dist-body {
   max-height: 0;
   opacity: 0;
   margin: 0;
   pointer-events: none;
-}
-.app-dist.minimized {
-  padding-bottom: 14px;
 }
 
 .dist-grid {
@@ -2105,7 +2240,7 @@ body.light-theme .highlight-card .dist-icon{
   </section>
 
   <!-- 2. RECHARGE COMMAND CONSOLE (Compressed, Transparent, Collapsible) -->
-  <div class="command-console" id="controlsConsole">
+  <div class="command-console minimized" id="controlsConsole">
     <!-- Console Status Header (Always Visible, 38px, High-Tech Micro-Bar) -->
     <div class="console-head" id="consoleHead">
       <div class="console-quick-stats">
@@ -2129,8 +2264,8 @@ body.light-theme .highlight-card .dist-icon{
       </div>
 
       <div class="console-head-right">
-        <button type="button" class="console-toggle-btn" id="consoleToggleBtn" title="Toggle Controls View" aria-expanded="true">
-          <span id="consoleToggleIcon">▾</span> <span id="consoleToggleText">Minimize Controls</span>
+        <button type="button" class="console-toggle-btn" id="consoleToggleBtn" title="Expand Controls Bar" aria-expanded="false">
+          <span id="consoleToggleIcon">▸</span> <span id="consoleToggleText">Expand Controls</span>
         </button>
       </div>
     </div>
@@ -2274,7 +2409,7 @@ body.light-theme .highlight-card .dist-icon{
   <ul id="list"></ul>
 
   <!-- 8. APP DISTRIBUTION & COMMAND SUITE (Install, Share, QR, Backup, Publish) -->
-  <section class="app-dist" id="appDistSection" aria-labelledby="distTitle">
+  <section class="app-dist minimized" id="appDistSection" aria-labelledby="distTitle">
     <div class="dist-head">
       <div class="dist-head-left">
         <img src="assets/recharge-icon-96.png" class="dist-or-logo" alt="OR" style="width:36px;height:36px;border-radius:10px;border:1px solid rgba(217,185,92,0.5);box-shadow:0 0 14px rgba(217,185,92,0.3);object-fit:cover;flex-shrink:0;">
@@ -2287,8 +2422,8 @@ body.light-theme .highlight-card .dist-icon{
         </div>
       </div>
       <div class="dist-head-actions">
-        <button type="button" class="dist-toggle-btn" id="distMinimizeBtn" title="Toggle Minimized View" aria-expanded="true">
-          <span id="distMinIcon">▾</span> <span id="distMinText">Minimize</span>
+        <button type="button" class="dist-toggle-btn" id="distMinimizeBtn" title="Toggle Minimized View" aria-expanded="false">
+          <span id="distMinIcon">▸</span> <span id="distMinText">Expand</span>
         </button>
       </div>
     </div>
@@ -4243,13 +4378,11 @@ function updateDistMinUI(isMin) {
 }
 
 if (distMinBtn && distSec) {
-  var savedMin = false;
-  try { savedMin = localStorage.getItem("dra-dist-minimized") === "1"; } catch(e){}
-  updateDistMinUI(savedMin);
+  // Always default to MINIMIZED every time app or website opens
+  updateDistMinUI(true);
   distMinBtn.onclick = function() {
     var nowMin = !distSec.classList.contains("minimized");
     updateDistMinUI(nowMin);
-    try { localStorage.setItem("dra-dist-minimized", nowMin ? "1" : "0"); } catch(e){}
   };
 }
 
@@ -4974,17 +5107,13 @@ function updateConsoleMinUI(isMin) {
 }
 
 if (controlsConsole && consoleToggleBtn) {
-  var savedConsoleMin = false;
-  try {
-    savedConsoleMin = localStorage.getItem("dra-console-minimized") === "1";
-  } catch(e){}
-  updateConsoleMinUI(savedConsoleMin);
+  // Always default to MINIMIZED every time app or website opens
+  updateConsoleMinUI(true);
 
   consoleToggleBtn.onclick = function(e) {
     e.stopPropagation();
     var nowMin = !controlsConsole.classList.contains("minimized");
     updateConsoleMinUI(nowMin);
-    try { localStorage.setItem("dra-console-minimized", nowMin ? "1" : "0"); } catch(e){}
     showToast(nowMin ? "Controls minimized — Schedule moved up" : "Controls expanded", "🗜️");
   };
 
@@ -4993,7 +5122,6 @@ if (controlsConsole && consoleToggleBtn) {
       if (e.target.closest("button")) return;
       var nowMin = !controlsConsole.classList.contains("minimized");
       updateConsoleMinUI(nowMin);
-      try { localStorage.setItem("dra-console-minimized", nowMin ? "1" : "0"); } catch(e){}
     };
   }
 }
