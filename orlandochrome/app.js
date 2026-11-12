@@ -46,12 +46,234 @@
   const LIVE_APP_URL = 'https://orlandopasion000.github.io/orlandochrome/';
   const BLANK_APP_URL = 'https://orlandopasion000.github.io/orlandochrome/?edition=blank';
 
+  // ============================================================================
+  // FUTURISTIC CYBER SVG ICON SYSTEM (Next-Gen UI Glyphs)
+  // ============================================================================
+  const Icons = {
+    urgent: (size = 15) => `
+      <span class="oc-icon oc-icon-urgent" style="width:${size}px;height:${size}px;" title="Urgent">
+        <svg viewBox="0 0 24 24" fill="none">
+          <defs>
+            <linearGradient id="gUrgent" x1="12" y1="22" x2="12" y2="2" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#ff002f"/>
+              <stop offset="55%" stop-color="#ff6a00"/>
+              <stop offset="100%" stop-color="#ffe600"/>
+            </linearGradient>
+            <filter id="fUrgent" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="0" stdDeviation="1.5" flood-color="#ff3300" flood-opacity="0.85"/>
+            </filter>
+          </defs>
+          <path filter="url(#fUrgent)" fill="url(#gUrgent)" d="M12 2C10.6 4.7 9 7 9 10c0 1.4.5 2.5 1.2 3.4-1.2-.2-2.3-.9-3-1.8-.4 1.1-.6 2.3-.6 3.4 0 4 3.3 7 7.4 7s7.4-3 7.4-7c0-3.6-2.4-6.6-4.9-8.8-.5 1.1-.8 2.4-.8 3.7 0 .9.2 1.8.6 2.6C14.3 8.8 13.1 5.3 12 2z"/>
+          <path d="M12 14c-.8 0-1.5.7-1.5 1.5 0 1.4 1.1 2.5 2.5 2.5s2.5-1.1 2.5-2.5c0-.8-.7-1.5-1.5-1.5-.6 0-1.1.3-1.4.8-.2-.5-.6-.8-1.1-.8z" fill="#ffffff" opacity="0.95"/>
+        </svg>
+      </span>`,
+
+    waiting: (size = 15) => `
+      <span class="oc-icon oc-icon-waiting" style="width:${size}px;height:${size}px;" title="Waiting / Cooldown">
+        <svg viewBox="0 0 24 24" fill="none">
+          <defs>
+            <linearGradient id="gChrono" x1="4" y1="2" x2="20" y2="22" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#38bdf8"/>
+              <stop offset="50%" stop-color="#818cf8"/>
+              <stop offset="100%" stop-color="#f59e0b"/>
+            </linearGradient>
+            <filter id="fChrono" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="0" stdDeviation="1.5" flood-color="#38bdf8" flood-opacity="0.7"/>
+            </filter>
+          </defs>
+          <path d="M6 3h12M6 21h12" stroke="url(#gChrono)" stroke-width="2.2" stroke-linecap="round"/>
+          <path filter="url(#fChrono)" d="M7 4c0 4.5 3.5 6.5 5 8-1.5 1.5-5 3.5-5 8h10c0-4.5-3.5-6.5-5-8 1.5-1.5 5-3.5 5-8H7z" stroke="url(#gChrono)" stroke-width="1.8" stroke-linejoin="round" fill="rgba(56, 189, 248, 0.12)"/>
+          <path d="M10 8h4M9.5 17h5" stroke="#f59e0b" stroke-width="1.6" stroke-linecap="round"/>
+          <circle cx="12" cy="12" r="1.5" fill="#38bdf8"/>
+        </svg>
+      </span>`,
+
+    important: (size = 15) => `
+      <span class="oc-icon oc-icon-important" style="width:${size}px;height:${size}px;" title="Important / Pinned">
+        <svg viewBox="0 0 24 24" fill="none">
+          <defs>
+            <linearGradient id="gPin" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#ff2a3a"/>
+              <stop offset="100%" stop-color="#b8000a"/>
+            </linearGradient>
+            <filter id="fPin" x="-25%" y="-25%" width="150%" height="150%">
+              <feDropShadow dx="0" dy="0" stdDeviation="1.8" flood-color="#ff2a3a" flood-opacity="0.8"/>
+            </filter>
+          </defs>
+          <circle cx="12" cy="9" r="7" stroke="rgba(255, 42, 58, 0.35)" stroke-width="1.2" stroke-dasharray="2 2"/>
+          <path filter="url(#fPin)" d="M12 2C8.7 2 6 4.7 6 8c0 4.5 5 10 6 11 1-1 6-6.5 6-11 0-3.3-2.7-6-6-6z" fill="url(#gPin)"/>
+          <circle cx="12" cy="8" r="2.4" fill="#ffffff"/>
+          <path d="M12 19v3.5" stroke="#ff4d58" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </span>`,
+
+    verified: (size = 15) => `
+      <span class="oc-icon oc-icon-verified" style="width:${size}px;height:${size}px;" title="Verified / Done">
+        <svg viewBox="0 0 24 24" fill="none">
+          <defs>
+            <linearGradient id="gHex" x1="2" y1="12" x2="22" y2="12" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#059669"/>
+              <stop offset="50%" stop-color="#10b981"/>
+              <stop offset="100%" stop-color="#34d399"/>
+            </linearGradient>
+            <filter id="fHex" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="0" stdDeviation="1.6" flood-color="#10b981" flood-opacity="0.75"/>
+            </filter>
+          </defs>
+          <path filter="url(#fHex)" d="M12 2l7.5 4.3v7.4L12 21l-7.5-7.3V6.3L12 2z" fill="rgba(16, 185, 129, 0.16)" stroke="url(#gHex)" stroke-width="1.8" stroke-linejoin="round"/>
+          <path d="M8 12l2.8 2.8L16.2 9" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>`,
+
+    check: (size = 13) => `
+      <span class="oc-icon oc-icon-check" style="width:${size}px;height:${size}px;" title="Done">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M5 13l4 4L19 7" stroke="#10b981" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>`,
+
+    copy: (size = 13) => `
+      <span class="oc-icon oc-icon-copy" style="width:${size}px;height:${size}px;" title="Copy to Clipboard">
+        <svg viewBox="0 0 24 24" fill="none">
+          <defs>
+            <linearGradient id="gCopy" x1="0" y1="0" x2="24" y2="24">
+              <stop offset="0%" stop-color="#38bdf8"/>
+              <stop offset="100%" stop-color="#818cf8"/>
+            </linearGradient>
+          </defs>
+          <rect x="8" y="8" width="12" height="13" rx="2.5" stroke="url(#gCopy)" stroke-width="1.8" fill="rgba(56, 189, 248, 0.08)"/>
+          <path d="M16 8V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2h3" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M11 12h6M11 15h4" stroke="#38bdf8" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </span>`,
+
+    checklist: (size = 13) => `
+      <span class="oc-icon oc-icon-checklist" style="width:${size}px;height:${size}px;" title="Add Sub-item">
+        <svg viewBox="0 0 24 24" fill="none">
+          <defs>
+            <linearGradient id="gList" x1="0" y1="0" x2="24" y2="24">
+              <stop offset="0%" stop-color="#a855f7"/>
+              <stop offset="100%" stop-color="#ec4899"/>
+            </linearGradient>
+          </defs>
+          <rect x="3" y="4" width="7" height="7" rx="2" stroke="url(#gList)" stroke-width="1.8" fill="rgba(168, 85, 247, 0.15)"/>
+          <path d="M5 7.5l1.2 1.2L8.5 6" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M13 6.5h8M13 9.5h5M4 16h17M4 20h12" stroke="url(#gList)" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </span>`,
+
+    edit: (size = 13) => `
+      <span class="oc-icon oc-icon-edit" style="width:${size}px;height:${size}px;" title="Edit">
+        <svg viewBox="0 0 24 24" fill="none">
+          <defs>
+            <linearGradient id="gEdit" x1="0" y1="0" x2="24" y2="24">
+              <stop offset="0%" stop-color="#38bdf8"/>
+              <stop offset="100%" stop-color="#0284c7"/>
+            </linearGradient>
+          </defs>
+          <path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z" stroke="url(#gEdit)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="rgba(56, 189, 248, 0.1)"/>
+          <path d="M14 6l4 4" stroke="#38bdf8" stroke-width="1.6" stroke-linecap="round"/>
+          <circle cx="4" cy="20" r="1.2" fill="#38bdf8"/>
+        </svg>
+      </span>`,
+
+    delete: (size = 13) => `
+      <span class="oc-icon oc-icon-delete" style="width:${size}px;height:${size}px;" title="Delete">
+        <svg viewBox="0 0 24 24" fill="none">
+          <defs>
+            <linearGradient id="gDel" x1="12" y1="2" x2="12" y2="22">
+              <stop offset="0%" stop-color="#ff4d58"/>
+              <stop offset="100%" stop-color="#e50914"/>
+            </linearGradient>
+          </defs>
+          <path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2" stroke="url(#gDel)" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" stroke="url(#gDel)" stroke-width="1.8" stroke-linecap="round" fill="rgba(229, 9, 20, 0.08)"/>
+          <path d="M10 11v6M14 11v6" stroke="#ff4d58" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+      </span>`,
+
+    forward: (size = 13) => `
+      <span class="oc-icon oc-icon-forward" style="width:${size}px;height:${size}px;" title="Forward">
+        <svg viewBox="0 0 24 24" fill="none">
+          <defs>
+            <linearGradient id="gFwd" x1="0" y1="0" x2="24" y2="24">
+              <stop offset="0%" stop-color="#00f2fe"/>
+              <stop offset="100%" stop-color="#4facfe"/>
+            </linearGradient>
+          </defs>
+          <path d="M13 5l7 7-7 7M20 12H9a5 5 0 00-5 5v2" stroke="url(#gFwd)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="17" cy="12" r="1.2" fill="#00f2fe"/>
+        </svg>
+      </span>`,
+
+    note: (size = 13) => `
+      <span class="oc-icon oc-icon-note" style="width:${size}px;height:${size}px;" title="Note">
+        <svg viewBox="0 0 24 24" fill="none">
+          <defs>
+            <linearGradient id="gNote" x1="0" y1="0" x2="24" y2="24">
+              <stop offset="0%" stop-color="#ff4d58"/>
+              <stop offset="100%" stop-color="#a855f7"/>
+            </linearGradient>
+          </defs>
+          <path d="M20 12c0 4.4-3.6 8-8 8-1.5 0-2.9-.4-4.1-1.1L3 20l1.2-4.4C3.5 14.4 3 13.2 3 12c0-4.4 3.6-8 8-8s9 3.6 9 8z" stroke="url(#gNote)" stroke-width="1.8" stroke-linejoin="round" fill="rgba(229, 9, 20, 0.1)"/>
+          <path d="M8 12h.01M12 12h.01M16 12h.01" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round"/>
+        </svg>
+      </span>`,
+
+    undo: (size = 13) => `
+      <span class="oc-icon oc-icon-undo" style="width:${size}px;height:${size}px;" title="Undo">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M3 10h10a6 6 0 016 6v1" stroke="#ff4d58" stroke-width="2" stroke-linecap="round"/>
+          <path d="M7 6L3 10l4 4" stroke="#ff4d58" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>`,
+
+    redo: (size = 13) => `
+      <span class="oc-icon oc-icon-redo" style="width:${size}px;height:${size}px;" title="Redo">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M21 10H11a6 6 0 00-6 6v1" stroke="#ff4d58" stroke-width="2" stroke-linecap="round"/>
+          <path d="M17 6l4 4-4 4" stroke="#ff4d58" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>`,
+
+    trashVault: (size = 14) => `
+      <span class="oc-icon oc-icon-vault" style="width:${size}px;height:${size}px;" title="Recently Deleted Vault">
+        <svg viewBox="0 0 24 24" fill="none">
+          <defs>
+            <linearGradient id="gVault" x1="0" y1="0" x2="24" y2="24">
+              <stop offset="0%" stop-color="#ff4d58"/>
+              <stop offset="100%" stop-color="#f59e0b"/>
+            </linearGradient>
+          </defs>
+          <path d="M4 7h16M10 11v6M14 11v6M5 7l1 13a2 2 0 002 2h8a2 2 0 002-2l1-13M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3" stroke="url(#gVault)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="rgba(255, 77, 88, 0.12)"/>
+          <circle cx="12" cy="14" r="1.5" fill="#f59e0b"/>
+        </svg>
+      </span>`,
+
+    restore: (size = 13) => `
+      <span class="oc-icon oc-icon-restore" style="width:${size}px;height:${size}px;" title="Restore">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M4 12v-2a8 8 0 0114.9-4M20 12v2a8 8 0 01-14.9 4" stroke="#10b981" stroke-width="2" stroke-linecap="round"/>
+          <path d="M4 6v4h4M20 18v-4h-4" stroke="#10b981" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>`,
+
+    shake: (size = 32) => `
+      <span class="oc-icon oc-icon-shake" style="width:${size}px;height:${size}px;">
+        <svg viewBox="0 0 24 24" fill="none">
+          <rect x="7" y="3" width="10" height="18" rx="2.5" stroke="#38bdf8" stroke-width="1.8" fill="rgba(56, 189, 248, 0.1)"/>
+          <circle cx="12" cy="17.5" r="1" fill="#38bdf8"/>
+          <path d="M3 9c-.7 1-.7 2.5 0 3.5M21 9c.7 1 .7 2.5 0 3.5M1 7c-1 1.5-1 4 0 5.5M23 7c1 1.5 1 4 0 5.5" stroke="#ff4d58" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+      </span>`
+  };
+
   // Priority & Color Reactions (Messenger / Discord Style)
   const REACTIONS_LIST = [
-    { key: 'urgent',    icon: '🔥', label: 'Urgent',    cls: 'react-urgent' },
-    { key: 'waiting',   icon: '⏳', label: 'Waiting',   cls: 'react-waiting' },
-    { key: 'important', icon: '📌', label: 'Important', cls: 'react-important' },
-    { key: 'verified',  icon: '✅', label: 'Verified',  cls: 'react-verified' }
+    { key: 'urgent',    icon: Icons.urgent(15),    label: 'Urgent',    cls: 'react-urgent' },
+    { key: 'waiting',   icon: Icons.waiting(15),   label: 'Waiting',   cls: 'react-waiting' },
+    { key: 'important', icon: Icons.important(15), label: 'Important', cls: 'react-important' },
+    { key: 'verified',  icon: Icons.verified(15),  label: 'Verified',  cls: 'react-verified' }
   ];
   const REACTIONS_MAP = Object.fromEntries(REACTIONS_LIST.map(r => [r.key, r]));
 
@@ -183,6 +405,8 @@
   // Application State
   const state = {
     profiles: [],
+    trash: [], // Recently Deleted Notes Vault (30-day soft-delete)
+
     activeProfileId: IS_BLANK_EDITION ? "b_slot_1" : "p_tb_4",
     currentFilter: "all",      // "all" | "pending" | "timers"
     searchQuery: "",
@@ -273,15 +497,467 @@
     return `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><radialGradient id='g' cx='30%' cy='25%' r='75%'><stop offset='0%' stop-color='%23ff4d58'/><stop offset='50%' stop-color='%23b8000a'/><stop offset='100%' stop-color='%231a0002'/></radialGradient></defs><rect width='100' height='100' rx='50' fill='url(%23g)'/><text x='50' y='66' font-size='46' font-weight='800' text-anchor='middle' fill='%23ffffff' font-family='sans-serif'>${initial}</text></svg>`;
   }
 
-  // Toast notification
+
+  // Suggestion #4: Recently Deleted / Trash Vault
+  function addToTrash(note, profile) {
+    if (!state.trash) state.trash = [];
+    state.trash.unshift({
+      id: uid(),
+      profileId: profile.id,
+      profileName: profile.name,
+      note: JSON.parse(JSON.stringify(note)),
+      deletedAt: now(),
+      expiresAt: now() + 30 * 24 * 60 * 60 * 1000 // 30-day safety vault
+    });
+    // Prune beyond 100 items or older than 30 days
+    const cur = now();
+    state.trash = state.trash.filter(item => item.expiresAt > cur).slice(0, 100);
+    saveState();
+    updateTrashBadge();
+  }
+
+  function restoreFromTrash(trashId) {
+    if (!state.trash) return;
+    const idx = state.trash.findIndex(t => t.id === trashId);
+    if (idx === -1) return;
+    const item = state.trash.splice(idx, 1)[0];
+    const p = getProfile(item.profileId) || getProfile(state.activeProfileId);
+    if (p) {
+      if (!p.notes) p.notes = [];
+      p.notes.push(item.note);
+      saveState();
+      renderSidebar();
+      renderMainChat();
+      showToast(`↺ Restored note to ${p.name}`);
+      setTimeout(() => {
+        const card = $(`#noteCard_${item.note.id}`);
+        if (card) {
+          card.classList.add('note-restored-highlight');
+          card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      }, 80);
+    }
+    updateTrashBadge();
+  }
+
+  function purgeFromTrash(trashId) {
+    if (!state.trash) return;
+    state.trash = state.trash.filter(t => t.id !== trashId);
+    saveState();
+    updateTrashBadge();
+  }
+
+  function clearAllTrash() {
+    state.trash = [];
+    saveState();
+    updateTrashBadge();
+    showToast('🗑️ Cleared Trash Vault');
+  }
+
+  function updateTrashBadge() {
+    const badge = $('#headerTrashCount');
+    const count = (state.trash || []).length;
+    if (badge) {
+      badge.textContent = count;
+      badge.style.display = count > 0 ? 'inline-block' : 'none';
+    }
+  }
+
+  function openTrashVaultModal() {
+    const existing = $('#trashVaultBackdrop');
+    if (existing) existing.remove();
+
+    const backdrop = document.createElement('div');
+    backdrop.className = 'rename-dialog-backdrop';
+    backdrop.id = 'trashVaultBackdrop';
+    backdrop.style.zIndex = '9999';
+
+    const renderVault = () => {
+      const items = state.trash || [];
+      backdrop.innerHTML = `
+        <div class="trash-vault-modal">
+          <div class="trash-vault-header">
+            <div class="trash-vault-title-wrap">
+              ${Icons.trashVault(22)}
+              <div>
+                <h3 class="trash-vault-title">Recently Deleted Vault</h3>
+                <div class="trash-vault-subtitle">30-day soft-delete safety vault · Restore messages anytime with 1 click</div>
+              </div>
+            </div>
+            <button type="button" class="btn-banner-clear" id="btnCloseTrashVault" style="font-size:1.2rem; cursor:pointer;">✕</button>
+          </div>
+
+          <div class="trash-vault-list">
+            ${items.length === 0 ? `
+              <div class="trash-vault-empty">
+                ${Icons.trashVault(46)}
+                <h4>Trash Vault is Empty</h4>
+                <p style="font-size:0.8rem; margin:4px 0 0;">Accidentally deleted notes will be safely archived here for 30 days.</p>
+              </div>
+            ` : items.map(item => {
+              const diffMin = Math.max(1, Math.round((now() - item.deletedAt) / 60000));
+              const timeLabel = diffMin < 60 ? `${diffMin}m ago` : `${Math.round(diffMin/60)}h ago`;
+              return `
+                <div class="trash-item-card" data-tid="${item.id}">
+                  <div class="trash-item-left">
+                    <span class="trash-item-profile-badge">${esc(item.profileName)}</span>
+                    <div class="trash-item-text">${esc(item.note.text || (item.note.image ? '[Attached Screenshot]' : '[Voice Note]'))}</div>
+                    <div class="trash-item-meta">Deleted ${timeLabel} · Originally ${formatNoteDateTime(item.note.createdAt)}</div>
+                  </div>
+                  <div class="trash-item-actions">
+                    <button type="button" class="btn-trash-restore" data-restore-tid="${item.id}" title="Restore note back to profile">
+                      ${Icons.restore(13)} <span>Restore</span>
+                    </button>
+                    <button type="button" class="btn-trash-purge" data-purge-tid="${item.id}" title="Delete forever">
+                      ✕
+                    </button>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+
+          <div class="trash-vault-footer">
+            <span style="font-size:0.75rem; color:#64748b;">${items.length} item${items.length === 1 ? '' : 's'} archived</span>
+            ${items.length > 0 ? `
+              <button type="button" class="btn-trash-purge" id="btnClearAllTrash" style="color:#ff4d58; border-color:rgba(255,77,88,0.3);">
+                Clear All Trash
+              </button>
+            ` : ''}
+          </div>
+        </div>
+      `;
+
+      const close = () => { if (backdrop.parentNode) backdrop.parentNode.removeChild(backdrop); };
+      $('#btnCloseTrashVault', backdrop).onclick = close;
+      const clearBtn = $('#btnClearAllTrash', backdrop);
+      if (clearBtn) {
+        clearBtn.onclick = () => {
+          if (confirm('Permanently delete all items in the Trash Vault?')) {
+            clearAllTrash();
+            renderVault();
+          }
+        };
+      }
+
+      $$('.btn-trash-restore', backdrop).forEach(btn => {
+        btn.onclick = () => {
+          const tid = btn.dataset.restoreTid;
+          restoreFromTrash(tid);
+          renderVault();
+        };
+      });
+
+      $$('.btn-trash-purge', backdrop).forEach(btn => {
+        btn.onclick = () => {
+          const tid = btn.dataset.purgeTid;
+          purgeFromTrash(tid);
+          renderVault();
+        };
+      });
+    };
+
+    document.body.appendChild(backdrop);
+    backdrop.onclick = (e) => {
+      if (e.target === backdrop) {
+        if (backdrop.parentNode) backdrop.parentNode.removeChild(backdrop);
+      }
+    };
+    renderVault();
+  }
+
+  // Suggestion #5: Native iOS Accelerometer Shake to Undo
+  function initShakeToUndo() {
+    let lastX = null, lastY = null, lastZ = null;
+    let lastShakeTime = 0;
+
+    window.addEventListener('devicemotion', (e) => {
+      const acc = e.accelerationIncludingGravity || e.acceleration;
+      if (!acc) return;
+      const cur = now();
+      if (cur - lastShakeTime < 2200) return; // Debounce 2.2s
+
+      const { x, y, z } = acc;
+      if (lastX !== null && x !== null) {
+        const delta = Math.abs(x - lastX) + Math.abs(y - lastY) + Math.abs(z - lastZ);
+        if (delta > 25) { // Sensitivity threshold
+          lastShakeTime = cur;
+          if (historyMgr && historyMgr.canUndo()) {
+            showShakeUndoModal();
+          }
+        }
+      }
+      lastX = x; lastY = y; lastZ = z;
+    }, { passive: true });
+  }
+
+  function showShakeUndoModal() {
+    const existing = $('#shakeUndoModalBackdrop');
+    if (existing) return;
+
+    const backdrop = document.createElement('div');
+    backdrop.className = 'rename-dialog-backdrop';
+    backdrop.id = 'shakeUndoModalBackdrop';
+    backdrop.style.zIndex = '9999';
+    backdrop.innerHTML = `
+      <div class="rename-dialog shake-undo-dialog" style="max-width:320px; text-align:center;">
+        <div style="margin-bottom:10px;">${Icons.shake(36)}</div>
+        <h3 style="margin:0 0 6px;">Shake Detected</h3>
+        <p style="font-size:0.85rem; color:#94a3b8; margin:0 0 16px;">Undo last message action?</p>
+        <div class="rename-actions" style="justify-content:center; gap:10px;">
+          <button type="button" class="btn-banner-clear" id="btnCancelShake">Cancel</button>
+          <button type="button" class="btn-composer-send" id="btnConfirmShake" style="padding:8px 20px;">
+            ${Icons.undo(14)} <span>Undo</span>
+          </button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(backdrop);
+    const close = () => { if (backdrop.parentNode) backdrop.parentNode.removeChild(backdrop); };
+    $('#btnCancelShake', backdrop).onclick = close;
+    $('#btnConfirmShake', backdrop).onclick = () => {
+      close();
+      if (historyMgr) historyMgr.undo();
+    };
+  }
+
+  // Toast notification (Interactive action toast + regular toast)
   function showToast(msg) {
     const el = $('#toast');
     if (!el) return;
+    clearTimeout(el._timer);
+    clearInterval(el._interval);
+    el.classList.remove('has-action');
     el.textContent = msg;
     el.classList.add('show');
-    clearTimeout(el._timer);
     el._timer = setTimeout(() => el.classList.remove('show'), 2600);
   }
+
+  function showActionToast({ message, actionText = '↺ Undo', onAction, duration = 6500 }) {
+    const el = $('#toast');
+    if (!el) return;
+    clearTimeout(el._timer);
+    clearInterval(el._interval);
+
+    let remaining = Math.round(duration / 1000);
+    el.innerHTML = `
+      <span class="toast-msg">${esc(message)}</span>
+      <button type="button" class="toast-action-btn" id="toastActionBtn">${esc(actionText)} (${remaining}s)</button>
+    `;
+    el.classList.add('show', 'has-action');
+
+    const btn = $('#toastActionBtn', el);
+    if (btn) {
+      btn.onclick = (e) => {
+        e.stopPropagation();
+        clearTimeout(el._timer);
+        clearInterval(el._interval);
+        el.classList.remove('show', 'has-action');
+        if (typeof onAction === 'function') onAction();
+      };
+    }
+
+    el._interval = setInterval(() => {
+      remaining -= 1;
+      if (btn && remaining > 0) {
+        btn.textContent = `${actionText} (${remaining}s)`;
+      } else {
+        clearInterval(el._interval);
+      }
+    }, 1000);
+
+    el._timer = setTimeout(() => {
+      clearInterval(el._interval);
+      el.classList.remove('show', 'has-action');
+    }, duration);
+  }
+
+  // Multi-Action Reversible Command History Stack (Undo & Redo Engine)
+  const historyMgr = {
+    undoStack: [],
+    redoStack: [],
+    maxDepth: 50,
+
+    record(action) {
+      if (!action || !action.type) return;
+      this.undoStack.push(action);
+      if (this.undoStack.length > this.maxDepth) this.undoStack.shift();
+      this.redoStack = []; // New user actions invalidate the redo branch
+      this.updateUI();
+    },
+
+    canUndo() {
+      return this.undoStack.length > 0;
+    },
+
+    canRedo() {
+      return this.redoStack.length > 0;
+    },
+
+    undo() {
+      if (!this.canUndo()) {
+        showToast('Nothing to undo');
+        return false;
+      }
+      const action = this.undoStack.pop();
+      this.apply(action, true);
+      this.redoStack.push(action);
+      if (window.soundMgr) {
+        if (typeof window.soundMgr.playClickSoft === 'function') window.soundMgr.playClickSoft();
+        else if (typeof window.soundMgr.playClick === 'function') window.soundMgr.playClick();
+      }
+      this.updateUI();
+      return true;
+    },
+
+    redo() {
+      if (!this.canRedo()) {
+        showToast('Nothing to redo');
+        return false;
+      }
+      const action = this.redoStack.pop();
+      this.apply(action, false);
+      this.undoStack.push(action);
+      if (window.soundMgr) {
+        if (typeof window.soundMgr.playClickSoft === 'function') window.soundMgr.playClickSoft();
+        else if (typeof window.soundMgr.playClick === 'function') window.soundMgr.playClick();
+      }
+      this.updateUI();
+      return true;
+    },
+
+    apply(action, isUndo) {
+      const p = getProfile(action.profileId);
+      if (!p) return;
+
+      // Auto-switch active profile to where the action occurred
+      if (state.activeProfileId !== action.profileId) {
+        state.activeProfileId = action.profileId;
+      }
+
+      switch (action.type) {
+        case 'DELETE_NOTE': {
+          if (isUndo) {
+            if (!p.notes) p.notes = [];
+            const insertIdx = (typeof action.index === 'number' && action.index >= 0 && action.index <= p.notes.length)
+              ? action.index
+              : p.notes.length;
+            p.notes.splice(insertIdx, 0, JSON.parse(JSON.stringify(action.note)));
+            showToast(`↺ Restored note: "${(action.note.text || 'Message').slice(0, 24)}"`);
+            setTimeout(() => {
+              const card = $(`#noteCard_${action.note.id}`);
+              if (card) {
+                card.classList.add('note-restored-highlight');
+                card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+              }
+            }, 80);
+          } else {
+            p.notes = (p.notes || []).filter(n => n.id !== action.note.id);
+            showToast('↻ Redid delete');
+          }
+          break;
+        }
+
+        case 'ADD_NOTE': {
+          if (isUndo) {
+            p.notes = (p.notes || []).filter(n => n.id !== action.note.id);
+            showToast('↺ Undid new note');
+          } else {
+            if (!p.notes) p.notes = [];
+            p.notes.push(JSON.parse(JSON.stringify(action.note)));
+            showToast('↻ Redid note creation');
+            setTimeout(() => {
+              const card = $(`#noteCard_${action.note.id}`);
+              if (card) {
+                card.classList.add('note-restored-highlight');
+                card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+              }
+            }, 80);
+          }
+          break;
+        }
+
+        case 'EDIT_NOTE': {
+          const note = (p.notes || []).find(n => n.id === action.noteId);
+          if (note) {
+            if (isUndo) {
+              note.text = action.oldText;
+              note.editedAt = action.oldEditedAt;
+              showToast('↺ Reverted note edit');
+            } else {
+              note.text = action.newText;
+              note.editedAt = action.newEditedAt;
+              showToast('↻ Redid note edit');
+            }
+          }
+          break;
+        }
+
+        case 'STATUS_NOTE': {
+          if (isUndo) {
+            p.statusNote = action.oldNote ? JSON.parse(JSON.stringify(action.oldNote)) : null;
+            showToast(p.statusNote ? '↺ Restored status note' : '↺ Reverted status note');
+          } else {
+            p.statusNote = action.newNote ? JSON.parse(JSON.stringify(action.newNote)) : null;
+            showToast(p.statusNote ? '↻ Redid status note' : '↻ Redid clear status note');
+          }
+          break;
+        }
+
+        case 'STICKY_NOTE': {
+          if (isUndo) {
+            p.stickyNote = action.oldSticky || '';
+            showToast(p.stickyNote ? '↺ Restored sticky note' : '↺ Reverted sticky note');
+          } else {
+            p.stickyNote = action.newSticky || '';
+            showToast(p.stickyNote ? '↻ Redid sticky note' : '↻ Redid clear sticky note');
+          }
+          break;
+        }
+      }
+
+      if (countPending(p) === 0) {
+        p.isPinned = false;
+        p.pinnedAt = null;
+      }
+      if (!hasMessages(p)) {
+        p.isUnread = false;
+      }
+
+      saveState();
+      renderSidebar();
+      renderMainChat();
+    },
+
+    updateUI() {
+      const uBtn = $('#btnUndoNote');
+      const rBtn = $('#btnRedoNote');
+      const canU = this.canUndo();
+      const canR = this.canRedo();
+      if (uBtn) {
+        uBtn.disabled = !canU;
+        uBtn.classList.toggle('disabled', !canU);
+        if (canU) {
+          const last = this.undoStack[this.undoStack.length - 1];
+          uBtn.title = `Undo: ${last.type.toLowerCase().replace('_', ' ')} (Ctrl+Z)`;
+        } else {
+          uBtn.title = 'Nothing to undo (Ctrl+Z)';
+        }
+      }
+      if (rBtn) {
+        rBtn.disabled = !canR;
+        rBtn.classList.toggle('disabled', !canR);
+        if (canR) {
+          const next = this.redoStack[this.redoStack.length - 1];
+          rBtn.title = `Redo: ${next.type.toLowerCase().replace('_', ' ')} (Ctrl+Y)`;
+        } else {
+          rBtn.title = 'Nothing to redo (Ctrl+Y)';
+        }
+      }
+    }
+  };
+  window.historyMgr = historyMgr;
+  window.Icons = Icons;
 
   // Enhancement #3: Auto-Linkify URLs inside message text & sticky notes
   function linkifyText(raw) {
@@ -956,6 +1632,10 @@
       }
     }
 
+    try {
+      const savedTrash = localStorage.getItem('orlandochrome_trash');
+      if (savedTrash) state.trash = JSON.parse(savedTrash);
+    } catch (e) {}
     let loaded = null;
     if (raw) {
       try {
@@ -1067,6 +1747,7 @@
   function persistLocalOnly() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state.profiles));
+      localStorage.setItem('orlandochrome_trash', JSON.stringify(state.trash || []));
       updateDocumentTitle();
     } catch (e) {
       console.error('Failed to save state:', e);
@@ -1314,7 +1995,7 @@
         } catch (e) {}
         renderClockBox();
         scheduleCloudPush();
-        showToast(`⌚ Clock Style: ${DRA_THEME_NAMES[nextTheme] || nextTheme}`);
+        // clock style toggled silently
       };
     }
   }
@@ -1426,19 +2107,36 @@
     });
   }
 
-  // Select Profile while ALWAYS keeping the Left Profile List & Right Message Pane Side-by-Side
+  // Select Profile with Messenger-Style Full-Width View Switcher on Mobile (<= 768px)
   function openMobileChatWithSlide(profileId) {
     if (profileId) {
       state.activeProfileId = profileId;
     }
-    document.body.classList.remove('mobile-chat-open');
+    if (window.innerWidth <= 768) {
+      document.body.classList.add('mobile-chat-open');
+      try { localStorage.setItem('orlandochrome_mobile_view', 'chat'); } catch (e) {}
+    }
+    if (window.soundMgr) {
+      if (typeof window.soundMgr.playClickSoft === 'function') window.soundMgr.playClickSoft();
+      else if (typeof window.soundMgr.playClick === 'function') window.soundMgr.playClick();
+    }
     renderSidebar();
     renderMainChat();
+    setTimeout(() => {
+      const stream = $('#notesStream');
+      if (stream) stream.scrollTop = stream.scrollHeight;
+    }, 50);
   }
 
   function closeMobileChatWithSlide() {
     document.body.classList.remove('mobile-chat-open');
+    try { localStorage.setItem('orlandochrome_mobile_view', 'inbox'); } catch (e) {}
+    if (window.soundMgr) {
+      if (typeof window.soundMgr.playClickSoft === 'function') window.soundMgr.playClickSoft();
+      else if (typeof window.soundMgr.playClick === 'function') window.soundMgr.playClick();
+    }
     renderSidebar();
+    renderMainChat();
   }
 
   // Step to Previous (-1) or Next (+1) Chrome Profile (Paging Gesture / Header Tap)
@@ -1598,14 +2296,15 @@
           <div class="profile-text-content">
             <div class="profile-row-header">
               <span class="profile-name">${esc(p.name)}</span>
-              <div class="profile-header-right">
-                ${canUnread ? `<button type="button" class="unread-toggle-btn ${isUnread ? 'active' : ''}" data-unread-id="${p.id}" title="${isUnread ? 'Mark as Read' : 'Mark as Unread (Bookmark)'}">●</button>` : ''}
-                <span class="profile-shortcut">${esc(p.winShortcut)}</span>
-              </div>
+              ${canUnread ? `
+                <div class="profile-header-right">
+                  <button type="button" class="unread-toggle-btn ${isUnread ? 'active' : ''}" data-unread-id="${p.id}" title="${isUnread ? 'Mark as Read' : 'Mark as Unread (Bookmark)'}">●</button>
+                </div>
+              ` : ''}
             </div>
             <div class="profile-row-sub">
               <div class="profile-snippet ${snippetClass}">${snippetHtml}</div>
-              ${pendingCount > 0 ? `<span class="badge-pending-count">${pendingCount}</span>` : ''}
+              ${pendingCount > 0 ? `<button type="button" class="badge-pending-count" data-pending-id="${p.id}" title="${pendingCount} pending task${pendingCount > 1 ? 's' : ''} · Click to review & check off">${pendingCount}</button>` : ''}
               ${isTimer ? `<span class="badge-timer-pill">⏳ ${formatRemainingShort(p.timerUntil - cur)}</span>` : ''}
               ${isReset ? `<span class="badge-reset-pill">${renderGreenWhiteOrb()}<span class="reset-pill-text">Reset</span></span>` : ''}
             </div>
@@ -1617,10 +2316,32 @@
     // Attach profile avatar & note bubble click to open Messenger Note
     $$('.profile-avatar-wrap', list).forEach(wrap => {
       wrap.onclick = (e) => {
+        if (window.innerWidth <= 768) {
+          // On mobile: 1 tap anywhere opens that profile's chat view!
+          const pid = wrap.dataset.pid;
+          openMobileChatWithSlide(pid);
+          return;
+        }
         e.stopPropagation();
         const pid = wrap.dataset.pid;
         const prof = getProfile(pid);
         if (prof) promptMessengerNote(prof);
+      };
+    });
+
+    // Attach pending count badge click to open Mini Task Popover
+    $$('.badge-pending-count', list).forEach(badge => {
+      badge.onclick = (e) => {
+        if (window.innerWidth <= 768) {
+          // On mobile: 1 tap anywhere opens that profile's chat view!
+          const pid = badge.dataset.pendingId;
+          openMobileChatWithSlide(pid);
+          return;
+        }
+        e.stopPropagation();
+        const pid = badge.dataset.pendingId;
+        const prof = getProfile(pid);
+        if (prof) showPendingTasksPopover(prof, badge);
       };
     });
 
@@ -1669,15 +2390,47 @@
       };
     });
 
-    // Attach item click & right-click (contextmenu) handlers
+    // Attach item click & fast touch (1-tap on iOS) handlers
     $$('.profile-item', list).forEach(item => {
-      item.onclick = () => {
+      const handleSelect = (e) => {
         if (item.dataset.justSwiped === '1') {
           item.dataset.justSwiped = '0';
           return;
         }
+        if (e && e.target && e.target.closest('.unread-toggle-btn')) return;
         openMobileChatWithSlide(item.dataset.id);
       };
+
+      item.onclick = handleSelect;
+
+      // Fast iOS touch-release detection (bypasses 300ms delay & iOS hover double-tap)
+      let tStartX = 0;
+      let tStartY = 0;
+      let tStartTime = 0;
+
+      item.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+          tStartX = e.touches[0].clientX;
+          tStartY = e.touches[0].clientY;
+          tStartTime = Date.now();
+        }
+      }, { passive: true });
+
+      item.addEventListener('touchend', (e) => {
+        if (e.changedTouches.length === 1 && tStartX > 0) {
+          const dx = Math.abs(e.changedTouches[0].clientX - tStartX);
+          const dy = Math.abs(e.changedTouches[0].clientY - tStartY);
+          const dt = Date.now() - tStartTime;
+          tStartX = 0;
+          tStartY = 0;
+          if (dx < 12 && dy < 12 && dt < 450) {
+            if (window.innerWidth <= 768) {
+              if (e.target && e.target.closest('.unread-toggle-btn')) return;
+              openMobileChatWithSlide(item.dataset.id);
+            }
+          }
+        }
+      }, { passive: true });
       item.oncontextmenu = (e) => {
         const prof = getProfile(item.dataset.id);
         if (!prof || !hasMessages(prof)) return;
@@ -1724,53 +2477,54 @@
     const w = state.wispr;
 
     main.innerHTML = `
-      <!-- Header with Bigger Picture (60px), Prev/Next Paging, Sticky Note, Unread Bookmark & Rename Action -->
+      <!-- Header with Back to Profiles (Mobile), Enlarged Profile Picture, Profile Stepper & Actions -->
       <header class="chat-header" id="chatHeaderBar">
+        <button type="button" class="btn-mobile-back" id="btnMobileBackToList" title="Back to All Profiles">
+          <span class="back-chevron">‹</span>
+          <span class="back-text">Profiles</span>
+          ${(state.profiles.reduce((sum, pr) => sum + countPending(pr), 0)) > 0 ? `<span class="back-pending-badge">${state.profiles.reduce((sum, pr) => sum + countPending(pr), 0)}</span>` : ''}
+        </button>
+
         <div class="chat-header-profile">
-          <div class="chat-header-avatar-wrap" id="headerAvatarWrap" title="${statusNote ? `💭 24h Note: "${esc(statusNote.text)}" (${formatRemainingNoteTime(statusNote.expiresAt - cur)}) · Tap to edit` : 'Tap avatar to add 24h Messenger Note'}">
-            ${statusNote ? `
-              <div class="header-note-bubble" id="headerNoteBubble" title="Tap to view/edit note">
-                <span class="header-note-text">${esc(statusNote.text)}</span>
-              </div>
-            ` : `
-              <div class="header-note-add-badge" id="headerNoteAddBadge" title="Add 24h Note">
-                <span>💭+</span>
-              </div>
-            `}
-            <img src="${avatarSrc}" class="chat-header-avatar" id="headerAvatarImg" alt="${esc(p.name)}">
-          </div>
-          <div class="chat-header-info">
-            <div class="chat-header-title">
-              <span>Chrome #${p.chromeNo}: ${esc(p.name)}</span>
-              ${isUnread ? `<span class="header-unread-pill">● UNREAD</span>` : ''}
-              ${statusNote ? `
-                <span class="header-note-pill" id="headerNotePill" title="Active 24-Hour Note · Tap to edit">
-                  💭 "${esc(statusNote.text)}" <span class="note-pill-timer">· ${formatRemainingNoteTime(statusNote.expiresAt - cur)}</span>
-                </span>
-              ` : ''}
-            </div>
-            <div class="chat-header-meta">
-              ${esc(p.email)} · Taskbar Slot #${p.taskbarSlot}
+          <div class="chat-header-avatar-wrap" id="headerAvatarWrap" role="button" tabindex="0" title="Click to change profile picture manually (Upload photo)">
+            <img src="${avatarSrc}" class="chat-header-avatar" id="headerAvatarImg" alt="Profile Picture">
+            ${isUnread ? `<span class="header-avatar-unread-dot" title="Unread Dot"></span>` : ''}
+            <div class="header-avatar-upload-badge" title="Click to upload new profile photo">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                <circle cx="12" cy="13" r="4"></circle>
+              </svg>
             </div>
           </div>
           <!-- Quick Prev / Next Profile Stepper Buttons -->
-          <div class="header-profile-stepper" title="Tap or swipe header left/right to switch profiles">
+          <div class="header-profile-stepper" title="Tap to switch profiles (‹ previous / › next)">
             <button type="button" class="btn-step-profile" id="btnPrevProfile" title="Previous Chrome Profile">‹</button>
             <button type="button" class="btn-step-profile" id="btnNextProfile" title="Next Chrome Profile">›</button>
+          </div>
+          <div class="chat-header-mobile-title">
+            <span class="mobile-header-name">${esc(p.name)}</span>
+            <span class="mobile-header-slot">${esc(p.winShortcut || ('W+' + p.taskbarSlot))}</span>
           </div>
         </div>
 
         <div class="chat-header-actions">
+          <button type="button" class="btn-header-action btn-header-undo ${historyMgr.canUndo() ? '' : 'disabled'}" id="btnUndoNote" title="Undo last message action (Ctrl+Z)" ${historyMgr.canUndo() ? '' : 'disabled'}>
+            ${Icons.undo(13)} <span>Undo</span>
+          </button>
+          <button type="button" class="btn-header-action btn-header-redo ${historyMgr.canRedo() ? '' : 'disabled'}" id="btnRedoNote" title="Redo last message action (Ctrl+Y)" ${historyMgr.canRedo() ? '' : 'disabled'}>
+            ${Icons.redo(13)} <span>Redo</span>
+          </button>
+          <button type="button" class="btn-header-action btn-header-trash" id="btnOpenTrashVault" title="Recently Deleted Vault (30-day restore)">
+            ${Icons.trashVault(14)} <span>Trash</span>
+            <span class="trash-badge-count" id="headerTrashCount" style="${(state.trash || []).length > 0 ? '' : 'display:none;'}">${(state.trash || []).length}</span>
+          </button>
           ${IS_BLANK_EDITION ? `
             <button class="btn-header-action" id="btnAddSlotBlank" title="Add another taskbar Chrome profile slot">
               ➕ Add Profile
             </button>
           ` : ''}
-          <button class="btn-header-action ${statusNote ? 'note-active' : ''}" id="btnMessengerNote" title="Messenger 24-Hour Note (lasts 24 hours)">
-            💭 ${statusNote ? 'Edit Note' : 'Add Note'}
-          </button>
           <button class="btn-header-action ${p.stickyNote ? 'sticky-active' : ''}" id="btnStickyNote" title="Set a permanent sticky header note for ${esc(p.name)}">
-            📌 ${p.stickyNote ? 'Edit Sticky' : 'Sticky Note'}
+            ${Icons.important(13)} <span>${p.stickyNote ? 'Sticky' : 'Sticky Note'}</span>
           </button>
           ${canUnread ? `
             <button class="btn-header-action ${isUnread ? 'unread-active' : ''}" id="btnToggleUnreadHeader" title="Bookmark this profile as Unread (or right-click in sidebar)">
@@ -1778,7 +2532,7 @@
             </button>
           ` : ''}
           <button class="btn-header-action" id="btnRenameProfile">
-            ✏️ Rename
+            ${Icons.edit(13)} <span>Rename</span>
           </button>
         </div>
       </header>
@@ -1802,12 +2556,17 @@
       ${p.stickyNote ? `
         <div class="profile-sticky-banner" id="profileStickyBanner">
           <div class="sticky-banner-left">
-            <span class="sticky-pin-tag">📌 STICKY</span>
+            <span class="sticky-pin-tag">
+              ${Icons.important(13)}
+              <span>STICKY</span>
+            </span>
             <span class="sticky-banner-text">${linkifyText(p.stickyNote)}</span>
           </div>
           <div class="sticky-banner-actions">
-            <button type="button" class="btn-sticky-mini" id="btnEditStickyInline" title="Edit sticky note">✏️</button>
-            <button type="button" class="btn-sticky-mini" id="btnClearStickyInline" title="Remove sticky note">✕</button>
+            <button type="button" class="btn-sticky-mini" id="btnEditStickyInline" title="Edit sticky note">
+              ${Icons.edit(12)} <span>Edit</span>
+            </button>
+            <button type="button" class="btn-sticky-mini btn-sticky-clear" id="btnClearStickyInline" title="Remove sticky note">✕</button>
           </div>
         </div>
       ` : ''}
@@ -1854,7 +2613,7 @@
           const subItems = Array.isArray(n.subItems) ? n.subItems : [];
 
           return `
-          <div class="note-item-wrap" data-nid="${n.id}">
+          <div class="note-item-wrap" data-nid="${n.id}" id="noteCard_${n.id}">
             <div class="note-swipe-indicator left-ind"><span>${n.done ? '↩ Reopen' : '✓ Done'}</span></div>
             <div class="note-swipe-indicator right-ind"><span>↪ Forward</span></div>
             <div class="note-bubble ${n.done ? 'done' : ''} ${isEditing ? 'editing' : ''}">
@@ -1925,15 +2684,15 @@
 
               <div class="note-bubble-actions">
                 ${n.done ? `
-                  <button class="btn-note-reopen" data-action="toggle-done" data-nid="${n.id}">↩ Reopen</button>
+                  <button class="btn-note-reopen" data-action="toggle-done" data-nid="${n.id}">${Icons.undo(13)} <span>Reopen</span></button>
                 ` : `
-                  <button class="btn-note-done" data-action="toggle-done" data-nid="${n.id}">✓ Done</button>
+                  <button class="btn-note-done" data-action="toggle-done" data-nid="${n.id}">${Icons.check(13)} <span>Done</span></button>
                 `}
-                <button class="btn-note-action" data-action="copy-note" data-nid="${n.id}" title="Copy message text to clipboard">📋</button>
-                <button class="btn-note-action" data-action="add-subitem" data-nid="${n.id}" title="Add checkable sub-item to this note">☑️</button>
-                <button class="btn-note-action" data-action="start-edit" data-nid="${n.id}" title="Edit message inline">✏️</button>
-                <button class="btn-note-action btn-note-forward" data-action="forward-note" data-nid="${n.id}" title="Forward or move task to another Chrome profile">↪ Forward</button>
-                <button class="btn-note-delete" data-action="delete-note" data-nid="${n.id}" title="Delete note">🗑️</button>
+                <button class="btn-note-action" data-action="copy-note" data-nid="${n.id}" title="Copy message text to clipboard">${Icons.copy(13)}</button>
+                <button class="btn-note-action" data-action="add-subitem" data-nid="${n.id}" title="Add checkable sub-item to this note">${Icons.checklist(13)}</button>
+                <button class="btn-note-action" data-action="start-edit" data-nid="${n.id}" title="Edit message inline">${Icons.edit(13)}</button>
+                <button class="btn-note-action btn-note-forward" data-action="forward-note" data-nid="${n.id}" title="Forward or move task to another Chrome profile">${Icons.forward(13)} <span>Forward</span></button>
+                <button class="btn-note-delete" data-action="delete-note" data-nid="${n.id}" title="Delete note">${Icons.delete(13)}</button>
               </div>
             </div>
             <div class="note-timestamp">
@@ -2116,18 +2875,32 @@
     const btnNextProf = $('#btnNextProfile', main);
     if (btnNextProf) btnNextProf.onclick = () => stepProfile(1);
 
-    // 1. Messenger Note & Photo upload via clicking avatar wrap or note bubble
+    // 1. Right Header Avatar: Click to change profile picture manually via file picker
     const headerAvatarWrap = $('#headerAvatarWrap');
     if (headerAvatarWrap) {
-      headerAvatarWrap.onclick = () => promptMessengerNote(p);
+      headerAvatarWrap.onclick = (e) => {
+        e.stopPropagation();
+        if (window.soundMgr) {
+          if (typeof window.soundMgr.playClickSoft === 'function') window.soundMgr.playClickSoft();
+          else if (typeof window.soundMgr.playClick === 'function') window.soundMgr.playClick();
+        }
+        state.uploadTargetId = p.id;
+        const photoInput = $('#globalPhotoInput');
+        if (photoInput) {
+          photoInput.value = ''; // Reset so same file can be re-selected if desired
+          photoInput.click();
+        }
+      };
+      headerAvatarWrap.onkeydown = (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          headerAvatarWrap.click();
+        }
+      };
     }
     const btnMessengerNote = $('#btnMessengerNote');
     if (btnMessengerNote) {
       btnMessengerNote.onclick = () => promptMessengerNote(p);
-    }
-    const headerNotePill = $('#headerNotePill');
-    if (headerNotePill) {
-      headerNotePill.onclick = () => promptMessengerNote(p);
     }
 
     // 1b. Toggle Unread from header
@@ -2199,7 +2972,24 @@
       btnDownloadScanner.onclick = () => downloadLaptopTaskbarScannerCmd();
     }
 
+    // 1e. Undo & Redo Header Controls
+    const btnUndo = $('#btnUndoNote');
+    if (btnUndo) {
+      btnUndo.onclick = () => {
+        historyMgr.undo();
+      };
+    }
+    const btnRedo = $('#btnRedoNote');
+    if (btnRedo) {
+      btnRedo.onclick = () => {
+        historyMgr.redo();
+      };
+    }
+
     // 2. Rename profile
+    const btnTrashVault = $('#btnOpenTrashVault');
+    if (btnTrashVault) btnTrashVault.onclick = () => openTrashVaultModal();
+
     const renameBtn = $('#btnRenameProfile');
     if (renameBtn) {
       renameBtn.onclick = () => promptRename(p);
@@ -2307,17 +3097,70 @@
           saveState();
           renderMainChat();
         } else if (act === 'delete-note') {
-          p.notes = p.notes.filter(n => n.id !== nid);
-          if (countPending(p) === 0) {
-            p.isPinned = false;
-            p.pinnedAt = null;
+          const noteIdx = (p.notes || []).findIndex(n => n.id === nid);
+          if (noteIdx !== -1) {
+            const deletedNote = JSON.parse(JSON.stringify(p.notes[noteIdx]));
+            addToTrash(deletedNote, p);
+            historyMgr.record({
+              type: 'DELETE_NOTE',
+              profileId: p.id,
+              note: deletedNote,
+              index: noteIdx
+            });
+            p.notes.splice(noteIdx, 1);
+            if (countPending(p) === 0) {
+              p.isPinned = false;
+              p.pinnedAt = null;
+            }
+            if (!hasMessages(p)) {
+              p.isUnread = false;
+            }
+            saveState();
+            renderSidebar();
+
+            // Suggestion #5: Inline Ghost Card morph instead of abrupt vanishing
+            const cardEl = $(`#noteCard_${nid}`);
+            if (cardEl) {
+              cardEl.classList.add('note-ghost-mode');
+              cardEl.innerHTML = `
+                <div class="ghost-card-content">
+                  <div class="ghost-info">
+                    ${Icons.delete(13)}
+                    <span>Note deleted <em>("${esc((deletedNote.text || 'Message').slice(0, 32))}")</em></span>
+                  </div>
+                  <button type="button" class="btn-ghost-undo" data-nid="${nid}">
+                    ${Icons.undo(12)} <span>Tap to Undo</span>
+                  </button>
+                </div>
+              `;
+              const btnGhostUndo = cardEl.querySelector('.btn-ghost-undo');
+              if (btnGhostUndo) {
+                btnGhostUndo.onclick = (e) => {
+                  e.stopPropagation();
+                  historyMgr.undo();
+                };
+              }
+              setTimeout(() => {
+                if (cardEl && cardEl.classList.contains('note-ghost-mode')) {
+                  cardEl.classList.add('ghost-collapsing');
+                  setTimeout(() => {
+                    if (cardEl.parentNode) cardEl.parentNode.removeChild(cardEl);
+                  }, 300);
+                }
+              }, 6000);
+            } else {
+              renderMainChat();
+            }
+
+            showActionToast({
+              message: '🗑️ Deleted note',
+              actionText: '↺ Undo',
+              duration: 6500,
+              onAction: () => {
+                historyMgr.undo();
+              }
+            });
           }
-          if (!hasMessages(p)) {
-            p.isUnread = false;
-          }
-          saveState();
-          renderSidebar();
-          renderMainChat();
         } else if (act === 'start-edit') {
           state.editingNoteId = nid;
           renderMainChat();
@@ -2502,7 +3345,7 @@
         state.pendingReactionTag = null;
       }
 
-      p.notes.push({
+      const newCreatedNote = {
         id: uid(),
         text,
         image: state.pendingAttachment || null,
@@ -2513,6 +3356,12 @@
         editedAt: null,
         forwardedFrom: null,
         done: false
+      };
+      p.notes.push(newCreatedNote);
+      historyMgr.record({
+        type: 'ADD_NOTE',
+        profileId: p.id,
+        note: JSON.parse(JSON.stringify(newCreatedNote))
       });
 
       if (input) input.value = '';
@@ -2534,6 +3383,22 @@
       input.onkeydown = (e) => {
         if (e.key === 'Enter') handleAdd();
       };
+      input.onfocus = () => {
+        if (window.innerWidth <= 768) {
+          document.body.classList.add('mobile-typing-mode');
+          setTimeout(() => {
+            const stream = $('#notesStream');
+            if (stream) stream.scrollTop = stream.scrollHeight;
+          }, 80);
+        }
+      };
+      input.onblur = () => {
+        setTimeout(() => {
+          if (!document.activeElement || document.activeElement.id !== 'composerInput') {
+            document.body.classList.remove('mobile-typing-mode');
+          }
+        }, 150);
+      };
     }
   }
 
@@ -2542,6 +3407,17 @@
     const trimmed = (newText || '').trim();
     const note = (profile.notes || []).find(n => n.id === noteId);
     if (note && (trimmed || note.image || note.voiceClip)) {
+      if (note.text !== trimmed) {
+        historyMgr.record({
+          type: 'EDIT_NOTE',
+          profileId: profile.id,
+          noteId,
+          oldText: note.text,
+          newText: trimmed,
+          oldEditedAt: note.editedAt,
+          newEditedAt: now()
+        });
+      }
       note.text = trimmed;
       note.editedAt = now();
       saveState();
@@ -2614,16 +3490,35 @@
   }
 
   // Messenger Standard 24-Hour Note Modal (Tap avatar or note bubble)
-  // Messenger Standard 24-Hour Note Modal (Simplified, User-Friendly & Advanced Task Statuses)
+  // Messenger Standard 24-Hour Note Modal (Solid Black, Radiant Gradient, Advanced Task Statuses)
   function promptMessengerNote(profile) {
     const cur = now();
     const currentNote = getActiveStatusNote(profile);
     const avatarSrc = getAvatarSrc(profile);
 
+    const TASK_PRESETS = [
+      { icon: '📝', label: 'Grading', status: '📝 Grading Exams' },
+      { icon: '🖨️', label: 'Printing', status: '🖨️ Printing Files' },
+      { icon: '📐', label: 'Math Class', status: '📐 Math Class' },
+      { icon: '🧠', label: 'Deep Focus', status: '🧠 Deep Focus' },
+      { icon: '🔬', label: 'Research', status: '🔬 AI Research' },
+      { icon: '📊', label: 'Reports', status: '📊 DepEd Reports' },
+      { icon: '📚', label: 'Lesson Plan', status: '📚 Lesson Plan' },
+      { icon: '📋', label: 'DepEd Forms', status: '📋 DepEd Forms (SF)' },
+      { icon: '💻', label: 'Online Class', status: '💻 Online Class' },
+      { icon: '🧪', label: 'Lab Activity', status: '🧪 Lab Activity' },
+      { icon: '🎯', label: 'Review', status: '🎯 Review Session' },
+      { icon: '⏳', label: 'Cooldown', status: '⏳ Cooldown' },
+      { icon: '⚡', label: 'Ready', status: '⚡ Ready for Work' },
+      { icon: '🚀', label: 'Rush Priority', status: '🚀 Rush Priority' },
+      { icon: '☕', label: 'Coffee Break', status: '☕ Coffee Break' },
+      { icon: '✨', label: 'Clean Slate', status: '✨ Clean Slate' }
+    ];
+
     const backdrop = document.createElement('div');
     backdrop.className = 'rename-dialog-backdrop';
     backdrop.innerHTML = `
-      <div class="rename-dialog messenger-note-dialog" style="max-width:460px; padding:22px; background:#0d0d12; border:1px solid rgba(229, 9, 20, 0.4); border-radius:18px; box-shadow:0 16px 48px rgba(0,0,0,0.9), 0 0 25px rgba(229,9,20,0.25);">
+      <div class="rename-dialog messenger-note-dialog">
         <div class="messenger-note-header-simple">
           <div class="note-modal-profile-info">
             <img src="${avatarSrc}" class="note-avatar-mini" alt="${esc(profile.name)}">
@@ -2632,7 +3527,7 @@
               <div class="note-modal-subtitle">${esc(profile.name)} · ${esc(profile.winShortcut)} ${currentNote ? `· ⏳ ${formatRemainingNoteTime(currentNote.expiresAt - cur)}` : ''}</div>
             </div>
           </div>
-          <button type="button" class="btn-subcheck-del" id="btnCloseNoteModal" title="Close" style="font-size:18px; background:none; border:none; color:#aaa; cursor:pointer;">✕</button>
+          <button type="button" class="btn-close-note-modal" id="btnCloseNoteModal" title="Close (Esc)">✕</button>
         </div>
 
         <div class="note-input-container">
@@ -2642,22 +3537,18 @@
           </div>
         </div>
 
-        <!-- Advanced Task Presets & Helpful Icons -->
+        <!-- Advanced Task Presets (Solo Icons Removed) -->
         <div class="note-presets-section">
-          <div class="note-preset-label">⚡ Task Status Presets:</div>
-          <div class="note-preset-chips">
-            <button type="button" class="btn-task-chip" data-status="📝 Grading Exams">📝 Grading</button>
-            <button type="button" class="btn-task-chip" data-status="🖨️ Printing Files">🖨️ Printing</button>
-            <button type="button" class="btn-task-chip" data-status="📐 Math Class">📐 Math Class</button>
-            <button type="button" class="btn-task-chip" data-status="🧠 Deep Focus">🧠 Deep Focus</button>
-            <button type="button" class="btn-task-chip" data-status="🔬 AI Research">🔬 Research</button>
-            <button type="button" class="btn-task-chip" data-status="📊 DepEd Reports">📊 Reports</button>
-            <button type="button" class="btn-task-chip" data-status="⏳ Cooldown Timer">⏳ Cooldown</button>
-            <button type="button" class="btn-task-chip" data-status="⚡ Ready for Work">⚡ Ready</button>
+          <div class="note-preset-label">
+            <span>⚡ TASK STATUS PRESETS:</span>
+            <span class="note-preset-hint">Tap to pick · Press Enter to share</span>
           </div>
-          <div class="note-icon-row">
-            ${['📝', '🖨️', '📐', '🔬', '💻', '📊', '⚡', '⏳', '🎯', '✅', '☕', '✨'].map(em => `
-              <button type="button" class="btn-emoji-chip" data-emoji="${em}">${em}</button>
+          <div class="note-preset-chips">
+            ${TASK_PRESETS.map(tp => `
+              <button type="button" class="btn-task-chip" data-status="${esc(tp.status)}" title="Click to insert • Double-click or Enter to Share">
+                <span class="task-chip-icon">${tp.icon}</span>
+                <span class="task-chip-text">${esc(tp.label)}</span>
+              </button>
             `).join('')}
           </div>
         </div>
@@ -2670,7 +3561,7 @@
           ` : ''}
           <div style="flex:1;"></div>
           <button type="button" class="btn-banner-clear" id="btnCancelNote">Cancel</button>
-          <button type="button" class="btn-composer-send" id="btnSaveNote" style="padding:8px 20px; font-weight:800;">
+          <button type="button" class="btn-composer-send btn-save-note-radiant" id="btnSaveNote">
             ${currentNote ? 'Update Note 💭' : 'Share Note 💭'}
           </button>
         </div>
@@ -2688,27 +3579,6 @@
     };
 
     inp.oninput = updatePreview;
-
-    // Task Preset Chips click: replaces input value
-    $$('.btn-task-chip', backdrop).forEach(btn => {
-      btn.onclick = () => {
-        inp.value = btn.dataset.status.slice(0, 60);
-        updatePreview();
-        inp.focus();
-      };
-    });
-
-    // Advanced task emoji chips click: appends emoji
-    $$('.btn-emoji-chip', backdrop).forEach(btn => {
-      btn.onclick = () => {
-        const emoji = btn.dataset.emoji;
-        if (inp.value.length + emoji.length <= 60) {
-          inp.value += (inp.value.length > 0 && !inp.value.endsWith(' ') ? ' ' : '') + emoji;
-          updatePreview();
-          inp.focus();
-        }
-      };
-    });
 
     const close = () => { if (backdrop.parentNode) backdrop.parentNode.removeChild(backdrop); };
     backdrop.onclick = (e) => { if (e.target === backdrop) close(); };
@@ -2733,12 +3603,40 @@
         expiresAt: postTime + (24 * 60 * 60 * 1000)
       };
       saveState();
-      if (window.soundMgr) window.soundMgr.playClick();
+      if (window.soundMgr) {
+        if (typeof window.soundMgr.playClickSoft === "function") window.soundMgr.playClickSoft();
+        else if (typeof window.soundMgr.playClick === "function") window.soundMgr.playClick();
+      }
       renderSidebar();
       renderMainChat();
       showToast(`💭 Note shared on ${profile.name} (lasts 24 hours)`);
       close();
     };
+
+    // Keyboard support: Enter key automatically means go (Share a Note)
+    inp.onkeydown = (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        saveNote();
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        close();
+      }
+    };
+
+    // Task Preset Chips click: replaces input value; double-click immediately submits
+    $$('.btn-task-chip', backdrop).forEach(btn => {
+      btn.onclick = () => {
+        inp.value = btn.dataset.status.slice(0, 60);
+        updatePreview();
+        inp.focus();
+      };
+      btn.ondblclick = () => {
+        inp.value = btn.dataset.status.slice(0, 60);
+        updatePreview();
+        saveNote();
+      };
+    });
 
     $('#btnSaveNote', backdrop).onclick = saveNote;
     $('#btnCancelNote', backdrop).onclick = close;
@@ -2747,17 +3645,208 @@
     const delBtn = $('#btnDeleteNote', backdrop);
     if (delBtn) {
       delBtn.onclick = () => {
+        const oldStatus = profile.statusNote ? JSON.parse(JSON.stringify(profile.statusNote)) : null;
+        if (oldStatus) {
+          historyMgr.record({
+            type: 'STATUS_NOTE',
+            profileId: profile.id,
+            oldNote: oldStatus,
+            newNote: null
+          });
+        }
         profile.statusNote = null;
         saveState();
-        if (window.soundMgr) window.soundMgr.playClick();
+        if (window.soundMgr) {
+          if (typeof window.soundMgr.playClickSoft === "function") window.soundMgr.playClickSoft();
+          else if (typeof window.soundMgr.playClick === "function") window.soundMgr.playClick();
+        }
         renderSidebar();
         renderMainChat();
-        showToast(`🗑️ Note deleted for ${profile.name}`);
         close();
+        showActionToast({
+          message: `🗑️ Note deleted for ${profile.name}`,
+          actionText: '↺ Undo',
+          duration: 6500,
+          onAction: () => historyMgr.undo()
+        });
       };
     }
   }
 
+  // Mini Pending Tasks Popover: Quick-View & 1-Click Checkoff right from sidebar
+  function showPendingTasksPopover(profile, anchorElement) {
+    const existing = $('#pendingTasksPopoverBackdrop');
+    if (existing) existing.remove();
+
+    if (window.soundMgr) {
+      if (typeof window.soundMgr.playClickSoft === "function") window.soundMgr.playClickSoft();
+      else if (typeof window.soundMgr.playClick === "function") window.soundMgr.playClick();
+    }
+
+    const backdrop = document.createElement('div');
+    backdrop.id = 'pendingTasksPopoverBackdrop';
+    backdrop.className = 'pending-tasks-popover-backdrop';
+
+    const popoverEl = document.createElement('div');
+    popoverEl.className = 'pending-tasks-popover';
+
+    const close = () => {
+      document.removeEventListener('keydown', handleKey);
+      if (backdrop.parentNode) backdrop.parentNode.removeChild(backdrop);
+    };
+
+    const handleKey = (e) => {
+      if (e.key === 'Escape') close();
+    };
+    document.addEventListener('keydown', handleKey);
+
+    backdrop.onclick = (e) => {
+      if (e.target === backdrop) close();
+    };
+
+    const renderContent = () => {
+      const pendingNotes = (profile.notes || []).filter(n => !n.done);
+      if (pendingNotes.length === 0) {
+        popoverEl.innerHTML = `
+          <div style="text-align:center; padding:18px 8px;">
+            <div style="font-size:26px; margin-bottom:6px;">🎉</div>
+            <div style="font-size:13px; font-weight:850; color:#34d399;">All Tasks Completed!</div>
+            <div style="font-size:11px; color:#888; margin-top:4px;">No pending items on ${esc(profile.name)}</div>
+          </div>
+        `;
+        setTimeout(() => close(), 800);
+        return;
+      }
+
+      popoverEl.innerHTML = `
+        <div class="popover-header">
+          <div class="popover-title-wrap">
+            <span class="popover-badge-pill">${pendingNotes.length}</span>
+            <div>
+              <div class="popover-profile-name">${esc(profile.name)}</div>
+              <div class="popover-sub-count">${pendingNotes.length} Pending Task${pendingNotes.length > 1 ? 's' : ''}</div>
+            </div>
+          </div>
+          <button type="button" class="btn-close-popover" id="btnClosePopover" title="Close (Esc)">✕</button>
+        </div>
+
+        <div class="popover-tasks-list">
+          ${pendingNotes.map(n => `
+            <div class="popover-task-item" data-task-id="${n.id}">
+              <div class="popover-task-text">${esc(n.text)}</div>
+              <div class="popover-task-actions">
+                <span class="popover-task-time">${formatNoteDateTime(n.createdAt)}</span>
+                <div class="popover-task-btns">
+                  <button type="button" class="btn-popover-done" data-act="done" data-id="${n.id}" title="Mark task as Done">
+                    ✓ Done
+                  </button>
+                  <button type="button" class="btn-popover-view" data-act="view" data-id="${n.id}" title="Jump to note in chat">
+                    👁️ View
+                  </button>
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+
+        ${pendingNotes.length > 1 ? `
+          <button type="button" class="btn-popover-all-done" id="btnPopoverAllDone">
+            ✓ Mark All ${pendingNotes.length} Done
+          </button>
+        ` : ''}
+      `;
+
+      // 1. Mark single task as Done
+      $$('.btn-popover-done', popoverEl).forEach(btn => {
+        btn.onclick = (e) => {
+          e.stopPropagation();
+          const noteId = btn.dataset.id;
+          const note = (profile.notes || []).find(x => x.id === noteId);
+          if (note) {
+            note.done = true;
+            note.doneAt = now();
+            if (window.soundMgr) {
+              if (typeof window.soundMgr.playReadyChime === 'function') window.soundMgr.playReadyChime();
+              else if (typeof window.soundMgr.playClick === 'function') window.soundMgr.playClick();
+            }
+            if (countPending(profile) === 0) {
+              profile.isPinned = false;
+              profile.pinnedAt = null;
+            }
+            saveState();
+            renderSidebar();
+            renderMainChat();
+            showToast(`✓ Completed: "${note.text.slice(0, 25)}"`);
+            renderContent();
+          }
+        };
+      });
+
+      // 2. Jump to note in main chat
+      $$('.btn-popover-view', popoverEl).forEach(btn => {
+        btn.onclick = (e) => {
+          e.stopPropagation();
+          const noteId = btn.dataset.id;
+          state.activeProfileId = profile.id;
+          renderSidebar();
+          renderMainChat();
+          close();
+          setTimeout(() => {
+            const card = document.querySelector(`.note-item-wrap[data-nid="${noteId}"]`);
+            if (card) {
+              card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              card.classList.add('note-card-highlight-pulse');
+              setTimeout(() => card.classList.remove('note-card-highlight-pulse'), 2500);
+            }
+          }, 120);
+        };
+      });
+
+      // 3. Mark All Done
+      const btnAllDone = $('#btnPopoverAllDone', popoverEl);
+      if (btnAllDone) {
+        btnAllDone.onclick = (e) => {
+          e.stopPropagation();
+          (profile.notes || []).forEach(n => { n.done = true; n.doneAt = now(); });
+          if (window.soundMgr) {
+            if (typeof window.soundMgr.playReadyChime === 'function') window.soundMgr.playReadyChime();
+            else if (typeof window.soundMgr.playClick === 'function') window.soundMgr.playClick();
+          }
+          profile.isPinned = false;
+          profile.pinnedAt = null;
+          saveState();
+          renderSidebar();
+          renderMainChat();
+          showToast(`✓ Completed all tasks on ${profile.name}`);
+          renderContent();
+        };
+      }
+
+      const btnClose = $('#btnClosePopover', popoverEl);
+      if (btnClose) btnClose.onclick = close;
+    };
+
+    // Calculate position relative to anchor
+    if (anchorElement && anchorElement.getBoundingClientRect) {
+      const rect = anchorElement.getBoundingClientRect();
+      let left = rect.right + 12;
+      let top = Math.max(12, rect.top - 20);
+
+      if (left + 330 > window.innerWidth) {
+        left = Math.max(12, rect.left - 330);
+      }
+      if (top + 360 > window.innerHeight) {
+        top = Math.max(12, window.innerHeight - 370);
+      }
+
+      popoverEl.style.left = `${left}px`;
+      popoverEl.style.top = `${top}px`;
+    }
+
+    backdrop.appendChild(popoverEl);
+    document.body.appendChild(backdrop);
+    renderContent();
+  }
 
   function promptStickyNote(profile) {
     const backdrop = document.createElement('div');
@@ -2876,6 +3965,10 @@
 
     const wasSameProfile = (nextProf.id === state.activeProfileId);
     state.activeProfileId = nextProf.id;
+    if (window.innerWidth <= 768) {
+      document.body.classList.add('mobile-chat-open');
+      try { localStorage.setItem('orlandochrome_mobile_view', 'chat'); } catch (e) {}
+    }
 
     // Ensure nextProf is visible if currently filtered out by filter tabs
     const curTab = state.currentFilter;
@@ -4427,6 +5520,22 @@ ${jsRes}
 
     // Enhancement #6: Global Keyboard Shortcuts (Alt+Space Dictation, Alt+↑/↓ Profile Nav, Alt+N Next Ready)
     document.addEventListener('keydown', (e) => {
+      // Undo & Redo Shortcuts: Ctrl+Z / Cmd+Z and Ctrl+Y / Cmd+Shift+Z
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z' && !e.shiftKey) {
+        const tag = (document.activeElement && document.activeElement.tagName) || '';
+        if (tag !== 'INPUT' && tag !== 'TEXTAREA') {
+          e.preventDefault();
+          historyMgr.undo();
+          return;
+        }
+      } else if ((e.ctrlKey || e.metaKey) && (e.key.toLowerCase() === 'y' || (e.shiftKey && e.key.toLowerCase() === 'z'))) {
+        const tag = (document.activeElement && document.activeElement.tagName) || '';
+        if (tag !== 'INPUT' && tag !== 'TEXTAREA') {
+          e.preventDefault();
+          historyMgr.redo();
+          return;
+        }
+      }
       if ((e.altKey && e.code === 'Space') || (e.ctrlKey && e.shiftKey && e.code === 'Space')) {
         e.preventDefault();
         toggleWisprDictation();
@@ -4664,6 +5773,13 @@ ${jsRes}
       if (mode === 'header-page' && chatMain) {
         chatMain.style.transition = 'transform 0.24s cubic-bezier(0.22, 1, 0.36, 1)';
         chatMain.style.transform = '';
+        if (window.innerWidth <= 768 && document.body.classList.contains('mobile-chat-open')) {
+          // In iOS/Mobile inside a message: swiping left OR swiping right goes back to all profiles!
+          if (Math.abs(currentDx) >= 38 || Math.abs(velocityX) >= 0.25) {
+            closeMobileChatWithSlide();
+            return;
+          }
+        }
         if ((currentDx <= -52 || (currentDx <= -28 && velocityX < -0.42)) && velocityX <= 0.1) {
           stepProfile(1);
         } else if ((currentDx >= 52 || (currentDx >= 28 && velocityX > 0.42)) && velocityX >= -0.1) {
@@ -4773,11 +5889,53 @@ ${jsRes}
   // Initializer
   function init() {
     loadState();
-    document.body.classList.remove('mobile-chat-open');
+    
+    // Dynamic iOS Virtual Keyboard Viewport Handler
+    if (window.visualViewport) {
+      const handleVP = () => {
+        if (window.innerWidth <= 768) {
+          const vp = window.visualViewport;
+          const workspace = $('#appWorkspace');
+          const keyboardShowing = (window.innerHeight - vp.height) > 80;
+          if (keyboardShowing) {
+            document.body.classList.add('mobile-typing-mode');
+            if (workspace) {
+              workspace.style.height = `${vp.height}px`;
+              workspace.style.maxHeight = `${vp.height}px`;
+            }
+            const stream = $('#notesStream');
+            if (stream) stream.scrollTop = stream.scrollHeight;
+          } else {
+            if (!document.activeElement || document.activeElement.id !== 'composerInput') {
+              document.body.classList.remove('mobile-typing-mode');
+            }
+            if (workspace) {
+              workspace.style.height = '';
+              workspace.style.maxHeight = '';
+            }
+          }
+        }
+      };
+      window.visualViewport.addEventListener('resize', handleVP);
+      window.visualViewport.addEventListener('scroll', handleVP);
+    }
+    if (window.innerWidth <= 768) {
+      let savedView = 'inbox';
+      try { savedView = localStorage.getItem('orlandochrome_mobile_view') || 'inbox'; } catch (e) {}
+      if (savedView === 'chat') {
+        document.body.classList.add('mobile-chat-open');
+      } else {
+        document.body.classList.remove('mobile-chat-open');
+      }
+    } else {
+      document.body.classList.remove('mobile-chat-open');
+    }
     initEvents();
     initGestureNavigation();
+    initShakeToUndo();
     renderSidebar();
     renderMainChat();
+    updateTrashBadge();
     renderClockBox();
     initCloudSync();
 

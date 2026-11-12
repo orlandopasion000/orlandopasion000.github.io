@@ -265,7 +265,101 @@
       .hub-card.is-featured { grid-column: auto; }
       .philosophy { padding: 80px 20px; }
     }
-  </style>
+  
+    /* ORLANDOCHROME FLAGSHIP APP INTEGRATION */
+    .btn-oc-hero {
+      background: linear-gradient(135deg, #1b0305 0%, #000000 100%);
+      color: #ffffff;
+      border: 1.5px solid rgba(255, 45, 60, 0.7);
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 15px 30px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 700;
+      box-shadow: 0 8px 30px rgba(229, 9, 20, 0.35);
+      transition: all 0.3s ease;
+    }
+    .btn-oc-hero:hover {
+      background: linear-gradient(135deg, #b8000a 0%, #e50914 100%);
+      border-color: #ff4d58;
+      color: #ffffff;
+      box-shadow: 0 12px 40px rgba(229, 9, 20, 0.65), 0 0 20px rgba(229, 9, 20, 0.4);
+      transform: translateY(-2px);
+    }
+    .btn-oc-hero img {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      filter: drop-shadow(0 0 6px rgba(229,9,20,0.6));
+    }
+    .nav-oc-link {
+      color: #ff6b75 !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 7px;
+      font-weight: 700;
+      transition: all 0.3s !important;
+    }
+    .nav-oc-link:hover {
+      color: #ffffff !important;
+      text-shadow: 0 0 12px rgba(229, 9, 20, 0.8) !important;
+      transform: translateY(-1px);
+    }
+    .nav-oc-link img {
+      width: 17px;
+      height: 17px;
+      border-radius: 4px;
+      filter: drop-shadow(0 0 4px rgba(229,9,20,0.5));
+    }
+    .mobile-menu-oc {
+      display: flex !important;
+      align-items: center !important;
+      gap: 14px !important;
+      color: #ff4d58 !important;
+      border: 1px solid rgba(229, 9, 20, 0.4) !important;
+      padding: 10px 24px !important;
+      border-radius: 999px !important;
+      background: rgba(229, 9, 20, 0.1) !important;
+    }
+    .mobile-menu-oc img {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+    }
+
+    .hub-card.is-orlandochrome {
+      background: linear-gradient(135deg, rgba(229,9,20,0.18) 0%, var(--surface-2) 42%, rgba(212,168,83,0.10) 100%) !important;
+      border: 1.5px solid rgba(255, 45, 60, 0.45) !important;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.6), 0 0 18px rgba(229,9,20,0.15) !important;
+    }
+    .hub-card.is-orlandochrome:hover {
+      border-color: #ff3344 !important;
+      box-shadow: 0 20px 50px rgba(229,9,20,0.35), 0 0 30px rgba(229,9,20,0.3) !important;
+      transform: translateY(-4px);
+    }
+    .hub-card.is-orlandochrome .hub-card-icon {
+      background: rgba(229, 9, 20, 0.12) !important;
+      border-color: rgba(255, 45, 60, 0.35) !important;
+    }
+    .hub-card.is-orlandochrome .hub-card-badge {
+      border-color: rgba(255,77,88,0.5) !important;
+      color: #ff4d58 !important;
+      background: rgba(229,9,20,0.12) !important;
+      box-shadow: 0 0 10px rgba(229,9,20,0.3) !important;
+    }
+    .hub-card.is-orlandochrome .hub-card-open {
+      color: #ff4d58 !important;
+      font-weight: 700;
+    }
+    .hub-card.is-orlandochrome:hover .hub-card-open {
+      color: #ff858d !important;
+      text-shadow: 0 0 8px rgba(229, 9, 20, 0.6);
+    }
+</style>
 </head>
 <body>
 
@@ -273,6 +367,12 @@
   <nav class="nav">
     <a href="#hero" class="nav-brand">OVP</a>
     <ul class="nav-links">
+      <li>
+        <a href="https://orlandopasion000.github.io/orlandochrome/" target="_blank" class="nav-oc-link" title="Launch (1) OrlandoChrome (Main Version)">
+          <img src="assets/oc-logo.svg" alt="OrlandoChrome Logo">
+          <span>OrlandoChrome</span>
+        </a>
+      </li>
       <li><a href="#about">About</a></li>
       <li><a href="#expertise">Expertise</a></li>
       <li><a href="#resources">Resources</a></li>
@@ -281,6 +381,10 @@
     <button class="nav-hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
   </nav>
   <div class="mobile-menu" id="mobileMenu">
+    <a href="https://orlandopasion000.github.io/orlandochrome/" target="_blank" onclick="closeMenu()" class="mobile-menu-oc">
+      <img src="assets/oc-logo.svg" alt="OrlandoChrome Logo">
+      <span>(1) OrlandoChrome</span>
+    </a>
     <a href="#about" onclick="closeMenu()">About</a>
     <a href="#expertise" onclick="closeMenu()">Expertise</a>
     <a href="#resources" onclick="closeMenu()">Resources</a>
@@ -297,6 +401,10 @@
     <div class="hero-bar"></div>
     <p class="hero-subtitle"><strong>Teacher VI</strong> at Nancalobasaan National High School — advancing Mathematics education through innovation, technology, and a commitment to every Filipino learner.</p>
     <div class="hero-cta">
+      <a href="https://orlandopasion000.github.io/orlandochrome/" target="_blank" class="btn btn-oc-hero" title="Launch (1) OrlandoChrome (Main Version)">
+        <img src="assets/oc-logo.svg" alt="OrlandoChrome Logo">
+        <span>(1) OrlandoChrome (Main Version)</span>
+      </a>
       <a href="#resources" class="btn btn-gold">▸ View Resources</a>
       <a href="#about" class="btn btn-ghost">Learn More</a>
     </div>
@@ -474,6 +582,18 @@
     // Metadata for known files (rich descriptions, icons, order)
     // Any file NOT listed here will still appear — with an auto-generated card!
     var KNOWN_FILES = {
+      'orlandochrome': {
+        icon: '<img src="assets/oc-logo.svg" alt="OrlandoChrome" style="width:34px;height:34px;border-radius:8px;object-fit:contain;filter:drop-shadow(0 0 6px rgba(229,9,20,0.6));">',
+        badge: '★ FLAGSHIP APP · PWA READY',
+        featured: true,
+        isOrlandoChrome: true,
+        order: -1,
+        title: '(1) OrlandoChrome (Main Version)',
+        desc: 'Complete 22-profile Chrome taskbar command center, live sync suite, interactive messaging, 30-day trash vault, and quick cooldown timers.',
+        tags: ['Taskbar Control', 'Live Sync', 'PWA Ready', 'Win + 1–10'],
+        questions: 0,
+        search: 'orlandochrome main version 1 taskbar command center live sync suite chrome profiles'
+      },
       'orlandorecharge': {
         icon: '⚡', badge: 'Featured Tool', featured: true, order: 0,
         title: 'OrlandoRecharge (Master)',
@@ -580,7 +700,7 @@
       var a = document.createElement('a');
       a.href = config.href;
       a.target = '_blank';
-      a.className = 'hub-card' + (config.featured ? ' is-featured' : '');
+      a.className = 'hub-card' + (config.featured ? ' is-featured' : '') + (config.isOrlandoChrome ? ' is-orlandochrome' : '');
       a.setAttribute('data-questions', config.questions || 0);
       a.setAttribute('data-search', (config.search || config.title + ' ' + config.desc + ' ' + (config.tags || []).join(' ')).toLowerCase());
 
@@ -609,6 +729,23 @@
       document.getElementById('hubLiveCount').textContent = liveLinks;
     }
 
+    
+    var FLAGSHIP_APPS = [
+      {
+        href: 'https://orlandopasion000.github.io/orlandochrome/',
+        icon: '<img src="assets/oc-logo.svg" alt="OrlandoChrome" style="width:34px;height:34px;border-radius:8px;object-fit:contain;filter:drop-shadow(0 0 6px rgba(229,9,20,0.6));">',
+        badge: '★ FLAGSHIP APP · PWA READY',
+        featured: true,
+        isOrlandoChrome: true,
+        order: -1,
+        title: '(1) OrlandoChrome (Main Version)',
+        desc: 'Complete 22-profile Chrome taskbar command center, live sync suite, interactive messaging, 30-day trash vault, and quick cooldown timers.',
+        tags: ['Taskbar Control', 'Live Sync', 'PWA Ready', 'Win + 1–10'],
+        questions: 0,
+        search: 'orlandochrome main version 1 taskbar command center live sync suite chrome profiles'
+      }
+    ];
+
     // Main: fetch files from GitHub API and render cards
     function loadResources() {
       var grid = document.getElementById('hubGrid');
@@ -625,6 +762,7 @@
           });
 
           var resources = [];
+          FLAGSHIP_APPS.forEach(function(fApp) { resources.push(fApp); });
           var autoIconIndex = 0;
 
           htmlFiles.forEach(function(file) {
@@ -675,6 +813,7 @@
           console.warn('GitHub API error, using fallback:', err);
           // Fallback: render from KNOWN_FILES if API fails
           var resources = [];
+          FLAGSHIP_APPS.forEach(function(fApp) { resources.push(fApp); });
           var keys = Object.keys(KNOWN_FILES);
           keys.forEach(function(filename) {
             var known = KNOWN_FILES[filename];

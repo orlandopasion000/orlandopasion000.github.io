@@ -1,17 +1,20 @@
 /* OrlandoChrome · Offline-First Service Worker (PWA Ready) */
-const CACHE_NAME = 'orlandochrome-pwa-v4';
+const CACHE_NAME = 'orlandochrome-pwa-v43';
 const ASSETS = [
   './',
   './index.html',
-  './styles.css',
+  './styles.css?v=40',
   './qrcode.min.js',
-  './app.js',
-  './sound.js',
+  './app.js?v=40',
+  './sound.js?v=40',
   './oc-logo.svg',
+  './icon-192.png',
+  './icon-512.png',
+  './icon-maskable.png',
   './favicon.ico',
-  './recharge-icon.png',
-  './manifest.json',
-  './manifest-clean.json'
+  './favicon-32.png',
+  './favicon-16.png',
+  './manifest.json'
 ];
 
 self.addEventListener('install', (event) => {
