@@ -6052,7 +6052,7 @@ try {
 } catch(e){}
 try { checkUrlHashRoutine(); } catch(e){}
 
-/* ───────── ANTIGRAVITY PARTICLE DEFLECTOR ENGINE (Sleek Straight Capsules & Subtle Turn-Flex Suite) ───────── */
+/* ───────── ANTIGRAVITY PARTICLE DEFLECTOR ENGINE (Masterpiece Futuristic Suite) ───────── */
 (function initAntigravityEngine() {
   var backCanvas = document.getElementById("antigravityCanvas");
   var frontCanvas = document.getElementById("antigravityFrontCanvas");
@@ -6172,6 +6172,10 @@ try { checkUrlHashRoutine(); } catch(e){}
   var cursorSpeed = 0;
 
   var shockwaves = [];
+  var sonicHalos = [];
+  var lastDownbeatTime = 0;
+  var idleBreathPhase = 0;
+
   function triggerHyperspaceShockwave(originX, originY, baseHue) {
     var pal = getActiveCircadianPalette();
     var hue = (baseHue !== undefined) ? baseHue : pal[Math.floor(Math.random() * pal.length)].h;
@@ -6185,6 +6189,40 @@ try { checkUrlHashRoutine(); } catch(e){}
       hue: hue
     });
   }
+
+  // ── Smart Reading Horizon & Card Graviton Perimeter Tracking ──
+  var hoveredCardRect = null;
+  var gravitonRects = [];
+  var lastGravitonScan = 0;
+
+  function updateGravitonRects() {
+    var nowMs = Date.now();
+    if (nowMs - lastGravitonScan < 1800) return;
+    lastGravitonScan = nowMs;
+    gravitonRects = [];
+    var clockEl = document.getElementById("clock");
+    if (clockEl) {
+      var cr = clockEl.getBoundingClientRect();
+      if (cr.width > 0) gravitonRects.push({ x1: cr.left, y1: cr.top, x2: cr.right, y2: cr.bottom, cx: (cr.left + cr.right) / 2, cy: (cr.top + cr.bottom) / 2 });
+    }
+    var cards = document.querySelectorAll(".alarm-item");
+    for (var ci = 0; ci < Math.min(cards.length, 6); ci++) {
+      var ar = cards[ci].getBoundingClientRect();
+      if (ar.top < height && ar.bottom > 0) {
+        gravitonRects.push({ x1: ar.left, y1: ar.top, x2: ar.right, y2: ar.bottom, cx: (ar.left + ar.right) / 2, cy: (ar.top + ar.bottom) / 2 });
+      }
+    }
+  }
+
+  document.addEventListener("pointerover", function(e) {
+    var item = e.target && e.target.closest(".alarm-item, #clock, .stat-badge, .console-mini-pill");
+    if (item) {
+      var rect = item.getBoundingClientRect();
+      hoveredCardRect = { x1: rect.left, y1: rect.top, x2: rect.right, y2: rect.bottom, cx: (rect.left + rect.right) / 2, cy: (rect.top + rect.bottom) / 2 };
+    } else {
+      hoveredCardRect = null;
+    }
+  }, { passive: true });
 
   // Dual-Layer Population: Ambient backdrop + Dedicated 3D Weaver Dancers
   var AMBIENT_COUNT = width < 768 ? 75 : (width < 1200 ? 125 : 170);
@@ -6271,6 +6309,7 @@ try { checkUrlHashRoutine(); } catch(e){}
     mouse.active = false;
     mouse.x = -9999;
     mouse.y = -9999;
+    hoveredCardRect = null;
   });
 
   window.addEventListener("alarm-fire", function(e) {
@@ -6305,6 +6344,7 @@ try { checkUrlHashRoutine(); } catch(e){}
     if (frontCtx) frontCtx.clearRect(0, 0, width, height);
 
     var now = Date.now();
+    updateGravitonRects();
 
     // ── Kinetic Jet Cursor Velocity Calculation ──
     if (mouse.active) {
@@ -6358,6 +6398,36 @@ try { checkUrlHashRoutine(); } catch(e){}
     prevBassEnergy = liveBass;
     beatKickImpulse *= 0.84;
 
+    // ── FEATURE 4: DOWNBEAT SONIC HALO (Micro Sonic Boom on Measure Drop) ──
+    var isDownbeat = isAudioHot && (liveBass > 0.30) && (liveBass - prevBassEnergy > 0.10) && (now - lastDownbeatTime > 1150);
+    if (isDownbeat) {
+      lastDownbeatTime = now;
+      for (var fHi = 0; fHi < particles.length; fHi++) {
+        if (particles[fHi].isFront && Math.random() < 0.40) {
+          sonicHalos.push({
+            x: particles[fHi].x,
+            y: particles[fHi].y,
+            radius: 3,
+            maxRadius: 18,
+            speed: 1.6,
+            alpha: 0.82,
+            hue: particles[fHi].hue
+          });
+          break;
+        }
+      }
+    }
+
+    // ── FEATURE 3: IDLE NEBULA BREATH (Resting Pulse when Paused / Idle) ──
+    var isIdle = !isAudioHot && (!mouse.active || (now - mouse.lastActiveTime > 4000));
+    var idleBreathFactor = 0;
+    if (isIdle) {
+      idleBreathPhase += 0.016; // ~4.5 second smooth meditative breath
+      idleBreathFactor = Math.sin(idleBreathPhase);
+    } else {
+      idleBreathPhase = 0;
+    }
+
     // ── Update & Render Hyperspace Shockwaves (On Background Canvas) ──
     for (var sIdx = shockwaves.length - 1; sIdx >= 0; sIdx--) {
       var sw = shockwaves[sIdx];
@@ -6377,6 +6447,27 @@ try { checkUrlHashRoutine(); } catch(e){}
 
       if (sw.alpha < 0.02 || sw.radius > sw.maxRadius) {
         shockwaves.splice(sIdx, 1);
+      }
+    }
+
+    // ── Render Downbeat Sonic Halos ──
+    for (var shIdx = sonicHalos.length - 1; shIdx >= 0; shIdx--) {
+      var sh = sonicHalos[shIdx];
+      sh.radius += sh.speed;
+      sh.alpha *= 0.87;
+      if (sh.alpha > 0.04 && sh.radius < sh.maxRadius) {
+        var sTargetCtx = frontCtx || backCtx;
+        sTargetCtx.save();
+        sTargetCtx.beginPath();
+        sTargetCtx.arc(sh.x, sh.y, sh.radius, 0, Math.PI * 2);
+        sTargetCtx.strokeStyle = "hsla(" + Math.round(sh.hue) + ", 96%, 74%, " + sh.alpha.toFixed(2) + ")";
+        sTargetCtx.lineWidth = 1.0;
+        sTargetCtx.shadowColor = "hsla(" + Math.round(sh.hue) + ", 100%, 70%, " + (sh.alpha * 0.85).toFixed(2) + ")";
+        sTargetCtx.shadowBlur = 7;
+        sTargetCtx.stroke();
+        sTargetCtx.restore();
+      } else {
+        sonicHalos.splice(shIdx, 1);
       }
     }
 
@@ -6519,6 +6610,38 @@ try { checkUrlHashRoutine(); } catch(e){}
         }
       }
 
+      // ── FEATURE 2: CARD-EDGE GRAVITATIONAL SLINGSHOT (Glass Skimming) ──
+      if (!p.isFront) {
+        for (var gi = 0; gi < gravitonRects.length; gi++) {
+          var gr = gravitonRects[gi];
+          if (p.x >= gr.x1 - 20 && p.x <= gr.x2 + 20 && p.y >= gr.y1 - 20 && p.y <= gr.y2 + 20) {
+            var nLeft = Math.abs(p.x - gr.x1) < 20;
+            var nRight = Math.abs(p.x - gr.x2) < 20;
+            var nTop = Math.abs(p.y - gr.y1) < 20;
+            var nBottom = Math.abs(p.y - gr.y2) < 20;
+            if (nLeft || nRight || nTop || nBottom) {
+              if (nLeft || nRight) p.vy += (p.vy >= 0 ? 0.14 : -0.14);
+              if (nTop || nBottom) p.vx += (p.vx >= 0 ? 0.14 : -0.14);
+              break;
+            }
+          }
+        }
+      }
+
+      // ── FEATURE 5: SMART READING HORIZON (Focus Clearance on Hover) ──
+      var readingClearance = 1.0;
+      if (hoveredCardRect) {
+        if (p.x >= hoveredCardRect.x1 - 16 && p.x <= hoveredCardRect.x2 + 16 &&
+            p.y >= hoveredCardRect.y1 - 16 && p.y <= hoveredCardRect.y2 + 16) {
+          var hdx = p.x - hoveredCardRect.cx;
+          var hdy = p.y - hoveredCardRect.cy;
+          var hdist = Math.hypot(hdx, hdy) || 1;
+          p.vx += (hdx / hdist) * 0.28;
+          p.vy += (hdy / hdist) * 0.28;
+          if (p.isFront) readingClearance = 0.32; // Dip opacity so text is crystal clear
+        }
+      }
+
       // Shockwave Particle Displacement
       for (var swi = 0; swi < shockwaves.length; swi++) {
         var csw = shockwaves[swi];
@@ -6539,13 +6662,11 @@ try { checkUrlHashRoutine(); } catch(e){}
       if (isAudioHot) {
         var mType = curChoreo ? curChoreo.motionType : "generic";
         var dForce = curChoreo ? curChoreo.danceForce : 0.65;
-        if (p.isFront) dForce *= 1.35; // Foreground dancers have extra joyful energy!
+        if (p.isFront) dForce *= 1.35;
 
-        // Joyful vertical hop on drum kicks & chord downbeats
         var happyVerticalHop = Math.sin(now * 0.0055 + i * 0.6) * (liveBass * 2.2 + liveMid * 1.2);
         p.vy += happyVerticalHop * 0.18;
 
-        // Upward kinetic leap on sharp beat transients (jumping for joy!)
         if (beatKickImpulse > 0.18) {
           p.vy -= beatKickImpulse * (p.isFront ? 1.8 : 1.2);
         }
@@ -6582,11 +6703,12 @@ try { checkUrlHashRoutine(); } catch(e){}
         }
       }
 
-      // Natural damping & restoration
-      p.vx *= 0.965;
-      p.vy *= 0.965;
-      p.vx += (p.baseVx - p.vx) * 0.022;
-      p.vy += (p.baseVy - p.vy) * 0.022;
+      // Natural damping & restoration (calm cruising during idle breath)
+      var dampRate = isIdle ? 0.978 : 0.965;
+      p.vx *= dampRate;
+      p.vy *= dampRate;
+      p.vx += (p.baseVx - p.vx) * (isIdle ? 0.012 : 0.022);
+      p.vy += (p.baseVy - p.vy) * (isIdle ? 0.012 : 0.022);
 
       p.x += p.vx;
       p.y += p.vy;
@@ -6600,11 +6722,11 @@ try { checkUrlHashRoutine(); } catch(e){}
       if (p.x < MIN_X) {
         p.x = MIN_X;
         p.vx = Math.abs(p.vx) * 0.75 + 0.25;
-        p.turnFlex = 0.85; // Subtle bend when reflecting to the opposite side
+        p.turnFlex = 0.85;
       } else if (p.x > MAX_X) {
         p.x = MAX_X;
         p.vx = -Math.abs(p.vx) * 0.75 - 0.25;
-        p.turnFlex = -0.85; // Subtle bend when reflecting to the opposite side
+        p.turnFlex = -0.85;
       }
       if (p.y < MIN_Y) {
         p.y = MIN_Y;
@@ -6638,12 +6760,10 @@ try { checkUrlHashRoutine(); } catch(e){}
       var currentSpeed = Math.hypot(p.vx, p.vy);
       var currentAngle = Math.atan2(p.vy, p.vx);
 
-      // Detect sharp directional turns / reversals (moving to the opposite side)
       if (p.prevAngle !== undefined) {
         var angleDelta = currentAngle - p.prevAngle;
         while (angleDelta > Math.PI) angleDelta -= Math.PI * 2;
         while (angleDelta < -Math.PI) angleDelta += Math.PI * 2;
-        // Trigger a tiny flex ONLY when making an actual sharp turn (> ~20 degrees)
         if (Math.abs(angleDelta) > 0.35) {
           p.turnFlex = Math.max(-1.0, Math.min(1.0, (p.turnFlex || 0) + angleDelta * 0.7));
         }
@@ -6670,7 +6790,11 @@ try { checkUrlHashRoutine(); } catch(e){}
         dynamicLength *= (1 + primaryInstEnergy * elas);
       }
 
-      var currentAlpha = Math.min(0.98, p.alpha * (0.82 + Math.sin(p.pulsePhase) * 0.18)) * p.fadeProgress;
+      // ── FEATURE 1: RELATIVISTIC SPEED-DILATION (Micro Doppler Shift on Acceleration) ──
+      var speedRatio = Math.max(0, (currentSpeed - p.baseSpeed) / (p.baseSpeed * 2.2));
+      var dopplerBoost = Math.min(1.0, speedRatio * 0.65 + beatKickImpulse * 0.45);
+
+      var currentAlpha = Math.min(0.98, p.alpha * (0.82 + Math.sin(p.pulsePhase) * 0.18)) * p.fadeProgress * readingClearance;
       if (isAudioHot) {
         currentAlpha = Math.min(1.0, currentAlpha + liveBass * 0.25);
       }
@@ -6687,7 +6811,7 @@ try { checkUrlHashRoutine(); } catch(e){}
         targetCtx.lineWidth = curSize;
         targetCtx.lineCap = "round";
       } else {
-        // Pristine, clean, straight geometric capsule (the look you prefer!)
+        // Pristine, clean, straight geometric capsule
         if (typeof targetCtx.roundRect === "function") {
           targetCtx.roundRect(-dynamicLength / 2, -curSize / 2, dynamicLength, curSize, curSize / 2);
         } else {
@@ -6696,25 +6820,32 @@ try { checkUrlHashRoutine(); } catch(e){}
       }
 
       if (p.isFront) {
-        // ── FOREGROUND 3D DANCER (Extra Radiant Luminous Glow & Diamond Core) ──
+        // ── FOREGROUND 3D DANCER (Extra Radiant Luminous Glow, Relativistic Shift & Diamond Core) ──
         var fGrad = targetCtx.createLinearGradient(-dynamicLength / 2, 0, dynamicLength / 2, 0);
         var fLitBoost = isAudioHot ? (liveBass * 24 + beatKickImpulse * 16) : 0;
-        var fHeadLit = Math.min(98, 80 + fLitBoost);
-        var fTailLit = Math.min(90, p.lit + fLitBoost * 0.6);
 
-        fGrad.addColorStop(0, "hsla(" + Math.round(p.hue) + ",98%," + fTailLit + "%," + (currentAlpha * 0.95).toFixed(2) + ")");
-        fGrad.addColorStop(0.55, "hsla(" + Math.round(p.hue2) + ",100%," + fHeadLit + "%," + currentAlpha.toFixed(2) + ")");
-        fGrad.addColorStop(1, "rgba(255,255,255," + (currentAlpha * 0.95).toFixed(2) + ")"); // Diamond white-hot leading edge
+        // Doppler blueshift on leading tip + redshift on tail
+        var fHeadLit = Math.min(99, 80 + fLitBoost + dopplerBoost * 12);
+        var fTailLit = Math.min(90, Math.max(52, p.lit + fLitBoost * 0.6 - dopplerBoost * 8));
+        var fHeadHue = (dopplerBoost > 0.12) ? Math.round(p.hue2 * (1 - dopplerBoost * 0.5) + 198 * (dopplerBoost * 0.5)) : p.hue2;
+        var fTailHue = (dopplerBoost > 0.12) ? Math.round(p.hue * (1 - dopplerBoost * 0.4) + 22 * (dopplerBoost * 0.4)) : p.hue;
+
+        fGrad.addColorStop(0, "hsla(" + Math.round(fTailHue) + ",98%," + fTailLit + "%," + (currentAlpha * 0.95).toFixed(2) + ")");
+        fGrad.addColorStop(0.55, "hsla(" + Math.round(fHeadHue) + ",100%," + fHeadLit + "%," + currentAlpha.toFixed(2) + ")");
+        fGrad.addColorStop(1, "rgba(255,255,255," + (currentAlpha * 0.96).toFixed(2) + ")"); // Diamond white-hot leading edge
 
         var fGlow = p.glowBlur * (1.1 + (p.isWeaver ? Math.max(0, p.z) * 0.5 : 0));
         if (isAudioHot) {
           fGlow *= (1 + liveBass * 2.8 + liveMid * 1.1 + beatKickImpulse * 1.5);
         }
+        if (isIdle) {
+          fGlow *= (1.0 + idleBreathFactor * 0.18); // Meditative breath halo
+        }
         if (p.emergeBloom > 0.02) {
           fGlow *= (1 + p.emergeBloom * 1.5);
         }
 
-        targetCtx.shadowColor = "hsla(" + Math.round(p.hue) + ",100%,66%," + Math.min(1, currentAlpha * (0.75 + liveBass * 0.30)).toFixed(2) + ")";
+        targetCtx.shadowColor = "hsla(" + Math.round(fHeadHue) + ",100%,66%," + Math.min(1, currentAlpha * (0.75 + liveBass * 0.30)).toFixed(2) + ")";
         targetCtx.shadowBlur = fGlow;
 
         if (isCurved) {
@@ -6729,7 +6860,7 @@ try { checkUrlHashRoutine(); } catch(e){}
         targetCtx.beginPath();
         targetCtx.arc(dynamicLength / 2, 0, curSize * 0.65, 0, Math.PI * 2);
         targetCtx.fillStyle = "rgba(255,255,255," + (currentAlpha * 0.96).toFixed(2) + ")";
-        targetCtx.shadowColor = "hsla(" + Math.round(p.hue2) + ",100%,75%,0.95)";
+        targetCtx.shadowColor = "hsla(" + Math.round(fHeadHue) + ",100%,75%,0.95)";
         targetCtx.shadowBlur = fGlow * 1.2;
         targetCtx.fill();
 
@@ -6738,11 +6869,12 @@ try { checkUrlHashRoutine(); } catch(e){}
         var grad = targetCtx.createLinearGradient(-dynamicLength / 2, 0, dynamicLength / 2, 0);
         var litBoost = isAudioHot ? (liveBass * 20 + beatKickImpulse * 12) : 0;
         var satBoost = isAudioHot ? 98 : p.sat;
-        var headLit = Math.min(96, 75 + litBoost);
+        var headLit = Math.min(98, 75 + litBoost + dopplerBoost * 10);
         var tailLit = Math.min(88, p.lit + litBoost * 0.6);
+        var rHeadHue = (dopplerBoost > 0.14) ? Math.round(p.hue2 * (1 - dopplerBoost * 0.45) + 196 * (dopplerBoost * 0.45)) : p.hue2;
 
         grad.addColorStop(0, "hsla(" + Math.round(p.hue) + "," + satBoost + "%," + tailLit + "%," + (currentAlpha * 0.90).toFixed(2) + ")");
-        grad.addColorStop(1, "hsla(" + Math.round(p.hue2) + ",98%," + headLit + "%," + Math.min(1, currentAlpha * 1.35).toFixed(2) + ")");
+        grad.addColorStop(1, "hsla(" + Math.round(rHeadHue) + ",98%," + headLit + "%," + Math.min(1, currentAlpha * 1.35).toFixed(2) + ")");
 
         var curGlow = p.glowBlur;
         if (isAudioHot) {
@@ -6751,6 +6883,9 @@ try { checkUrlHashRoutine(); } catch(e){}
                                (curChoreo && curChoreo.focus === "piano-sub") ? (livePiano * 2.0 + liveSub * 2.4) :
                                (liveBass * 2.4 + liveMid * 0.9 + beatKickImpulse * 1.2);
           curGlow *= (1 + instGlowEnergy * glowMult);
+        }
+        if (isIdle) {
+          curGlow *= (1.0 + idleBreathFactor * 0.16); // Meditative breath halo
         }
         if (p.emergeBloom > 0.02) {
           curGlow *= (1 + p.emergeBloom * 1.5);
@@ -6785,7 +6920,7 @@ try { checkUrlHashRoutine(); } catch(e){}
             targetCtx.fill();
           }
         } else {
-          targetCtx.shadowBlur = p.emergeBloom > 0.02 ? (p.emergeBloom * 12) : 0;
+          targetCtx.shadowBlur = p.emergeBloom > 0.02 ? (p.emergeBloom * 12) : (isIdle ? (idleBreathFactor * 4) : 0);
           if (isCurved) {
             targetCtx.strokeStyle = "hsla(" + Math.round(p.hue) + "," + p.sat + "%," + p.lit + "%," + currentAlpha.toFixed(2) + ")";
             targetCtx.stroke();
