@@ -6060,7 +6060,7 @@ try {
 } catch(e){}
 try { checkUrlHashRoutine(); } catch(e){}
 
-/* ───────── ANTIGRAVITY PARTICLE DEFLECTOR ENGINE (Dual-Layer Happy Dance Suite) ───────── */
+/* ───────── ANTIGRAVITY PARTICLE DEFLECTOR ENGINE (3D Z-Depth Weaving & Quantum Fade Suite) ───────── */
 (function initAntigravityEngine() {
   var backCanvas = document.getElementById("antigravityCanvas");
   var frontCanvas = document.getElementById("antigravityFrontCanvas");
@@ -6121,40 +6121,51 @@ try { checkUrlHashRoutine(); } catch(e){}
 
   /* ── 1. CIRCADIAN CHROMATIC HARMONIZATION PALETTES ── */
   var CIRCADIAN_PALETTES = {
-    morning: [ // 05:00 - 11:30 (Solar Amber, 24K Gold, Warm Sunrise Coral)
-      { h: 38,  s: 94, l: 62 },
-      { h: 48,  s: 92, l: 64 },
-      { h: 22,  s: 90, l: 62 },
-      { h: 14,  s: 88, l: 60 }
+    dawn: [
+      { h: 36, s: 95, l: 64 },
+      { h: 22, s: 92, l: 62 },
+      { h: 345, s: 88, l: 66 },
+      { h: 48, s: 96, l: 68 }
     ],
-    afternoon: [ // 11:30 - 17:00 (Electric Cyan, Glacial Ice, Cobalt Executive)
-      { h: 195, s: 92, l: 60 },
-      { h: 182, s: 88, l: 58 },
-      { h: 220, s: 86, l: 68 },
-      { h: 160, s: 85, l: 58 }
+    solar: [
+      { h: 198, s: 95, l: 58 },
+      { h: 184, s: 92, l: 54 },
+      { h: 215, s: 90, l: 64 },
+      { h: 168, s: 88, l: 56 }
     ],
-    evening: [ // 17:00 - 21:30 (Quantum Amethyst, Twilight Iris, Sunset Magenta)
-      { h: 275, s: 84, l: 68 },
-      { h: 255, s: 82, l: 72 },
-      { h: 320, s: 85, l: 64 },
-      { h: 40,  s: 90, l: 60 }
+    golden: [
+      { h: 38, s: 96, l: 62 },
+      { h: 24, s: 94, l: 60 },
+      { h: 12, s: 90, l: 58 },
+      { h: 285, s: 82, l: 65 }
     ],
-    night: [ // 21:30 - 05:00 (Deep Obsidian Slate, Subdued Velvet Violet, Lunar Silver)
-      { h: 245, s: 50, l: 65 },
-      { h: 280, s: 45, l: 62 },
-      { h: 210, s: 35, l: 70 }
+    twilight: [
+      { h: 265, s: 88, l: 66 },
+      { h: 282, s: 85, l: 62 },
+      { h: 228, s: 92, l: 64 },
+      { h: 310, s: 80, l: 60 }
+    ],
+    deepnight: [
+      { h: 224, s: 92, l: 62 },
+      { h: 200, s: 90, l: 56 },
+      { h: 245, s: 86, l: 65 },
+      { h: 188, s: 92, l: 52 }
     ]
   };
 
   function getActiveCircadianPalette() {
-    var nowH = (new Date()).getHours() + (new Date()).getMinutes() / 60;
-    if (nowH >= 5 && nowH < 11.5) return CIRCADIAN_PALETTES.morning;
-    if (nowH >= 11.5 && nowH < 17.0) return CIRCADIAN_PALETTES.afternoon;
-    if (nowH >= 17.0 && nowH < 21.5) return CIRCADIAN_PALETTES.evening;
-    return CIRCADIAN_PALETTES.night;
+    var hour = new Date().getHours();
+    if (hour >= 5 && hour < 8) return CIRCADIAN_PALETTES.dawn;
+    if (hour >= 8 && hour < 16) return CIRCADIAN_PALETTES.solar;
+    if (hour >= 16 && hour < 19) return CIRCADIAN_PALETTES.golden;
+    if (hour >= 19 && hour < 22) return CIRCADIAN_PALETTES.twilight;
+    return CIRCADIAN_PALETTES.deepnight;
   }
 
-  // Mouse & Touch coordinates with smooth inertia interpolation
+  /* ── 2. PARTICLE DYNAMICS & 3D Z-DEPTH WEAVING SETUP ── */
+  var SHIELD_RADIUS = 76;
+  var INFLUENCE_RADIUS = 168;
+
   var mouse = {
     x: -9999,
     y: -9999,
@@ -6164,18 +6175,30 @@ try { checkUrlHashRoutine(); } catch(e){}
     lastActiveTime: 0
   };
 
-  var lastCursorX = -9999, lastCursorY = -9999;
+  var lastCursorX = -9999;
+  var lastCursorY = -9999;
   var cursorSpeed = 0;
 
-  var SHIELD_RADIUS = Math.min(95, Math.max(68, width * 0.085)); // Hard repulsion bubble
-  var INFLUENCE_RADIUS = SHIELD_RADIUS * 2.3;                    // Outer orbital field
+  var shockwaves = [];
+  function triggerHyperspaceShockwave(originX, originY, baseHue) {
+    var pal = getActiveCircadianPalette();
+    var hue = (baseHue !== undefined) ? baseHue : pal[Math.floor(Math.random() * pal.length)].h;
+    shockwaves.push({
+      x: (originX !== undefined) ? originX : width / 2,
+      y: (originY !== undefined) ? originY : height / 2,
+      radius: 8,
+      maxRadius: Math.max(width, height) * 0.75,
+      speed: 12.5,
+      alpha: 1.0,
+      hue: hue
+    });
+  }
 
-  // Background Swarm count + Exactly 7 Foreground Celestial Dancers
-  var BACK_COUNT = width < 768 ? 85 : (width < 1200 ? 140 : 190);
-  var FRONT_COUNT = 7; // Exactly few in front to inspire without blocking reading
+  // Dual-Layer Population: Ambient backdrop + Dedicated 3D Weaver Dancers
+  var AMBIENT_COUNT = width < 768 ? 75 : (width < 1200 ? 125 : 170);
+  var WEAVER_COUNT = width < 768 ? 12 : 16; // Evenly distributed in depth: exactly ~6-8 are in front at any moment!
 
-  function createParticle(isFront) {
-    // Spawn within safe line-of-sight boundaries
+  function createParticle(isWeaver, phaseOffset) {
     var minSpawnX = 40, maxSpawnX = width - 40;
     var minSpawnY = 40, maxSpawnY = height - 40;
     var x = minSpawnX + Math.random() * (maxSpawnX - minSpawnX);
@@ -6184,11 +6207,15 @@ try { checkUrlHashRoutine(); } catch(e){}
     var pal = getActiveCircadianPalette();
     var colorDef = pal[Math.floor(Math.random() * pal.length)];
     var driftAngle = Math.random() * Math.PI * 2;
-    var driftSpeed = isFront ? (0.45 + Math.random() * 0.55) : (0.32 + Math.random() * 0.50);
+    var driftSpeed = isWeaver ? (0.42 + Math.random() * 0.50) : (0.30 + Math.random() * 0.45);
 
-    // Foreground dancers are ALL 100% radiant with dual-tone/3-stop gradients
-    // Background particles: ~26% radiant, ~74% crisp ambient
-    var isRadiant = isFront ? true : (Math.random() < 0.26);
+    var depthPhase = (phaseOffset !== undefined) ? phaseOffset : (Math.random() * Math.PI * 2);
+    var depthSpeed = 0.0022 + Math.random() * 0.0016; // Smooth 4-6 second orbital weave cycle
+    var initialZ = isWeaver ? Math.sin(depthPhase) : -0.5;
+    var isFront = isWeaver ? (initialZ > 0.05) : false;
+
+    // All weavers are radiant; ambient particles have ~26% radiant nodes
+    var isRadiant = isWeaver ? true : (Math.random() < 0.26);
     var hue2 = (colorDef.h + 24 + Math.floor(Math.random() * 18)) % 360;
 
     return {
@@ -6199,31 +6226,42 @@ try { checkUrlHashRoutine(); } catch(e){}
       baseVx: Math.cos(driftAngle) * driftSpeed,
       baseVy: Math.sin(driftAngle) * driftSpeed,
       baseSpeed: driftSpeed,
-      isFront: !!isFront,
-      size: isFront ? (2.6 + Math.random() * 0.6) : (isRadiant ? (2.1 + Math.random() * 0.5) : (1.6 + Math.random() * 0.4)),
-      length: isFront ? (9.0 + Math.random() * 5.0) : (isRadiant ? (7.0 + Math.random() * 4.0) : (5.0 + Math.random() * 3.0)),
+      isWeaver: !!isWeaver,
+      depthPhase: depthPhase,
+      depthSpeed: depthSpeed,
+      z: initialZ,
+      isFront: isFront,
+      baseSize: isWeaver ? (2.4 + Math.random() * 0.5) : (isRadiant ? (2.0 + Math.random() * 0.4) : (1.5 + Math.random() * 0.35)),
+      size: 2.0,
+      baseLength: isWeaver ? (9.5 + Math.random() * 4.5) : (isRadiant ? (7.0 + Math.random() * 3.5) : (5.0 + Math.random() * 2.5)),
+      length: 8.0,
       isRadiant: isRadiant,
-      glowBlur: isFront ? (17 + Math.random() * 9) : (7 + Math.random() * 7),
+      glowBlur: isWeaver ? (18 + Math.random() * 8) : (isRadiant ? (9 + Math.random() * 7) : 0),
       hue: colorDef.h,
       hue2: hue2,
       targetHue: colorDef.h,
-      sat: isFront ? 98 : colorDef.s,
-      lit: isFront ? 68 : colorDef.l,
-      alpha: isFront ? (0.85 + Math.random() * 0.15) : (isRadiant ? (0.65 + Math.random() * 0.30) : (0.40 + Math.random() * 0.40)),
+      sat: colorDef.s,
+      lit: colorDef.l,
+      alpha: isWeaver ? (0.85 + Math.random() * 0.15) : (isRadiant ? (0.65 + Math.random() * 0.25) : (0.38 + Math.random() * 0.35)),
       pulsePhase: Math.random() * Math.PI * 2,
       dancePhase: Math.random() * Math.PI * 2,
+      fadeMode: "normal", // "normal", "fading", "emerging"
+      fadeProgress: 1.0,
+      fadeSpeed: 0.08,
+      emergeBloom: 0.0,
       trail: []
     };
   }
 
   var particles = [];
-  // 1. Create Background Swarm
-  for (var b = 0; b < BACK_COUNT; b++) {
-    particles.push(createParticle(false));
+  // 1. Create 3D Weaver Dancers (distributed uniformly in depth phase around 2*PI circle)
+  for (var w = 0; w < WEAVER_COUNT; w++) {
+    var phase = (w / WEAVER_COUNT) * Math.PI * 2;
+    particles.push(createParticle(true, phase));
   }
-  // 2. Create the 7 Foreground VIP Celestial Dancers
-  for (var f = 0; f < FRONT_COUNT; f++) {
-    particles.push(createParticle(true));
+  // 2. Create Ambient Swarm
+  for (var b = 0; b < AMBIENT_COUNT; b++) {
+    particles.push(createParticle(false));
   }
 
   function onPointerMove(e) {
@@ -6237,29 +6275,21 @@ try { checkUrlHashRoutine(); } catch(e){}
   window.addEventListener("pointerdown", onPointerMove, { passive: true });
   window.addEventListener("pointerleave", function() {
     mouse.active = false;
+    mouse.x = -9999;
+    mouse.y = -9999;
   });
 
-  /* ── 2. HYPERSPACE SHOCKWAVES ── */
-  var shockwaves = [];
-  function triggerHyperspaceShockwave(originX, originY, colorHue) {
-    if (!enabled) return;
-    shockwaves.push({
-      x: (originX !== undefined && originX !== null) ? originX : (width / 2),
-      y: (originY !== undefined && originY !== null) ? originY : (height * 0.28),
-      radius: 14,
-      maxRadius: Math.max(width, height) * 0.85,
-      speed: 15,
-      alpha: 0.92,
-      hue: colorHue || 42
-    });
-  }
-
-  /* ── 5. 100% LIVE AUDIO FFT BEAT & DANCE STATE ── */
-  var prevBassEnergy = 0;
-  var beatKickImpulse = 0;
+  window.addEventListener("alarm-fire", function(e) {
+    var hue = e && e.detail && e.detail.hue;
+    var x = width * 0.5;
+    var y = height * 0.35;
+    triggerHyperspaceShockwave(x, y, hue);
+  });
 
   var animId = null;
   var isTabActive = true;
+  var prevBassEnergy = 0;
+  var beatKickImpulse = 0;
 
   document.addEventListener("visibilitychange", function() {
     if (document.hidden) {
@@ -6366,11 +6396,89 @@ try { checkUrlHashRoutine(); } catch(e){}
     var MIN_X = MARGIN_X, MAX_X = width - MARGIN_X;
     var MIN_Y = MARGIN_Y, MAX_Y = height - MARGIN_Y;
 
+    // ── SPONTANEOUS QUANTUM FLASH-FADE & IMMEDIATE EMERGENCE CONTROLLER ──
+    // Lessens repetitive pattern by having a few particles quickly vanish while others immediately emerge!
+    var activeFadingCount = 0;
+    for (var fCount = 0; fCount < particles.length; fCount++) {
+      if (particles[fCount].fadeMode !== "normal") activeFadingCount++;
+    }
+
+    var triggerFlash = (Math.random() < 0.038) || (beatKickImpulse > 0.42 && Math.random() < 0.22);
+    if (triggerFlash && activeFadingCount < 4) {
+      // 1. Pick 1 random normal particle to immediately fade out
+      var fIdx = Math.floor(Math.random() * particles.length);
+      var pFade = particles[fIdx];
+      if (pFade && pFade.fadeMode === "normal") {
+        pFade.fadeMode = "fading";
+        pFade.fadeSpeed = 0.075 + Math.random() * 0.045; // Fades out in ~10-14 frames (~170ms)
+      }
+
+      // 2. Concurrently pick another particle to immediately emerge at a fresh spontaneous location!
+      var eIdx = Math.floor(Math.random() * particles.length);
+      var pEmerge = particles[eIdx];
+      if (pEmerge && pEmerge.fadeMode === "normal" && eIdx !== fIdx) {
+        pEmerge.x = MIN_X + 25 + Math.random() * (MAX_X - MIN_X - 50);
+        pEmerge.y = MIN_Y + 25 + Math.random() * (MAX_Y - MIN_Y - 50);
+        var freshAngle = Math.random() * Math.PI * 2;
+        var freshSpeed = pEmerge.baseSpeed || (0.35 + Math.random() * 0.50);
+        pEmerge.vx = Math.cos(freshAngle) * freshSpeed;
+        pEmerge.vy = Math.sin(freshAngle) * freshSpeed;
+        pEmerge.fadeMode = "emerging";
+        pEmerge.fadeProgress = 0.06;
+        pEmerge.emergeBloom = 1.0; // Instant luminous emergence flash
+        pEmerge.fadeSpeed = 0.080 + Math.random() * 0.040; // Emerges in ~10-12 frames
+      }
+    }
+
     // ── Main Particle Simulation Loop ──
     for (var i = 0; i < particles.length; i++) {
       var p = particles[i];
       p.pulsePhase += 0.025;
       p.dancePhase += 0.035;
+
+      // ── 3D Z-DEPTH WEAVING DYNAMICS (Inside, Outside, Above and Behind Cards) ──
+      if (p.isWeaver) {
+        p.depthPhase += p.depthSpeed;
+        if (isAudioHot) {
+          // Beat transients accelerate the weave dance
+          p.depthPhase += (liveBass * 0.0035 + beatKickImpulse * 0.0045);
+        }
+        p.z = Math.sin(p.depthPhase);
+        // z > 0.05 rises into Foreground Canvas (z-index: 3, floating in front of cards & clock)
+        // z <= 0.05 dives into Background Canvas (z-index: 1, dancing behind cards & clock)
+        p.isFront = (p.z > 0.05);
+      }
+
+      // ── Immediate Fade & Emergence Transitions ──
+      if (p.fadeMode === "fading") {
+        p.fadeProgress -= p.fadeSpeed;
+        if (p.fadeProgress <= 0) {
+          p.fadeProgress = 0;
+          // As soon as it immediately fades, it instantly emerges at a fresh spontaneous location!
+          p.x = MIN_X + 25 + Math.random() * (MAX_X - MIN_X - 50);
+          p.y = MIN_Y + 25 + Math.random() * (MAX_Y - MIN_Y - 50);
+          var reAngle = Math.random() * Math.PI * 2;
+          var reSpeed = p.baseSpeed || (0.35 + Math.random() * 0.50);
+          p.vx = Math.cos(reAngle) * reSpeed;
+          p.vy = Math.sin(reAngle) * reSpeed;
+          p.fadeMode = "emerging";
+          p.fadeProgress = 0.06;
+          p.emergeBloom = 1.0;
+        }
+      } else if (p.fadeMode === "emerging") {
+        p.fadeProgress += p.fadeSpeed;
+        p.emergeBloom *= 0.85;
+        if (p.fadeProgress >= 1.0) {
+          p.fadeProgress = 1.0;
+          p.fadeMode = "normal";
+          p.emergeBloom = 0.0;
+        }
+      }
+
+      // Dynamic size and glow based on 3D depth
+      var depthScale = p.isWeaver ? (0.86 + Math.max(0, p.z) * 0.44) : 1.0;
+      var curSize = p.baseSize * depthScale;
+      var baseLength = p.baseLength * (p.isWeaver ? (0.90 + Math.max(0, p.z) * 0.38) : 1.0);
 
       // Select target canvas based on layer
       var targetCtx = (p.isFront && frontCtx) ? frontCtx : backCtx;
@@ -6455,65 +6563,39 @@ try { checkUrlHashRoutine(); } catch(e){}
 
         } else if (mType === "acoustic-sway") {
           // You’re Still The One: Relaxed country acoustic strum & warm loving sway
-          var strumAngle = Math.sin(now * 0.0020 + p.pulsePhase) * 1.4;
-          var strumPush = (liveStrum * 0.85 + liveBass * 0.35) * dForce;
-          p.vx += Math.sin(strumAngle) * (strumPush * 0.22);
-          p.vy += Math.cos(strumAngle) * (strumPush * 0.18);
+          var strumAngle = Math.sin(now * 0.0020 + p.pulsePhase) * 1.5;
+          var strumPush = (liveStrum * 0.90 + liveBass * 0.35) * dForce;
+          p.vx += Math.sin(strumAngle) * (strumPush * 0.28);
+          p.vy += (Math.cos(now * 0.0035 + i * 0.2) * 0.15) * strumPush;
 
         } else if (mType === "pop-bounce") {
-          // OKAY!: High-energy bouncy pop hops, joyful spring physics on 808 kicks & claps
-          var bounceAngle = p.pulsePhase + (i % 2 === 0 ? 0.785 : -0.785);
-          var bouncePush = (liveBass * 0.95 + beatKickImpulse * 0.70 + liveTreble * 0.40) * dForce;
-          p.vx += Math.cos(bounceAngle) * (bouncePush * 0.45);
-          p.vy += Math.sin(bounceAngle) * (bouncePush * 0.45);
+          // Malibu Nights / Okay: Crisp contemporary drum/bass rhythmic leaps
+          var bounceHop = Math.sin(now * 0.008 + i * 0.4) * (liveBass * 1.6 + liveMid * 0.6) * dForce;
+          p.vy += bounceHop * 0.26;
+          var popLateral = Math.cos(now * 0.004 + p.dancePhase) * (liveMid * 0.9 + liveBass * 0.5) * dForce;
+          p.vx += popLateral * 0.22;
 
-        } else if (mType === "piano-subbass") {
-          // Malibu Nights: Dreamy celestial float with deep 808 sub-bass ripples & piano sparkles
-          var pAngle = Math.atan2(p.y - height / 2, p.x - width / 2);
-          var pianoRipple = (liveSub * 1.10 + livePiano * 0.65) * dForce;
-          p.vx += Math.cos(pAngle) * (pianoRipple * 0.26);
-          p.vy += Math.sin(pAngle) * (pianoRipple * 0.26);
-
-        } else if (mType === "disco-vortex") {
-          // Training Season: Relentless four-on-the-floor disco vortex drive
-          var vortexA = Math.atan2(p.y - height / 2, p.x - width / 2) + Math.PI / 2;
-          var discoPush = (liveBass * 0.90 + liveTreble * 0.45) * dForce;
-          p.vx += Math.cos(vortexA) * (discoPush * 0.38);
-          p.vy += Math.sin(vortexA) * (discoPush * 0.38);
-
-        } else if (mType === "riff-headbob") {
-          // The Man Who Can’t Be Moved: Steady 4/4 head-bob on acoustic guitar riff
-          var riffWave = Math.sin(now * 0.0035 + (i % 4) * 0.5) * (liveStrum * 0.75 + liveBass * 0.45) * dForce;
-          p.vx += riffWave * 0.28;
-          p.vy += Math.cos(p.pulsePhase) * (riffWave * 0.22);
-
-        } else if (mType === "sparkle-crescendo") {
-          // Enchanted: Delicate acoustic picking twinkle building into broad stadium sweep
-          var fairySparkle = (liveStrum * 0.65 + livePiano * 0.50 + liveBass * 0.85) * dForce;
-          p.vx += Math.cos(p.pulsePhase * 3) * (fairySparkle * 0.28);
-          p.vy += Math.sin(p.pulsePhase * 3) * (fairySparkle * 0.28);
-
-        } else if (mType === "staccato-burst") {
-          // Stop The Wedding!: Punchy staccato piano hits & dramatic chorus bursts
-          var staccatoForce = (livePiano * 0.85 + liveBass * 0.65 + beatKickImpulse * 0.55) * dForce;
-          p.vx += Math.cos(p.pulsePhase) * (staccatoForce * 0.36);
-          p.vy += Math.sin(p.pulsePhase) * (staccatoForce * 0.36);
+        } else if (mType === "ambient-drift") {
+          // Delicate ambient chime floats
+          var ambAngle = p.pulsePhase + Math.sin(now * 0.0015) * 0.8;
+          var ambEnergy = (liveTreble * 0.85 + liveMid * 0.45) * dForce;
+          p.vx += Math.cos(ambAngle) * (ambEnergy * 0.16);
+          p.vy += Math.sin(ambAngle) * (ambEnergy * 0.16);
 
         } else {
-          // Na Para Bang & General: Lyrical gentle acoustic leaf drift
-          var driftW = (liveStrum * 0.60 + liveMid * 0.40) * dForce;
-          p.vx += Math.cos(p.pulsePhase) * (driftW * 0.24);
-          p.vy += Math.sin(p.pulsePhase) * (driftW * 0.24);
+          // Generic Harmonic Resonance: Bass-driven organic expansion
+          var harmAngle = p.pulsePhase;
+          var harmForce = (liveBass * 0.70 + liveMid * 0.40) * dForce;
+          p.vx += Math.cos(harmAngle) * (harmForce * 0.20);
+          p.vy += Math.sin(harmAngle) * (harmForce * 0.20);
         }
       }
 
-      // Natural Ambient Drift
-      p.vx += (p.baseVx - p.vx) * 0.035;
-      p.vy += (p.baseVy - p.vy) * 0.035;
-
-      // Damping
-      p.vx *= 0.94;
-      p.vy *= 0.94;
+      // Natural damping & restoration
+      p.vx *= 0.965;
+      p.vy *= 0.965;
+      p.vx += (p.baseVx - p.vx) * 0.022;
+      p.vy += (p.baseVy - p.vy) * 0.022;
 
       p.x += p.vx;
       p.y += p.vy;
@@ -6551,7 +6633,7 @@ try { checkUrlHashRoutine(); } catch(e){}
           if (tr.alpha > 0.05) {
             targetCtx.beginPath();
             targetCtx.arc(tr.x, tr.y, p.isFront ? 1.6 : 1.2, 0, Math.PI * 2);
-            targetCtx.fillStyle = "hsla(" + Math.round(p.hue) + ", 95%, 72%, " + tr.alpha.toFixed(2) + ")";
+            targetCtx.fillStyle = "hsla(" + Math.round(p.hue) + ", 95%, 72%, " + (tr.alpha * p.fadeProgress).toFixed(2) + ")";
             targetCtx.fill();
           } else {
             p.trail.splice(tIdx, 1);
@@ -6562,7 +6644,7 @@ try { checkUrlHashRoutine(); } catch(e){}
       // ── Render Directional Capsule ──
       var currentSpeed = Math.hypot(p.vx, p.vy);
       var currentAngle = Math.atan2(p.vy, p.vx);
-      var dynamicLength = Math.max(p.length, Math.min(p.isFront ? 18 : 15, p.length + currentSpeed * 2.2));
+      var dynamicLength = Math.max(baseLength, Math.min(p.isFront ? 18 : 15, baseLength + currentSpeed * 2.2));
 
       // 100% Engraved Beat Length Elasticity
       if (isAudioHot) {
@@ -6574,7 +6656,7 @@ try { checkUrlHashRoutine(); } catch(e){}
         dynamicLength *= (1 + primaryInstEnergy * elas);
       }
 
-      var currentAlpha = Math.min(0.98, p.alpha * (0.82 + Math.sin(p.pulsePhase) * 0.18));
+      var currentAlpha = Math.min(0.98, p.alpha * (0.82 + Math.sin(p.pulsePhase) * 0.18)) * p.fadeProgress;
       if (isAudioHot) {
         currentAlpha = Math.min(1.0, currentAlpha + liveBass * 0.25);
       }
@@ -6585,13 +6667,13 @@ try { checkUrlHashRoutine(); } catch(e){}
       targetCtx.beginPath();
 
       if (typeof targetCtx.roundRect === "function") {
-        targetCtx.roundRect(-dynamicLength / 2, -p.size / 2, dynamicLength, p.size, p.size / 2);
+        targetCtx.roundRect(-dynamicLength / 2, -curSize / 2, dynamicLength, curSize, curSize / 2);
       } else {
-        targetCtx.rect(-dynamicLength / 2, -p.size / 2, dynamicLength, p.size);
+        targetCtx.rect(-dynamicLength / 2, -curSize / 2, dynamicLength, curSize);
       }
 
       if (p.isFront) {
-        // ── FOREGROUND VIP CELESTIAL DANCER (Extra Radiant Luminous Glow & Diamond Core) ──
+        // ── FOREGROUND 3D DANCER (Extra Radiant Luminous Glow & Diamond Core Floating Directly Above UI) ──
         var fGrad = targetCtx.createLinearGradient(-dynamicLength / 2, 0, dynamicLength / 2, 0);
         var fLitBoost = isAudioHot ? (liveBass * 24 + beatKickImpulse * 16) : 0;
         var fHeadLit = Math.min(98, 80 + fLitBoost);
@@ -6601,9 +6683,12 @@ try { checkUrlHashRoutine(); } catch(e){}
         fGrad.addColorStop(0.55, "hsla(" + Math.round(p.hue2) + ",100%," + fHeadLit + "%," + currentAlpha.toFixed(2) + ")");
         fGrad.addColorStop(1, "rgba(255,255,255," + (currentAlpha * 0.92).toFixed(2) + ")"); // Diamond white-hot leading edge
 
-        var fGlow = p.glowBlur;
+        var fGlow = p.glowBlur * (1.1 + (p.isWeaver ? Math.max(0, p.z) * 0.5 : 0));
         if (isAudioHot) {
           fGlow *= (1 + liveBass * 2.8 + liveMid * 1.1 + beatKickImpulse * 1.5);
+        }
+        if (p.emergeBloom > 0.02) {
+          fGlow *= (1 + p.emergeBloom * 1.5);
         }
 
         targetCtx.shadowColor = "hsla(" + Math.round(p.hue) + ",100%,66%," + Math.min(1, currentAlpha * (0.75 + liveBass * 0.30)).toFixed(2) + ")";
@@ -6611,7 +6696,7 @@ try { checkUrlHashRoutine(); } catch(e){}
         targetCtx.fillStyle = fGrad;
 
       } else if (p.isRadiant) {
-        // Radiant Background Quantum Node
+        // Radiant Quantum Node (Behind Cards or Ambient)
         var grad = targetCtx.createLinearGradient(-dynamicLength / 2, 0, dynamicLength / 2, 0);
         var litBoost = isAudioHot ? (liveBass * 20 + beatKickImpulse * 12) : 0;
         var satBoost = isAudioHot ? 98 : p.sat;
@@ -6628,6 +6713,9 @@ try { checkUrlHashRoutine(); } catch(e){}
                                (curChoreo && curChoreo.focus === "piano-sub") ? (livePiano * 2.0 + liveSub * 2.4) :
                                (liveBass * 2.4 + liveMid * 0.9 + beatKickImpulse * 1.2);
           curGlow *= (1 + instGlowEnergy * glowMult);
+        }
+        if (p.emergeBloom > 0.02) {
+          curGlow *= (1 + p.emergeBloom * 1.5);
         }
 
         targetCtx.shadowColor = "hsla(" + Math.round(p.hue) + ",94%,64%," + Math.min(1, currentAlpha * (0.65 + liveBass * 0.35)).toFixed(2) + ")";
@@ -6646,7 +6734,7 @@ try { checkUrlHashRoutine(); } catch(e){}
           targetCtx.shadowBlur = ambBeat * 10;
           targetCtx.fillStyle = aGrad;
         } else {
-          targetCtx.shadowBlur = 0;
+          targetCtx.shadowBlur = p.emergeBloom > 0.02 ? (p.emergeBloom * 12) : 0;
           targetCtx.fillStyle = "hsla(" + Math.round(p.hue) + "," + p.sat + "%," + p.lit + "%," + currentAlpha.toFixed(2) + ")";
         }
       }
@@ -6666,7 +6754,7 @@ try { checkUrlHashRoutine(); } catch(e){}
         var fdist = Math.hypot(fdx, fdy);
         if (fdist < maxFilamentDist) {
           var fNorm = 1 - (fdist / maxFilamentDist);
-          var fAlpha = Math.pow(fNorm, 1.6) * 0.16;
+          var fAlpha = Math.pow(fNorm, 1.6) * 0.16 * (pA.fadeProgress || 1.0) * (pB.fadeProgress || 1.0);
           backCtx.beginPath();
           backCtx.moveTo(pA.x, pA.y);
           backCtx.lineTo(pB.x, pB.y);
