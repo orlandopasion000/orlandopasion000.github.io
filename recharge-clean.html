@@ -1665,27 +1665,29 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
   opacity: 1;
 }
 
+.play-music-btn.is-playing .pm-eq-b {
+  transform-box: fill-box;
+  transform-origin: bottom;
+  will-change: transform;
+}
+
 .play-music-btn.is-playing .pm-eq-b.b-1 {
   animation: pmEqDance1 0.8s ease-in-out infinite alternate;
-  transform-origin: bottom;
 }
 .play-music-btn.is-playing .pm-eq-b.b-2 {
   animation: pmEqDance2 0.65s ease-in-out infinite alternate 0.15s;
-  transform-origin: bottom;
 }
 .play-music-btn.is-playing .pm-eq-b.b-3 {
   animation: pmEqDance3 0.9s ease-in-out infinite alternate 0.08s;
-  transform-origin: bottom;
 }
 .play-music-btn.is-playing .pm-eq-b.b-4 {
   animation: pmEqDance4 0.75s ease-in-out infinite alternate 0.2s;
-  transform-origin: bottom;
 }
 
-@keyframes pmEqDance1 { 0% { height: 3px; y: 15px; } 100% { height: 11px; y: 7px; } }
-@keyframes pmEqDance2 { 0% { height: 12px; y: 6px; } 100% { height: 4px; y: 14px; } }
-@keyframes pmEqDance3 { 0% { height: 4px; y: 14px; } 100% { height: 13px; y: 5px; } }
-@keyframes pmEqDance4 { 0% { height: 8px; y: 10px; } 100% { height: 3px; y: 15px; } }
+@keyframes pmEqDance1 { 0% { transform: scaleY(0.25); } 100% { transform: scaleY(1.0); } }
+@keyframes pmEqDance2 { 0% { transform: scaleY(1.0); } 100% { transform: scaleY(0.35); } }
+@keyframes pmEqDance3 { 0% { transform: scaleY(0.3); } 100% { transform: scaleY(1.0); } }
+@keyframes pmEqDance4 { 0% { transform: scaleY(0.75); } 100% { transform: scaleY(0.2); } }
 
 .pm-text-wrap {
   position: relative;
@@ -1716,13 +1718,15 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 
 .play-music-btn.is-playing .pm-char {
   background: linear-gradient(135deg, #ffffff 0%, #38bdf8 35%, #fbbf24 70%, #ec4899 100%);
-  background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.7));
-  animation: pmTextDance 1.6s cubic-bezier(0.4, 0, 0.2, 1) infinite, pmTextGradient 3.5s linear infinite;
+  filter: drop-shadow(0 0 5px rgba(56, 189, 248, 0.65));
+  animation: pmTextDance 1.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   animation-delay: calc(var(--ci, 0) * 0.11s);
   will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  contain: layout style;
 }
 
 @keyframes pmTextDance {
@@ -1735,12 +1739,6 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
   70% {
     transform: translate3d(0, 1.8px, 0) rotate(2deg) scale(0.97);
   }
-}
-
-@keyframes pmTextGradient {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
 }
 
 .pm-particle-canvas {
@@ -1809,8 +1807,60 @@ body.light-theme .play-music-btn.is-playing {
 .preset-cluster-right{display:flex;gap:6px;align-items:center;flex-wrap:nowrap;flex-shrink:0}
 .preset-cluster-right button{padding:5px 10px;font-size:.78rem;font-weight:600;white-space:nowrap;border-radius:8px}
 
-/* Schedule Section Header & Action Buttons */
-.sched-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:12px}
+/* Schedule Section Header & 3-Column Symmetrical Layout (Centered Play Music) */
+.sched-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 14px;
+  position: relative;
+}
+.sched-head-left {
+  display: flex;
+  align-items: center;
+  flex: 1 1 0;
+  min-width: 180px;
+}
+.sched-head-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+.sched-head-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 1 1 0;
+  min-width: 180px;
+}
+@media (min-width: 769px) {
+  .sched-head {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 16px;
+  }
+  .sched-head-left { justify-self: start; min-width: auto; }
+  .sched-head-center { justify-self: center; }
+  .sched-head-right { justify-self: end; min-width: auto; }
+}
+@media (max-width: 768px) {
+  .sched-head {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+  }
+  .sched-head-left, .sched-head-center, .sched-head-right {
+    justify-content: center;
+    width: 100%;
+    min-width: auto;
+  }
+}
 h2{font-size:clamp(1.5rem,2.6vw,2.1rem);font-weight:700;display:flex;align-items:center;gap:14px;text-shadow:var(--glow-w);margin:0}
 .sched-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 
@@ -3048,8 +3098,10 @@ body.light-theme .highlight-card .dist-icon{
 
   <!-- 7. SCHEDULE SECTION -->
   <div class="sched-head">
-    <h2>Today's Schedule</h2>
-    <div class="sched-actions" id="schedActionsNormal">
+    <div class="sched-head-left">
+      <h2>Today's Schedule</h2>
+    </div>
+    <div class="sched-head-center">
       <!-- Play Music: Next-Gen Futuristic Interactive Button & Particle Dancing Suite -->
       <button class="ghost play-music-btn" id="test" title="Play Curated Alarm Music & Antigravity Beats" aria-label="Play Music">
         <span class="pm-bg-aurora"></span>
@@ -3060,10 +3112,10 @@ body.light-theme .highlight-card .dist-icon{
             <path class="pm-icon-wave wave-1" d="M17.5 9.5C18.4 10.2 19 11 19 12C19 13 18.4 13.8 17.5 14.5" stroke="#38bdf8" stroke-width="1.4" stroke-linecap="round"/>
             <path class="pm-icon-wave wave-2" d="M6.5 9.5C5.6 10.2 5 11 5 12C5 13 5.6 13.8 6.5 14.5" stroke="#f59e0b" stroke-width="1.4" stroke-linecap="round"/>
             <g class="pm-icon-eq-bars">
-              <rect class="pm-eq-b b-1" x="7" y="10" width="2" height="4" rx="1" fill="#38bdf8"/>
+              <rect class="pm-eq-b b-1" x="7" y="7" width="2" height="10" rx="1" fill="#38bdf8"/>
               <rect class="pm-eq-b b-2" x="10" y="7" width="2" height="10" rx="1" fill="#f59e0b"/>
-              <rect class="pm-eq-b b-3" x="13" y="9" width="2" height="6" rx="1" fill="#38bdf8"/>
-              <rect class="pm-eq-b b-4" x="16" y="11" width="2" height="2" rx="1" fill="#ec4899"/>
+              <rect class="pm-eq-b b-3" x="13" y="7" width="2" height="10" rx="1" fill="#38bdf8"/>
+              <rect class="pm-eq-b b-4" x="16" y="7" width="2" height="10" rx="1" fill="#ec4899"/>
             </g>
             <defs>
               <linearGradient id="pmCyberGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
@@ -3085,6 +3137,8 @@ body.light-theme .highlight-card .dist-icon{
           <canvas class="pm-particle-canvas" id="pmParticleCanvas"></canvas>
         </span>
       </button>
+    </div>
+    <div class="sched-head-right" id="schedActionsNormal">
       <div id="schedActionsEdit" style="display:none;gap:8px;align-items:center;">
         <button class="btn-save" id="saveScheduleBtn">💾 Save Changes</button>
         <button class="btn-cancel" id="cancelScheduleBtn">✕ Cancel Edit</button>
@@ -3850,8 +3904,28 @@ var SONG_CHOREOGRAPHY = {
   }
 };
 
-// Global 100% Real-Time Beat & Multi-Band Instrumentation Telemetry
+// Global 100% Real-Time Beat & Multi-Band Instrumentation Telemetry (Zero-Allocation High Performance)
+var _audioTelemetryCache = {
+  active: false,
+  songKey: '',
+  choreo: null,
+  bass: 0,
+  subBass: 0,
+  strum: 0,
+  piano: 0,
+  mid: 0,
+  treble: 0,
+  energy: 0
+};
+var _lastAudioTelemetryTime = 0;
+
 function getAudioBeatTelemetry(){
+  var nowTime = (typeof performance !== "undefined" && performance.now) ? performance.now() : Date.now();
+  if (nowTime - _lastAudioTelemetryTime < 8) {
+    return _audioTelemetryCache;
+  }
+  _lastAudioTelemetryTime = nowTime;
+
   var isPlaying = (typeof current !== "undefined" && current !== null) ||
                   (typeof chimeTimer !== "undefined" && chimeTimer !== null) ||
                   (typeof ringing !== "undefined" && ringing !== -1);
@@ -3859,67 +3933,64 @@ function getAudioBeatTelemetry(){
   var songKey = (current && current.file) ? current.file.replace(/^music\//, '') : '';
   var choreo = SONG_CHOREOGRAPHY[songKey] || null;
 
+  _audioTelemetryCache.songKey = songKey;
+  _audioTelemetryCache.choreo = choreo;
+
   if(!audioAnalyser || !analyserDataArray || !ac || ac.state !== "running"){
-    return {
-      active: isPlaying,
-      songKey: songKey,
-      choreo: choreo,
-      bass: isPlaying ? 0.35 : 0,
-      subBass: isPlaying ? 0.30 : 0,
-      strum: isPlaying ? 0.28 : 0,
-      piano: isPlaying ? 0.25 : 0,
-      mid: isPlaying ? 0.25 : 0,
-      treble: isPlaying ? 0.15 : 0,
-      energy: isPlaying ? 0.30 : 0
-    };
+    _audioTelemetryCache.active = isPlaying;
+    _audioTelemetryCache.bass = isPlaying ? 0.35 : 0;
+    _audioTelemetryCache.subBass = isPlaying ? 0.30 : 0;
+    _audioTelemetryCache.strum = isPlaying ? 0.28 : 0;
+    _audioTelemetryCache.piano = isPlaying ? 0.25 : 0;
+    _audioTelemetryCache.mid = isPlaying ? 0.25 : 0;
+    _audioTelemetryCache.treble = isPlaying ? 0.15 : 0;
+    _audioTelemetryCache.energy = isPlaying ? 0.30 : 0;
+    return _audioTelemetryCache;
   }
 
   audioAnalyser.getByteFrequencyData(analyserDataArray);
 
   // Sub-Bass: Bins 1 to 2 (~20Hz - 90Hz)
-  var subSum = (analyserDataArray[1] + analyserDataArray[2]) / 2;
-  var subBass = subSum / 255;
+  var subSum = (analyserDataArray[1] + analyserDataArray[2]) * 0.5;
+  var subBass = subSum * 0.0039215686;
 
   // Bass & Kick Drum: Bins 1 to 5 (~40Hz - 250Hz)
-  var bSum = 0;
-  for(var b = 1; b <= 5; b++) bSum += analyserDataArray[b];
-  var bass = bSum / (5 * 255);
+  var bSum = analyserDataArray[1] + analyserDataArray[2] + analyserDataArray[3] + analyserDataArray[4] + analyserDataArray[5];
+  var bass = bSum * 0.0007843137;
 
   // Acoustic Guitar Strumming: Bins 4 to 16 (~160Hz - 800Hz)
   var strSum = 0;
   for(var st = 4; st <= 16; st++) strSum += analyserDataArray[st];
-  var strum = strSum / (13 * 255);
+  var strum = strSum * 0.0003016591;
 
   // Piano Harmonics & Vocal Chords: Bins 10 to 35 (~500Hz - 2000Hz)
   var pSum = 0;
   for(var pi = 10; pi <= 35; pi++) pSum += analyserDataArray[pi];
-  var piano = pSum / (26 * 255);
+  var piano = pSum * 0.0001508295;
 
   // Mid-range: Bins 6 to 24 (~250Hz - 1200Hz)
   var mSum = 0;
   for(var m = 6; m <= 24; m++) mSum += analyserDataArray[m];
-  var mid = mSum / (19 * 255);
+  var mid = mSum * 0.0002063983;
 
   // Treble: Bins 25 to 64 (~1200Hz - 6000Hz)
   var tSum = 0;
   for(var tr = 25; tr <= 64; tr++) tSum += analyserDataArray[tr];
-  var treble = tSum / (40 * 255);
+  var treble = tSum * 0.0000980392;
 
   var energy = (bass * 0.45 + strum * 0.25 + mid * 0.20 + treble * 0.10);
   var active = isPlaying || energy > 0.02;
 
-  return {
-    active: active,
-    songKey: songKey,
-    choreo: choreo,
-    bass: bass,
-    subBass: subBass,
-    strum: strum,
-    piano: piano,
-    mid: mid,
-    treble: treble,
-    energy: energy
-  };
+  _audioTelemetryCache.active = active;
+  _audioTelemetryCache.bass = bass;
+  _audioTelemetryCache.subBass = subBass;
+  _audioTelemetryCache.strum = strum;
+  _audioTelemetryCache.piano = piano;
+  _audioTelemetryCache.mid = mid;
+  _audioTelemetryCache.treble = treble;
+  _audioTelemetryCache.energy = energy;
+
+  return _audioTelemetryCache;
 }
 function unlock(){
   initAudio();
@@ -4912,11 +4983,12 @@ $("arm").onclick=function(){
     // alarms paused
   }
 };
-$("test").onclick=function(){
+$("test").onclick=function(e){
   if(mode==="test"){stopSong();return}
-  var btnRect = $("test").getBoundingClientRect();
+  var swX = (e && typeof e.clientX === "number" && e.clientX > 0) ? e.clientX : (window.innerWidth / 2);
+  var swY = (e && typeof e.clientY === "number" && e.clientY > 0) ? e.clientY : (window.innerHeight * 0.4);
   if (window.antigravityFX && typeof window.antigravityFX.triggerShockwave === "function") {
-    window.antigravityFX.triggerShockwave(btnRect.left + btnRect.width / 2, btnRect.top + btnRect.height / 2, 42);
+    window.antigravityFX.triggerShockwave(swX, swY, 42);
   }
   var song=queued;queued=nextSong();
   playSong(song,null,"test");
@@ -6413,8 +6485,8 @@ try { checkUrlHashRoutine(); } catch(e){}
   var particles = [];
   var dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-  // High-performance particle palette
-  var MAX_PARTICLES = 40;
+  // Silky 60-120fps particle palette (tuned for zero latency)
+  var MAX_PARTICLES = 25;
   var HUES = [198, 42, 335, 275, 160]; // Cyan, Celestial Gold, Radiant Rose, Electric Violet, Emerald
 
   var canvasW = 0, canvasH = 0;
@@ -6431,8 +6503,8 @@ try { checkUrlHashRoutine(); } catch(e){}
     for (var i = 0; i < charEls.length; i++) {
       var r = charEls[i].getBoundingClientRect();
       cachedCharCoords.push({
-        x: (r.left + r.width / 2) - cRect.left,
-        y: (r.top + r.height / 2) - cRect.top,
+        x: (r.left + r.width * 0.5) - cRect.left,
+        y: (r.top + r.height * 0.5) - cRect.top,
         w: r.width,
         h: r.height
       });
@@ -6456,8 +6528,22 @@ try { checkUrlHashRoutine(); } catch(e){}
     updateCharCoords();
   }
 
+  // Pre-measure resting coordinates at boot so clicking "Play Music" causes zero forced layout reflow
+  function initCoords() {
+    resizeCanvas();
+  }
+  if (document.readyState === "complete" || document.readyState === "interactive") {
+    setTimeout(initCoords, 60);
+  } else {
+    window.addEventListener("DOMContentLoaded", function() { setTimeout(initCoords, 60); }, { once: true });
+  }
+
+  var resizeTimer = null;
   window.addEventListener("resize", function() {
-    if (isPlaying) resizeCanvas();
+    if (resizeTimer) clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function() {
+      resizeCanvas();
+    }, 100);
   }, { passive: true });
 
   function getLiveMetrics() {
@@ -6616,16 +6702,18 @@ try { checkUrlHashRoutine(); } catch(e){}
     btn.title = isPlaying ? "Playing Music · Click to Stop" : "Play Curated Alarm Music & Antigravity Beats";
 
     if (isPlaying) {
-      resizeCanvas();
+      if (cachedCharCoords.length === 0) {
+        resizeCanvas();
+      }
       spawnLetterBurst(2);
       if (!animFrameId) {
         animFrameId = requestAnimationFrame(loop);
       }
     } else {
-      particles.forEach(function(p) {
-        p.decay *= 2.5;
-        p.vy += 1.0;
-      });
+      for (var pIdx = 0; pIdx < particles.length; pIdx++) {
+        particles[pIdx].decay *= 2.5;
+        particles[pIdx].vy += 1.0;
+      }
     }
   }
 
@@ -6811,9 +6899,9 @@ try { checkUrlHashRoutine(); } catch(e){}
     }
   }, { passive: true });
 
-  // Dual-Layer Population: Ambient backdrop + Dedicated 3D Weaver Dancers
-  var AMBIENT_COUNT = width < 768 ? 75 : (width < 1200 ? 125 : 170);
-  var WEAVER_COUNT = width < 768 ? 12 : 16; // Evenly distributed in depth: exactly ~6-8 are in front at any moment!
+  // Dual-Layer Population: Ambient backdrop + Dedicated 3D Weaver Dancers (Tuned for silky 60-120fps)
+  var AMBIENT_COUNT = width < 768 ? 55 : (width < 1200 ? 85 : 115);
+  var WEAVER_COUNT = width < 768 ? 10 : 14; // Evenly distributed in depth: exactly ~5-7 are in front at any moment!
 
   function createParticle(isWeaver, phaseOffset) {
     var minSpawnX = 40, maxSpawnX = width - 40;
@@ -7431,6 +7519,7 @@ try { checkUrlHashRoutine(); } catch(e){}
         if (p.emergeBloom > 0.02) {
           fGlow *= (1 + p.emergeBloom * 1.5);
         }
+        fGlow = Math.min(10, fGlow);
 
         targetCtx.shadowColor = "hsla(" + Math.round(fHeadHue) + ",100%,66%," + Math.min(1, currentAlpha * (0.75 + liveBass * 0.30)).toFixed(2) + ")";
         targetCtx.shadowBlur = fGlow;
@@ -7448,7 +7537,7 @@ try { checkUrlHashRoutine(); } catch(e){}
         targetCtx.arc(dynamicLength / 2, 0, curSize * 0.65, 0, Math.PI * 2);
         targetCtx.fillStyle = "rgba(255,255,255," + (currentAlpha * 0.96).toFixed(2) + ")";
         targetCtx.shadowColor = "hsla(" + Math.round(fHeadHue) + ",100%,75%,0.95)";
-        targetCtx.shadowBlur = fGlow * 1.2;
+        targetCtx.shadowBlur = Math.min(12, fGlow * 1.2);
         targetCtx.fill();
 
       } else if (p.isRadiant) {
@@ -7477,6 +7566,7 @@ try { checkUrlHashRoutine(); } catch(e){}
         if (p.emergeBloom > 0.02) {
           curGlow *= (1 + p.emergeBloom * 1.5);
         }
+        curGlow = Math.min(8, curGlow);
 
         targetCtx.shadowColor = "hsla(" + Math.round(p.hue) + ",94%,64%," + Math.min(1, currentAlpha * (0.65 + liveBass * 0.35)).toFixed(2) + ")";
         targetCtx.shadowBlur = curGlow;
@@ -7490,56 +7580,52 @@ try { checkUrlHashRoutine(); } catch(e){}
         }
 
       } else {
-        // Ambient Micro-Dash (Clean straight line)
-        if (isAudioHot && (liveBass > 0.25 || beatKickImpulse > 0.25)) {
-          var ambBeat = Math.max(liveBass, beatKickImpulse);
-          var aGrad = targetCtx.createLinearGradient(-dynamicLength / 2, 0, dynamicLength / 2, 0);
-          aGrad.addColorStop(0, "hsla(" + Math.round(p.hue) + "," + p.sat + "%," + p.lit + "%," + currentAlpha.toFixed(2) + ")");
-          aGrad.addColorStop(1, "hsla(" + Math.round(p.hue2) + ",94%," + Math.min(88, p.lit + 18) + "%," + currentAlpha.toFixed(2) + ")");
-
-          targetCtx.shadowColor = "hsla(" + Math.round(p.hue) + ",92%,65%," + (ambBeat * 0.60).toFixed(2) + ")";
-          targetCtx.shadowBlur = ambBeat * 10;
-          if (isCurved) {
-            targetCtx.strokeStyle = aGrad;
-            targetCtx.stroke();
-          } else {
-            targetCtx.fillStyle = aGrad;
-            targetCtx.fill();
-          }
+        // Ambient Micro-Dash (Clean straight line - Zero Garbage & Zero Shadow Lag)
+        var ambFill;
+        if (isAudioHot && (liveBass > 0.20 || beatKickImpulse > 0.20)) {
+          var ambLit = Math.min(88, p.lit + 14);
+          ambFill = "hsla(" + Math.round(p.hue) + ",95%," + ambLit + "%," + currentAlpha.toFixed(2) + ")";
         } else {
-          targetCtx.shadowBlur = p.emergeBloom > 0.02 ? (p.emergeBloom * 12) : (isIdle ? (idleBreathFactor * 4) : 0);
-          if (isCurved) {
-            targetCtx.strokeStyle = "hsla(" + Math.round(p.hue) + "," + p.sat + "%," + p.lit + "%," + currentAlpha.toFixed(2) + ")";
-            targetCtx.stroke();
-          } else {
-            targetCtx.fillStyle = "hsla(" + Math.round(p.hue) + "," + p.sat + "%," + p.lit + "%," + currentAlpha.toFixed(2) + ")";
-            targetCtx.fill();
-          }
+          ambFill = "hsla(" + Math.round(p.hue) + "," + p.sat + "%," + p.lit + "%," + currentAlpha.toFixed(2) + ")";
+        }
+        targetCtx.shadowBlur = (p.emergeBloom > 0.05) ? (p.emergeBloom * 6) : 0;
+        if (targetCtx.shadowBlur > 0) {
+          targetCtx.shadowColor = "hsla(" + Math.round(p.hue) + ",92%,65%,0.6)";
+        }
+        if (isCurved) {
+          targetCtx.strokeStyle = ambFill;
+          targetCtx.stroke();
+        } else {
+          targetCtx.fillStyle = ambFill;
+          targetCtx.fill();
         }
       }
 
       targetCtx.restore();
     }
 
-    // ── 4. MICRO-CONSTELLATION FILAMENTS (On Background Canvas) ──
-    var maxFilamentDist = 58;
-    for (var r1 = 0; r1 < radiantBackNodes.length; r1++) {
-      var pA = radiantBackNodes[r1];
-      for (var r2 = r1 + 1; r2 < radiantBackNodes.length; r2++) {
-        var pB = radiantBackNodes[r2];
-        var fdx = pA.x - pB.x;
-        var fdy = pA.y - pB.y;
-        var fdist = Math.hypot(fdx, fdy);
-        if (fdist < maxFilamentDist) {
-          var fNorm = 1 - (fdist / maxFilamentDist);
-          var fAlpha = Math.pow(fNorm, 1.6) * 0.16 * (pA.fadeProgress || 1.0) * (pB.fadeProgress || 1.0);
-          backCtx.beginPath();
-          backCtx.moveTo(pA.x, pA.y);
-          backCtx.lineTo(pB.x, pB.y);
-          backCtx.strokeStyle = "hsla(" + Math.round(pA.hue) + ", 85%, 68%, " + fAlpha.toFixed(2) + ")";
-          backCtx.lineWidth = 0.75;
-          backCtx.stroke();
+    // ── 4. MICRO-CONSTELLATION FILAMENTS (On Background Canvas - Batched High Speed) ──
+    if (radiantBackNodes.length > 1) {
+      backCtx.beginPath();
+      var filamentsDrawn = 0;
+      var rLimit = Math.min(radiantBackNodes.length, 16);
+      for (var r1 = 0; r1 < rLimit && filamentsDrawn < 20; r1++) {
+        var pA = radiantBackNodes[r1];
+        for (var r2 = r1 + 1; r2 < rLimit && filamentsDrawn < 20; r2++) {
+          var pB = radiantBackNodes[r2];
+          var fdx = pA.x - pB.x;
+          var fdy = pA.y - pB.y;
+          if (fdx * fdx + fdy * fdy < 3364) {
+            backCtx.moveTo(pA.x, pA.y);
+            backCtx.lineTo(pB.x, pB.y);
+            filamentsDrawn++;
+          }
         }
+      }
+      if (filamentsDrawn > 0) {
+        backCtx.strokeStyle = "rgba(56, 189, 248, 0.16)";
+        backCtx.lineWidth = 0.75;
+        backCtx.stroke();
       }
     }
   }

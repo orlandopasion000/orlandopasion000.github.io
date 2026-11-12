@@ -2,7 +2,7 @@
    • Caches core app, clean blank edition, manifests, song chorus clips, mobile QR code, and Lexend font for 100% offline playback.
    • Handles notification actions (Snooze / Dismiss / Focus).
    Scope: ./ */
-var VERSION = "recharge-v21";
+var VERSION = "recharge-v22";
 var CORE = [
   "orlandorecharge",
   "orlandorecharge.html",
