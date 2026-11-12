@@ -5868,6 +5868,11 @@ try { checkUrlHashRoutine(); } catch(e){}
     var colorDef = PALETTE[Math.floor(Math.random() * PALETTE.length)];
     var driftAngle = Math.random() * Math.PI * 2;
     var driftSpeed = 0.35 + Math.random() * 0.55;
+    // Selective radiance: only ~26% of particles are radiant gradient nodes to prevent visual clutter
+    var isRadiant = Math.random() < 0.26;
+    // Harmonic secondary hue for dual-tone linear gradient
+    var hue2 = (colorDef.h + 24 + Math.floor(Math.random() * 18)) % 360;
+
     return {
       x: x,
       y: y,
@@ -5876,12 +5881,15 @@ try { checkUrlHashRoutine(); } catch(e){}
       baseVx: Math.cos(driftAngle) * driftSpeed,
       baseVy: Math.sin(driftAngle) * driftSpeed,
       baseSpeed: driftSpeed,
-      size: 1.8 + Math.random() * 0.5,
-      length: 5.5 + Math.random() * 3.5,
+      size: isRadiant ? (2.1 + Math.random() * 0.5) : (1.6 + Math.random() * 0.4),
+      length: isRadiant ? (7.0 + Math.random() * 4.0) : (5.0 + Math.random() * 3.0),
+      isRadiant: isRadiant,
+      glowBlur: 7 + Math.random() * 7,
       hue: colorDef.h,
+      hue2: hue2,
       sat: colorDef.s,
       lit: colorDef.l,
-      alpha: 0.45 + Math.random() * 0.45,
+      alpha: isRadiant ? (0.65 + Math.random() * 0.30) : (0.40 + Math.random() * 0.40),
       pulsePhase: Math.random() * Math.PI * 2
     };
   }
@@ -6003,21 +6011,35 @@ try { checkUrlHashRoutine(); } catch(e){}
       // ── 4. RENDER DIRECTIONAL DASH / CAPSULE (Oriented to velocity vector) ──
       var currentSpeed = Math.hypot(p.vx, p.vy);
       var currentAngle = Math.atan2(p.vy, p.vx);
-      var dynamicLength = Math.max(p.length, Math.min(14, p.length + currentSpeed * 2.2));
-      var currentAlpha = Math.min(0.95, p.alpha * (0.8 + Math.sin(p.pulsePhase) * 0.2));
-
-      var fillColor = "hsla(" + p.hue + "," + p.sat + "%," + p.lit + "%," + currentAlpha.toFixed(2) + ")";
+      var dynamicLength = Math.max(p.length, Math.min(15, p.length + currentSpeed * 2.2));
+      var currentAlpha = Math.min(0.96, p.alpha * (0.82 + Math.sin(p.pulsePhase) * 0.18));
 
       ctx.save();
       ctx.translate(p.x, p.y);
       ctx.rotate(currentAngle);
       ctx.beginPath();
+
       if (typeof ctx.roundRect === "function") {
         ctx.roundRect(-dynamicLength / 2, -p.size / 2, dynamicLength, p.size, p.size / 2);
       } else {
         ctx.rect(-dynamicLength / 2, -p.size / 2, dynamicLength, p.size);
       }
-      ctx.fillStyle = fillColor;
+
+      if (p.isRadiant) {
+        // Radiant Quantum Node: Head-to-tail linear gradient with soft halo glow
+        var grad = ctx.createLinearGradient(-dynamicLength / 2, 0, dynamicLength / 2, 0);
+        grad.addColorStop(0, "hsla(" + p.hue + "," + p.sat + "%," + p.lit + "%," + (currentAlpha * 0.90).toFixed(2) + ")");
+        grad.addColorStop(1, "hsla(" + p.hue2 + ",95%,75%," + Math.min(1, currentAlpha * 1.25).toFixed(2) + ")");
+
+        ctx.shadowColor = "hsla(" + p.hue + ",92%,62%," + (currentAlpha * 0.60).toFixed(2) + ")";
+        ctx.shadowBlur = p.glowBlur;
+        ctx.fillStyle = grad;
+      } else {
+        // Ambient Micro-Dash: Clean, crisp, non-distracting solid fill with zero shadow overhead
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = "hsla(" + p.hue + "," + p.sat + "%," + p.lit + "%," + currentAlpha.toFixed(2) + ")";
+      }
+
       ctx.fill();
       ctx.restore();
     }
