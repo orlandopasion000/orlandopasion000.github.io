@@ -2375,7 +2375,7 @@ body.light-theme .highlight-card .dist-icon{
             </div>
           </div>
           <div class="dist-btn-stack">
-            <a class="primary dist-btn" href="recharge-clean.html" target="_blank" rel="noopener" title="Open 100% clean blank schedule">
+            <a class="primary dist-btn" id="openBlankAppBtn" href="recharge-clean.html" target="_blank" rel="noopener" title="Open 100% clean blank schedule">
               <svg class="modern-icon" viewBox="0 0 24 24" style="width:14px;height:14px"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
               <span>Open Blank Web App</span>
             </a>
@@ -3073,7 +3073,7 @@ function renderList(){
       '<div style="font-size:0.92rem;color:var(--dim);max-width:460px;margin:0 auto 18px;line-height:1.5;">This app has <b>zero alarms</b> and clean storage. You can add your own custom alarms, or switch to a Routine Preset!</div>' +
       '<div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap">' +
         '<button type="button" class="primary" id="emptyAddBtn" style="padding:10px 22px;border-radius:10px;font-weight:700;font-size:0.92rem">+ Add First Alarm</button>' +
-        (isCleanApp ? '<a class="ghost" href="https://orlandopasion000.github.io/orlandorecharge" target="_blank" style="padding:10px 20px;border-radius:10px;font-weight:700;font-size:0.92rem;text-decoration:none;display:inline-flex;align-items:center;">⚡ Open Main Executive Schedule (23 Blocks) &rarr;</a>' : '') +
+        (isCleanApp ? '<a class="ghost" id="emptyOpenMainBtn" href="https://orlandopasion000.github.io/orlandorecharge" target="_blank" style="padding:10px 20px;border-radius:10px;font-weight:700;font-size:0.92rem;text-decoration:none;display:inline-flex;align-items:center;">⚡ Open Main Executive Schedule (23 Blocks) &rarr;</a>' : '') +
       '</div>';
     list.appendChild(emptyDiv);
     var emptyAdd = $("emptyAddBtn");
@@ -3601,7 +3601,7 @@ function ring(i,snoozed){
       return;
     }
     flashOn = !flashOn;
-    document.title = (flashOn ? "🔔 ALARM: " : "⏰ ") + fmt(s[0],s[1]) + " " + s[3];
+    document.title = (flashOn ? "🔔 ALARM: " : "⏰ ") + fmt(s[0],s[1]) + " " + s[3] + " · OrlandoRecharge (Main Version)";
   }, 750);
 }
 function notify(title,body){
@@ -3747,13 +3747,13 @@ function tick(){
     var isBlankCanvas = (S.length === 0);
     $("nextLabel").textContent = isBlankCanvas ? "Blank Canvas (0 Alarms)" : "No alarms set";
     $("count").textContent = isBlankCanvas ? "Tap + Add Alarm" : "";
-    document.title = isBlankCanvas ? "OrlandoRecharge — Clean Blank Canvas" : "OrlandoRecharge (Main Version)";
+    document.title = isBlankCanvas ? "OrlandoRecharge (Clean Edition) — Blank Canvas" : "OrlandoRecharge (Main Version) — No Alarms Scheduled";
     return;
   }
   var diff=Math.round((found.at-n)/1000),h=Math.floor(diff/3600),m=Math.floor(diff%3600/60),s2=diff%60;
   $("nextLabel").textContent=fmt(S[found.i][0],S[found.i][1])+" — "+S[found.i][3];
   $("count").textContent="in "+(h?h+"h ":"")+(h||m?p2(m)+"m ":"")+p2(s2)+"s";
-  document.title=($("ov").className==="show"?"🔔 ":armed?"":"⏸ ")+(h?h+"h ":"")+p2(m)+"m — "+S[found.i][3];
+  document.title = "OrlandoRecharge (Main Version) · " + ($("ov").className==="show"?"🔔 ":armed?"":"⏸ ")+(h?h+"h ":"")+p2(m)+"m — "+S[found.i][3];
 }
 
 function chromeHTML(str){
@@ -4279,6 +4279,54 @@ function fallbackCopy(text){
   document.body.removeChild(ta);
 }
 
+
+
+/* ══════════════════════════════════════════════════════════════
+   DEDICATED APP WINDOW SPAWNERS (Enforces Separate Window Identity)
+   ══════════════════════════════════════════════════════════════ */
+function launchStandaloneAppWindow(targetUrl, windowTitle) {
+  var popupFeatures = "popup=yes,menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes,width=1380,height=880";
+  try {
+    var spawned = window.open(targetUrl, windowTitle, popupFeatures);
+    if (spawned && !spawned.closed) {
+      try { spawned.focus(); } catch(err){}
+      return true;
+    }
+  } catch(e){}
+  try {
+    var blankWin = window.open(targetUrl, "_blank");
+    if (blankWin) {
+      try { blankWin.focus(); } catch(err){}
+      return true;
+    }
+  } catch(e){}
+  window.location.href = targetUrl;
+  return false;
+}
+
+if ($("openMainAppBtn")) {
+  $("openMainAppBtn").onclick = function(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    launchStandaloneAppWindow("https://orlandopasion000.github.io/orlandorecharge", "OrlandoRechargeMainAppWindow");
+    return false;
+  };
+}
+
+if ($("openBlankAppBtn")) {
+  $("openBlankAppBtn").onclick = function(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    launchStandaloneAppWindow("https://orlandopasion000.github.io/recharge-clean.html", "OrlandoRechargeCleanAppWindow");
+    return false;
+  };
+}
+
+document.addEventListener("click", function(e) {
+  var target = e.target && e.target.closest ? e.target.closest("#emptyOpenMainBtn") : null;
+  if (target) {
+    if (e.preventDefault) e.preventDefault();
+    launchStandaloneAppWindow("https://orlandopasion000.github.io/orlandorecharge", "OrlandoRechargeMainAppWindow");
+  }
+});
 
 /* Share Cockpit */
 $("shareAppBtn").onclick=function(){

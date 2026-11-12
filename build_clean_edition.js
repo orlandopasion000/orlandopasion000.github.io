@@ -127,7 +127,10 @@ src = src.replace(/"dra-preset-key"/g, '"dra-clean-preset-key"');
 src = src.replace(/owner:"Sir Orlando V\. Pasion, Jr\."/g, 'owner:"Public Clean Edition"');
 src = src.replace(/daily-recharge-schedule-backup\.json/g, 'daily-recharge-clean-backup.json');
 
-// 9. Wire cleanResetCanvasBtn before initial bootstrap
+// 9. Enforce OrlandoRecharge (Clean Edition) in all document.title strings in recharge-clean.html
+src = src.replace(/OrlandoRecharge \(Main Version\)/g, 'OrlandoRecharge (Clean Edition)');
+
+// 10. Wire cleanResetCanvasBtn before initial bootstrap
 const cleanHooks = `
 if ($("cleanResetCanvasBtn")) {
   $("cleanResetCanvasBtn").onclick = function() {
@@ -146,11 +149,11 @@ if ($("cleanResetCanvasBtn")) {
 `;
 src = src.replace('/* ───────── INITIAL BOOTSTRAP', cleanHooks + '\n/* ───────── INITIAL BOOTSTRAP');
 
-// 10. Write file
+// 11. Write file
 fs.writeFileSync(destFile, src, 'utf8');
 console.log('Successfully generated recharge-clean.html from orlandorecharge.html');
 
-// 11. Copy orlandorecharge.html to orlandorecharge/index.html
+// 12. Copy orlandorecharge.html to orlandorecharge/index.html
 const subfolderIndex = path.join(repoDir, 'orlandorecharge', 'index.html');
 fs.writeFileSync(subfolderIndex, fs.readFileSync(srcFile, 'utf8'), 'utf8');
 console.log('Successfully copied orlandorecharge.html to orlandorecharge/index.html');
