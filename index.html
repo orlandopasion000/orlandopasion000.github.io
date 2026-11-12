@@ -266,6 +266,46 @@
       .philosophy { padding: 80px 20px; }
     }
   
+    
+    /* ORLANDOCHROME REAL-TIME LIVE BRIDGE STYLES */
+    .oc-live-badge-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      margin: 0 5px 1px 0;
+      vertical-align: middle;
+    }
+    .oc-live-badge-dot.synced {
+      background: #10b981;
+      box-shadow: 0 0 6px rgba(16, 185, 129, 0.7);
+    }
+    .oc-live-badge-dot.pending {
+      background: #ff1a24;
+      box-shadow: 0 0 10px rgba(255, 26, 36, 0.9);
+      animation: ocDotPulse 1.5s infinite ease-in-out;
+    }
+    @keyframes ocDotPulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.35); opacity: 0.75; }
+    }
+    .btn-oc-hero.has-pending-badge {
+      border-color: #ff1a24 !important;
+      box-shadow: 0 8px 32px rgba(229, 9, 20, 0.55), 0 0 16px rgba(255, 26, 36, 0.4) !important;
+      animation: ocHeroPulse 2.4s infinite ease-in-out;
+    }
+    @keyframes ocHeroPulse {
+      0%, 100% { box-shadow: 0 8px 30px rgba(229, 9, 20, 0.35); }
+      50% { box-shadow: 0 12px 42px rgba(229, 9, 20, 0.65), 0 0 22px rgba(255, 45, 60, 0.5); }
+    }
+    .hub-card.is-orlandochrome.has-pending-card {
+      border-color: rgba(255, 42, 60, 0.65) !important;
+      box-shadow: 0 12px 35px rgba(229, 9, 20, 0.25) !important;
+    }
+    .nav-oc-link.has-pending-badge {
+      text-shadow: 0 0 12px rgba(255, 42, 42, 0.9) !important;
+    }
+
     /* ORLANDOCHROME FLAGSHIP APP INTEGRATION */
     .btn-oc-hero {
       background: linear-gradient(135deg, #1b0305 0%, #000000 100%);
@@ -368,9 +408,9 @@
     <a href="#hero" class="nav-brand">OVP</a>
     <ul class="nav-links">
       <li>
-        <a href="https://orlandopasion000.github.io/orlandochrome/" target="_blank" class="nav-oc-link" title="Launch (1) OrlandoChrome (Main Version)">
+        <a href="https://orlandopasion000.github.io/orlandochrome/" target="_blank" class="nav-oc-link" id="navOcLink" title="Launch OrlandoChrome (Main Version)">
           <img src="assets/oc-logo.svg" alt="OrlandoChrome Logo">
-          <span>(1) OrlandoChrome (Main Version)</span>
+          <span id="navOcText">OrlandoChrome (Main Version)</span>
         </a>
       </li>
       <li><a href="#about">About</a></li>
@@ -381,9 +421,9 @@
     <button class="nav-hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
   </nav>
   <div class="mobile-menu" id="mobileMenu">
-    <a href="https://orlandopasion000.github.io/orlandochrome/" target="_blank" onclick="closeMenu()" class="mobile-menu-oc">
+    <a href="https://orlandopasion000.github.io/orlandochrome/" target="_blank" onclick="closeMenu()" class="mobile-menu-oc" id="mobileOcLink">
       <img src="assets/oc-logo.svg" alt="OrlandoChrome Logo">
-      <span>(1) OrlandoChrome (Main Version)</span>
+      <span id="mobileOcText">OrlandoChrome (Main Version)</span>
     </a>
     <a href="#about" onclick="closeMenu()">About</a>
     <a href="#expertise" onclick="closeMenu()">Expertise</a>
@@ -401,9 +441,9 @@
     <div class="hero-bar"></div>
     <p class="hero-subtitle"><strong>Teacher VI</strong> at Nancalobasaan National High School — advancing Mathematics education through innovation, technology, and a commitment to every Filipino learner.</p>
     <div class="hero-cta">
-      <a href="https://orlandopasion000.github.io/orlandochrome/" target="_blank" class="btn btn-oc-hero" title="Launch (1) OrlandoChrome (Main Version)">
+      <a href="https://orlandopasion000.github.io/orlandochrome/" target="_blank" class="btn btn-oc-hero" id="heroOcLink" title="Launch OrlandoChrome (Main Version)">
         <img src="assets/oc-logo.svg" alt="OrlandoChrome Logo">
-        <span>(1) OrlandoChrome (Main Version)</span>
+        <span id="heroOcText">OrlandoChrome (Main Version)</span>
       </a>
       <a href="#resources" class="btn btn-gold">▸ View Resources</a>
       <a href="#about" class="btn btn-ghost">Learn More</a>
@@ -588,7 +628,7 @@
         featured: true,
         isOrlandoChrome: true,
         order: -1,
-        title: '(1) OrlandoChrome (Main Version)',
+        title: 'OrlandoChrome (Main Version)',
         desc: 'Complete 22-profile Chrome taskbar command center, live sync suite, interactive messaging, 30-day trash vault, and quick cooldown timers.',
         tags: ['Taskbar Control', 'Live Sync', 'PWA Ready', 'Win + 1–10'],
         questions: 0,
@@ -738,7 +778,7 @@
         featured: true,
         isOrlandoChrome: true,
         order: -1,
-        title: '(1) OrlandoChrome (Main Version)',
+        title: 'OrlandoChrome (Main Version)',
         desc: 'Complete 22-profile Chrome taskbar command center, live sync suite, interactive messaging, 30-day trash vault, and quick cooldown timers.',
         tags: ['Taskbar Control', 'Live Sync', 'PWA Ready', 'Win + 1–10'],
         questions: 0,
@@ -808,6 +848,7 @@
           });
 
           updateHubMetrics();
+          if (window.syncOrlandoChromeBridgeUI) window.syncOrlandoChromeBridgeUI();
         })
         .catch(function(err) {
           console.warn('GitHub API error, using fallback:', err);
@@ -836,6 +877,7 @@
             grid.appendChild(createCard(res));
           });
           updateHubMetrics();
+          if (window.syncOrlandoChromeBridgeUI) window.syncOrlandoChromeBridgeUI();
         });
     }
 
@@ -862,6 +904,197 @@
       document.getElementById('hubEmpty').style.display = visible === 0 ? 'block' : 'none';
     });
   </script>
+
+  <!-- OrlandoChrome Real-Time Live Sync Bridge -->
+  <script>
+    // =========================================================================
+    // ORLANDOCHROME REAL-TIME LIVE BRIDGE (0ms Cross-Tab & Cross-Device Sync)
+    // =========================================================================
+    var OrlandoChromeBridge = (function() {
+      var CLOUD_TOPIC = 'orlandochrome_live_sync_pasion1994_v2';
+      var livePendingCount = 0;
+      var broadcastChannel = null;
+      var sseEventSource = null;
+
+      function calculateLocalPending() {
+        // 1. Direct cached count from OrlandoChrome
+        var cached = localStorage.getItem('orlandochrome_live_pending_count');
+        if (cached !== null && !isNaN(parseInt(cached, 10))) {
+          return parseInt(cached, 10);
+        }
+        // 2. Parse profiles array from localStorage
+        try {
+          var raw = localStorage.getItem('chrome_taskbar_messenger_notes_v5');
+          if (raw) {
+            var arr = JSON.parse(raw);
+            if (Array.isArray(arr)) {
+              var count = 0;
+              arr.forEach(function(p) {
+                if (p && Array.isArray(p.notes)) {
+                  count += p.notes.filter(function(n) { return !n.done; }).length;
+                }
+              });
+              return count;
+            }
+          }
+        } catch (e) {}
+        return 0;
+      }
+
+      function applyPendingCount(count) {
+        var num = Math.max(0, parseInt(count, 10) || 0);
+        livePendingCount = num;
+
+        var baseTitle = 'OrlandoChrome (Main Version)';
+        var fullTitle = num > 0 ? '(' + num + ') ' + baseTitle : baseTitle;
+
+        // 1. Top Navigation Bar
+        var navText = document.getElementById('navOcText');
+        var navLink = document.getElementById('navOcLink');
+        if (navText) navText.textContent = fullTitle;
+        if (navLink) {
+          navLink.title = 'Launch ' + fullTitle;
+          if (num > 0) navLink.classList.add('has-pending-badge');
+          else navLink.classList.remove('has-pending-badge');
+        }
+
+        // 2. Mobile Menu
+        var mobileText = document.getElementById('mobileOcText');
+        var mobileLink = document.getElementById('mobileOcLink');
+        if (mobileText) mobileText.textContent = fullTitle;
+        if (mobileLink) {
+          if (num > 0) mobileLink.classList.add('has-pending-badge');
+          else mobileLink.classList.remove('has-pending-badge');
+        }
+
+        // 3. Hero CTA Button
+        var heroText = document.getElementById('heroOcText');
+        var heroLink = document.getElementById('heroOcLink');
+        if (heroText) heroText.textContent = fullTitle;
+        if (heroLink) {
+          heroLink.title = 'Launch ' + fullTitle;
+          if (num > 0) heroLink.classList.add('has-pending-badge');
+          else heroLink.classList.remove('has-pending-badge');
+        }
+
+        // 4. Resource Hub Card (Card #1)
+        var card = document.querySelector('.hub-card.is-orlandochrome');
+        if (card) {
+          var cardTitle = card.querySelector('h3');
+          if (cardTitle) cardTitle.textContent = fullTitle;
+
+          var badge = card.querySelector('.hub-card-badge');
+          if (badge) {
+            if (num > 0) {
+              badge.innerHTML = '★ FLAGSHIP APP · <span class="oc-live-badge-dot pending"></span> <strong>' + num + ' PENDING</strong>';
+              card.classList.add('has-pending-card');
+            } else {
+              badge.innerHTML = '★ FLAGSHIP APP · <span class="oc-live-badge-dot synced"></span> <strong>LIVE SYNCED</strong>';
+              card.classList.remove('has-pending-card');
+            }
+          }
+        }
+
+        // Update in-memory models if resource hub re-renders
+        if (window.FLAGSHIP_APPS && window.FLAGSHIP_APPS[0]) {
+          window.FLAGSHIP_APPS[0].title = fullTitle;
+          window.FLAGSHIP_APPS[0].badge = num > 0
+            ? '★ FLAGSHIP APP · <span class="oc-live-badge-dot pending"></span> <strong>' + num + ' PENDING</strong>'
+            : '★ FLAGSHIP APP · <span class="oc-live-badge-dot synced"></span> <strong>LIVE SYNCED</strong>';
+        }
+        if (window.KNOWN_FILES && window.KNOWN_FILES['orlandochrome']) {
+          window.KNOWN_FILES['orlandochrome'].title = fullTitle;
+        }
+      }
+
+      function init() {
+        // Immediate 0ms local read
+        applyPendingCount(calculateLocalPending());
+
+        // A. Cross-tab storage event (0ms on same origin)
+        window.addEventListener('storage', function(e) {
+          if (e.key === 'orlandochrome_live_pending_count' || e.key === 'chrome_taskbar_messenger_notes_v5') {
+            applyPendingCount(calculateLocalPending());
+          }
+        });
+
+        // B. BroadcastChannel API (0ms cross-tab)
+        try {
+          if (typeof BroadcastChannel !== 'undefined') {
+            broadcastChannel = new BroadcastChannel('orlandochrome_live_bridge');
+            broadcastChannel.onmessage = function(e) {
+              if (e.data && typeof e.data.pending !== 'undefined') {
+                applyPendingCount(e.data.pending);
+              }
+            };
+            // Solicit status from any running OrlandoChrome tab
+            broadcastChannel.postMessage({ type: 'REQUEST_STATUS' });
+          }
+        } catch (e) {}
+
+        // C. Real-Time Cloud SSE Stream for Cross-Device Sync (iPhone <-> Laptop)
+        try {
+          if (typeof EventSource !== 'undefined') {
+            sseEventSource = new EventSource('https://ntfy.sh/' + CLOUD_TOPIC + '/sse');
+            sseEventSource.onmessage = function(ev) {
+              try {
+                var env = JSON.parse(ev.data);
+                if (env && env.event === 'message' && env.message) {
+                  var pkt = JSON.parse(env.message);
+                  var c = 0;
+                  if (typeof pkt.pendingCount !== 'undefined') {
+                    c = pkt.pendingCount;
+                  } else if (Array.isArray(pkt.p)) {
+                    pkt.p.forEach(function(p) {
+                      if (Array.isArray(p.n)) {
+                        c += p.n.filter(function(note) { return !note.d; }).length;
+                      }
+                    });
+                  }
+                  localStorage.setItem('orlandochrome_live_pending_count', String(c));
+                  applyPendingCount(c);
+                }
+              } catch (err) {}
+            };
+          }
+        } catch (e) {}
+
+        // D. Re-check on Window Focus and Visibility Change
+        window.addEventListener('focus', function() {
+          applyPendingCount(calculateLocalPending());
+          if (broadcastChannel) broadcastChannel.postMessage({ type: 'REQUEST_STATUS' });
+        });
+        document.addEventListener('visibilitychange', function() {
+          if (document.visibilityState === 'visible') {
+            applyPendingCount(calculateLocalPending());
+            if (broadcastChannel) broadcastChannel.postMessage({ type: 'REQUEST_STATUS' });
+          }
+        });
+
+        // E. Periodic check every 3 seconds
+        setInterval(function() {
+          var c = calculateLocalPending();
+          if (c !== livePendingCount) {
+            applyPendingCount(c);
+          }
+        }, 3000);
+      }
+
+      // Public API
+      return {
+        init: init,
+        apply: applyPendingCount,
+        getPending: calculateLocalPending,
+        refresh: function() { applyPendingCount(calculateLocalPending()); }
+      };
+    })();
+
+    // Expose on window and initialize
+    window.OrlandoChromeBridge = OrlandoChromeBridge;
+    window.syncOrlandoChromeBridgeUI = function() { OrlandoChromeBridge.refresh(); };
+    OrlandoChromeBridge.init();
+  </script>
+
   <script src="cursor-effect.js"></script>
 </body>
 </html>
