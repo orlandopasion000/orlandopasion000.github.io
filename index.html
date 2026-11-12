@@ -1286,5 +1286,28 @@
   </script>
 
   <script src="cursor-effect.js"></script>
+  <!-- Automatic Client Cache & Obsolete Service Worker Purger -->
+  <script>
+    (function() {
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+          registrations.forEach(function(reg) {
+            if (reg.scope === 'https://orlandopasion000.github.io/' || reg.scope.indexOf('/recharge') !== -1 || reg.scope.indexOf('/orlandorecharge') !== -1) {
+              reg.unregister().catch(function() {});
+            }
+          });
+        }).catch(function() {});
+      }
+      if ('caches' in window) {
+        caches.keys().then(function(keys) {
+          keys.forEach(function(key) {
+            if (key.indexOf('recharge-') === 0) {
+              caches.delete(key).catch(function() {});
+            }
+          });
+        }).catch(function() {});
+      }
+    })();
+  </script>
 </body>
 </html>
