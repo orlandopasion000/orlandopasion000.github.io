@@ -1,7 +1,8 @@
 {
   "name": "OrlandoChrome (Main Version)",
   "short_name": "OrlandoChrome",
-  "description": "OrlandoChrome · Taskbar Chrome Profile Messenger, AI Cooldown Timers & Wispr Flow Pro Dictation Suite.",
+  "description": "OrlandoChrome (Main Version) · OLED Taskbar Chrome Profile Messenger, AI Cooldown Timers & Wispr Flow Pro Dictation Suite — by Sir Orlando V. Pasion, Jr.",
+  "id": "orlandochrome-master-pwa",
   "start_url": "https://orlandopasion000.github.io/orlandochrome/",
   "scope": "https://orlandopasion000.github.io/orlandochrome/",
   "display": "standalone",
@@ -9,11 +10,27 @@
   "orientation": "any",
   "background_color": "#000000",
   "theme_color": "#000000",
-  "categories": ["productivity", "utilities"],
+  "categories": [
+    "productivity",
+    "utilities",
+    "education"
+  ],
   "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
     {
       "src": "assets/icon-192.png",
       "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
@@ -24,7 +41,7 @@
       "purpose": "any"
     },
     {
-      "src": "assets/icon-512.png",
+      "src": "icon-maskable.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
