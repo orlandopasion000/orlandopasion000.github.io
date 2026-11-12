@@ -2978,7 +2978,6 @@ if ($("themeBtn")) {
   $("themeBtn").onclick = function(){
     var idx = (THEMES.indexOf(clockTheme) + 1) % THEMES.length;
     applyClockTheme(THEMES[idx]);
-    showToast("Clock Style: " + THEME_NAMES[THEMES[idx]], "🎨");
   };
 }
 applyClockTheme(clockTheme);
@@ -3040,7 +3039,6 @@ function updateAudioBadge(){
 }
 $("audioBadge").onclick=function(){
   unlock();
-  showToast("Sound is active and ready", "🔊");
 };
 
 // Initialize audio immediately so Sound Ready is permanently on by default
@@ -3107,8 +3105,20 @@ function startFallback(song){
       if(ac){
         ac.resume().then(function(){
           var i=idx(song);
-          if(ready[i])startBuf(ready[i]);
-        }).catch(function(){});
+          if(ready[i]) {
+            startBuf(ready[i]);
+          } else {
+            decode(i).then(function(buf){
+              if(current===song) startBuf(buf);
+            }).catch(function(){
+              if(mode === "alarm") playSyntheticChime();
+            });
+          }
+        }).catch(function(){
+          if(mode === "alarm") playSyntheticChime();
+        });
+      } else {
+        if(mode === "alarm") playSyntheticChime();
       }
     });
   }
@@ -3136,7 +3146,50 @@ function playSong(song,done,m){
 function finished(){
   var cb=onDone;curSrc=curFade=null;current=null;onDone=null;mode=null;showSong();cb&&cb();
 }
+var chimeTimer = null;
+function playSyntheticChime(){
+  stopSyntheticChime();
+  if(!ac && (window.AudioContext || window.webkitAudioContext)){
+    try { ac = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){}
+  }
+  if(!ac) return;
+  if(ac.state === "suspended") ac.resume().catch(function(){});
+  
+  var notes = [523.25, 659.25, 783.99, 1046.50, 783.99, 659.25, 1046.50];
+  var noteIdx = 0;
+  function step(){
+    if($("ov").className !== "show" && mode !== "test") {
+      stopSyntheticChime();
+      return;
+    }
+    try {
+      var freq = notes[noteIdx % notes.length];
+      noteIdx++;
+      var osc = ac.createOscillator();
+      var g = ac.createGain();
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(freq, ac.currentTime);
+      g.gain.setValueAtTime(0, ac.currentTime);
+      g.gain.linearRampToValueAtTime(target() * 0.85, ac.currentTime + 0.04);
+      g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.55);
+      osc.connect(g);
+      g.connect(master || ac.destination);
+      osc.start(ac.currentTime);
+      osc.stop(ac.currentTime + 0.60);
+    } catch(e){}
+  }
+  step();
+  chimeTimer = setInterval(step, 380);
+}
+function stopSyntheticChime(){
+  if(chimeTimer){
+    clearInterval(chimeTimer);
+    chimeTimer = null;
+  }
+}
+
 function stopSong(){
+  stopSyntheticChime();
   if(curSrc){
     var sr=curSrc,g=curFade,t=ac.currentTime;sr.onended=null;
     g.gain.cancelScheduledValues(t);g.gain.setValueAtTime(g.gain.value,t);g.gain.linearRampToValueAtTime(0,t+.06);
@@ -3721,6 +3774,18 @@ var ringing=-1,snoozes=[];
 var ringTitleTimer=null;
 function ring(i,snoozed){
   var s=S[i],plays=0;ringing=i;
+
+  // Guarantee audible volume whenever an alarm fires
+  if (muted) muted = false;
+  if (volume < 0.60) volume = 0.85;
+  showVol();
+  save();
+
+  // Awaken AudioContext and Screen Wake Lock
+  unlock();
+  if (ac && ac.state === "suspended") ac.resume().catch(function(){});
+  requestWakeLock();
+
   $("ovT").textContent=(snoozed?"Snoozed — ":"")+s[3];
   $("ovM").textContent=fmt(s[0],s[1]);
   $("ov").className="show";
@@ -3728,7 +3793,7 @@ function ring(i,snoozed){
     var song=queued;queued=nextSong();
     $("ovSongName").textContent=song.title+" — "+song.artist;
     playSong(song,function(){if(++plays<4&&$("ov").className==="show")go()},"alarm");
-    if(navigator.vibrate)navigator.vibrate([400,200,400]);
+    if(navigator.vibrate)navigator.vibrate([500,250,500,250,500]);
   }
   go();
   setTimeout(function(){if($("ov").className==="show")$("ovB").focus()},50);
@@ -3833,11 +3898,11 @@ $("arm").onclick=function(){
     requestWakeLock();
     startAudioKeepAlive();
     try{if(window.Notification&&Notification.permission==="default")Notification.requestPermission()}catch(e){}
-    showToast("Alarms Armed & Screen Wake Active", "🛡️");
+    // alarms armed
   } else {
     releaseWakeLock();
     stopAudioKeepAlive();
-    showToast("Alarms Paused", "⏸️");
+    // alarms paused
   }
 };
 $("test").onclick=function(){
@@ -3865,7 +3930,7 @@ function tick(){
     if(on&&t<=sec)cur=i;
     var el=$("r"+i);
     if(el)el.classList.toggle("past",on&&t<=sec);
-    if(armed&&on&&!off[i]){var k=n.toDateString()+i;if(!fired[k]&&sec>=t&&sec-t<90){fired[k]=1;ring(i)}}
+    if(armed&&on&&!off[i]){var k=n.toDateString()+i;if(!fired[k]&&sec>=t&&sec-t<300){fired[k]=1;ring(i)}}
   });
   S.forEach(function(s,i){var el=$("r"+i);if(el)el.classList.toggle("cur",i===cur)});
 
@@ -3943,6 +4008,7 @@ document.addEventListener("webkitfullscreenchange",function(){if(!document.webki
 function showToast(msg, icon){
   var box=$("toastBox");
   if(!box)return;
+  box.innerHTML = ""; // Never allow stacked notifications
   var t=document.createElement("div");
   t.className="toast";
   t.innerHTML=(icon?"<span>"+icon+"</span>":"<span>✓</span>")+"<span>"+msg+"</span>";
@@ -3951,7 +4017,7 @@ function showToast(msg, icon){
     t.style.opacity="0";
     t.style.transition="opacity .3s ease";
     setTimeout(function(){try{t.remove()}catch(e){}},350);
-  },3000);
+  },2000);
 }
 
 /* ───────── APP DISTRIBUTION & COMMAND SUITE ───────── */
@@ -4408,7 +4474,7 @@ if (distSec) {
     if (e && e.stopPropagation) e.stopPropagation();
     var willMin = !distSec.classList.contains("minimized");
     updateDistMinUI(willMin);
-    showToast(willMin ? "App Distribution dock minimized" : "App Distribution dock expanded", "🗜️");
+    // dock toggled silently
   };
 
   // 1. Dedicated Minimize/Expand toggle button
@@ -4556,8 +4622,15 @@ function releaseWakeLock() {
   }
 }
 document.addEventListener('visibilitychange', function() {
-  if (document.visibilityState === 'visible' && armed) {
-    requestWakeLock();
+  if (document.visibilityState === 'visible') {
+    if (armed) {
+      requestWakeLock();
+      startAudioKeepAlive();
+    }
+    if (ac && ac.state === 'suspended') {
+      ac.resume().catch(function(){});
+    }
+    tick();
   }
 });
 
@@ -5100,7 +5173,7 @@ if ($("themeModeBtn")) {
   $("themeModeBtn").onclick = function() {
     var nextMode = currentThemeMode === "dark" ? "light" : "dark";
     applyThemeMode(nextMode);
-    showToast("Switched to " + (nextMode === "light" ? "Porcelain Light" : "Obsidian Dark") + " theme", nextMode === "light" ? "☀️" : "🌙");
+    // theme toggled silently
   };
 }
 applyThemeMode(currentThemeMode);
@@ -5170,7 +5243,7 @@ if (controlsConsole && consoleToggleBtn) {
     e.stopPropagation();
     var nowMin = !controlsConsole.classList.contains("minimized");
     updateConsoleMinUI(nowMin);
-    showToast(nowMin ? "Controls minimized — Schedule moved up" : "Controls expanded", "🗜️");
+    // controls toggled silently
   };
 
   if (consoleHead) {
