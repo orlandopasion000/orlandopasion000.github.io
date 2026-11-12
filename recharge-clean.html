@@ -3978,7 +3978,7 @@ if ($("dismissInstallGuide")) $("dismissInstallGuide").onclick=function(){$("ins
    ══════════════════════════════════════════════════════════════ */
 var RECHARGE_QR_THEMES = {
   gold:     { label: '✨ Royal Gold',   fg: '140e02', bg: 'ffffff', accent: '#d9b95c', glow: 'rgba(217,185,92,0.5)', ratio: '20.2:1' },
-  instant:  { label: '⚡ Instant Scan', fg: '000000', bg: 'ffffff', accent: '#5de8a0', glow: 'rgba(93,232,160,0.5)', ratio: '21:1' },
+  cyan:     { label: '⚡ Cyber Cyan',   fg: '001524', bg: 'ffffff', accent: '#00f2fe', glow: 'rgba(0,242,254,0.55)', ratio: '20.8:1' },
   crimson:  { label: '🔴 Crimson Laser',fg: '3b0003', bg: 'ffffff', accent: '#ef4444', glow: 'rgba(239,68,68,0.55)', ratio: '19.8:1' },
   emerald:  { label: '🟢 Emerald Core', fg: '011a13', bg: 'ffffff', accent: '#10b981', glow: 'rgba(16,185,129,0.5)', ratio: '19.5:1' },
   titanium: { label: '🌌 Titanium Noir',fg: '0f172a', bg: 'ffffff', accent: '#94a3b8', glow: 'rgba(148,163,184,0.5)', ratio: '18.9:1' }
@@ -4022,7 +4022,7 @@ function generateRechargeQrMarkup(text, fgHex, bgHex) {
 function renderRechargeHoloSuite(isBlank) {
   if (typeof isBlank === 'boolean') rechargeHoloState.isBlank = isBlank;
   var s = rechargeHoloState;
-  var t = RECHARGE_QR_THEMES[s.activeTheme] || RECHARGE_QR_THEMES.gold;
+  var t = RECHARGE_QR_THEMES[s.activeTheme] || (s.activeTheme === 'instant' ? RECHARGE_QR_THEMES.cyan : null) || RECHARGE_QR_THEMES.gold;
   var container = $("rechargeHoloSuite");
   if (!container) return;
 
