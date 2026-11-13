@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <base href="/orlandochrome/">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content">
+  <title id="pageTitle">OrlandoChrome (Main Version)</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=pure72">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png?v=pure72">
+  <link rel="icon" type="image/x-icon" href="favicon.ico?v=pure72">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=pure72">
+
+  <meta name="theme-color" content="#000000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="OrlandoChrome (Main Version)">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="description" content="OrlandoChrome · Taskbar Chrome Profile Messenger, AI Cooldown Timers & Wispr Flow Pro Dictation Suite.">
+  <link rel="manifest" id="manifestLink" href="manifest.json?v=pure72">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png?v=pure72">
+  <link rel="stylesheet" href="styles.css?v=pure72">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body class="netflix-messenger-theme">
+  <!-- Top Application Bar -->
+  <header class="app-topbar">
+    <div class="topbar-left">
+      <div class="brand-logo" id="logoBtn" title="OrlandoChrome (Main Version)">
+        <img src="oc-logo.png" class="oc-logo-img" alt="OrlandoChrome Logo" onerror="this.onerror=null;this.src='oc-logo.svg'">
+        <div class="brand-text-wrap">
+          <span class="brand-title"><span class="title-orlando">ORLANDO</span><span class="title-chrome">CHROME</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="topbar-right">
+      <!-- Jump to Next Pending / Reset Profile (Alt+N) -->
+      <button type="button" class="btn-topbar-quick" id="btnNextReady" title="Jump to next profile with Pending Note or Limit Reset (Alt + N)">
+        <svg class="modern-icon modern-icon-gold" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg> <span>Next Ready</span>
+      </button>
+
+      <!-- Open Main Web App Window / PWA Button -->
+      <button type="button" class="btn-topbar-desktop" id="btnTopbarLaunchApp" title="Open OrlandoChrome (Main Web App)">
+        <span class="desktop-btn-icon" id="topbarLaunchIcon"><svg class="modern-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></span>
+        <span class="desktop-btn-label" id="topbarLaunchLabel">Open Main Web App</span>
+      </button>
+
+      <!-- App Distribution, Live QR & Command Suite Trigger -->
+      <button type="button" class="btn-topbar-suite" id="btnOpenAppSuite" title="Open App Distribution, Live QR Scanner &amp; Cross-Device Cloud Sync Suite">
+        <span><svg class="modern-icon modern-icon-cyan" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg> App Suite</span>
+        <span class="pwa-ready-mini-badge"><span class="sync-status-dot synced" id="topbarSyncDot"></span> <span id="topbarSyncLabel">Synced</span></span>
+      </button>
+
+      <!-- Live Clock & Daily Recharge Alarm Widget -->
+      <div class="nav-clock-box" id="navClockBox">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </header>
+
+  <!-- Main 2-Pane Messenger Workspace -->
+  <div class="app-workspace" id="appWorkspace">
+    <!-- Left Column: Search, Filters, and Chrome Profiles -->
+    <aside class="sidebar" id="appSidebar">
+      <div class="sidebar-header">
+        <div class="search-box-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="profileSearch" class="search-input" placeholder="Search profiles or notes... (Alt+↑/↓)">
+        </div>
+
+        <div class="filter-tabs-row">
+          <button class="filter-tab active" data-filter="all" id="tabAll">All (<span id="countAll">22</span>)</button>
+          <button class="filter-tab" data-filter="pending" id="tabPending"><span class="tab-red-radiant-dot"></span> Pending (<span id="countPending">0</span>)</button>
+          <button class="filter-tab" data-filter="timers" id="tabTimers"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="vertical-align:middle; margin-right:4px;"><path d="M6 3h12M6 21h12" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round"/><path d="M7 4c0 4.5 3.5 6.5 5 8-1.5 1.5-5 3.5-5 8h10c0-4.5-3.5-6.5-5-8 1.5-1.5 5-3.5 5-8H7z" stroke="#38bdf8" stroke-width="1.8" stroke-linejoin="round" fill="rgba(56, 189, 248, 0.15)"/><circle cx="12" cy="12" r="1.5" fill="#f59e0b"/></svg>Timers (<span id="countTimers">0</span>)</button>
+        </div>
+      </div>
+
+      <!-- Profiles List -->
+      <div class="profile-list" id="profileList">
+        <!-- Rendered dynamically -->
+      </div>
+    </aside>
+
+    <!-- Draggable Width Resizer Line Between Profiles & Messages -->
+    <div class="workspace-resizer" id="workspaceResizer" title="Drag to adjust width · Double-click to reset">
+      <span class="resizer-grip" aria-hidden="true">⋮</span>
+    </div>
+
+    <!-- Right Column: Active Chrome Profile Notes & Timers -->
+    <main class="chat-main" id="chatMain">
+      <!-- Rendered dynamically -->
+    </main>
+  </div>
+
+  <!-- 8. APP DISTRIBUTION & COMMAND SUITE (Install, Share, QR, Backup, Blank Edition) -->
+  <section class="app-dist oc-app-dist minimized" id="appDistSection" aria-labelledby="distTitle">
+    <div class="dist-head" id="distHead" role="button" tabindex="0" title="Click header anywhere to toggle App Suite">
+      <div class="dist-head-left">
+        <div class="dist-oc-mini" title="OrlandoChrome">
+          <img src="oc-logo.svg" alt="OC" class="dist-oc-logo-img">
+        </div>
+        <div class="dist-header-text">
+          <div class="dist-title" id="distTitle">
+            <span class="dist-title-name">App Distribution &amp; Live Sync Suite</span>
+            <span class="dist-badge">● PWA READY</span>
+            <span class="dist-collapse-hint" id="distCollapseHint">· 4 Command Tools · Tap to Expand</span>
+          </div>
+          <div class="dist-subtitle" id="distSubtitle">Installed, offline-cached, zero-warning install &amp; holographic device sync</div>
+        </div>
+      </div>
+      <div class="dist-head-actions">
+        <button type="button" class="dist-toggle-btn" id="distMinimizeBtn" title="Toggle Minimized View" aria-expanded="false">
+            <span id="distMinIcon" class="dist-min-icon">▸</span> <span id="distMinText">Expand</span>
+          </button>
+      </div>
+    </div>
+
+    <!-- Collapsible Command Drawer with Fluid Morphing Transition -->
+    <div class="dist-drawer-wrapper" id="distDrawerWrapper">
+      <div class="dist-body" id="distBody">
+      <div class="dist-grid">
+        <!-- Card 1: Main Executive Workspace -->
+        <div class="dist-card" id="distCardMain">
+          <div class="dist-card-top">
+            <div class="dist-icon dist-icon-red">
+              <svg class="modern-icon modern-icon-red" viewBox="0 0 24 24" style="width:19px;height:19px;margin:0"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+            </div>
+            <div class="dist-card-meta">
+              <div class="dist-name" id="distCardMainTitle">OrlandoChrome (Main Version)</div>
+              <div class="dist-desc" id="distCardMainDesc">Complete 22-profile main workspace</div>
+            </div>
+          </div>
+          <div class="dist-btn-stack" id="distMainBtnStack">
+              <a class="primary dist-btn dist-btn-install" id="openMainAppBtn" href="https://orlandopasion000.github.io/orlandochrome/" target="_blank" rel="noopener" title="Open OrlandoChrome (Main Version)">
+                <svg class="modern-icon" viewBox="0 0 24 24" style="width:14px;height:14px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                <span>Open Main Web App</span>
+              </a>
+            </div>
+        </div>
+
+        <!-- Card 2: Mobile QR Code & Link Sharing -->
+        <div class="dist-card dist-card-holo" id="cardHoloQr" style="cursor: pointer;" title="Open Holographic QR Scanner">
+          <div class="dist-card-top">
+            <div class="dist-icon dist-icon-red">
+              <svg class="modern-icon modern-icon-red" viewBox="0 0 24 24" style="width:19px;height:19px;margin:0"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            </div>
+            <div class="dist-card-meta">
+              <div class="dist-name">Holographic QR</div>
+              <div class="dist-desc">Instant phone scanner &amp; device sync</div>
+            </div>
+          </div>
+          <div class="dist-btn-stack">
+            <button type="button" class="ghost dist-btn dist-btn-holo" id="openQrBtn">
+              <svg class="modern-icon modern-icon-cyan" viewBox="0 0 24 24" style="width:14px;height:14px"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+              <span>Open Phone QR</span>
+            </button>
+            <button type="button" class="ghost dist-btn" id="shareAppBtn">
+              <svg class="modern-icon" viewBox="0 0 24 24" style="width:14px;height:14px"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+              <span>Share / Copy Link</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Card 3: Backup & Restore Workspace -->
+        <div class="dist-card">
+          <div class="dist-card-top">
+            <div class="dist-icon dist-icon-red">
+              <svg class="modern-icon modern-icon-red" viewBox="0 0 24 24" style="width:19px;height:19px;margin:0"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></svg>
+            </div>
+            <div class="dist-card-meta">
+              <div class="dist-name">Backup &amp; Restore</div>
+              <div class="dist-desc">Encrypted local workspace backup</div>
+            </div>
+          </div>
+          <div class="dist-btn-stack">
+            <div class="dist-btn-row">
+              <button type="button" class="ghost dist-btn" id="exportBackupBtn">
+                <svg class="modern-icon modern-icon-emerald" viewBox="0 0 24 24" style="width:13px;height:13px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                <span>Export</span>
+              </button>
+              <button type="button" class="ghost dist-btn" id="importBackupBtn">
+                <svg class="modern-icon" viewBox="0 0 24 24" style="width:13px;height:13px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                <span>Import</span>
+              </button>
+            </div>
+            <input type="file" id="importBackupFile" accept=".json,application/json" style="display:none">
+          </div>
+        </div>
+
+        <!-- Card 4: Clean Blank Edition -->
+        <div class="dist-card dist-card-blank" id="distCardBlank">
+          <div class="dist-card-top">
+            <div class="dist-icon dist-icon-gold">
+              <svg class="modern-icon modern-icon-gold" viewBox="0 0 24 24" style="width:19px;height:19px;margin:0"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            </div>
+            <div class="dist-card-meta">
+              <div class="dist-name" id="distCardBlankTitle" style="color:#ffffff">OrlandoChrome (Blank Canvas)</div>
+              <div class="dist-desc" id="distCardBlankDesc">100% blank canvas (0 notes / clean routine)</div>
+            </div>
+          </div>
+          <div class="dist-btn-stack" id="distBlankBtnStack">
+            <a class="primary dist-btn" id="openBlankAppBtn" href="https://orlandopasion000.github.io/orlandochrome/?edition=blank" target="_blank" rel="noopener">
+              <svg class="modern-icon" viewBox="0 0 24 24" style="width:14px;height:14px"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <span>Open Blank Web App</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </section>
+  <!-- Hidden Photo Upload Input (Profile Avatar) -->
+  <input type="file" id="globalPhotoInput" accept="image/*" style="display:none;">
+  <!-- Hidden Screenshot / Media Attachment Input (Chat Notes) -->
+  <input type="file" id="noteImageInput" accept="image/*" style="display:none;">
+  <!-- Hidden JSON Backup Restore Input -->
+  <input type="file" id="backupJsonInput" accept=".json,application/json" style="display:none;">
+  <!-- Hidden Chrome Local State / Taskbar Scanner File Input (For Blank Edition Laptop Sync) -->
+  <input type="file" id="localStateFileInput" style="display:none;">
+
+  <!-- Toast Notification Container -->
+  <div id="toast"></div>
+
+  <!-- Scripts -->
+  <script src="sound.js?v=pure72"></script>
+  <script src="qrcode.min.js"></script>
+  <script src="app.js?v=pure72"></script>
+</body>
+</html>
