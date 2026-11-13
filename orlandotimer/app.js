@@ -957,17 +957,11 @@
       const timeStr = formatTimeHHMMSS(timerRemaining);
       timerDigitsEl.innerHTML = chromeHTML(timeStr);
     }
-    const chronoArc = document.getElementById('chronoProgressArc');
     if (timerProgressBar && timerTotalDuration > 0) {
       const pct = Math.max(0, Math.min(100, (timerRemaining / timerTotalDuration) * 100));
       timerProgressBar.style.width = `${pct}%`;
-      if (chronoArc) {
-        // Path length is approximately 1050px
-        const strokeOffset = 1050 * (1 - (pct / 100));
-        chronoArc.style.strokeDashoffset = strokeOffset;
-      }
-    } else if (chronoArc) {
-      chronoArc.style.strokeDashoffset = 0;
+    } else if (timerProgressBar) {
+      timerProgressBar.style.width = '100%';
     }
   }
 
@@ -1458,7 +1452,23 @@
     });
   }
 
+  const alarmLiveDigitsEl = document.getElementById('alarmLiveDigits');
+
+  function updateAlarmLiveClock() {
+    if (!alarmLiveDigitsEl) return;
+    const now = new Date();
+    let currentHour24 = now.getHours();
+    let currentAmPm = currentHour24 >= 12 ? 'PM' : 'AM';
+    let currentHour12 = currentHour24 % 12;
+    if (currentHour12 === 0) currentHour12 = 12;
+    const hStr = String(currentHour12).padStart(2, '0');
+    const mStr = String(now.getMinutes()).padStart(2, '0');
+    const sStr = String(now.getSeconds()).padStart(2, '0');
+    alarmLiveDigitsEl.innerHTML = chromeHTML(`${hStr}:${mStr}:${sStr}`) + `<span class="ampm-indicator">${currentAmPm}</span>`;
+  }
+
   function checkAlarms() {
+    updateAlarmLiveClock();
     const now = new Date();
     const currentMin = now.getMinutes();
 
@@ -1486,6 +1496,7 @@
 
   setInterval(checkAlarms, 1000);
   loadAlarms();
+  updateAlarmLiveClock();
 
   // ══════════════════════════════════════════════════════════════════════════
   // 10. FULLSCREEN ALERT OVERLAY (Flashing, Sound, Snooze & Stop)
@@ -1567,17 +1578,12 @@
     let width = 0;
     let height = 0;
     let particles = [];
-    const particleCount = 42;
-    let mouse = { x: -1000, y: -1000, radius: 120 };
+    const particleCount = 50;
+    let mouse = { x: -1000, y: -1000, radius: 140 };
     let currentParticleColor = 'rgba(217, 185, 92, 0.45)';
-    let currentParticleCategory = 'metals';
 
-    window.updateParticleThemeColor = function (hexColor, category = 'metals') {
+    window.updateParticleThemeColor = function (hexColor) {
       if (hexColor) currentParticleColor = hexColor;
-      if (category) {
-        currentParticleCategory = category;
-        initParticles();
-      }
     };
 
     function resizeCanvas() {
@@ -1587,114 +1593,79 @@
 
     function initParticles() {
       particles = [];
-      const count = currentParticleCategory === 'cyber' ? 55 : (currentParticleCategory === 'cosmic' ? 60 : 42);
-
-      for (let i = 0; i < count; i++) {
-        if (currentParticleCategory === 'cosmic') {
-          // Radial warp drive
-          const angle = Math.random() * Math.PI * 2;
-          const radius = Math.random() * (Math.min(width, height) * 0.45);
-          particles.push({
-            x: width / 2 + Math.cos(angle) * radius,
-            y: height / 2 + Math.sin(angle) * radius,
-            angle: angle,
-            speed: Math.random() * 1.8 + 0.6,
-            size: Math.random() * 2 + 1,
-            alpha: Math.random() * 0.6 + 0.2
-          });
-        } else if (currentParticleCategory === 'cyber') {
-          // Matrix digital rain
-          particles.push({
-            x: Math.random() * width,
-            y: Math.random() * height,
-            speed: Math.random() * 2.5 + 1.2,
-            length: Math.random() * 14 + 6,
-            size: Math.random() * 1.5 + 1,
-            alpha: Math.random() * 0.7 + 0.3
-          });
-        } else {
-          // Luxury floating orbs
-          particles.push({
-            x: Math.random() * width,
-            y: Math.random() * height,
-            vx: (Math.random() - 0.5) * 0.45,
-            vy: (Math.random() - 0.5) * 0.45,
-            size: Math.random() * 2.2 + 1,
-            alpha: Math.random() * 0.5 + 0.2
-          });
-        }
+      for (let i = 0; i < particleCount; i++) {
+        const size = Math.random() * 2.2 + 1.2;
+        // Spawn strictly inside the screen
+        particles.push({
+          x: Math.random() * (Math.max(10, width - size * 4)) + size * 2,
+          y: Math.random() * (Math.max(10, height - size * 4)) + size * 2,
+          vx: (Math.random() - 0.5) * 0.6,
+          vy: (Math.random() - 0.5) * 0.6,
+          size: size,
+          alpha: Math.random() * 0.5 + 0.3
+        });
       }
     }
 
     function renderParticles() {
       if (!ctx) return;
       ctx.clearRect(0, 0, width, height);
-
       ctx.fillStyle = currentParticleColor;
-      ctx.strokeStyle = currentParticleColor;
-
-      const cx = width / 2;
-      const cy = height / 2;
 
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
 
-        if (currentParticleCategory === 'cosmic') {
-          // Expand radially outward from center
-          p.x += Math.cos(p.angle) * p.speed;
-          p.y += Math.sin(p.angle) * p.speed;
-          p.speed *= 1.01;
+        // 1. Mouse repulsion effect: particles move away from cursor
+        const dx = p.x - mouse.x;
+        const dy = p.y - mouse.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
 
-          if (p.x < 0 || p.x > width || p.y < 0 || p.y > height) {
-            p.angle = Math.random() * Math.PI * 2;
-            const r = Math.random() * 40;
-            p.x = cx + Math.cos(p.angle) * r;
-            p.y = cy + Math.sin(p.angle) * r;
-            p.speed = Math.random() * 1.4 + 0.6;
-          }
-
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-          ctx.fill();
-
-        } else if (currentParticleCategory === 'cyber') {
-          // Cascading digital rain stream
-          p.y += p.speed;
-          if (p.y > height) {
-            p.y = -p.length;
-            p.x = Math.random() * width;
-          }
-
-          ctx.beginPath();
-          ctx.moveTo(p.x, p.y);
-          ctx.lineTo(p.x, p.y + p.length);
-          ctx.lineWidth = p.size;
-          ctx.stroke();
-
-        } else {
-          // Classic magnetic repulsion
-          const dx = p.x - mouse.x;
-          const dy = p.y - mouse.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-
-          if (dist < mouse.radius && dist > 0) {
-            const force = (mouse.radius - dist) / mouse.radius;
-            p.x += (dx / dist) * force * 3;
-            p.y += (dy / dist) * force * 3;
-          }
-
-          p.x += p.vx;
-          p.y += p.vy;
-
-          if (p.x < 0) p.x = width;
-          if (p.x > width) p.x = 0;
-          if (p.y < 0) p.y = height;
-          if (p.y > height) p.y = 0;
-
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-          ctx.fill();
+        if (dist < mouse.radius && dist > 0) {
+          const force = (mouse.radius - dist) / mouse.radius;
+          p.vx += (dx / dist) * force * 1.5;
+          p.vy += (dy / dist) * force * 1.5;
         }
+
+        // Apply gentle fluid damping
+        p.vx *= 0.985;
+        p.vy *= 0.985;
+
+        // Ensure particles always keep a gentle ambient float
+        const currentSpeed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+        if (currentSpeed < 0.2) {
+          p.vx += (Math.random() - 0.5) * 0.08;
+          p.vy += (Math.random() - 0.5) * 0.08;
+        } else if (currentSpeed > 4.0) {
+          p.vx = (p.vx / currentSpeed) * 4.0;
+          p.vy = (p.vy / currentSpeed) * 4.0;
+        }
+
+        // Update position
+        p.x += p.vx;
+        p.y += p.vy;
+
+        // 2. Strict screen boundaries: particles NEVER leave the view!
+        const r = p.size;
+        if (p.x <= r) {
+          p.x = r;
+          p.vx = Math.abs(p.vx);
+        } else if (p.x >= width - r) {
+          p.x = width - r;
+          p.vx = -Math.abs(p.vx);
+        }
+
+        if (p.y <= r) {
+          p.y = r;
+          p.vy = Math.abs(p.vy);
+        } else if (p.y >= height - r) {
+          p.y = height - r;
+          p.vy = -Math.abs(p.vy);
+        }
+
+        // Render particle strictly within view
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
       }
 
       requestAnimationFrame(renderParticles);

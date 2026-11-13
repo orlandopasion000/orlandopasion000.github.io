@@ -20,8 +20,13 @@
   <meta name="apple-mobile-web-app-title" content="Orlando Timer">
   <meta name="description" content="Orlando Timer — Executive 3-in-1 Timer, Stopwatch, and Alarm Horology Suite by Sir Orlando V. Pasion, Jr.">
 
+  <!-- Google Fonts Preconnect & Inter / Lexend Master Horology Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&family=Orbitron:wght@600;700;800;900&family=Outfit:wght@600;700;800;900&family=Space+Grotesk:wght@600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
   <!-- Relative Stylesheet (with cache-bust versioning) -->
-  <link rel="stylesheet" href="style.css?v=4.0">
+  <link rel="stylesheet" href="style.css?v=5.0">
 </head>
 <body data-app-theme="platinum" data-clock-style="platinum">
   <!-- Google Antigravity Signature Repulsive Particle Stage -->
@@ -127,25 +132,10 @@
       <!-- TAB 1: TIMER                               -->
       <!-- ========================================== -->
       <section class="tab-panel active" id="panel-timer" role="tabpanel" aria-labelledby="tab-timer">
-        <!-- Display Stage with HUGE Digits and Cybernetic Chrono Ring -->
+        <!-- Display Stage with HUGE Digits -->
         <div class="display-stage">
-          <div class="chrono-hud-wrapper">
-            <svg class="chrono-hud-svg" viewBox="0 0 1000 280" preserveAspectRatio="none" aria-hidden="true">
-              <!-- Radial background track -->
-              <path class="chrono-track-arc" d="M 40,250 C 40,50 960,50 960,250" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="6" stroke-linecap="round" />
-              <!-- Animated glowing progress arc -->
-              <path id="chronoProgressArc" class="chrono-progress-arc" d="M 40,250 C 40,50 960,50 960,250" fill="none" stroke="url(#chronoGrad)" stroke-width="7" stroke-linecap="round" />
-              <defs>
-                <linearGradient id="chronoGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stop-color="var(--theme-primary)" stop-opacity="0.35" />
-                  <stop offset="50%" stop-color="var(--theme-primary)" stop-opacity="1" />
-                  <stop offset="100%" stop-color="var(--theme-accent)" stop-opacity="0.9" />
-                </linearGradient>
-              </defs>
-            </svg>
-            <div class="chrome timer-digits-huge" id="timerDigits">
-              <!-- Formatted via chromeHTML() in JS -->
-            </div>
+          <div class="chrome timer-digits-huge" id="timerDigits">
+            <!-- Formatted via chromeHTML() in JS -->
           </div>
           <!-- Progress bar -->
           <div class="progress-container">
@@ -282,6 +272,13 @@
       <!-- TAB 3: ALARM                               -->
       <!-- ========================================== -->
       <section class="tab-panel" id="panel-alarm" role="tabpanel" aria-labelledby="tab-alarm">
+        <!-- Display Stage with HUGE Live Horology Clock Digits HH:MM:SS AM/PM -->
+        <div class="display-stage" style="margin-bottom: 24px;">
+          <div class="chrome alarm-digits-huge" id="alarmLiveDigits" title="Current Executive Horology Time">
+            <!-- Formatted via chromeHTML() in JS -->
+          </div>
+        </div>
+
         <!-- Set a Time (12-hour AM/PM) & Label -->
         <div class="alarm-create-card">
           <div class="alarm-time-picker-row">
@@ -411,6 +408,6 @@
   <audio id="alarmAudioElement" preload="auto" src="sounds/piano.mp3"></audio>
 
   <!-- Relative JavaScript (with cache-bust versioning) -->
-  <script src="app.js?v=4.0"></script>
+  <script src="app.js?v=5.0"></script>
 </body>
 </html>
