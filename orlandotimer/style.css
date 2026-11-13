@@ -1025,24 +1025,46 @@ body[data-app-theme="cyber-matrix-rain"] {
 .fun-action-btn {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  padding: 10px 12px;
+  border-radius: 14px;
+  padding: 10px 14px;
   display: flex;
   align-items: center;
   gap: 12px;
   cursor: pointer;
   text-align: left;
   transition: all 0.22s ease;
+  width: 100%;
 }
 
 .fun-action-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.09);
   border-color: var(--theme-primary);
   transform: translateY(-1px);
 }
 
-.fun-btn-icon {
-  font-size: 20px;
+.fun-btn-icon-wrap {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--theme-primary);
+  transition: all 0.2s ease;
+}
+
+.fun-action-btn:hover .fun-btn-icon-wrap {
+  background: var(--theme-primary);
+  color: var(--theme-primary-text);
+  box-shadow: 0 0 14px var(--theme-primary-glow);
+}
+
+.cyber-btn-svg {
+  width: 20px;
+  height: 20px;
 }
 
 .fun-btn-text strong {
@@ -1058,48 +1080,6 @@ body[data-app-theme="cyber-matrix-rain"] {
   font-family: var(--mono);
   font-size: 10px;
   color: var(--theme-text-dim);
-}
-
-.fun-soundscapes-section {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.fun-soundscapes-label {
-  font-family: var(--mono);
-  font-size: 9.5px;
-  font-weight: 800;
-  letter-spacing: 1px;
-  color: var(--theme-text-dim);
-}
-
-.fun-soundscapes-row {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 6px;
-}
-
-.fun-sound-pill {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  padding: 6px 4px;
-  font-family: var(--sans);
-  font-size: 11px;
-  font-weight: 700;
-  color: #FFFFFF;
-  cursor: pointer;
-  text-align: center;
-  transition: all 0.2s ease;
-}
-
-.fun-sound-pill:hover,
-.fun-sound-pill.active {
-  background: var(--theme-primary);
-  color: var(--theme-primary-text);
-  border-color: var(--theme-primary);
-  box-shadow: 0 0 10px var(--theme-primary-glow);
 }
 
 /* Zen Immersion Mode (Clean focus mode) */
@@ -2277,16 +2257,16 @@ body[data-clock-style="cyber-matrix-rain"] .chrome span {
    8. INTERFACE CONTROLS, INPUTS, BUTTONS & MODULES
    ══════════════════════════════════════════════════════════════════════════ */
 .progress-container {
-  width: 100%;
-  max-width: 680px;
-  height: 7px;
-  background: rgba(255, 255, 255, 0.06);
+  width: calc(100% - 48px);
+  max-width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 9999px;
-  margin: 20px auto 8px auto;
+  margin: 24px auto 10px auto;
   overflow: visible;
   position: relative;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.6);
+  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
@@ -2314,6 +2294,151 @@ body[data-clock-style="cyber-matrix-rain"] .chrome span {
   box-shadow: 0 0 14px 2px var(--theme-primary), 0 0 28px var(--theme-primary-glow);
   pointer-events: none;
   transition: transform 0.2s ease, opacity 0.3s ease;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FUTURISTIC ICON SYSTEM & GEOMETRIC VECTOR STYLING
+   ═══════════════════════════════════════════════════════════════ */
+.cyber-icon-sm {
+  width: 15px;
+  height: 15px;
+  vertical-align: -2px;
+  margin-right: 6px;
+  color: var(--theme-primary);
+}
+
+.cyber-chevron-svg {
+  width: 11px;
+  height: 11px;
+  margin-left: 2px;
+  stroke-width: 2;
+  transition: transform 0.25s ease;
+}
+
+.or-brand-badge.open .cyber-chevron-svg {
+  transform: rotate(180deg);
+}
+
+.cyber-widget-icon {
+  width: 14px;
+  height: 14px;
+  color: var(--theme-primary);
+  vertical-align: -2px;
+  margin-right: 6px;
+}
+
+.cyber-topbar-svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  color: var(--theme-primary);
+  transition: transform 0.25s ease;
+}
+
+.btn-topbar-desktop:hover .cyber-topbar-svg {
+  transform: scale(1.12);
+}
+
+.cyber-badge-svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: var(--theme-primary);
+}
+
+.holo-chevron-svg {
+  width: 12px;
+  height: 12px;
+  color: var(--theme-text-dim);
+  margin-left: 4px;
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+
+.holo-trigger-btn:hover .holo-chevron-svg {
+  transform: translateY(1.5px);
+  color: var(--theme-primary);
+}
+
+.tab-svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+
+.tab-btn:hover .tab-svg,
+.tab-btn.active .tab-svg {
+  transform: scale(1.12);
+}
+
+.spinner-btn {
+  background: transparent;
+  border: none;
+  color: var(--theme-text-dim);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.spinner-btn:hover {
+  color: var(--theme-primary);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.spinner-chevron-svg {
+  width: 10px;
+  height: 7px;
+  display: block;
+}
+
+.cyber-btn-svg-action {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+  transition: transform 0.22s ease;
+}
+
+.btn-luxury:hover .cyber-btn-svg-action {
+  transform: scale(1.1);
+}
+
+.cyber-search-svg {
+  width: 16px;
+  height: 16px;
+  color: var(--theme-primary);
+  flex-shrink: 0;
+}
+
+.cyber-shuffle-svg {
+  width: 17px;
+  height: 17px;
+  color: var(--theme-primary);
+  flex-shrink: 0;
+}
+
+.cyber-close-svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.cyber-mini-close {
+  width: 12px;
+  height: 12px;
+  display: block;
+}
+
+.ov-cyber-bell {
+  width: 58px;
+  height: 58px;
+  color: var(--theme-primary);
+  filter: drop-shadow(0 0 24px var(--theme-primary-glow));
+  animation: pulseGlow 1.2s infinite ease-in-out;
 }
 
 .timer-inputs-wrapper {
@@ -2968,81 +3093,339 @@ input:checked + .slider:before {
   color: var(--theme-text-mute);
 }
 
-/* Responsive Media Queries */
-@media (max-width: 860px) {
-  .customization-cockpit {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 14px;
-    padding: 14px 16px;
+/* ═══════════════════════════════════════════════════════════════
+   9. COMPREHENSIVE FULLY RESPONSIVE WEB DESIGN ENGINE
+   Seamless compatibility: 4K, Desktops, Laptops, Tablets, iPhones & Android
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Large Screens & 4K */
+@media (min-width: 1440px) {
+  main.timer-main {
+    max-width: 1200px;
   }
-  .customizer-divider {
-    width: 100%;
-    height: 1px;
-  }
-  .customizer-control-wrap {
-    justify-content: space-between;
+  .display-stage {
+    padding: 38px 24px 32px 24px;
   }
 }
 
-@media (max-width: 768px) {
+/* Tablets & Small Laptops (768px - 1023px) */
+@media (max-width: 1023px) {
   .or-brand-header {
-    padding: 14px 16px;
+    padding: 14px 20px 10px 20px;
   }
-  .or-brand-main {
-    font-size: 1.05rem;
+  .customization-cockpit {
+    gap: 12px;
+    padding: 8px 14px;
   }
-  .btn-topbar-desktop span:not(.status-dot-wake) {
-    display: none;
+  .holo-trigger-btn {
+    padding: 10px 14px;
+  }
+  .progress-container {
+    width: calc(100% - 32px);
+    height: 7px;
+    margin: 20px auto 8px auto;
+  }
+  .timer-digits-huge {
+    font-size: clamp(3.6rem, 13vw, 8.5rem);
+  }
+  .stopwatch-digits-huge {
+    font-size: clamp(3.2rem, 11vw, 7.5rem);
+  }
+  .alarm-digits-huge {
+    font-size: clamp(3.0rem, 10vw, 6.8rem);
+  }
+}
+
+/* Phablets & Mobile Devices (481px - 767px) */
+@media (max-width: 767px) {
+  .or-brand-header {
+    padding: 12px 14px 8px 14px;
+    gap: 10px;
+  }
+  .or-brand-logo-glass {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+  }
+  .or-brand-main.transparent-text {
+    font-size: 1.1rem;
+    letter-spacing: 1.5px;
+  }
+  .or-brand-fun-tag {
+    font-size: 9.5px;
+    padding: 2px 8px;
+  }
+  .fun-micro-cockpit {
+    width: 290px;
   }
   .btn-topbar-desktop {
     padding: 8px 10px;
+    font-size: 10px;
+  }
+  .btn-topbar-desktop span:not(.status-dot-wake):not(.status-dot-audio) {
+    display: none;
+  }
+  .customization-cockpit {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 8px 10px;
+  }
+  .customizer-box {
+    width: 100%;
+  }
+  .holo-trigger-btn {
+    width: 100%;
+    justify-content: space-between;
+    padding: 10px 14px;
+  }
+  .customizer-divider {
+    display: none;
+  }
+  .tabs-nav-container {
+    margin-bottom: 18px;
+  }
+  .tabs-nav {
+    width: 100%;
   }
   .tab-btn {
-    padding: 8px 16px;
+    flex: 1;
+    padding: 10px 12px;
     font-size: 13px;
+    justify-content: center;
   }
   .display-stage {
-    padding: 20px 10px;
-    border-radius: 20px;
+    padding: 22px 12px 18px 12px;
+    border-radius: 22px;
+    margin-bottom: 20px;
   }
-  .btn-luxury {
-    padding: 12px 24px;
-    font-size: 15px;
+  .progress-container {
+    width: calc(100% - 24px);
+    height: 6px;
+    margin: 18px auto 6px auto;
+  }
+  .timer-digits-huge {
+    font-size: clamp(2.8rem, 13vw, 5.5rem);
+  }
+  .stopwatch-digits-huge {
+    font-size: clamp(2.5rem, 11vw, 4.8rem);
+  }
+  .alarm-digits-huge {
+    font-size: clamp(2.3rem, 10vw, 4.4rem);
+  }
+  .timer-inputs-wrapper {
+    gap: 8px;
+    padding: 10px 14px;
+    margin-bottom: 20px;
   }
   .time-input-box {
     width: 52px;
-    height: 42px;
-    font-size: 20px;
+    height: 44px;
+    font-size: 22px;
   }
-}
-
-@media (max-width: 480px) {
-  .tabs-nav {
-    width: 100%;
-    justify-content: space-around;
+  .controls-row {
+    gap: 12px;
+    margin-bottom: 22px;
   }
-  .tab-btn {
-    padding: 8px 12px;
-    font-size: 12px;
-    gap: 4px;
+  .btn-luxury {
+    padding: 12px 22px;
+    font-size: 14px;
+    min-height: 46px;
   }
-  .time-input-spinner {
-    gap: 2px;
-  }
-  .alarm-time-picker-row {
+  .presets-row {
     gap: 8px;
   }
-  .alarm-select {
-    font-size: 20px;
-    padding: 6px 10px;
-  }
-  .theme-control-pill {
+  .preset-pill {
     padding: 7px 12px;
     font-size: 12px;
   }
-  .theme-select-menu {
-    max-width: 140px;
+}
+
+/* Small Smartphones & iPhones (< 480px, down to 320px) */
+@media (max-width: 480px) {
+  body {
+    overflow-x: hidden;
+  }
+  .or-brand-header {
+    padding: 10px 10px 6px 10px;
+  }
+  .or-brand-badge.transparent-brand {
+    gap: 8px;
+    padding: 2px 4px;
+  }
+  .or-brand-logo-glass {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+  }
+  .or-brand-main.transparent-text {
+    font-size: 0.98rem;
+    letter-spacing: 1px;
+  }
+  .or-brand-fun-tag {
+    font-size: 9px;
+    padding: 1.5px 6px;
+  }
+  .fun-micro-cockpit {
+    width: calc(100vw - 20px);
+    left: -4px;
+    padding: 14px;
+    border-radius: 16px;
+  }
+  .or-header-right {
+    gap: 6px;
+  }
+  .btn-topbar-desktop {
+    padding: 7px 8px;
+    border-radius: 8px;
+  }
+  .btn-topbar-desktop span:not(.status-dot-wake):not(.status-dot-audio) {
+    display: none;
+  }
+  .customization-cockpit {
+    margin: 8px auto 14px auto;
+    padding: 6px 8px;
+  }
+  .holo-trigger-btn {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+  .customizer-badge-text {
     font-size: 11px;
+  }
+  .holo-current-label {
+    font-size: 11px;
+    max-width: 115px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .tabs-nav {
+    width: 100%;
+    padding: 4px;
+    border-radius: 12px;
+  }
+  .tab-btn {
+    padding: 8px 6px;
+    font-size: 11.5px;
+    gap: 4px;
+  }
+  .tab-svg {
+    width: 15px;
+    height: 15px;
+  }
+  .display-stage {
+    padding: 16px 8px 14px 8px;
+    border-radius: 18px;
+    margin-bottom: 16px;
+  }
+  .progress-container {
+    width: calc(100% - 16px);
+    height: 5px;
+    margin: 14px auto 4px auto;
+  }
+  .progress-comet-head {
+    width: 10px;
+    height: 10px;
+    right: -4px;
+  }
+  .timer-digits-huge {
+    font-size: clamp(2.2rem, 13vw, 3.8rem);
+    letter-spacing: 0.005em !important;
+  }
+  .chrome span {
+    width: .60em !important;
+  }
+  .chrome span.c {
+    width: .24em !important;
+    margin: 0 0.015em !important;
+  }
+  .stopwatch-digits-huge {
+    font-size: clamp(2.0rem, 11vw, 3.4rem);
+  }
+  .alarm-digits-huge {
+    font-size: clamp(1.9rem, 10vw, 3.0rem);
+  }
+  .timer-inputs-wrapper {
+    gap: 4px;
+    padding: 8px 10px;
+    margin-bottom: 16px;
+    border-radius: 14px;
+  }
+  .time-input-group label {
+    font-size: 9px;
+  }
+  .time-input-box {
+    width: 44px;
+    height: 38px;
+    font-size: 18px;
+    padding: 2px 4px;
+  }
+  .spinner-btn {
+    padding: 2px;
+  }
+  .time-colon {
+    font-size: 18px;
+  }
+  .controls-row {
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .btn-luxury {
+    padding: 10px 16px;
+    font-size: 13px;
+    min-height: 44px;
+    gap: 6px;
+  }
+  .presets-section {
+    margin-bottom: 24px;
+  }
+  .presets-row {
+    gap: 6px;
+    justify-content: center;
+  }
+  .preset-pill {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+  .alarm-time-picker-row {
+    gap: 6px;
+  }
+  .alarm-select {
+    font-size: 18px;
+    padding: 6px 8px;
+  }
+  .ampm-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+  .alarm-card {
+    padding: 12px 14px;
+    border-radius: 14px;
+  }
+  .alarm-card-time {
+    font-size: 1.4rem;
+  }
+  .holo-vault-container {
+    width: 95vw;
+    max-height: 88vh;
+    border-radius: 20px;
+  }
+  .holo-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 14px 14px 20px 14px;
+  }
+  .footer {
+    padding: 24px 12px 30px 12px;
+  }
+  .footer-name {
+    font-size: 0.95rem;
+  }
+  .footer-sub {
+    font-size: 0.72rem;
+  }
+  .footer-copy {
+    font-size: 0.65rem;
   }
 }

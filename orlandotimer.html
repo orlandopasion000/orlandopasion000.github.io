@@ -26,102 +26,140 @@
   <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&family=Orbitron:wght@600;700;800;900&family=Outfit:wght@600;700;800;900&family=Space+Grotesk:wght@600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
   <!-- Relative Stylesheet (with cache-bust versioning) -->
-  <link rel="stylesheet" href="style.css?v=6.0">
+  <link rel="stylesheet" href="style.css?v=7.0">
 </head>
 <body data-app-theme="platinum" data-clock-style="platinum">
   <!-- Google Antigravity Signature Repulsive Particle Stage -->
   <canvas id="antigravityCanvas" class="antigravity-fx-canvas" aria-hidden="true"></canvas>
 
   <div class="app-wrapper">
-    <!-- 0. EXECUTIVE BRAND HEADER (TRANSPARENT LUXURY CRYSTAL & FUN INTERACTIVE HUB) -->
+    <!-- 0. EXECUTIVE BRAND HEADER (TRANSPARENT LUXURY CRYSTAL & QUANTUM TIME COMMAND) -->
     <header class="or-brand-header">
       <div class="or-brand-left-container">
         <!-- Glassmorphic Translucent Logo + Title Button with Supernova Easter Egg -->
         <div class="or-brand-badge-wrap">
-          <button type="button" class="or-brand-badge transparent-brand" id="btnLogoEasterEgg" title="Click for Quantum Supernova Burst ✨ (or toggle Lab)">
+          <button type="button" class="or-brand-badge transparent-brand" id="btnLogoEasterEgg" title="Quantum Supernova Protocol (Click to Trigger)">
             <div class="or-brand-logo-glass">
               <img src="assets/ot-icon-192.png" alt="Orlando Timer Transparent Emblem" class="or-brand-logo-img transparent-logo">
               <span class="logo-specular-shimmer"></span>
             </div>
             <div class="or-brand-titles">
               <span class="or-brand-main transparent-text">ORLANDO<span class="or-brand-accent transparent-accent">TIMER</span></span>
-              <!-- Fun Interactive Executive Status / Mode Badge -->
-              <div class="or-brand-fun-tag" id="brandFunTag">
+              <!-- Futuristic Executive Mode Badge -->
+              <div class="or-brand-fun-tag" id="brandFunTag" title="Toggle Quantum Time Command">
                 <span class="fun-sparkle-dot"></span>
-                <span class="fun-tag-label" id="funTagLabel">⚡ Focus Flow</span>
-                <span class="fun-tag-hint">▾</span>
+                <span class="fun-tag-label" id="funTagLabel">Focus Protocol</span>
+                <svg class="cyber-chevron-svg" viewBox="0 0 12 12" fill="none">
+                  <path d="M2.5 4.5L6 8l3.5-3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
               </div>
             </div>
           </button>
         </div>
 
-        <!-- Futuristic Micro-Cockpit Drawer (Fun Easter Egg Menu) -->
+        <!-- Futuristic Micro-Cockpit Drawer (Quantum Time Command) -->
         <div class="fun-micro-cockpit" id="funMicroCockpit" aria-hidden="true">
           <div class="fun-cockpit-header">
-            <span class="fun-cockpit-title">🛸 EXECUTIVE HOROLOGY LAB</span>
-            <button type="button" class="btn-fun-close" id="btnCloseFunCockpit" aria-label="Close Lab">✕</button>
+            <span class="fun-cockpit-title">
+              <svg class="cyber-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="9"/>
+                <circle cx="12" cy="12" r="3.5" fill="currentColor" opacity="0.3"/>
+                <line x1="12" y1="3" x2="12" y2="6.5"/>
+                <line x1="12" y1="17.5" x2="12" y2="21"/>
+                <line x1="3" y1="12" x2="6.5" y2="12"/>
+                <line x1="17.5" y1="12" x2="21" y2="12"/>
+              </svg>
+              QUANTUM TIME COMMAND
+            </span>
+            <button type="button" class="btn-fun-close" id="btnCloseFunCockpit" aria-label="Close Command Hub">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
           </div>
           <div class="fun-cockpit-body">
             <!-- Feature 1: Day Horizon Meter -->
             <div class="fun-widget-item">
               <div class="fun-widget-row">
-                <span class="fun-widget-name">🌍 Earth Day Horizon</span>
-                <span class="fun-widget-val" id="dayProgressVal">86.4%</span>
+                <span class="fun-widget-name">
+                  <svg class="cyber-widget-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="9"/>
+                    <ellipse cx="12" cy="12" rx="9" ry="3.5" stroke-dasharray="2 2"/>
+                    <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+                  </svg>
+                  Earth Solar Horizon
+                </span>
+                <span class="fun-widget-val" id="dayProgressVal">87.5%</span>
               </div>
               <div class="fun-mini-bar-track">
-                <div class="fun-mini-bar-fill" id="dayProgressBar" style="width: 86%;"></div>
+                <div class="fun-mini-bar-fill" id="dayProgressBar" style="width: 87.5%;"></div>
               </div>
-              <span class="fun-widget-sub" id="dayCountdownSub">3h 12m until midnight</span>
+              <span class="fun-widget-sub" id="dayCountdownSub">3h 0m until midnight</span>
             </div>
 
             <!-- Feature 2: Fun Supernova Particle Burst -->
             <button type="button" class="fun-action-btn" id="btnFireSupernova">
-              <span class="fun-btn-icon">💥</span>
+              <div class="fun-btn-icon-wrap">
+                <svg class="cyber-btn-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="3.5" fill="currentColor" opacity="0.3"/>
+                  <line x1="12" y1="2" x2="12" y2="6"/>
+                  <line x1="12" y1="18" x2="12" y2="22"/>
+                  <line x1="2" y1="12" x2="6" y2="12"/>
+                  <line x1="18" y1="12" x2="22" y2="12"/>
+                  <path d="M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                </svg>
+              </div>
               <div class="fun-btn-text">
                 <strong>Supernova Particle Burst</strong>
-                <small>Erupt radiant antigravity particles across screen</small>
+                <small>Erupt radiant quantum particles across viewport</small>
               </div>
             </button>
 
-            <!-- Feature 3: Zen Minimalist Immersion Mode -->
+            <!-- Feature 3: Zen Immersion Mode -->
             <button type="button" class="fun-action-btn" id="btnToggleZenMode">
-              <span class="fun-btn-icon">🧘</span>
+              <div class="fun-btn-icon-wrap">
+                <svg class="cyber-btn-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="8"/>
+                  <circle cx="12" cy="12" r="3" fill="currentColor" opacity="0.3"/>
+                  <path d="M8 12h8M12 8v8" stroke-linecap="round"/>
+                </svg>
+              </div>
               <div class="fun-btn-text">
                 <strong id="zenModeLabel">Zen Immersion Mode</strong>
-                <small>Hide chrome, float colossal clock in ambient void</small>
+                <small>Conceal chrome, float colossal clock in ambient void</small>
               </div>
             </button>
-
-            <!-- Feature 4: Instant Ambient Soundscapes -->
-            <div class="fun-soundscapes-section">
-              <div class="fun-soundscapes-label">🎧 INSTANT AMBIENT SOUNDSCAPES</div>
-              <div class="fun-soundscapes-row">
-                <button type="button" class="fun-sound-pill" data-sound="rain" title="Rain Ambience">🌧️ Rain</button>
-                <button type="button" class="fun-sound-pill" data-sound="space" title="Deep Space Void">🌌 Space</button>
-                <button type="button" class="fun-sound-pill" data-sound="waves" title="Ocean Waves">🌊 Waves</button>
-                <button type="button" class="fun-sound-pill" data-sound="campfire" title="Campfire">🔥 Fire</button>
-              </div>
-            </div>
           </div>
         </div>
       </div>
       <div class="or-header-right">
-        <!-- Mechanical Quartz / Acoustic Tick Toggle -->
-        <button type="button" class="btn-topbar-desktop" id="btnAcousticTick" title="Toggle Mechanical Escapement / Quartz Tick Sound">
+        <!-- Mechanical Quartz / Acoustic Tick Toggle with Futuristic Resonator SVG -->
+        <button type="button" class="btn-topbar-desktop" id="btnAcousticTick" title="Toggle Mechanical Escapement / Acoustic Resonator">
+          <svg class="cyber-topbar-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12h3l2-6 4 12 4-12 2 6h3" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+          </svg>
           <span class="status-dot-audio" id="acousticDot"></span>
           <span id="acousticTickText">Tick: OFF</span>
         </button>
 
-        <!-- Keep Screen Awake status button -->
-        <button type="button" class="btn-topbar-desktop" id="btnWakeLock" title="Screen Wake Lock Status (Toggle)">
+        <!-- Keep Screen Awake status button with Futuristic Reactor SVG -->
+        <button type="button" class="btn-topbar-desktop" id="btnWakeLock" title="Screen Wake Lock (Toggle Perpetual Display)">
+          <svg class="cyber-topbar-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="8"/>
+            <path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke-linecap="round"/>
+            <circle cx="12" cy="12" r="3" fill="currentColor"/>
+          </svg>
           <span class="status-dot-wake"></span>
           <span id="wakeLockText">Awake ON</span>
         </button>
 
-        <!-- Fullscreen Button -->
-        <button type="button" class="btn-topbar-desktop" id="btnFullscreen" title="Toggle Fullscreen View">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px">
-            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+        <!-- Fullscreen Button with Futuristic HUD Telemetry SVG -->
+        <button type="button" class="btn-topbar-desktop" id="btnFullscreen" title="Toggle Fullscreen Telemetry View">
+          <svg class="cyber-topbar-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>
+            <circle cx="12" cy="12" r="1.5" fill="currentColor" opacity="0.8"/>
           </svg>
           <span id="fsLabel">Fullscreen</span>
         </button>
@@ -140,11 +178,22 @@
         <!-- Trigger 1 (Left): Global Application Theme -->
         <div class="customizer-box customizer-theme">
           <button type="button" class="holo-trigger-btn" id="btnOpenThemeVault" aria-haspopup="dialog" aria-expanded="false" title="Open Holographic Theme Vault (Hotkey: T)">
-            <span class="customizer-badge-icon">🎨</span>
+            <span class="customizer-badge-icon">
+              <!-- Futuristic Cyber Chromatic Prism SVG -->
+              <svg class="cyber-badge-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5" stroke-linejoin="round"/>
+                <circle cx="12" cy="12" r="3.5" fill="currentColor" opacity="0.3"/>
+                <line x1="12" y1="2" x2="12" y2="8.5"/>
+                <line x1="22" y1="15.5" x2="17" y2="12"/>
+                <line x1="2" y1="15.5" x2="7" y2="12"/>
+              </svg>
+            </span>
             <span class="customizer-badge-text">App Theme</span>
             <span class="theme-color-preview" id="appThemeSwatch"></span>
             <span class="holo-current-label" id="appThemeLabel">Pure Platinum</span>
-            <span class="holo-open-arrow">⬡</span>
+            <svg class="holo-chevron-svg" viewBox="0 0 12 12" fill="none">
+              <path d="M2.5 4.5L6 8l3.5-3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
           </button>
         </div>
 
@@ -154,37 +203,49 @@
         <!-- Trigger 2 (Right): Clock Style Only -->
         <div class="customizer-box customizer-clock">
           <button type="button" class="holo-trigger-btn" id="btnOpenClockVault" aria-haspopup="dialog" aria-expanded="false" title="Open Clock Typography Vault (Hotkey: C)">
-            <span class="customizer-badge-icon">⏱️</span>
+            <span class="customizer-badge-icon">
+              <!-- Futuristic Atomic Tourbillon Horology SVG -->
+              <svg class="cyber-badge-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="9"/>
+                <circle cx="12" cy="12" r="4.5" stroke-dasharray="2 2"/>
+                <line x1="12" y1="12" x2="16" y2="8" stroke-linecap="round"/>
+                <circle cx="12" cy="12" r="1.8" fill="currentColor"/>
+                <path d="M12 3v2M12 19v2M3 12h2M19 12h2" stroke-linecap="round"/>
+              </svg>
+            </span>
             <span class="customizer-badge-text">Clock Style</span>
             <span class="theme-color-preview" id="clockStyleSwatch"></span>
             <span class="holo-current-label" id="clockStyleLabel">Pure Platinum</span>
-            <span class="holo-open-arrow">⬡</span>
+            <svg class="holo-chevron-svg" viewBox="0 0 12 12" fill="none">
+              <path d="M2.5 4.5L6 8l3.5-3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
           </button>
         </div>
       </section>
 
-      <!-- TABS NAVIGATION -->
+      <!-- TABS NAVIGATION WITH FUTURISTIC ICONS -->
       <div class="tabs-nav-container">
         <nav class="tabs-nav" role="tablist" aria-label="Orlando Timer Navigation">
           <button type="button" class="tab-btn active" id="tab-timer" role="tab" aria-selected="true" data-tab="timer">
-            <svg viewBox="0 0 24 24">
-              <circle cx="12" cy="12" r="10"></circle>
-              <polyline points="12 6 12 12 16 14"></polyline>
+            <svg class="tab-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M7 3h10M7 21h10M7 3l5 6-5 6v6M17 3l-5 6 5 6v6" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
             </svg>
             <span>Timer</span>
           </button>
           <button type="button" class="tab-btn" id="tab-stopwatch" role="tab" aria-selected="false" data-tab="stopwatch">
-            <svg viewBox="0 0 24 24">
-              <circle cx="12" cy="14" r="8"></circle>
-              <line x1="12" y1="2" x2="12" y2="6"></line>
-              <line x1="12" y1="6" x2="15" y2="6"></line>
+            <svg class="tab-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="13" r="8"/>
+              <path d="M12 9v4l3 2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M10 2h4M12 2v3M19 6l-1.5 1.5M5 6l1.5 1.5" stroke-linecap="round"/>
             </svg>
             <span>Stopwatch</span>
           </button>
           <button type="button" class="tab-btn" id="tab-alarm" role="tab" aria-selected="false" data-tab="alarm">
-            <svg viewBox="0 0 24 24">
-              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            <svg class="tab-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 9a6 6 0 1 0-12 0c0 7-3 8-3 8h18s-3-1-3-8" stroke-linejoin="round"/>
+              <path d="M14 19a2 2 0 0 1-4 0M4 4l2 2M20 4l-2 2" stroke-linecap="round"/>
+              <circle cx="12" cy="9" r="1.5" fill="currentColor"/>
             </svg>
             <span>Alarm</span>
           </button>
@@ -216,8 +277,12 @@
             <div class="time-input-spinner">
               <input type="number" id="timerHours" class="time-input-box" min="0" max="99" value="00" aria-label="Timer Hours">
               <div class="spinner-btn-col">
-                <button type="button" class="spinner-btn" onclick="stepTime('h', 1)" title="Increase Hours">▲</button>
-                <button type="button" class="spinner-btn" onclick="stepTime('h', -1)" title="Decrease Hours">▼</button>
+                <button type="button" class="spinner-btn" onclick="stepTime('h', 1)" title="Increase Hours">
+                  <svg class="spinner-chevron-svg" viewBox="0 0 12 8" fill="none"><path d="M1.5 6.5L6 2l4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <button type="button" class="spinner-btn" onclick="stepTime('h', -1)" title="Decrease Hours">
+                  <svg class="spinner-chevron-svg" viewBox="0 0 12 8" fill="none"><path d="M1.5 1.5L6 6l4.5-4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
               </div>
             </div>
           </div>
@@ -230,8 +295,12 @@
             <div class="time-input-spinner">
               <input type="number" id="timerMinutes" class="time-input-box" min="0" max="59" value="25" aria-label="Timer Minutes">
               <div class="spinner-btn-col">
-                <button type="button" class="spinner-btn" onclick="stepTime('m', 1)" title="Increase Minutes">▲</button>
-                <button type="button" class="spinner-btn" onclick="stepTime('m', -1)" title="Decrease Minutes">▼</button>
+                <button type="button" class="spinner-btn" onclick="stepTime('m', 1)" title="Increase Minutes">
+                  <svg class="spinner-chevron-svg" viewBox="0 0 12 8" fill="none"><path d="M1.5 6.5L6 2l4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <button type="button" class="spinner-btn" onclick="stepTime('m', -1)" title="Decrease Minutes">
+                  <svg class="spinner-chevron-svg" viewBox="0 0 12 8" fill="none"><path d="M1.5 1.5L6 6l4.5-4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
               </div>
             </div>
           </div>
@@ -244,8 +313,12 @@
             <div class="time-input-spinner">
               <input type="number" id="timerSeconds" class="time-input-box" min="0" max="59" value="00" aria-label="Timer Seconds">
               <div class="spinner-btn-col">
-                <button type="button" class="spinner-btn" onclick="stepTime('s', 1)" title="Increase Seconds">▲</button>
-                <button type="button" class="spinner-btn" onclick="stepTime('s', -1)" title="Decrease Seconds">▼</button>
+                <button type="button" class="spinner-btn" onclick="stepTime('s', 1)" title="Increase Seconds">
+                  <svg class="spinner-chevron-svg" viewBox="0 0 12 8" fill="none"><path d="M1.5 6.5L6 2l4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <button type="button" class="spinner-btn" onclick="stepTime('s', -1)" title="Decrease Seconds">
+                  <svg class="spinner-chevron-svg" viewBox="0 0 12 8" fill="none"><path d="M1.5 1.5L6 6l4.5-4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
               </div>
             </div>
           </div>
@@ -254,17 +327,23 @@
         <!-- Buttons: Start, Pause, Reset -->
         <div class="controls-row">
           <button type="button" class="btn-luxury btn-primary-gold" id="btnTimerStart">
-            <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <svg class="cyber-btn-svg-action" viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="6 4 20 12 6 20"/>
+              <circle cx="10" cy="12" r="2" fill="var(--theme-bg)"/>
+            </svg>
             <span>Start</span>
           </button>
           <button type="button" class="btn-luxury btn-pause-amber" id="btnTimerPause" style="display:none">
-            <svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+            <svg class="cyber-btn-svg-action" viewBox="0 0 24 24" fill="currentColor">
+              <rect x="6" y="4" width="4.5" height="16" rx="1.5"/>
+              <rect x="13.5" y="4" width="4.5" height="16" rx="1.5"/>
+            </svg>
             <span>Pause</span>
           </button>
           <button type="button" class="btn-luxury btn-ghost-silver" id="btnTimerReset">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="1 4 1 10 7 10"></polyline>
-              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+            <svg class="cyber-btn-svg-action" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 12a9 9 0 1 0 2.6-6.4L2 9"/>
+              <polyline points="2 3 2 9 8 9"/>
             </svg>
             <span>Reset</span>
           </button>
@@ -294,27 +373,32 @@
           </div>
         </div>
 
-        <!-- Buttons: Start, Stop, Lap, Reset -->
+        <!-- Buttons: Start, Stop, Lap, Reset with Futuristic Action SVGs -->
         <div class="controls-row">
           <button type="button" class="btn-luxury btn-primary-gold" id="btnSwStart">
-            <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <svg class="cyber-btn-svg-action" viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="6 4 20 12 6 20"/>
+              <circle cx="10" cy="12" r="2" fill="var(--theme-bg)"/>
+            </svg>
             <span>Start</span>
           </button>
           <button type="button" class="btn-luxury btn-stop-rose" id="btnSwStop" style="display:none">
-            <svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12"></rect></svg>
+            <svg class="cyber-btn-svg-action" viewBox="0 0 24 24" fill="currentColor">
+              <rect x="6" y="4" width="4.5" height="16" rx="1.5"/>
+              <rect x="13.5" y="4" width="4.5" height="16" rx="1.5"/>
+            </svg>
             <span>Stop</span>
           </button>
           <button type="button" class="btn-luxury btn-lap" id="btnSwLap">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
-              <line x1="4" y1="22" x2="4" y2="15"></line>
+            <svg class="cyber-btn-svg-action" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="4 3 19 8 4 13 4 21" fill="currentColor" fill-opacity="0.25"/>
             </svg>
             <span>Lap</span>
           </button>
           <button type="button" class="btn-luxury btn-ghost-silver" id="btnSwReset">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="1 4 1 10 7 10"></polyline>
-              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+            <svg class="cyber-btn-svg-action" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 12a9 9 0 1 0 2.6-6.4L2 9"/>
+              <polyline points="2 3 2 9 8 9"/>
             </svg>
             <span>Reset</span>
           </button>
@@ -364,9 +448,10 @@
 
           <div style="display:flex;justify-content:center;">
             <button type="button" class="btn-luxury btn-primary-gold" id="btnAddAlarm" style="width:100%;max-width:320px;">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="12" y1="5" x2="12" y2="19"></line>
-                <line x1="5" y1="12" x2="19" y2="12"></line>
+              <svg class="cyber-btn-svg-action" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+                <circle cx="12" cy="12" r="10" stroke-width="1" stroke-dasharray="3 3"/>
               </svg>
               <span>Add Alarm</span>
             </button>
@@ -403,20 +488,42 @@
           <p class="holo-vault-subtitle" id="holoVaultSubtitle">Hover over any luxury card for instant live preview. Click to lock in selection.</p>
         </div>
         <button type="button" class="holo-vault-close-btn" id="btnHoloVaultClose" aria-label="Close Vault (Esc)">
-          <span>✕</span>
+          <svg class="cyber-close-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
           <span class="esc-badge">ESC</span>
         </button>
       </div>
 
-      <!-- Search & Quantum Shuffle Toolbar -->
+      <!-- Search & Quantum Shuffle Toolbar with Futuristic SVGs -->
       <div class="holo-vault-toolbar">
         <div class="holo-search-wrap">
-          <span class="holo-search-icon">🔍</span>
+          <span class="holo-search-icon">
+            <svg class="cyber-search-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="7"/>
+              <line x1="21" y1="21" x2="16.5" y2="16.5" stroke-linecap="round"/>
+              <circle cx="11" cy="11" r="2.5" stroke-dasharray="2 2"/>
+              <line x1="11" y1="4" x2="11" y2="6"/>
+              <line x1="11" y1="16" x2="11" y2="18"/>
+              <line x1="4" y1="11" x2="6" y2="11"/>
+              <line x1="16" y1="11" x2="18" y2="11"/>
+            </svg>
+          </span>
           <input type="text" id="holoSearchInput" class="holo-search-input" placeholder="Search 30 themes (e.g. gold, neon, space, racing, carbon)..." autocomplete="off" spellcheck="false" aria-label="Search themes">
-          <button type="button" id="btnClearSearch" class="btn-clear-search" style="display:none;" title="Clear search">✕</button>
+          <button type="button" id="btnClearSearch" class="btn-clear-search" style="display:none;" title="Clear search">
+            <svg class="cyber-mini-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
         </div>
-        <button type="button" class="btn-quantum-shuffle" id="btnQuantumShuffle" title="Surprise Me: Harmonize random Theme + Clock Style">
-          <span class="shuffle-dice">🎲</span>
+        <button type="button" class="btn-quantum-shuffle" id="btnQuantumShuffle" title="Harmonize random Theme + Clock Style">
+          <svg class="cyber-shuffle-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="3" y="3" width="18" height="18" rx="4"/>
+            <circle cx="8" cy="8" r="1.5" fill="currentColor"/>
+            <circle cx="16" cy="16" r="1.5" fill="currentColor"/>
+            <circle cx="12" cy="12" r="2" fill="currentColor"/>
+            <circle cx="16" cy="8" r="1.5" fill="currentColor"/>
+            <circle cx="8" cy="16" r="1.5" fill="currentColor"/>
+          </svg>
           <span>Quantum Shuffle</span>
         </button>
       </div>
@@ -456,7 +563,14 @@
   <!-- FULLSCREEN RINGING & FLASHING SCREEN OVERLAY -->
   <div id="ov" role="alertdialog" aria-modal="true" aria-labelledby="ovTitle" aria-live="assertive">
     <div class="ov-content">
-      <div class="ov-ring-bell">🔔</div>
+      <div class="ov-ring-bell">
+        <svg class="ov-cyber-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 9a6 6 0 1 0-12 0c0 7-3 8-3 8h18s-3-1-3-8" stroke-linejoin="round"/>
+          <path d="M14 19a2 2 0 0 1-4 0" stroke-linecap="round"/>
+          <circle cx="12" cy="9" r="2" fill="currentColor"/>
+          <path d="M2 9a10 10 0 0 1 2-6M22 9a10 10 0 0 0-2-6" stroke-linecap="round" stroke-dasharray="2 2"/>
+        </svg>
+      </div>
       <div class="ov-title chrome" id="ovTitle">
         <!-- Rendered with chromeHTML() -->
       </div>
@@ -473,6 +587,6 @@
   <audio id="alarmAudioElement" preload="auto" src="sounds/piano.mp3"></audio>
 
   <!-- Relative JavaScript (with cache-bust versioning) -->
-  <script src="app.js?v=6.0"></script>
+  <script src="app.js?v=7.0"></script>
 </body>
 </html>

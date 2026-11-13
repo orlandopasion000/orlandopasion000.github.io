@@ -1573,7 +1573,7 @@
   });
 
   // ══════════════════════════════════════════════════════════════════════════
-  // ── 10B. EXECUTIVE HOROLOGY LAB & FUN EASTER EGG HUB ──
+  // ── 10B. QUANTUM TIME COMMAND & FOCUS PROTOCOL ──
   const btnLogoEasterEgg = document.getElementById('btnLogoEasterEgg');
   const brandFunTag = document.getElementById('brandFunTag');
   const funTagLabel = document.getElementById('funTagLabel');
@@ -1587,12 +1587,11 @@
   const dayCountdownSub = document.getElementById('dayCountdownSub');
 
   const funModes = [
-    '⚡ Focus Flow',
-    '🧘 Zen Mind',
-    '🚀 Deep Work',
-    '✨ Supernova',
-    '👑 Horology Master',
-    '🏎️ Speed Run'
+    'Focus Protocol',
+    'Zen Immersion',
+    'Deep Work',
+    'Quantum Flow',
+    'Precision Chrono'
   ];
   let funModeIndex = 0;
 
@@ -1634,7 +1633,7 @@
         window.spawnSupernovaBurst(e.clientX, e.clientY);
       }
       AudioHUD.confirm();
-      // Cycle fun mode tag
+      // Cycle focus protocol tag
       funModeIndex = (funModeIndex + 1) % funModes.length;
       if (funTagLabel) funTagLabel.textContent = funModes[funModeIndex];
       // Toggle cockpit
@@ -1670,7 +1669,7 @@
     });
   }
 
-  // Click anywhere to exit zen mode or close fun cockpit
+  // Click anywhere to exit zen mode or close command hub
   document.addEventListener('click', (e) => {
     if (document.body.classList.contains('zen-mode')) {
       document.body.classList.remove('zen-mode');
@@ -1681,31 +1680,6 @@
         toggleFunCockpit(false);
       }
     }
-  });
-
-  // Soundscape pills
-  let currentAmbientAudio = null;
-  const soundPills = document.querySelectorAll('.fun-sound-pill');
-  soundPills.forEach(pill => {
-    pill.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const soundKey = pill.getAttribute('data-sound');
-      if (pill.classList.contains('active')) {
-        pill.classList.remove('active');
-        if (currentAmbientAudio) {
-          currentAmbientAudio.pause();
-          currentAmbientAudio = null;
-        }
-        return;
-      }
-      soundPills.forEach(p => p.classList.remove('active'));
-      pill.classList.add('active');
-      if (currentAmbientAudio) currentAmbientAudio.pause();
-      currentAmbientAudio = new Audio(`sounds/${soundKey}.mp3`);
-      currentAmbientAudio.loop = true;
-      currentAmbientAudio.volume = 0.5;
-      currentAmbientAudio.play().catch(() => {});
-    });
   });
 
   // 11. ANTIGRAVITY REPULSIVE PARTICLES CANVAS (Signature Visual FX)
