@@ -382,6 +382,43 @@
             osc.stop(now + i * 0.032 + 0.18);
           });
         } catch (e) {}
+      },
+      supernovaShockwave: function (tier = 2) {
+        try {
+          const c = getCtx();
+          if (!c) return;
+          const now = c.currentTime;
+
+          // 1. Visceral Sub-Bass Gravitational Implosion Sweep
+          const bassOsc = c.createOscillator();
+          const bassGain = c.createGain();
+          bassOsc.type = 'sine';
+          bassOsc.frequency.setValueAtTime(68, now);
+          bassOsc.frequency.exponentialRampToValueAtTime(26, now + 0.85);
+          bassGain.gain.setValueAtTime(0.18, now);
+          bassGain.gain.exponentialRampToValueAtTime(0.001, now + 0.9);
+          bassOsc.connect(bassGain);
+          bassGain.connect(c.destination);
+          bassOsc.start(now);
+          bassOsc.stop(now + 0.95);
+
+          // 2. High Horology Acoustic Resonance Chimes (Harmonic pentatonic cascade)
+          const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98];
+          const count = tier === 3 ? 6 : (tier === 2 ? 4 : 3);
+          notes.slice(0, count).forEach((freq, i) => {
+            const osc = c.createOscillator();
+            const gain = c.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now + i * 0.045);
+            osc.frequency.exponentialRampToValueAtTime(freq * 1.008, now + i * 0.045 + 1.2);
+            gain.gain.setValueAtTime(0.05 / (i + 1), now + i * 0.045);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.045 + 1.4);
+            osc.connect(gain);
+            gain.connect(c.destination);
+            osc.start(now + i * 0.045);
+            osc.stop(now + i * 0.045 + 1.45);
+          });
+        } catch (e) {}
       }
     };
   })();
@@ -1056,10 +1093,37 @@
   }
 
   function onTimerComplete() {
+    const completedMins = Math.max(1, Math.round((timerTotalDuration || 1500) / 60));
+    const updatedTele = addFocusMinutes(completedMins);
+    const tierInfo = getSupernovaTier(updatedTele.mins);
+
+    // Automated Supernova Celebration centered on the timer display
+    const timerStage = document.querySelector('.display-stage');
+    let ox = window.innerWidth / 2;
+    let oy = window.innerHeight / 2;
+    if (timerStage) {
+      const rect = timerStage.getBoundingClientRect();
+      ox = rect.left + rect.width / 2;
+      oy = rect.top + rect.height / 2;
+    }
+
+    if (window.spawnSupernovaBurst) {
+      window.spawnSupernovaBurst(ox, oy, {
+        tier: tierInfo.tier,
+        showToast: false,
+        celebration: true
+      });
+    }
+
+    showQuantumTelemetryToast(
+      `🌟 FOCUS SESSION COMPLETED (+${completedMins} MIN)`,
+      `TODAY: ${updatedTele.mins} MIN · ${tierInfo.name}`
+    );
+
     triggerAlertOverlay({
       type: 'timer',
       title: "00:00:00",
-      message: "TIME'S UP! Your countdown has finished.",
+      message: `SESSION COMPLETE! +${completedMins}m Focus Logged (${tierInfo.name})`,
       canSnooze: false
     });
   }
@@ -1609,12 +1673,169 @@
     if (dayCountdownSub) dayCountdownSub.textContent = `${hrsLeft}h ${minsLeft}m until midnight`;
   }
 
+  // ══════════════════════════════════════════════════════════════════════════
+  // ── 10C. QUANTUM FOCUS TELEMETRY & MILESTONE ENGINE ──
+  function getTodayDateString() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  }
+
+  function getFocusTelemetry() {
+    const today = getTodayDateString();
+    const savedDate = localStorage.getItem('ot_focus_date');
+    if (savedDate !== today) {
+      localStorage.setItem('ot_focus_date', today);
+      localStorage.setItem('ot_focus_mins', '0');
+      return { date: today, mins: 0 };
+    }
+    const mins = parseInt(localStorage.getItem('ot_focus_mins') || '0', 10);
+    return { date: today, mins: isNaN(mins) ? 0 : mins };
+  }
+
+  function addFocusMinutes(mins) {
+    if (!mins || mins <= 0) return getFocusTelemetry();
+    const current = getFocusTelemetry();
+    const newMins = current.mins + Math.round(mins);
+    localStorage.setItem('ot_focus_mins', String(newMins));
+    updateFocusTelemetryUI();
+    return { date: current.date, mins: newMins };
+  }
+
+  function getSupernovaTier(mins) {
+    if (mins >= 180) return { tier: 3, name: 'TIER III · HYPERNOVA', target: 'Max Level Active ✨', pct: 100 };
+    if (mins >= 60) return { tier: 2, name: 'TIER II · STELLAR NOVA', target: 'Next: 180m (Tier III)', pct: Math.round(((mins - 60) / 120) * 100) };
+    return { tier: 1, name: 'TIER I · NOVA', target: 'Next: 60m (Tier II)', pct: Math.round((mins / 60) * 100) };
+  }
+
+  function updateFocusTelemetryUI() {
+    const tele = getFocusTelemetry();
+    const tierInfo = getSupernovaTier(tele.mins);
+    const tierBadge = document.getElementById('supernovaTierBadge');
+    const focusMinsEl = document.getElementById('telemetryFocusMins');
+    const nextTierEl = document.getElementById('telemetryNextTier');
+    const progressFill = document.getElementById('telemetryProgressFill');
+
+    if (tierBadge) tierBadge.textContent = tierInfo.name;
+    if (focusMinsEl) focusMinsEl.textContent = `${tele.mins} min`;
+    if (nextTierEl) nextTierEl.textContent = tierInfo.target;
+    if (progressFill) progressFill.style.width = `${Math.min(100, Math.max(0, tierInfo.pct))}%`;
+  }
+
+  let toastTimeout = null;
+  function showQuantumTelemetryToast(title, message) {
+    const toast = document.getElementById('quantumTelemetryToast');
+    const tTitle = document.getElementById('toastTitle');
+    const tMsg = document.getElementById('toastMessage');
+    if (!toast || !tTitle || !tMsg) return;
+
+    tTitle.textContent = title;
+    tMsg.textContent = message;
+    toast.style.display = 'flex';
+
+    if (toastTimeout) clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => {
+      toast.style.display = 'none';
+    }, 4500);
+  }
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // ── 10D. QUANTUM RESONANCE BREATHING CALIBRATION (4-4-4-4) ──
+  let breathingInterval = null;
+  let breathingPhase = 0; // 0: inhale, 1: hold1, 2: exhale, 3: hold2
+  let breathingSecLeft = 4;
+  const breathingPhases = [
+    { name: 'IN-BREATH · GRAVITATIONAL GATHER', sub: 'Inhale slowly through nose as particles coalesce inward', scale: 1.45 },
+    { name: 'HOLD · QUANTUM SINGULARITY', sub: 'Retain breath and hold mental stillness at the core', scale: 1.45 },
+    { name: 'OUT-BREATH · STELLAR EXPANSION', sub: 'Exhale smoothly through mouth as radiant waves release', scale: 0.8 },
+    { name: 'HOLD · ZERO-GRAVITY VOID', sub: 'Rest comfortably empty in pure effortless clarity', scale: 0.8 }
+  ];
+
+  function startBreathingSession() {
+    const overlay = document.getElementById('quantumBreathingOverlay');
+    if (!overlay) return;
+    overlay.style.display = 'flex';
+    AudioHUD.confirm();
+    toggleFunCockpit(false);
+
+    breathingPhase = 0;
+    breathingSecLeft = 4;
+    updateBreathingUI();
+
+    if (breathingInterval) clearInterval(breathingInterval);
+    breathingInterval = setInterval(() => {
+      breathingSecLeft--;
+      if (breathingSecLeft <= 0) {
+        breathingPhase = (breathingPhase + 1) % 4;
+        breathingSecLeft = 4;
+        AudioHUD.tick(breathingPhase % 2 === 0 ? 880 : 1200);
+        if (breathingPhase === 2 && window.spawnSupernovaBurst) {
+          window.spawnSupernovaBurst(window.innerWidth / 2, window.innerHeight / 2, {
+            tier: 1,
+            showToast: false
+          });
+        }
+      }
+      updateBreathingUI();
+    }, 1000);
+  }
+
+  function stopBreathingSession() {
+    const overlay = document.getElementById('quantumBreathingOverlay');
+    if (overlay) overlay.style.display = 'none';
+    if (breathingInterval) {
+      clearInterval(breathingInterval);
+      breathingInterval = null;
+    }
+  }
+
+  function updateBreathingUI() {
+    const counter = document.getElementById('breathingCounter');
+    const title = document.getElementById('breathingStateTitle');
+    const subtext = document.getElementById('breathingSubtext');
+    const orbOuter = document.getElementById('breathingOrbOuter');
+    const orbCore = document.getElementById('breathingOrbCore');
+    const dots = document.querySelectorAll('.b-cycle-dot');
+
+    if (counter) counter.textContent = breathingSecLeft;
+    const curr = breathingPhases[breathingPhase];
+    if (title) title.textContent = curr.name;
+    if (subtext) subtext.textContent = curr.sub;
+
+    if (orbOuter) orbOuter.style.transform = `scale(${curr.scale})`;
+    if (orbCore) orbCore.style.transform = `scale(${curr.scale * 0.9})`;
+
+    dots.forEach((dot, idx) => {
+      dot.classList.toggle('active', idx === breathingPhase);
+    });
+  }
+
+  const btnStartBreathing = document.getElementById('btnStartBreathing');
+  const btnCloseBreathing = document.getElementById('btnCloseBreathing');
+  const btnStopBreathing = document.getElementById('btnStopBreathing');
+
+  if (btnStartBreathing) {
+    btnStartBreathing.addEventListener('click', (e) => {
+      e.stopPropagation();
+      startBreathingSession();
+    });
+  }
+  if (btnCloseBreathing) {
+    btnCloseBreathing.addEventListener('click', stopBreathingSession);
+  }
+  if (btnStopBreathing) {
+    btnStopBreathing.addEventListener('click', stopBreathingSession);
+  }
+
+  // Initialize telemetry UI
+  updateFocusTelemetryUI();
+
   function toggleFunCockpit(show) {
     if (!funMicroCockpit) return;
     const isOpen = funMicroCockpit.classList.contains('open');
     const shouldOpen = show !== undefined ? show : !isOpen;
     if (shouldOpen) {
       updateEarthDayProgress();
+      updateFocusTelemetryUI();
       funMicroCockpit.classList.add('open');
       funMicroCockpit.setAttribute('aria-hidden', 'false');
       if (btnLogoEasterEgg) btnLogoEasterEgg.classList.add('open');
@@ -1652,10 +1873,14 @@
   if (btnFireSupernova) {
     btnFireSupernova.addEventListener('click', (e) => {
       e.stopPropagation();
+      const tele = getFocusTelemetry();
+      const tierInfo = getSupernovaTier(tele.mins);
       if (window.spawnSupernovaBurst) {
-        window.spawnSupernovaBurst(window.innerWidth / 2, window.innerHeight / 2);
+        window.spawnSupernovaBurst(window.innerWidth / 2, window.innerHeight / 2, {
+          tier: tierInfo.tier,
+          showToast: true
+        });
       }
-      AudioHUD.confirm();
     });
   }
 
@@ -1669,7 +1894,7 @@
     });
   }
 
-  // Click anywhere to exit zen mode or close command hub
+  // Click anywhere to exit zen mode, close breathing or close command hub
   document.addEventListener('click', (e) => {
     if (document.body.classList.contains('zen-mode')) {
       document.body.classList.remove('zen-mode');
@@ -1682,7 +1907,13 @@
     }
   });
 
-  // 11. ANTIGRAVITY REPULSIVE PARTICLES CANVAS (Signature Visual FX)
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      stopBreathingSession();
+    }
+  });
+
+  // 11. ANTIGRAVITY REPULSIVE PARTICLES CANVAS (Multi-Stage Celestial Engine)
   // ══════════════════════════════════════════════════════════════════════════
   const canvas = document.getElementById('antigravityCanvas');
   if (canvas) {
@@ -1690,7 +1921,8 @@
     let width = 0;
     let height = 0;
     let particles = [];
-    const particleCount = 50;
+    let shockwaves = [];
+    const particleCount = 55;
     let mouse = { x: -1000, y: -1000, radius: 140 };
     let currentParticleColor = 'rgba(217, 185, 92, 0.45)';
 
@@ -1698,22 +1930,90 @@
       if (hexColor) currentParticleColor = hexColor;
     };
 
-    window.spawnSupernovaBurst = function (originX, originY) {
+    window.spawnSupernovaBurst = function (originX, originY, options = {}) {
       const ox = originX !== undefined ? originX : width / 2;
       const oy = originY !== undefined ? originY : height / 2;
-      for (let i = 0; i < 70; i++) {
+      const tele = getFocusTelemetry();
+      const defaultTierInfo = getSupernovaTier(tele.mins);
+      const tier = options.tier || defaultTierInfo.tier;
+      const count = tier === 3 ? 190 : (tier === 2 ? 120 : 75);
+      const baseSpeed = tier === 3 ? 12 : (tier === 2 ? 9 : 7);
+
+      // Phase 1 & 2: Launch high-energy stardust particles
+      for (let i = 0; i < count; i++) {
         const angle = Math.random() * Math.PI * 2;
-        const speed = Math.random() * 8 + 3;
+        const speed = Math.random() * baseSpeed + (tier === 3 ? 4 : 2.5);
         particles.push({
           x: ox,
           y: oy,
           vx: Math.cos(angle) * speed,
           vy: Math.sin(angle) * speed,
-          size: Math.random() * 3 + 1.2,
+          size: Math.random() * (tier === 3 ? 4.2 : 3.2) + 1.2,
           alpha: 1.0,
           isBurst: true,
-          decay: Math.random() * 0.016 + 0.008
+          decay: Math.random() * 0.012 + 0.007
         });
+      }
+
+      // Phase 2: Relativistic Shockwave Rings
+      shockwaves.push({
+        x: ox,
+        y: oy,
+        radius: 6,
+        maxRadius: Math.max(width, height) * (tier === 3 ? 0.85 : 0.65),
+        speed: tier === 3 ? 19 : 14,
+        alpha: 0.95,
+        decay: tier === 3 ? 0.016 : 0.022,
+        lineWidth: tier === 3 ? 3 : 2,
+        color: currentParticleColor
+      });
+
+      if (tier >= 2) {
+        setTimeout(() => {
+          shockwaves.push({
+            x: ox,
+            y: oy,
+            radius: 4,
+            maxRadius: Math.max(width, height) * 0.5,
+            speed: 10,
+            alpha: 0.8,
+            decay: 0.02,
+            lineWidth: 1.5,
+            color: '#FFFFFF'
+          });
+        }, 80);
+      }
+
+      if (tier === 3) {
+        setTimeout(() => {
+          shockwaves.push({
+            x: ox,
+            y: oy,
+            radius: 2,
+            maxRadius: Math.max(width, height) * 0.75,
+            speed: 16,
+            alpha: 0.9,
+            decay: 0.015,
+            lineWidth: 2.5,
+            color: currentParticleColor
+          });
+        }, 160);
+
+        // Screen micro-shake for Tier III Hypernova Singularity
+        document.body.classList.add('supernova-shake');
+        setTimeout(() => document.body.classList.remove('supernova-shake'), 450);
+      }
+
+      // Phase 3: Synthesized Acoustic Shockwave
+      AudioHUD.supernovaShockwave(tier);
+
+      // Telemetry Toast
+      if (options.showToast) {
+        const tierDetails = getSupernovaTier(tele.mins);
+        showQuantumTelemetryToast(
+          `✨ ${tierDetails.name} DETONATED`,
+          `TODAY'S FOCUS: ${tele.mins} MIN · STELLAR SHOCKWAVE ACTIVE`
+        );
       }
     };
 
@@ -1726,7 +2026,6 @@
       particles = [];
       for (let i = 0; i < particleCount; i++) {
         const size = Math.random() * 2.2 + 1.2;
-        // Spawn strictly inside the screen
         particles.push({
           x: Math.random() * (Math.max(10, width - size * 4)) + size * 2,
           y: Math.random() * (Math.max(10, height - size * 4)) + size * 2,
@@ -1741,6 +2040,54 @@
     function renderParticles() {
       if (!ctx) return;
       ctx.clearRect(0, 0, width, height);
+
+      // 1. Render Relativistic Shockwave Rings
+      for (let s = 0; s < shockwaves.length; s++) {
+        const sw = shockwaves[s];
+        sw.radius += sw.speed;
+        sw.alpha -= sw.decay;
+        if (sw.alpha <= 0 || sw.radius >= sw.maxRadius) {
+          shockwaves.splice(s, 1);
+          s--;
+          continue;
+        }
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
+        ctx.strokeStyle = sw.color || currentParticleColor;
+        ctx.lineWidth = sw.lineWidth || 2;
+        ctx.globalAlpha = Math.max(0, sw.alpha);
+        ctx.shadowColor = sw.color || currentParticleColor;
+        ctx.shadowBlur = 16;
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      // 2. Render Stardust Constellation Filaments for Burst Particles
+      ctx.save();
+      for (let i = 0; i < particles.length; i++) {
+        const p1 = particles[i];
+        if (!p1.isBurst || p1.alpha < 0.25) continue;
+        for (let j = i + 1; j < particles.length; j++) {
+          const p2 = particles[j];
+          if (!p2.isBurst) continue;
+          const cdx = p1.x - p2.x;
+          const cdy = p1.y - p2.y;
+          const cdist = Math.sqrt(cdx * cdx + cdy * cdy);
+          if (cdist < 65) {
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = currentParticleColor;
+            ctx.globalAlpha = Math.min(p1.alpha, p2.alpha) * 0.3 * (1 - cdist / 65);
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
+        }
+      }
+      ctx.restore();
+
+      // 3. Render Particles
       ctx.fillStyle = currentParticleColor;
 
       for (let i = 0; i < particles.length; i++) {
@@ -1748,8 +2095,8 @@
 
         if (p.isBurst) {
           p.alpha -= p.decay;
-          p.vx *= 0.97;
-          p.vy *= 0.97;
+          p.vx *= 0.965;
+          p.vy *= 0.965;
           if (p.alpha <= 0) {
             particles.splice(i, 1);
             i--;
@@ -1757,7 +2104,7 @@
           }
         }
 
-        // 1. Mouse repulsion effect: particles move away from cursor
+        // Mouse repulsion effect
         const dx = p.x - mouse.x;
         const dy = p.y - mouse.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
@@ -1768,25 +2115,24 @@
           p.vy += (dy / dist) * force * 1.5;
         }
 
-        // Apply gentle fluid damping
+        // Damping
         p.vx *= 0.985;
         p.vy *= 0.985;
 
-        // Ensure particles always keep a gentle ambient float
+        // Ambient gentle drift
         const currentSpeed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
         if (currentSpeed < 0.2) {
           p.vx += (Math.random() - 0.5) * 0.08;
           p.vy += (Math.random() - 0.5) * 0.08;
-        } else if (currentSpeed > 4.0) {
-          p.vx = (p.vx / currentSpeed) * 4.0;
-          p.vy = (p.vy / currentSpeed) * 4.0;
+        } else if (currentSpeed > 4.5 && !p.isBurst) {
+          p.vx = (p.vx / currentSpeed) * 4.5;
+          p.vy = (p.vy / currentSpeed) * 4.5;
         }
 
-        // Update position
         p.x += p.vx;
         p.y += p.vy;
 
-        // 2. Strict screen boundaries: particles NEVER leave the view!
+        // Screen boundary retention
         const r = p.size;
         if (p.x <= r) {
           p.x = r;
@@ -1804,7 +2150,6 @@
           p.vy = -Math.abs(p.vy);
         }
 
-        // Render particle strictly within view
         ctx.save();
         ctx.globalAlpha = p.alpha !== undefined ? Math.max(0, Math.min(1, p.alpha)) : 0.6;
         ctx.beginPath();

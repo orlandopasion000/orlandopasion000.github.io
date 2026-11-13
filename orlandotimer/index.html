@@ -26,7 +26,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&family=Orbitron:wght@600;700;800;900&family=Outfit:wght@600;700;800;900&family=Space+Grotesk:wght@600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
   <!-- Relative Stylesheet (with cache-bust versioning) -->
-  <link rel="stylesheet" href="style.css?v=7.0">
+  <link rel="stylesheet" href="style.css?v=8.0">
 </head>
 <body data-app-theme="platinum" data-clock-style="platinum">
   <!-- Google Antigravity Signature Repulsive Particle Stage -->
@@ -98,23 +98,56 @@
               <span class="fun-widget-sub" id="dayCountdownSub">3h 0m until midnight</span>
             </div>
 
-            <!-- Feature 2: Fun Supernova Particle Burst -->
-            <button type="button" class="fun-action-btn" id="btnFireSupernova">
-              <div class="fun-btn-icon-wrap">
-                <svg class="cyber-btn-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="12" r="3.5" fill="currentColor" opacity="0.3"/>
-                  <line x1="12" y1="2" x2="12" y2="6"/>
-                  <line x1="12" y1="18" x2="12" y2="22"/>
-                  <line x1="2" y1="12" x2="6" y2="12"/>
-                  <line x1="18" y1="12" x2="22" y2="12"/>
-                  <path d="M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
-                </svg>
+            <!-- Feature 2: Enhanced Quantum Supernova Engine & Telemetry -->
+            <div class="fun-supernova-card" id="cardSupernovaEngine">
+              <div class="fun-supernova-header">
+                <div class="fun-btn-icon-wrap singularity-icon">
+                  <svg class="cyber-btn-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <circle cx="12" cy="12" r="4.5" fill="currentColor" fill-opacity="0.3"/>
+                    <ellipse cx="12" cy="12" rx="9.5" ry="3.5" transform="rotate(-25 12 12)" stroke="currentColor" stroke-dasharray="3 1.5"/>
+                    <ellipse cx="12" cy="12" rx="9.5" ry="3.5" transform="rotate(35 12 12)" stroke="currentColor" stroke-opacity="0.6"/>
+                    <path d="M12 2v3M12 19v3M2 12h3M19 12h3" stroke="currentColor" stroke-linecap="round"/>
+                    <circle cx="12" cy="12" r="1.5" fill="#FFFFFF"/>
+                  </svg>
+                </div>
+                <div class="fun-btn-text">
+                  <div class="fun-title-row">
+                    <strong>Quantum Supernova Engine</strong>
+                    <span class="supernova-tier-badge" id="supernovaTierBadge">TIER I · NOVA</span>
+                  </div>
+                  <small>Milestone Shockwaves, Resonance Breathing & Telemetry</small>
+                </div>
               </div>
-              <div class="fun-btn-text">
-                <strong>Supernova Particle Burst</strong>
-                <small>Erupt radiant quantum particles across viewport</small>
+
+              <!-- Telemetry Metrics Bar -->
+              <div class="supernova-telemetry-row">
+                <div class="supernova-telemetry-info">
+                  <span>Today's Focus:</span>
+                  <strong id="telemetryFocusMins">0 min</strong>
+                </div>
+                <span class="supernova-telemetry-target" id="telemetryNextTier">Next: 60m (Tier II)</span>
               </div>
-            </button>
+              <div class="supernova-telemetry-track">
+                <div class="supernova-telemetry-fill" id="telemetryProgressFill" style="width: 0%;"></div>
+              </div>
+
+              <!-- Action Pills -->
+              <div class="supernova-action-pills">
+                <button type="button" class="sn-action-pill primary" id="btnFireSupernova" title="Detonate Celestial Supernova Shockwave">
+                  <svg class="sn-pill-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                  </svg>
+                  <span>Erupt Supernova</span>
+                </button>
+                <button type="button" class="sn-action-pill" id="btnStartBreathing" title="Calibrate Focus with Quantum Resonance Breathing">
+                  <svg class="sn-pill-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="9"/>
+                    <circle cx="12" cy="12" r="3.5" fill="currentColor" fill-opacity="0.3"/>
+                  </svg>
+                  <span>Breathing Reset</span>
+                </button>
+              </div>
+            </div>
 
             <!-- Feature 3: Zen Immersion Mode -->
             <button type="button" class="fun-action-btn" id="btnToggleZenMode">
@@ -583,10 +616,50 @@
     </div>
   </div>
 
+  <!-- FLOATING QUANTUM TELEMETRY TOAST -->
+  <div id="quantumTelemetryToast" class="quantum-telemetry-toast" style="display:none;" aria-live="polite">
+    <div class="toast-glow-ring"></div>
+    <div class="toast-icon-wrap">
+      <svg class="toast-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+      </svg>
+    </div>
+    <div class="toast-content">
+      <div class="toast-title" id="toastTitle">QUANTUM SUPERNOVA CELEBRATION</div>
+      <div class="toast-message" id="toastMessage">+25 MIN FOCUS RECORDED · TODAY: 25 MIN</div>
+    </div>
+  </div>
+
+  <!-- QUANTUM RESONANCE BREATHING CALIBRATION MODAL -->
+  <div id="quantumBreathingOverlay" class="quantum-breathing-modal" style="display:none;" aria-modal="true" role="dialog" aria-labelledby="breathingStateTitle">
+    <div class="breathing-backdrop"></div>
+    <div class="breathing-card">
+      <button type="button" class="btn-close-breathing" id="btnCloseBreathing" aria-label="Close Breathing Calibration">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div class="breathing-badge">QUANTUM RESONANCE CALIBRATION (4-4-4-4)</div>
+      <div class="breathing-visual-container">
+        <div class="breathing-orb-ripple" id="breathingRipple"></div>
+        <div class="breathing-orb-outer" id="breathingOrbOuter"></div>
+        <div class="breathing-orb-core" id="breathingOrbCore"></div>
+        <div class="breathing-seconds-counter" id="breathingCounter">4</div>
+      </div>
+      <div class="breathing-state-title" id="breathingStateTitle">IN-BREATH · GRAVITATIONAL GATHER</div>
+      <div class="breathing-subtext" id="breathingSubtext">Inhale slowly through nose as particles coalesce inward</div>
+      <div class="breathing-cycle-indicators">
+        <span class="b-cycle-dot active" title="Inhale"></span>
+        <span class="b-cycle-dot" title="Hold"></span>
+        <span class="b-cycle-dot" title="Exhale"></span>
+        <span class="b-cycle-dot" title="Hold"></span>
+      </div>
+      <button type="button" class="btn-end-breathing" id="btnStopBreathing">Complete Calibration</button>
+    </div>
+  </div>
+
   <!-- Audio element fallback (piano sound from existing assets) -->
   <audio id="alarmAudioElement" preload="auto" src="sounds/piano.mp3"></audio>
 
   <!-- Relative JavaScript (with cache-bust versioning) -->
-  <script src="app.js?v=7.0"></script>
+  <script src="app.js?v=8.0"></script>
 </body>
 </html>

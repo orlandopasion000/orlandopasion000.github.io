@@ -1082,6 +1082,409 @@ body[data-app-theme="cyber-matrix-rain"] {
   color: var(--theme-text-dim);
 }
 
+/* ── Enhanced Quantum Supernova Engine Card ── */
+.fun-supernova-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all 0.25s ease;
+}
+
+.fun-supernova-card:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: var(--theme-primary);
+  box-shadow: 0 0 20px var(--theme-primary-glow);
+}
+
+.fun-supernova-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.fun-btn-icon-wrap.singularity-icon {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(0, 0, 0, 0.5) 100%);
+  border-color: var(--theme-primary);
+  box-shadow: 0 0 12px var(--theme-primary-glow);
+}
+
+.fun-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+}
+
+.supernova-tier-badge {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--theme-primary);
+  color: var(--theme-primary);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+.supernova-telemetry-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--theme-text-dim);
+}
+
+.supernova-telemetry-info strong {
+  color: #FFFFFF;
+  margin-left: 4px;
+}
+
+.supernova-telemetry-target {
+  font-size: 9.5px;
+  color: var(--theme-primary);
+}
+
+.supernova-telemetry-track {
+  width: 100%;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.supernova-telemetry-fill {
+  height: 100%;
+  background: var(--theme-primary-gradient);
+  border-radius: 9999px;
+  transition: width 0.4s ease;
+  box-shadow: 0 0 8px var(--theme-primary-glow);
+}
+
+.supernova-action-pills {
+  display: flex;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.sn-action-pill {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px 10px;
+  border-radius: 9999px;
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sn-action-pill:hover {
+  background: rgba(255, 255, 255, 0.14);
+  transform: translateY(-1px);
+}
+
+.sn-action-pill.primary {
+  background: var(--theme-primary);
+  color: var(--theme-primary-text);
+  border-color: var(--theme-primary);
+  box-shadow: 0 0 14px var(--theme-primary-glow);
+}
+
+.sn-action-pill.primary:hover {
+  filter: brightness(1.15);
+  box-shadow: 0 0 20px var(--theme-primary-glow);
+}
+
+.sn-pill-svg {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+}
+
+/* ── Floating Quantum Telemetry Toast ── */
+.quantum-telemetry-toast {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+  background: rgba(14, 18, 28, 0.94);
+  border: 1.5px solid var(--theme-primary);
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.9), 0 0 35px var(--theme-primary-glow);
+  border-radius: 9999px;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  z-index: 99999;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  animation: toastEntrance 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  pointer-events: none;
+}
+
+@keyframes toastEntrance {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+
+.toast-icon-wrap {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--theme-primary);
+  color: var(--theme-primary-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 14px var(--theme-primary-glow);
+}
+
+.toast-icon-svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.toast-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.toast-title {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 900;
+  color: #FFFFFF;
+  letter-spacing: 0.5px;
+}
+
+.toast-message {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--theme-primary);
+  font-weight: 700;
+}
+
+/* ── Quantum Resonance Breathing Calibration Modal ── */
+.quantum-breathing-modal {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  z-index: 99998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.breathing-backdrop {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(4, 7, 14, 0.88);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+.breathing-card {
+  position: relative;
+  z-index: 2;
+  width: 90%;
+  max-width: 440px;
+  background: rgba(14, 20, 32, 0.95);
+  border: 1.5px solid var(--theme-primary);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 50px var(--theme-primary-glow);
+  border-radius: 28px;
+  padding: 36px 28px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: breathingCardIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes breathingCardIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.btn-close-breathing {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-close-breathing:hover {
+  background: rgba(255, 255, 255, 0.16);
+  transform: rotate(90deg);
+}
+
+.breathing-badge {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: var(--theme-primary);
+  margin-bottom: 24px;
+}
+
+.breathing-visual-container {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.breathing-orb-ripple {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 1.5px solid var(--theme-primary);
+  opacity: 0.3;
+  animation: ripplePulse 4s infinite cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes ripplePulse {
+  0% { transform: scale(0.6); opacity: 0.8; }
+  50% { transform: scale(1.2); opacity: 0.1; }
+  100% { transform: scale(0.6); opacity: 0.8; }
+}
+
+.breathing-orb-outer {
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--theme-primary-glow) 0%, transparent 70%);
+  border: 2px solid var(--theme-primary);
+  box-shadow: 0 0 35px var(--theme-primary-glow);
+  transition: transform 4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.breathing-orb-core {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  box-shadow: 0 0 30px #FFFFFF, 0 0 60px var(--theme-primary);
+  transition: transform 4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.breathing-seconds-counter {
+  position: relative;
+  z-index: 5;
+  font-family: var(--mono);
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--theme-bg);
+  pointer-events: none;
+}
+
+.breathing-state-title {
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: #FFFFFF;
+  margin-bottom: 8px;
+}
+
+.breathing-subtext {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--theme-text-dim);
+  line-height: 1.5;
+  margin-bottom: 20px;
+  max-width: 320px;
+}
+
+.breathing-cycle-indicators {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.b-cycle-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  transition: all 0.3s ease;
+}
+
+.b-cycle-dot.active {
+  background: var(--theme-primary);
+  box-shadow: 0 0 10px var(--theme-primary-glow);
+  transform: scale(1.3);
+}
+
+.btn-end-breathing {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #FFFFFF;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 10px 20px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-end-breathing:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: var(--theme-primary);
+}
+
+/* Supernova Screen Shake for Tier III */
+@keyframes supernovaScreenShake {
+  0% { transform: translate(0, 0); }
+  15% { transform: translate(-3px, 2px); }
+  30% { transform: translate(3px, -3px); }
+  45% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 3px); }
+  75% { transform: translate(-1px, 1px); }
+  100% { transform: translate(0, 0); }
+}
+
+body.supernova-shake {
+  animation: supernovaScreenShake 0.45s ease-out;
+}
+
 /* Zen Immersion Mode (Clean focus mode) */
 body.zen-mode .or-header-right,
 body.zen-mode .customization-cockpit,
