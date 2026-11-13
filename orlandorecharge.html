@@ -2989,65 +2989,169 @@ body.light-theme .highlight-card .dist-icon{
   -webkit-text-fill-color: transparent;
 }
 
-/* ───────── TOPBAR DESKTOP LAUNCHER BUTTON (24K SWISS GOLD) ───────── */
+/* ───────── FUTURISTIC QUANTUM LAUNCHER BUTTON ("OPEN MAIN WEB APP") ───────── */
 .or-header-right {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 .btn-topbar-desktop {
-  background: rgba(217, 185, 92, 0.08);
-  border: 1px solid rgba(217, 185, 92, 0.38);
-  color: #f2efe8;
-  padding: 8px 16px;
-  border-radius: 9999px;
-  font-family: 'Space Mono', 'Consolas', monospace;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
+  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  padding: 8px 18px;
+  background: linear-gradient(135deg, rgba(14, 20, 36, 0.90) 0%, rgba(22, 19, 32, 0.86) 50%, rgba(10, 15, 26, 0.94) 100%);
+  border: 1px solid rgba(217, 185, 92, 0.42);
+  border-radius: 9999px;
+  color: #ffffff;
+  font-family: 'Lexend', var(--sans);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 0 14px rgba(217, 185, 92, 0.15);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5), 0 0 16px rgba(217, 185, 92, 0.18), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   text-decoration: none !important;
+  z-index: 1;
 }
+
+/* Luminous Cyber-Aura & Rotating Border Wave */
+.btn-topbar-desktop::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 9999px;
+  padding: 1px;
+  background: linear-gradient(90deg, rgba(217, 185, 92, 0.7) 0%, rgba(56, 189, 248, 0.7) 35%, rgba(245, 158, 11, 0.8) 70%, rgba(129, 140, 248, 0.7) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.75;
+  transition: opacity 0.3s ease;
+}
+
+/* Specular Shimmer / High-Tech Glass Light Sweep */
+.btn-topbar-desktop::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 70%;
+  height: 100%;
+  background: linear-gradient(105deg, transparent 20%, rgba(255, 255, 255, 0.32) 48%, rgba(217, 185, 92, 0.4) 55%, transparent 80%);
+  transform: skewX(-20deg);
+  transition: left 0.75s ease;
+  pointer-events: none;
+}
+
 .btn-topbar-desktop:hover {
-  background: rgba(217, 185, 92, 0.22);
-  border-color: rgba(217, 185, 92, 0.75);
-  box-shadow: 0 0 22px rgba(217, 185, 92, 0.4);
-  transform: translateY(-1px);
+  background: linear-gradient(135deg, rgba(20, 28, 50, 0.95) 0%, rgba(32, 26, 46, 0.92) 50%, rgba(16, 23, 38, 0.98) 100%);
+  border-color: rgba(217, 185, 92, 0.85);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6), 0 0 28px rgba(217, 185, 92, 0.45), 0 0 35px rgba(56, 189, 248, 0.3);
+  transform: translateY(-2px);
   color: #ffffff;
 }
-.btn-topbar-desktop .modern-icon {
-  width: 14px;
-  height: 14px;
-  flex-shrink: 0;
+
+.btn-topbar-desktop:hover::before {
+  opacity: 1;
 }
+
+.btn-topbar-desktop:hover::after {
+  left: 140%;
+}
+
+.btn-topbar-desktop:active {
+  transform: translateY(0px) scale(0.98);
+}
+
+/* Futuristic Icon Styling */
+.btn-topbar-desktop .desktop-btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
+}
+.btn-topbar-desktop:hover .desktop-btn-icon {
+  transform: scale(1.12);
+  filter: drop-shadow(0 0 8px rgba(217, 185, 92, 0.8)) drop-shadow(0 0 14px rgba(56, 189, 248, 0.6));
+}
+.futuristic-launch-svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+  overflow: visible;
+}
+
+/* Luminous Telemetry Status Dot */
+.btn-portal-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 8px #38bdf8, 0 0 14px rgba(56, 189, 248, 0.8);
+  margin-left: 2px;
+  flex-shrink: 0;
+  animation: portalDotPulse 2.2s infinite ease-in-out;
+}
+@keyframes portalDotPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.85;
+    box-shadow: 0 0 6px #38bdf8, 0 0 12px rgba(56, 189, 248, 0.6);
+  }
+  50% {
+    transform: scale(1.25);
+    opacity: 1;
+    background: #ffd700;
+    box-shadow: 0 0 10px #ffd700, 0 0 18px rgba(217, 185, 92, 0.9);
+  }
+}
+
+/* Active Standalone App State (Quantum Emerald Mode) */
 .btn-topbar-desktop.btn-app-active {
-  background: radial-gradient(135deg, rgba(34, 197, 94, 0.22) 0%, rgba(16, 185, 129, 0.38) 100%) !important;
-  border: 1px solid rgba(74, 222, 128, 0.7) !important;
-  box-shadow: 0 0 14px rgba(34, 197, 94, 0.35) !important;
+  background: linear-gradient(135deg, rgba(6, 78, 59, 0.55) 0%, rgba(4, 47, 46, 0.7) 100%) !important;
+  border-color: rgba(52, 211, 153, 0.7) !important;
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
   color: #ffffff !important;
   cursor: default !important;
 }
+.btn-topbar-desktop.btn-app-active::before {
+  background: linear-gradient(90deg, rgba(52, 211, 153, 0.8), rgba(16, 185, 129, 0.9), rgba(110, 231, 183, 0.8)) !important;
+}
+.btn-topbar-desktop.btn-app-active .btn-portal-dot {
+  background: #34d399;
+  box-shadow: 0 0 8px #34d399, 0 0 14px rgba(52, 211, 153, 0.8);
+}
 .btn-topbar-desktop.btn-app-active:hover {
   transform: none !important;
-  border-color: rgba(74, 222, 128, 1) !important;
-  box-shadow: 0 0 18px rgba(34, 197, 94, 0.5) !important;
+  box-shadow: 0 0 24px rgba(16, 185, 129, 0.5) !important;
 }
+
 @media (max-width: 680px) {
   .btn-topbar-desktop {
-    padding: 6px 10px;
-    font-size: 10px;
+    padding: 7px 14px;
+    font-size: 0.78rem;
+    gap: 8px;
+  }
+  .futuristic-launch-svg {
+    width: 16px;
+    height: 16px;
   }
 }
 @media (max-width: 480px) {
+  .btn-topbar-desktop {
+    padding: 7px 12px;
+  }
   .btn-topbar-desktop .desktop-btn-label {
-    display: none;
+    font-size: 0.74rem;
   }
 }
 
@@ -3072,20 +3176,33 @@ body.light-theme .highlight-card .dist-icon{
       <img src="assets/recharge-icon-192.png?v=pure5" alt="OrlandoRecharge 24K Swiss Gold Monogram" class="or-brand-logo-img">
       <div class="or-brand-titles">
         <span class="or-brand-main">ORLANDO<span class="or-brand-accent">RECHARGE</span></span>
-        <span class="or-brand-sub">MAIN VERSION · 24K SWISS GOLD HOROLOGY</span>
       </div>
     </a>
     <div class="or-header-right">
       <!-- Open Main Web App Window / PWA Button -->
-      <button type="button" class="btn-topbar-desktop" id="btnTopbarLaunchApp" title="Open OrlandoRecharge (Main Web App)">
+      <button type="button" class="btn-topbar-desktop" id="btnTopbarLaunchApp" title="Open OrlandoRecharge (Main Web App)" aria-label="Open Main Web App">
         <span class="desktop-btn-icon" id="topbarLaunchIcon">
-          <svg class="modern-icon" viewBox="0 0 24 24" fill="none">
-            <polygon points="12 2 21 7 21 17 12 22 3 17 3 7" stroke="#d9b95c" stroke-width="1.8" fill="rgba(217,185,92,0.18)" stroke-linejoin="round"/>
-            <polyline points="7 12 12 7 17 12" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <line x1="12" y1="7" x2="12" y2="17" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+          <svg class="futuristic-launch-svg" viewBox="0 0 24 24" fill="none">
+            <defs>
+              <linearGradient id="flHexGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#ffd700"/>
+                <stop offset="50%" stop-color="#38bdf8"/>
+                <stop offset="100%" stop-color="#f59e0b"/>
+              </linearGradient>
+              <linearGradient id="flArrowGrad" x1="12" y1="5" x2="12" y2="19" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#ffffff"/>
+                <stop offset="60%" stop-color="#fef08a"/>
+                <stop offset="100%" stop-color="#d9b95c"/>
+              </linearGradient>
+            </defs>
+            <path class="fl-hex-orbit" d="M12 2.5L20.5 7.4V16.6L12 21.5L3.5 16.6V7.4L12 2.5Z" stroke="url(#flHexGrad)" stroke-width="1.6" stroke-linejoin="round"/>
+            <circle class="fl-pulse-core" cx="12" cy="12" r="3.2" fill="url(#flHexGrad)" opacity="0.45"/>
+            <path class="fl-arrow" d="M12 7V17M12 17L8 13M12 17L16 13" stroke="url(#flArrowGrad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <line class="fl-base-line" x1="7" y1="19.5" x2="17" y2="19.5" stroke="#38bdf8" stroke-width="1.8" stroke-linecap="round" opacity="0.85"/>
           </svg>
         </span>
         <span class="desktop-btn-label" id="topbarLaunchLabel">Open Main Web App</span>
+        <span class="btn-portal-dot" aria-hidden="true"></span>
       </button>
     </div>
   </header>
@@ -3354,7 +3471,10 @@ body.light-theme .highlight-card .dist-icon{
           </div>
           <div class="dist-btn-stack">
             <a class="primary dist-btn" id="openMainAppBtn" href="https://orlandopasion000.github.io/orlandorecharge" target="_blank" rel="noopener" title="Open Complete 23-Block Main Schedule in New Window">
-              <svg class="modern-icon" viewBox="0 0 24 24" style="width:14px;height:14px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+              <svg class="modern-icon" viewBox="0 0 24 24" fill="none" style="width:14px;height:14px">
+                <path d="M12 2.5L20.5 7.4V16.6L12 21.5L3.5 16.6V7.4L12 2.5Z" stroke="#000000" stroke-width="1.8" stroke-linejoin="round"/>
+                <path d="M12 7V17M12 17L8 13M12 17L16 13" stroke="#000000" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
               <span>Open Main Web App</span>
             </a>
           </div>
@@ -5442,14 +5562,14 @@ function updateLaunchButtonState() {
     btn.title = 'OrlandoRecharge (Main Web App) is Active';
     label.textContent = 'App Active';
     if (icon) {
-      icon.innerHTML = '<svg class="modern-icon" viewBox="0 0 24 24" style="width:13px;height:13px;stroke:#5de8a0;fill:none;stroke-width:2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+      icon.innerHTML = '<svg class="futuristic-launch-svg" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="flActiveGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#86efac"/><stop offset="100%" stop-color="#10b981"/></linearGradient></defs><path d="M12 2.5L20.5 7.4V16.6L12 21.5L3.5 16.6V7.4L12 2.5Z" stroke="url(#flActiveGrad)" stroke-width="1.6" stroke-linejoin="round"/><polyline points="8 12 11 15 16 9" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     }
   } else {
     btn.classList.remove('btn-app-active');
     btn.title = 'Open OrlandoRecharge (Main Web App)';
     label.textContent = 'Open Main Web App';
     if (icon) {
-      icon.innerHTML = '<svg class="modern-icon" viewBox="0 0 24 24" style="width:13px;height:13px;stroke:#d9b95c;fill:none;stroke-width:2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>';
+      icon.innerHTML = '<svg class="futuristic-launch-svg" viewBox="0 0 24 24" fill="none"><defs><linearGradient id="flHexGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#ffd700"/><stop offset="50%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#f59e0b"/></linearGradient><linearGradient id="flArrowGrad" x1="12" y1="5" x2="12" y2="19" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#ffffff"/><stop offset="60%" stop-color="#fef08a"/><stop offset="100%" stop-color="#d9b95c"/></linearGradient></defs><path class="fl-hex-orbit" d="M12 2.5L20.5 7.4V16.6L12 21.5L3.5 16.6V7.4L12 2.5Z" stroke="url(#flHexGrad)" stroke-width="1.6" stroke-linejoin="round"/><circle class="fl-pulse-core" cx="12" cy="12" r="3.2" fill="url(#flHexGrad)" opacity="0.45"/><path class="fl-arrow" d="M12 7V17M12 17L8 13M12 17L16 13" stroke="url(#flArrowGrad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line class="fl-base-line" x1="7" y1="19.5" x2="17" y2="19.5" stroke="#38bdf8" stroke-width="1.8" stroke-linecap="round" opacity="0.85"/></svg>';
     }
   }
 }
