@@ -1,10 +1,10 @@
 {
   "name": "OrlandoRecharge (Main Version)",
   "short_name": "OrlandoRecharge",
-  "description": "Complete 23-block main schedule alarm cockpit with luxury horology clocks and music clips — by Sir Orlando V. Pasion, Jr.",
+  "description": "Complete 23-block main schedule alarm cockpit with luxury horology clocks and music clips \u2014 by Sir Orlando V. Pasion, Jr.",
   "id": "orlandorecharge-main-version",
-  "start_url": "https://orlandopasion000.github.io/orlandorecharge",
-  "scope": "https://orlandopasion000.github.io/orlandorecharge",
+  "start_url": "https://orlandopasion000.github.io/orlandorecharge/",
+  "scope": "https://orlandopasion000.github.io/orlandorecharge/",
   "display": "standalone",
   "orientation": "any",
   "background_color": "#000000",
@@ -45,5 +45,9 @@
         }
       ]
     }
+  ],
+  "display_override": [
+    "window-controls-overlay",
+    "standalone"
   ]
 }

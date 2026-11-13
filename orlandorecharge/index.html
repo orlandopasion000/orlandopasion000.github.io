@@ -2911,6 +2911,69 @@ body.light-theme .highlight-card .dist-icon{
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+/* ───────── TOPBAR DESKTOP LAUNCHER BUTTON (24K SWISS GOLD) ───────── */
+.or-header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.btn-topbar-desktop {
+  background: rgba(217, 185, 92, 0.08);
+  border: 1px solid rgba(217, 185, 92, 0.38);
+  color: #f2efe8;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  font-family: 'Space Mono', 'Consolas', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 14px rgba(217, 185, 92, 0.15);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  text-decoration: none !important;
+}
+.btn-topbar-desktop:hover {
+  background: rgba(217, 185, 92, 0.22);
+  border-color: rgba(217, 185, 92, 0.75);
+  box-shadow: 0 0 22px rgba(217, 185, 92, 0.4);
+  transform: translateY(-1px);
+  color: #ffffff;
+}
+.btn-topbar-desktop .modern-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+.btn-topbar-desktop.btn-app-active {
+  background: radial-gradient(135deg, rgba(34, 197, 94, 0.22) 0%, rgba(16, 185, 129, 0.38) 100%) !important;
+  border: 1px solid rgba(74, 222, 128, 0.7) !important;
+  box-shadow: 0 0 14px rgba(34, 197, 94, 0.35) !important;
+  color: #ffffff !important;
+  cursor: default !important;
+}
+.btn-topbar-desktop.btn-app-active:hover {
+  transform: none !important;
+  border-color: rgba(74, 222, 128, 1) !important;
+  box-shadow: 0 0 18px rgba(34, 197, 94, 0.5) !important;
+}
+@media (max-width: 680px) {
+  .btn-topbar-desktop {
+    padding: 6px 10px;
+    font-size: 10px;
+  }
+}
+@media (max-width: 480px) {
+  .btn-topbar-desktop .desktop-btn-label {
+    display: none;
+  }
+}
+
 .or-brand-sub {
   font-family: 'Space Mono', 'Consolas', monospace;
   font-size: 0.68rem;
@@ -2935,6 +2998,19 @@ body.light-theme .highlight-card .dist-icon{
         <span class="or-brand-sub">MAIN VERSION · 24K SWISS GOLD HOROLOGY</span>
       </div>
     </a>
+    <div class="or-header-right">
+      <!-- Open Main Web App Window / PWA Button -->
+      <button type="button" class="btn-topbar-desktop" id="btnTopbarLaunchApp" title="Open OrlandoRecharge (Main Web App)">
+        <span class="desktop-btn-icon" id="topbarLaunchIcon">
+          <svg class="modern-icon" viewBox="0 0 24 24" fill="none">
+            <polygon points="12 2 21 7 21 17 12 22 3 17 3 7" stroke="#d9b95c" stroke-width="1.8" fill="rgba(217,185,92,0.18)" stroke-linejoin="round"/>
+            <polyline points="7 12 12 7 17 12" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="12" y1="7" x2="12" y2="17" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="desktop-btn-label" id="topbarLaunchLabel">Open Main Web App</span>
+      </button>
+    </div>
   </header>
 
 
@@ -5163,12 +5239,123 @@ function showToast(msg, icon){
   },2000);
 }
 
-/* ───────── APP DISTRIBUTION & COMMAND SUITE ───────── */
-var deferredInstallPrompt=null;
-window.addEventListener("beforeinstallprompt",function(e){
+
+/* ───────── APP DISTRIBUTION & COMMAND SUITE (PWA & DESKTOP WINDOW LAUNCHER) ───────── */
+var deferredInstallPrompt = null;
+window.addEventListener("beforeinstallprompt", function(e) {
   e.preventDefault();
-  deferredInstallPrompt=e;
+  deferredInstallPrompt = e;
+  if (typeof updateLaunchButtonState === 'function') {
+    updateLaunchButtonState();
+  }
 });
+
+window.addEventListener('appinstalled', function() {
+  deferredInstallPrompt = null;
+  if (typeof updateLaunchButtonState === 'function') {
+    updateLaunchButtonState();
+  }
+  if (typeof showToast === 'function') {
+    showToast('🎉 OrlandoRecharge installed as PWA! ⏰✨', '💻');
+  }
+});
+
+function isStandaloneMode() {
+  return (
+    (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) ||
+    (window.matchMedia && window.matchMedia('(display-mode: window-controls-overlay)').matches) ||
+    window.navigator.standalone === true ||
+    window.name === 'OrlandoRechargeStandaloneWindow' ||
+    (window.location.search && window.location.search.indexOf('standalone=true') !== -1)
+  );
+}
+
+function updateLaunchButtonState() {
+  var btn = document.getElementById('btnTopbarLaunchApp');
+  if (!btn) return;
+  var label = document.getElementById('topbarLaunchLabel') || btn.querySelector('.desktop-btn-label');
+  var icon = document.getElementById('topbarLaunchIcon') || btn.querySelector('.desktop-btn-icon');
+  if (!label) return;
+
+  if (isStandaloneMode()) {
+    btn.classList.add('btn-app-active');
+    btn.title = 'OrlandoRecharge (Main Web App) is Active';
+    label.textContent = 'App Active';
+    if (icon) {
+      icon.innerHTML = '<svg class="modern-icon" viewBox="0 0 24 24" style="width:13px;height:13px;stroke:#5de8a0;fill:none;stroke-width:2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+    }
+  } else {
+    btn.classList.remove('btn-app-active');
+    btn.title = 'Open OrlandoRecharge (Main Web App)';
+    label.textContent = 'Open Main Web App';
+    if (icon) {
+      icon.innerHTML = '<svg class="modern-icon" viewBox="0 0 24 24" style="width:13px;height:13px;stroke:#d9b95c;fill:none;stroke-width:2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>';
+    }
+  }
+}
+
+async function handleLaunchStandaloneApp() {
+  if (typeof unlock === 'function') { try { unlock(); } catch(e){} }
+
+  if (isStandaloneMode()) {
+    if (typeof showToast === 'function') {
+      showToast('✨ OrlandoRecharge is already running as Main Web App!', '⏰');
+    }
+    return;
+  }
+
+  // If native PWA installation prompt is ready, offer native installation
+  if (deferredInstallPrompt) {
+    deferredInstallPrompt.prompt();
+    try {
+      var choice = await deferredInstallPrompt.userChoice;
+      if (choice && choice.outcome === 'accepted') {
+        deferredInstallPrompt = null;
+        updateLaunchButtonState();
+        if (typeof showToast === 'function') {
+          showToast('🎉 OrlandoRecharge PWA Installed! Launching...', '🚀');
+        }
+        return;
+      }
+    } catch (err) {}
+  }
+
+  // Dedicated Standalone Chromium App Window (No address bar, no tabs)
+  var targetUrl = 'https://orlandopasion000.github.io/orlandorecharge/?standalone=true';
+  var windowFeatures = 'popup=yes,menubar=no,toolbar=no,location=no,status=no,personalbar=no,scrollbars=yes,resizable=yes,width=1280,height=850,left=100,top=60';
+  var appWin = window.open(targetUrl, 'OrlandoRechargeStandaloneWindow', windowFeatures);
+
+  if (appWin) {
+    if (typeof showToast === 'function') {
+      showToast('🚀 Opening OrlandoRecharge (Main Web App)...', '✨');
+    }
+    try { appWin.focus(); } catch (err) {}
+  } else {
+    window.location.href = targetUrl;
+  }
+}
+
+function initRechargeAppLaunch() {
+  var btnLaunchDesktop = document.getElementById('btnTopbarLaunchApp');
+  if (btnLaunchDesktop) {
+    btnLaunchDesktop.onclick = function(e) {
+      if (e) e.preventDefault();
+      handleLaunchStandaloneApp();
+    };
+  }
+  updateLaunchButtonState();
+
+  var mainAppBtn = document.getElementById('openMainAppBtn');
+  if (mainAppBtn) {
+    mainAppBtn.onclick = function(e) {
+      if (e) e.preventDefault();
+      handleLaunchStandaloneApp();
+    };
+  }
+}
+window.addEventListener('DOMContentLoaded', initRechargeAppLaunch);
+setTimeout(initRechargeAppLaunch, 300);
+
 
 function launchDesktopApp() {
   if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) {
@@ -5754,6 +5941,18 @@ $("exportBackupBtn").onclick=function(){
   URL.revokeObjectURL(a.href);
   showToast("Schedule backup downloaded!", "💾");
 };
+
+var wakeLock = null;
+async function requestWakeLock() {
+  if ('wakeLock' in navigator) {
+    try {
+      wakeLock = await navigator.wakeLock.request('screen');
+      wakeLock.addEventListener('release', function() {
+        wakeLock = null;
+      });
+    } catch (err) {}
+  }
+}
 
 function releaseWakeLock() {
   if (wakeLock) {
@@ -7709,28 +7908,13 @@ try { checkUrlHashRoutine(); } catch(e){}
 
 </script>
 
-  <!-- Automatic Client Cache & Obsolete Service Worker Purger -->
+  <!-- OrlandoRecharge Official PWA Service Worker Registration -->
   <script>
-    (function() {
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.getRegistrations().then(function(registrations) {
-          registrations.forEach(function(reg) {
-            if (reg.scope === 'https://orlandopasion000.github.io/' || reg.scope.indexOf('/recharge') !== -1 || reg.scope.indexOf('/orlandorecharge') !== -1) {
-              reg.unregister().catch(function() {});
-            }
-          });
-        }).catch(function() {});
-      }
-      if ('caches' in window) {
-        caches.keys().then(function(keys) {
-          keys.forEach(function(key) {
-            if (key.indexOf('recharge-') === 0) {
-              caches.delete(key).catch(function() {});
-            }
-          });
-        }).catch(function() {});
-      }
-    })();
+    if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('recharge-sw.js?v=pure25').catch(function() {});
+      });
+    }
   </script>
 
 </body>
