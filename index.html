@@ -1,1285 +1,665 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sir Orlando V. Pasion, Jr. — Teacher VI · Mathematics Educator · EdTech Innovator</title>
-  <meta name="description" content="Official resource library of Sir Orlando V. Pasion, Jr., featuring NASH reviewers, mock tests, mathematics tools, and professional learning resources.">
-  <meta property="og:title" content="Sir Orlando V. Pasion, Jr. — Learning Resources">
-  <meta property="og:description" content="NASH reviewers, mock tests, mathematics tools, and professional learning resources in one curated library.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://orlandopasion000.github.io/">
-  <meta property="og:image" content="https://orlandopasion000.github.io/assets/ovpj-official-masterpiece-hd.png">
-  <link rel="icon" type="image/x-icon" href="favicon.ico?v=pure5">
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/ovpj-icon-32.png?v=pure5">
-  <link rel="icon" type="image/png" sizes="192x192" href="assets/ovpj-icon-192.png?v=pure5">
-  <link rel="apple-touch-icon" href="assets/ovpj-apple-touch.png?v=pure5">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#000000">
+  <title>Orlando Timer</title>
+
+  <!-- PWA & Favicon Meta -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/ot-icon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/ot-icon-512.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/ot-icon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/ot-icon-16.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Orlando Timer">
+  <meta name="description" content="Orlando Timer — Executive 3-in-1 Timer, Stopwatch, and Alarm Horology Suite by Sir Orlando V. Pasion, Jr.">
+
+  <!-- Google Fonts Preconnect & Inter / Lexend Master Horology Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Syne:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --black: #050507;
-      --surface-1: #0f1014;
-      --surface-2: #15161d;
-      --surface-3: #1c1d27;
-      --gold: #d4a853;
-      --gold-bright: #f0d078;
-      --gold-glow: rgba(212,168,83,0.15);
-      --gold-glow-strong: rgba(212,168,83,0.35);
-      --cyan: #56d4c8;
-      --white: #f2efe8;
-      --white-dim: #9b9a97;
-      --white-faint: rgba(242,239,232,0.06);
-      --green: #5de8a0;
-      --font-display: 'Cormorant Garamond', serif;
-      --font-heading: 'Syne', sans-serif;
-      --font-mono: 'Space Mono', monospace;
-      --ease: cubic-bezier(0.16,1,0.3,1);
-    }
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&family=Orbitron:wght@600;700;800;900&family=Outfit:wght@600;700;800;900&family=Space+Grotesk:wght@600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body { font-family: var(--font-heading); background: var(--black); color: var(--white); line-height: 1.6; }
-    ::selection { background: var(--gold); color: var(--black); }
-    a { color: inherit; text-decoration: none; cursor: pointer; }
-    button { cursor: pointer; }
-    img { max-width: 100%; display: block; }
-
-    /* NAV */
-    .nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      padding: 20px 48px; display: flex; justify-content: space-between; align-items: center;
-      background: rgba(5,5,7,0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(212,168,83,0.06);
-    }
-    .nav-brand { font-family: var(--font-display); font-size: 20px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); }
-    .nav-links { display: flex; gap: 36px; list-style: none; }
-    .nav-links a {
-      font-family: var(--font-mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
-      color: var(--white-dim); padding: 8px 4px; display: inline-block; transition: color 0.3s;
-    }
-    .nav-links a:hover { color: var(--gold); }
-    .nav-hamburger { display: none; background: none; border: none; padding: 8px; }
-    .nav-hamburger span { display: block; width: 24px; height: 2px; background: var(--gold); margin: 5px 0; transition: all 0.3s; }
-    .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
-    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-    .mobile-menu {
-      display: none; position: fixed; inset: 0; z-index: 99;
-      background: rgba(5,5,7,0.97); flex-direction: column; align-items: center; justify-content: center; gap: 28px;
-    }
-    .mobile-menu.open { display: flex; }
-    .mobile-menu a { font-family: var(--font-display); font-size: 32px; font-weight: 300; color: var(--white); padding: 8px 16px; }
-
-    /* SCROLL REVEAL */
-    .sr { opacity: 0; transform: translateY(60px); transition: opacity 0.8s ease, transform 0.8s ease; }
-    .sr.vis { opacity: 1; transform: translateY(0); }
-    .sr-d1 { transition-delay: 0.1s; }
-    .sr-d2 { transition-delay: 0.2s; }
-    .sr-d3 { transition-delay: 0.3s; }
-    .sr-d4 { transition-delay: 0.4s; }
-    .sr-d5 { transition-delay: 0.5s; }
-    .sr-d6 { transition-delay: 0.6s; }
-
-    /* HERO */
-    .hero {
-      min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
-      text-align: center; padding: 140px 48px 80px;
-      background: radial-gradient(ellipse at 50% 30%, rgba(212,168,83,0.06) 0%, transparent 60%);
-    }
-    .hero-overtitle {
-      font-family: var(--font-mono); font-size: 11px; letter-spacing: 6px; text-transform: uppercase;
-      color: var(--gold); margin-bottom: 28px;
-      animation: fadeIn 1s ease 0.3s both;
-    }
-    .hero-name {
-      font-family: var(--font-display); font-size: clamp(48px, 10vw, 130px); font-weight: 300;
-      line-height: 0.95; letter-spacing: -2px; color: var(--white); margin-bottom: 16px;
-    }
-    .hero-name .line { display: block; animation: slideUp 1s var(--ease) both; }
-    .hero-name .line:nth-child(1) { animation-delay: 0.5s; }
-    .hero-name .line:nth-child(2) { animation-delay: 0.65s; font-style: italic; color: var(--gold); }
-    @keyframes slideUp { from { opacity: 0; transform: translateY(60px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-    .hero-bar { width: 80px; height: 1px; background: var(--gold); margin: 32px auto; animation: fadeIn 1s ease 0.9s both; }
-    .hero-subtitle {
-      font-size: clamp(14px, 2vw, 18px); color: var(--white-dim); max-width: 600px; letter-spacing: 0.5px;
-      animation: fadeIn 1s ease 1.1s both;
-    }
-    .hero-subtitle strong { color: var(--gold); font-weight: 600; }
-    .hero-cta { display: flex; gap: 16px; margin-top: 44px; animation: fadeIn 1s ease 1.3s both; flex-wrap: wrap; justify-content: center; }
-
-    .btn {
-      font-family: var(--font-mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
-      padding: 16px 36px; border: none; display: inline-block; transition: all 0.3s ease;
-    }
-    .btn-gold { background: var(--gold); color: var(--black); }
-    .btn-gold:hover { background: var(--gold-bright); box-shadow: 0 12px 40px rgba(212,168,83,0.25); transform: translateY(-2px); }
-    .btn-ghost { background: transparent; color: var(--white); border: 1px solid rgba(255,255,255,0.12); }
-    .btn-ghost:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
-
-    .hero-scroll { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); text-align: center; animation: fadeIn 1s ease 1.6s both; }
-    .hero-scroll span { font-family: var(--font-mono); font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--white-dim); display: block; margin-bottom: 8px; }
-    .scroll-line { width: 1px; height: 40px; margin: 0 auto; background: linear-gradient(to bottom, var(--gold), transparent); animation: pulse 2s ease-in-out infinite; }
-    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
-
-    /* STATS */
-    .stats-bar { display: flex; justify-content: center; border-top: 1px solid var(--white-faint); border-bottom: 1px solid var(--white-faint); }
-    .stat-item { flex: 1; max-width: 280px; padding: 44px 32px; text-align: center; border-right: 1px solid var(--white-faint); transition: background 0.3s; }
-    .stat-item:last-child { border-right: none; }
-    .stat-item:hover { background: var(--gold-glow); }
-    .stat-number { font-family: var(--font-display); font-size: 52px; font-weight: 300; color: var(--gold); line-height: 1; margin-bottom: 8px; }
-    .stat-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--white-dim); }
-
-    /* SECTION */
-    .sec { padding: 120px 48px; }
-    .sec-inner { max-width: 1200px; margin: 0 auto; }
-    .sec-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; display: flex; align-items: center; gap: 16px; }
-    .sec-label::before { content: ''; width: 32px; height: 1px; background: var(--gold); }
-    .sec-title { font-family: var(--font-display); font-size: clamp(36px,5vw,64px); font-weight: 300; line-height: 1.15; color: var(--white); margin-bottom: 20px; }
-    .sec-title em { font-style: italic; color: var(--gold); }
-    .sec-desc { font-size: 16px; color: var(--white-dim); max-width: 550px; line-height: 1.8; }
-
-    /* ABOUT */
-    .about-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 72px; align-items: center; margin-top: 56px; }
-    .about-portrait {
-      aspect-ratio: 3/4; background: linear-gradient(145deg, var(--surface-2), var(--surface-1));
-      border: 1px solid var(--white-faint); display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 12px;
-    }
-    .about-portrait .monogram { font-family: var(--font-display); font-size: 120px; font-weight: 300; color: var(--gold); opacity: 0.15; }
-    .about-portrait .rank { font-family: var(--font-mono); font-size: 10px; letter-spacing: 5px; text-transform: uppercase; color: var(--gold); }
-    .about-portrait .name-display { font-family: var(--font-display); font-size: 28px; font-weight: 300; font-style: italic; color: var(--white); }
-    .about-content p { color: var(--white-dim); font-size: 15px; line-height: 1.9; margin-bottom: 18px; }
-    .about-content strong { color: var(--gold); font-weight: 600; }
-    .about-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 36px; padding-top: 36px; border-top: 1px solid var(--white-faint); }
-    .about-meta-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--white-dim); margin-bottom: 4px; }
-    .about-meta-value { font-size: 14px; font-weight: 600; color: var(--white); }
-
-    /* EXPERTISE */
-    .expertise-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin-top: 56px; }
-    .exp-card {
-      background: var(--surface-1); border: 1px solid var(--white-faint); padding: 40px 28px;
-      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-    }
-    .exp-card:hover { transform: translateY(-6px); box-shadow: 0 24px 60px rgba(0,0,0,0.4); border-color: rgba(212,168,83,0.15); }
-    .exp-number { font-family: var(--font-display); font-size: 56px; font-weight: 300; color: var(--gold); opacity: 0.12; line-height: 1; margin-bottom: 8px; }
-    .exp-card h3 { font-size: 17px; font-weight: 700; color: var(--white); margin-bottom: 10px; }
-    .exp-card p { font-size: 13px; color: var(--white-dim); line-height: 1.7; }
-
-    /* ============================================================
-       RESOURCE HUB
-       ============================================================ */
-    .hub-section {
-      background: linear-gradient(180deg, var(--black), var(--surface-1) 8%, var(--surface-1) 92%, var(--black));
-      border-top: 1px solid var(--white-faint); border-bottom: 1px solid var(--white-faint);
-    }
-    .hub-search-bar { margin: 36px 0 40px; position: relative; }
-    .hub-search-bar input {
-      width: 100%; padding: 18px 20px 18px 52px;
-      background: var(--surface-2); border: 1px solid var(--white-faint); color: var(--white);
-      font-family: var(--font-heading); font-size: 15px; outline: none; transition: border-color 0.3s;
-    }
-    .hub-search-bar input:focus { border-color: var(--gold); }
-    .hub-search-bar input::placeholder { color: var(--white-dim); }
-    .hub-search-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); font-size: 16px; color: var(--white-dim); pointer-events: none; }
-
-    .hub-stats { display: flex; gap: 20px; margin-bottom: 40px; flex-wrap: wrap; }
-    .hub-stat { font-family: var(--font-mono); font-size: 12px; color: var(--white-dim); padding: 8px 14px; background: var(--surface-2); border: 1px solid var(--white-faint); }
-    .hub-stat strong { color: var(--gold); }
-
-    .hub-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 18px; }
-
-    .hub-card {
-      display: flex; flex-direction: column; min-height: 100%; background: var(--surface-2); border: 1px solid var(--white-faint); padding: 24px;
-      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-    }
-    .hub-card:hover { transform: translateY(-4px); border-color: rgba(212,168,83,0.3); box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
-    .hub-card:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
-    .hub-card.is-featured { grid-column: span 2; background: linear-gradient(135deg, rgba(212,168,83,0.14), var(--surface-2) 42%, rgba(86,212,200,0.08)); border-color: rgba(212,168,83,0.22); }
-    .hub-card.is-featured h3 { font-size: 19px; }
-
-    .hub-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-    .hub-card-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 18px; background: var(--gold-glow); border: 1px solid rgba(212,168,83,0.12); }
-    .hub-card-badge { font-family: var(--font-mono); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; padding: 3px 10px; border: 1px solid rgba(93,232,160,0.3); color: var(--green); background: rgba(93,232,160,0.06); }
-    .hub-card h3 { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
-    .hub-card-desc { font-size: 13px; color: var(--white-dim); line-height: 1.5; margin-bottom: 14px; }
-    .hub-card-footer { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: auto; padding-top: 12px; border-top: 1px solid var(--white-faint); }
-    .hub-card-meta { display: flex; gap: 10px; flex-wrap: wrap; }
-    .hub-card-meta span { font-family: var(--font-mono); font-size: 10px; color: var(--white-dim); }
-    .hub-card-open { font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); opacity: 0.78; transition: opacity 0.3s; }
-    .hub-card:hover .hub-card-open, .hub-card:focus-visible .hub-card-open { opacity: 1; }
-
-    .hub-empty { text-align: center; padding: 48px 20px; color: var(--white-dim); display: none; }
-
-    /* PHILOSOPHY */
-    .philosophy {
-      text-align: center; padding: 140px 48px;
-      background: linear-gradient(180deg, var(--black), var(--surface-1), var(--black));
-    }
-    .phil-mark { font-family: var(--font-display); font-size: 160px; color: var(--gold); opacity: 0.08; line-height: 0.5; }
-    .phil-quote { font-family: var(--font-display); font-size: clamp(22px,3.5vw,40px); font-weight: 300; font-style: italic; color: var(--white); max-width: 800px; margin: 0 auto; line-height: 1.5; }
-    .phil-line { width: 48px; height: 1px; background: var(--gold); margin: 28px auto; }
-    .phil-author { font-family: var(--font-mono); font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); }
-
-    /* TIMELINE */
-    .timeline { margin-top: 56px; max-width: 800px; position: relative; padding-left: 40px; }
-    .timeline::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: linear-gradient(180deg, var(--gold), rgba(212,168,83,0.2), transparent); }
-    .tl-item { padding-bottom: 48px; position: relative; }
-    .tl-item:last-child { padding-bottom: 0; }
-    .tl-dot { position: absolute; left: -44px; top: 6px; width: 10px; height: 10px; background: var(--black); border: 2px solid var(--gold); }
-    .tl-item:hover .tl-dot { background: var(--gold); box-shadow: 0 0 16px var(--gold-glow-strong); }
-    .tl-year { font-family: var(--font-mono); font-size: 11px; letter-spacing: 3px; color: var(--gold); margin-bottom: 6px; }
-    .tl-title { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
-    .tl-desc { font-size: 14px; color: var(--white-dim); line-height: 1.7; }
-
-    /* FOOTER */
-    .footer { text-align: center; padding: 56px 48px; border-top: 1px solid var(--white-faint); }
-    .footer-name { font-family: var(--font-display); font-size: 26px; font-weight: 300; font-style: italic; color: var(--gold); margin-bottom: 6px; }
-    .footer-sub { font-family: var(--font-mono); font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--white-dim); margin-bottom: 28px; }
-    .footer-copy { font-size: 12px; color: rgba(255,255,255,0.2); }
-
-    .to-top {
-      position: fixed; bottom: 28px; right: 28px; width: 44px; height: 44px; background: var(--gold); color: var(--black);
-      border: none; display: none; align-items: center; justify-content: center; font-size: 18px; z-index: 50;
-      transition: background 0.3s, transform 0.3s;
-    }
-    .to-top.show { display: flex; }
-    .to-top:hover { background: var(--gold-bright); transform: translateY(-3px); }
-
-    /* RESPONSIVE */
-    @media (max-width: 1024px) {
-      .expertise-grid { grid-template-columns: repeat(2,1fr); }
-      .about-grid { grid-template-columns: 1fr; gap: 40px; }
-    }
-    @media (max-width: 768px) {
-      .sec { padding: 80px 20px; }
-      .hero { padding: 100px 20px 60px; }
-      .nav { padding: 16px 20px; }
-      .nav-links { display: none; }
-      .nav-hamburger { display: block; }
-      .expertise-grid { grid-template-columns: 1fr; }
-      .stats-bar { flex-direction: column; }
-      .stat-item { border-right: none; border-bottom: 1px solid var(--white-faint); }
-      .stat-item:last-child { border-bottom: none; }
-      .hero-cta { flex-direction: column; }
-      .about-meta { grid-template-columns: 1fr; }
-      .about-portrait { max-width: 280px; margin: 0 auto; }
-      .hub-grid { grid-template-columns: 1fr; }
-      .hub-card.is-featured { grid-column: auto; }
-      .philosophy { padding: 80px 20px; }
-    }
-  
-    
-    /* ORLANDOCHROME REAL-TIME LIVE BRIDGE STYLES */
-    .oc-live-badge-dot {
-      display: inline-block;
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      margin: 0 5px 1px 0;
-      vertical-align: middle;
-    }
-    .oc-live-badge-dot.synced {
-      background: #10b981;
-      box-shadow: 0 0 6px rgba(16, 185, 129, 0.7);
-    }
-    .oc-live-badge-dot.pending {
-      background: #ff1a24;
-      box-shadow: 0 0 10px rgba(255, 26, 36, 0.9);
-      animation: ocDotPulse 1.5s infinite ease-in-out;
-    }
-    @keyframes ocDotPulse {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.35); opacity: 0.75; }
-    }
-    .btn-oc-hero.has-pending-badge {
-      border-color: #ff1a24 !important;
-      box-shadow: 0 8px 32px rgba(229, 9, 20, 0.55), 0 0 16px rgba(255, 26, 36, 0.4) !important;
-      animation: ocHeroPulse 2.4s infinite ease-in-out;
-    }
-    @keyframes ocHeroPulse {
-      0%, 100% { box-shadow: 0 8px 30px rgba(229, 9, 20, 0.35); }
-      50% { box-shadow: 0 12px 42px rgba(229, 9, 20, 0.65), 0 0 22px rgba(255, 45, 60, 0.5); }
-    }
-    .hub-card.is-orlandochrome.has-pending-card {
-      border-color: rgba(255, 42, 60, 0.65) !important;
-      box-shadow: 0 12px 35px rgba(229, 9, 20, 0.25) !important;
-    }
-    .nav-oc-link.has-pending-badge {
-      text-shadow: 0 0 12px rgba(255, 42, 42, 0.9) !important;
-    }
-
-    /* ORLANDORECHARGE FLAGSHIP APP INTEGRATION */
-    .btn-recharge-hero {
-      background: linear-gradient(135deg, #1f1a09 0%, #080702 100%);
-      color: #ffffff;
-      border: 1.5px solid rgba(217, 185, 92, 0.7);
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      padding: 15px 28px;
-      font-family: var(--font-mono);
-      font-size: 11px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      font-weight: 700;
-      box-shadow: 0 8px 30px rgba(217, 185, 92, 0.35);
-      transition: all 0.3s ease;
-    }
-    .btn-recharge-hero:hover {
-      background: linear-gradient(135deg, #d9b95c 0%, #b89230 100%);
-      border-color: #f5e08a;
-      color: #000000;
-      box-shadow: 0 12px 40px rgba(217, 185, 92, 0.65), 0 0 20px rgba(217, 185, 92, 0.4);
-      transform: translateY(-2px);
-    }
-    .btn-recharge-hero img {
-      width: 24px;
-      height: 24px;
-      border-radius: 6px;
-      box-shadow: 0 0 8px rgba(217, 185, 92, 0.6);
-      object-fit: cover;
-    }
-    .nav-recharge-link {
-      color: #d9b95c !important;
-      display: inline-flex !important;
-      align-items: center !important;
-      gap: 7px;
-      font-weight: 700;
-      transition: all 0.3s !important;
-    }
-    .nav-recharge-link:hover {
-      color: #ffffff !important;
-      text-shadow: 0 0 12px rgba(217, 185, 92, 0.8) !important;
-      transform: translateY(-1px);
-    }
-    .nav-recharge-link img {
-      width: 17px;
-      height: 17px;
-      border-radius: 4px;
-      box-shadow: 0 0 6px rgba(217, 185, 92, 0.5);
-      object-fit: cover;
-    }
-    .mobile-menu-recharge {
-      display: flex !important;
-      align-items: center !important;
-      gap: 14px !important;
-      color: #7dd3fc !important;
-      border: 1px solid rgba(56, 189, 248, 0.4) !important;
-      padding: 10px 24px !important;
-      border-radius: 999px !important;
-      background: rgba(56, 189, 248, 0.1) !important;
-    }
-    .mobile-menu-recharge img {
-      width: 32px;
-      height: 32px;
-      border-radius: 6px;
-      box-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
-      object-fit: cover;
-    }
-    .hub-card.is-orlandorecharge {
-      border-color: rgba(217, 185, 92, 0.5) !important;
-      background: linear-gradient(135deg, rgba(31, 26, 9, 0.85) 0%, rgba(8, 7, 2, 0.95) 100%) !important;
-      box-shadow: 0 8px 30px rgba(217, 185, 92, 0.22) !important;
-    }
-    .hub-card.is-orlandorecharge:hover {
-      border-color: #d9b95c !important;
-      box-shadow: 0 16px 45px rgba(217, 185, 92, 0.45), 0 0 20px rgba(217, 185, 92, 0.3) !important;
-      transform: translateY(-4px);
-    }
-
-    /* ORLANDOCHROME FLAGSHIP APP INTEGRATION */
-    .btn-oc-hero {
-      background: linear-gradient(135deg, #1b0305 0%, #000000 100%);
-      color: #ffffff;
-      border: 1.5px solid rgba(255, 45, 60, 0.7);
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      padding: 15px 30px;
-      font-family: var(--font-mono);
-      font-size: 11px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      font-weight: 700;
-      box-shadow: 0 8px 30px rgba(229, 9, 20, 0.35);
-      transition: all 0.3s ease;
-    }
-    .btn-oc-hero:hover {
-      background: linear-gradient(135deg, #b8000a 0%, #e50914 100%);
-      border-color: #ff4d58;
-      color: #ffffff;
-      box-shadow: 0 12px 40px rgba(229, 9, 20, 0.65), 0 0 20px rgba(229, 9, 20, 0.4);
-      transform: translateY(-2px);
-    }
-    .btn-oc-hero img {
-      width: 24px;
-      height: 24px;
-      border-radius: 6px;
-      filter: drop-shadow(0 0 6px rgba(229,9,20,0.6));
-    }
-    .nav-oc-link {
-      color: #ff6b75 !important;
-      display: inline-flex !important;
-      align-items: center !important;
-      gap: 7px;
-      font-weight: 700;
-      transition: all 0.3s !important;
-    }
-    .nav-oc-link:hover {
-      color: #ffffff !important;
-      text-shadow: 0 0 12px rgba(229, 9, 20, 0.8) !important;
-      transform: translateY(-1px);
-    }
-    .nav-oc-link img {
-      width: 17px;
-      height: 17px;
-      border-radius: 4px;
-      filter: drop-shadow(0 0 4px rgba(229,9,20,0.5));
-    }
-    .mobile-menu-oc {
-      display: flex !important;
-      align-items: center !important;
-      gap: 14px !important;
-      color: #ff4d58 !important;
-      border: 1px solid rgba(229, 9, 20, 0.4) !important;
-      padding: 10px 24px !important;
-      border-radius: 999px !important;
-      background: rgba(229, 9, 20, 0.1) !important;
-    }
-    .mobile-menu-oc img {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-    }
-
-    .hub-card.is-orlandochrome {
-      background: linear-gradient(135deg, rgba(229,9,20,0.18) 0%, var(--surface-2) 42%, rgba(212,168,83,0.10) 100%) !important;
-      border: 1.5px solid rgba(255, 45, 60, 0.45) !important;
-      box-shadow: 0 12px 36px rgba(0,0,0,0.6), 0 0 18px rgba(229,9,20,0.15) !important;
-    }
-    .hub-card.is-orlandochrome:hover {
-      border-color: #ff3344 !important;
-      box-shadow: 0 20px 50px rgba(229,9,20,0.35), 0 0 30px rgba(229,9,20,0.3) !important;
-      transform: translateY(-4px);
-    }
-    .hub-card.is-orlandochrome .hub-card-icon {
-      background: rgba(229, 9, 20, 0.12) !important;
-      border-color: rgba(255, 45, 60, 0.35) !important;
-    }
-    .hub-card.is-orlandochrome .hub-card-badge {
-      border-color: rgba(255,77,88,0.5) !important;
-      color: #ff4d58 !important;
-      background: rgba(229,9,20,0.12) !important;
-      box-shadow: 0 0 10px rgba(229,9,20,0.3) !important;
-    }
-    .hub-card.is-orlandochrome .hub-card-open {
-      color: #ff4d58 !important;
-      font-weight: 700;
-    }
-    .hub-card.is-orlandochrome:hover .hub-card-open {
-      color: #ff858d !important;
-      text-shadow: 0 0 8px rgba(229, 9, 20, 0.6);
-    }
-
-    /* OVPJ OFFICIAL MASTERPIECE EMBLEM STYLES */
-    .nav-brand {
-      display: inline-flex !important;
-      align-items: center !important;
-      gap: 10px !important;
-      font-family: var(--font-display) !important;
-      font-size: 20px !important;
-      font-weight: 700 !important;
-      letter-spacing: 2.5px !important;
-      text-transform: uppercase !important;
-      color: var(--white) !important;
-      text-decoration: none !important;
-    }
-    .nav-brand-logo {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      object-fit: cover;
-      box-shadow: 0 0 12px rgba(0, 255, 102, 0.65);
-      border: 1.5px solid rgba(0, 255, 102, 0.7);
-      flex-shrink: 0;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .nav-brand:hover .nav-brand-logo {
-      transform: scale(1.1) rotate(4deg);
-      box-shadow: 0 0 18px rgba(0, 255, 102, 0.9);
-    }
-    .hero-insignia-wrap {
-      margin-bottom: 26px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-    }
-    .hero-insignia-img {
-      width: clamp(120px, 14vw, 150px);
-      height: clamp(120px, 14vw, 150px);
-      border-radius: 50%;
-      object-fit: cover;
-      box-shadow: 0 0 45px rgba(0, 255, 102, 0.45), 0 0 90px rgba(0, 255, 102, 0.22);
-      border: 2px solid rgba(0, 255, 102, 0.75);
-      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
-      animation: ovpjAuraPulse 4s ease-in-out infinite alternate;
-    }
-    .hero-insignia-img:hover {
-      transform: scale(1.08) rotate(3deg);
-      box-shadow: 0 0 65px rgba(0, 255, 102, 0.8), 0 0 130px rgba(0, 255, 102, 0.4);
-    }
-    @keyframes ovpjAuraPulse {
-      0% { box-shadow: 0 0 38px rgba(0, 255, 102, 0.4), 0 0 75px rgba(0, 255, 102, 0.18); }
-      100% { box-shadow: 0 0 55px rgba(0, 255, 102, 0.7), 0 0 110px rgba(0, 255, 102, 0.35); }
-    }
-
-  </style>
+  <!-- Relative Stylesheet (with cache-bust versioning) -->
+  <link rel="stylesheet" href="style.css?v=12.0">
 </head>
-<body>
+<body data-app-theme="pure-black" data-clock-style="pure-black">
+  <!-- Google Antigravity Signature Repulsive Particle Stage -->
+  <canvas id="antigravityCanvas" class="antigravity-fx-canvas" aria-hidden="true"></canvas>
 
-  <!-- NAV -->
-  <nav class="nav">
-    <a href="#hero" class="nav-brand" title="Sir Orlando V. Pasion, Jr. — Official Portfolio">
-      <img src="assets/ovpj-official-masterpiece-hd.png" alt="OVPJ Official Emblem" class="nav-brand-logo">
-      <span>OVPJ</span>
-    </a>
-    <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#expertise">Expertise</a></li>
-      <li><a href="#resources">Resources</a></li>
-      <li><a href="#journey">Journey</a></li>
-    </ul>
-    <button class="nav-hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
-  </nav>
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="#about" onclick="closeMenu()">About</a>
-    <a href="#expertise" onclick="closeMenu()">Expertise</a>
-    <a href="#resources" onclick="closeMenu()">Resources</a>
-    <a href="#journey" onclick="closeMenu()">Journey</a>
-  </div>
-
-  <!-- HERO -->
-  <section class="hero" id="hero">
-    <div class="hero-insignia-wrap">
-      <img src="assets/ovpj-official-masterpiece-hd.png" alt="OVPJ Official Masterpiece Emblem" class="hero-insignia-img" title="Sir Orlando V. Pasion, Jr. — Master Brand Crest">
-    </div>
-    <div class="hero-overtitle">Teacher VI · Mathematics Educator · EdTech Innovator</div>
-    <h1 class="hero-name">
-      <span class="line">Sir Orlando V.</span>
-      <span class="line">Pasion, Jr.</span>
-    </h1>
-    <div class="hero-bar"></div>
-    <p class="hero-subtitle"><strong>Teacher VI</strong> at Nancalobasaan National High School — advancing Mathematics education through innovation, technology, and a commitment to every Filipino learner.</p>
-    <div class="hero-cta">
-      <a href="#resources" class="btn btn-gold">▸ View Resources</a>
-      <a href="#about" class="btn btn-ghost">Learn More</a>
-    </div>
-    <div class="hero-scroll"><span>Scroll</span><div class="scroll-line"></div></div>
-  </section>
-
-  <!-- STATS -->
-  <div class="stats-bar">
-    <div class="stat-item sr"><div class="stat-number" data-target="10" data-suffix="+">0</div><div class="stat-label">Years Teaching</div></div>
-    <div class="stat-item sr sr-d1"><div class="stat-number" data-target="3000" data-suffix="+">0</div><div class="stat-label">Students Mentored</div></div>
-    <div class="stat-item sr sr-d2"><div class="stat-number" data-target="75" data-suffix="+">0</div><div class="stat-label">Resources Built</div></div>
-    <div class="stat-item sr sr-d3"><div class="stat-number" data-target="5" data-suffix="">0</div><div class="stat-label">PPSSH Domains</div></div>
-  </div>
-
-  <!-- ABOUT -->
-  <section class="sec" id="about">
-    <div class="sec-inner">
-      <div class="sec-label sr">001 — About</div>
-      <h2 class="sec-title sr sr-d1">Educator, Mentor,<br>and <em>Innovator</em></h2>
-      <div class="about-grid">
-        <div class="about-portrait sr">
-          <div class="monogram">O</div>
-          <div class="rank">Teacher VI</div>
-          <div class="name-display">Orlando V. Pasion, Jr.</div>
+  <div class="app-wrapper">
+    <!-- 0. EXECUTIVE BRAND HEADER (TRANSPARENT LUXURY CRYSTAL & QUANTUM TIME COMMAND) -->
+    <header class="or-brand-header">
+      <div class="or-brand-left-container">
+        <!-- Glassmorphic Translucent Logo + Title Button with Supernova Easter Egg -->
+        <div class="or-brand-badge-wrap">
+          <button type="button" class="or-brand-badge transparent-brand" id="btnLogoEasterEgg" title="Quantum Supernova Protocol (Click to Trigger)">
+            <div class="or-brand-logo-glass">
+              <img src="assets/ot-icon-192.png" alt="Orlando Timer Transparent Emblem" class="or-brand-logo-img transparent-logo">
+              <span class="logo-specular-shimmer"></span>
+            </div>
+            <div class="or-brand-titles">
+              <span class="or-brand-main transparent-text">ORLANDO<span class="or-brand-accent transparent-accent">TIMER</span></span>
+              <!-- Futuristic Executive Mode Badge -->
+              <div class="or-brand-fun-tag" id="brandFunTag" title="Toggle Quantum Time Command">
+                <span class="fun-sparkle-dot"></span>
+                <span class="fun-tag-label" id="funTagLabel">Focus Protocol</span>
+                <svg class="cyber-chevron-svg" viewBox="0 0 12 12" fill="none">
+                  <path d="M2.5 4.5L6 8l3.5-3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+          </button>
         </div>
-        <div class="about-content sr sr-d2">
-          <p>I am <strong>Sir Orlando V. Pasion, Jr.</strong>, <strong>Teacher VI</strong> at Nancalobasaan National High School under DepEd Region I — Ilocos Region. Mathematics is the discipline through which I teach problem-solving, confidence, and lifelong learning.</p>
-          <p>Currently pursuing my <strong>Doctor of Education</strong> in Educational Management at Urdaneta City University, I am preparing for school leadership while strengthening my practice across the five PPSSH domains.</p>
-          <p>I believe in the fusion of tradition and technology — where chalk meets code, and every student discovers that mathematics is a <strong>bridge to possibility</strong>.</p>
-          <div class="about-meta">
-            <div><div class="about-meta-label">Position</div><div class="about-meta-value">Teacher VI</div></div>
-            <div><div class="about-meta-label">School</div><div class="about-meta-value">Nancalobasaan NHS</div></div>
-            <div><div class="about-meta-label">Region</div><div class="about-meta-value">DepEd Region I</div></div>
-            <div><div class="about-meta-label">Graduate Studies</div><div class="about-meta-value">EdD, Urdaneta City University</div></div>
-            <div><div class="about-meta-label">Specialization</div><div class="about-meta-value">Mathematics</div></div>
-            <div><div class="about-meta-label">Leadership Goal</div><div class="about-meta-value">School Principal</div></div>
+
+        <!-- Futuristic Micro-Cockpit Drawer (Quantum Time Command) -->
+        <div class="fun-micro-cockpit" id="funMicroCockpit" aria-hidden="true">
+          <div class="fun-cockpit-header">
+            <span class="fun-cockpit-title">
+              <svg class="cyber-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="9"/>
+                <circle cx="12" cy="12" r="3.5" fill="currentColor" opacity="0.3"/>
+                <line x1="12" y1="3" x2="12" y2="6.5"/>
+                <line x1="12" y1="17.5" x2="12" y2="21"/>
+                <line x1="3" y1="12" x2="6.5" y2="12"/>
+                <line x1="17.5" y1="12" x2="21" y2="12"/>
+              </svg>
+              QUANTUM TIME COMMAND
+            </span>
+            <button type="button" class="btn-fun-close" id="btnCloseFunCockpit" aria-label="Close Command Hub">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+          </div>
+          <div class="fun-cockpit-body">
+            <!-- Feature 1: Day Horizon Meter -->
+            <div class="fun-widget-item">
+              <div class="fun-widget-row">
+                <span class="fun-widget-name">
+                  <svg class="cyber-widget-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="9"/>
+                    <ellipse cx="12" cy="12" rx="9" ry="3.5" stroke-dasharray="2 2"/>
+                    <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+                  </svg>
+                  Earth Solar Horizon
+                </span>
+                <span class="fun-widget-val" id="dayProgressVal">87.5%</span>
+              </div>
+              <div class="fun-mini-bar-track">
+                <div class="fun-mini-bar-fill" id="dayProgressBar" style="width: 87.5%;"></div>
+              </div>
+              <span class="fun-widget-sub" id="dayCountdownSub">3h 0m until midnight</span>
+            </div>
+
+            <!-- Feature 2: Enhanced Quantum Supernova Engine & Telemetry -->
+            <div class="fun-supernova-card" id="cardSupernovaEngine">
+              <div class="fun-supernova-header">
+                <div class="fun-btn-icon-wrap singularity-icon">
+                  <svg class="cyber-btn-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <circle cx="12" cy="12" r="4.5" fill="currentColor" fill-opacity="0.3"/>
+                    <ellipse cx="12" cy="12" rx="9.5" ry="3.5" transform="rotate(-25 12 12)" stroke="currentColor" stroke-dasharray="3 1.5"/>
+                    <ellipse cx="12" cy="12" rx="9.5" ry="3.5" transform="rotate(35 12 12)" stroke="currentColor" stroke-opacity="0.6"/>
+                    <path d="M12 2v3M12 19v3M2 12h3M19 12h3" stroke="currentColor" stroke-linecap="round"/>
+                    <circle cx="12" cy="12" r="1.5" fill="#FFFFFF"/>
+                  </svg>
+                </div>
+                <div class="fun-btn-text">
+                  <div class="fun-title-row">
+                    <strong>Quantum Supernova Engine</strong>
+                    <span class="supernova-tier-badge" id="supernovaTierBadge">TIER I · NOVA</span>
+                  </div>
+                  <small>Milestone Shockwaves, Resonance Breathing & Telemetry</small>
+                </div>
+              </div>
+
+              <!-- Telemetry Metrics Bar -->
+              <div class="supernova-telemetry-row">
+                <div class="supernova-telemetry-info">
+                  <span>Today's Focus:</span>
+                  <strong id="telemetryFocusMins">0 min</strong>
+                </div>
+                <span class="supernova-telemetry-target" id="telemetryNextTier">Next: 60m (Tier II)</span>
+              </div>
+              <div class="supernova-telemetry-track">
+                <div class="supernova-telemetry-fill" id="telemetryProgressFill" style="width: 0%;"></div>
+              </div>
+
+              <!-- Action Pills -->
+              <div class="supernova-action-pills">
+                <button type="button" class="sn-action-pill primary" id="btnFireSupernova" title="Detonate Celestial Supernova Shockwave">
+                  <svg class="sn-pill-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                  </svg>
+                  <span>Erupt Supernova</span>
+                </button>
+                <button type="button" class="sn-action-pill" id="btnStartBreathing" title="Calibrate Focus with Quantum Resonance Breathing">
+                  <svg class="sn-pill-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="9"/>
+                    <circle cx="12" cy="12" r="3.5" fill="currentColor" fill-opacity="0.3"/>
+                  </svg>
+                  <span>Breathing Reset</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Feature 3: Zen Immersion Mode -->
+            <button type="button" class="fun-action-btn" id="btnToggleZenMode">
+              <div class="fun-btn-icon-wrap">
+                <svg class="cyber-btn-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="8"/>
+                  <circle cx="12" cy="12" r="3" fill="currentColor" opacity="0.3"/>
+                  <path d="M8 12h8M12 8v8" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div class="fun-btn-text">
+                <strong id="zenModeLabel">Zen Immersion Mode</strong>
+                <small>Conceal chrome, float colossal clock in ambient void</small>
+              </div>
+            </button>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+      <div class="or-header-right">
+        <!-- Mechanical Quartz / Acoustic Tick Toggle with Futuristic Resonator SVG -->
+        <button type="button" class="btn-topbar-desktop" id="btnAcousticTick" title="Toggle Mechanical Escapement / Acoustic Resonator">
+          <svg class="cyber-topbar-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12h3l2-6 4 12 4-12 2 6h3" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+          </svg>
+          <span class="status-dot-audio" id="acousticDot"></span>
+          <span id="acousticTickText">Tick: OFF</span>
+        </button>
 
-  <!-- EXPERTISE -->
-  <section class="sec" id="expertise">
-    <div class="sec-inner">
-      <div class="sec-label sr">002 — Expertise</div>
-      <h2 class="sec-title sr sr-d1">Professional <em>Strengths</em></h2>
-      <p class="sec-desc sr sr-d2">Built on the PPSSH, the MATATAG curriculum, and years of frontline teaching.</p>
-      <div class="expertise-grid">
-        <div class="exp-card sr sr-d1"><div class="exp-number">01</div><h3>Advanced Mathematics</h3><p>Grade 8 — Central Tendency to Probability, with lessons designed to support mastery.</p></div>
-        <div class="exp-card sr sr-d2"><div class="exp-number">02</div><h3>Educational Technology</h3><p>Interactive HTML/CSS/JS tools, AI-integrated reviewers, and polished quiz apps.</p></div>
-        <div class="exp-card sr sr-d3"><div class="exp-number">03</div><h3>Curriculum Architecture</h3><p>MATATAG-aligned lesson series with 40+ slide decks, assessments, and TOS grids.</p></div>
-        <div class="exp-card sr sr-d4"><div class="exp-number">04</div><h3>Education Policy</h3><p>RA 9155, RA 10533, DO 7 s. 2023, RA 12009, and Philippine education governance.</p></div>
-        <div class="exp-card sr sr-d5"><div class="exp-number">05</div><h3>School Leadership</h3><p>NASH preparation across all five PPSSH domains — instructional leadership to strategic planning.</p></div>
-        <div class="exp-card sr sr-d6"><div class="exp-number">06</div><h3>Data-Driven Assessment</h3><p>Bloom's Taxonomy alignment, item analysis, and performance-based rubrics.</p></div>
+        <!-- Keep Screen Awake status button with Futuristic Reactor SVG -->
+        <button type="button" class="btn-topbar-desktop" id="btnWakeLock" title="Screen Wake Lock (Toggle Perpetual Display)">
+          <svg class="cyber-topbar-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="8"/>
+            <path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke-linecap="round"/>
+            <circle cx="12" cy="12" r="3" fill="currentColor"/>
+          </svg>
+          <span class="status-dot-wake"></span>
+          <span id="wakeLockText">Awake ON</span>
+        </button>
+
+        <!-- Fullscreen Button with Futuristic HUD Telemetry SVG -->
+        <button type="button" class="btn-topbar-desktop" id="btnFullscreen" title="Toggle Fullscreen Telemetry View">
+          <svg class="cyber-topbar-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>
+            <circle cx="12" cy="12" r="1.5" fill="currentColor" opacity="0.8"/>
+          </svg>
+          <span id="fsLabel">Fullscreen</span>
+        </button>
       </div>
-    </div>
-  </section>
+    </header>
 
-  <!-- ============================================================
-       RESOURCE HUB
-       ============================================================ -->
-  <section class="sec hub-section" id="resources">
-    <div class="sec-inner">
-      <div class="sec-label sr">003 — Resources</div>
-      <h2 class="sec-title sr sr-d1">Digital <em>Library</em></h2>
-      <p class="sec-desc sr sr-d2">All my reviewers, tools, and learning resources — one click to open what you need.</p>
+    <!-- MIDDLE SECTION: VERY BIG TIMER APP WITH THREE TABS -->
+    <main class="timer-main">
 
-      <div class="hub-search-bar sr">
-        <span class="hub-search-icon">⌕</span>
-        <input type="text" id="hubSearch" placeholder="Search resources... (e.g., NASH, mock test, Academy)">
+      <!-- ════════════════════════════════════════════════════════════════════
+           DUAL HOLOGRAPHIC COCKPIT (FUTURISTIC INDEPENDENT TRIGGERS)
+           LEFT: App Theme (Global environment, canvas & surfaces)
+           RIGHT: Clock Style (Typography finish & specular horizon)
+           ════════════════════════════════════════════════════════════════════ -->
+      <section class="customization-cockpit" aria-label="Visual Appearance Customization">
+        <!-- Trigger 1 (Left): Global Application Theme -->
+        <div class="customizer-box customizer-theme">
+          <button type="button" class="holo-trigger-btn" id="btnOpenThemeVault" aria-haspopup="dialog" aria-expanded="false" title="Open Holographic Theme Vault (Hotkey: T)">
+            <span class="customizer-badge-icon">
+              <!-- Futuristic Cyber Chromatic Prism SVG -->
+              <svg class="cyber-badge-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5" stroke-linejoin="round"/>
+                <circle cx="12" cy="12" r="3.5" fill="currentColor" opacity="0.3"/>
+                <line x1="12" y1="2" x2="12" y2="8.5"/>
+                <line x1="22" y1="15.5" x2="17" y2="12"/>
+                <line x1="2" y1="15.5" x2="7" y2="12"/>
+              </svg>
+            </span>
+            <span class="customizer-badge-text">App Theme</span>
+            <span class="theme-color-preview" id="appThemeSwatch"></span>
+            <span class="holo-current-label" id="appThemeLabel">Pure Black</span>
+            <svg class="holo-chevron-svg" viewBox="0 0 12 12" fill="none">
+              <path d="M2.5 4.5L6 8l3.5-3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Distinct Separation Divider -->
+        <div class="customizer-divider"></div>
+
+        <!-- Trigger 2 (Right): Clock Style Only -->
+        <div class="customizer-box customizer-clock">
+          <button type="button" class="holo-trigger-btn" id="btnOpenClockVault" aria-haspopup="dialog" aria-expanded="false" title="Open Clock Typography Vault (Hotkey: C)">
+            <span class="customizer-badge-icon">
+              <!-- Futuristic Atomic Tourbillon Horology SVG -->
+              <svg class="cyber-badge-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="9"/>
+                <circle cx="12" cy="12" r="4.5" stroke-dasharray="2 2"/>
+                <line x1="12" y1="12" x2="16" y2="8" stroke-linecap="round"/>
+                <circle cx="12" cy="12" r="1.8" fill="currentColor"/>
+                <path d="M12 3v2M12 19v2M3 12h2M19 12h2" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="customizer-badge-text">Clock Style</span>
+            <span class="theme-color-preview" id="clockStyleSwatch"></span>
+            <span class="holo-current-label" id="clockStyleLabel">Pure Black</span>
+            <svg class="holo-chevron-svg" viewBox="0 0 12 12" fill="none">
+              <path d="M2.5 4.5L6 8l3.5-3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </section>
+
+      <!-- TABS NAVIGATION WITH FUTURISTIC ICONS -->
+      <div class="tabs-nav-container">
+        <nav class="tabs-nav" role="tablist" aria-label="Orlando Timer Navigation">
+          <button type="button" class="tab-btn active" id="tab-timer" role="tab" aria-selected="true" data-tab="timer">
+            <svg class="tab-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M7 3h10M7 21h10M7 3l5 6-5 6v6M17 3l-5 6 5 6v6" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+            </svg>
+            <span>Timer</span>
+          </button>
+          <button type="button" class="tab-btn" id="tab-stopwatch" role="tab" aria-selected="false" data-tab="stopwatch">
+            <svg class="tab-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="13" r="8"/>
+              <path d="M12 9v4l3 2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M10 2h4M12 2v3M19 6l-1.5 1.5M5 6l1.5 1.5" stroke-linecap="round"/>
+            </svg>
+            <span>Stopwatch</span>
+          </button>
+          <button type="button" class="tab-btn" id="tab-alarm" role="tab" aria-selected="false" data-tab="alarm">
+            <svg class="tab-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 9a6 6 0 1 0-12 0c0 7-3 8-3 8h18s-3-1-3-8" stroke-linejoin="round"/>
+              <path d="M14 19a2 2 0 0 1-4 0M4 4l2 2M20 4l-2 2" stroke-linecap="round"/>
+              <circle cx="12" cy="9" r="1.5" fill="currentColor"/>
+            </svg>
+            <span>Alarm</span>
+          </button>
+        </nav>
       </div>
 
-      <div class="hub-stats sr">
-        <div class="hub-stat"><strong id="hubResourceCount">0</strong> resources</div>
-        <div class="hub-stat"><strong id="hubQuestionCount">0</strong> questions</div>
-        <div class="hub-stat"><strong id="hubLiveCount">0</strong> live links</div>
+      <!-- ========================================== -->
+      <!-- TAB 1: TIMER                               -->
+      <!-- ========================================== -->
+      <section class="tab-panel active" id="panel-timer" role="tabpanel" aria-labelledby="tab-timer">
+        <!-- Display Stage with HUGE Digits -->
+        <div class="display-stage">
+          <div class="chrome timer-digits-huge" id="timerDigits">
+            <!-- Formatted via chromeHTML() in JS -->
+          </div>
+          <!-- Progress bar with Luminous Comet Head -->
+          <div class="progress-container" id="timerProgressTrack" title="Timer Visual Duration Progress">
+            <div class="progress-bar-fill" id="timerProgressBar" style="width: 100%">
+              <span class="progress-comet-head" id="progressCometHead"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Inputs for Hours, Minutes, Seconds -->
+        <div class="timer-inputs-wrapper">
+          <!-- Hours -->
+          <div class="time-input-group">
+            <label for="timerHours">Hours</label>
+            <div class="time-input-spinner">
+              <input type="number" id="timerHours" class="time-input-box" min="0" max="99" value="00" aria-label="Timer Hours">
+              <div class="spinner-btn-col">
+                <button type="button" class="spinner-btn" onclick="stepTime('h', 1)" title="Increase Hours">
+                  <svg class="spinner-chevron-svg" viewBox="0 0 12 8" fill="none"><path d="M1.5 6.5L6 2l4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <button type="button" class="spinner-btn" onclick="stepTime('h', -1)" title="Decrease Hours">
+                  <svg class="spinner-chevron-svg" viewBox="0 0 12 8" fill="none"><path d="M1.5 1.5L6 6l4.5-4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="time-colon">:</div>
+
+          <!-- Minutes -->
+          <div class="time-input-group">
+            <label for="timerMinutes">Mins</label>
+            <div class="time-input-spinner">
+              <input type="number" id="timerMinutes" class="time-input-box" min="0" max="59" value="25" aria-label="Timer Minutes">
+              <div class="spinner-btn-col">
+                <button type="button" class="spinner-btn" onclick="stepTime('m', 1)" title="Increase Minutes">
+                  <svg class="spinner-chevron-svg" viewBox="0 0 12 8" fill="none"><path d="M1.5 6.5L6 2l4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <button type="button" class="spinner-btn" onclick="stepTime('m', -1)" title="Decrease Minutes">
+                  <svg class="spinner-chevron-svg" viewBox="0 0 12 8" fill="none"><path d="M1.5 1.5L6 6l4.5-4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="time-colon">:</div>
+
+          <!-- Seconds -->
+          <div class="time-input-group">
+            <label for="timerSeconds">Secs</label>
+            <div class="time-input-spinner">
+              <input type="number" id="timerSeconds" class="time-input-box" min="0" max="59" value="00" aria-label="Timer Seconds">
+              <div class="spinner-btn-col">
+                <button type="button" class="spinner-btn" onclick="stepTime('s', 1)" title="Increase Seconds">
+                  <svg class="spinner-chevron-svg" viewBox="0 0 12 8" fill="none"><path d="M1.5 6.5L6 2l4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <button type="button" class="spinner-btn" onclick="stepTime('s', -1)" title="Decrease Seconds">
+                  <svg class="spinner-chevron-svg" viewBox="0 0 12 8" fill="none"><path d="M1.5 1.5L6 6l4.5-4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Buttons: Start, Pause, Reset -->
+        <div class="controls-row">
+          <button type="button" class="btn-luxury btn-primary-gold" id="btnTimerStart">
+            <svg class="cyber-btn-svg-action" viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="6 4 20 12 6 20"/>
+              <circle cx="10" cy="12" r="2" fill="var(--theme-bg)"/>
+            </svg>
+            <span>Start</span>
+          </button>
+          <button type="button" class="btn-luxury btn-pause-amber" id="btnTimerPause" style="display:none">
+            <svg class="cyber-btn-svg-action" viewBox="0 0 24 24" fill="currentColor">
+              <rect x="6" y="4" width="4.5" height="16" rx="1.5"/>
+              <rect x="13.5" y="4" width="4.5" height="16" rx="1.5"/>
+            </svg>
+            <span>Pause</span>
+          </button>
+          <button type="button" class="btn-luxury btn-ghost-silver" id="btnTimerReset">
+            <svg class="cyber-btn-svg-action" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 12a9 9 0 1 0 2.6-6.4L2 9"/>
+              <polyline points="2 3 2 9 8 9"/>
+            </svg>
+            <span>Reset</span>
+          </button>
+        </div>
+
+        <!-- Quick Presets: 5, 10, 15, 25, 45 minutes -->
+        <div class="presets-section">
+          <span class="presets-label">Quick Presets</span>
+          <div class="presets-row">
+            <button type="button" class="preset-pill" data-minutes="5">5 min</button>
+            <button type="button" class="preset-pill" data-minutes="10">10 min</button>
+            <button type="button" class="preset-pill" data-minutes="15">15 min</button>
+            <button type="button" class="preset-pill" data-minutes="25">25 min (Pomodoro)</button>
+            <button type="button" class="preset-pill" data-minutes="45">45 min</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- TAB 2: STOPWATCH                           -->
+      <!-- ========================================== -->
+      <section class="tab-panel" id="panel-stopwatch" role="tabpanel" aria-labelledby="tab-stopwatch">
+        <!-- Display Stage with HUGE Digits MM:SS.ms -->
+        <div class="display-stage">
+          <div class="chrome stopwatch-digits-huge" id="swDigits">
+            <!-- Formatted via chromeHTML() in JS -->
+          </div>
+        </div>
+
+        <!-- Buttons: Start, Stop, Lap, Reset with Futuristic Action SVGs -->
+        <div class="controls-row">
+          <button type="button" class="btn-luxury btn-primary-gold" id="btnSwStart">
+            <svg class="cyber-btn-svg-action" viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="6 4 20 12 6 20"/>
+              <circle cx="10" cy="12" r="2" fill="var(--theme-bg)"/>
+            </svg>
+            <span>Start</span>
+          </button>
+          <button type="button" class="btn-luxury btn-stop-rose" id="btnSwStop" style="display:none">
+            <svg class="cyber-btn-svg-action" viewBox="0 0 24 24" fill="currentColor">
+              <rect x="6" y="4" width="4.5" height="16" rx="1.5"/>
+              <rect x="13.5" y="4" width="4.5" height="16" rx="1.5"/>
+            </svg>
+            <span>Stop</span>
+          </button>
+          <button type="button" class="btn-luxury btn-lap" id="btnSwLap">
+            <svg class="cyber-btn-svg-action" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="4 3 19 8 4 13 4 21" fill="currentColor" fill-opacity="0.25"/>
+            </svg>
+            <span>Lap</span>
+          </button>
+          <button type="button" class="btn-luxury btn-ghost-silver" id="btnSwReset">
+            <svg class="cyber-btn-svg-action" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 12a9 9 0 1 0 2.6-6.4L2 9"/>
+              <polyline points="2 3 2 9 8 9"/>
+            </svg>
+            <span>Reset</span>
+          </button>
+        </div>
+
+        <!-- Lap List Below -->
+        <div class="laps-wrapper">
+          <div class="laps-header">
+            <span>Lap #</span>
+            <span>Split Time</span>
+            <span>Total Time</span>
+          </div>
+          <div class="laps-list" id="lapsList">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- TAB 3: ALARM                               -->
+      <!-- ========================================== -->
+      <section class="tab-panel" id="panel-alarm" role="tabpanel" aria-labelledby="tab-alarm">
+        <!-- Display Stage with HUGE Live Horology Clock Digits HH:MM:SS AM/PM -->
+        <div class="display-stage" style="margin-bottom: 24px;">
+          <div class="chrome alarm-digits-huge" id="alarmLiveDigits" title="Current Executive Horology Time">
+            <!-- Formatted via chromeHTML() in JS -->
+          </div>
+        </div>
+
+        <!-- Set a Time (12-hour AM/PM) & Label -->
+        <div class="alarm-create-card">
+          <div class="alarm-time-picker-row">
+            <select id="alarmHour" class="alarm-select" aria-label="Alarm Hour">
+              <!-- Dynamically populated 01-12 -->
+            </select>
+            <span class="time-colon">:</span>
+            <select id="alarmMinute" class="alarm-select" aria-label="Alarm Minute">
+              <!-- Dynamically populated 00-59 -->
+            </select>
+            <div class="ampm-toggle" role="group" aria-label="AM or PM">
+              <button type="button" class="ampm-btn active" id="btnAm">AM</button>
+              <button type="button" class="ampm-btn" id="btnPm">PM</button>
+            </div>
+          </div>
+
+          <input type="text" id="alarmLabel" class="alarm-label-input" placeholder="Alarm Label (e.g. Mathematics Focus, Break, Recharge)" maxlength="48">
+
+          <div style="display:flex;justify-content:center;">
+            <button type="button" class="btn-luxury btn-primary-gold" id="btnAddAlarm" style="width:100%;max-width:320px;">
+              <svg class="cyber-btn-svg-action" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+                <circle cx="12" cy="12" r="10" stroke-width="1" stroke-dasharray="3 3"/>
+              </svg>
+              <span>Add Alarm</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Multiple Alarms List with On/Off Switches -->
+        <div class="alarms-list-container" id="alarmsList">
+          <!-- Dynamically populated cards -->
+        </div>
+      </section>
+    </main>
+
+    <!-- EXECUTIVE FOOTER -->
+    <footer class="footer">
+      <div class="footer-name">Sir Orlando V. Pasion, Jr.</div>
+      <div class="footer-sub">Teacher VI · Mathematics Educator · EdTech Innovator</div>
+      <div class="footer-copy">&copy; 2026 Sir Orlando V. Pasion, Jr. — Designed and developed with HTML, CSS, and JavaScript</div>
+    </footer>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       HOLOGRAPHIC THEME & CLOCK VAULT (FUTURISTIC 3D GLASS MODAL + LIVE HOLO-SCRUB)
+       ══════════════════════════════════════════════════════════════════════ -->
+  <div id="holoVaultModal" class="holo-vault-modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="holo-vault-backdrop" id="holoVaultBackdrop"></div>
+    <div class="holo-vault-container">
+      
+      <!-- Vault Header -->
+      <div class="holo-vault-header">
+        <div class="holo-vault-title-wrap">
+          <span class="holo-vault-kicker" id="holoVaultKicker">FUTURISTIC HOROLOGY SUITE · LIVE HOLO-PREVIEW</span>
+          <h2 class="holo-vault-title" id="holoVaultTitle">HOLOGRAPHIC THEME VAULT</h2>
+          <p class="holo-vault-subtitle" id="holoVaultSubtitle">Hover over any luxury card for instant live preview. Click to lock in selection.</p>
+        </div>
+        <button type="button" class="holo-vault-close-btn" id="btnHoloVaultClose" aria-label="Close Vault (Esc)">
+          <svg class="cyber-close-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+          <span class="esc-badge">ESC</span>
+        </button>
       </div>
 
-      <div class="sr">
-        <div class="hub-grid" id="hubGrid">
-          <!-- Cards are loaded dynamically from GitHub API -->
-          <div id="hubLoading" style="grid-column:1/-1;text-align:center;padding:40px;color:var(--white-dim);font-family:var(--font-mono);font-size:12px;letter-spacing:2px;text-transform:uppercase;">Loading resources…</div>
+      <!-- Search & Quantum Shuffle Toolbar with Futuristic SVGs -->
+      <div class="holo-vault-toolbar">
+        <div class="holo-search-wrap">
+          <span class="holo-search-icon">
+            <svg class="cyber-search-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="7"/>
+              <line x1="21" y1="21" x2="16.5" y2="16.5" stroke-linecap="round"/>
+              <circle cx="11" cy="11" r="2.5" stroke-dasharray="2 2"/>
+              <line x1="11" y1="4" x2="11" y2="6"/>
+              <line x1="11" y1="16" x2="11" y2="18"/>
+              <line x1="4" y1="11" x2="6" y2="11"/>
+              <line x1="16" y1="11" x2="18" y2="11"/>
+            </svg>
+          </span>
+          <input type="text" id="holoSearchInput" class="holo-search-input" placeholder="Search 30 themes (e.g. gold, neon, space, racing, carbon)..." autocomplete="off" spellcheck="false" aria-label="Search themes">
+          <button type="button" id="btnClearSearch" class="btn-clear-search" style="display:none;" title="Clear search">
+            <svg class="cyber-mini-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+        <button type="button" class="btn-quantum-shuffle" id="btnQuantumShuffle" title="Harmonize random Theme + Clock Style">
+          <svg class="cyber-shuffle-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="3" y="3" width="18" height="18" rx="4"/>
+            <circle cx="8" cy="8" r="1.5" fill="currentColor"/>
+            <circle cx="16" cy="16" r="1.5" fill="currentColor"/>
+            <circle cx="12" cy="12" r="2" fill="currentColor"/>
+            <circle cx="16" cy="8" r="1.5" fill="currentColor"/>
+            <circle cx="8" cy="16" r="1.5" fill="currentColor"/>
+          </svg>
+          <span>Quantum Shuffle</span>
+        </button>
+      </div>
+
+      <!-- Category Filter Pills (7 Curated Categories for 30 Themes) -->
+      <div class="holo-filter-bar">
+        <button type="button" class="holo-filter-pill active" data-category="all">All (30)</button>
+        <button type="button" class="holo-filter-pill" data-category="metals">Precious Metals & Luxury (7)</button>
+        <button type="button" class="holo-filter-pill" data-category="cyber">Cyberpunk & Synthwave (6)</button>
+        <button type="button" class="holo-filter-pill" data-category="chrono">Horology & Grand Prix (4)</button>
+        <button type="button" class="holo-filter-pill" data-category="cosmic">Deep Space & Cosmic (5)</button>
+        <button type="button" class="holo-filter-pill" data-category="minimal">Minimalist & Monolith (3)</button>
+        <button type="button" class="holo-filter-pill" data-category="nature">Organic & Nature (5)</button>
+      </div>
+
+      <!-- Holographic Grid of 17 Bespoke Cards -->
+      <div class="holo-cards-grid" id="holoCardsGrid" role="listbox">
+        <!-- Injected via JavaScript with live radiant cards -->
+      </div>
+
+      <!-- Vault Footer / Status Bar -->
+      <div class="holo-vault-footer">
+        <div class="holo-status-indicator">
+          <span class="holo-status-dot"></span>
+          <span id="holoStatusText">Awaiting selection · Live Holo-Scrubbing Active</span>
+        </div>
+        <div class="holo-vault-shortcuts">
+          <span><kbd>T</kbd> App Theme</span>
+          <span><kbd>C</kbd> Clock Style</span>
+          <span><kbd>Esc</kbd> Close</span>
         </div>
       </div>
 
-      <div class="hub-empty" id="hubEmpty">No resources match your search.</div>
     </div>
-  </section>
+  </div>
 
-  <!-- PHILOSOPHY -->
-  <section class="philosophy">
-    <div class="sr">
-      <div class="phil-mark">"</div>
-      <p class="phil-quote">A great teacher does not simply deliver lessons — they build futures, one student at a time, with patience as their foundation and innovation as their compass.</p>
-      <div class="phil-line"></div>
-      <div class="phil-author">Sir Orlando V. Pasion, Jr.</div>
-    </div>
-  </section>
-
-  <!-- JOURNEY -->
-  <section class="sec" id="journey">
-    <div class="sec-inner">
-      <div class="sec-label sr">004 — Journey</div>
-      <h2 class="sec-title sr sr-d1">A Career of <em>Purpose</em></h2>
-      <div class="timeline">
-        <div class="tl-item sr"><div class="tl-dot"></div><div class="tl-year">2026 — Present</div><div class="tl-title">Promoted to Teacher VI</div><div class="tl-desc">Recognized for excellence in mathematics instruction and educational technology integration.</div></div>
-        <div class="tl-item sr"><div class="tl-dot"></div><div class="tl-year">Ongoing</div><div class="tl-title">EdD — Educational Management</div><div class="tl-desc">Doctoral studies at Urdaneta City University — governance, instructional leadership, school-based management.</div></div>
-        <div class="tl-item sr"><div class="tl-dot"></div><div class="tl-year">2026</div><div class="tl-title">NASH Examination — Batch 2</div><div class="tl-desc">Preparation across all five PPSSH domains for School Principal qualification.</div></div>
-        <div class="tl-item sr"><div class="tl-dot"></div><div class="tl-year">Continuous</div><div class="tl-title">EdTech Innovation</div><div class="tl-desc">Interactive classroom tools and AI-powered review systems for Filipino students.</div></div>
-        <div class="tl-item sr"><div class="tl-dot"></div><div class="tl-year">Vision</div><div class="tl-title">School Leadership</div><div class="tl-desc">Leading a school where technology and community partnerships transform education.</div></div>
+  <!-- FULLSCREEN RINGING & FLASHING SCREEN OVERLAY -->
+  <div id="ov" role="alertdialog" aria-modal="true" aria-labelledby="ovTitle" aria-live="assertive">
+    <div class="ov-content">
+      <div class="ov-ring-bell">
+        <svg class="ov-cyber-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 9a6 6 0 1 0-12 0c0 7-3 8-3 8h18s-3-1-3-8" stroke-linejoin="round"/>
+          <path d="M14 19a2 2 0 0 1-4 0" stroke-linecap="round"/>
+          <circle cx="12" cy="9" r="2" fill="currentColor"/>
+          <path d="M2 9a10 10 0 0 1 2-6M22 9a10 10 0 0 0-2-6" stroke-linecap="round" stroke-dasharray="2 2"/>
+        </svg>
       </div>
+      <div class="ov-title chrome" id="ovTitle">
+        <!-- Rendered with chromeHTML() -->
+      </div>
+      <div class="ov-message" id="ovMessage">Time's Up!</div>
+      <div class="ov-actions">
+        <button type="button" class="btn-luxury btn-ghost-silver" id="btnOvSnooze">Snooze (5 min)</button>
+        <button type="button" class="btn-luxury btn-primary-gold" id="btnOvDismiss">Stop / Dismiss</button>
+      </div>
+      <div class="ov-keys-hint">S = Snooze (5m) · Esc / Space = Dismiss</div>
     </div>
-  </section>
+  </div>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="footer-name">Sir Orlando V. Pasion, Jr.</div>
-    <div class="footer-sub">Teacher VI · Mathematics Educator · EdTech Innovator</div>
-    <div class="footer-copy">&copy; 2026 Sir Orlando V. Pasion, Jr. — Designed and developed with HTML, CSS, and JavaScript</div>
-  </footer>
+  <!-- FLOATING QUANTUM TELEMETRY TOAST -->
+  <div id="quantumTelemetryToast" class="quantum-telemetry-toast" style="display:none;" aria-live="polite">
+    <div class="toast-glow-ring"></div>
+    <div class="toast-icon-wrap">
+      <svg class="toast-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+      </svg>
+    </div>
+    <div class="toast-content">
+      <div class="toast-title" id="toastTitle">QUANTUM SUPERNOVA CELEBRATION</div>
+      <div class="toast-message" id="toastMessage">+25 MIN FOCUS RECORDED · TODAY: 25 MIN</div>
+    </div>
+  </div>
 
-  <button class="to-top" id="toTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+  <!-- QUANTUM RESONANCE BREATHING CALIBRATION MODAL -->
+  <div id="quantumBreathingOverlay" class="quantum-breathing-modal" style="display:none;" aria-modal="true" role="dialog" aria-labelledby="breathingStateTitle">
+    <div class="breathing-backdrop"></div>
+    <div class="breathing-card">
+      <button type="button" class="btn-close-breathing" id="btnCloseBreathing" aria-label="Close Breathing Calibration">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div class="breathing-badge">QUANTUM RESONANCE CALIBRATION (4-4-4-4)</div>
+      <div class="breathing-visual-container">
+        <div class="breathing-orb-ripple" id="breathingRipple"></div>
+        <div class="breathing-orb-outer" id="breathingOrbOuter"></div>
+        <div class="breathing-orb-core" id="breathingOrbCore"></div>
+        <div class="breathing-seconds-counter" id="breathingCounter">4</div>
+      </div>
+      <div class="breathing-state-title" id="breathingStateTitle">IN-BREATH · GRAVITATIONAL GATHER</div>
+      <div class="breathing-subtext" id="breathingSubtext">Inhale slowly through nose as particles coalesce inward</div>
+      <div class="breathing-cycle-indicators">
+        <span class="b-cycle-dot active" title="Inhale"></span>
+        <span class="b-cycle-dot" title="Hold"></span>
+        <span class="b-cycle-dot" title="Exhale"></span>
+        <span class="b-cycle-dot" title="Hold"></span>
+      </div>
+      <button type="button" class="btn-end-breathing" id="btnStopBreathing">Complete Calibration</button>
+    </div>
+  </div>
 
-  <script>
-    // MOBILE MENU
-    function closeMenu() {
-      document.getElementById('hamburger').classList.remove('open');
-      document.getElementById('mobileMenu').classList.remove('open');
-    }
-    document.getElementById('hamburger').addEventListener('click', function() {
-      this.classList.toggle('open');
-      document.getElementById('mobileMenu').classList.toggle('open');
-    });
+  <!-- Audio element fallback (piano sound from existing assets) -->
+  <audio id="alarmAudioElement" preload="auto" src="sounds/piano.mp3"></audio>
 
-    // SCROLL REVEAL
-    var observer = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) entry.target.classList.add('vis');
-      });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.sr').forEach(function(el) { observer.observe(el); });
-
-    // COUNTER
-    var countersRun = false;
-    var counterObs = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting && !countersRun) {
-          countersRun = true;
-          document.querySelectorAll('.stat-number').forEach(function(el) {
-            var target = parseInt(el.getAttribute('data-target'));
-            var suffix = el.getAttribute('data-suffix') || '';
-            var current = 0;
-            var step = target / 60;
-            var timer = setInterval(function() {
-              current += step;
-              if (current >= target) { current = target; clearInterval(timer); }
-              el.textContent = Math.floor(current) + suffix;
-            }, 25);
-          });
-        }
-      });
-    }, { threshold: 0.3 });
-    document.querySelectorAll('.stats-bar').forEach(function(el) { counterObs.observe(el); });
-
-    // SCROLL TO TOP
-    window.addEventListener('scroll', function() {
-      document.getElementById('toTop').classList.toggle('show', window.scrollY > 500);
-    });
-
-    // =============================================
-    // DYNAMIC RESOURCE LOADING FROM GITHUB API
-    // =============================================
-
-    // Metadata for known files (rich descriptions, icons, order)
-    // Any file NOT listed here will still appear — with an auto-generated card!
-    var KNOWN_FILES = {
-      'orlandochrome': {
-        icon: '<img src="assets/orlandochrome-master-photoshop-hd.png" alt="OrlandoChrome" style="width:34px;height:34px;border-radius:8px;object-fit:contain;filter:drop-shadow(0 0 6px rgba(229,9,20,0.6));">',
-        badge: '★ FLAGSHIP APP · PWA READY',
-        featured: true,
-        isOrlandoChrome: true,
-        order: -1,
-        title: 'OrlandoChrome (Main Version)',
-        desc: 'Complete 22-profile Chrome taskbar command center, live sync suite, interactive messaging, 30-day trash vault, and quick cooldown timers.',
-        tags: ['Taskbar Control', 'Live Sync', 'PWA Ready', 'Win + 1–10'],
-        questions: 0,
-        search: 'orlandochrome main version 1 taskbar command center live sync suite chrome profiles'
-      },
-      'orlandorecharge': {
-        icon: '<img src="assets/orlandorecharge-master-photoshop-hd.png" alt="OrlandoRecharge" style="width:34px;height:34px;border-radius:8px;object-fit:contain;filter:drop-shadow(0 0 6px rgba(217,185,92,0.6));">',
-        badge: '★ FLAGSHIP APP · PWA READY',
-        featured: true,
-        isOrlandoRecharge: true,
-        order: 0,
-        title: 'OrlandoRecharge (Main Version)',
-        desc: 'Curated daily rhythm with 17 luxury metallic clocks, BetterSleep nature soundscapes, and Rest Mode.',
-        tags: ['Productivity', 'Daily Alarm', 'PWA']
-      },
-      'orlandorecharge.html': {
-        icon: '<img src="assets/orlandorecharge-master-photoshop-hd.png" alt="OrlandoRecharge" style="width:34px;height:34px;border-radius:8px;object-fit:contain;filter:drop-shadow(0 0 6px rgba(217,185,92,0.6));">',
-        badge: '★ FLAGSHIP APP · PWA READY',
-        featured: true,
-        isOrlandoRecharge: true,
-        order: 0,
-        title: 'OrlandoRecharge (Main Version)',
-        desc: 'Curated daily rhythm with 17 luxury metallic clocks, BetterSleep nature soundscapes, and Rest Mode.',
-        tags: ['Productivity', 'Daily Alarm', 'PWA']
-      },
-      'recharge-clean.html': {
-        icon: '<img src="assets/orlandorecharge-master-photoshop-hd.png" alt="OrlandoRecharge" style="width:34px;height:34px;border-radius:8px;object-fit:contain;filter:drop-shadow(0 0 6px rgba(217,185,92,0.6));">',
-        badge: 'Blank Edition',
-        featured: true,
-        isOrlandoRecharge: true,
-        order: 1,
-        title: 'OrlandoRecharge (Main Version)',
-        desc: '100% clean, schedule-free daily alarm app with isolated storage for anyone to customize.',
-        tags: ['Productivity', 'Clean Slate', 'PWA']
-      },
-      'may-2026-mock-test-reviewer.html': {
-        icon: '✦', badge: 'New', featured: true, order: 1,
-        title: 'May 2026 Mock Test Reviewer',
-        desc: 'May 2026 NASH mock-test reviewer with explanations, answer checks, and revision notes.',
-        tags: ['May 2026', '140 Items'], questions: 140
-      },
-      'nash-01.html': {
-        icon: '◆', badge: 'Live', order: 10,
-        title: 'NASH Reviewer 01: Obsidian Majesty',
-        desc: 'Interactive quiz with policy-cited explanations.',
-        tags: ['Q1–20', '20 Items'], questions: 20
-      },
-      'nash-02.html': {
-        icon: '⟐', badge: 'Live', order: 11,
-        title: 'NASH Reviewer 02: Titanium Fortress',
-        desc: 'Advanced PPSSH domain coverage.',
-        tags: ['Q21–40', '20 Items'], questions: 20
-      },
-      'nash-03.html': {
-        icon: '△', badge: 'Live', order: 12,
-        title: 'NASH Reviewer 03: Jade Emperor',
-        desc: 'Comprehensive coverage with navigation.',
-        tags: ['Q41–60', '20 Items'], questions: 20
-      },
-      'nash-04.html': {
-        icon: '◇', badge: 'Live', order: 13,
-        title: 'NASH Reviewer 04: Aurum Prestige',
-        desc: 'Gold-themed reviewer with full explanations.',
-        tags: ['Q61–80', '20 Items'], questions: 20
-      },
-      'nash-05.html': {
-        icon: '□', badge: 'Live', order: 14,
-        title: 'NASH Reviewer 05: Bourbon Dynasty',
-        desc: 'Complete PPSSH standard citations.',
-        tags: ['Q81–100', '20 Items'], questions: 20
-      },
-      'nash-06.html': {
-        icon: '○', badge: 'Live', order: 15,
-        title: 'NASH Reviewer 06: Sapphire Sovereign',
-        desc: 'Elegant quiz with detailed rationales.',
-        tags: ['Q101–120', '20 Items'], questions: 20
-      },
-      'nash-07.html': {
-        icon: '⬡', badge: 'Live', order: 16,
-        title: 'NASH Reviewer 07: Crimson Throne',
-        desc: 'Final set completing the 139-question bank.',
-        tags: ['Q121–139', '19 Items'], questions: 19
-      },
-      'anthropic-academy-orlandopremium.html': {
-        icon: 'AI', badge: 'Live', order: 20,
-        title: 'Anthropic Academy',
-        desc: '13 free Claude courses with certificates — AI Fluency, Developer Deep-Dives, and Cloud & Enterprise tracks.',
-        tags: ['3 Tracks', '13 Courses'], questions: 0
-      },
-      'NASH_Quiz_latest from 1994.html': {
-        icon: '📝', badge: 'Live', order: 5,
-        title: 'NASH Quiz Latest from 1994',
-        desc: 'NASH Mock Test — May 2026 with mode selection for flexible review and practice.',
-        tags: ['May 2026', 'Mock Test'], questions: 0
-      }
-    };
-
-    // Files to EXCLUDE from the resource listing
-    var EXCLUDE_FILES = ['index.html', 'daily-recharge-alarm.html', 'orlandorecharge.html', 'orlandorecharge'];
-
-    // Auto-icons for unknown files (cycles through these)
-    var AUTO_ICONS = ['📄', '📋', '📊', '🔖', '📐', '🧮', '📑', '🗂️'];
-
-    // Convert filename to a nice display title
-    function filenameToTitle(filename) {
-      return filename
-        .replace(/\.html$/i, '')
-        .replace(/[-_]/g, ' ')
-        .replace(/\s+/g, ' ')
-        .trim()
-        .split(' ')
-        .map(function(word) {
-          if (word.length <= 2 && word === word.toUpperCase()) return word;
-          return word.charAt(0).toUpperCase() + word.slice(1);
-        })
-        .join(' ');
-    }
-
-    // Build one card element
-    function createCard(config) {
-      var a = document.createElement('a');
-      a.href = config.href;
-      a.target = '_blank';
-      a.className = 'hub-card' + (config.featured ? ' is-featured' : '') + (config.isOrlandoChrome ? ' is-orlandochrome' : '') + (config.isOrlandoRecharge ? ' is-orlandorecharge' : '');
-      a.setAttribute('data-questions', config.questions || 0);
-      a.setAttribute('data-search', (config.search || config.title + ' ' + config.desc + ' ' + (config.tags || []).join(' ')).toLowerCase());
-
-      var tagsHtml = (config.tags || []).map(function(t) { return '<span>' + t + '</span>'; }).join('');
-
-      a.innerHTML =
-        '<div class="hub-card-top"><div class="hub-card-icon">' + config.icon + '</div><div class="hub-card-badge">' + config.badge + '</div></div>' +
-        '<h3>' + config.title + '</h3>' +
-        '<div class="hub-card-desc">' + config.desc + '</div>' +
-        '<div class="hub-card-footer"><div class="hub-card-meta">' + tagsHtml + '</div><div class="hub-card-open">Open →</div></div>';
-
-      return a;
-    }
-
-    // Metrics
-    function updateHubMetrics(activeCards) {
-      var cards = activeCards || Array.prototype.slice.call(document.querySelectorAll('.hub-card'));
-      var totalQ = 0;
-      cards.forEach(function(c) {
-        var v = parseInt(c.getAttribute('data-questions') || '0', 10);
-        if (!isNaN(v)) totalQ += v;
-      });
-      var liveLinks = cards.filter(function(c) { return !!c.getAttribute('href'); }).length;
-      document.getElementById('hubResourceCount').textContent = cards.length;
-      document.getElementById('hubQuestionCount').textContent = totalQ;
-      document.getElementById('hubLiveCount').textContent = liveLinks;
-    }
-
-    
-    var FLAGSHIP_APPS = [
-      {
-        href: 'https://orlandopasion000.github.io/orlandorecharge/',
-        icon: '<img src="assets/orlandorecharge-master-photoshop-hd.png" alt="OrlandoRecharge" style="width:34px;height:34px;border-radius:8px;object-fit:cover;box-shadow:0 0 10px rgba(56,189,248,0.55);border:1px solid rgba(56,189,248,0.4);filter:drop-shadow(0 0 6px rgba(56,189,248,0.5));">',
-        badge: '★ FLAGSHIP APP · PWA READY',
-        featured: true,
-        isOrlandoRecharge: true,
-        order: -2,
-        title: 'OrlandoRecharge (Main Version)',
-        desc: 'Executive daily schedule cockpit with 10 music alarms, 3D Antigravity particle dancers, real-time beat matching, and Wake Lock Rest Mode.',
-        tags: ['Productivity', 'Daily Rhythm', '3D Antigravity', 'PWA Ready'],
-        questions: 0,
-        search: 'orlandorecharge main version 1 daily recharge alarm schedule music wake lock antigravity particles'
-      },
-      {
-        href: 'https://orlandopasion000.github.io/orlandochrome/',
-        icon: '<img src="assets/orlandochrome-master-photoshop-hd.png" alt="OrlandoChrome" style="width:34px;height:34px;border-radius:8px;object-fit:contain;filter:drop-shadow(0 0 6px rgba(229,9,20,0.6));">',
-        badge: '★ FLAGSHIP APP · PWA READY',
-        featured: true,
-        isOrlandoChrome: true,
-        order: -1,
-        title: 'OrlandoChrome (Main Version)',
-        desc: 'Complete 22-profile Chrome taskbar command center, live sync suite, interactive messaging, 30-day trash vault, and quick cooldown timers.',
-        tags: ['Taskbar Control', 'Live Sync', 'PWA Ready', 'Win + 1–10'],
-        questions: 0,
-        search: 'orlandochrome main version 1 taskbar command center live sync suite chrome profiles'
-      }
-    ];
-
-    // Main: fetch files from GitHub API and render cards
-    function loadResources() {
-      var grid = document.getElementById('hubGrid');
-      var apiUrl = 'https://api.github.com/repos/orlandopasion000/orlandopasion000.github.io/contents/';
-
-      fetch(apiUrl)
-        .then(function(response) { return response.json(); })
-        .then(function(files) {
-          // Filter to .html files only, exclude index.html and non-file items
-          var htmlFiles = files.filter(function(f) {
-            return f.type === 'file' &&
-                   f.name.match(/\.html$/i) &&
-                   EXCLUDE_FILES.indexOf(f.name) === -1;
-          });
-
-          var resources = [];
-          FLAGSHIP_APPS.forEach(function(fApp) { resources.push(fApp); });
-          var autoIconIndex = 0;
-
-          htmlFiles.forEach(function(file) {
-            var known = KNOWN_FILES[file.name];
-            if (known) {
-              resources.push({
-                href: file.name === 'orlandorecharge.html' ? 'orlandorecharge' : encodeURI(file.name),
-                icon: known.icon,
-                badge: known.badge,
-                featured: known.featured || false,
-                order: known.order || 50,
-                title: known.title,
-                desc: known.desc,
-                tags: known.tags || [],
-                questions: known.questions || 0,
-                search: ''
-              });
-            } else {
-              // AUTO-GENERATE a card for any new/unknown file!
-              resources.push({
-                href: encodeURI(file.name),
-                icon: AUTO_ICONS[autoIconIndex % AUTO_ICONS.length],
-                badge: 'New',
-                featured: false,
-                order: 90 + autoIconIndex,
-                title: filenameToTitle(file.name),
-                desc: 'Recently uploaded resource — click to open.',
-                tags: ['Resource'],
-                questions: 0,
-                search: file.name.toLowerCase()
-              });
-              autoIconIndex++;
-            }
-          });
-
-          // Sort by order
-          resources.sort(function(a, b) { return a.order - b.order; });
-
-          // Render all cards
-          grid.innerHTML = '';
-          resources.forEach(function(res) {
-            grid.appendChild(createCard(res));
-          });
-
-          updateHubMetrics();
-          if (window.syncOrlandoChromeBridgeUI) window.syncOrlandoChromeBridgeUI();
-        })
-        .catch(function(err) {
-          console.warn('GitHub API error, using fallback:', err);
-          // Fallback: render from KNOWN_FILES if API fails
-          var resources = [];
-          FLAGSHIP_APPS.forEach(function(fApp) { resources.push(fApp); });
-          var keys = Object.keys(KNOWN_FILES);
-          keys.forEach(function(filename) {
-            var known = KNOWN_FILES[filename];
-            resources.push({
-              href: encodeURI(filename),
-              icon: known.icon,
-              badge: known.badge,
-              featured: known.featured || false,
-              order: known.order || 50,
-              title: known.title,
-              desc: known.desc,
-              tags: known.tags || [],
-              questions: known.questions || 0,
-              search: ''
-            });
-          });
-          resources.sort(function(a, b) { return a.order - b.order; });
-          grid.innerHTML = '';
-          resources.forEach(function(res) {
-            grid.appendChild(createCard(res));
-          });
-          updateHubMetrics();
-          if (window.syncOrlandoChromeBridgeUI) window.syncOrlandoChromeBridgeUI();
-        });
-    }
-
-    // Load resources on page load
-    loadResources();
-
-    // SEARCH (works with dynamically loaded cards)
-    document.getElementById('hubSearch').addEventListener('input', function() {
-      var query = this.value.toLowerCase().trim();
-      var cards = document.querySelectorAll('.hub-card');
-      var visible = 0;
-      var visibleCards = [];
-      cards.forEach(function(card) {
-        var searchText = (card.getAttribute('data-search') || '') + ' ' + card.textContent.toLowerCase();
-        if (!query || searchText.indexOf(query) !== -1) {
-          card.style.display = '';
-          visible++;
-          visibleCards.push(card);
-        } else {
-          card.style.display = 'none';
-        }
-      });
-      updateHubMetrics(visibleCards);
-      document.getElementById('hubEmpty').style.display = visible === 0 ? 'block' : 'none';
-    });
-  </script>
-
-  <!-- OrlandoChrome Real-Time Live Sync Bridge -->
-  <script>
-    // =========================================================================
-    // ORLANDOCHROME REAL-TIME LIVE BRIDGE (0ms Cross-Tab & Cross-Device Sync)
-    // =========================================================================
-    var OrlandoChromeBridge = (function() {
-      var CLOUD_TOPIC = 'orlandochrome_live_sync_pasion1994_v2';
-      var livePendingCount = 0;
-      var broadcastChannel = null;
-      var sseEventSource = null;
-
-      function calculateLocalPending() {
-        // 1. Direct cached count from OrlandoChrome
-        var cached = localStorage.getItem('orlandochrome_live_pending_count');
-        if (cached !== null && !isNaN(parseInt(cached, 10))) {
-          return parseInt(cached, 10);
-        }
-        // 2. Parse profiles array from localStorage
-        try {
-          var raw = localStorage.getItem('chrome_taskbar_messenger_notes_v5');
-          if (raw) {
-            var arr = JSON.parse(raw);
-            if (Array.isArray(arr)) {
-              var count = 0;
-              arr.forEach(function(p) {
-                if (p && Array.isArray(p.notes)) {
-                  count += p.notes.filter(function(n) { return !n.done; }).length;
-                }
-              });
-              return count;
-            }
-          }
-        } catch (e) {}
-        return 0;
-      }
-
-      function applyPendingCount(count) {
-        var num = Math.max(0, parseInt(count, 10) || 0);
-        livePendingCount = num;
-
-        var baseTitle = 'OrlandoChrome (Main Version)';
-        var fullTitle = num > 0 ? '(' + num + ') ' + baseTitle : baseTitle;
-
-        // 1. Top Navigation Bar
-        var navText = document.getElementById('navOcText');
-        var navLink = document.getElementById('navOcLink');
-        if (navText) navText.textContent = fullTitle;
-        if (navLink) {
-          navLink.title = 'Launch ' + fullTitle;
-          if (num > 0) navLink.classList.add('has-pending-badge');
-          else navLink.classList.remove('has-pending-badge');
-        }
-
-        // 2. Mobile Menu
-        var mobileText = document.getElementById('mobileOcText');
-        var mobileLink = document.getElementById('mobileOcLink');
-        if (mobileText) mobileText.textContent = fullTitle;
-        if (mobileLink) {
-          if (num > 0) mobileLink.classList.add('has-pending-badge');
-          else mobileLink.classList.remove('has-pending-badge');
-        }
-
-        // 3. Hero CTA Button
-        var heroText = document.getElementById('heroOcText');
-        var heroLink = document.getElementById('heroOcLink');
-        if (heroText) heroText.textContent = fullTitle;
-        if (heroLink) {
-          heroLink.title = 'Launch ' + fullTitle;
-          if (num > 0) heroLink.classList.add('has-pending-badge');
-          else heroLink.classList.remove('has-pending-badge');
-        }
-
-        // 4. Resource Hub Card (Card #1)
-        var card = document.querySelector('.hub-card.is-orlandochrome');
-        if (card) {
-          var cardTitle = card.querySelector('h3');
-          if (cardTitle) cardTitle.textContent = fullTitle;
-
-          var badge = card.querySelector('.hub-card-badge');
-          if (badge) {
-            if (num > 0) {
-              badge.innerHTML = '★ FLAGSHIP APP · <span class="oc-live-badge-dot pending"></span> <strong>' + num + ' PENDING</strong>';
-              card.classList.add('has-pending-card');
-            } else {
-              badge.innerHTML = '★ FLAGSHIP APP · <span class="oc-live-badge-dot synced"></span> <strong>LIVE SYNCED</strong>';
-              card.classList.remove('has-pending-card');
-            }
-          }
-        }
-
-        // Update in-memory models if resource hub re-renders
-        if (window.FLAGSHIP_APPS) {
-          window.FLAGSHIP_APPS.forEach(function(fApp) {
-            if (fApp.isOrlandoChrome) {
-              fApp.title = fullTitle;
-              fApp.badge = num > 0
-                ? '★ FLAGSHIP APP · <span class="oc-live-badge-dot pending"></span> <strong>' + num + ' PENDING</strong>'
-                : '★ FLAGSHIP APP · <span class="oc-live-badge-dot synced"></span> <strong>LIVE SYNCED</strong>';
-            } else if (fApp.isOrlandoRecharge) {
-              fApp.title = 'OrlandoRecharge (Main Version)';
-            }
-          });
-        }
-        if (window.KNOWN_FILES && window.KNOWN_FILES['orlandochrome']) {
-          window.KNOWN_FILES['orlandochrome'].title = fullTitle;
-        }
-      }
-
-      function init() {
-        // Immediate 0ms local read
-        applyPendingCount(calculateLocalPending());
-        setInterval(function() { applyPendingCount(calculateLocalPending()); }, 1000);
-
-        // A. Cross-tab storage event (0ms on same origin)
-        window.addEventListener('storage', function(e) {
-          if (e.key === 'orlandochrome_live_pending_count' || e.key === 'chrome_taskbar_messenger_notes_v5') {
-            applyPendingCount(calculateLocalPending());
-          }
-        });
-
-        // B. BroadcastChannel API (0ms cross-tab)
-        try {
-          if (typeof BroadcastChannel !== 'undefined') {
-            broadcastChannel = new BroadcastChannel('orlandochrome_live_bridge');
-            broadcastChannel.onmessage = function(e) {
-              if (e.data && typeof e.data.pending !== 'undefined') {
-                applyPendingCount(e.data.pending);
-              }
-            };
-            // Solicit status from any running OrlandoChrome tab
-            broadcastChannel.postMessage({ type: 'REQUEST_STATUS' });
-          }
-        } catch (e) {}
-
-        // C. Real-Time Cloud SSE Stream for Cross-Device Sync (iPhone <-> Laptop)
-        try {
-          if (typeof EventSource !== 'undefined') {
-            sseEventSource = new EventSource('https://ntfy.sh/' + CLOUD_TOPIC + '/sse');
-            sseEventSource.onmessage = function(ev) {
-              try {
-                var env = JSON.parse(ev.data);
-                if (env && env.event === 'message' && env.message) {
-                  var pkt = JSON.parse(env.message);
-                  var c = 0;
-                  if (typeof pkt.pendingCount !== 'undefined') {
-                    c = pkt.pendingCount;
-                  } else if (Array.isArray(pkt.p)) {
-                    pkt.p.forEach(function(p) {
-                      if (Array.isArray(p.n)) {
-                        c += p.n.filter(function(note) { return !note.d; }).length;
-                      }
-                    });
-                  }
-                  localStorage.setItem('orlandochrome_live_pending_count', String(c));
-                  applyPendingCount(c);
-                }
-              } catch (err) {}
-            };
-          }
-        } catch (e) {}
-
-        // D. Re-check on Window Focus and Visibility Change
-        window.addEventListener('focus', function() {
-          applyPendingCount(calculateLocalPending());
-          if (broadcastChannel) broadcastChannel.postMessage({ type: 'REQUEST_STATUS' });
-        });
-        document.addEventListener('visibilitychange', function() {
-          if (document.visibilityState === 'visible') {
-            applyPendingCount(calculateLocalPending());
-            if (broadcastChannel) broadcastChannel.postMessage({ type: 'REQUEST_STATUS' });
-          }
-        });
-
-        // E. Periodic check every 3 seconds
-        setInterval(function() {
-          var c = calculateLocalPending();
-          if (c !== livePendingCount) {
-            applyPendingCount(c);
-          }
-        }, 3000);
-      }
-
-      // Public API
-      return {
-        init: init,
-        apply: applyPendingCount,
-        getPending: calculateLocalPending,
-        refresh: function() { applyPendingCount(calculateLocalPending()); }
-      };
-    })();
-
-    // Expose on window and initialize
-    window.OrlandoChromeBridge = OrlandoChromeBridge;
-    window.syncOrlandoChromeBridgeUI = function() { OrlandoChromeBridge.refresh(); };
-    OrlandoChromeBridge.init();
-  </script>
-
-  <script src="cursor-effect.js"></script>
-  <!-- Automatic Client Cache & Obsolete Service Worker Purger -->
-  <script>
-    (function() {
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.getRegistrations().then(function(registrations) {
-          registrations.forEach(function(reg) {
-            if (reg.scope === 'https://orlandopasion000.github.io/' || reg.scope.indexOf('/recharge') !== -1 ) {
-              reg.unregister().catch(function() {});
-            }
-          });
-        }).catch(function() {});
-      }
-      if ('caches' in window) {
-        caches.keys().then(function(keys) {
-          keys.forEach(function(key) {
-            if (key.indexOf('recharge-') === 0) {
-              caches.delete(key).catch(function() {});
-            }
-          });
-        }).catch(function() {});
-      }
-    })();
-  </script>
+  <!-- Relative JavaScript (with cache-bust versioning) -->
+  <script src="app.js?v=12.0"></script>
 </body>
 </html>

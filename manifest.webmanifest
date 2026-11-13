@@ -1,0 +1,36 @@
+{
+  "name": "Orlando Timer",
+  "short_name": "OrlandoTimer",
+  "description": "Executive 3-in-1 Timer, Stopwatch, and Alarm suite with Swiss Gold Horology — by Sir Orlando V. Pasion, Jr.",
+  "id": "orlandotimer-executive-suite",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "categories": [
+    "productivity",
+    "utilities"
+  ],
+  "icons": [
+    {
+      "src": "assets/ot-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/ot-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/ot-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
