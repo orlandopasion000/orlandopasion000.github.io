@@ -8156,6 +8156,7 @@ try { checkUrlHashRoutine(); } catch(e){}
       fadeSpeed: 0.08,
       emergeBloom: 0.0,
       lumiTier: 0, // 0 = baseline radiant (40%), 1 = a little brighter (50%), 2 = more brighter (10%)
+      stardust: [],
       trail: []
     };
   }
@@ -8719,57 +8720,68 @@ try { checkUrlHashRoutine(); } catch(e){}
       targetCtx.translate(p.x, p.y);
       targetCtx.rotate(currentAngle);
 
-      targetCtx.beginPath();
-      if (isCurved) {
-        // Subtle momentary flex strictly during turns/reversals
-        targetCtx.moveTo(-dynamicLength / 2, 0);
-        targetCtx.quadraticCurveTo(0, bowOffset, dynamicLength / 2, 0);
-        targetCtx.lineWidth = curSize;
-        targetCtx.lineCap = "round";
-      } else {
-        // Pristine, clean, straight geometric capsule
-        if (typeof targetCtx.roundRect === "function") {
-          targetCtx.roundRect(-dynamicLength / 2, -curSize / 2, dynamicLength, curSize, curSize / 2);
-        } else {
-          targetCtx.rect(-dynamicLength / 2, -curSize / 2, dynamicLength, curSize);
-        }
-      }
+      var halfL = dynamicLength / 2;
+      var headR = curSize * 0.52;
+      var tailR = Math.max(0.65, curSize * 0.22);
+      var focalX = halfL - headR;
 
       if (renderAsBrightest) {
-        // ── FOREGROUND & GAME RADIANT DANCER (Diamond Core, Luminous Glow & White-Hot Leading Spark) ──
-        var fGrad = targetCtx.createLinearGradient(-dynamicLength / 2, 0, dynamicLength / 2, 0);
-        var fLitBoost = isAudioHot ? (liveBass * 24 + beatKickImpulse * 16) : 0;
-
-        // 3-Tier Game Mode Luminosity: Exactly 10% "more brighter", 50% "a little brighter", 40% baseline radiant
+        // ── FOREGROUND & GAME RADIANT DANCER: HAUTE HORLOGERIE PHOTONIC COMET ──
         var tier = p.lumiTier || 0;
-        var gameLitBoost = (tier === 2) ? (gameGlowProgress * 18) : ((tier === 1) ? (gameGlowProgress * 11) : (gameGlowProgress * 6));
+        var gameLitBoost = (tier === 2) ? (gameGlowProgress * 16) : ((tier === 1) ? (gameGlowProgress * 10) : (gameGlowProgress * 5));
         var gameAlphaBoost = (tier === 2) ? (gameGlowProgress * 0.35) : ((tier === 1) ? (gameGlowProgress * 0.20) : (gameGlowProgress * 0.10));
-        var sparkScale = (tier === 2) ? (1.0 + gameGlowProgress * 0.40) : ((tier === 1) ? (1.0 + gameGlowProgress * 0.20) : (1.0 + gameGlowProgress * 0.08));
-        var coronaScale = (tier === 2) ? 3.0 : ((tier === 1) ? 2.4 : 2.0);
-        var coronaAlphaMult = (tier === 2) ? 0.42 : ((tier === 1) ? 0.28 : 0.18);
-        var midBulbAlphaMult = (tier === 2) ? 0.78 : ((tier === 1) ? 0.65 : 0.50);
 
-        // Doppler blueshift on leading tip + redshift on tail
+        var fLitBoost = isAudioHot ? (liveBass * 22 + beatKickImpulse * 14) : 0;
         var fHeadLit = Math.min(100, 80 + fLitBoost + dopplerBoost * 12 + gameLitBoost);
-        var fTailLit = Math.min(94, Math.max(52, p.lit + fLitBoost * 0.6 - dopplerBoost * 8 + gameLitBoost * 0.7));
+        var fTailLit = Math.min(94, Math.max(50, p.lit + fLitBoost * 0.6 - dopplerBoost * 8 + gameLitBoost * 0.7));
         var fHeadHue = (dopplerBoost > 0.12) ? Math.round(p.hue2 * (1 - dopplerBoost * 0.5) + 198 * (dopplerBoost * 0.5)) : p.hue2;
         var fTailHue = (dopplerBoost > 0.12) ? Math.round(p.hue * (1 - dopplerBoost * 0.4) + 22 * (dopplerBoost * 0.4)) : p.hue;
 
         var renderAlpha = Math.min(1.0, currentAlpha * (1.0 + gameAlphaBoost) + (gameGlowProgress * 0.10));
 
-        fGrad.addColorStop(0, "hsla(" + Math.round(fTailHue) + ",98%," + fTailLit.toFixed(1) + "%," + (renderAlpha * 0.95).toFixed(2) + ")");
-        fGrad.addColorStop(0.55, "hsla(" + Math.round(fHeadHue) + ",100%," + fHeadLit.toFixed(1) + "%," + renderAlpha.toFixed(2) + ")");
-        fGrad.addColorStop(1, "rgba(255,255,255," + (renderAlpha * 0.98).toFixed(2) + ")"); // Diamond white-hot leading edge
+        // ── 1. Anamorphic Optical Laser Envelope (Soft elliptical aura along motion axis - ZERO hard borders) ──
+        var auraRadius = curSize * (tier === 2 ? 6.2 : (tier === 1 ? 4.6 : 3.2));
+        var auraAlphaBase = renderAlpha * (tier === 2 ? 0.34 : (tier === 1 ? 0.22 : 0.12));
 
-        // High-Speed Rendering: avoid expensive Canvas2D Gaussian shadowBlur on 120+ particles!
-        if (p.isFront && !isGameMode) {
-          var fGlow = p.glowBlur * (1.1 + (p.isWeaver ? Math.max(0, p.z) * 0.5 : 0));
-          if (isAudioHot) fGlow *= (1 + liveBass * 2.8 + liveMid * 1.1 + beatKickImpulse * 1.5);
-          targetCtx.shadowColor = "hsla(" + Math.round(fHeadHue) + ",100%,70%," + Math.min(1, renderAlpha * 0.75).toFixed(2) + ")";
-          targetCtx.shadowBlur = Math.min(8, fGlow);
-        } else {
-          targetCtx.shadowBlur = 0;
+        if (auraAlphaBase > 0.02) {
+          targetCtx.save();
+          targetCtx.translate(focalX, 0);
+          targetCtx.scale(1.75, 0.82); // Anamorphic 2:1 horizontal stretch along flight vector
+          var auraGrad = targetCtx.createRadialGradient(0, 0, 0, 0, 0, auraRadius);
+          auraGrad.addColorStop(0.0, "rgba(255, 255, 255, " + (auraAlphaBase * 0.85).toFixed(3) + ")");
+          auraGrad.addColorStop(0.22, "hsla(" + Math.round(fHeadHue) + ", 100%, 75%, " + (auraAlphaBase * 0.50).toFixed(3) + ")");
+          auraGrad.addColorStop(0.55, "hsla(" + Math.round(fHeadHue) + ", 100%, 60%, " + (auraAlphaBase * 0.15).toFixed(3) + ")");
+          auraGrad.addColorStop(1.0, "hsla(" + Math.round(fHeadHue) + ", 100%, 50%, 0)"); // 100% transparent at perimeter!
+          targetCtx.fillStyle = auraGrad;
+          targetCtx.beginPath();
+          targetCtx.arc(0, 0, auraRadius, 0, Math.PI * 2);
+          targetCtx.fill();
+          targetCtx.restore();
         }
+
+        // ── 2. Streamlined Aerodynamic Tapered Photonic Needle Body (Seamless Single Form) ──
+        targetCtx.beginPath();
+        if (isCurved) {
+          targetCtx.moveTo(-halfL, 0);
+          targetCtx.quadraticCurveTo(0, bowOffset, halfL, 0);
+          targetCtx.lineWidth = curSize;
+          targetCtx.lineCap = "round";
+        } else {
+          // Tapered aerodynamic projectile: slim needle tail -> sculpted luminous head
+          targetCtx.moveTo(-halfL + tailR, -tailR);
+          targetCtx.lineTo(halfL - headR, -headR);
+          targetCtx.arc(halfL - headR, 0, headR, -Math.PI / 2, Math.PI / 2);
+          targetCtx.lineTo(-halfL + tailR, tailR);
+          targetCtx.arc(-halfL + tailR, 0, tailR, Math.PI / 2, 3 * Math.PI / 2);
+          targetCtx.closePath();
+        }
+
+        var fGrad = targetCtx.createLinearGradient(-halfL, 0, halfL, 0);
+        fGrad.addColorStop(0.0, "hsla(" + Math.round(fTailHue) + ",95%," + fTailLit.toFixed(1) + "%,0)"); // Tail tip seamlessly dissolves into black
+        fGrad.addColorStop(0.20, "hsla(" + Math.round(fTailHue) + ",98%," + fTailLit.toFixed(1) + "%," + (renderAlpha * 0.45).toFixed(2) + ")");
+        fGrad.addColorStop(0.68, "hsla(" + Math.round(fHeadHue) + ",100%," + fHeadLit.toFixed(1) + "%," + (renderAlpha * 0.88).toFixed(2) + ")");
+        fGrad.addColorStop(0.92, "hsla(" + Math.round(fHeadHue) + ",100%,94%," + (renderAlpha * 0.98).toFixed(2) + ")");
+        fGrad.addColorStop(1.0, "rgba(255,255,255," + (renderAlpha * 1.0).toFixed(2) + ")"); // Pure diamond white-hot crest
 
         if (isCurved) {
           targetCtx.strokeStyle = fGrad;
@@ -8779,90 +8791,149 @@ try { checkUrlHashRoutine(); } catch(e){}
           targetCtx.fill();
         }
 
-        // Diamond white-hot leading spark bulb (High-Speed Concentric Geometry: 120 FPS, ZERO Gaussian lag!)
-        var sparkRadius = curSize * (0.65 + gameGlowProgress * 0.12) * sparkScale;
-        var tipX = dynamicLength / 2;
+        // ── 3. Haute Horlogerie Diamond Anamorphic Star Glint (✦) ──
+        // Crisp, microscopic optical diamond refraction on Tier 1 & Tier 2 stars
+        if (tier >= 1 && renderAlpha > 0.25) {
+          // 1. Axial Laser Core Streak (razor-thin horizontal photonic filament)
+          var laserSpan = dynamicLength * (tier === 2 ? 0.90 : 0.65);
+          var lGrad = targetCtx.createLinearGradient(focalX - laserSpan * 0.65, 0, focalX + laserSpan * 0.45, 0);
+          var laserAlpha = renderAlpha * (tier === 2 ? 0.95 : 0.75);
+          lGrad.addColorStop(0.0, "rgba(255,255,255,0)");
+          lGrad.addColorStop(0.55, "rgba(255,255,255," + laserAlpha.toFixed(2) + ")");
+          lGrad.addColorStop(1.0, "rgba(255,255,255,0)");
 
-        // 1. Radiant Outer Aura Ring (soft, high-speed pure alpha corona)
-        targetCtx.beginPath();
-        targetCtx.arc(tipX, 0, sparkRadius * coronaScale, 0, Math.PI * 2);
-        targetCtx.fillStyle = "hsla(" + Math.round(fHeadHue) + ",100%,75%," + (renderAlpha * coronaAlphaMult).toFixed(2) + ")";
-        targetCtx.fill();
+          targetCtx.beginPath();
+          targetCtx.moveTo(focalX - laserSpan * 0.65, 0);
+          targetCtx.lineTo(focalX + laserSpan * 0.45, 0);
+          targetCtx.strokeStyle = lGrad;
+          targetCtx.lineWidth = tier === 2 ? 1.3 : 1.0;
+          targetCtx.lineCap = "round";
+          targetCtx.stroke();
 
-        // 2. Luminous Mid Bulb
-        targetCtx.beginPath();
-        targetCtx.arc(tipX, 0, sparkRadius * 1.35, 0, Math.PI * 2);
-        targetCtx.fillStyle = "hsla(" + Math.round(fHeadHue) + ",100%,88%," + (renderAlpha * midBulbAlphaMult).toFixed(2) + ")";
-        targetCtx.fill();
+          // 2. Transverse Micro-Diffraction Spike (Swiss Diamond Cross-Glint)
+          var spikeSpan = curSize * (tier === 2 ? 3.8 : 2.4);
+          var sGrad = targetCtx.createLinearGradient(0, -spikeSpan, 0, spikeSpan);
+          var spikeAlpha = renderAlpha * (tier === 2 ? 0.85 : 0.55);
+          sGrad.addColorStop(0.0, "rgba(255,255,255,0)");
+          sGrad.addColorStop(0.5, "rgba(255,255,255," + spikeAlpha.toFixed(2) + ")");
+          sGrad.addColorStop(1.0, "rgba(255,255,255,0)");
 
-        // 3. Diamond White-Hot Brilliant Core
-        targetCtx.beginPath();
-        targetCtx.arc(tipX, 0, sparkRadius, 0, Math.PI * 2);
-        targetCtx.fillStyle = "rgba(255,255,255," + (renderAlpha * 0.99).toFixed(2) + ")";
-        targetCtx.fill();
+          targetCtx.beginPath();
+          targetCtx.moveTo(focalX, -spikeSpan);
+          targetCtx.lineTo(focalX, spikeSpan);
+          targetCtx.strokeStyle = sGrad;
+          targetCtx.lineWidth = 1.0;
+          targetCtx.stroke();
+
+          // 3. For Tier 2 (Top 10% Supernovas): 8-Facet Gemstone Micro-Diagonals
+          if (tier === 2) {
+            var diagSpan = spikeSpan * 0.45;
+            var dGrad = targetCtx.createLinearGradient(-diagSpan, -diagSpan, diagSpan, diagSpan);
+            dGrad.addColorStop(0.0, "rgba(255,255,255,0)");
+            dGrad.addColorStop(0.5, "rgba(255,255,255," + (spikeAlpha * 0.65).toFixed(2) + ")");
+            dGrad.addColorStop(1.0, "rgba(255,255,255,0)");
+
+            targetCtx.beginPath();
+            targetCtx.moveTo(focalX - diagSpan, -diagSpan);
+            targetCtx.lineTo(focalX + diagSpan, diagSpan);
+            targetCtx.moveTo(focalX - diagSpan, diagSpan);
+            targetCtx.lineTo(focalX + diagSpan, -diagSpan);
+            targetCtx.strokeStyle = dGrad;
+            targetCtx.lineWidth = 0.8;
+            targetCtx.stroke();
+          }
+        }
+
+        // ── 4. Micro-Stardust Quantum Sparks (Tier 2 Beacons Only) ──
+        if (!p.stardust) p.stardust = [];
+        if (tier === 2 && Math.random() < 0.35) {
+          p.stardust.push({
+            x: p.x - Math.cos(currentAngle) * (halfL * 0.75) + (Math.random() - 0.5) * 1.5,
+            y: p.y - Math.sin(currentAngle) * (halfL * 0.75) + (Math.random() - 0.5) * 1.5,
+            alpha: 0.85,
+            r: 0.65 + Math.random() * 0.45,
+            hue: fHeadHue
+          });
+          if (p.stardust.length > 5) p.stardust.shift();
+        }
 
       } else if (p.isRadiant) {
-        // Radiant Background Node
-        var grad = targetCtx.createLinearGradient(-dynamicLength / 2, 0, dynamicLength / 2, 0);
+        // Radiant Background Node: Sleek Tapered Starlight Filament
+        var grad = targetCtx.createLinearGradient(-halfL, 0, halfL, 0);
         var litBoost = isAudioHot ? (liveBass * 20 + beatKickImpulse * 12) : 0;
         var satBoost = isAudioHot ? 98 : p.sat;
         var headLit = Math.min(98, 75 + litBoost + dopplerBoost * 10);
         var tailLit = Math.min(88, p.lit + litBoost * 0.6);
         var rHeadHue = (dopplerBoost > 0.14) ? Math.round(p.hue2 * (1 - dopplerBoost * 0.45) + 196 * (dopplerBoost * 0.45)) : p.hue2;
 
-        grad.addColorStop(0, "hsla(" + Math.round(p.hue) + "," + satBoost + "%," + tailLit + "%," + (currentAlpha * 0.90).toFixed(2) + ")");
-        grad.addColorStop(1, "hsla(" + Math.round(rHeadHue) + ",98%," + headLit + "%," + Math.min(1, currentAlpha * 1.35).toFixed(2) + ")");
+        grad.addColorStop(0.0, "hsla(" + Math.round(p.hue) + "," + satBoost + "%," + tailLit + "%,0)"); // Tail tip dissolves into black
+        grad.addColorStop(0.35, "hsla(" + Math.round(p.hue) + "," + satBoost + "%," + tailLit + "%," + (currentAlpha * 0.65).toFixed(2) + ")");
+        grad.addColorStop(0.85, "hsla(" + Math.round(rHeadHue) + ",98%," + headLit + "%," + Math.min(1, currentAlpha * 1.15).toFixed(2) + ")");
+        grad.addColorStop(1.0, "rgba(255,255,255," + Math.min(1, currentAlpha * 1.25).toFixed(2) + ")"); // White tip
 
-        var curGlow = p.glowBlur;
-        if (isAudioHot) {
-          var glowMult = curChoreo ? curChoreo.glowMultiplier : 2.0;
-          var instGlowEnergy = (curChoreo && curChoreo.focus === "strum") ? (liveStrum * 2.2 + liveBass * 1.2) :
-                               (curChoreo && curChoreo.focus === "piano-sub") ? (livePiano * 2.0 + liveSub * 2.4) :
-                               (liveBass * 2.4 + liveMid * 0.9 + beatKickImpulse * 1.2);
-          curGlow *= (1 + instGlowEnergy * glowMult);
-        }
-        if (isIdle) {
-          curGlow *= (1.0 + idleBreathFactor * 0.16); // Meditative breath halo
-        }
-        if (p.emergeBloom > 0.02) {
-          curGlow *= (1 + p.emergeBloom * 1.5);
-        }
-        curGlow = Math.min(8, curGlow);
-
-        targetCtx.shadowColor = "hsla(" + Math.round(p.hue) + ",94%,64%," + Math.min(1, currentAlpha * (0.65 + liveBass * 0.35)).toFixed(2) + ")";
-        targetCtx.shadowBlur = curGlow;
-
+        targetCtx.beginPath();
         if (isCurved) {
+          targetCtx.moveTo(-halfL, 0);
+          targetCtx.quadraticCurveTo(0, bowOffset, halfL, 0);
+          targetCtx.lineWidth = curSize;
+          targetCtx.lineCap = "round";
           targetCtx.strokeStyle = grad;
           targetCtx.stroke();
         } else {
+          targetCtx.moveTo(-halfL + tailR, -tailR);
+          targetCtx.lineTo(halfL - headR, -headR);
+          targetCtx.arc(halfL - headR, 0, headR, -Math.PI / 2, Math.PI / 2);
+          targetCtx.lineTo(-halfL + tailR, tailR);
+          targetCtx.arc(-halfL + tailR, 0, tailR, Math.PI / 2, 3 * Math.PI / 2);
+          targetCtx.closePath();
           targetCtx.fillStyle = grad;
           targetCtx.fill();
         }
 
       } else {
-        // Ambient Micro-Dash (Clean straight line - Zero Garbage & Zero Shadow Lag)
-        var ambFill;
-        if (isAudioHot && (liveBass > 0.20 || beatKickImpulse > 0.20)) {
-          var ambLit = Math.min(88, p.lit + 14);
-          ambFill = "hsla(" + Math.round(p.hue) + ",95%," + ambLit + "%," + currentAlpha.toFixed(2) + ")";
-        } else {
-          ambFill = "hsla(" + Math.round(p.hue) + "," + p.sat + "%," + p.lit + "%," + currentAlpha.toFixed(2) + ")";
-        }
-        targetCtx.shadowBlur = (p.emergeBloom > 0.05) ? (p.emergeBloom * 6) : 0;
-        if (targetCtx.shadowBlur > 0) {
-          targetCtx.shadowColor = "hsla(" + Math.round(p.hue) + ",92%,65%,0.6)";
-        }
+        // Ambient Micro-Dash (Clean starlight streak)
+        var ambLit = (isAudioHot && (liveBass > 0.20 || beatKickImpulse > 0.20)) ? Math.min(88, p.lit + 14) : p.lit;
+        var aGrad = targetCtx.createLinearGradient(-halfL, 0, halfL, 0);
+        aGrad.addColorStop(0.0, "hsla(" + Math.round(p.hue) + "," + p.sat + "%," + ambLit + "%,0)");
+        aGrad.addColorStop(0.35, "hsla(" + Math.round(p.hue) + "," + p.sat + "%," + ambLit + "%," + (currentAlpha * 0.55).toFixed(2) + ")");
+        aGrad.addColorStop(1.0, "hsla(" + Math.round(p.hue) + "," + p.sat + "%," + Math.min(100, ambLit + 12) + "%," + currentAlpha.toFixed(2) + ")");
+
+        targetCtx.beginPath();
         if (isCurved) {
-          targetCtx.strokeStyle = ambFill;
+          targetCtx.moveTo(-halfL, 0);
+          targetCtx.quadraticCurveTo(0, bowOffset, halfL, 0);
+          targetCtx.lineWidth = curSize;
+          targetCtx.lineCap = "round";
+          targetCtx.strokeStyle = aGrad;
           targetCtx.stroke();
         } else {
-          targetCtx.fillStyle = ambFill;
+          if (typeof targetCtx.roundRect === "function") {
+            targetCtx.roundRect(-halfL, -curSize / 2, dynamicLength, curSize, curSize / 2);
+          } else {
+            targetCtx.rect(-halfL, -curSize / 2, dynamicLength, curSize);
+          }
+          targetCtx.fillStyle = aGrad;
           targetCtx.fill();
         }
       }
 
       targetCtx.restore();
+
+      // Render Micro-Stardust Quantum Sparks in World Coordinates
+      if (p.stardust && p.stardust.length > 0) {
+        for (var si = p.stardust.length - 1; si >= 0; si--) {
+          var spk = p.stardust[si];
+          spk.alpha *= 0.76;
+          if (spk.alpha > 0.05) {
+            targetCtx.beginPath();
+            targetCtx.arc(spk.x, spk.y, spk.r, 0, Math.PI * 2);
+            targetCtx.fillStyle = "hsla(" + Math.round(spk.hue) + ", 100%, 82%, " + spk.alpha.toFixed(2) + ")";
+            targetCtx.fill();
+          } else {
+            p.stardust.splice(si, 1);
+          }
+        }
+      }
     }
 
     // ── 4. MICRO-CONSTELLATION FILAMENTS (On Background Canvas - Batched High Speed) ──
