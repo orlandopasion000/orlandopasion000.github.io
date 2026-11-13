@@ -133,7 +133,7 @@
     },
     "minimal-white": {
       name: "Pure Minimalist Studio White",
-      category: "nature",
+      category: "minimal",
       desc: "Ultra-clean high-contrast architectural luminescence",
       swatch: "#FFFFFF",
       gradient: "linear-gradient(135deg, #FFFFFF 0%, #F1F5F9 50%, #CBD5E1 100%)",
