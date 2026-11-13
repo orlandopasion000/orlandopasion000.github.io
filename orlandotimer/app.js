@@ -957,11 +957,14 @@
       const timeStr = formatTimeHHMMSS(timerRemaining);
       timerDigitsEl.innerHTML = chromeHTML(timeStr);
     }
+    const cometHead = document.getElementById('progressCometHead');
     if (timerProgressBar && timerTotalDuration > 0) {
       const pct = Math.max(0, Math.min(100, (timerRemaining / timerTotalDuration) * 100));
       timerProgressBar.style.width = `${pct}%`;
+      if (cometHead) cometHead.style.opacity = pct <= 0 ? '0' : '1';
     } else if (timerProgressBar) {
       timerProgressBar.style.width = '100%';
+      if (cometHead) cometHead.style.opacity = '1';
     }
   }
 
@@ -1570,6 +1573,141 @@
   });
 
   // ══════════════════════════════════════════════════════════════════════════
+  // ── 10B. EXECUTIVE HOROLOGY LAB & FUN EASTER EGG HUB ──
+  const btnLogoEasterEgg = document.getElementById('btnLogoEasterEgg');
+  const brandFunTag = document.getElementById('brandFunTag');
+  const funTagLabel = document.getElementById('funTagLabel');
+  const funMicroCockpit = document.getElementById('funMicroCockpit');
+  const btnCloseFunCockpit = document.getElementById('btnCloseFunCockpit');
+  const btnFireSupernova = document.getElementById('btnFireSupernova');
+  const btnToggleZenMode = document.getElementById('btnToggleZenMode');
+  const zenModeLabel = document.getElementById('zenModeLabel');
+  const dayProgressVal = document.getElementById('dayProgressVal');
+  const dayProgressBar = document.getElementById('dayProgressBar');
+  const dayCountdownSub = document.getElementById('dayCountdownSub');
+
+  const funModes = [
+    '⚡ Focus Flow',
+    '🧘 Zen Mind',
+    '🚀 Deep Work',
+    '✨ Supernova',
+    '👑 Horology Master',
+    '🏎️ Speed Run'
+  ];
+  let funModeIndex = 0;
+
+  function updateEarthDayProgress() {
+    const now = new Date();
+    const totalSecsInDay = 86400;
+    const currentSecs = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+    const pct = ((currentSecs / totalSecsInDay) * 100).toFixed(1);
+    const secsLeft = totalSecsInDay - currentSecs;
+    const hrsLeft = Math.floor(secsLeft / 3600);
+    const minsLeft = Math.floor((secsLeft % 3600) / 60);
+
+    if (dayProgressVal) dayProgressVal.textContent = `${pct}%`;
+    if (dayProgressBar) dayProgressBar.style.width = `${pct}%`;
+    if (dayCountdownSub) dayCountdownSub.textContent = `${hrsLeft}h ${minsLeft}m until midnight`;
+  }
+
+  function toggleFunCockpit(show) {
+    if (!funMicroCockpit) return;
+    const isOpen = funMicroCockpit.classList.contains('open');
+    const shouldOpen = show !== undefined ? show : !isOpen;
+    if (shouldOpen) {
+      updateEarthDayProgress();
+      funMicroCockpit.classList.add('open');
+      funMicroCockpit.setAttribute('aria-hidden', 'false');
+      if (btnLogoEasterEgg) btnLogoEasterEgg.classList.add('open');
+      AudioHUD.tick(1000);
+    } else {
+      funMicroCockpit.classList.remove('open');
+      funMicroCockpit.setAttribute('aria-hidden', 'true');
+      if (btnLogoEasterEgg) btnLogoEasterEgg.classList.remove('open');
+    }
+  }
+
+  if (btnLogoEasterEgg) {
+    btnLogoEasterEgg.addEventListener('click', (e) => {
+      // Trigger instant Supernova particle burst at click position!
+      if (window.spawnSupernovaBurst) {
+        window.spawnSupernovaBurst(e.clientX, e.clientY);
+      }
+      AudioHUD.confirm();
+      // Cycle fun mode tag
+      funModeIndex = (funModeIndex + 1) % funModes.length;
+      if (funTagLabel) funTagLabel.textContent = funModes[funModeIndex];
+      // Toggle cockpit
+      toggleFunCockpit();
+    });
+  }
+
+  if (btnCloseFunCockpit) {
+    btnCloseFunCockpit.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleFunCockpit(false);
+      AudioHUD.tick(500);
+    });
+  }
+
+  if (btnFireSupernova) {
+    btnFireSupernova.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (window.spawnSupernovaBurst) {
+        window.spawnSupernovaBurst(window.innerWidth / 2, window.innerHeight / 2);
+      }
+      AudioHUD.confirm();
+    });
+  }
+
+  if (btnToggleZenMode) {
+    btnToggleZenMode.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isZen = document.body.classList.toggle('zen-mode');
+      if (zenModeLabel) zenModeLabel.textContent = isZen ? 'Exit Zen Mode' : 'Zen Immersion Mode';
+      toggleFunCockpit(false);
+      AudioHUD.confirm();
+    });
+  }
+
+  // Click anywhere to exit zen mode or close fun cockpit
+  document.addEventListener('click', (e) => {
+    if (document.body.classList.contains('zen-mode')) {
+      document.body.classList.remove('zen-mode');
+      if (zenModeLabel) zenModeLabel.textContent = 'Zen Immersion Mode';
+    }
+    if (funMicroCockpit && funMicroCockpit.classList.contains('open')) {
+      if (!funMicroCockpit.contains(e.target) && !btnLogoEasterEgg?.contains(e.target)) {
+        toggleFunCockpit(false);
+      }
+    }
+  });
+
+  // Soundscape pills
+  let currentAmbientAudio = null;
+  const soundPills = document.querySelectorAll('.fun-sound-pill');
+  soundPills.forEach(pill => {
+    pill.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const soundKey = pill.getAttribute('data-sound');
+      if (pill.classList.contains('active')) {
+        pill.classList.remove('active');
+        if (currentAmbientAudio) {
+          currentAmbientAudio.pause();
+          currentAmbientAudio = null;
+        }
+        return;
+      }
+      soundPills.forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      if (currentAmbientAudio) currentAmbientAudio.pause();
+      currentAmbientAudio = new Audio(`sounds/${soundKey}.mp3`);
+      currentAmbientAudio.loop = true;
+      currentAmbientAudio.volume = 0.5;
+      currentAmbientAudio.play().catch(() => {});
+    });
+  });
+
   // 11. ANTIGRAVITY REPULSIVE PARTICLES CANVAS (Signature Visual FX)
   // ══════════════════════════════════════════════════════════════════════════
   const canvas = document.getElementById('antigravityCanvas');
@@ -1584,6 +1722,25 @@
 
     window.updateParticleThemeColor = function (hexColor) {
       if (hexColor) currentParticleColor = hexColor;
+    };
+
+    window.spawnSupernovaBurst = function (originX, originY) {
+      const ox = originX !== undefined ? originX : width / 2;
+      const oy = originY !== undefined ? originY : height / 2;
+      for (let i = 0; i < 70; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 8 + 3;
+        particles.push({
+          x: ox,
+          y: oy,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          size: Math.random() * 3 + 1.2,
+          alpha: 1.0,
+          isBurst: true,
+          decay: Math.random() * 0.016 + 0.008
+        });
+      }
     };
 
     function resizeCanvas() {
@@ -1614,6 +1771,17 @@
 
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
+
+        if (p.isBurst) {
+          p.alpha -= p.decay;
+          p.vx *= 0.97;
+          p.vy *= 0.97;
+          if (p.alpha <= 0) {
+            particles.splice(i, 1);
+            i--;
+            continue;
+          }
+        }
 
         // 1. Mouse repulsion effect: particles move away from cursor
         const dx = p.x - mouse.x;
@@ -1663,9 +1831,12 @@
         }
 
         // Render particle strictly within view
+        ctx.save();
+        ctx.globalAlpha = p.alpha !== undefined ? Math.max(0, Math.min(1, p.alpha)) : 0.6;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fill();
+        ctx.restore();
       }
 
       requestAnimationFrame(renderParticles);

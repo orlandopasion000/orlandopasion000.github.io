@@ -747,27 +747,84 @@ body[data-app-theme="cyber-matrix-rain"] {
   gap: 16px;
 }
 
-.or-brand-badge {
+/* Translucent Crystal Glass Logo & Brand Header */
+.or-brand-left-container {
+  position: relative;
+}
+
+.or-brand-badge-wrap {
   display: inline-flex;
   align-items: center;
-  gap: 14px;
-  text-decoration: none;
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.or-brand-badge:hover {
-  transform: translateY(-1.5px);
+.or-brand-badge.transparent-brand {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 16px;
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
 }
 
-.or-brand-logo-img {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  border: 1.5px solid var(--theme-border-strong);
-  box-shadow: 0 0 20px var(--theme-accent-glow), 0 4px 14px rgba(0, 0, 0, 0.9);
-  object-fit: cover;
+.or-brand-badge.transparent-brand:hover {
+  background: rgba(255, 255, 255, 0.04);
+  transform: translateY(-1.5px) scale(1.015);
+}
+
+.or-brand-logo-glass {
+  position: relative;
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1.5px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), inset 0 0 12px rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.or-brand-badge.transparent-brand:hover .or-brand-logo-glass {
+  border-color: var(--theme-primary);
+  box-shadow: 0 0 24px var(--theme-primary-glow), inset 0 0 16px rgba(255, 255, 255, 0.15);
+  transform: rotate(4deg) scale(1.06);
+}
+
+.or-brand-logo-img.transparent-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.82;
+  mix-blend-mode: screen;
+  transition: opacity 0.3s ease, transform 0.4s ease;
+}
+
+.or-brand-badge.transparent-brand:hover .or-brand-logo-img.transparent-logo {
+  opacity: 1;
+}
+
+.logo-specular-shimmer {
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+  background: linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.28) 50%, transparent 60%);
+  transition: transform 0.6s ease;
+  pointer-events: none;
+}
+
+.or-brand-badge.transparent-brand:hover .logo-specular-shimmer {
+  transform: translate(50%, 50%);
 }
 
 .or-brand-titles {
@@ -776,29 +833,289 @@ body[data-app-theme="cyber-matrix-rain"] {
   gap: 2px;
 }
 
-.or-brand-main {
+/* Translucent Crystal Glass Text */
+.or-brand-main.transparent-text {
   font-family: var(--sans);
   font-size: 1.25rem;
-  font-weight: 800;
-  letter-spacing: 1.8px;
-  color: var(--theme-text-main);
-  text-shadow: 0 0 14px var(--theme-accent-glow);
-}
-
-.or-brand-accent {
-  background: var(--theme-accent-gradient);
+  font-weight: 900;
+  letter-spacing: 2px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.45) 100%);
   -webkit-background-clip: text;
   background-clip: text;
+  color: transparent;
   -webkit-text-fill-color: transparent;
+  text-shadow: none;
+  filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.15));
+  transition: filter 0.3s ease;
 }
 
-.or-brand-sub {
+.or-brand-accent.transparent-accent {
+  background: var(--theme-primary-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  opacity: 0.95;
+}
+
+/* Fun Interactive Executive Status / Mode Badge */
+.or-brand-fun-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
+  padding: 2px 10px 2px 8px;
   font-family: var(--mono);
-  font-size: 0.68rem;
-  letter-spacing: 2px;
-  color: var(--theme-accent);
-  text-transform: uppercase;
-  transition: color 0.3s ease;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--theme-primary);
+  margin-top: 2px;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  width: fit-content;
+}
+
+.or-brand-fun-tag:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: var(--theme-primary);
+  box-shadow: 0 0 12px var(--theme-primary-glow);
+  transform: translateY(-0.5px);
+}
+
+.fun-sparkle-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--theme-primary);
+  box-shadow: 0 0 8px var(--theme-primary-glow);
+  animation: pulseGlow 2s infinite ease-in-out;
+}
+
+.fun-tag-hint {
+  font-size: 8px;
+  opacity: 0.6;
+  margin-left: 2px;
+  transition: transform 0.25s ease;
+}
+
+.or-brand-badge.open .fun-tag-hint {
+  transform: rotate(180deg);
+}
+
+/* Futuristic Micro-Cockpit Drawer */
+.fun-micro-cockpit {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 320px;
+  background: rgba(14, 18, 28, 0.94);
+  border: 1.5px solid var(--theme-border-strong);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.85), 0 0 32px var(--theme-primary-glow);
+  border-radius: 20px;
+  padding: 16px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-10px) scale(0.97);
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fun-micro-cockpit.open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+.fun-cockpit-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 10px;
+}
+
+.fun-cockpit-title {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: var(--theme-primary);
+}
+
+.btn-fun-close {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.btn-fun-close:hover {
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.fun-cockpit-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.fun-widget-item {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fun-widget-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.fun-widget-name {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.fun-widget-val {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--theme-primary);
+}
+
+.fun-mini-bar-track {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.fun-mini-bar-fill {
+  height: 100%;
+  background: var(--theme-primary-gradient);
+  border-radius: 9999px;
+  transition: width 0.4s ease;
+}
+
+.fun-widget-sub {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--theme-text-dim);
+}
+
+.fun-action-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.22s ease;
+}
+
+.fun-action-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--theme-primary);
+  transform: translateY(-1px);
+}
+
+.fun-btn-icon {
+  font-size: 20px;
+}
+
+.fun-btn-text strong {
+  display: block;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 800;
+  color: #FFFFFF;
+}
+
+.fun-btn-text small {
+  display: block;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--theme-text-dim);
+}
+
+.fun-soundscapes-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fun-soundscapes-label {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: var(--theme-text-dim);
+}
+
+.fun-soundscapes-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.fun-sound-pill {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 6px 4px;
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  color: #FFFFFF;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.fun-sound-pill:hover,
+.fun-sound-pill.active {
+  background: var(--theme-primary);
+  color: var(--theme-primary-text);
+  border-color: var(--theme-primary);
+  box-shadow: 0 0 10px var(--theme-primary-glow);
+}
+
+/* Zen Immersion Mode (Clean focus mode) */
+body.zen-mode .or-header-right,
+body.zen-mode .customization-cockpit,
+body.zen-mode .timer-inputs-wrapper,
+body.zen-mode .tabs-nav-wrapper,
+body.zen-mode footer {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-15px);
+  transition: all 0.4s ease;
+}
+
+body.zen-mode .timer-main {
+  justify-content: center;
 }
 
 .or-header-right {
@@ -1961,13 +2278,17 @@ body[data-clock-style="cyber-matrix-rain"] .chrome span {
    ══════════════════════════════════════════════════════════════════════════ */
 .progress-container {
   width: 100%;
-  max-width: 640px;
-  height: 6px;
-  background: rgba(255, 255, 255, 0.08);
+  max-width: 680px;
+  height: 7px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 9999px;
-  margin: 18px 0 6px 0;
-  overflow: hidden;
+  margin: 20px auto 8px auto;
+  overflow: visible;
   position: relative;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .progress-bar-fill {
@@ -1975,8 +2296,24 @@ body[data-clock-style="cyber-matrix-rain"] .chrome span {
   width: 100%;
   background: var(--theme-primary-gradient);
   border-radius: 9999px;
-  box-shadow: 0 0 12px var(--theme-primary-glow);
+  box-shadow: 0 0 14px var(--theme-primary-glow);
   transition: width 0.25s linear;
+  position: relative;
+}
+
+/* Luminous Leading Photon Comet Head */
+.progress-comet-head {
+  position: absolute;
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  box-shadow: 0 0 14px 2px var(--theme-primary), 0 0 28px var(--theme-primary-glow);
+  pointer-events: none;
+  transition: transform 0.2s ease, opacity 0.3s ease;
 }
 
 .timer-inputs-wrapper {

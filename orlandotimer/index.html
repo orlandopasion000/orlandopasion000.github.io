@@ -26,22 +26,85 @@
   <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&family=Orbitron:wght@600;700;800;900&family=Outfit:wght@600;700;800;900&family=Space+Grotesk:wght@600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
   <!-- Relative Stylesheet (with cache-bust versioning) -->
-  <link rel="stylesheet" href="style.css?v=5.0">
+  <link rel="stylesheet" href="style.css?v=6.0">
 </head>
 <body data-app-theme="platinum" data-clock-style="platinum">
   <!-- Google Antigravity Signature Repulsive Particle Stage -->
   <canvas id="antigravityCanvas" class="antigravity-fx-canvas" aria-hidden="true"></canvas>
 
   <div class="app-wrapper">
-    <!-- 0. EXECUTIVE BRAND HEADER -->
+    <!-- 0. EXECUTIVE BRAND HEADER (TRANSPARENT LUXURY CRYSTAL & FUN INTERACTIVE HUB) -->
     <header class="or-brand-header">
-      <a href="https://orlandopasion000.github.io/" class="or-brand-badge" title="Sir Orlando V. Pasion, Jr. — Master Portfolio">
-        <img src="assets/ot-icon-192.png" alt="Orlando Timer 24K Swiss Gold Monogram" class="or-brand-logo-img">
-        <div class="or-brand-titles">
-          <span class="or-brand-main">ORLANDO<span class="or-brand-accent">TIMER</span></span>
-          <span class="or-brand-sub">EXECUTIVE SUITE · 24K SWISS GOLD HOROLOGY</span>
+      <div class="or-brand-left-container">
+        <!-- Glassmorphic Translucent Logo + Title Button with Supernova Easter Egg -->
+        <div class="or-brand-badge-wrap">
+          <button type="button" class="or-brand-badge transparent-brand" id="btnLogoEasterEgg" title="Click for Quantum Supernova Burst ✨ (or toggle Lab)">
+            <div class="or-brand-logo-glass">
+              <img src="assets/ot-icon-192.png" alt="Orlando Timer Transparent Emblem" class="or-brand-logo-img transparent-logo">
+              <span class="logo-specular-shimmer"></span>
+            </div>
+            <div class="or-brand-titles">
+              <span class="or-brand-main transparent-text">ORLANDO<span class="or-brand-accent transparent-accent">TIMER</span></span>
+              <!-- Fun Interactive Executive Status / Mode Badge -->
+              <div class="or-brand-fun-tag" id="brandFunTag">
+                <span class="fun-sparkle-dot"></span>
+                <span class="fun-tag-label" id="funTagLabel">⚡ Focus Flow</span>
+                <span class="fun-tag-hint">▾</span>
+              </div>
+            </div>
+          </button>
         </div>
-      </a>
+
+        <!-- Futuristic Micro-Cockpit Drawer (Fun Easter Egg Menu) -->
+        <div class="fun-micro-cockpit" id="funMicroCockpit" aria-hidden="true">
+          <div class="fun-cockpit-header">
+            <span class="fun-cockpit-title">🛸 EXECUTIVE HOROLOGY LAB</span>
+            <button type="button" class="btn-fun-close" id="btnCloseFunCockpit" aria-label="Close Lab">✕</button>
+          </div>
+          <div class="fun-cockpit-body">
+            <!-- Feature 1: Day Horizon Meter -->
+            <div class="fun-widget-item">
+              <div class="fun-widget-row">
+                <span class="fun-widget-name">🌍 Earth Day Horizon</span>
+                <span class="fun-widget-val" id="dayProgressVal">86.4%</span>
+              </div>
+              <div class="fun-mini-bar-track">
+                <div class="fun-mini-bar-fill" id="dayProgressBar" style="width: 86%;"></div>
+              </div>
+              <span class="fun-widget-sub" id="dayCountdownSub">3h 12m until midnight</span>
+            </div>
+
+            <!-- Feature 2: Fun Supernova Particle Burst -->
+            <button type="button" class="fun-action-btn" id="btnFireSupernova">
+              <span class="fun-btn-icon">💥</span>
+              <div class="fun-btn-text">
+                <strong>Supernova Particle Burst</strong>
+                <small>Erupt radiant antigravity particles across screen</small>
+              </div>
+            </button>
+
+            <!-- Feature 3: Zen Minimalist Immersion Mode -->
+            <button type="button" class="fun-action-btn" id="btnToggleZenMode">
+              <span class="fun-btn-icon">🧘</span>
+              <div class="fun-btn-text">
+                <strong id="zenModeLabel">Zen Immersion Mode</strong>
+                <small>Hide chrome, float colossal clock in ambient void</small>
+              </div>
+            </button>
+
+            <!-- Feature 4: Instant Ambient Soundscapes -->
+            <div class="fun-soundscapes-section">
+              <div class="fun-soundscapes-label">🎧 INSTANT AMBIENT SOUNDSCAPES</div>
+              <div class="fun-soundscapes-row">
+                <button type="button" class="fun-sound-pill" data-sound="rain" title="Rain Ambience">🌧️ Rain</button>
+                <button type="button" class="fun-sound-pill" data-sound="space" title="Deep Space Void">🌌 Space</button>
+                <button type="button" class="fun-sound-pill" data-sound="waves" title="Ocean Waves">🌊 Waves</button>
+                <button type="button" class="fun-sound-pill" data-sound="campfire" title="Campfire">🔥 Fire</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="or-header-right">
         <!-- Mechanical Quartz / Acoustic Tick Toggle -->
         <button type="button" class="btn-topbar-desktop" id="btnAcousticTick" title="Toggle Mechanical Escapement / Quartz Tick Sound">
@@ -137,9 +200,11 @@
           <div class="chrome timer-digits-huge" id="timerDigits">
             <!-- Formatted via chromeHTML() in JS -->
           </div>
-          <!-- Progress bar -->
-          <div class="progress-container">
-            <div class="progress-bar-fill" id="timerProgressBar" style="width: 100%"></div>
+          <!-- Progress bar with Luminous Comet Head -->
+          <div class="progress-container" id="timerProgressTrack" title="Timer Visual Duration Progress">
+            <div class="progress-bar-fill" id="timerProgressBar" style="width: 100%">
+              <span class="progress-comet-head" id="progressCometHead"></span>
+            </div>
           </div>
         </div>
 
@@ -408,6 +473,6 @@
   <audio id="alarmAudioElement" preload="auto" src="sounds/piano.mp3"></audio>
 
   <!-- Relative JavaScript (with cache-bust versioning) -->
-  <script src="app.js?v=5.0"></script>
+  <script src="app.js?v=6.0"></script>
 </body>
 </html>
