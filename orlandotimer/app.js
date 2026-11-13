@@ -12,26 +12,45 @@
   'use strict';
 
   // ══════════════════════════════════════════════════════════════════════════
-  // 1. BESPOKE THEMES DEFINITION (17 WORLD-CLASS HOROLOGY THEMES)
+  // 1. BESPOKE THEMES DEFINITION (30 WORLD-CLASS HOROLOGY THEMES)
   // ══════════════════════════════════════════════════════════════════════════
   const THEMES = [
-    "platinum",         // Pure Platinum
-    "gold",             // Royal 24K Radiant Gold
-    "royal-sapphire",   // Royal Sapphire & Cobalt Chrono
-    "crimson-laser",    // Cyberpunk Crimson Laser
-    "obsidian-noir",    // Titanium Obsidian Noir
-    "solis-gold",       // Solis Radiant 18K Yellow Gold
-    "rainbow",          // Prismatic Rainbow
-    "chrome-3d",        // Executive Chrome 3D
-    "cyber-emerald",    // Cyberpunk Emerald Matrix
-    "ice-titanium",     // Glacial Titanium & Ice Blue
-    "amethyst",         // Imperial Amethyst Purple
-    "sunset-rose",      // Sunset Rose Gold
-    "minimal-white",    // Pure Minimalist Studio White
-    "chronometer-din",  // German Chronometer DIN
-    "sunset-amber",     // Blazing Sunset Amber
-    "midnight-gold",    // Midnight Gold Dual-Tone Rim
-    "green-nature"      // Green Nature Matrix
+    // Precious Metals & Luxury (7)
+    "platinum",
+    "gold",
+    "solis-gold",
+    "sunset-rose",
+    "chrome-3d",
+    "midnight-gold",
+    "liquid-mercury",
+    // Cyberpunk & Synthwave (6)
+    "crimson-laser",
+    "cyber-emerald",
+    "ice-titanium",
+    "rainbow",
+    "tokyo-neon",
+    "cyber-matrix-rain",
+    // Horology & Grand Prix (4)
+    "royal-sapphire",
+    "chronometer-din",
+    "monaco-racing",
+    "carbon-forged",
+    // Deep Space & Cosmic (5)
+    "supernova-crimson",
+    "quantum-violet",
+    "amethyst",
+    "solaris-plasma",
+    "deep-ocean-abyss",
+    // Minimalist & Monolith (3)
+    "minimal-white",
+    "obsidian-noir",
+    "stealth-matte-black",
+    // Organic & Natural Wonders (5)
+    "green-nature",
+    "arctic-aurora",
+    "desert-dune",
+    "sakura-blossom",
+    "sunset-amber"
   ];
 
   const THEME_DATA = {
@@ -51,30 +70,6 @@
       gradient: "linear-gradient(135deg, #FFFFFF 0%, #F5E5B8 25%, #D9B95C 60%, #997B28 100%)",
       glow: "rgba(217, 185, 92, 0.55)"
     },
-    "royal-sapphire": {
-      name: "Royal Sapphire & Cobalt Chrono",
-      category: "cyber",
-      desc: "Deep ocean cobalt crystal & electric sapphire chronometer",
-      swatch: "#3B82F6",
-      gradient: "linear-gradient(135deg, #93C5FD 0%, #3B82F6 50%, #1D4ED8 100%)",
-      glow: "rgba(59, 130, 246, 0.55)"
-    },
-    "crimson-laser": {
-      name: "Cyberpunk Crimson Laser",
-      category: "cyber",
-      desc: "High-voltage neon red laser grid & tachyon beam aura",
-      swatch: "#EF4444",
-      gradient: "linear-gradient(135deg, #FCA5A5 0%, #EF4444 50%, #991B1B 100%)",
-      glow: "rgba(239, 68, 68, 0.6)"
-    },
-    "obsidian-noir": {
-      name: "Titanium Obsidian Noir",
-      category: "chrono",
-      desc: "Stealth DLC matte charcoal & brushed titanium chassis",
-      swatch: "#94A3B8",
-      gradient: "linear-gradient(135deg, #CBD5E1 0%, #64748B 50%, #1E293B 100%)",
-      glow: "rgba(148, 163, 184, 0.4)"
-    },
     "solis-gold": {
       name: "Solis Radiant 18K Gold",
       category: "metals",
@@ -83,13 +78,13 @@
       gradient: "linear-gradient(135deg, #FEF08A 0%, #EAB308 50%, #854D0E 100%)",
       glow: "rgba(234, 179, 8, 0.55)"
     },
-    "rainbow": {
-      name: "Prismatic Rainbow",
-      category: "cyber",
-      desc: "Iridescent chromatic dispersion & hyper-spectrum wave",
-      swatch: "#FD79A8",
-      gradient: "linear-gradient(135deg, #FF6B6B 0%, #FECA57 25%, #48DBFB 50%, #FF9FF3 75%, #54A0FF 100%)",
-      glow: "rgba(253, 121, 168, 0.6)"
+    "sunset-rose": {
+      name: "Sunset Rose Gold",
+      category: "metals",
+      desc: "Venetian rose gold alloy & warm twilight copper glow",
+      swatch: "#FB7185",
+      gradient: "linear-gradient(135deg, #FECDD3 0%, #FB7185 50%, #9F1239 100%)",
+      glow: "rgba(251, 113, 133, 0.55)"
     },
     "chrome-3d": {
       name: "Executive Chrome 3D",
@@ -98,6 +93,30 @@
       swatch: "#E2E8F0",
       gradient: "linear-gradient(135deg, #FFFFFF 0%, #CBD5E1 50%, #64748B 100%)",
       glow: "rgba(226, 232, 240, 0.5)"
+    },
+    "midnight-gold": {
+      name: "Midnight Gold Dual-Tone Rim",
+      category: "metals",
+      desc: "Deep obsidian navy dial with 24K gilded fluted rim",
+      swatch: "#F5E5B8",
+      gradient: "linear-gradient(135deg, #FFFFFF 0%, #D9B95C 40%, #1E3A8A 100%)",
+      glow: "rgba(217, 185, 92, 0.5)"
+    },
+    "liquid-mercury": {
+      name: "Liquid Quicksilver Mercury",
+      category: "metals",
+      desc: "Fluid mirror chrome with dynamic liquid specular highlights",
+      swatch: "#FFFFFF",
+      gradient: "linear-gradient(135deg, #FFFFFF 0%, #CBD5E1 40%, #64748B 80%, #FFFFFF 100%)",
+      glow: "rgba(255, 255, 255, 0.65)"
+    },
+    "crimson-laser": {
+      name: "Cyberpunk Crimson Laser",
+      category: "cyber",
+      desc: "High-voltage neon red laser grid & tachyon beam aura",
+      swatch: "#EF4444",
+      gradient: "linear-gradient(135deg, #FCA5A5 0%, #EF4444 50%, #991B1B 100%)",
+      glow: "rgba(239, 68, 68, 0.6)"
     },
     "cyber-emerald": {
       name: "Cyberpunk Emerald Matrix",
@@ -115,29 +134,37 @@
       gradient: "linear-gradient(135deg, #BAE6FD 0%, #38BDF8 50%, #0369A1 100%)",
       glow: "rgba(56, 189, 248, 0.55)"
     },
-    "amethyst": {
-      name: "Imperial Amethyst Purple",
+    "rainbow": {
+      name: "Prismatic Rainbow",
+      category: "cyber",
+      desc: "Iridescent chromatic dispersion & hyper-spectrum wave",
+      swatch: "#FD79A8",
+      gradient: "linear-gradient(135deg, #FF6B6B 0%, #FECA57 25%, #48DBFB 50%, #FF9FF3 75%, #54A0FF 100%)",
+      glow: "rgba(253, 121, 168, 0.6)"
+    },
+    "tokyo-neon": {
+      name: "Tokyo Cyber-Night 2099",
+      category: "cyber",
+      desc: "Shibuya midnight dual cyan and electric magenta synthwave neon",
+      swatch: "#00F0FF",
+      gradient: "linear-gradient(135deg, #E0FCFF 0%, #00F0FF 50%, #FF007F 100%)",
+      glow: "rgba(0, 240, 255, 0.65)"
+    },
+    "cyber-matrix-rain": {
+      name: "Neural Matrix Rain 2.0",
+      category: "cyber",
+      desc: "Cathode green terminal phosphor & cascading data glyph stream",
+      swatch: "#39FF14",
+      gradient: "linear-gradient(135deg, #EBFFE6 0%, #39FF14 50%, #008F11 100%)",
+      glow: "rgba(57, 255, 20, 0.7)"
+    },
+    "royal-sapphire": {
+      name: "Royal Sapphire & Cobalt Chrono",
       category: "chrono",
-      desc: "Imperial dynasty violet crystal & ultraviolet corona",
-      swatch: "#A855F7",
-      gradient: "linear-gradient(135deg, #E9D5FF 0%, #A855F7 50%, #6B21A8 100%)",
-      glow: "rgba(168, 85, 247, 0.55)"
-    },
-    "sunset-rose": {
-      name: "Sunset Rose Gold",
-      category: "metals",
-      desc: "Venetian rose gold alloy & warm twilight copper glow",
-      swatch: "#FB7185",
-      gradient: "linear-gradient(135deg, #FECDD3 0%, #FB7185 50%, #9F1239 100%)",
-      glow: "rgba(251, 113, 133, 0.55)"
-    },
-    "minimal-white": {
-      name: "Pure Minimalist Studio White",
-      category: "minimal",
-      desc: "Ultra-clean high-contrast architectural luminescence",
-      swatch: "#FFFFFF",
-      gradient: "linear-gradient(135deg, #FFFFFF 0%, #F1F5F9 50%, #CBD5E1 100%)",
-      glow: "rgba(255, 255, 255, 0.5)"
+      desc: "Deep ocean cobalt crystal & electric sapphire chronometer",
+      swatch: "#3B82F6",
+      gradient: "linear-gradient(135deg, #93C5FD 0%, #3B82F6 50%, #1D4ED8 100%)",
+      glow: "rgba(59, 130, 246, 0.55)"
     },
     "chronometer-din": {
       name: "German Chronometer DIN",
@@ -147,21 +174,85 @@
       gradient: "linear-gradient(135deg, #FFEDD5 0%, #F97316 50%, #9A3412 100%)",
       glow: "rgba(249, 115, 22, 0.55)"
     },
-    "sunset-amber": {
-      name: "Blazing Sunset Amber",
+    "monaco-racing": {
+      name: "Monaco Heritage Chrono",
       category: "chrono",
-      desc: "Molten volcanic horizon fire & liquid amber warmth",
-      swatch: "#F59E0B",
-      gradient: "linear-gradient(135deg, #FEF3C7 0%, #F59E0B 50%, #78350F 100%)",
-      glow: "rgba(245, 158, 11, 0.55)"
+      desc: "British racing green paddock with vintage gilded brass accents",
+      swatch: "#E5C07B",
+      gradient: "linear-gradient(135deg, #FFF6E5 0%, #E5C07B 50%, #8A6828 100%)",
+      glow: "rgba(229, 192, 123, 0.55)"
     },
-    "midnight-gold": {
-      name: "Midnight Gold Dual-Tone Rim",
-      category: "metals",
-      desc: "Deep obsidian navy dial with 24K gilded fluted rim",
-      swatch: "#F5E5B8",
-      gradient: "linear-gradient(135deg, #FFFFFF 0%, #D9B95C 40%, #1E3A8A 100%)",
-      glow: "rgba(217, 185, 92, 0.5)"
+    "carbon-forged": {
+      name: "Forged Hypercar Carbon",
+      category: "chrono",
+      desc: "High-gloss marbled carbon composite with acid yellow racing highlights",
+      swatch: "#E2F800",
+      gradient: "linear-gradient(135deg, #FAFFCC 0%, #E2F800 50%, #768000 100%)",
+      glow: "rgba(226, 248, 0, 0.6)"
+    },
+    "supernova-crimson": {
+      name: "Supernova Cosmic Flare",
+      category: "cosmic",
+      desc: "Blazing cosmic plasma explosion into stellar magenta-crimson",
+      swatch: "#FF0055",
+      gradient: "linear-gradient(135deg, #FFE4EF 0%, #FF0055 50%, #990033 100%)",
+      glow: "rgba(255, 0, 85, 0.65)"
+    },
+    "quantum-violet": {
+      name: "Quantum Singularity Void",
+      category: "cosmic",
+      desc: "Deep gravitational void with electric tachyon violet halo",
+      swatch: "#8B5CF6",
+      gradient: "linear-gradient(135deg, #EDE9FE 0%, #8B5CF6 50%, #4C1D95 100%)",
+      glow: "rgba(139, 92, 246, 0.6)"
+    },
+    "amethyst": {
+      name: "Imperial Amethyst Purple",
+      category: "cosmic",
+      desc: "Imperial dynasty violet crystal & ultraviolet corona",
+      swatch: "#A855F7",
+      gradient: "linear-gradient(135deg, #E9D5FF 0%, #A855F7 50%, #6B21A8 100%)",
+      glow: "rgba(168, 85, 247, 0.55)"
+    },
+    "solaris-plasma": {
+      name: "Solaris Fusion 24K Plasma",
+      category: "cosmic",
+      desc: "Thermonuclear white-hot solar core with 24K corona flare",
+      swatch: "#FF6600",
+      gradient: "linear-gradient(135deg, #FFF0E6 0%, #FF6600 50%, #FFCC00 100%)",
+      glow: "rgba(255, 102, 0, 0.65)"
+    },
+    "deep-ocean-abyss": {
+      name: "Mariana Oceanic Abyss",
+      category: "cosmic",
+      desc: "11,000m abyssal oceanic trench with electric cyan bioluminescence",
+      swatch: "#00E5FF",
+      gradient: "linear-gradient(135deg, #E0FCFF 0%, #00E5FF 50%, #0044B3 100%)",
+      glow: "rgba(0, 229, 255, 0.65)"
+    },
+    "minimal-white": {
+      name: "Pure Minimalist Studio White",
+      category: "minimal",
+      desc: "Ultra-clean high-contrast architectural luminescence",
+      swatch: "#FFFFFF",
+      gradient: "linear-gradient(135deg, #FFFFFF 0%, #F1F5F9 50%, #CBD5E1 100%)",
+      glow: "rgba(255, 255, 255, 0.5)"
+    },
+    "obsidian-noir": {
+      name: "Titanium Obsidian Noir",
+      category: "minimal",
+      desc: "Stealth DLC matte charcoal & brushed titanium chassis",
+      swatch: "#94A3B8",
+      gradient: "linear-gradient(135deg, #CBD5E1 0%, #64748B 50%, #1E293B 100%)",
+      glow: "rgba(148, 163, 184, 0.4)"
+    },
+    "stealth-matte-black": {
+      name: "Vanta Noir Monolith",
+      category: "minimal",
+      desc: "99.9% light-absorbent true black stealth with razor silver rim",
+      swatch: "#E5E7EB",
+      gradient: "linear-gradient(135deg, #FFFFFF 0%, #D1D5DB 50%, #4B5563 100%)",
+      glow: "rgba(255, 255, 255, 0.35)"
     },
     "green-nature": {
       name: "Green Nature Matrix",
@@ -170,6 +261,38 @@
       swatch: "#22C55E",
       gradient: "linear-gradient(135deg, #DCFCE7 0%, #22C55E 50%, #14532D 100%)",
       glow: "rgba(34, 197, 94, 0.55)"
+    },
+    "arctic-aurora": {
+      name: "Arctic Borealis Aurora",
+      category: "nature",
+      desc: "Ethereal polar night sky with undulating emerald-cyan ribbons",
+      swatch: "#00FFA3",
+      gradient: "linear-gradient(135deg, #E6FFF6 0%, #00FFA3 50%, #00B3FF 100%)",
+      glow: "rgba(0, 255, 163, 0.6)"
+    },
+    "desert-dune": {
+      name: "Sahara Rose & Terracotta",
+      category: "nature",
+      desc: "Warm champagne desert sand, sun-baked terracotta & bronze",
+      swatch: "#E2B18A",
+      gradient: "linear-gradient(135deg, #FFF3EB 0%, #E2B18A 50%, #995530 100%)",
+      glow: "rgba(226, 177, 138, 0.55)"
+    },
+    "sakura-blossom": {
+      name: "Kyoto Imperial Sakura",
+      category: "nature",
+      desc: "Delicate spring blossom pink, rose quartz & porcelain white",
+      swatch: "#F472B6",
+      gradient: "linear-gradient(135deg, #FDF2F8 0%, #F472B6 50%, #9D174D 100%)",
+      glow: "rgba(244, 114, 182, 0.55)"
+    },
+    "sunset-amber": {
+      name: "Blazing Sunset Amber",
+      category: "nature",
+      desc: "Molten volcanic horizon fire & liquid amber warmth",
+      swatch: "#F59E0B",
+      gradient: "linear-gradient(135deg, #FEF3C7 0%, #F59E0B 50%, #78350F 100%)",
+      glow: "rgba(245, 158, 11, 0.55)"
     }
   };
 
@@ -181,10 +304,17 @@
   });
 
   // ══════════════════════════════════════════════════════════════════════════
-  // 1B. CYBERNETIC WEB AUDIO SYNTHESIZER (Sci-Fi Micro-Ticks & Confirmations)
+  // 1B. CYBERNETIC WEB AUDIO SYNTHESIZER (Horology Escapement & Sci-Fi Engine)
   // ══════════════════════════════════════════════════════════════════════════
+  let acousticTickEnabled = false;
+  try {
+    acousticTickEnabled = localStorage.getItem('orlando-acoustic-tick') === 'true';
+  } catch(e) {}
+
   const AudioHUD = (function () {
     let ctx = null;
+    let tickCount = 0;
+
     function getCtx() {
       if (!ctx) {
         const AudioCtor = window.AudioContext || window.webkitAudioContext;
@@ -212,6 +342,26 @@
           gain.connect(c.destination);
           osc.start();
           osc.stop(c.currentTime + 0.025);
+        } catch (e) {}
+      },
+      escapementTick: function () {
+        try {
+          const c = getCtx();
+          if (!c) return;
+          tickCount++;
+          // Alternate subtle pitch for authentic Swiss mechanical tick-tock
+          const freq = (tickCount % 2 === 0) ? 1400 : 1750;
+          const osc = c.createOscillator();
+          const gain = c.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, c.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(freq * 0.4, c.currentTime + 0.015);
+          gain.gain.setValueAtTime(0.03, c.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + 0.015);
+          osc.connect(gain);
+          gain.connect(c.destination);
+          osc.start();
+          osc.stop(c.currentTime + 0.018);
         } catch (e) {}
       },
       confirm: function () {
@@ -267,7 +417,7 @@
     }
 
     if (window.updateParticleThemeColor) {
-      window.updateParticleThemeColor(THEME_SWATCHES[theme]);
+      window.updateParticleThemeColor(THEME_SWATCHES[theme], THEME_DATA[theme]?.category || 'metals');
     }
 
     try {
@@ -360,16 +510,40 @@
     AudioHUD.tick(600);
   }
 
-  function renderHoloCards(filterCategory = 'all') {
+  let holoSearchQuery = '';
+
+  function renderHoloCards(filterCategory = currentFilter, searchQuery = holoSearchQuery) {
     if (!holoCardsGrid) return;
     holoCardsGrid.innerHTML = '';
 
     const currentSelected = activeVaultTarget === 'theme' ? currentAppTheme : currentClockStyle;
 
-    THEMES.forEach((themeKey) => {
+    const filtered = THEMES.filter((themeKey) => {
       const data = THEME_DATA[themeKey];
-      if (filterCategory !== 'all' && data.category !== filterCategory) return;
+      if (filterCategory !== 'all' && data.category !== filterCategory) return false;
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        const matchName = data.name.toLowerCase().includes(query);
+        const matchDesc = data.desc.toLowerCase().includes(query);
+        const matchCat = data.category.toLowerCase().includes(query);
+        if (!matchName && !matchDesc && !matchCat) return false;
+      }
+      return true;
+    });
 
+    if (filtered.length === 0) {
+      holoCardsGrid.innerHTML = `
+        <div style="grid-column: 1 / -1; padding: 48px 20px; text-align: center; color: var(--theme-text-dim);">
+          <div style="font-size: 36px; margin-bottom: 8px;">🛸</div>
+          <div style="font-family: var(--mono); font-size: 13px; font-weight: 800; color: #FFFFFF; letter-spacing: 1px;">NO THEMES FOUND</div>
+          <div style="font-size: 12px; color: var(--theme-text-mute); margin-top: 6px;">Try searching for "gold", "neon", "space", "racing", or "minimal"</div>
+        </div>
+      `;
+      return;
+    }
+
+    filtered.forEach((themeKey) => {
+      const data = THEME_DATA[themeKey];
       const card = document.createElement('div');
       card.className = 'holo-theme-card' + (themeKey === currentSelected ? ' active' : '');
       card.setAttribute('role', 'option');
@@ -397,7 +571,7 @@
         }
         if (activeVaultTarget === 'theme') {
           document.body.setAttribute('data-app-theme', themeKey);
-          if (window.updateParticleThemeColor) window.updateParticleThemeColor(data.swatch);
+          if (window.updateParticleThemeColor) window.updateParticleThemeColor(data.swatch, data.category);
         } else if (activeVaultTarget === 'clock') {
           document.body.setAttribute('data-clock-style', themeKey);
         }
@@ -428,8 +602,72 @@
         pill.classList.add('active');
         currentFilter = pill.getAttribute('data-category') || 'all';
         AudioHUD.tick(1050);
-        renderHoloCards(currentFilter);
+        renderHoloCards(currentFilter, holoSearchQuery);
       });
+    });
+  }
+
+  // Search input binding
+  const holoSearchInput = document.getElementById('holoSearchInput');
+  const btnClearSearch = document.getElementById('btnClearSearch');
+  if (holoSearchInput) {
+    holoSearchInput.addEventListener('input', (e) => {
+      holoSearchQuery = e.target.value.trim().toLowerCase();
+      if (btnClearSearch) btnClearSearch.style.display = holoSearchQuery ? 'flex' : 'none';
+      renderHoloCards(currentFilter, holoSearchQuery);
+    });
+  }
+  if (btnClearSearch) {
+    btnClearSearch.addEventListener('click', () => {
+      if (holoSearchInput) holoSearchInput.value = '';
+      holoSearchQuery = '';
+      btnClearSearch.style.display = 'none';
+      renderHoloCards(currentFilter, '');
+    });
+  }
+
+  // Quantum Shuffle
+  const btnQuantumShuffle = document.getElementById('btnQuantumShuffle');
+  if (btnQuantumShuffle) {
+    btnQuantumShuffle.addEventListener('click', () => {
+      const randomApp = THEMES[Math.floor(Math.random() * THEMES.length)];
+      const randomClock = THEMES[Math.floor(Math.random() * THEMES.length)];
+      applyAppTheme(randomApp);
+      applyClockStyle(randomClock);
+      savedActiveTheme = randomApp;
+      savedActiveClock = randomClock;
+      AudioHUD.confirm();
+      if (holoStatusText) {
+        holoStatusText.textContent = `🎲 Quantum Harmonized: ${THEME_NAMES[randomApp]} (App) + ${THEME_NAMES[randomClock]} (Clock)`;
+      }
+      renderHoloCards(currentFilter, holoSearchQuery);
+      setTimeout(() => closeHoloVault(true), 380);
+    });
+  }
+
+  // Acoustic Tick button binding
+  const btnAcousticTick = document.getElementById('btnAcousticTick');
+  const acousticDot = document.getElementById('acousticDot');
+  const acousticTickText = document.getElementById('acousticTickText');
+
+  function updateAcousticTickUI() {
+    if (acousticDot) {
+      if (acousticTickEnabled) acousticDot.classList.add('active');
+      else acousticDot.classList.remove('active');
+    }
+    if (acousticTickText) {
+      acousticTickText.textContent = acousticTickEnabled ? 'Tick: ON' : 'Tick: OFF';
+    }
+    try {
+      localStorage.setItem('orlando-acoustic-tick', acousticTickEnabled ? 'true' : 'false');
+    } catch(e) {}
+  }
+  if (btnAcousticTick) {
+    updateAcousticTickUI();
+    btnAcousticTick.addEventListener('click', () => {
+      acousticTickEnabled = !acousticTickEnabled;
+      updateAcousticTickUI();
+      AudioHUD.tick(acousticTickEnabled ? 1200 : 600);
     });
   }
 
@@ -719,9 +957,17 @@
       const timeStr = formatTimeHHMMSS(timerRemaining);
       timerDigitsEl.innerHTML = chromeHTML(timeStr);
     }
+    const chronoArc = document.getElementById('chronoProgressArc');
     if (timerProgressBar && timerTotalDuration > 0) {
       const pct = Math.max(0, Math.min(100, (timerRemaining / timerTotalDuration) * 100));
       timerProgressBar.style.width = `${pct}%`;
+      if (chronoArc) {
+        // Path length is approximately 1050px
+        const strokeOffset = 1050 * (1 - (pct / 100));
+        chronoArc.style.strokeDashoffset = strokeOffset;
+      }
+    } else if (chronoArc) {
+      chronoArc.style.strokeDashoffset = 0;
     }
   }
 
@@ -770,9 +1016,19 @@
 
     requestWakeLock();
 
+    let lastTickSecond = -1;
     timerInterval = setInterval(() => {
       const diffMs = timerEndTime - Date.now();
-      timerRemaining = Math.max(0, Math.round(diffMs / 1000));
+      const currentSec = Math.max(0, Math.round(diffMs / 1000));
+
+      if (currentSec !== lastTickSecond) {
+        lastTickSecond = currentSec;
+        if (acousticTickEnabled && currentSec > 0) {
+          AudioHUD.escapementTick();
+        }
+      }
+
+      timerRemaining = currentSec;
       updateTimerDisplay();
 
       if (timerRemaining <= 0) {
@@ -1314,10 +1570,14 @@
     const particleCount = 42;
     let mouse = { x: -1000, y: -1000, radius: 120 };
     let currentParticleColor = 'rgba(217, 185, 92, 0.45)';
+    let currentParticleCategory = 'metals';
 
-    window.updateParticleThemeColor = function (hexColor) {
-      if (!hexColor) return;
-      currentParticleColor = hexColor;
+    window.updateParticleThemeColor = function (hexColor, category = 'metals') {
+      if (hexColor) currentParticleColor = hexColor;
+      if (category) {
+        currentParticleCategory = category;
+        initParticles();
+      }
     };
 
     function resizeCanvas() {
@@ -1327,46 +1587,114 @@
 
     function initParticles() {
       particles = [];
-      for (let i = 0; i < particleCount; i++) {
-        particles.push({
-          x: Math.random() * width,
-          y: Math.random() * height,
-          vx: (Math.random() - 0.5) * 0.4,
-          vy: (Math.random() - 0.5) * 0.4,
-          size: Math.random() * 2 + 1,
-          alpha: Math.random() * 0.5 + 0.2
-        });
+      const count = currentParticleCategory === 'cyber' ? 55 : (currentParticleCategory === 'cosmic' ? 60 : 42);
+
+      for (let i = 0; i < count; i++) {
+        if (currentParticleCategory === 'cosmic') {
+          // Radial warp drive
+          const angle = Math.random() * Math.PI * 2;
+          const radius = Math.random() * (Math.min(width, height) * 0.45);
+          particles.push({
+            x: width / 2 + Math.cos(angle) * radius,
+            y: height / 2 + Math.sin(angle) * radius,
+            angle: angle,
+            speed: Math.random() * 1.8 + 0.6,
+            size: Math.random() * 2 + 1,
+            alpha: Math.random() * 0.6 + 0.2
+          });
+        } else if (currentParticleCategory === 'cyber') {
+          // Matrix digital rain
+          particles.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            speed: Math.random() * 2.5 + 1.2,
+            length: Math.random() * 14 + 6,
+            size: Math.random() * 1.5 + 1,
+            alpha: Math.random() * 0.7 + 0.3
+          });
+        } else {
+          // Luxury floating orbs
+          particles.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            vx: (Math.random() - 0.5) * 0.45,
+            vy: (Math.random() - 0.5) * 0.45,
+            size: Math.random() * 2.2 + 1,
+            alpha: Math.random() * 0.5 + 0.2
+          });
+        }
       }
     }
 
     function renderParticles() {
       if (!ctx) return;
       ctx.clearRect(0, 0, width, height);
+
       ctx.fillStyle = currentParticleColor;
+      ctx.strokeStyle = currentParticleColor;
+
+      const cx = width / 2;
+      const cy = height / 2;
 
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
-        const dx = p.x - mouse.x;
-        const dy = p.y - mouse.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
 
-        if (dist < mouse.radius && dist > 0) {
-          const force = (mouse.radius - dist) / mouse.radius;
-          p.x += (dx / dist) * force * 3;
-          p.y += (dy / dist) * force * 3;
+        if (currentParticleCategory === 'cosmic') {
+          // Expand radially outward from center
+          p.x += Math.cos(p.angle) * p.speed;
+          p.y += Math.sin(p.angle) * p.speed;
+          p.speed *= 1.01;
+
+          if (p.x < 0 || p.x > width || p.y < 0 || p.y > height) {
+            p.angle = Math.random() * Math.PI * 2;
+            const r = Math.random() * 40;
+            p.x = cx + Math.cos(p.angle) * r;
+            p.y = cy + Math.sin(p.angle) * r;
+            p.speed = Math.random() * 1.4 + 0.6;
+          }
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fill();
+
+        } else if (currentParticleCategory === 'cyber') {
+          // Cascading digital rain stream
+          p.y += p.speed;
+          if (p.y > height) {
+            p.y = -p.length;
+            p.x = Math.random() * width;
+          }
+
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(p.x, p.y + p.length);
+          ctx.lineWidth = p.size;
+          ctx.stroke();
+
+        } else {
+          // Classic magnetic repulsion
+          const dx = p.x - mouse.x;
+          const dy = p.y - mouse.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < mouse.radius && dist > 0) {
+            const force = (mouse.radius - dist) / mouse.radius;
+            p.x += (dx / dist) * force * 3;
+            p.y += (dy / dist) * force * 3;
+          }
+
+          p.x += p.vx;
+          p.y += p.vy;
+
+          if (p.x < 0) p.x = width;
+          if (p.x > width) p.x = 0;
+          if (p.y < 0) p.y = height;
+          if (p.y > height) p.y = 0;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fill();
         }
-
-        p.x += p.vx;
-        p.y += p.vy;
-
-        if (p.x < 0) p.x = width;
-        if (p.x > width) p.x = 0;
-        if (p.y < 0) p.y = height;
-        if (p.y > height) p.y = 0;
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fill();
       }
 
       requestAnimationFrame(renderParticles);

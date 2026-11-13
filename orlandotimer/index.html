@@ -21,7 +21,7 @@
   <meta name="description" content="Orlando Timer — Executive 3-in-1 Timer, Stopwatch, and Alarm Horology Suite by Sir Orlando V. Pasion, Jr.">
 
   <!-- Relative Stylesheet (with cache-bust versioning) -->
-  <link rel="stylesheet" href="style.css?v=3.1">
+  <link rel="stylesheet" href="style.css?v=4.0">
 </head>
 <body data-app-theme="platinum" data-clock-style="platinum">
   <!-- Google Antigravity Signature Repulsive Particle Stage -->
@@ -38,6 +38,12 @@
         </div>
       </a>
       <div class="or-header-right">
+        <!-- Mechanical Quartz / Acoustic Tick Toggle -->
+        <button type="button" class="btn-topbar-desktop" id="btnAcousticTick" title="Toggle Mechanical Escapement / Quartz Tick Sound">
+          <span class="status-dot-audio" id="acousticDot"></span>
+          <span id="acousticTickText">Tick: OFF</span>
+        </button>
+
         <!-- Keep Screen Awake status button -->
         <button type="button" class="btn-topbar-desktop" id="btnWakeLock" title="Screen Wake Lock Status (Toggle)">
           <span class="status-dot-wake"></span>
@@ -121,10 +127,25 @@
       <!-- TAB 1: TIMER                               -->
       <!-- ========================================== -->
       <section class="tab-panel active" id="panel-timer" role="tabpanel" aria-labelledby="tab-timer">
-        <!-- Display Stage with HUGE Digits -->
+        <!-- Display Stage with HUGE Digits and Cybernetic Chrono Ring -->
         <div class="display-stage">
-          <div class="chrome timer-digits-huge" id="timerDigits">
-            <!-- Formatted via chromeHTML() in JS -->
+          <div class="chrono-hud-wrapper">
+            <svg class="chrono-hud-svg" viewBox="0 0 1000 280" preserveAspectRatio="none" aria-hidden="true">
+              <!-- Radial background track -->
+              <path class="chrono-track-arc" d="M 40,250 C 40,50 960,50 960,250" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="6" stroke-linecap="round" />
+              <!-- Animated glowing progress arc -->
+              <path id="chronoProgressArc" class="chrono-progress-arc" d="M 40,250 C 40,50 960,50 960,250" fill="none" stroke="url(#chronoGrad)" stroke-width="7" stroke-linecap="round" />
+              <defs>
+                <linearGradient id="chronoGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="var(--theme-primary)" stop-opacity="0.35" />
+                  <stop offset="50%" stop-color="var(--theme-primary)" stop-opacity="1" />
+                  <stop offset="100%" stop-color="var(--theme-accent)" stop-opacity="0.9" />
+                </linearGradient>
+              </defs>
+            </svg>
+            <div class="chrome timer-digits-huge" id="timerDigits">
+              <!-- Formatted via chromeHTML() in JS -->
+            </div>
           </div>
           <!-- Progress bar -->
           <div class="progress-container">
@@ -325,14 +346,28 @@
         </button>
       </div>
 
-      <!-- Category Filter Pills -->
+      <!-- Search & Quantum Shuffle Toolbar -->
+      <div class="holo-vault-toolbar">
+        <div class="holo-search-wrap">
+          <span class="holo-search-icon">🔍</span>
+          <input type="text" id="holoSearchInput" class="holo-search-input" placeholder="Search 30 themes (e.g. gold, neon, space, racing, carbon)..." autocomplete="off" spellcheck="false" aria-label="Search themes">
+          <button type="button" id="btnClearSearch" class="btn-clear-search" style="display:none;" title="Clear search">✕</button>
+        </div>
+        <button type="button" class="btn-quantum-shuffle" id="btnQuantumShuffle" title="Surprise Me: Harmonize random Theme + Clock Style">
+          <span class="shuffle-dice">🎲</span>
+          <span>Quantum Shuffle</span>
+        </button>
+      </div>
+
+      <!-- Category Filter Pills (7 Curated Categories for 30 Themes) -->
       <div class="holo-filter-bar">
-        <button type="button" class="holo-filter-pill active" data-category="all">All (17)</button>
-        <button type="button" class="holo-filter-pill" data-category="metals">Precious Metals</button>
-        <button type="button" class="holo-filter-pill" data-category="cyber">Cyberpunk & Sci-Fi</button>
-        <button type="button" class="holo-filter-pill" data-category="chrono">Horology & Chrono</button>
-        <button type="button" class="holo-filter-pill" data-category="minimal">Studio Minimalist</button>
-        <button type="button" class="holo-filter-pill" data-category="nature">Organic Nature</button>
+        <button type="button" class="holo-filter-pill active" data-category="all">All (30)</button>
+        <button type="button" class="holo-filter-pill" data-category="metals">Precious Metals & Luxury (7)</button>
+        <button type="button" class="holo-filter-pill" data-category="cyber">Cyberpunk & Synthwave (6)</button>
+        <button type="button" class="holo-filter-pill" data-category="chrono">Horology & Grand Prix (4)</button>
+        <button type="button" class="holo-filter-pill" data-category="cosmic">Deep Space & Cosmic (5)</button>
+        <button type="button" class="holo-filter-pill" data-category="minimal">Minimalist & Monolith (3)</button>
+        <button type="button" class="holo-filter-pill" data-category="nature">Organic & Nature (5)</button>
       </div>
 
       <!-- Holographic Grid of 17 Bespoke Cards -->
@@ -376,6 +411,6 @@
   <audio id="alarmAudioElement" preload="auto" src="sounds/piano.mp3"></audio>
 
   <!-- Relative JavaScript (with cache-bust versioning) -->
-  <script src="app.js?v=3.1"></script>
+  <script src="app.js?v=4.0"></script>
 </body>
 </html>

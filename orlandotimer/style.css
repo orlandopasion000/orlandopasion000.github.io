@@ -458,6 +458,279 @@ body[data-app-theme="green-nature"] {
   --theme-particle-color: rgba(34, 197, 94, 0.6);
 }
 
+/* Theme 18: Supernova Cosmic Flare */
+body[data-app-theme="supernova-crimson"] {
+  --theme-bg: #0c0208;
+  --theme-bg-gradient: radial-gradient(circle at 50% 22%, #380420 0%, #16020c 58%, #050003 100%);
+  --theme-surface-card: rgba(36, 6, 22, 0.82);
+  --theme-surface-glass: rgba(18, 3, 11, 0.92);
+  --theme-surface-interactive: rgba(255, 0, 85, 0.12);
+  --theme-primary: #FF0055;
+  --theme-primary-gradient: linear-gradient(135deg, #FFE4EF 0%, #FF0055 50%, #990033 100%);
+  --theme-primary-text: #FFFFFF;
+  --theme-primary-glow: rgba(255, 0, 85, 0.6);
+  --theme-accent: #FF3377;
+  --theme-accent-gradient: linear-gradient(135deg, #FFF0F5 0%, #FF3377 50%, #80002A 100%);
+  --theme-accent-glow: rgba(255, 51, 119, 0.45);
+  --theme-border: rgba(255, 0, 85, 0.35);
+  --theme-border-strong: rgba(255, 51, 119, 0.7);
+  --theme-text-dim: #FFD1E0;
+  --theme-text-mute: #8C2348;
+  --theme-particle-color: rgba(255, 0, 85, 0.65);
+}
+
+/* Theme 19: Quantum Singularity Void */
+body[data-app-theme="quantum-violet"] {
+  --theme-bg: #070211;
+  --theme-bg-gradient: radial-gradient(circle at 50% 22%, #220645 0%, #0d021c 58%, #030008 100%);
+  --theme-surface-card: rgba(24, 7, 48, 0.82);
+  --theme-surface-glass: rgba(12, 3, 24, 0.92);
+  --theme-surface-interactive: rgba(139, 92, 246, 0.14);
+  --theme-primary: #8B5CF6;
+  --theme-primary-gradient: linear-gradient(135deg, #EDE9FE 0%, #8B5CF6 50%, #4C1D95 100%);
+  --theme-primary-text: #FFFFFF;
+  --theme-primary-glow: rgba(139, 92, 246, 0.6);
+  --theme-accent: #C084FC;
+  --theme-accent-gradient: linear-gradient(135deg, #FAF5FF 0%, #C084FC 50%, #581C87 100%);
+  --theme-accent-glow: rgba(192, 132, 252, 0.45);
+  --theme-border: rgba(139, 92, 246, 0.35);
+  --theme-border-strong: rgba(192, 132, 252, 0.7);
+  --theme-text-dim: #E9D5FF;
+  --theme-text-mute: #6B21A8;
+  --theme-particle-color: rgba(168, 85, 247, 0.65);
+}
+
+/* Theme 20: Tokyo Cyber-Night 2099 */
+body[data-app-theme="tokyo-neon"] {
+  --theme-bg: #050713;
+  --theme-bg-gradient: radial-gradient(circle at 50% 22%, #0b1a38 0%, #040919 58%, #01030a 100%);
+  --theme-surface-card: rgba(10, 24, 52, 0.82);
+  --theme-surface-glass: rgba(5, 12, 26, 0.92);
+  --theme-surface-interactive: rgba(0, 240, 255, 0.14);
+  --theme-primary: #00F0FF;
+  --theme-primary-gradient: linear-gradient(135deg, #E0FCFF 0%, #00F0FF 50%, #FF007F 100%);
+  --theme-primary-text: #021118;
+  --theme-primary-glow: rgba(0, 240, 255, 0.6);
+  --theme-accent: #FF007F;
+  --theme-accent-gradient: linear-gradient(135deg, #FFE5F1 0%, #FF007F 50%, #00F0FF 100%);
+  --theme-accent-glow: rgba(255, 0, 127, 0.5);
+  --theme-border: rgba(0, 240, 255, 0.35);
+  --theme-border-strong: rgba(255, 0, 127, 0.65);
+  --theme-text-dim: #C5F9FF;
+  --theme-text-mute: #007A85;
+  --theme-particle-color: rgba(0, 240, 255, 0.7);
+}
+
+/* Theme 21: Monaco Heritage Chrono */
+body[data-app-theme="monaco-racing"] {
+  --theme-bg: #02120a;
+  --theme-bg-gradient: radial-gradient(circle at 50% 22%, #08331d 0%, #03170c 58%, #010804 100%);
+  --theme-surface-card: rgba(7, 38, 22, 0.82);
+  --theme-surface-glass: rgba(3, 20, 11, 0.92);
+  --theme-surface-interactive: rgba(229, 192, 123, 0.12);
+  --theme-primary: #E5C07B;
+  --theme-primary-gradient: linear-gradient(135deg, #FFF6E5 0%, #E5C07B 50%, #8A6828 100%);
+  --theme-primary-text: #171004;
+  --theme-primary-glow: rgba(229, 192, 123, 0.55);
+  --theme-accent: #10B981;
+  --theme-accent-gradient: linear-gradient(135deg, #ECFDF5 0%, #10B981 50%, #065F46 100%);
+  --theme-accent-glow: rgba(16, 185, 129, 0.4);
+  --theme-border: rgba(229, 192, 123, 0.35);
+  --theme-border-strong: rgba(229, 192, 123, 0.7);
+  --theme-text-dim: #F9EED4;
+  --theme-text-mute: #70551F;
+  --theme-particle-color: rgba(229, 192, 123, 0.6);
+}
+
+/* Theme 22: Arctic Borealis Aurora */
+body[data-app-theme="arctic-aurora"] {
+  --theme-bg: #010f13;
+  --theme-bg-gradient: radial-gradient(circle at 50% 22%, #043038 0%, #02151b 58%, #00080a 100%);
+  --theme-surface-card: rgba(4, 38, 46, 0.82);
+  --theme-surface-glass: rgba(2, 20, 24, 0.92);
+  --theme-surface-interactive: rgba(0, 255, 163, 0.12);
+  --theme-primary: #00FFA3;
+  --theme-primary-gradient: linear-gradient(135deg, #E6FFF6 0%, #00FFA3 50%, #00B3FF 100%);
+  --theme-primary-text: #011a12;
+  --theme-primary-glow: rgba(0, 255, 163, 0.55);
+  --theme-accent: #00E5FF;
+  --theme-accent-gradient: linear-gradient(135deg, #E6FCFF 0%, #00E5FF 50%, #00FFA3 100%);
+  --theme-accent-glow: rgba(0, 229, 255, 0.45);
+  --theme-border: rgba(0, 255, 163, 0.35);
+  --theme-border-strong: rgba(0, 229, 255, 0.7);
+  --theme-text-dim: #BAFFE4;
+  --theme-text-mute: #007D53;
+  --theme-particle-color: rgba(0, 255, 163, 0.65);
+}
+
+/* Theme 23: Sahara Rose & Terracotta */
+body[data-app-theme="desert-dune"] {
+  --theme-bg: #120906;
+  --theme-bg-gradient: radial-gradient(circle at 50% 22%, #381b12 0%, #1a0b06 58%, #080301 100%);
+  --theme-surface-card: rgba(40, 18, 11, 0.82);
+  --theme-surface-glass: rgba(20, 9, 5, 0.92);
+  --theme-surface-interactive: rgba(226, 177, 138, 0.12);
+  --theme-primary: #E2B18A;
+  --theme-primary-gradient: linear-gradient(135deg, #FFF3EB 0%, #E2B18A 50%, #995530 100%);
+  --theme-primary-text: #1f0f08;
+  --theme-primary-glow: rgba(226, 177, 138, 0.55);
+  --theme-accent: #D97706;
+  --theme-accent-gradient: linear-gradient(135deg, #FEF3C7 0%, #D97706 50%, #78350F 100%);
+  --theme-accent-glow: rgba(217, 119, 6, 0.4);
+  --theme-border: rgba(226, 177, 138, 0.35);
+  --theme-border-strong: rgba(226, 177, 138, 0.7);
+  --theme-text-dim: #F6DEC8;
+  --theme-text-mute: #7A4222;
+  --theme-particle-color: rgba(226, 177, 138, 0.6);
+}
+
+/* Theme 24: Forged Hypercar Carbon */
+body[data-app-theme="carbon-forged"] {
+  --theme-bg: #090b0e;
+  --theme-bg-gradient: radial-gradient(circle at 50% 22%, #1b2028 0%, #0c0f14 58%, #030406 100%);
+  --theme-surface-card: rgba(22, 27, 36, 0.82);
+  --theme-surface-glass: rgba(11, 14, 18, 0.92);
+  --theme-surface-interactive: rgba(226, 248, 0, 0.12);
+  --theme-primary: #E2F800;
+  --theme-primary-gradient: linear-gradient(135deg, #FAFFCC 0%, #E2F800 50%, #768000 100%);
+  --theme-primary-text: #111400;
+  --theme-primary-glow: rgba(226, 248, 0, 0.6);
+  --theme-accent: #00F0FF;
+  --theme-accent-gradient: linear-gradient(135deg, #E0FCFF 0%, #00F0FF 50%, #006B73 100%);
+  --theme-accent-glow: rgba(0, 240, 255, 0.4);
+  --theme-border: rgba(148, 163, 184, 0.3);
+  --theme-border-strong: rgba(226, 248, 0, 0.7);
+  --theme-text-dim: #E2E8F0;
+  --theme-text-mute: #64748B;
+  --theme-particle-color: rgba(226, 248, 0, 0.65);
+}
+
+/* Theme 25: Liquid Quicksilver Mercury */
+body[data-app-theme="liquid-mercury"] {
+  --theme-bg: #090c12;
+  --theme-bg-gradient: radial-gradient(circle at 50% 22%, #222b3d 0%, #0e121a 58%, #030406 100%);
+  --theme-surface-card: rgba(24, 32, 48, 0.82);
+  --theme-surface-glass: rgba(12, 16, 24, 0.92);
+  --theme-surface-interactive: rgba(255, 255, 255, 0.14);
+  --theme-primary: #FFFFFF;
+  --theme-primary-gradient: linear-gradient(135deg, #FFFFFF 0%, #CBD5E1 40%, #64748B 80%, #FFFFFF 100%);
+  --theme-primary-text: #05080e;
+  --theme-primary-glow: rgba(255, 255, 255, 0.65);
+  --theme-accent: #93C5FD;
+  --theme-accent-gradient: linear-gradient(135deg, #EFF6FF 0%, #93C5FD 50%, #1D4ED8 100%);
+  --theme-accent-glow: rgba(147, 197, 253, 0.45);
+  --theme-border: rgba(203, 213, 225, 0.4);
+  --theme-border-strong: rgba(255, 255, 255, 0.8);
+  --theme-text-dim: #E2E8F0;
+  --theme-text-mute: #64748B;
+  --theme-particle-color: rgba(255, 255, 255, 0.6);
+}
+
+/* Theme 26: Mariana Oceanic Abyss */
+body[data-app-theme="deep-ocean-abyss"] {
+  --theme-bg: #010814;
+  --theme-bg-gradient: radial-gradient(circle at 50% 22%, #041f48 0%, #020f24 58%, #00040a 100%);
+  --theme-surface-card: rgba(5, 25, 60, 0.82);
+  --theme-surface-glass: rgba(2, 12, 30, 0.92);
+  --theme-surface-interactive: rgba(0, 229, 255, 0.14);
+  --theme-primary: #00E5FF;
+  --theme-primary-gradient: linear-gradient(135deg, #E0FCFF 0%, #00E5FF 50%, #0044B3 100%);
+  --theme-primary-text: #01111c;
+  --theme-primary-glow: rgba(0, 229, 255, 0.6);
+  --theme-accent: #38BDF8;
+  --theme-accent-gradient: linear-gradient(135deg, #F0F9FF 0%, #38BDF8 50%, #0369A1 100%);
+  --theme-accent-glow: rgba(56, 189, 248, 0.45);
+  --theme-border: rgba(0, 229, 255, 0.35);
+  --theme-border-strong: rgba(0, 229, 255, 0.7);
+  --theme-text-dim: #BAF7FF;
+  --theme-text-mute: #02607D;
+  --theme-particle-color: rgba(0, 229, 255, 0.7);
+}
+
+/* Theme 27: Kyoto Imperial Sakura */
+body[data-app-theme="sakura-blossom"] {
+  --theme-bg: #12070c;
+  --theme-bg-gradient: radial-gradient(circle at 50% 22%, #381223 0%, #19060f 58%, #080105 100%);
+  --theme-surface-card: rgba(40, 14, 26, 0.82);
+  --theme-surface-glass: rgba(20, 6, 13, 0.92);
+  --theme-surface-interactive: rgba(244, 114, 182, 0.12);
+  --theme-primary: #F472B6;
+  --theme-primary-gradient: linear-gradient(135deg, #FDF2F8 0%, #F472B6 50%, #9D174D 100%);
+  --theme-primary-text: #210411;
+  --theme-primary-glow: rgba(244, 114, 182, 0.55);
+  --theme-accent: #FDA4AF;
+  --theme-accent-gradient: linear-gradient(135deg, #FFF1F2 0%, #FDA4AF 50%, #BE123C 100%);
+  --theme-accent-glow: rgba(253, 164, 175, 0.4);
+  --theme-border: rgba(244, 114, 182, 0.35);
+  --theme-border-strong: rgba(244, 114, 182, 0.7);
+  --theme-text-dim: #FCE7F3;
+  --theme-text-mute: #831843;
+  --theme-particle-color: rgba(244, 114, 182, 0.6);
+}
+
+/* Theme 28: Solaris Fusion 24K Plasma */
+body[data-app-theme="solaris-plasma"] {
+  --theme-bg: #140400;
+  --theme-bg-gradient: radial-gradient(circle at 50% 22%, #4a1500 0%, #200800 58%, #080200 100%);
+  --theme-surface-card: rgba(48, 16, 0, 0.82);
+  --theme-surface-glass: rgba(24, 8, 0, 0.92);
+  --theme-surface-interactive: rgba(255, 102, 0, 0.14);
+  --theme-primary: #FF6600;
+  --theme-primary-gradient: linear-gradient(135deg, #FFF0E6 0%, #FF6600 50%, #FFCC00 100%);
+  --theme-primary-text: #1a0800;
+  --theme-primary-glow: rgba(255, 102, 0, 0.65);
+  --theme-accent: #FFCC00;
+  --theme-accent-gradient: linear-gradient(135deg, #FFFFE6 0%, #FFCC00 50%, #CC4400 100%);
+  --theme-accent-glow: rgba(255, 204, 0, 0.5);
+  --theme-border: rgba(255, 102, 0, 0.4);
+  --theme-border-strong: rgba(255, 204, 0, 0.75);
+  --theme-text-dim: #FFE4D1;
+  --theme-text-mute: #803300;
+  --theme-particle-color: rgba(255, 102, 0, 0.7);
+}
+
+/* Theme 29: Vanta Noir Monolith */
+body[data-app-theme="stealth-matte-black"] {
+  --theme-bg: #000000;
+  --theme-bg-gradient: radial-gradient(circle at 50% 22%, #0d0d0d 0%, #040404 58%, #000000 100%);
+  --theme-surface-card: rgba(14, 14, 14, 0.9);
+  --theme-surface-glass: rgba(6, 6, 6, 0.96);
+  --theme-surface-interactive: rgba(255, 255, 255, 0.08);
+  --theme-primary: #E5E7EB;
+  --theme-primary-gradient: linear-gradient(135deg, #FFFFFF 0%, #D1D5DB 50%, #4B5563 100%);
+  --theme-primary-text: #000000;
+  --theme-primary-glow: rgba(255, 255, 255, 0.35);
+  --theme-accent: #9CA3AF;
+  --theme-accent-gradient: linear-gradient(135deg, #F3F4F6 0%, #9CA3AF 50%, #374151 100%);
+  --theme-accent-glow: rgba(156, 163, 175, 0.25);
+  --theme-border: rgba(255, 255, 255, 0.16);
+  --theme-border-strong: rgba(255, 255, 255, 0.5);
+  --theme-text-dim: #9CA3AF;
+  --theme-text-mute: #4B5563;
+  --theme-particle-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Theme 30: Neural Matrix Rain 2.0 */
+body[data-app-theme="cyber-matrix-rain"] {
+  --theme-bg: #000b03;
+  --theme-bg-gradient: radial-gradient(circle at 50% 22%, #00360d 0%, #001605 58%, #000501 100%);
+  --theme-surface-card: rgba(0, 36, 12, 0.82);
+  --theme-surface-glass: rgba(0, 18, 6, 0.92);
+  --theme-surface-interactive: rgba(57, 255, 20, 0.14);
+  --theme-primary: #39FF14;
+  --theme-primary-gradient: linear-gradient(135deg, #EBFFE6 0%, #39FF14 50%, #008F11 100%);
+  --theme-primary-text: #001a04;
+  --theme-primary-glow: rgba(57, 255, 20, 0.65);
+  --theme-accent: #00FF66;
+  --theme-accent-gradient: linear-gradient(135deg, #E6FFF0 0%, #00FF66 50%, #006622 100%);
+  --theme-accent-glow: rgba(0, 255, 102, 0.5);
+  --theme-border: rgba(57, 255, 20, 0.4);
+  --theme-border-strong: rgba(57, 255, 20, 0.75);
+  --theme-text-dim: #D1FFC7;
+  --theme-text-mute: #006614;
+  --theme-particle-color: rgba(57, 255, 20, 0.75);
+}
+
 /* ══════════════════════════════════════════════════════════════════════════
    3. HEADER & EXECUTIVE CUSTOMIZATION COCKPIT
    ══════════════════════════════════════════════════════════════════════════ */
@@ -824,6 +1097,116 @@ body[data-app-theme="green-nature"] {
   color: var(--theme-text-mute);
 }
 
+/* Search & Quantum Shuffle Toolbar */
+.holo-vault-toolbar {
+  padding: 14px 28px;
+  background: rgba(10, 14, 24, 0.6);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.holo-search-wrap {
+  flex: 1;
+  min-width: 260px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.holo-search-icon {
+  position: absolute;
+  left: 14px;
+  font-size: 13px;
+  color: var(--theme-text-mute);
+  pointer-events: none;
+}
+
+.holo-search-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 9999px;
+  padding: 8px 36px 8px 38px;
+  font-family: var(--sans);
+  font-size: 13px;
+  color: #FFFFFF;
+  outline: none;
+  transition: all 0.25s ease;
+}
+
+.holo-search-input:focus {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--theme-primary);
+  box-shadow: 0 0 16px var(--theme-primary-glow);
+}
+
+.holo-search-input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.btn-clear-search {
+  position: absolute;
+  right: 12px;
+  background: transparent;
+  border: none;
+  color: var(--theme-text-mute);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-clear-search:hover {
+  color: #FFFFFF;
+}
+
+.btn-quantum-shuffle {
+  background: var(--theme-surface-interactive);
+  border: 1.5px solid var(--theme-primary);
+  color: #FFFFFF;
+  padding: 8px 18px;
+  border-radius: 9999px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 16px var(--theme-primary-glow);
+  white-space: nowrap;
+}
+
+.btn-quantum-shuffle:hover {
+  background: var(--theme-primary);
+  color: var(--theme-primary-text);
+  transform: translateY(-1.5px) scale(1.03);
+  box-shadow: 0 0 24px var(--theme-primary-glow);
+}
+
+.btn-quantum-shuffle:active {
+  transform: translateY(0) scale(0.97);
+}
+
+.shuffle-dice {
+  font-size: 14px;
+  animation: diceWobble 2.5s infinite ease-in-out;
+}
+
+@keyframes diceWobble {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-12deg); }
+  75% { transform: rotate(12deg); }
+}
+
 /* Category Filter Bar */
 .holo-filter-bar {
   display: flex;
@@ -1165,6 +1548,51 @@ main.timer-main {
   background: linear-gradient(90deg, transparent, var(--theme-border-strong), transparent);
 }
 
+/* Cybernetic Radial Chrono Ring */
+.chrono-hud-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 980px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chrono-hud-svg {
+  position: absolute;
+  inset: -15px 0 -10px 0;
+  width: 100%;
+  height: calc(100% + 25px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.chrono-track-arc {
+  filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.8));
+}
+
+.chrono-progress-arc {
+  filter: drop-shadow(0 0 12px var(--theme-primary-glow));
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 0.3s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.35s ease;
+}
+
+/* Audio Status Dot */
+.status-dot-audio {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--theme-text-mute);
+  transition: all 0.25s ease;
+}
+
+.status-dot-audio.active {
+  background: var(--theme-primary);
+  box-shadow: 0 0 8px var(--theme-primary);
+  animation: pulse-dot 1.8s infinite ease-in-out;
+}
+
 /* ══════════════════════════════════════════════════════════════════════════
    7. CLOCK AND TYPOGRAPHY STYLES (RIGHT CATEGORY)
    Exact Master Inter 900 chrome geometry, optical kerning & 17 metallic finishes
@@ -1391,6 +1819,136 @@ body[data-clock-style="solis-gold"] .chrome {
 }
 body[data-clock-style="solis-gold"] .chrome span {
   background: linear-gradient(180deg,#FEFCE8 0%,#FEF08A 18%,#FACC15 48%,#713F12 74%,#EAB308 88%,#FDE047 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0;
+}
+
+/* Clock Style 18: Supernova Cosmic Flare */
+body[data-clock-style="supernova-crimson"] .chrome {
+  filter: drop-shadow(0 0 16px rgba(255,0,85,0.75)) drop-shadow(0 0 36px rgba(255,0,85,0.4));
+}
+body[data-clock-style="supernova-crimson"] .chrome span {
+  background: linear-gradient(180deg,#FFF0F5 0%,#FFE4EF 18%,#FF0055 48%,#660022 74%,#FF3377 88%,#FFAACC 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0;
+}
+
+/* Clock Style 19: Quantum Singularity Void */
+body[data-clock-style="quantum-violet"] .chrome {
+  filter: drop-shadow(0 0 16px rgba(139,92,246,0.7)) drop-shadow(0 0 32px rgba(192,132,252,0.4));
+}
+body[data-clock-style="quantum-violet"] .chrome span {
+  background: linear-gradient(180deg,#FAF5FF 0%,#EDE9FE 18%,#8B5CF6 48%,#3B0764 74%,#C084FC 88%,#F3E8FF 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0;
+}
+
+/* Clock Style 20: Tokyo Cyber-Night 2099 */
+body[data-clock-style="tokyo-neon"] .chrome {
+  filter: drop-shadow(0 0 14px rgba(0,240,255,0.7)) drop-shadow(0 0 32px rgba(255,0,127,0.45));
+}
+body[data-clock-style="tokyo-neon"] .chrome span {
+  background: linear-gradient(180deg,#FFFFFF 0%,#C5F9FF 18%,#00F0FF 48%,#55002B 74%,#FF007F 88%,#FFE5F1 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0;
+}
+
+/* Clock Style 21: Monaco Heritage Chrono */
+body[data-clock-style="monaco-racing"] .chrome {
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.92)) drop-shadow(0 0 24px rgba(229,192,123,0.45));
+}
+body[data-clock-style="monaco-racing"] .chrome span {
+  background: linear-gradient(180deg,#FFFDF5 0%,#F9EED4 18%,#E5C07B 48%,#063D23 74%,#D4A359 88%,#FFF2D6 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0;
+}
+
+/* Clock Style 22: Arctic Borealis Aurora */
+body[data-clock-style="arctic-aurora"] .chrome {
+  filter: drop-shadow(0 0 16px rgba(0,255,163,0.7)) drop-shadow(0 0 34px rgba(0,229,255,0.4));
+}
+body[data-clock-style="arctic-aurora"] .chrome span {
+  background: linear-gradient(180deg,#FFFFFF 0%,#E6FFF6 18%,#00FFA3 48%,#003847 74%,#00E5FF 88%,#E6FCFF 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0;
+}
+
+/* Clock Style 23: Sahara Rose & Terracotta */
+body[data-clock-style="desert-dune"] .chrome {
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.92)) drop-shadow(0 0 24px rgba(226,177,138,0.4));
+}
+body[data-clock-style="desert-dune"] .chrome span {
+  background: linear-gradient(180deg,#FFFBF8 0%,#F6DEC8 18%,#E2B18A 48%,#572611 74%,#D97706 88%,#FDE68A 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0;
+}
+
+/* Clock Style 24: Forged Hypercar Carbon */
+body[data-clock-style="carbon-forged"] .chrome {
+  filter: drop-shadow(0 6px 14px rgba(0,0,0,0.96)) drop-shadow(0 0 24px rgba(226,248,0,0.45));
+}
+body[data-clock-style="carbon-forged"] .chrome span {
+  background: linear-gradient(180deg,#FFFFFF 0%,#FAFFCC 18%,#E2F800 48%,#1A1E24 74%,#94A3B8 88%,#E2E8F0 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0;
+}
+
+/* Clock Style 25: Liquid Quicksilver Mercury */
+body[data-clock-style="liquid-mercury"] .chrome {
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.95)) drop-shadow(0 0 32px rgba(255,255,255,0.65));
+}
+body[data-clock-style="liquid-mercury"] .chrome span {
+  background: linear-gradient(180deg,#FFFFFF 0%,#F1F5F9 22%,#CBD5E1 46%,#1E293B 70%,#64748B 84%,#FFFFFF 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0;
+}
+
+/* Clock Style 26: Mariana Oceanic Abyss */
+body[data-clock-style="deep-ocean-abyss"] .chrome {
+  filter: drop-shadow(0 0 16px rgba(0,229,255,0.75)) drop-shadow(0 0 36px rgba(0,102,255,0.45));
+}
+body[data-clock-style="deep-ocean-abyss"] .chrome span {
+  background: linear-gradient(180deg,#E6FCFF 0%,#BAF7FF 18%,#00E5FF 48%,#001C47 74%,#0284C7 88%,#E0F2FE 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0;
+}
+
+/* Clock Style 27: Kyoto Imperial Sakura */
+body[data-clock-style="sakura-blossom"] .chrome {
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.92)) drop-shadow(0 0 28px rgba(244,114,182,0.45));
+}
+body[data-clock-style="sakura-blossom"] .chrome span {
+  background: linear-gradient(180deg,#FFF5F9 0%,#FCE7F3 18%,#F472B6 48%,#500724 74%,#FB7185 88%,#FFE4E6 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0;
+}
+
+/* Clock Style 28: Solaris Fusion 24K Plasma */
+body[data-clock-style="solaris-plasma"] .chrome {
+  filter: drop-shadow(0 0 16px rgba(255,102,0,0.75)) drop-shadow(0 0 36px rgba(255,204,0,0.45));
+}
+body[data-clock-style="solaris-plasma"] .chrome span {
+  background: linear-gradient(180deg,#FFFFEB 0%,#FFE4D1 18%,#FF6600 48%,#571A00 74%,#FFCC00 88%,#FFFBEB 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0;
+}
+
+/* Clock Style 29: Vanta Noir Monolith */
+body[data-clock-style="stealth-matte-black"] .chrome {
+  filter: drop-shadow(0 8px 18px rgba(0,0,0,1)) drop-shadow(0 0 12px rgba(255,255,255,0.25));
+}
+body[data-clock-style="stealth-matte-black"] .chrome span {
+  background: linear-gradient(180deg,#FFFFFF 0%,#D1D5DB 20%,#4B5563 46%,#000000 72%,#1F2937 88%,#9CA3AF 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0;
+}
+
+/* Clock Style 30: Neural Matrix Rain 2.0 */
+body[data-clock-style="cyber-matrix-rain"] .chrome {
+  filter: drop-shadow(0 0 16px rgba(57,255,20,0.8)) drop-shadow(0 0 34px rgba(0,255,102,0.4));
+}
+body[data-clock-style="cyber-matrix-rain"] .chrome span {
+  background: linear-gradient(180deg,#F0FFF0 0%,#D1FFC7 18%,#39FF14 48%,#003308 74%,#00FF66 88%,#E6FFF0 100%);
   -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
   -webkit-text-stroke: 0;
 }
