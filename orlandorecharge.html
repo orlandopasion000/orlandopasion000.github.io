@@ -59,7 +59,7 @@
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{background:#000}
-html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+html{scrollbar-gutter:stable;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 body{color:var(--text);font-family:var(--sans);font-size:19.5px;line-height:1.5;min-height:100vh;overflow-x:hidden}
 /* Antigravity Repulsive Particle Canvas (Google Antigravity FX) */
 .antigravity-fx-canvas {
@@ -1914,8 +1914,8 @@ body.universe-game-active .antigravity-front-canvas {
 .quantum-game-overlay {
   position: fixed;
   inset: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   z-index: 85;
   pointer-events: none;
   opacity: 0;
@@ -2238,10 +2238,11 @@ body.universe-game-active .qgame-btn-exit {
 .qgame-victory-card {
   position: relative;
   width: min(540px, 94vw);
-  min-height: 400px;
+  height: 440px;
+  min-height: 440px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   box-sizing: border-box;
   background: linear-gradient(145deg, rgba(14, 20, 36, 0.74) 0%, rgba(20, 16, 32, 0.70) 50%, rgba(10, 15, 26, 0.78) 100%);
   border: 1px solid rgba(255, 215, 0, 0.45);
@@ -2271,7 +2272,7 @@ body.universe-game-active .qgame-btn-exit {
 .qgame-victory-icon {
   width: 58px;
   height: 58px;
-  margin: 0 auto 14px;
+  margin: 0 auto 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2285,11 +2286,15 @@ body.universe-game-active .qgame-btn-exit {
 
 .qgame-victory-title {
   font-family: 'Chakra Petch', 'Orbitron', var(--sans);
-  font-size: clamp(1.4rem, 2.8vw, 1.9rem);
+  font-size: clamp(1.4rem, 2.8vw, 1.85rem);
   font-weight: 800;
   letter-spacing: 0.08em;
   color: #ffffff;
   margin: 0 0 6px 0;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-shadow: 0 0 12px rgba(255, 215, 0, 0.7);
   transition: color 0.4s ease, text-shadow 0.4s ease;
 }
@@ -2300,7 +2305,11 @@ body.universe-game-active .qgame-btn-exit {
   font-weight: 600;
   letter-spacing: 0.12em;
   color: #38bdf8;
-  margin-bottom: 22px;
+  margin-bottom: 20px;
+  min-height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: color 0.4s ease;
 }
 
@@ -9418,7 +9427,21 @@ try { checkUrlHashRoutine(); } catch(e){}
   var fillEl = document.getElementById("qGameTimerFill");
   var missionText = document.getElementById("qGameMissionText");
   var victoryModal = document.getElementById("qGameVictoryModal");
+
+  // Dynamic Result Elements (Shared Zero-Shift Card for Victory & Game Over)
+  var resultCard = document.getElementById("qGameResultCard");
+  var resultAurora = document.getElementById("qGameResultAurora");
+  var resultIcon = document.getElementById("qGameResultIcon");
+  var resultTitle = document.getElementById("qGameResultTitle");
+  var resultSubtitle = document.getElementById("qGameResultSubtitle");
+  var statLabel1 = document.getElementById("qGameStatLabel1");
   var preservedTimeEl = document.getElementById("qGamePreservedTime");
+  var statLabel2 = document.getElementById("qGameStatLabel2");
+  var statLock = document.getElementById("qGameLockDuration");
+  var statLabel3 = document.getElementById("qGameStatLabel3");
+  var statStatus = document.getElementById("qGameSystemStatus");
+  var actionIcon = document.getElementById("qGameActionIcon");
+  var actionLabel = document.getElementById("qGameActionLabel");
 
   if (!overlay || !canvas || !btnLaunch) return;
 
@@ -9427,6 +9450,7 @@ try { checkUrlHashRoutine(); } catch(e){}
 
   var isActive = false;
   var isWon = false;
+  var isGameOver = false;
   var animId = null;
   var width = 0, height = 0, dpr = 1;
 
@@ -9518,6 +9542,34 @@ try { checkUrlHashRoutine(); } catch(e){}
     }
   }
 
+  function playDefeatSoundtrack() {
+    initAudioCtx();
+    if (!audioCtx) return;
+    try {
+      var osc = audioCtx.createOscillator();
+      var gain = audioCtx.createGain();
+      var filter = audioCtx.createBiquadFilter();
+      
+      osc.type = "sawtooth";
+      osc.frequency.setValueAtTime(175, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(45, audioCtx.currentTime + 0.70);
+
+      filter.type = "lowpass";
+      filter.frequency.setValueAtTime(420, audioCtx.currentTime);
+      filter.frequency.exponentialRampToValueAtTime(110, audioCtx.currentTime + 0.70);
+
+      gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.75);
+
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start(audioCtx.currentTime);
+      osc.stop(audioCtx.currentTime + 0.78);
+    } catch(e){}
+  }
+
   function playVictorySoundtrack() {
     initAudioCtx();
     if (audioCtx) {
@@ -9571,6 +9623,53 @@ try { checkUrlHashRoutine(); } catch(e){}
     syncGameMusicBtn();
   }
 
+  function showResultScreen(mode) {
+    if (!resultCard) return;
+    if (mode === "defeat") {
+      resultCard.classList.add("is-defeat");
+      if (resultTitle) resultTitle.textContent = "GAME OVER";
+      if (resultSubtitle) resultSubtitle.textContent = "TEMPORAL MATRIX DEPLETED · RESONANCE FAILED";
+      if (resultIcon) {
+        resultIcon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" class="qgame-victory-svg"><path d="M12 2.5L20.5 7.4V16.6L12 21.5L3.5 16.6V7.4L12 2.5Z" stroke="#ef4444" stroke-width="1.6" fill="rgba(239, 68, 68, 0.15)" stroke-linejoin="round"/><circle cx="12" cy="12" r="4.2" stroke="#f87171" stroke-width="1.4" fill="rgba(220, 38, 38, 0.35)"/><path d="M12 8.5V12.5M12 15.5V16" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/></svg>';
+      }
+      if (statLabel1) statLabel1.textContent = "FINAL TIME";
+      if (preservedTimeEl) {
+        preservedTimeEl.textContent = "00.00s";
+        preservedTimeEl.className = "qgame-stat-val highlight";
+      }
+      if (statLabel2) statLabel2.textContent = "LOCK DURATION";
+      if (statLock) statLock.textContent = (contactDuration > 0 ? (contactDuration.toFixed(1) + "s / 2.0s") : "UNRESOLVED");
+      if (statLabel3) statLabel3.textContent = "SYSTEM STATUS";
+      if (statStatus) {
+        statStatus.textContent = "QUANTUM COLLAPSE";
+        statStatus.className = "qgame-stat-val danger";
+      }
+      if (actionIcon) actionIcon.textContent = "↻";
+      if (actionLabel) actionLabel.textContent = "Try Again";
+    } else {
+      resultCard.classList.remove("is-defeat");
+      if (resultTitle) resultTitle.textContent = "QUANTUM RESONANCE COMPLETE";
+      if (resultSubtitle) resultSubtitle.textContent = "TARGET SYNCHRONIZED · HARMONIC DANCE ACTIVE";
+      if (resultIcon) {
+        resultIcon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" class="qgame-victory-svg"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="url(#vicGoldGrad)" stroke="#ffffff" stroke-width="1.2"/><defs><linearGradient id="vicGoldGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#ffd700"/><stop offset="50%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#f59e0b"/></linearGradient></defs></svg>';
+      }
+      if (statLabel1) statLabel1.textContent = "FINAL TIME PRESERVED";
+      if (preservedTimeEl) {
+        preservedTimeEl.textContent = preservedTimeStr + "s";
+        preservedTimeEl.className = "qgame-stat-val highlight";
+      }
+      if (statLabel2) statLabel2.textContent = "LOCK DURATION";
+      if (statLock) statLock.textContent = "2.00s CONTINUOUS";
+      if (statLabel3) statLabel3.textContent = "SYSTEM STATUS";
+      if (statStatus) {
+        statStatus.textContent = "CELEBRATION DANCE";
+        statStatus.className = "qgame-stat-val success";
+      }
+      if (actionIcon) actionIcon.textContent = "⚡";
+      if (actionLabel) actionLabel.textContent = "Play Again";
+    }
+  }
+
   function resize() {
     dpr = window.devicePixelRatio || 1;
     width = window.innerWidth;
@@ -9600,17 +9699,53 @@ try { checkUrlHashRoutine(); } catch(e){}
   window.addEventListener("pointermove", onPointer, { passive: true });
   window.addEventListener("pointerdown", onPointer, { passive: true });
   window.addEventListener("pointerup", function() {
-    if (width < 768 && !isWon) {
+    if (width < 768 && !isWon && !isGameOver) {
       contactDuration = 0;
       lockedParticle = null;
       stopLockAudio();
     }
   }, { passive: true });
 
+  function restartGame() {
+    if (typeof stopSong === "function") stopSong();
+    stopLockAudio();
+    isWon = false;
+    isGameOver = false;
+    remainingTime = TOTAL_TIME;
+    preservedTimeStr = TOTAL_TIME.toFixed(2);
+    gameStartTime = performance.now();
+    lastFrameTime = performance.now();
+    contactDuration = 0.0;
+    lockedParticle = null;
+    activeExplosion = null;
+    cursor.x = -9999;
+    cursor.y = -9999;
+    cursor.active = false;
+    hasDeliberateMove = false;
+
+    victoryModal.style.display = "none";
+    if (resultCard) resultCard.classList.remove("is-defeat");
+    digitsEl.textContent = TOTAL_TIME.toFixed(2);
+    digitsEl.classList.remove("victory-frozen", "defeat-frozen");
+    fillEl.style.width = "100%";
+    missionText.textContent = "INITIALIZING QUANTUM REALM · PREPARE RETICLE";
+    syncGameMusicBtn();
+
+    if (window.antigravityFX) {
+      if (typeof window.antigravityFX.setGameMode === "function") {
+        window.antigravityFX.setGameMode(true);
+      }
+      if (typeof window.antigravityFX.stopVictoryDance === "function") {
+        window.antigravityFX.stopVictoryDance();
+      }
+    }
+  }
+
   function launchGame() {
     if (isActive) return;
     isActive = true;
     isWon = false;
+    isGameOver = false;
     remainingTime = TOTAL_TIME;
     preservedTimeStr = TOTAL_TIME.toFixed(2);
     gameStartTime = performance.now();
@@ -9629,12 +9764,15 @@ try { checkUrlHashRoutine(); } catch(e){}
     initAudioCtx();
 
     // 1. Instant Universe Transition (1.35s cinematic ease-in-out S-curve fade of surroundings)
+    var onb = document.getElementById("onboardingModal");
+    if (onb) onb.classList.remove("open");
     document.body.classList.add("universe-game-active");
     overlay.setAttribute("aria-hidden", "false");
     victoryModal.style.display = "none";
+    if (resultCard) resultCard.classList.remove("is-defeat");
     missionText.textContent = "INITIALIZING QUANTUM REALM · PREPARE RETICLE";
     digitsEl.textContent = TOTAL_TIME.toFixed(2);
-    digitsEl.classList.remove("victory-frozen");
+    digitsEl.classList.remove("victory-frozen", "defeat-frozen");
     fillEl.style.width = "100%";
     syncGameMusicBtn();
 
@@ -9653,6 +9791,7 @@ try { checkUrlHashRoutine(); } catch(e){}
     if (!isActive) return;
     isActive = false;
     isWon = false;
+    isGameOver = false;
     stopLockAudio();
 
     // Automatically stop celebratory or game music when exiting to horizon
@@ -9675,6 +9814,8 @@ try { checkUrlHashRoutine(); } catch(e){}
     document.body.classList.remove("universe-game-active");
     overlay.setAttribute("aria-hidden", "true");
     victoryModal.style.display = "none";
+    if (resultCard) resultCard.classList.remove("is-defeat");
+    digitsEl.classList.remove("victory-frozen", "defeat-frozen");
 
     // Restore particle physics to normal cruise
     if (window.antigravityFX) {
@@ -9687,14 +9828,39 @@ try { checkUrlHashRoutine(); } catch(e){}
     }
   }
 
+  function triggerGameOver() {
+    if (isGameOver || isWon) return;
+    isGameOver = true;
+    stopLockAudio();
+
+    digitsEl.textContent = "00.00";
+    digitsEl.classList.remove("victory-frozen");
+    digitsEl.classList.add("defeat-frozen");
+    fillEl.style.width = "0%";
+    missionText.textContent = "QUANTUM TIME EXPIRED · MATRIX DESTABILIZED";
+
+    // Play subtle high-tech defeat sound
+    playDefeatSoundtrack();
+
+    // Show result screen in defeat mode
+    showResultScreen("defeat");
+
+    setTimeout(function() {
+      if (isActive && isGameOver) {
+        victoryModal.style.display = "flex";
+      }
+    }, 450);
+  }
+
   function triggerVictory(targetParticle) {
-    if (isWon) return;
+    if (isWon || isGameOver) return;
     isWon = true;
     stopLockAudio();
 
     // 1. Freeze timer immediately and preserve final time!
     preservedTimeStr = Math.max(0, remainingTime).toFixed(2);
     digitsEl.textContent = preservedTimeStr;
+    digitsEl.classList.remove("defeat-frozen");
     digitsEl.classList.add("victory-frozen");
     if (preservedTimeEl) preservedTimeEl.textContent = preservedTimeStr + "s";
 
@@ -9741,9 +9907,11 @@ try { checkUrlHashRoutine(); } catch(e){}
     // 4. Play celebratory music and fanfare immediately
     playVictorySoundtrack();
 
+    // 5. Setup Victory Hologram Readouts
+    showResultScreen("victory");
     missionText.textContent = "◈ QUANTUM RESONANCE ACHIEVED · CELEBRATION DANCE ACTIVE ◈";
 
-    // 5. Reveal Victory Hologram Card
+    // 6. Reveal Victory Hologram Card
     setTimeout(function() {
       if (isActive && isWon) {
         victoryModal.style.display = "flex";
@@ -9764,7 +9932,7 @@ try { checkUrlHashRoutine(); } catch(e){}
     var isWarmingUp = (now - gameStartTime < WARMUP_MS);
 
     // ── Update Countdown Timer & Mission Telemetry ──
-    if (!isWon) {
+    if (!isWon && !isGameOver) {
       if (isWarmingUp) {
         lastFrameTime = now;
         digitsEl.textContent = TOTAL_TIME.toFixed(2);
@@ -9776,10 +9944,7 @@ try { checkUrlHashRoutine(); } catch(e){}
         remainingTime -= dt;
         if (remainingTime <= 0) {
           remainingTime = 0;
-          digitsEl.textContent = "00.00";
-          fillEl.style.width = "0%";
-          missionText.textContent = "QUANTUM TIME EXPIRED · TRY AGAIN";
-          stopLockAudio();
+          triggerGameOver();
         } else {
           digitsEl.textContent = remainingTime.toFixed(2);
           var pct = (remainingTime / TOTAL_TIME) * 100;
@@ -9792,7 +9957,7 @@ try { checkUrlHashRoutine(); } catch(e){}
     var particles = (window.antigravityFX && typeof window.antigravityFX.getParticles === "function") ? window.antigravityFX.getParticles() : [];
 
     // Strictly enforce: no locking during transition warmup, and requires active deliberate cursor move!
-    if (!isWon && !isWarmingUp && remainingTime > 0 && cursor.active && hasDeliberateMove) {
+    if (!isWon && !isGameOver && !isWarmingUp && remainingTime > 0 && cursor.active && hasDeliberateMove) {
       if (lockedParticle) {
         if (lockedParticle.exploded) {
           lockedParticle = null;
@@ -9838,7 +10003,7 @@ try { checkUrlHashRoutine(); } catch(e){}
         }
       }
     } else {
-      if (isWarmingUp || !hasDeliberateMove) {
+      if (isWarmingUp || !hasDeliberateMove || isGameOver) {
         lockedParticle = null;
         contactDuration = 0.0;
         stopLockAudio();
@@ -9846,7 +10011,7 @@ try { checkUrlHashRoutine(); } catch(e){}
     }
 
     // ── Render Cursor Crosshair Guide (when active and moved) ──
-    if (!isWon && !isWarmingUp && cursor.active && hasDeliberateMove) {
+    if (!isWon && !isGameOver && !isWarmingUp && cursor.active && hasDeliberateMove) {
       drawCursorGuide(cursor.x, cursor.y);
     }
 
@@ -10004,12 +10169,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   btnExit.onclick = exitGame;
   if (btnReturn) btnReturn.onclick = exitGame;
   if (btnPlayAgain) {
-    btnPlayAgain.onclick = function() {
-      // Automatically stop celebratory or game music when starting a new round
-      if (typeof stopSong === "function") stopSong();
-      exitGame();
-      setTimeout(launchGame, 100);
-    };
+    btnPlayAgain.onclick = restartGame;
   }
   if (btnGamePlayMusic) {
     btnGamePlayMusic.onclick = function(e) {
@@ -10032,6 +10192,9 @@ try { checkUrlHashRoutine(); } catch(e){}
   window.quantumGame = {
     launch: launchGame,
     exit: exitGame,
+    restart: restartGame,
+    triggerGameOver: triggerGameOver,
+    triggerVictory: triggerVictory,
     isActive: function() { return isActive; }
   };
 })();
