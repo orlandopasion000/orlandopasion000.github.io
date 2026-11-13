@@ -2207,11 +2207,17 @@ li:hover .card-icon-badge {
 #restAmpm{font-family:var(--font-clock);font-weight:600;font-size:min(3.4vw,6vh);letter-spacing:.35em;color:var(--gold);margin-top:.6em;opacity:.85}
 #restHint{position:fixed;left:0;right:0;bottom:28px;text-align:center;color:var(--mute);font-size:1rem;transition:opacity 1.2s}
 
-/* Alarm overlay */
-#ov{position:fixed;inset:0;background:#000;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;z-index:100}
+/* Alarm overlay (Full-Screen Beat-Dancing Particle Stage) */
+#ov{position:fixed;inset:0;background:radial-gradient(circle at 50% 36%,rgba(16,22,35,.96) 0%,rgba(6,8,14,.98) 72%,#030407 100%);display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px 20px;z-index:100;overflow:hidden;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px)}
 #ov.show{display:flex}
-.ring{width:130px;height:130px;border-radius:50%;border:3px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:3.2rem;animation:pulse 1.6s ease-in-out infinite}
-@keyframes pulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(217,185,92,.4)}50%{transform:scale(1.12);box-shadow:0 0 60px 14px rgba(217,185,92,.25)}}
+.ov-particle-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
+.ov-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;max-width:840px;width:100%;pointer-events:auto}
+.ring{width:130px;height:130px;border-radius:50%;border:3px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:3.2rem;animation:pulse 1.6s ease-in-out infinite;box-shadow:0 0 45px rgba(217,185,92,.35);position:relative}
+@keyframes pulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(217,185,92,.4),0 0 35px rgba(56,189,248,.18)}50%{transform:scale(1.12);box-shadow:0 0 65px 16px rgba(217,185,92,.38),0 0 75px 22px rgba(56,189,248,.28)}}
+.ov-unmute-banner{display:inline-flex;align-items:center;gap:10px;margin-bottom:20px;padding:12px 26px;background:rgba(217,185,92,.18);border:1px solid rgba(217,185,92,.6);border-radius:999px;color:#f7df8b;font-weight:700;font-size:1.05rem;cursor:pointer;animation:bannerPulse 1.8s infinite ease-in-out;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 0 35px rgba(217,185,92,.32);transition:transform .2s ease,background .2s ease}
+.ov-unmute-banner:hover{transform:scale(1.03);background:rgba(217,185,92,.28)}
+.ov-unmute-dot{width:10px;height:10px;border-radius:50%;background:#ffd700;box-shadow:0 0 10px #ffd700;animation:pulse 1.2s infinite ease-in-out}
+@keyframes bannerPulse{0%,100%{transform:scale(1);box-shadow:0 0 25px rgba(217,185,92,.3)}50%{transform:scale(1.03);box-shadow:0 0 50px rgba(217,185,92,.65)}}
 #ovT{font-size:clamp(2.2rem,5.5vw,4.2rem);font-weight:700;letter-spacing:-.02em;margin:30px 0 6px}
 #ovM{font-family:var(--font-clock);font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;font-size:clamp(1.8rem,3.2vw,2.6rem);font-weight:700;letter-spacing:.01em;color:var(--gold)}
 .ov-actions{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
@@ -3359,17 +3365,24 @@ body.light-theme .highlight-card .dist-icon{
   </div>
 </div>
 
-<!-- Ringing Alarm Overlay -->
+<!-- Ringing Alarm Overlay (Full-Screen Beat-Dancing Particle Stage) -->
 <div id="ov" role="alertdialog" aria-modal="true" aria-labelledby="ovT" aria-live="assertive">
-  <div class="ring">🔔</div>
-  <div id="ovT"></div>
-  <div id="ovM"></div>
-  <div id="ovSong">♪ <b id="ovSongName"></b></div>
-  <div class="ov-actions">
-    <button class="ghost" id="ovS">Snooze 5 min</button>
-    <button class="primary" id="ovB">Dismiss</button>
+  <canvas id="ovParticleCanvas" class="ov-particle-canvas"></canvas>
+  <div class="ov-content">
+    <div id="ovAutoplayBanner" class="ov-unmute-banner" style="display:none" role="button" tabindex="0">
+      <span class="ov-unmute-dot"></span>
+      <span>🔊 Sound Paused by Browser — Tap Anywhere to Unmute Alarm</span>
+    </div>
+    <div class="ring" id="ovRingBell">🔔</div>
+    <div id="ovT"></div>
+    <div id="ovM"></div>
+    <div id="ovSong">♪ <b id="ovSongName"></b></div>
+    <div class="ov-actions">
+      <button class="ghost" id="ovS">Snooze 5 min</button>
+      <button class="primary" id="ovB">Dismiss</button>
+    </div>
+    <div class="ov-keys">S = snooze · Esc = dismiss · Tap anywhere to unmute</div>
   </div>
-  <div class="ov-keys">S = snooze · Esc = dismiss</div>
 </div>
 
 <!-- Interactive Add Alarm Modal (Drop-Down Category, Custom Time, No Browser Prompt) -->
@@ -4076,8 +4089,25 @@ function getAudioBeatTelemetry(){
 
   return _audioTelemetryCache;
 }
+function primeMediaAudio(){
+  try {
+    SONGS.forEach(function(s){
+      var el = getSongAudioElement(s);
+      if(el && el.paused && el.currentTime === 0){
+        var p = el.play();
+        if(p && p.then){
+          p.then(function(){
+            el.pause();
+            el.currentTime = 0;
+          }).catch(function(){});
+        }
+      }
+    });
+  } catch(e){}
+}
 function unlock(){
   initAudio();
+  primeMediaAudio();
   if(ac&&ac.state!=="running"){
     ac.resume().then(function(){
       updateAudioBadge();
@@ -4137,12 +4167,12 @@ function decode(i){
   return pr;
 }
 function prepare(){
-  var keep={};
-  if(current)keep[idx(current)]=1;
-  if(queued)keep[idx(queued)]=1;
-  keep[peekIdx()]=1;
-  Object.keys(keep).forEach(function(i){decode(+i)});
-  Object.keys(bufs).forEach(function(i){if(!keep[i]){delete bufs[i];delete ready[i]}});
+  // Permanently pre-decode all alarm songs so they remain ready in RAM with zero latency
+  SONGS.forEach(function(_, i){
+    if(!ready[i] && !bufs[i]){
+      decode(i).catch(function(){});
+    }
+  });
 }
 function startBuf(buf){
   var src=ac.createBufferSource(),g=ac.createGain(),t=ac.currentTime+.005,d=buf.duration;
@@ -4157,20 +4187,13 @@ function startBuf(buf){
 function startFallback(song){
   var el=getSongAudioElement(song);
   el.currentTime=0;
-  el.volume=target();
+  el.volume=Math.max(0.1, target() || 0.85);
   fallback=el;
-  if(ac && master && !el._mediaSourceNode){
-    try {
-      el._mediaSourceNode = ac.createMediaElementSource(el);
-      el._mediaSourceNode.connect(master);
-      el.volume = 1;
-    } catch(e){}
-  }
   el.onended=function(){if(fallback===el){fallback=null;finished()}};
   var p=el.play();
   if(p&&p.catch){
     p.catch(function(err){
-      console.warn("Audio element play blocked, attempting Web Audio buffer:", err);
+      console.warn("[OrlandoRecharge] Audio element play blocked, attempting Web Audio buffer:", err);
       if(ac){
         ac.resume().then(function(){
           var i=idx(song);
@@ -4932,16 +4955,37 @@ renderDays();
 /* ───────── ALARM TRIGGERING (Song Clip Only) ───────── */
 var ringing=-1,snoozes=[];
 var ringTitleTimer=null;
+var alarmWatchdogTimer=null;
+
+function showOvUnmuteBanner(){
+  var b=$("ovAutoplayBanner");
+  if(b) b.style.display="inline-flex";
+}
+function hideOvUnmuteBanner(){
+  var b=$("ovAutoplayBanner");
+  if(b) b.style.display="none";
+}
+
+function handleOvUnmute(){
+  unlock();
+  if(ac && ac.state === "suspended") ac.resume().catch(function(){});
+  hideOvUnmuteBanner();
+  if(!curSrc && (!fallback || fallback.paused)){
+    var s = current || queued || SONGS[0];
+    playSong(s, function(){ if(++plays < 4 && $("ov").className === "show") go(); }, "alarm");
+  }
+}
+
 function ring(i,snoozed){
   var s=S[i],plays=0;ringing=i;
 
   // Guarantee audible volume whenever an alarm fires
   if (muted) muted = false;
-  if (volume < 0.60) volume = 0.85;
+  if (volume < 0.85) volume = 0.85;
   showVol();
   save();
 
-  // Awaken AudioContext and Screen Wake Lock
+  // Awaken AudioContext, prime audio elements, and request Screen Wake Lock
   unlock();
   if (ac && ac.state === "suspended") ac.resume().catch(function(){});
   requestWakeLock();
@@ -4949,9 +4993,17 @@ function ring(i,snoozed){
   $("ovT").textContent=(snoozed?"Snoozed — ":"")+s[3];
   $("ovM").textContent=fmt(s[0],s[1]);
   $("ov").className="show";
+  hideOvUnmuteBanner();
+
+  // Start Full-Screen Beat-Dancing Particles on Alarm Overlay
+  if (window.ovAlarmFX && typeof window.ovAlarmFX.start === "function") {
+    window.ovAlarmFX.start();
+  }
+
   if (window.antigravityFX && typeof window.antigravityFX.triggerShockwave === "function") {
     window.antigravityFX.triggerShockwave(window.innerWidth / 2, window.innerHeight * 0.28, 42);
   }
+
   function go(){
     var song=queued;queued=nextSong();
     $("ovSongName").textContent=song.title+" — "+song.artist;
@@ -4959,6 +5011,20 @@ function ring(i,snoozed){
     if(navigator.vibrate)navigator.vibrate([500,250,500,250,500]);
   }
   go();
+
+  // Active Alarm Audio Watchdog (Ensures sound is progressing; triggers backup chime if browser throttled)
+  clearTimeout(alarmWatchdogTimer);
+  alarmWatchdogTimer = setTimeout(function(){
+    if ($("ov").className !== "show") return;
+    var isWebAudioPlaying = curSrc !== null && ac && ac.state === "running";
+    var isFallbackPlaying = fallback !== null && !fallback.paused && fallback.currentTime > 0;
+    if (!isWebAudioPlaying && !isFallbackPlaying) {
+      console.warn("[OrlandoRecharge] Audio watchdog: audio playback paused or throttled by browser. Activating harmonic chime & unmute banner.");
+      playSyntheticChime();
+      showOvUnmuteBanner();
+    }
+  }, 450);
+
   setTimeout(function(){if($("ov").className==="show")$("ovB").focus()},50);
   notify(s[3],fmt(s[0],s[1])+" — tap Snooze or Dismiss");
 
@@ -5013,6 +5079,11 @@ function dismiss(){
   if($("ov").className!=="show")return;
   $("ov").className="";
   ringing=-1;
+  clearTimeout(alarmWatchdogTimer);
+  hideOvUnmuteBanner();
+  if (window.ovAlarmFX && typeof window.ovAlarmFX.stop === "function") {
+    window.ovAlarmFX.stop();
+  }
   clearInterval(ringTitleTimer);
   stopSong();
   clearNotes();
@@ -5028,10 +5099,22 @@ function snooze(){
 }
 $("ovB").onclick=dismiss;
 $("ovS").onclick=snooze;
+if ($("ovAutoplayBanner")) {
+  $("ovAutoplayBanner").onclick = function(e){
+    e.stopPropagation();
+    handleOvUnmute();
+  };
+}
+$("ov").addEventListener("click", function(e){
+  if (e.target !== $("ovB") && e.target !== $("ovS")) {
+    handleOvUnmute();
+  }
+});
 document.addEventListener("keydown",function(e){
   if($("ov").className!=="show")return;
   if(e.key==="Escape"){e.preventDefault();dismiss()}
   else if(e.key==="s"||e.key==="S"){e.preventDefault();snooze()}
+  else { handleOvUnmute(); }
 });
 
 /* ───────── CONTROLS ───────── */
@@ -5098,7 +5181,7 @@ function tick(){
     if(on&&t<=sec)cur=i;
     var el=$("r"+i);
     if(el)el.classList.toggle("past",on&&t<=sec);
-    if(armed&&on&&!off[i]){var k=n.toDateString()+i;if(!fired[k]&&sec>=t&&sec-t<300){fired[k]=1;ring(i)}}
+    if(armed&&on&&!off[i]){var k=n.toDateString()+i;if(!fired[k]&&sec>=t&&sec-t<600){fired[k]=1;ring(i)}}
   });
   S.forEach(function(s,i){var el=$("r"+i);if(el)el.classList.toggle("cur",i===cur)});
 
@@ -5972,6 +6055,16 @@ document.addEventListener('visibilitychange', function() {
     }
     tick();
   }
+});
+window.addEventListener('focus', function() {
+  if (armed) {
+    requestWakeLock();
+    startAudioKeepAlive();
+  }
+  if (ac && ac.state === 'suspended') {
+    ac.resume().catch(function(){});
+  }
+  tick();
 });
 
 var keepAliveOsc = null;
@@ -7906,13 +7999,302 @@ try { checkUrlHashRoutine(); } catch(e){}
   };
 })();
 
+/* ══════════════════════════════════════════════════════════════
+   FULL-SCREEN ALARM OVERLAY BEAT-DANCING PARTICLES (ovAlarmFX)
+   Celebratory, beat-synchronized golden stardust, harmonic orbits,
+   expanding sonic shockwaves, and celestial embers across #ov.
+   ══════════════════════════════════════════════════════════════ */
+(function initOvAlarmParticles(){
+  var canvas = document.getElementById("ovParticleCanvas");
+  if (!canvas) return;
+  var ctx = canvas.getContext("2d");
+  if (!ctx) return;
+
+  var animId = null;
+  var active = false;
+  var width = 0, height = 0, dpr = 1;
+  var bellX = 0, bellY = 0;
+  var lastTime = 0;
+  var beatPulse = 0;
+
+  // Particle Pools (Zero allocations during animation loop)
+  var NUM_ORBITALS = 52;
+  var NUM_EMBERS = 36;
+  var NUM_SHOCKWAVES = 6;
+
+  var orbitals = [];
+  var embers = [];
+  var shockwaves = [];
+
+  // Color palettes matching OrlandoRecharge luxury theme
+  var GOLD_COLORS = [
+    { r: 245, g: 215, b: 110 }, // Brilliant 24K Gold
+    { r: 220, g: 180, b: 80 },  // Rich Amber Gold
+    { r: 255, g: 245, b: 220 }, // Champagne Diamond
+    { r: 94,  g: 234, b: 212 }, // Aurora Cyan
+    { r: 56,  g: 189, b: 248 }  // Electric Azure
+  ];
+
+  // Initialize Orbital Dancers (Orbit around the ringing bell with harmonic wave oscillation)
+  for (var i = 0; i < NUM_ORBITALS; i++) {
+    var col = GOLD_COLORS[i % GOLD_COLORS.length];
+    orbitals.push({
+      angle: Math.random() * Math.PI * 2,
+      baseRadius: 75 + Math.random() * 320,
+      radius: 100,
+      speed: (0.008 + Math.random() * 0.016) * (Math.random() < 0.5 ? 1 : -1),
+      harmonicFreq: 2 + Math.floor(Math.random() * 4),
+      harmonicAmp: 10 + Math.random() * 26,
+      phase: Math.random() * Math.PI * 2,
+      size: 2.2 + Math.random() * 3.4,
+      color: col,
+      alpha: 0.4 + Math.random() * 0.55,
+      // Trail history coordinates
+      hx1: 0, hy1: 0, hx2: 0, hy2: 0, hx3: 0, hy3: 0
+    });
+  }
+
+  // Initialize Ascending Embers (Float gently upward through the full viewport)
+  for (var e = 0; e < NUM_EMBERS; e++) {
+    var c = GOLD_COLORS[e % GOLD_COLORS.length];
+    embers.push({
+      x: Math.random(),
+      y: Math.random(),
+      speedY: 0.0003 + Math.random() * 0.0007,
+      driftFreq: 0.8 + Math.random() * 2.2,
+      driftAmp: 18 + Math.random() * 30,
+      seed: Math.random() * 100,
+      size: 1.8 + Math.random() * 2.8,
+      color: c,
+      baseAlpha: 0.25 + Math.random() * 0.55
+    });
+  }
+
+  // Initialize Expanding Shockwaves pool
+  for (var s = 0; s < NUM_SHOCKWAVES; s++) {
+    shockwaves.push({
+      active: false,
+      r: 0,
+      maxR: 500,
+      speed: 6,
+      alpha: 0,
+      color: GOLD_COLORS[s % GOLD_COLORS.length]
+    });
+  }
+
+  function resize(){
+    if (!canvas) return;
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = Math.round(width * dpr);
+    canvas.height = Math.round(height * dpr);
+    canvas.style.width = width + "px";
+    canvas.style.height = height + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    // Anchor center to ringing bell
+    updateBellAnchor();
+  }
+
+  function updateBellAnchor(){
+    var bell = document.getElementById("ovRingBell");
+    if (bell && bell.offsetParent !== null) {
+      var rect = bell.getBoundingClientRect();
+      bellX = rect.left + rect.width / 2;
+      bellY = rect.top + rect.height / 2;
+    } else {
+      bellX = width / 2;
+      bellY = height * 0.33;
+    }
+  }
+
+  function triggerShockwaveRing(){
+    for (var i = 0; i < shockwaves.length; i++) {
+      if (!shockwaves[i].active) {
+        shockwaves[i].active = true;
+        shockwaves[i].r = 65;
+        shockwaves[i].maxR = Math.max(width, height) * 0.75;
+        shockwaves[i].speed = 5.5 + Math.random() * 3.5;
+        shockwaves[i].alpha = 0.85;
+        break;
+      }
+    }
+  }
+
+  var lastShockwaveTime = 0;
+
+  function render(timestamp){
+    if (!active) return;
+    if (!lastTime) lastTime = timestamp;
+    var dt = Math.min(40, timestamp - lastTime);
+    lastTime = timestamp;
+
+    // Retrieve beat telemetry
+    var beatTelemetry = (typeof getAudioBeatTelemetry === "function") ? getAudioBeatTelemetry() : null;
+    var bass = (beatTelemetry && beatTelemetry.active) ? beatTelemetry.bass : 0.25;
+    var subBass = (beatTelemetry && beatTelemetry.active) ? beatTelemetry.subBass : 0.20;
+    var energy = (beatTelemetry && beatTelemetry.active) ? beatTelemetry.energy : 0.30;
+
+    // Beat pulse decay and expansion impulse
+    beatPulse = Math.max(0, beatPulse * 0.91 + (bass > 0.26 ? bass * 0.35 : 0));
+    var beatExpansion = beatPulse * 38;
+
+    // Trigger shockwave on rhythmic spikes (spaced at least 380ms apart)
+    if (bass > 0.32 && (timestamp - lastShockwaveTime > 380)) {
+      triggerShockwaveRing();
+      lastShockwaveTime = timestamp;
+    }
+
+    ctx.clearRect(0, 0, width, height);
+
+    // ── 1. RENDER EXPANDING SONIC SHOCKWAVES ──
+    for (var s = 0; s < shockwaves.length; s++) {
+      var sw = shockwaves[s];
+      if (!sw.active) continue;
+      sw.r += sw.speed * (dt / 16.6);
+      sw.alpha *= 0.965;
+      if (sw.alpha < 0.02 || sw.r >= sw.maxR) {
+        sw.active = false;
+        continue;
+      }
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(bellX, bellY, sw.r, 0, Math.PI * 2);
+      ctx.lineWidth = Math.max(1.2, 4.5 * (1 - sw.r / sw.maxR));
+      ctx.strokeStyle = "rgba(" + sw.color.r + "," + sw.color.g + "," + sw.color.b + "," + sw.alpha.toFixed(3) + ")";
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // ── 2. RENDER ASCENDING CELESTIAL EMBERS ──
+    for (var e = 0; e < embers.length; e++) {
+      var emb = embers[e];
+      emb.y -= emb.speedY * (dt / 16.6);
+      if (emb.y < -0.05) {
+        emb.y = 1.05;
+        emb.x = Math.random();
+      }
+
+      var wobble = Math.sin((timestamp * 0.0018 * emb.driftFreq) + emb.seed) * emb.driftAmp;
+      var curX = emb.x * width + wobble;
+      var curY = emb.y * height;
+      var embAlpha = Math.min(1.0, emb.baseAlpha * (0.8 + Math.sin(timestamp * 0.003 + emb.seed) * 0.25) + energy * 0.25);
+
+      ctx.save();
+      ctx.fillStyle = "rgba(" + emb.color.r + "," + emb.color.g + "," + emb.color.b + "," + embAlpha.toFixed(3) + ")";
+      ctx.beginPath();
+      ctx.arc(curX, curY, emb.size * (1 + beatPulse * 0.3), 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // ── 3. RENDER HARMONIC ORBITAL DANCERS (BEAT SYNCHRONIZED) ──
+    for (var i = 0; i < orbitals.length; i++) {
+      var p = orbitals[i];
+      p.angle += p.speed * (dt / 16.6) * (1 + beatPulse * 0.4);
+
+      // Harmonic radial oscillation with beat swell
+      var harmonic = Math.sin(p.angle * p.harmonicFreq + p.phase) * p.harmonicAmp;
+      var curRadius = p.baseRadius + harmonic + beatExpansion;
+
+      var px = bellX + Math.cos(p.angle) * curRadius;
+      var py = bellY + Math.sin(p.angle) * curRadius;
+
+      // Draw graceful luminous particle trail
+      if (p.hx1 !== 0) {
+        ctx.beginPath();
+        ctx.moveTo(p.hx3, p.hy3);
+        ctx.lineTo(p.hx2, p.hy2);
+        ctx.lineTo(p.hx1, p.hy1);
+        ctx.lineTo(px, py);
+        ctx.strokeStyle = "rgba(" + p.color.r + "," + p.color.g + "," + p.color.b + "," + (p.alpha * 0.28).toFixed(3) + ")";
+        ctx.lineWidth = Math.max(1, p.size * 0.65);
+        ctx.lineCap = "round";
+        ctx.stroke();
+      }
+
+      // Update history
+      p.hx3 = p.hx2; p.hy3 = p.hy2;
+      p.hx2 = p.hx1; p.hy2 = p.hy1;
+      p.hx1 = px;    p.hy1 = py;
+
+      // Draw particle core & diamond highlight
+      var pSize = p.size * (1 + beatPulse * 0.45);
+      var curAlpha = Math.min(1.0, p.alpha * (0.85 + Math.sin(p.phase + timestamp * 0.004) * 0.15) + beatPulse * 0.3);
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(px, py, pSize, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(" + p.color.r + "," + p.color.g + "," + p.color.b + "," + curAlpha.toFixed(3) + ")";
+      ctx.shadowColor = "rgba(" + p.color.r + "," + p.color.g + "," + p.color.b + ", 0.85)";
+      ctx.shadowBlur = 10 + beatPulse * 12;
+      ctx.fill();
+
+      // Diamond hot-spot core
+      ctx.beginPath();
+      ctx.arc(px, py, Math.max(1, pSize * 0.35), 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(255,255,255," + (curAlpha * 0.95).toFixed(3) + ")";
+      ctx.fill();
+      ctx.restore();
+    }
+
+    animId = requestAnimationFrame(render);
+  }
+
+  window.addEventListener("resize", function(){
+    if (active) resize();
+  }, { passive: true });
+
+  window.ovAlarmFX = {
+    start: function(){
+      active = true;
+      resize();
+      updateBellAnchor();
+      lastTime = 0;
+      beatPulse = 0.5; // Initial welcoming burst
+      for (var i = 0; i < orbitals.length; i++) {
+        var p = orbitals[i];
+        var curRadius = p.baseRadius;
+        var px = bellX + Math.cos(p.angle) * curRadius;
+        var py = bellY + Math.sin(p.angle) * curRadius;
+        p.hx1 = px; p.hy1 = py;
+        p.hx2 = px; p.hy2 = py;
+        p.hx3 = px; p.hy3 = py;
+      }
+      triggerShockwaveRing();
+      if (!animId) {
+        animId = requestAnimationFrame(render);
+      }
+    },
+    stop: function(){
+      active = false;
+      if (animId) {
+        cancelAnimationFrame(animId);
+        animId = null;
+      }
+      if (ctx) ctx.clearRect(0, 0, width, height);
+      for (var s = 0; s < shockwaves.length; s++) {
+        shockwaves[s].active = false;
+      }
+    },
+    triggerShockwave: function(){
+      triggerShockwaveRing();
+    },
+    isActive: function(){
+      return active;
+    }
+  };
+})();
+
 </script>
 
   <!-- OrlandoRecharge Official PWA Service Worker Registration -->
   <script>
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('recharge-sw.js?v=pure25').catch(function() {});
+        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v26').catch(function() {});
       });
     }
   </script>

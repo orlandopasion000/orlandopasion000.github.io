@@ -1,5 +1,5 @@
 /* OrlandoRecharge · Offline-First Service Worker (PWA Ready) */
-var CACHE_NAME = 'orlandorecharge-pwa-v25';
+var CACHE_NAME = 'recharge-v26';
 var ASSETS = [
   './',
   './index.html',
@@ -10,7 +10,17 @@ var ASSETS = [
   './assets/recharge-icon-maskable.png',
   './assets/recharge-apple-touch.png',
   './assets/app-icon.ico',
-  './favicon.ico'
+  './favicon.ico',
+  './music/palagi.mp3',
+  './music/na-para-bang.mp3',
+  './music/what-if-i-miss-you.mp3',
+  './music/okay.mp3',
+  './music/training-season.mp3',
+  './music/stop-the-wedding.mp3',
+  './music/malibu-nights.mp3',
+  './music/enchanted.mp3',
+  './music/the-man-who-cant-be-moved.mp3',
+  './music/youre-still-the-one.mp3'
 ];
 
 self.addEventListener('install', function (event) {
@@ -26,7 +36,7 @@ self.addEventListener('activate', function (event) {
   event.waitUntil(
     caches.keys().then(function (keys) {
       return Promise.all(
-        keys.filter(function (k) { return k !== CACHE_NAME && k.indexOf('orlandorecharge-') === 0; })
+        keys.filter(function (k) { return k !== CACHE_NAME && (k.indexOf('orlandorecharge-') === 0 || k.indexOf('recharge-') === 0); })
             .map(function (k) { return caches.delete(k); })
       );
     })
