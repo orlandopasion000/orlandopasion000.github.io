@@ -23,7 +23,7 @@
   <!-- Relative Stylesheet -->
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body data-clock-theme="platinum">
   <!-- Google Antigravity Signature Repulsive Particle Stage -->
   <canvas id="antigravityCanvas" class="antigravity-fx-canvas" aria-hidden="true"></canvas>
 
@@ -56,6 +56,20 @@
 
     <!-- MIDDLE SECTION: VERY BIG TIMER APP WITH THREE TABS -->
     <main class="timer-main">
+      <!-- THEME SELECTOR STRIP (17 Bespoke Horology Finishes) -->
+      <div class="theme-strip">
+        <button type="button" class="theme-cycle-btn" id="themeCycleBtn" title="Click to cycle next theme">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 2a10 10 0 0 1 10 10"></path>
+          </svg>
+          <span>Theme: <b id="themeLabel">Pure Platinum</b></span>
+        </button>
+        <select id="themeSelectDropdown" class="theme-select-dropdown" aria-label="Select Clock Appearance Theme">
+          <!-- Populated in JS with 17 themes -->
+        </select>
+      </div>
+
       <!-- TABS NAVIGATION -->
       <div class="tabs-nav-container">
         <nav class="tabs-nav" role="tablist" aria-label="Orlando Timer Navigation">
@@ -88,10 +102,10 @@
       <!-- TAB 1: TIMER                               -->
       <!-- ========================================== -->
       <section class="tab-panel active" id="panel-timer" role="tabpanel" aria-labelledby="tab-timer">
-        <!-- Display Stage with HUGE Digits -->
+        <!-- Display Stage with HUGE Digits in Master Inter Display Black 900 Chrome -->
         <div class="display-stage">
-          <div class="huge-digits-container">
-            <div class="timer-digits" id="timerDigits">00:25:00</div>
+          <div class="chrome timer-digits-huge" id="timerDigits">
+            <!-- Formatted via chromeHTML() in JS -->
           </div>
           <!-- Progress bar -->
           <div class="progress-container">
@@ -178,10 +192,10 @@
       <!-- TAB 2: STOPWATCH                           -->
       <!-- ========================================== -->
       <section class="tab-panel" id="panel-stopwatch" role="tabpanel" aria-labelledby="tab-stopwatch">
-        <!-- Display Stage with HUGE Digits MM:SS.ms -->
+        <!-- Display Stage with HUGE Digits MM:SS.ms in Master Inter Display Black 900 Chrome -->
         <div class="display-stage">
-          <div class="huge-digits-container">
-            <span class="stopwatch-digits" id="swDigits">00:00</span><span class="stopwatch-ms" id="swMs">.00</span>
+          <div class="chrome stopwatch-digits-huge" id="swDigits">
+            <!-- Formatted via chromeHTML() in JS -->
           </div>
         </div>
 
@@ -276,7 +290,9 @@
   <div id="ov" role="alertdialog" aria-modal="true" aria-labelledby="ovTitle" aria-live="assertive">
     <div class="ov-content">
       <div class="ov-ring-bell">🔔</div>
-      <div class="ov-title" id="ovTitle">00:00:00</div>
+      <div class="ov-title chrome" id="ovTitle">
+        <!-- Rendered with chromeHTML() -->
+      </div>
       <div class="ov-message" id="ovMessage">Time's Up!</div>
       <div class="ov-actions">
         <button type="button" class="btn-luxury btn-ghost-silver" id="btnOvSnooze">Snooze (5 min)</button>

@@ -34,7 +34,6 @@
   --mute: #7E776B;
   
   --sans: 'Lexend', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-clock: 'Chakra Petch', 'Orbitron', 'Lexend', monospace;
   --mono: 'Space Mono', 'Consolas', monospace;
   
   color-scheme: dark;
@@ -83,7 +82,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 24px 14px 24px;
+  padding: 16px 24px 12px 24px;
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
@@ -148,6 +147,7 @@ html, body {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .btn-topbar-desktop {
@@ -197,15 +197,68 @@ main.timer-main {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 8px 20px 40px 20px;
+  padding: 4px 20px 40px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
+/* THEME SELECTION STRIP */
+.theme-strip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  gap: 12px;
+}
+
+.theme-cycle-btn {
+  background: rgba(217, 185, 92, 0.08);
+  border: 1px solid rgba(217, 185, 92, 0.4);
+  color: #FFFBEB;
+  padding: 7px 18px;
+  border-radius: 9999px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 0 12px rgba(217, 185, 92, 0.15);
+  backdrop-filter: blur(8px);
+}
+
+.theme-cycle-btn:hover {
+  background: rgba(217, 185, 92, 0.2);
+  border-color: var(--gold);
+  box-shadow: 0 0 20px rgba(217, 185, 92, 0.35);
+  transform: translateY(-1px);
+}
+
+.theme-select-dropdown {
+  background: rgba(12, 12, 14, 0.95);
+  border: 1px solid rgba(217, 185, 92, 0.35);
+  color: #FFFBEB;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.theme-select-dropdown:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 14px rgba(217, 185, 92, 0.4);
+}
+
 /* LUXURY TABS NAVIGATION */
 .tabs-nav-container {
-  margin: 12px 0 28px 0;
+  margin: 6px 0 24px 0;
   display: flex;
   justify-content: center;
   width: 100%;
@@ -289,12 +342,12 @@ main.timer-main {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 24px 16px 20px 16px;
+  padding: 30px 16px 26px 16px;
   margin-bottom: 24px;
-  background: radial-gradient(circle at 50% 50%, rgba(28, 29, 37, 0.4) 0%, rgba(12, 12, 14, 0.6) 80%);
-  border: 1px solid rgba(217, 185, 92, 0.16);
+  background: radial-gradient(circle at 50% 50%, rgba(28, 29, 37, 0.45) 0%, rgba(12, 12, 14, 0.75) 80%);
+  border: 1px solid rgba(217, 185, 92, 0.2);
   border-radius: 28px;
-  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.8), 0 12px 36px rgba(0, 0, 0, 0.6);
+  box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.85), 0 14px 40px rgba(0, 0, 0, 0.7);
   position: relative;
   overflow: hidden;
 }
@@ -303,49 +356,259 @@ main.timer-main {
   content: '';
   position: absolute;
   top: 0;
-  left: 25%;
-  right: 25%;
+  left: 20%;
+  right: 20%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(217, 185, 92, 0.6), transparent);
+  background: linear-gradient(90deg, transparent, rgba(217, 185, 92, 0.65), transparent);
 }
 
-/* TIMER DIGITS (HUGE, FILLING MOST OF SCREEN) */
-.huge-digits-container {
-  display: flex;
+/* ══════════════════════════════════════════════════════════════
+   PRECISION NUMERALS — MASTER INTER DISPLAY BLACK 900
+   (Exact specification matching OrlandoRecharge)
+   ══════════════════════════════════════════════════════════════ */
+.chrome {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-weight: 900 !important;
+  line-height: 0.88;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  letter-spacing: 0.01em !important;
+  display: inline-flex;
   align-items: baseline;
   justify-content: center;
-  width: 100%;
-  line-height: 1;
   user-select: none;
   -webkit-user-select: none;
 }
 
-.timer-digits, .stopwatch-digits {
-  font-family: var(--font-clock);
-  font-size: clamp(3.8rem, 13.5vw, 9.8rem);
-  font-weight: 800;
-  letter-spacing: clamp(1px, 0.5vw, 6px);
-  font-variant-numeric: tabular-nums;
-  color: #FFFFFF;
-  background: linear-gradient(180deg, #FFFFFF 20%, #EAD69A 65%, #C29E3D 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 24px rgba(217, 185, 92, 0.45));
+.chrome span {
+  display: inline-block;
+  width: .62em !important;
   text-align: center;
-  white-space: nowrap;
 }
 
-.stopwatch-ms {
-  font-family: var(--font-clock);
-  font-size: clamp(1.8rem, 6.5vw, 4.5rem);
-  font-weight: 700;
-  color: var(--gold-light);
-  background: linear-gradient(180deg, #FFFFFF 10%, #D9B95C 80%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-left: 4px;
+.chrome span.c {
+  width: .26em !important;
+  margin: 0 0.03em 0 0.015em !important;
+  transform: translateY(-.04em);
+}
+
+.chrome span.ms-sep {
+  width: .22em !important;
+  margin: 0 0.02em !important;
+  transform: translateY(-.04em);
+}
+
+/* Huge Clock Sizes matching OrlandoRecharge geometry */
+.timer-digits-huge {
+  font-size: clamp(4.2rem, 15vw, 13.5rem);
+  flex-shrink: 0;
+}
+
+.stopwatch-digits-huge {
+  font-size: clamp(3.8rem, 13.5vw, 12rem);
+  flex-shrink: 0;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   17 BESPOKE CLOCK METALLIC & LUMINESCENT COLORWAYS (INTER 900)
+   (Directly imported from OrlandoRecharge)
+   ══════════════════════════════════════════════════════════════ */
+
+/* Choice 1: Executive Chrome 3D */
+body[data-clock-theme="chrome-3d"] .chrome,
+body[data-clock-theme="chrome"] .chrome {
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.92));
+}
+body[data-clock-theme="chrome-3d"] .chrome span,
+body[data-clock-theme="chrome"] .chrome span {
+  background: linear-gradient(180deg,#FFFFFF 0%,#F1F5F9 16%,#CBD5E1 38%,#475569 52%,#1E293B 56%,#334155 64%,#94A3B8 82%,#E2E8F0 96%,#FFFFFF 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0;
+}
+
+/* Choice 2: Royal 24K Radiant Gold */
+body[data-clock-theme="gold"] .chrome {
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.9)) drop-shadow(0 0 25px rgba(217,185,92,0.25));
+}
+body[data-clock-theme="gold"] .chrome span {
+  background: linear-gradient(180deg,#FFFBEB 0%,#FDE68A 18%,#F59E0B 48%,#78350F 70%,#FBBF24 88%,#FDE68A 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0;
+}
+
+/* Choice 3: Cyberpunk Emerald Matrix */
+body[data-clock-theme="cyber-emerald"] .chrome,
+body[data-clock-theme="cyberpunk"] .chrome {
+  filter: drop-shadow(0 0 10px rgba(52,211,153,0.7)) drop-shadow(0 0 28px rgba(16,185,129,0.35));
+}
+body[data-clock-theme="cyber-emerald"] .chrome span,
+body[data-clock-theme="cyberpunk"] .chrome span {
+  background: linear-gradient(180deg,#F0FDF4 0%,#A7F3D0 22%,#34D399 52%,#059669 82%,#10B981 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0;
+}
+
+/* Choice 4: Glacial Titanium & Ice Blue */
+body[data-clock-theme="ice-titanium"] .chrome,
+body[data-clock-theme="glacial"] .chrome {
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.85)) drop-shadow(0 0 20px rgba(56,189,248,0.3));
+}
+body[data-clock-theme="ice-titanium"] .chrome span,
+body[data-clock-theme="glacial"] .chrome span {
+  background: linear-gradient(180deg,#F0F9FF 0%,#BAE6FD 20%,#38BDF8 50%,#0C4A6E 74%,#0284C7 88%,#7DD3FC 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0;
+}
+
+/* Choice 5: Imperial Amethyst Purple */
+body[data-clock-theme="amethyst"] .chrome,
+body[data-clock-theme="purple"] .chrome {
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.9)) drop-shadow(0 0 22px rgba(192,132,252,0.4));
+}
+body[data-clock-theme="amethyst"] .chrome span,
+body[data-clock-theme="purple"] .chrome span {
+  background: linear-gradient(180deg,#FAF5FF 0%,#E9D5FF 22%,#C084FC 50%,#7E22CE 76%,#A855F7 90%,#E9D5FF 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0;
+}
+
+/* Choice 6: Sunset Rose Gold */
+body[data-clock-theme="sunset-rose"] .chrome,
+body[data-clock-theme="pink"] .chrome {
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.85)) drop-shadow(0 0 18px rgba(244,114,182,0.25));
+}
+body[data-clock-theme="sunset-rose"] .chrome span,
+body[data-clock-theme="pink"] .chrome span {
+  background: linear-gradient(180deg,#FFF1F2 0%,#FECDD3 22%,#FB7185 50%,#4C0519 74%,#E11D48 88%,#FDA4AF 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0;
+}
+
+/* Choice 7: Pure Minimalist Studio White */
+body[data-clock-theme="minimal-white"] .chrome,
+body[data-clock-theme="pure-white"] .chrome {
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.85)) drop-shadow(0 0 20px rgba(255,255,255,0.15));
+}
+body[data-clock-theme="minimal-white"] .chrome span,
+body[data-clock-theme="pure-white"] .chrome span {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  -webkit-text-stroke: 0 !important;
+}
+
+/* Choice 8: German Chronometer Tool Steel */
+body[data-clock-theme="chronometer-din"] .chrome,
+body[data-clock-theme="din"] .chrome {
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.9));
+}
+body[data-clock-theme="chronometer-din"] .chrome span,
+body[data-clock-theme="din"] .chrome span {
+  background: linear-gradient(180deg,#FFFFFF 0%,#E2E8F0 25%,#94A3B8 54%,#334155 76%,#64748B 90%,#CBD5E1 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0;
+}
+
+/* Choice 9: Blazing Sunset Amber */
+body[data-clock-theme="sunset-amber"] .chrome,
+body[data-clock-theme="amber"] .chrome {
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.9)) drop-shadow(0 0 25px rgba(245,158,11,0.35));
+}
+body[data-clock-theme="sunset-amber"] .chrome span,
+body[data-clock-theme="amber"] .chrome span {
+  background: linear-gradient(180deg,#FFFBEB 0%,#FDE68A 20%,#F59E0B 52%,#451A03 76%,#D97706 90%,#FCD34D 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0;
+}
+
+/* Choice 10: Midnight Gold Dual-Tone Rim */
+body[data-clock-theme="midnight-gold"] .chrome {
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.95));
+}
+body[data-clock-theme="midnight-gold"] .chrome span {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  -webkit-text-stroke: 0 !important;
+  text-shadow:
+    -1.5px -1.5px 0 #D9B95C,
+     1.5px -1.5px 0 #D9B95C,
+    -1.5px  1.5px 0 #D9B95C,
+     1.5px  1.5px 0 #D9B95C,
+     0px   -1.8px 0 #D9B95C,
+     0px    1.8px 0 #D9B95C,
+    -1.8px  0px   0 #D9B95C,
+     1.8px  0px   0 #D9B95C,
+     0 0 18px rgba(217,185,92,0.45);
+}
+
+/* Choice 11: Pure Platinum (DEFAULT REFERENCE) */
+body[data-clock-theme="platinum"] .chrome {
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.92));
+}
+body[data-clock-theme="platinum"] .chrome span {
+  background: linear-gradient(180deg,#FFFFFF 0%,#F1F5F9 18%,#CBD5E1 42%,#475569 64%,#1E293B 70%,#64748B 82%,#E2E8F0 96%,#FFFFFF 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0;
+}
+
+/* Choice 12: Prismatic Rainbow Shining */
+body[data-clock-theme="rainbow"] .chrome {
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.9));
+}
+body[data-clock-theme="rainbow"] .chrome span {
+  background: linear-gradient(135deg,#FF7675 0%,#FDCB6E 20%,#55EFC4 40%,#74B9FF 60%,#A29BFE 80%,#FD79A8 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0;
+}
+
+/* Choice 13: Green Nature Matrix */
+body[data-clock-theme="green-nature"] .chrome {
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.85)) drop-shadow(0 0 20px rgba(34,197,94,0.3));
+}
+body[data-clock-theme="green-nature"] .chrome span {
+  background: linear-gradient(180deg,#F0FDF4 0%,#86EFAC 22%,#22C55E 50%,#14532D 74%,#4ADE80 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0;
+}
+
+/* Choice 14: Royal Sapphire & Cobalt Chrono */
+body[data-clock-theme="royal-sapphire"] .chrome {
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.9)) drop-shadow(0 0 24px rgba(59,130,246,0.5));
+}
+body[data-clock-theme="royal-sapphire"] .chrome span {
+  background: linear-gradient(180deg,#EFF6FF 0%,#BFDBFE 18%,#60A5FA 46%,#1E3A8A 72%,#2563EB 88%,#93C5FD 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0;
+}
+
+/* Choice 15: Cyberpunk Crimson Laser */
+body[data-clock-theme="crimson-laser"] .chrome {
+  filter: drop-shadow(0 0 12px rgba(239,68,68,0.7)) drop-shadow(0 0 32px rgba(220,38,38,0.35));
+}
+body[data-clock-theme="crimson-laser"] .chrome span {
+  background: linear-gradient(180deg,#FEF2F2 0%,#FECACA 20%,#F87171 48%,#7F1D1D 74%,#EF4444 88%,#FCA5A5 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0;
+}
+
+/* Choice 16: Titanium Obsidian Noir */
+body[data-clock-theme="obsidian-noir"] .chrome {
+  filter: drop-shadow(0 6px 14px rgba(0,0,0,0.95)) drop-shadow(0 0 16px rgba(148,163,184,0.3));
+}
+body[data-clock-theme="obsidian-noir"] .chrome span {
+  background: linear-gradient(180deg,#FFFFFF 0%,#E2E8F0 18%,#94A3B8 46%,#0F172A 72%,#475569 88%,#CBD5E1 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0;
+}
+
+/* Choice 17: Solis Radiant 18K Yellow Gold */
+body[data-clock-theme="solis-gold"] .chrome {
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.92)) drop-shadow(0 0 28px rgba(234,179,8,0.4));
+}
+body[data-clock-theme="solis-gold"] .chrome span {
+  background: linear-gradient(180deg,#FEFCE8 0%,#FEF08A 18%,#FACC15 48%,#713F12 74%,#EAB308 88%,#FDE047 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0;
 }
 
 /* PROGRESS BAR / RING */
@@ -410,9 +673,9 @@ main.timer-main {
   background: rgba(12, 12, 14, 0.9);
   border: 1px solid rgba(217, 185, 92, 0.35);
   border-radius: 10px;
-  font-family: var(--font-clock);
-  font-size: 26px;
-  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  font-size: 24px;
+  font-weight: 800;
   color: #FFFBEB;
   text-align: center;
   outline: none;
@@ -426,8 +689,9 @@ main.timer-main {
 }
 
 .time-colon {
-  font-family: var(--font-clock);
+  font-family: 'Inter', sans-serif;
   font-size: 28px;
+  font-weight: 900;
   color: var(--gold);
   line-height: 1;
   padding-bottom: 4px;
@@ -663,15 +927,16 @@ main.timer-main {
 }
 
 .lap-split {
-  font-family: var(--font-clock);
+  font-family: 'Inter', sans-serif;
   font-size: 15px;
+  font-weight: 800;
   color: var(--text);
 }
 
 .lap-total {
-  font-family: var(--font-clock);
+  font-family: 'Inter', sans-serif;
   font-size: 15px;
-  font-weight: 700;
+  font-weight: 900;
   color: var(--gold);
 }
 
@@ -726,9 +991,9 @@ main.timer-main {
   background: rgba(12, 12, 14, 0.95);
   border: 1px solid rgba(217, 185, 92, 0.4);
   border-radius: 12px;
-  font-family: var(--font-clock);
+  font-family: 'Inter', sans-serif;
   font-size: 26px;
-  font-weight: 700;
+  font-weight: 800;
   color: #FFFBEB;
   padding: 8px 14px;
   outline: none;
@@ -821,15 +1086,12 @@ main.timer-main {
 .alarm-card-left {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
 
 .alarm-card-time {
-  font-family: var(--font-clock);
-  font-size: 30px;
-  font-weight: 700;
-  color: #FFFFFF;
-  letter-spacing: 1px;
+  font-size: 28px;
+  line-height: 1;
 }
 
 .alarm-card-label {
@@ -969,14 +1231,7 @@ input:checked + .slider:before {
 }
 
 .ov-title {
-  font-family: var(--font-clock);
-  font-size: clamp(2.5rem, 8vw, 4.5rem);
-  font-weight: 800;
-  color: #FFFBEB;
-  background: linear-gradient(180deg, #FFFFFF, #D9B95C);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-size: clamp(2.8rem, 8vw, 5.5rem);
   line-height: 1.1;
 }
 
@@ -1061,7 +1316,7 @@ input:checked + .slider:before {
   }
   
   .display-stage {
-    padding: 18px 10px;
+    padding: 20px 10px;
     border-radius: 20px;
   }
   

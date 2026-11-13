@@ -8,11 +8,110 @@
   'use strict';
 
   // -------------------------------------------------------------------------
-  // 1. AUDIO SYNTHESIS & SOUND ENGINE (Web Audio API + Fallback)
+  // 1. BESPOKE CLOCK THEMES (Exact 17 Masterworks from OrlandoRecharge)
+  // -------------------------------------------------------------------------
+  const THEMES = [
+    "platinum",         // Choice 11: Pure Platinum (Reference Specular Masterpiece)
+    "gold",             // Choice 2: Royal 24K Radiant Gold (Split-Complementary Luxury)
+    "royal-sapphire",   // Choice 14: Royal Sapphire & Cobalt Chrono (Space Grotesk Bold)
+    "crimson-laser",    // Choice 15: Cyberpunk Crimson Laser (Chakra Petch Bold)
+    "obsidian-noir",    // Choice 16: Titanium Obsidian Noir (Inter Display Black)
+    "solis-gold",       // Choice 17: Solis Radiant 18K Yellow Gold (Outfit Extra Bold)
+    "rainbow",          // Choice 12: Prismatic Rainbow (Triadic 120° Harmonic Spectrum)
+    "chrome-3d",        // Choice 1: Executive Chrome 3D (Monochromatic Specular Silver)
+    "cyber-emerald",    // Choice 3: Cyberpunk Emerald Matrix (Analogous Mint & Forest Neon)
+    "ice-titanium",     // Choice 4: Glacial Titanium & Ice Blue (Complementary Cyan & Titanium)
+    "amethyst",         // Choice 5: Imperial Amethyst Purple (Analogous Royal Violet)
+    "sunset-rose",      // Choice 6: Sunset Rose Gold (Analogous Serene Copper Blush)
+    "minimal-white",    // Choice 7: Pure Minimalist Studio White
+    "chronometer-din",  // Choice 8: German Chronometer DIN (Monochromatic Precision Tool Steel)
+    "sunset-amber",     // Choice 9: Blazing Sunset Amber (Complementary Molten Bronze Tachometer)
+    "midnight-gold",    // Choice 10: Midnight Gold Dual-Tone Rim (Split-Complementary Core & 24K Rim)
+    "green-nature"      // Choice 13: Green Nature Matrix
+  ];
+
+  const THEME_NAMES = {
+    "platinum": "Pure Platinum",
+    "gold": "Royal 24K Radiant Gold",
+    "royal-sapphire": "Royal Sapphire & Cobalt Chrono",
+    "crimson-laser": "Cyberpunk Crimson Laser",
+    "obsidian-noir": "Titanium Obsidian Noir",
+    "solis-gold": "Solis Radiant 18K Gold",
+    "rainbow": "Prismatic Rainbow",
+    "chrome-3d": "Executive Chrome 3D",
+    "cyber-emerald": "Cyberpunk Emerald Matrix",
+    "ice-titanium": "Glacial Titanium & Ice Blue",
+    "amethyst": "Imperial Amethyst Purple",
+    "sunset-rose": "Sunset Rose Gold",
+    "minimal-white": "Pure Minimalist Studio",
+    "chronometer-din": "German Chronometer DIN",
+    "sunset-amber": "Blazing Sunset Amber",
+    "midnight-gold": "Midnight Gold Dual-Tone Rim",
+    "green-nature": "Green Nature Matrix"
+  };
+
+  let currentTheme = "platinum";
+  try {
+    const savedTheme = localStorage.getItem('orlando-clock-theme');
+    if (savedTheme && THEMES.includes(savedTheme)) {
+      currentTheme = savedTheme;
+    }
+  } catch(e) {}
+
+  function applyClockTheme(theme) {
+    if (!THEMES.includes(theme)) theme = "platinum";
+    currentTheme = theme;
+    document.body.setAttribute('data-clock-theme', theme);
+    const themeLabel = document.getElementById('themeLabel');
+    if (themeLabel) themeLabel.textContent = THEME_NAMES[theme] || theme;
+    const select = document.getElementById('themeSelectDropdown');
+    if (select && select.value !== theme) select.value = theme;
+    try {
+      localStorage.setItem('orlando-clock-theme', theme);
+    } catch(e) {}
+  }
+
+  // Populate Theme Dropdown & Wire Cycle Button
+  const themeDropdown = document.getElementById('themeSelectDropdown');
+  if (themeDropdown) {
+    THEMES.forEach((t) => {
+      const opt = document.createElement('option');
+      opt.value = t;
+      opt.textContent = THEME_NAMES[t];
+      if (t === currentTheme) opt.selected = true;
+      themeDropdown.appendChild(opt);
+    });
+    themeDropdown.addEventListener('change', (e) => {
+      applyClockTheme(e.target.value);
+    });
+  }
+
+  const themeCycleBtn = document.getElementById('themeCycleBtn');
+  if (themeCycleBtn) {
+    themeCycleBtn.addEventListener('click', () => {
+      const idx = (THEMES.indexOf(currentTheme) + 1) % THEMES.length;
+      applyClockTheme(THEMES[idx]);
+    });
+  }
+
+  // Apply initial theme immediately
+  applyClockTheme(currentTheme);
+
+  // Precision Chrome Number Renderer (from OrlandoRecharge)
+  function chromeHTML(str) {
+    return str.split("").map((c) => {
+      if (c === ":") return '<span class="c">:</span>';
+      if (c === ".") return '<span class="ms-sep">.</span>';
+      return '<span>' + c + '</span>';
+    }).join("");
+  }
+
+  // -------------------------------------------------------------------------
+  // 2. AUDIO SYNTHESIS & SOUND ENGINE (Web Audio API + Fallback)
   // -------------------------------------------------------------------------
   let audioCtx = null;
   let alarmAudioInterval = null;
-  let isRinging = null; // null or object with { type: 'timer'|'alarm', label: string }
+  let isRinging = null;
   let audioUnlocked = false;
 
   function getAudioContext() {
@@ -32,7 +131,6 @@
     if (audioUnlocked) return;
     const ctx = getAudioContext();
     if (ctx) {
-      // Play a tiny silent buffer
       const buffer = ctx.createBuffer(1, 1, 22050);
       const source = ctx.createBufferSource();
       source.buffer = buffer;
@@ -79,7 +177,6 @@
       playLuxuryChime();
     }, 1400);
 
-    // Try fallback sound element if present
     const audioEl = document.getElementById('alarmAudioElement');
     if (audioEl) {
       audioEl.currentTime = 0;
@@ -100,7 +197,7 @@
   }
 
   // -------------------------------------------------------------------------
-  // 2. SCREEN WAKE LOCK API (Keep Screen Awake while Running)
+  // 3. SCREEN WAKE LOCK API (Keep Screen Awake while Running)
   // -------------------------------------------------------------------------
   let wakeLockSentinel = null;
   let isWakeLockRequested = true;
@@ -116,7 +213,6 @@
         });
       }
     } catch (err) {
-      console.warn('Wake Lock error:', err);
       updateWakeLockUI(false);
     }
   }
@@ -158,11 +254,10 @@
     });
   }
 
-  // Initial wake lock request
   requestWakeLock();
 
   // -------------------------------------------------------------------------
-  // 3. FULLSCREEN API
+  // 4. FULLSCREEN API
   // -------------------------------------------------------------------------
   const btnFullscreen = document.getElementById('btnFullscreen');
   const fsLabel = document.getElementById('fsLabel');
@@ -195,7 +290,7 @@
   document.addEventListener('webkitfullscreenchange', updateFullscreenUI);
 
   // -------------------------------------------------------------------------
-  // 4. TAB NAVIGATION
+  // 5. TAB NAVIGATION
   // -------------------------------------------------------------------------
   const tabBtns = document.querySelectorAll('.tab-btn');
   const tabPanels = document.querySelectorAll('.tab-panel');
@@ -217,7 +312,7 @@
   });
 
   // -------------------------------------------------------------------------
-  // 5. TIMER MODULE (Huge Digits, Inputs, Presets, Flashing & Sound)
+  // 6. TIMER MODULE (Huge Master Inter Black Digits, Presets, Flashing)
   // -------------------------------------------------------------------------
   let timerTotalDuration = 25 * 60; // 25 min default
   let timerRemaining = timerTotalDuration;
@@ -249,7 +344,8 @@
 
   function updateTimerDisplay() {
     if (timerDigitsEl) {
-      timerDigitsEl.textContent = formatTimeHHMMSS(timerRemaining);
+      const timeStr = formatTimeHHMMSS(timerRemaining);
+      timerDigitsEl.innerHTML = chromeHTML(timeStr);
     }
     if (timerProgressBar && timerTotalDuration > 0) {
       const pct = Math.max(0, Math.min(100, (timerRemaining / timerTotalDuration) * 100));
@@ -288,7 +384,7 @@
     if (timerRemaining <= 0) {
       const inputDuration = getDurationFromInputs();
       if (inputDuration <= 0) {
-        setTimerDuration(25 * 60); // Default to 25 min if 0
+        setTimerDuration(25 * 60);
       } else {
         setTimerDuration(inputDuration);
       }
@@ -337,8 +433,8 @@
   function onTimerComplete() {
     triggerAlertOverlay({
       type: 'timer',
-      title: "TIME'S UP!",
-      message: 'Your timer countdown has finished.',
+      title: "00:00:00",
+      message: "TIME'S UP! Your countdown has finished.",
       canSnooze: false
     });
   }
@@ -386,21 +482,19 @@
   btnTimerPause.addEventListener('click', pauseTimer);
   btnTimerReset.addEventListener('click', resetTimer);
 
-  // Initialize Timer Display
   setTimerDuration(25 * 60);
 
   // -------------------------------------------------------------------------
-  // 6. STOPWATCH MODULE (Huge Digits MM:SS.ms, Lap List, Fastest/Slowest)
+  // 7. STOPWATCH MODULE (Huge Digits MM:SS.ms in Chrome Inter 900)
   // -------------------------------------------------------------------------
   let swStartTime = 0;
   let swElapsedTime = 0;
   let swInterval = null;
   let swIsRunning = false;
-  let laps = []; // array of { lapNumber, splitTime, totalTime }
+  let laps = [];
   let lastLapTotalTime = 0;
 
   const swDigitsEl = document.getElementById('swDigits');
-  const swMsEl = document.getElementById('swMs');
   const btnSwStart = document.getElementById('btnSwStart');
   const btnSwStop = document.getElementById('btnSwStop');
   const btnSwLap = document.getElementById('btnSwLap');
@@ -409,7 +503,7 @@
 
   function formatStopwatchTime(totalMs) {
     const totalSec = Math.floor(totalMs / 1000);
-    const ms = Math.floor((totalMs % 1000) / 10); // 2 digits
+    const ms = Math.floor((totalMs % 1000) / 10);
     const hours = Math.floor(totalSec / 3600);
     const minutes = Math.floor((totalSec % 3600) / 60);
     const seconds = totalSec % 60;
@@ -420,15 +514,16 @@
 
     if (hours > 0) {
       const hh = String(hours).padStart(2, '0');
-      return { main: `${hh}:${mm}:${ss}`, ms: `.${msStr}` };
+      return `${hh}:${mm}:${ss}.${msStr}`;
     }
-    return { main: `${mm}:${ss}`, ms: `.${msStr}` };
+    return `${mm}:${ss}.${msStr}`;
   }
 
   function updateStopwatchDisplay() {
     const formatted = formatStopwatchTime(swElapsedTime);
-    if (swDigitsEl) swDigitsEl.textContent = formatted.main;
-    if (swMsEl) swMsEl.textContent = formatted.ms;
+    if (swDigitsEl) {
+      swDigitsEl.innerHTML = chromeHTML(formatted);
+    }
   }
 
   function startStopwatch() {
@@ -491,7 +586,6 @@
       return;
     }
 
-    // Determine fastest and slowest
     let minSplit = Infinity;
     let maxSplit = -Infinity;
 
@@ -519,8 +613,8 @@
         return `
         <div class="lap-item">
           <span class="lap-num">Lap ${String(lap.lapNumber).padStart(2, '0')}${badgeHtml}</span>
-          <span class="lap-split">+${splitFmt.main}${splitFmt.ms}</span>
-          <span class="lap-total">${totalFmt.main}${totalFmt.ms}</span>
+          <span class="lap-split chrome">+${chromeHTML(splitFmt)}</span>
+          <span class="lap-total chrome">${chromeHTML(totalFmt)}</span>
         </div>
       `;
       })
@@ -536,7 +630,7 @@
   renderLaps();
 
   // -------------------------------------------------------------------------
-  // 7. ALARM MODULE (12-hour AM/PM, Multiple Alarms, localStorage, Ringing)
+  // 8. ALARM MODULE (12-hour AM/PM, Multiple Alarms, Chrome Formatting)
   // -------------------------------------------------------------------------
   const STORAGE_KEY = 'orlando_timer_alarms';
   let alarms = [];
@@ -551,7 +645,6 @@
   const btnAddAlarm = document.getElementById('btnAddAlarm');
   const alarmsListContainer = document.getElementById('alarmsList');
 
-  // Populate hour and minute dropdowns
   if (alarmHourSelect) {
     for (let h = 1; h <= 12; h++) {
       const opt = document.createElement('option');
@@ -591,7 +684,6 @@
       if (raw) {
         alarms = JSON.parse(raw);
       } else {
-        // Default seed alarms for Executive Horology
         alarms = [
           {
             id: 'alarm_1',
@@ -621,7 +713,6 @@
         saveAlarms();
       }
     } catch (e) {
-      console.warn('Failed to load alarms:', e);
       alarms = [];
     }
   }
@@ -629,9 +720,7 @@
   function saveAlarms() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(alarms));
-    } catch (e) {
-      console.warn('Failed to save alarms:', e);
-    }
+    } catch (e) {}
     renderAlarms();
   }
 
@@ -643,7 +732,7 @@
 
     const targetDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), targetHour, alarmMinute, 0, 0);
     if (targetDate <= now) {
-      targetDate.setDate(targetDate.getDate() + 1); // Rings tomorrow
+      targetDate.setDate(targetDate.getDate() + 1);
     }
 
     const diffMs = targetDate - now;
@@ -668,13 +757,17 @@
 
     alarmsListContainer.innerHTML = alarms
       .map((alarm) => {
-        const timeStr = `${String(alarm.hour).padStart(2, '0')}:${String(alarm.minute).padStart(2, '0')} ${alarm.ampm}`;
+        const timeDigits = `${String(alarm.hour).padStart(2, '0')}:${String(alarm.minute).padStart(2, '0')}`;
+        const timeFormatted = chromeHTML(timeDigits);
         const countdownStr = alarm.enabled ? calculateTimeUntil(alarm.hour, alarm.minute, alarm.ampm) : 'Disabled';
 
         return `
         <div class="alarm-card ${alarm.enabled ? '' : 'disabled'}" id="card_${alarm.id}">
           <div class="alarm-card-left">
-            <div class="alarm-card-time">${timeStr}</div>
+            <div class="alarm-card-time chrome">
+              ${timeFormatted}
+              <span style="font-size:0.52em;margin-left:0.18em;letter-spacing:0.04em;">${alarm.ampm}</span>
+            </div>
             <div class="alarm-card-label">${escapeHtml(alarm.label || 'Alarm')}</div>
             <div class="alarm-card-countdown">${countdownStr}</div>
           </div>
@@ -740,17 +833,12 @@
     });
   }
 
-  // Check alarms every second
   function checkAlarms() {
     const now = new Date();
     const currentMin = now.getMinutes();
 
-    // Check count downs update periodically
     if (now.getSeconds() === 0 && currentMin !== lastCheckedMinute) {
       renderAlarms();
-    }
-
-    if (now.getSeconds() === 0 && currentMin !== lastCheckedMinute) {
       lastCheckedMinute = currentMin;
 
       let currentHour24 = now.getHours();
@@ -762,8 +850,8 @@
         if (alarm.enabled && alarm.hour === currentHour12 && alarm.minute === currentMin && alarm.ampm === currentAmPm) {
           triggerAlertOverlay({
             type: 'alarm',
-            title: `${String(alarm.hour).padStart(2, '0')}:${String(alarm.minute).padStart(2, '0')} ${alarm.ampm}`,
-            message: alarm.label || 'Alarm Notification',
+            title: `${String(alarm.hour).padStart(2, '0')}:${String(alarm.minute).padStart(2, '0')}`,
+            message: `${alarm.label || 'Alarm Notification'} (${alarm.ampm})`,
             canSnooze: true
           });
         }
@@ -775,7 +863,7 @@
   loadAlarms();
 
   // -------------------------------------------------------------------------
-  // 8. FULLSCREEN ALERT OVERLAY (Flashing, Sound, Snooze & Stop)
+  // 9. FULLSCREEN ALERT OVERLAY (Flashing, Sound, Snooze & Stop)
   // -------------------------------------------------------------------------
   const overlayEl = document.getElementById('ov');
   const ovTitleEl = document.getElementById('ovTitle');
@@ -785,7 +873,7 @@
 
   function triggerAlertOverlay(info) {
     isRinging = info;
-    if (ovTitleEl) ovTitleEl.textContent = info.title;
+    if (ovTitleEl) ovTitleEl.innerHTML = chromeHTML(info.title);
     if (ovMessageEl) ovMessageEl.textContent = info.message;
 
     if (btnOvSnooze) {
@@ -812,7 +900,6 @@
 
   function snoozeAlert() {
     dismissAlert();
-    // Schedule snooze for 5 minutes
     const now = new Date();
     now.setMinutes(now.getMinutes() + 5);
 
@@ -836,7 +923,6 @@
   if (btnOvDismiss) btnOvDismiss.addEventListener('click', dismissAlert);
   if (btnOvSnooze) btnOvSnooze.addEventListener('click', snoozeAlert);
 
-  // Keyboard accessibility
   window.addEventListener('keydown', (e) => {
     if (isRinging) {
       if (e.key === 'Escape' || e.key === ' ' || e.key === 'Enter') {
@@ -848,7 +934,7 @@
   });
 
   // -------------------------------------------------------------------------
-  // 9. ANTIGRAVITY REPULSIVE PARTICLES CANVAS (Signature Visual FX)
+  // 10. ANTIGRAVITY REPULSIVE PARTICLES CANVAS (Signature Visual FX)
   // -------------------------------------------------------------------------
   const canvas = document.getElementById('antigravityCanvas');
   if (canvas) {
@@ -881,13 +967,10 @@
     function renderParticles() {
       if (!ctx) return;
       ctx.clearRect(0, 0, width, height);
-
       ctx.fillStyle = 'rgba(217, 185, 92, 0.45)';
 
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
-
-        // Antigravity mouse repulsion
         const dx = p.x - mouse.x;
         const dy = p.y - mouse.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
@@ -934,7 +1017,7 @@
     requestAnimationFrame(renderParticles);
   }
 
-  // Service Worker Registration (for GitHub Pages & PWA)
+  // Service Worker Registration
   if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('sw.js').catch(() => {});
