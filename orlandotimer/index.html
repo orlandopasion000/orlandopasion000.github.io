@@ -23,12 +23,12 @@
   <!-- Relative Stylesheet -->
   <link rel="stylesheet" href="style.css">
 </head>
-<body data-clock-theme="platinum">
+<body data-app-theme="platinum" data-clock-style="platinum">
   <!-- Google Antigravity Signature Repulsive Particle Stage -->
   <canvas id="antigravityCanvas" class="antigravity-fx-canvas" aria-hidden="true"></canvas>
 
   <div class="app-wrapper">
-    <!-- 0. EXECUTIVE 24K SWISS GOLD BRAND HEADER -->
+    <!-- 0. EXECUTIVE BRAND HEADER -->
     <header class="or-brand-header">
       <a href="https://orlandopasion000.github.io/" class="or-brand-badge" title="Sir Orlando V. Pasion, Jr. — Master Portfolio">
         <img src="assets/ot-icon-192.png" alt="Orlando Timer 24K Swiss Gold Monogram" class="or-brand-logo-img">
@@ -56,19 +56,46 @@
 
     <!-- MIDDLE SECTION: VERY BIG TIMER APP WITH THREE TABS -->
     <main class="timer-main">
-      <!-- THEME SELECTOR STRIP (17 Bespoke Horology Finishes) -->
-      <div class="theme-strip">
-        <button type="button" class="theme-cycle-btn" id="themeCycleBtn" title="Click to cycle next theme">
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"></circle>
-            <path d="M12 2a10 10 0 0 1 10 10"></path>
-          </svg>
-          <span>Theme: <b id="themeLabel">Pure Platinum</b></span>
-        </button>
-        <select id="themeSelectDropdown" class="theme-select-dropdown" aria-label="Select Clock Appearance Theme">
-          <!-- Populated in JS with 17 themes -->
-        </select>
-      </div>
+
+      <!-- ════════════════════════════════════════════════════════════════════
+           DUAL CUSTOMIZATION COCKPIT (TWO SEPARATE INDEPENDENT CONTROLS)
+           LEFT: Theme (Controls entire application appearance)
+           RIGHT: Clock Style (Controls only clock digits typography & finish)
+           ════════════════════════════════════════════════════════════════════ -->
+      <section class="customization-cockpit" aria-label="Visual Appearance Customization">
+        <!-- Control 1 (Left): Global Application Theme -->
+        <div class="customizer-box customizer-theme">
+          <label for="appThemeSelect" class="customizer-badge" title="Controls entire application background, surfaces, cards, and buttons">
+            <span class="customizer-badge-icon">🎨</span>
+            <span class="customizer-badge-text">Theme</span>
+          </label>
+          <div class="customizer-select-wrap">
+            <span class="theme-color-preview" id="appThemeSwatch"></span>
+            <select id="appThemeSelect" class="luxury-theme-select" aria-label="Select Global Application Theme">
+              <!-- Dynamically populated with 17 themes in JS -->
+            </select>
+            <span class="select-chevron">▼</span>
+          </div>
+        </div>
+
+        <!-- Distinct Separation Divider -->
+        <div class="customizer-divider"></div>
+
+        <!-- Control 2 (Right): Clock Style Only -->
+        <div class="customizer-box customizer-clock">
+          <label for="clockStyleSelect" class="customizer-badge" title="Controls only the clock digits finish, font, and specular reflection">
+            <span class="customizer-badge-icon">⏱️</span>
+            <span class="customizer-badge-text">Clock Style</span>
+          </label>
+          <div class="customizer-select-wrap">
+            <span class="theme-color-preview" id="clockStyleSwatch"></span>
+            <select id="clockStyleSelect" class="luxury-theme-select" aria-label="Select Clock & Typography Style Only">
+              <!-- Dynamically populated with 17 clock styles in JS -->
+            </select>
+            <span class="select-chevron">▼</span>
+          </div>
+        </div>
+      </section>
 
       <!-- TABS NAVIGATION -->
       <div class="tabs-nav-container">
@@ -102,7 +129,7 @@
       <!-- TAB 1: TIMER                               -->
       <!-- ========================================== -->
       <section class="tab-panel active" id="panel-timer" role="tabpanel" aria-labelledby="tab-timer">
-        <!-- Display Stage with HUGE Digits in Master Inter Display Black 900 Chrome -->
+        <!-- Display Stage with HUGE Digits -->
         <div class="display-stage">
           <div class="chrome timer-digits-huge" id="timerDigits">
             <!-- Formatted via chromeHTML() in JS -->
@@ -192,7 +219,7 @@
       <!-- TAB 2: STOPWATCH                           -->
       <!-- ========================================== -->
       <section class="tab-panel" id="panel-stopwatch" role="tabpanel" aria-labelledby="tab-stopwatch">
-        <!-- Display Stage with HUGE Digits MM:SS.ms in Master Inter Display Black 900 Chrome -->
+        <!-- Display Stage with HUGE Digits MM:SS.ms -->
         <div class="display-stage">
           <div class="chrome stopwatch-digits-huge" id="swDigits">
             <!-- Formatted via chromeHTML() in JS -->

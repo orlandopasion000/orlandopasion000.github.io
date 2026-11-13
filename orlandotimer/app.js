@@ -2,32 +2,36 @@
  * Orlando Timer — Executive Horology Suite
  * Author: Sir Orlando V. Pasion, Jr.
  * Plain Vanilla JavaScript (ES6+), Zero Frameworks. Works offline & on GitHub Pages.
+ * 
+ * Comprehensive 2-Category Theming Architecture:
+ * - Category 1: Global Application Theme (Controls entire visual identity, surfaces, glows, background, buttons)
+ * - Category 2: Clock & Typography Style (Controls numeral typography, finishes, specular gradients, shadows)
  */
 
 (function () {
   'use strict';
 
-  // -------------------------------------------------------------------------
-  // 1. BESPOKE CLOCK THEMES (Exact 17 Masterworks from OrlandoRecharge)
-  // -------------------------------------------------------------------------
+  // ══════════════════════════════════════════════════════════════════════════
+  // 1. BESPOKE THEMES DEFINITION (17 WORLD-CLASS HOROLOGY THEMES)
+  // ══════════════════════════════════════════════════════════════════════════
   const THEMES = [
-    "platinum",         // Choice 11: Pure Platinum (Reference Specular Masterpiece)
-    "gold",             // Choice 2: Royal 24K Radiant Gold (Split-Complementary Luxury)
-    "royal-sapphire",   // Choice 14: Royal Sapphire & Cobalt Chrono (Space Grotesk Bold)
-    "crimson-laser",    // Choice 15: Cyberpunk Crimson Laser (Chakra Petch Bold)
-    "obsidian-noir",    // Choice 16: Titanium Obsidian Noir (Inter Display Black)
-    "solis-gold",       // Choice 17: Solis Radiant 18K Yellow Gold (Outfit Extra Bold)
-    "rainbow",          // Choice 12: Prismatic Rainbow (Triadic 120° Harmonic Spectrum)
-    "chrome-3d",        // Choice 1: Executive Chrome 3D (Monochromatic Specular Silver)
-    "cyber-emerald",    // Choice 3: Cyberpunk Emerald Matrix (Analogous Mint & Forest Neon)
-    "ice-titanium",     // Choice 4: Glacial Titanium & Ice Blue (Complementary Cyan & Titanium)
-    "amethyst",         // Choice 5: Imperial Amethyst Purple (Analogous Royal Violet)
-    "sunset-rose",      // Choice 6: Sunset Rose Gold (Analogous Serene Copper Blush)
-    "minimal-white",    // Choice 7: Pure Minimalist Studio White
-    "chronometer-din",  // Choice 8: German Chronometer DIN (Monochromatic Precision Tool Steel)
-    "sunset-amber",     // Choice 9: Blazing Sunset Amber (Complementary Molten Bronze Tachometer)
-    "midnight-gold",    // Choice 10: Midnight Gold Dual-Tone Rim (Split-Complementary Core & 24K Rim)
-    "green-nature"      // Choice 13: Green Nature Matrix
+    "platinum",         // Pure Platinum
+    "gold",             // Royal 24K Radiant Gold
+    "royal-sapphire",   // Royal Sapphire & Cobalt Chrono
+    "crimson-laser",    // Cyberpunk Crimson Laser
+    "obsidian-noir",    // Titanium Obsidian Noir
+    "solis-gold",       // Solis Radiant 18K Yellow Gold
+    "rainbow",          // Prismatic Rainbow
+    "chrome-3d",        // Executive Chrome 3D
+    "cyber-emerald",    // Cyberpunk Emerald Matrix
+    "ice-titanium",     // Glacial Titanium & Ice Blue
+    "amethyst",         // Imperial Amethyst Purple
+    "sunset-rose",      // Sunset Rose Gold
+    "minimal-white",    // Pure Minimalist Studio White
+    "chronometer-din",  // German Chronometer DIN
+    "sunset-amber",     // Blazing Sunset Amber
+    "midnight-gold",    // Midnight Gold Dual-Tone Rim
+    "green-nature"      // Green Nature Matrix
   ];
 
   const THEME_NAMES = {
@@ -43,59 +47,144 @@
     "ice-titanium": "Glacial Titanium & Ice Blue",
     "amethyst": "Imperial Amethyst Purple",
     "sunset-rose": "Sunset Rose Gold",
-    "minimal-white": "Pure Minimalist Studio",
+    "minimal-white": "Pure Minimalist Studio White",
     "chronometer-din": "German Chronometer DIN",
     "sunset-amber": "Blazing Sunset Amber",
     "midnight-gold": "Midnight Gold Dual-Tone Rim",
     "green-nature": "Green Nature Matrix"
   };
 
-  let currentTheme = "platinum";
+  const THEME_SWATCHES = {
+    "platinum": "#F1F5F9",
+    "gold": "#D9B95C",
+    "royal-sapphire": "#3B82F6",
+    "crimson-laser": "#EF4444",
+    "obsidian-noir": "#94A3B8",
+    "solis-gold": "#EAB308",
+    "rainbow": "#FD79A8",
+    "chrome-3d": "#E2E8F0",
+    "cyber-emerald": "#10B981",
+    "ice-titanium": "#38BDF8",
+    "amethyst": "#A855F7",
+    "sunset-rose": "#FB7185",
+    "minimal-white": "#FFFFFF",
+    "chronometer-din": "#F97316",
+    "sunset-amber": "#F59E0B",
+    "midnight-gold": "#F5E5B8",
+    "green-nature": "#22C55E"
+  };
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // 2. INDEPENDENT DUAL-CATEGORY CUSTOMIZATION ENGINE
+  // ══════════════════════════════════════════════════════════════════════════
+  let currentAppTheme = "platinum";
+  let currentClockStyle = "platinum";
+
+  // Load independent preferences from localStorage
   try {
-    const savedTheme = localStorage.getItem('orlando-clock-theme');
-    if (savedTheme && THEMES.includes(savedTheme)) {
-      currentTheme = savedTheme;
-    }
+    const savedApp = localStorage.getItem('orlando-app-theme');
+    if (savedApp && THEMES.includes(savedApp)) currentAppTheme = savedApp;
+
+    const savedClock = localStorage.getItem('orlando-clock-style') || localStorage.getItem('orlando-clock-theme');
+    if (savedClock && THEMES.includes(savedClock)) currentClockStyle = savedClock;
   } catch(e) {}
 
-  function applyClockTheme(theme) {
+  // Category 1: Global Application Theme Controller
+  function applyAppTheme(theme) {
     if (!THEMES.includes(theme)) theme = "platinum";
-    currentTheme = theme;
-    document.body.setAttribute('data-clock-theme', theme);
-    const themeLabel = document.getElementById('themeLabel');
-    if (themeLabel) themeLabel.textContent = THEME_NAMES[theme] || theme;
-    const select = document.getElementById('themeSelectDropdown');
+    currentAppTheme = theme;
+    document.body.setAttribute('data-app-theme', theme);
+
+    const label = document.getElementById('appThemeLabel');
+    if (label) label.textContent = THEME_NAMES[theme] || theme;
+
+    const swatch = document.getElementById('appThemeSwatch');
+    if (swatch) {
+      swatch.style.background = THEME_SWATCHES[theme] || '#D9B95C';
+      swatch.style.color = THEME_SWATCHES[theme] || '#D9B95C';
+    }
+
+    const select = document.getElementById('appThemeSelect');
     if (select && select.value !== theme) select.value = theme;
+
+    // Dynamically update canvas particle color
+    if (window.updateParticleThemeColor) {
+      window.updateParticleThemeColor(THEME_SWATCHES[theme]);
+    }
+
     try {
-      localStorage.setItem('orlando-clock-theme', theme);
+      localStorage.setItem('orlando-app-theme', theme);
     } catch(e) {}
   }
 
-  // Populate Theme Dropdown & Wire Cycle Button
-  const themeDropdown = document.getElementById('themeSelectDropdown');
-  if (themeDropdown) {
+  // Category 2: Clock and Typography Style Controller
+  function applyClockStyle(style) {
+    if (!THEMES.includes(style)) style = "platinum";
+    currentClockStyle = style;
+    document.body.setAttribute('data-clock-style', style);
+
+    const label = document.getElementById('clockStyleLabel');
+    if (label) label.textContent = THEME_NAMES[style] || style;
+
+    const swatch = document.getElementById('clockStyleSwatch');
+    if (swatch) {
+      swatch.style.background = THEME_SWATCHES[style] || '#D9B95C';
+      swatch.style.color = THEME_SWATCHES[style] || '#D9B95C';
+    }
+
+    const select = document.getElementById('clockStyleSelect');
+    if (select && select.value !== style) select.value = style;
+
+    try {
+      localStorage.setItem('orlando-clock-style', style);
+    } catch(e) {}
+  }
+
+  // Initialize UI Controls for Category 1 (App Theme)
+  const appThemeSelect = document.getElementById('appThemeSelect');
+  if (appThemeSelect) {
     THEMES.forEach((t) => {
       const opt = document.createElement('option');
       opt.value = t;
       opt.textContent = THEME_NAMES[t];
-      if (t === currentTheme) opt.selected = true;
-      themeDropdown.appendChild(opt);
+      if (t === currentAppTheme) opt.selected = true;
+      appThemeSelect.appendChild(opt);
     });
-    themeDropdown.addEventListener('change', (e) => {
-      applyClockTheme(e.target.value);
+    appThemeSelect.addEventListener('change', (e) => applyAppTheme(e.target.value));
+  }
+
+  const appThemeCycleBtn = document.getElementById('appThemeCycleBtn');
+  if (appThemeCycleBtn) {
+    appThemeCycleBtn.addEventListener('click', () => {
+      const nextIdx = (THEMES.indexOf(currentAppTheme) + 1) % THEMES.length;
+      applyAppTheme(THEMES[nextIdx]);
     });
   }
 
-  const themeCycleBtn = document.getElementById('themeCycleBtn');
-  if (themeCycleBtn) {
-    themeCycleBtn.addEventListener('click', () => {
-      const idx = (THEMES.indexOf(currentTheme) + 1) % THEMES.length;
-      applyClockTheme(THEMES[idx]);
+  // Initialize UI Controls for Category 2 (Clock Style)
+  const clockStyleSelect = document.getElementById('clockStyleSelect');
+  if (clockStyleSelect) {
+    THEMES.forEach((t) => {
+      const opt = document.createElement('option');
+      opt.value = t;
+      opt.textContent = THEME_NAMES[t];
+      if (t === currentClockStyle) opt.selected = true;
+      clockStyleSelect.appendChild(opt);
+    });
+    clockStyleSelect.addEventListener('change', (e) => applyClockStyle(e.target.value));
+  }
+
+  const clockStyleCycleBtn = document.getElementById('clockStyleCycleBtn');
+  if (clockStyleCycleBtn) {
+    clockStyleCycleBtn.addEventListener('click', () => {
+      const nextIdx = (THEMES.indexOf(currentClockStyle) + 1) % THEMES.length;
+      applyClockStyle(THEMES[nextIdx]);
     });
   }
 
-  // Apply initial theme immediately
-  applyClockTheme(currentTheme);
+  // Apply initial decoupled themes
+  applyAppTheme(currentAppTheme);
+  applyClockStyle(currentClockStyle);
 
   // Precision Chrome Number Renderer (from OrlandoRecharge)
   function chromeHTML(str) {
@@ -106,9 +195,9 @@
     }).join("");
   }
 
-  // -------------------------------------------------------------------------
-  // 2. AUDIO SYNTHESIS & SOUND ENGINE (Web Audio API + Fallback)
-  // -------------------------------------------------------------------------
+  // ══════════════════════════════════════════════════════════════════════════
+  // 3. AUDIO SYNTHESIS & SOUND ENGINE (Web Audio API + Fallback)
+  // ══════════════════════════════════════════════════════════════════════════
   let audioCtx = null;
   let alarmAudioInterval = null;
   let isRinging = null;
@@ -143,7 +232,6 @@
   window.addEventListener('click', unlockAudio, { once: true });
   window.addEventListener('touchstart', unlockAudio, { once: true });
 
-  // Play a luxurious 24K Swiss Horology Chime chord
   function playLuxuryChime() {
     const ctx = getAudioContext();
     if (!ctx) return;
@@ -196,9 +284,9 @@
     }
   }
 
-  // -------------------------------------------------------------------------
-  // 3. SCREEN WAKE LOCK API (Keep Screen Awake while Running)
-  // -------------------------------------------------------------------------
+  // ══════════════════════════════════════════════════════════════════════════
+  // 4. SCREEN WAKE LOCK API (Keep Screen Awake while Running)
+  // ══════════════════════════════════════════════════════════════════════════
   let wakeLockSentinel = null;
   let isWakeLockRequested = true;
 
@@ -230,7 +318,7 @@
     const dotEl = document.querySelector('.status-dot-wake');
     if (textEl) textEl.textContent = active ? 'Awake ON' : 'Awake OFF';
     if (dotEl) {
-      dotEl.style.background = active ? 'var(--emerald)' : 'var(--mute)';
+      dotEl.style.background = active ? 'var(--emerald)' : 'var(--theme-text-mute)';
       dotEl.style.boxShadow = active ? '0 0 8px var(--emerald)' : 'none';
     }
   }
@@ -256,9 +344,9 @@
 
   requestWakeLock();
 
-  // -------------------------------------------------------------------------
-  // 4. FULLSCREEN API
-  // -------------------------------------------------------------------------
+  // ══════════════════════════════════════════════════════════════════════════
+  // 5. FULLSCREEN API
+  // ══════════════════════════════════════════════════════════════════════════
   const btnFullscreen = document.getElementById('btnFullscreen');
   const fsLabel = document.getElementById('fsLabel');
 
@@ -289,9 +377,9 @@
   document.addEventListener('fullscreenchange', updateFullscreenUI);
   document.addEventListener('webkitfullscreenchange', updateFullscreenUI);
 
-  // -------------------------------------------------------------------------
-  // 5. TAB NAVIGATION
-  // -------------------------------------------------------------------------
+  // ══════════════════════════════════════════════════════════════════════════
+  // 6. TAB NAVIGATION
+  // ══════════════════════════════════════════════════════════════════════════
   const tabBtns = document.querySelectorAll('.tab-btn');
   const tabPanels = document.querySelectorAll('.tab-panel');
 
@@ -311,10 +399,10 @@
     });
   });
 
-  // -------------------------------------------------------------------------
-  // 6. TIMER MODULE (Huge Master Inter Black Digits, Presets, Flashing)
-  // -------------------------------------------------------------------------
-  let timerTotalDuration = 25 * 60; // 25 min default
+  // ══════════════════════════════════════════════════════════════════════════
+  // 7. TIMER MODULE (Huge Digits in Master Inter Black 900 Chrome)
+  // ══════════════════════════════════════════════════════════════════════════
+  let timerTotalDuration = 25 * 60;
   let timerRemaining = timerTotalDuration;
   let timerInterval = null;
   let timerEndTime = null;
@@ -439,7 +527,6 @@
     });
   }
 
-  // Quick presets (5, 10, 15, 25, 45 mins)
   const presetPills = document.querySelectorAll('.preset-pill');
   presetPills.forEach((pill) => {
     pill.addEventListener('click', () => {
@@ -449,7 +536,6 @@
     });
   });
 
-  // Time Inputs Change Listeners
   [timerHourInput, timerMinInput, timerSecInput].forEach((input) => {
     if (!input) return;
     input.addEventListener('change', () => {
@@ -460,7 +546,6 @@
     });
   });
 
-  // Stepper helper
   window.stepTime = function (type, amount) {
     if (timerIsRunning) return;
     let h = parseInt(timerHourInput.value || '0', 10);
@@ -484,9 +569,9 @@
 
   setTimerDuration(25 * 60);
 
-  // -------------------------------------------------------------------------
-  // 7. STOPWATCH MODULE (Huge Digits MM:SS.ms in Chrome Inter 900)
-  // -------------------------------------------------------------------------
+  // ══════════════════════════════════════════════════════════════════════════
+  // 8. STOPWATCH MODULE (Huge Digits MM:SS.ms in Chrome Inter 900)
+  // ══════════════════════════════════════════════════════════════════════════
   let swStartTime = 0;
   let swElapsedTime = 0;
   let swInterval = null;
@@ -582,7 +667,7 @@
   function renderLaps() {
     if (!lapsListEl) return;
     if (laps.length === 0) {
-      lapsListEl.innerHTML = '<div style="text-align:center;padding:24px;color:var(--mute);font-size:13px;font-family:var(--mono);">No laps recorded yet</div>';
+      lapsListEl.innerHTML = '<div style="text-align:center;padding:24px;color:var(--theme-text-mute);font-size:13px;font-family:var(--mono);">No laps recorded yet</div>';
       return;
     }
 
@@ -629,9 +714,9 @@
   updateStopwatchDisplay();
   renderLaps();
 
-  // -------------------------------------------------------------------------
-  // 8. ALARM MODULE (12-hour AM/PM, Multiple Alarms, Chrome Formatting)
-  // -------------------------------------------------------------------------
+  // ══════════════════════════════════════════════════════════════════════════
+  // 9. ALARM MODULE (12-hour AM/PM, Multiple Alarms, Chrome Formatting)
+  // ══════════════════════════════════════════════════════════════════════════
   const STORAGE_KEY = 'orlando_timer_alarms';
   let alarms = [];
   let alarmAmPm = 'AM';
@@ -751,7 +836,7 @@
   function renderAlarms() {
     if (!alarmsListContainer) return;
     if (alarms.length === 0) {
-      alarmsListContainer.innerHTML = '<div style="text-align:center;padding:32px;color:var(--mute);font-size:14px;font-family:var(--mono);">No alarms set. Create one above!</div>';
+      alarmsListContainer.innerHTML = '<div style="text-align:center;padding:32px;color:var(--theme-text-mute);font-size:14px;font-family:var(--mono);">No alarms set. Create one above!</div>';
       return;
     }
 
@@ -862,9 +947,9 @@
   setInterval(checkAlarms, 1000);
   loadAlarms();
 
-  // -------------------------------------------------------------------------
-  // 9. FULLSCREEN ALERT OVERLAY (Flashing, Sound, Snooze & Stop)
-  // -------------------------------------------------------------------------
+  // ══════════════════════════════════════════════════════════════════════════
+  // 10. FULLSCREEN ALERT OVERLAY (Flashing, Sound, Snooze & Stop)
+  // ══════════════════════════════════════════════════════════════════════════
   const overlayEl = document.getElementById('ov');
   const ovTitleEl = document.getElementById('ovTitle');
   const ovMessageEl = document.getElementById('ovMessage');
@@ -933,9 +1018,9 @@
     }
   });
 
-  // -------------------------------------------------------------------------
-  // 10. ANTIGRAVITY REPULSIVE PARTICLES CANVAS (Signature Visual FX)
-  // -------------------------------------------------------------------------
+  // ══════════════════════════════════════════════════════════════════════════
+  // 11. ANTIGRAVITY REPULSIVE PARTICLES CANVAS (Signature Visual FX)
+  // ══════════════════════════════════════════════════════════════════════════
   const canvas = document.getElementById('antigravityCanvas');
   if (canvas) {
     const ctx = canvas.getContext('2d');
@@ -944,6 +1029,12 @@
     let particles = [];
     const particleCount = 42;
     let mouse = { x: -1000, y: -1000, radius: 120 };
+    let currentParticleColor = 'rgba(217, 185, 92, 0.45)';
+
+    window.updateParticleThemeColor = function (hexColor) {
+      if (!hexColor) return;
+      currentParticleColor = hexColor;
+    };
 
     function resizeCanvas() {
       width = canvas.width = window.innerWidth;
@@ -967,7 +1058,7 @@
     function renderParticles() {
       if (!ctx) return;
       ctx.clearRect(0, 0, width, height);
-      ctx.fillStyle = 'rgba(217, 185, 92, 0.45)';
+      ctx.fillStyle = currentParticleColor;
 
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
