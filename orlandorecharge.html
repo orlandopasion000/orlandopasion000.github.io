@@ -8329,8 +8329,8 @@ try { checkUrlHashRoutine(); } catch(e){}
       }
       p.hue += (p.targetHue - p.hue) * 0.03;
 
-      // Antigravity Mouse Repulsion (Bypassed in game mode so player can touch particles)
-      if (mActive && !isGameMode) {
+      // Antigravity Mouse Repulsion (Preserved: particles actively avoid the cursor!)
+      if (mActive) {
         var dx = p.x - mx;
         var dy = p.y - my;
         var dist = Math.hypot(dx, dy);
@@ -8417,20 +8417,22 @@ try { checkUrlHashRoutine(); } catch(e){}
       // ── Engraved Song Choreography Physics + CELEBRATION DANCE ──
       if (isVictoryDancing) {
         var elapsed = (now - victoryDanceStartTime) * 0.001;
-        var danceFreq = 3.6; // Controlled rhythmic celebratory frequency
-        var danceDist = 7.5; // Shorter movement paths & smaller displacement distances than usual
-        var phaseOffset = i * 0.38;
+        var danceFreq = 2.4; // Silky smooth celebratory waltz tempo
+        var danceDist = 6.5; // Shorter movement paths & smaller displacement distances than usual
+        var phaseOffset = i * 0.35;
 
-        var targetX = (p.victoryAnchorX || p.x) + Math.sin(elapsed * danceFreq + phaseOffset) * danceDist;
-        var targetY = (p.victoryAnchorY || p.y) + Math.sin(elapsed * danceFreq * 1.8 + phaseOffset) * (danceDist * 0.55);
+        // Controlled harmonic oscillation around anchor
+        var desiredX = (p.victoryAnchorX || p.x) + Math.sin(elapsed * danceFreq + phaseOffset) * danceDist;
+        var desiredY = (p.victoryAnchorY || p.y) + Math.cos(elapsed * danceFreq * 1.4 + phaseOffset) * (danceDist * 0.55);
 
-        p.x += (targetX - p.x) * 0.18;
-        p.y += (targetY - p.y) * 0.18;
+        // Smooth spring force into velocity (zero jitter, perfectly fluid)
+        p.vx += (desiredX - p.x) * 0.08 - p.vx * 0.14;
+        p.vy += (desiredY - p.y) * 0.08 - p.vy * 0.14;
 
         // Controlled synchronized celebratory pulsation
-        p.alpha = Math.min(1.0, 0.65 + Math.sin(elapsed * danceFreq * 2 + phaseOffset) * 0.35);
+        p.alpha = Math.min(1.0, 0.72 + Math.sin(elapsed * danceFreq * 2 + phaseOffset) * 0.28);
         var targetHue = (i % 2 === 0) ? 45 : 195; // Alternating 24K Swiss Gold and Cyber Cyan
-        p.hue += (targetHue - p.hue) * 0.08;
+        p.hue += (targetHue - p.hue) * 0.05;
       } else if (isAudioHot) {
         var mType = curChoreo ? curChoreo.motionType : "generic";
         var dForce = curChoreo ? curChoreo.danceForce : 0.65;
@@ -9149,7 +9151,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   var lockedParticle = null;
   var contactDuration = 0.0;
   var REQUIRED_CONTACT = 2.0; // 2 seconds continuous
-  var HIT_RADIUS = 26;
+  var HIT_RADIUS = 88; // Active evasion capture perimeter (tuned to 76px repulsion shield)
 
   var audioCtx = null;
   var lockOsc = null;
@@ -9274,7 +9276,7 @@ try { checkUrlHashRoutine(); } catch(e){}
     canvas.width = Math.floor(width * dpr);
     canvas.height = Math.floor(height * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    HIT_RADIUS = (width < 768) ? 36 : 24;
+    HIT_RADIUS = (width < 768) ? 104 : 88;
   }
 
   window.addEventListener("resize", function() {
@@ -9322,7 +9324,7 @@ try { checkUrlHashRoutine(); } catch(e){}
     digitsEl.classList.remove("victory-frozen");
     fillEl.style.width = "100%";
 
-    // 2. Enable Game Mode on particle engine (disables repulsion so player can touch particles!)
+    // 2. Prepare Game Mode (particles retain their full avoidance behavior!)
     if (window.antigravityFX && typeof window.antigravityFX.setGameMode === "function") {
       window.antigravityFX.setGameMode(true);
       window.antigravityFX.stopVictoryDance();
