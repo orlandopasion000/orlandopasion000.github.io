@@ -84,7 +84,7 @@ body{color:var(--text);font-family:var(--sans);font-size:19.5px;line-height:1.5;
   opacity: 0.96;
   transition: opacity 0.4s ease;
 }
-main{position:relative;z-index:2;width:100%;max-width:1280px;margin:0 auto;padding:clamp(14px,2.8vw,28px) clamp(12px,3vw,32px) 80px}
+main{position:relative;z-index:2;width:100%;max-width:1280px;margin:0 auto;padding:clamp(14px,2.8vw,28px) clamp(12px,3vw,32px) 80px;transition:opacity 0.95s cubic-bezier(0.16,1,0.3,1),transform 0.95s cubic-bezier(0.16,1,0.3,1);will-change:opacity,transform}
 
 /* ===== HERO CLOCK (Very Big Clock with Date, Next Alarm, Countdown) ===== */
 .hero{position:relative;padding:clamp(16px,2.5vw,28px) clamp(16px,2.8vw,32px) clamp(14px,2vw,22px);border:1px solid var(--line);border-radius:26px;background:#000;margin-bottom:14px;overflow:hidden}
@@ -1902,17 +1902,18 @@ body.light-theme .naked-game-btn:hover {
 /* ───────── IMMERSIVE UNIVERSE GAME ENVIRONMENT (#quantumGameOverlay) ───────── */
 body.universe-game-active {
   overflow: hidden !important;
+  background: radial-gradient(ellipse at 50% 45%, #070d1d 0%, #02050c 55%, #000000 100%) !important;
+  transition: background 1.1s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 body.universe-game-active main {
   opacity: 0 !important;
   pointer-events: none !important;
-  transform: scale(0.97) !important;
-  filter: blur(12px) !important;
-  transition: opacity 0.95s cubic-bezier(0.16, 1, 0.3, 1), transform 0.95s cubic-bezier(0.16, 1, 0.3, 1), filter 0.95s ease !important;
+  transform: scale(0.98) !important;
+  transition: opacity 1.1s cubic-bezier(0.16, 1, 0.3, 1), transform 1.1s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
-/* Existing particles remain 100% visible and unaffected */
+/* Existing particles remain 100% visible, fully illuminated and razor sharp */
 body.universe-game-active .antigravity-fx-canvas,
 body.universe-game-active .antigravity-front-canvas {
   opacity: 1 !important;
@@ -1926,17 +1927,18 @@ body.universe-game-active .antigravity-front-canvas {
   width: 100vw;
   height: 100vh;
   z-index: 85;
-  display: none;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1);
-  background: radial-gradient(ellipse at 50% 45%, rgba(10, 18, 36, 0.52) 0%, rgba(2, 6, 16, 0.78) 60%, rgba(0, 0, 0, 0.92) 100%);
+  visibility: hidden;
+  transition: opacity 1.15s cubic-bezier(0.16, 1, 0.3, 1), visibility 1.15s cubic-bezier(0.16, 1, 0.3, 1);
+  background: transparent;
   user-select: none;
+  will-change: opacity;
 }
 
 body.universe-game-active .quantum-game-overlay {
-  display: block;
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
 }
 
@@ -1963,12 +1965,19 @@ body.universe-game-active .quantum-game-overlay {
   z-index: 10;
 }
 
-/* Upper Left: Futuristic Game Countdown Timer */
+/* Upper Left: Futuristic Game Countdown Timer (Smooth Staggered Entrance) */
 .qgame-timer-hud {
   display: flex;
   flex-direction: column;
   gap: 6px;
   pointer-events: auto;
+  opacity: 0;
+  transform: translateY(-12px);
+  transition: opacity 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.25s, transform 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.25s;
+}
+body.universe-game-active .qgame-timer-hud {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .qgame-hud-tag {
@@ -2045,7 +2054,7 @@ body.universe-game-active .quantum-game-overlay {
   transition: width 0.1s linear;
 }
 
-/* Center Top: Mission Telemetry Pill */
+/* Center Top: Mission Telemetry Pill (Smooth Staggered Entrance) */
 .qgame-mission-hud {
   display: inline-flex;
   align-items: center;
@@ -2064,6 +2073,13 @@ body.universe-game-active .quantum-game-overlay {
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4), 0 0 16px rgba(56, 189, 248, 0.15);
   pointer-events: auto;
   margin-top: 4px;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.40s, transform 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.40s;
+}
+body.universe-game-active .qgame-mission-hud {
+  opacity: 1;
+  transform: translateY(0);
 }
 .qgame-mission-icon {
   color: #ffd700;
@@ -2075,7 +2091,7 @@ body.universe-game-active .quantum-game-overlay {
   100% { transform: rotate(360deg); }
 }
 
-/* Upper Right: Return to Horizon Button */
+/* Upper Right: Return to Horizon Button (Smooth Staggered Entrance) */
 .qgame-exit-hud {
   pointer-events: auto;
 }
@@ -2097,7 +2113,13 @@ body.universe-game-active .quantum-game-overlay {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0;
+  transform: translateY(-12px);
+  transition: opacity 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.30s, transform 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.30s, background 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+body.universe-game-active .qgame-btn-exit {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .qgame-btn-exit .qgame-exit-glyph {
@@ -7910,6 +7932,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   var INFLUENCE_RADIUS = 168;
 
   var isGameMode = false;
+  var gameGlowProgress = 0.0;
   var isVictoryDancing = false;
   var victoryDanceStartTime = 0;
 
@@ -8100,6 +8123,10 @@ try { checkUrlHashRoutine(); } catch(e){}
 
     var now = Date.now();
     updateGravitonRects();
+
+    // Smooth ~1s universe illumination transition curve
+    var targetGameGlow = isGameMode ? 1.0 : 0.0;
+    gameGlowProgress += (targetGameGlow - gameGlowProgress) * 0.045;
 
     // ── Kinetic Jet Cursor Velocity Calculation ──
     if (mouse.active) {
@@ -8314,13 +8341,14 @@ try { checkUrlHashRoutine(); } catch(e){}
         }
       }
 
-      // Dynamic size and glow based on 3D depth
+      // Dynamic size and glow based on 3D depth + game mode illumination
       var depthScale = p.isWeaver ? (0.86 + Math.max(0, p.z) * 0.44) : 1.0;
-      var curSize = p.baseSize * depthScale;
-      var baseLength = p.baseLength * (p.isWeaver ? (0.90 + Math.max(0, p.z) * 0.38) : 1.0);
+      var curSize = (p.baseSize * depthScale) + (gameGlowProgress * 0.35);
+      var baseLength = (p.baseLength * (p.isWeaver ? (0.90 + Math.max(0, p.z) * 0.38) : 1.0)) + (gameGlowProgress * 1.5);
 
-      // Select target canvas based on layer
-      var targetCtx = (p.isFront && frontCtx) ? frontCtx : backCtx;
+      // Select target canvas based on layer (all particles elevate to foreground in game mode)
+      var renderAsBrightest = p.isFront || (gameGlowProgress > 0.04);
+      var targetCtx = (renderAsBrightest && frontCtx) ? frontCtx : backCtx;
 
       // Circadian & Song Hue Interpolation
       if (Math.random() < 0.02) {
@@ -8552,7 +8580,7 @@ try { checkUrlHashRoutine(); } catch(e){}
       var bowOffset = p.turnFlex * 1.5;
       var isCurved = Math.abs(bowOffset) > 0.12;
 
-      var dynamicLength = Math.max(baseLength, Math.min(p.isFront ? 18 : 15, baseLength + currentSpeed * 2.2));
+      var dynamicLength = Math.max(baseLength, Math.min(renderAsBrightest ? 18 : 15, baseLength + currentSpeed * 2.2));
 
       // 100% Engraved Beat Length Elasticity
       if (isAudioHot) {
@@ -8593,20 +8621,26 @@ try { checkUrlHashRoutine(); } catch(e){}
         }
       }
 
-      if (p.isFront) {
-        // ── FOREGROUND 3D DANCER (Extra Radiant Luminous Glow, Relativistic Shift & Diamond Core) ──
+      if (renderAsBrightest) {
+        // ── FOREGROUND & GAME RADIANT DANCER (Diamond Core, Luminous Glow & White-Hot Leading Spark) ──
         var fGrad = targetCtx.createLinearGradient(-dynamicLength / 2, 0, dynamicLength / 2, 0);
         var fLitBoost = isAudioHot ? (liveBass * 24 + beatKickImpulse * 16) : 0;
 
+        // Extra game mode luminosity boost: "make them all a little brighter during the game, just a little brighter"
+        var gameLitBoost = gameGlowProgress * 8; // +8% lightness boost
+        var gameAlphaBoost = gameGlowProgress * 0.15; // +15% alpha boost
+
         // Doppler blueshift on leading tip + redshift on tail
-        var fHeadLit = Math.min(99, 80 + fLitBoost + dopplerBoost * 12);
-        var fTailLit = Math.min(90, Math.max(52, p.lit + fLitBoost * 0.6 - dopplerBoost * 8));
+        var fHeadLit = Math.min(100, 80 + fLitBoost + dopplerBoost * 12 + gameLitBoost);
+        var fTailLit = Math.min(94, Math.max(52, p.lit + fLitBoost * 0.6 - dopplerBoost * 8 + gameLitBoost * 0.7));
         var fHeadHue = (dopplerBoost > 0.12) ? Math.round(p.hue2 * (1 - dopplerBoost * 0.5) + 198 * (dopplerBoost * 0.5)) : p.hue2;
         var fTailHue = (dopplerBoost > 0.12) ? Math.round(p.hue * (1 - dopplerBoost * 0.4) + 22 * (dopplerBoost * 0.4)) : p.hue;
 
-        fGrad.addColorStop(0, "hsla(" + Math.round(fTailHue) + ",98%," + fTailLit + "%," + (currentAlpha * 0.95).toFixed(2) + ")");
-        fGrad.addColorStop(0.55, "hsla(" + Math.round(fHeadHue) + ",100%," + fHeadLit + "%," + currentAlpha.toFixed(2) + ")");
-        fGrad.addColorStop(1, "rgba(255,255,255," + (currentAlpha * 0.96).toFixed(2) + ")"); // Diamond white-hot leading edge
+        var renderAlpha = Math.min(1.0, currentAlpha * (1.0 + gameAlphaBoost) + (gameGlowProgress * 0.10));
+
+        fGrad.addColorStop(0, "hsla(" + Math.round(fTailHue) + ",98%," + fTailLit.toFixed(1) + "%," + (renderAlpha * 0.95).toFixed(2) + ")");
+        fGrad.addColorStop(0.55, "hsla(" + Math.round(fHeadHue) + ",100%," + fHeadLit.toFixed(1) + "%," + renderAlpha.toFixed(2) + ")");
+        fGrad.addColorStop(1, "rgba(255,255,255," + (renderAlpha * 0.98).toFixed(2) + ")"); // Diamond white-hot leading edge
 
         var fGlow = p.glowBlur * (1.1 + (p.isWeaver ? Math.max(0, p.z) * 0.5 : 0));
         if (isAudioHot) {
@@ -8618,9 +8652,10 @@ try { checkUrlHashRoutine(); } catch(e){}
         if (p.emergeBloom > 0.02) {
           fGlow *= (1 + p.emergeBloom * 1.5);
         }
-        fGlow = Math.min(10, fGlow);
+        fGlow += gameGlowProgress * 4.0;
+        fGlow = Math.min(15, fGlow);
 
-        targetCtx.shadowColor = "hsla(" + Math.round(fHeadHue) + ",100%,66%," + Math.min(1, currentAlpha * (0.75 + liveBass * 0.30)).toFixed(2) + ")";
+        targetCtx.shadowColor = "hsla(" + Math.round(fHeadHue) + ",100%,70%," + Math.min(1, renderAlpha * (0.80 + liveBass * 0.20)).toFixed(2) + ")";
         targetCtx.shadowBlur = fGlow;
 
         if (isCurved) {
@@ -8631,12 +8666,13 @@ try { checkUrlHashRoutine(); } catch(e){}
           targetCtx.fill();
         }
 
-        // Diamond white-hot leading spark
+        // Diamond white-hot leading spark bulb (EXACTLY matching screenshot media_1794581887077_966b51c0.png)
+        var sparkRadius = curSize * (0.65 + gameGlowProgress * 0.12);
         targetCtx.beginPath();
-        targetCtx.arc(dynamicLength / 2, 0, curSize * 0.65, 0, Math.PI * 2);
-        targetCtx.fillStyle = "rgba(255,255,255," + (currentAlpha * 0.96).toFixed(2) + ")";
-        targetCtx.shadowColor = "hsla(" + Math.round(fHeadHue) + ",100%,75%,0.95)";
-        targetCtx.shadowBlur = Math.min(12, fGlow * 1.2);
+        targetCtx.arc(dynamicLength / 2, 0, sparkRadius, 0, Math.PI * 2);
+        targetCtx.fillStyle = "rgba(255,255,255," + (renderAlpha * 0.98).toFixed(2) + ")";
+        targetCtx.shadowColor = "hsla(" + Math.round(fHeadHue) + ",100%,80%,0.98)";
+        targetCtx.shadowBlur = Math.min(16, fGlow * 1.35);
         targetCtx.fill();
 
       } else if (p.isRadiant) {
@@ -9317,7 +9353,6 @@ try { checkUrlHashRoutine(); } catch(e){}
     // 1. Instant Universe Transition (~1s smooth fade of background interface)
     document.body.classList.add("universe-game-active");
     overlay.setAttribute("aria-hidden", "false");
-    overlay.style.display = "block";
     victoryModal.style.display = "none";
     missionText.textContent = "TARGET: TOUCH ANY PARTICLE · MAINTAIN CONTACT FOR 2.0s";
     digitsEl.textContent = TOTAL_TIME.toFixed(2);
@@ -9350,9 +9385,6 @@ try { checkUrlHashRoutine(); } catch(e){}
     document.body.classList.remove("universe-game-active");
     overlay.setAttribute("aria-hidden", "true");
     victoryModal.style.display = "none";
-    setTimeout(function() {
-      if (!isActive) overlay.style.display = "none";
-    }, 900);
 
     // Restore particle physics to normal cruise
     if (window.antigravityFX) {
