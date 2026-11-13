@@ -2389,32 +2389,89 @@
     });
   }
 
-  if (btnToggleZenMode) {
-    btnToggleZenMode.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const isZen = document.body.classList.toggle('zen-mode');
-      if (zenModeLabel) zenModeLabel.textContent = isZen ? 'Exit Zen Mode' : 'Zen Immersion Mode';
+  // ── ENHANCED ZEN IMMERSION CONTROLLER ──
+  const btnExitZenHUD = document.getElementById('btnExitZenHUD');
+  let zenIdleTimeout = null;
+
+  function toggleZenMode(force) {
+    const isZen = force !== undefined ? force : !document.body.classList.contains('zen-mode');
+    document.body.classList.toggle('zen-mode', isZen);
+    document.body.classList.remove('zen-idle');
+    if (zenModeLabel) zenModeLabel.textContent = isZen ? 'Exit Zen Mode' : 'Zen Immersion Mode';
+    if (isZen) {
       toggleFunCockpit(false);
+      announceSR("Zen Immersion Mode active. Minimalist tranquil focus display. Press Escape or Z to exit.");
       AudioHUD.confirm();
+      resetZenIdleTimer();
+    } else {
+      announceSR("Zen Immersion Mode exited.");
+      AudioHUD.tick(600);
+      if (zenIdleTimeout) clearTimeout(zenIdleTimeout);
+    }
+  }
+
+  function resetZenIdleTimer() {
+    if (!document.body.classList.contains('zen-mode')) return;
+    document.body.classList.remove('zen-idle');
+    if (zenIdleTimeout) clearTimeout(zenIdleTimeout);
+    zenIdleTimeout = setTimeout(() => {
+      if (document.body.classList.contains('zen-mode')) {
+        document.body.classList.add('zen-idle');
+      }
+    }, 2800);
+  }
+
+  window.addEventListener('mousemove', resetZenIdleTimer);
+  window.addEventListener('touchstart', resetZenIdleTimer);
+
+  if (btnExitZenHUD) {
+    btnExitZenHUD.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleZenMode(false);
     });
   }
 
-  // Click anywhere to exit zen mode, close breathing or close command hub
-  document.addEventListener('click', (e) => {
-    if (document.body.classList.contains('zen-mode')) {
-      document.body.classList.remove('zen-mode');
-      if (zenModeLabel) zenModeLabel.textContent = 'Zen Immersion Mode';
+  if (btnToggleZenMode) {
+    btnToggleZenMode.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleZenMode();
+    });
+  }
+
+  // Keyboard hotkeys: Z toggles Zen Mode, Escape exits
+  document.addEventListener('keydown', (e) => {
+    if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA')) return;
+    if (e.key === 'z' || e.key === 'Z') {
+      toggleZenMode();
+    } else if (e.key === 'Escape') {
+      if (document.body.classList.contains('zen-mode')) {
+        toggleZenMode(false);
+      }
+      stopBreathingSession();
     }
+  });
+
+  // Clicking on digits in Zen Mode toggles Play / Pause without leaving Zen Mode
+  if (timerDigitsEl) {
+    timerDigitsEl.addEventListener('click', () => {
+      if (document.body.classList.contains('zen-mode')) {
+        if (timerIsRunning) {
+          pauseTimer();
+          AudioHUD.tick(600);
+        } else {
+          startTimer();
+          AudioHUD.tick(1200);
+        }
+      }
+    });
+  }
+
+  // Click outside Command Hub closes drawer
+  document.addEventListener('click', (e) => {
     if (funMicroCockpit && funMicroCockpit.classList.contains('open')) {
       if (!funMicroCockpit.contains(e.target) && !btnLogoEasterEgg?.contains(e.target)) {
         toggleFunCockpit(false);
       }
-    }
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      stopBreathingSession();
     }
   });
 
