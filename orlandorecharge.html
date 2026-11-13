@@ -3250,22 +3250,22 @@ body.light-theme .highlight-card .dist-icon{
           </div>
         </div>
 
-        <!-- Card 4: Clean Blank Edition (For Friends & Students) -->
+        <!-- Card 4: Native Blank Canvas (For Custom Schedules) -->
         <div class="dist-card dist-card-blank">
           <div class="dist-card-top">
             <div class="dist-icon dist-icon-gold">
               <svg class="modern-icon modern-icon-gold" viewBox="0 0 24 24" style="width:19px;height:19px;margin:0"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
             </div>
             <div class="dist-card-meta">
-              <div class="dist-name" style="color:var(--gold)">Clean Blank Edition</div>
-              <div class="dist-desc">100% blank canvas (0 alarms)</div>
+              <div class="dist-name" style="color:var(--gold)" id="blankCardTitle">Clean Blank Canvas</div>
+              <div class="dist-desc" id="blankCardDesc">100% blank canvas (0 alarms)</div>
             </div>
           </div>
           <div class="dist-btn-stack">
-            <a class="primary dist-btn" id="openBlankAppBtn" href="recharge-clean.html" target="_blank" rel="noopener" title="Open 100% clean blank schedule">
+            <button type="button" class="primary dist-btn" id="startBlankCanvasBtn" style="width:100%" title="Start fresh with a 100% clean blank schedule">
               <svg class="modern-icon" viewBox="0 0 24 24" style="width:14px;height:14px"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-              <span>Open Blank Web App</span>
-            </a>
+              <span id="startBlankCanvasText">Start Blank Canvas (0 Alarms)</span>
+            </button>
           </div>
         </div>
       </div>
@@ -4316,21 +4316,22 @@ function renderList(){
   });
 
   if (S.length === 0) {
-    var isCleanApp = location.pathname.indexOf("recharge-clean") !== -1 || (document.title && document.title.indexOf("Clean") !== -1);
     var emptyDiv = document.createElement("div");
     emptyDiv.className = "empty-schedule-card";
     emptyDiv.style.cssText = "background:rgba(217,185,92,0.06);border:2px dashed rgba(217,185,92,0.35);border-radius:16px;padding:32px 20px;text-align:center;margin:16px 0;";
     emptyDiv.innerHTML =
       '<div style="font-size:2.4rem;margin-bottom:10px">📝✨</div>' +
-      '<div style="font-size:1.2rem;font-weight:800;color:var(--gold);margin-bottom:6px">Clean Blank Canvas (0 Alarms)</div>' +
-      '<div style="font-size:0.92rem;color:var(--dim);max-width:460px;margin:0 auto 18px;line-height:1.5;">This app has <b>zero alarms</b> and clean storage. You can add your own custom alarms, or switch to a Routine Preset!</div>' +
-      '<div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap">' +
+      '<div style="font-size:1.25rem;font-weight:800;color:var(--gold);margin-bottom:6px">Clean Blank Canvas (0 Alarms Scheduled)</div>' +
+      '<div style="font-size:0.92rem;color:var(--dim);max-width:520px;margin:0 auto 20px;line-height:1.5;">Your canvas is clean and ready. Click <b>+ Add First Alarm</b> to schedule your custom routine, or restore Sir Orlando\'s 23-block routine anytime!</div>' +
+      '<div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap">' +
         '<button type="button" class="primary" id="emptyAddBtn" style="padding:10px 22px;border-radius:10px;font-weight:700;font-size:0.92rem">+ Add First Alarm</button>' +
-        (isCleanApp ? '<a class="ghost" id="emptyOpenMainBtn" href="https://orlandopasion000.github.io/orlandorecharge" target="_blank" style="padding:10px 20px;border-radius:10px;font-weight:700;font-size:0.92rem;text-decoration:none;display:inline-flex;align-items:center;">⚡ Open Main Executive Schedule (23 Blocks) &rarr;</a>' : '') +
+        '<button type="button" class="ghost" id="emptyRestoreMasterBtn" style="padding:10px 20px;border-radius:10px;font-weight:700;font-size:0.92rem;display:inline-flex;align-items:center;gap:6px">↺ Restore Sir Orlando\'s 23-Block Schedule</button>' +
       '</div>';
     list.appendChild(emptyDiv);
     var emptyAdd = $("emptyAddBtn");
     if (emptyAdd) emptyAdd.onclick = function(){ if ($("addAlarmBtn")) $("addAlarmBtn").click(); };
+    var emptyRestore = $("emptyRestoreMasterBtn");
+    if (emptyRestore) emptyRestore.onclick = function(){ applyPreset("class"); };
     return;
   }
 
@@ -5701,21 +5702,19 @@ if ($("openMainAppBtn")) {
   };
 }
 
-if ($("openBlankAppBtn")) {
-  $("openBlankAppBtn").onclick = function(e) {
-    if (e && e.preventDefault) e.preventDefault();
-    launchStandaloneAppWindow("https://orlandopasion000.github.io/recharge-clean.html", "OrlandoRechargeCleanAppWindow");
-    return false;
+if ($("startBlankCanvasBtn")) {
+  $("startBlankCanvasBtn").onclick = function() {
+    if (S.length === 0) {
+      applyPreset("class");
+    } else {
+      applyPreset("blank");
+    }
+    var schedSection = document.querySelector(".sched-head");
+    if (schedSection) {
+      schedSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   };
 }
-
-document.addEventListener("click", function(e) {
-  var target = e.target && e.target.closest ? e.target.closest("#emptyOpenMainBtn") : null;
-  if (target) {
-    if (e.preventDefault) e.preventDefault();
-    launchStandaloneAppWindow("https://orlandopasion000.github.io/orlandorecharge", "OrlandoRechargeMainAppWindow");
-  }
-});
 
 /* Share Cockpit */
 $("shareAppBtn").onclick=function(){
@@ -6170,6 +6169,22 @@ function updatePresetSelectorUI() {
     sel.value = key;
   }
   updatePresetDaysBadge();
+
+  // Dynamic Card 4 Blank Canvas State
+  var bTitle = $("blankCardTitle");
+  var bDesc = $("blankCardDesc");
+  var bBtnText = $("startBlankCanvasText");
+  if (bTitle && bDesc && bBtnText) {
+    if (S.length === 0) {
+      bTitle.textContent = "Blank Canvas Active";
+      bDesc.textContent = "0 alarms · Ready for custom blocks";
+      bBtnText.textContent = "↺ Restore Sir Orlando's Routine (23 Blocks)";
+    } else {
+      bTitle.textContent = "Clean Blank Canvas";
+      bDesc.textContent = "100% blank canvas (0 alarms)";
+      bBtnText.textContent = "⭐ Start Blank Canvas (0 Alarms)";
+    }
+  }
 }
 
 function applyPreset(presetKey, skipConfirm) {
@@ -6460,6 +6475,18 @@ try {
     startAudioKeepAlive();
   }
 } catch(e){}
+function checkUrlPreset() {
+  try {
+    var params = new URLSearchParams(window.location.search);
+    var p = params.get("preset");
+    if (p && SCHEDULE_PRESETS[p]) {
+      applyPreset(p, true);
+    } else if (window.location.hash === "#blank") {
+      applyPreset("blank", true);
+    }
+  } catch(e){}
+}
+try { checkUrlPreset(); } catch(e){}
 try { checkUrlHashRoutine(); } catch(e){}
 
 /* ───────── "PLAY MUSIC" FUTURISTIC PARTICLE & BEAT-DANCE SUITE (60-120fps High Performance) ───────── */
