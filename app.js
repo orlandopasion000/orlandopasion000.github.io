@@ -1949,12 +1949,57 @@
     let height = 0;
     let particles = [];
     let shockwave = null;
-    const particleCount = 28; // Lean, pristine, zero-lag budget
+    const baseParticleBudget = 28; // Lean minimum particle budget
+    let particleFieldFactor = 0; // 0 = Minimum (current lean 28 dots), 1 = Maximum (112 radiant stars)
     let mouse = { x: -1000, y: -1000, radius: 120 };
     let currentParticleColor = 'rgba(217, 185, 92, 0.45)';
 
     window.updateParticleThemeColor = function (hexColor) {
       if (hexColor) currentParticleColor = hexColor;
+    };
+
+    window.updateParticleFieldSettings = function (factor) {
+      particleFieldFactor = Math.max(0, Math.min(1, factor));
+      const targetCount = Math.round(baseParticleBudget + particleFieldFactor * (112 - baseParticleBudget));
+
+      const ambient = particles.filter(p => !p.isBurst);
+      const bursts = particles.filter(p => p.isBurst);
+
+      if (ambient.length < targetCount) {
+        const needed = targetCount - ambient.length;
+        for (let i = 0; i < needed; i++) {
+          const baseS = Math.random() * 1.8 + 1.2;
+          const s = baseS * (1 + particleFieldFactor * 0.75);
+          ambient.push({
+            x: Math.random() * (Math.max(10, width - s * 4)) + s * 2,
+            y: Math.random() * (Math.max(10, height - s * 4)) + s * 2,
+            vx: (Math.random() - 0.5) * (0.5 + particleFieldFactor * 0.35),
+            vy: (Math.random() - 0.5) * (0.5 + particleFieldFactor * 0.35),
+            size: s,
+            targetSize: s,
+            alpha: Math.random() * 0.4 + (0.35 + particleFieldFactor * 0.25),
+            isDust: false,
+            isBurst: false,
+            shattered: false,
+            dustTimer: 0
+          });
+        }
+      } else if (ambient.length > targetCount) {
+        ambient.length = targetCount;
+      }
+
+      // Smoothly scale existing particle sizes and targets
+      for (let i = 0; i < ambient.length; i++) {
+        const p = ambient[i];
+        const baseS = Math.random() * 1.8 + 1.2;
+        p.targetSize = baseS * (1 + particleFieldFactor * 0.75);
+        if (!p.isDust) {
+          p.size = p.targetSize;
+        }
+      }
+
+      mouse.radius = 120 + particleFieldFactor * 60;
+      particles = [...ambient, ...bursts];
     };
 
     window.spawnSupernovaBurst = function (originX, originY, options = {}) {
@@ -2020,16 +2065,18 @@
     function initParticles() {
       particles = [];
       shockwave = null;
-      for (let i = 0; i < particleCount; i++) {
-        const s = Math.random() * 1.8 + 1.2;
+      const count = Math.round(baseParticleBudget + particleFieldFactor * (112 - baseParticleBudget));
+      for (let i = 0; i < count; i++) {
+        const baseS = Math.random() * 1.8 + 1.2;
+        const s = baseS * (1 + particleFieldFactor * 0.75);
         particles.push({
           x: Math.random() * (Math.max(10, width - s * 4)) + s * 2,
           y: Math.random() * (Math.max(10, height - s * 4)) + s * 2,
-          vx: (Math.random() - 0.5) * 0.5,
-          vy: (Math.random() - 0.5) * 0.5,
+          vx: (Math.random() - 0.5) * (0.5 + particleFieldFactor * 0.35),
+          vy: (Math.random() - 0.5) * (0.5 + particleFieldFactor * 0.35),
           size: s,
           targetSize: s,
-          alpha: Math.random() * 0.4 + 0.35,
+          alpha: Math.random() * 0.4 + (0.35 + particleFieldFactor * 0.25),
           isDust: false,
           isBurst: false,
           shattered: false,
@@ -2197,7 +2244,7 @@
           ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         }
       }
-      ctx.globalAlpha = 0.45;
+      ctx.globalAlpha = 0.40 + particleFieldFactor * 0.35;
       ctx.fill();
 
       ctx.globalAlpha = 1.0;
@@ -2223,6 +2270,219 @@
     initParticles();
     requestAnimationFrame(renderParticles);
   }
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // 12. ATMOSPHERE & PARTICLE FIELD LAB CONTROLLER (Ambient Glow & Floating Particles)
+  // ══════════════════════════════════════════════════════════════════════════
+  function initAtmosphereLab() {
+    const btnAtmosphere = document.getElementById('btnAtmosphere');
+    const atmospherePopup = document.getElementById('atmospherePopup');
+    const btnCloseAtmosphere = document.getElementById('btnCloseAtmosphere');
+    const atmoDot = document.getElementById('atmoDot');
+
+    const sliderAmbientGlow = document.getElementById('sliderAmbientGlow');
+    const glowValBadge = document.getElementById('glowValBadge');
+    const glowChips = document.querySelectorAll('.atmo-preset-chip[data-glow]');
+
+    const sliderParticles = document.getElementById('sliderParticles');
+    const particlesValBadge = document.getElementById('particlesValBadge');
+    const particleChips = document.querySelectorAll('.atmo-preset-chip[data-particles]');
+
+    // Toggle Atmosphere Popup
+    function toggleAtmospherePopup(force) {
+      if (!atmospherePopup) return;
+      const isOpen = force !== undefined ? force : !atmospherePopup.classList.contains('open');
+      if (isOpen) {
+        atmospherePopup.classList.add('open');
+        btnAtmosphere?.classList.add('active');
+        btnAtmosphere?.setAttribute('aria-expanded', 'true');
+        if (typeof AudioHUD !== 'undefined' && AudioHUD.tick) AudioHUD.tick(980);
+      } else {
+        atmospherePopup.classList.remove('open');
+        btnAtmosphere?.classList.remove('active');
+        btnAtmosphere?.setAttribute('aria-expanded', 'false');
+      }
+    }
+
+    if (btnAtmosphere) {
+      btnAtmosphere.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleAtmospherePopup();
+      });
+    }
+
+    if (btnCloseAtmosphere) {
+      btnCloseAtmosphere.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleAtmospherePopup(false);
+      });
+    }
+
+    // Dismiss when clicking outside
+    document.addEventListener('click', (e) => {
+      if (atmospherePopup && atmospherePopup.classList.contains('open')) {
+        const wrapper = document.querySelector('.atmo-dropdown-container');
+        if (wrapper && !wrapper.contains(e.target)) {
+          toggleAtmospherePopup(false);
+        }
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && atmospherePopup && atmospherePopup.classList.contains('open')) {
+        toggleAtmospherePopup(false);
+      }
+    });
+
+    // ── 1. AMBIENT GLOW CONTROLLER (0% Pure Black OLED -> 100% Vivid Radial Glow) ──
+    let currentAmbientGlow = 100;
+    try {
+      const saved = localStorage.getItem('orlando-ambient-glow');
+      if (saved !== null) {
+        const parsed = parseInt(saved, 10);
+        if (!isNaN(parsed) && parsed >= 0 && parsed <= 100) {
+          currentAmbientGlow = parsed;
+        }
+      }
+    } catch(e) {}
+
+    function applyAmbientGlow(value, save = true) {
+      currentAmbientGlow = Math.max(0, Math.min(100, Math.round(value)));
+      const opacity = currentAmbientGlow / 100;
+      
+      // Update CSS custom property controlling .ambient-glow-backdrop opacity
+      document.documentElement.style.setProperty('--ambient-glow-opacity', opacity.toString());
+      document.body.style.setProperty('--ambient-glow-opacity', opacity.toString());
+
+      if (sliderAmbientGlow) {
+        sliderAmbientGlow.value = currentAmbientGlow;
+      }
+
+      if (glowValBadge) {
+        if (currentAmbientGlow === 0) {
+          glowValBadge.textContent = '0% OLED Black';
+        } else if (currentAmbientGlow < 40) {
+          glowValBadge.textContent = `${currentAmbientGlow}% Subtle`;
+        } else if (currentAmbientGlow < 80) {
+          glowValBadge.textContent = `${currentAmbientGlow}% Balanced`;
+        } else {
+          glowValBadge.textContent = `${currentAmbientGlow}% Vivid`;
+        }
+      }
+
+      // Update active preset chips
+      glowChips.forEach((chip) => {
+        const chipVal = parseInt(chip.getAttribute('data-glow'), 10);
+        if (chipVal === currentAmbientGlow) {
+          chip.classList.add('active');
+        } else {
+          chip.classList.remove('active');
+        }
+      });
+
+      // Update atmosphere status dot luminescence
+      if (atmoDot) {
+        atmoDot.style.opacity = Math.max(0.3, opacity).toFixed(2);
+      }
+
+      if (save) {
+        try {
+          localStorage.setItem('orlando-ambient-glow', currentAmbientGlow.toString());
+        } catch(e) {}
+      }
+    }
+
+    if (sliderAmbientGlow) {
+      sliderAmbientGlow.addEventListener('input', (e) => {
+        applyAmbientGlow(parseFloat(e.target.value), true);
+      });
+    }
+
+    glowChips.forEach((chip) => {
+      chip.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const val = parseInt(chip.getAttribute('data-glow'), 10);
+        applyAmbientGlow(val, true);
+        if (typeof AudioHUD !== 'undefined' && AudioHUD.tick) AudioHUD.tick(840);
+      });
+    });
+
+    // ── 2. FLOATING PARTICLES CONTROLLER (Minimum lean -> Maximum hyper-field) ──
+    let currentParticleField = 0; // 0 = Minimum (current lean 28 dots)
+    try {
+      const savedP = localStorage.getItem('orlando-particle-field');
+      if (savedP !== null) {
+        const parsedP = parseInt(savedP, 10);
+        if (!isNaN(parsedP) && parsedP >= 0 && parsedP <= 100) {
+          currentParticleField = parsedP;
+        }
+      }
+    } catch(e) {}
+
+    function applyParticleField(value, save = true) {
+      currentParticleField = Math.max(0, Math.min(100, Math.round(value)));
+      const factor = currentParticleField / 100;
+
+      if (sliderParticles) {
+        sliderParticles.value = currentParticleField;
+      }
+
+      if (particlesValBadge) {
+        if (currentParticleField === 0) {
+          particlesValBadge.textContent = 'Min (Lean)';
+        } else if (currentParticleField < 35) {
+          particlesValBadge.textContent = `${currentParticleField}% Subtle`;
+        } else if (currentParticleField < 70) {
+          particlesValBadge.textContent = `${currentParticleField}% Stellar`;
+        } else {
+          particlesValBadge.textContent = `${currentParticleField}% Swarm`;
+        }
+      }
+
+      // Update active preset chips
+      particleChips.forEach((chip) => {
+        const chipVal = parseInt(chip.getAttribute('data-particles'), 10);
+        if (chipVal === currentParticleField) {
+          chip.classList.add('active');
+        } else {
+          chip.classList.remove('active');
+        }
+      });
+
+      // Notify particle canvas engine
+      if (window.updateParticleFieldSettings) {
+        window.updateParticleFieldSettings(factor);
+      }
+
+      if (save) {
+        try {
+          localStorage.setItem('orlando-particle-field', currentParticleField.toString());
+        } catch(e) {}
+      }
+    }
+
+    if (sliderParticles) {
+      sliderParticles.addEventListener('input', (e) => {
+        applyParticleField(parseFloat(e.target.value), true);
+      });
+    }
+
+    particleChips.forEach((chip) => {
+      chip.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const val = parseInt(chip.getAttribute('data-particles'), 10);
+        applyParticleField(val, true);
+        if (typeof AudioHUD !== 'undefined' && AudioHUD.tick) AudioHUD.tick(1100);
+      });
+    });
+
+    // Initialize defaults on load
+    applyAmbientGlow(currentAmbientGlow, false);
+    applyParticleField(currentParticleField, false);
+  }
+
+  // Initialize Atmosphere & Particle Field Lab
+  initAtmosphereLab();
 
   // Service Worker Registration
   if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {

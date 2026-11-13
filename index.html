@@ -26,11 +26,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&family=Orbitron:wght@600;700;800;900&family=Outfit:wght@600;700;800;900&family=Space+Grotesk:wght@600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
   <!-- Relative Stylesheet (with cache-bust versioning) -->
-  <link rel="stylesheet" href="style.css?v=12.0">
+  <link rel="stylesheet" href="style.css?v=13.0">
 </head>
 <body data-app-theme="pure-black" data-clock-style="pure-black">
   <!-- Google Antigravity Signature Repulsive Particle Stage -->
   <canvas id="antigravityCanvas" class="antigravity-fx-canvas" aria-hidden="true"></canvas>
+
+  <!-- Ambient Glow Background Radial Wash Layer -->
+  <div id="ambientGlowBackdrop" class="ambient-glow-backdrop" aria-hidden="true"></div>
 
   <div class="app-wrapper">
     <!-- 0. EXECUTIVE BRAND HEADER (TRANSPARENT LUXURY CRYSTAL & QUANTUM TIME COMMAND) -->
@@ -167,6 +170,110 @@
         </div>
       </div>
       <div class="or-header-right">
+        <!-- Atmosphere & Particle Field Controller (Ambient Glow & Floating Particles) -->
+        <div class="atmo-dropdown-container">
+          <button type="button" class="btn-topbar-desktop btn-atmosphere" id="btnAtmosphere" title="Control Ambient Glow & Floating Particles" aria-expanded="false" aria-controls="atmospherePopup">
+            <svg class="cyber-topbar-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3" fill="currentColor"/>
+              <circle cx="12" cy="12" r="7" stroke-dasharray="2 3"/>
+              <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke-linecap="round"/>
+            </svg>
+            <span class="status-dot-atmo" id="atmoDot"></span>
+            <span id="atmoLabel">Atmosphere</span>
+          </button>
+
+          <!-- Atmosphere & Floating Particles Control Popup Panel -->
+          <div class="atmo-popup-panel" id="atmospherePopup" role="dialog" aria-label="Ambient Glow and Floating Particles Controller">
+            <div class="atmo-popup-header">
+              <div class="atmo-header-title-wrap">
+                <span class="atmo-badge-icon">✦</span>
+                <div>
+                  <div class="atmo-popup-title">ATMOSPHERE &amp; PARTICLE LAB</div>
+                  <div class="atmo-popup-subtitle">Cosmic Radial Wash &amp; Dynamic Particle Field</div>
+                </div>
+              </div>
+              <button type="button" class="atmo-close-btn" id="btnCloseAtmosphere" title="Close Panel">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+              </button>
+            </div>
+
+            <div class="atmo-controls-body">
+              <!-- CONTROL 1: AMBIENT GLOW (RADIAL GRADIENT BACKGROUND) -->
+              <div class="atmo-control-section">
+                <div class="atmo-row-header">
+                  <div class="atmo-label-wrap">
+                    <svg class="atmo-sec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="9"/>
+                      <circle cx="12" cy="12" r="4" fill="currentColor" opacity="0.3"/>
+                    </svg>
+                    <span class="atmo-sec-label">Ambient Glow</span>
+                  </div>
+                  <span class="atmo-val-badge" id="glowValBadge">100% Vivid</span>
+                </div>
+                <p class="atmo-sec-desc">
+                  Radial gradient background wash. Brightest at center top, fading to pure black toward edges.
+                </p>
+
+                <div class="atmo-slider-container">
+                  <div class="atmo-track-meta">
+                    <span class="atmo-track-end">Pure Black (0%)</span>
+                    <span class="atmo-track-end">Max Glow (100%)</span>
+                  </div>
+                  <div class="atmo-slider-wrapper">
+                    <input type="range" id="sliderAmbientGlow" class="atmo-range-slider" min="0" max="100" step="1" value="100" aria-label="Ambient Glow Intensity">
+                    <div class="atmo-slider-fill" id="glowSliderFill"></div>
+                  </div>
+                  <div class="atmo-presets-row">
+                    <button type="button" class="atmo-preset-chip" data-glow="0">OLED Black (0%)</button>
+                    <button type="button" class="atmo-preset-chip" data-glow="35">Subtle (35%)</button>
+                    <button type="button" class="atmo-preset-chip" data-glow="70">Balanced (70%)</button>
+                    <button type="button" class="atmo-preset-chip active" data-glow="100">Max Glow (100%)</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="atmo-divider"></div>
+
+              <!-- CONTROL 2: FLOATING PARTICLES (PARTICLE FIELD) -->
+              <div class="atmo-control-section">
+                <div class="atmo-row-header">
+                  <div class="atmo-label-wrap">
+                    <svg class="atmo-sec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="7" cy="8" r="2" fill="currentColor"/>
+                      <circle cx="17" cy="6" r="1.5" fill="currentColor"/>
+                      <circle cx="12" cy="15" r="2.5" fill="currentColor"/>
+                      <circle cx="19" cy="16" r="1.2" fill="currentColor"/>
+                      <circle cx="5" cy="17" r="1" fill="currentColor"/>
+                    </svg>
+                    <span class="atmo-sec-label">Floating Particles</span>
+                  </div>
+                  <span class="atmo-val-badge" id="particlesValBadge">Min (Lean)</span>
+                </div>
+                <p class="atmo-sec-desc">
+                  Particle field density, dot diameter, and cosmic luminescence. Current is minimum.
+                </p>
+
+                <div class="atmo-slider-container">
+                  <div class="atmo-track-meta">
+                    <span class="atmo-track-end">Minimum (Current Lean)</span>
+                    <span class="atmo-track-end">Maximum (Hyper-Field)</span>
+                  </div>
+                  <div class="atmo-slider-wrapper">
+                    <input type="range" id="sliderParticles" class="atmo-range-slider" min="0" max="100" step="1" value="0" aria-label="Floating Particles Field Intensity">
+                    <div class="atmo-slider-fill" id="particlesSliderFill"></div>
+                  </div>
+                  <div class="atmo-presets-row">
+                    <button type="button" class="atmo-preset-chip active" data-particles="0">Min (Current)</button>
+                    <button type="button" class="atmo-preset-chip" data-particles="33">2x Balanced</button>
+                    <button type="button" class="atmo-preset-chip" data-particles="66">3x Stellar</button>
+                    <button type="button" class="atmo-preset-chip" data-particles="100">Max Swarm</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Mechanical Quartz / Acoustic Tick Toggle with Futuristic Resonator SVG -->
         <button type="button" class="btn-topbar-desktop" id="btnAcousticTick" title="Toggle Mechanical Escapement / Acoustic Resonator">
           <svg class="cyber-topbar-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -660,6 +767,6 @@
   <audio id="alarmAudioElement" preload="auto" src="sounds/piano.mp3"></audio>
 
   <!-- Relative JavaScript (with cache-bust versioning) -->
-  <script src="app.js?v=12.0"></script>
+  <script src="app.js?v=13.0"></script>
 </body>
 </html>
