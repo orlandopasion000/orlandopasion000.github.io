@@ -101,6 +101,89 @@ html, body {
    Meticulously created across all UI elements, backgrounds, surfaces & glows
    ══════════════════════════════════════════════════════════════════════════ */
 
+/* Flagship Default: Pure Black (OLED Infinite Contrast Monolith) */
+body[data-app-theme="pure-black"] {
+  --theme-bg: #000000;
+  --theme-bg-gradient: #000000;
+  --theme-surface-card: #050505;
+  --theme-surface-glass: #020202;
+  --theme-surface-interactive: rgba(255, 255, 255, 0.08);
+  --theme-primary: #FFFFFF;
+  --theme-primary-gradient: linear-gradient(135deg, #FFFFFF 0%, #E2E8F0 50%, #CBD5E1 100%);
+  --theme-primary-text: #000000;
+  --theme-primary-glow: rgba(255, 255, 255, 0.05); /* Subdued minimal glow */
+  --theme-accent: #FFFFFF;
+  --theme-accent-gradient: linear-gradient(135deg, #FFFFFF 0%, #E2E8F0 100%);
+  --theme-accent-glow: rgba(255, 255, 255, 0.03);
+  --theme-border: rgba(255, 255, 255, 0.12);
+  --theme-border-strong: rgba(255, 255, 255, 0.28);
+  --theme-text-dim: #A1A1AA;
+  --theme-text-mute: #52525B;
+  --theme-particle-color: rgba(255, 255, 255, 0.35);
+  background: #000000 !important;
+  background-color: #000000 !important;
+}
+
+body[data-app-theme="pure-black"] .display-stage {
+  background: #000000 !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04), 0 20px 45px rgba(0, 0, 0, 0.98) !important;
+}
+
+body[data-app-theme="pure-black"] .display-stage::before {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent) !important;
+}
+
+body[data-app-theme="pure-black"] .progress-container {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: none !important;
+}
+
+body[data-app-theme="pure-black"] .progress-bar-fill {
+  background: #FFFFFF !important;
+  box-shadow: none !important;
+}
+
+body[data-app-theme="pure-black"] .progress-comet-head {
+  background: #FFFFFF !important;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.5) !important;
+}
+
+body[data-app-theme="pure-black"] .btn-primary-gold {
+  background: #FFFFFF !important;
+  color: #000000 !important;
+  border-color: #FFFFFF !important;
+  box-shadow: 0 4px 14px rgba(255, 255, 255, 0.08) !important;
+}
+
+body[data-app-theme="pure-black"] .btn-primary-gold:hover {
+  background: #F1F5F9 !important;
+  box-shadow: 0 6px 18px rgba(255, 255, 255, 0.15) !important;
+}
+
+body[data-app-theme="pure-black"] .customization-cockpit {
+  background: rgba(8, 8, 8, 0.92) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.95) !important;
+}
+
+body[data-app-theme="pure-black"] .tabs-nav {
+  background: rgba(6, 6, 6, 0.95) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+body[data-app-theme="pure-black"] .tab-btn.active {
+  background: #FFFFFF !important;
+  color: #000000 !important;
+  box-shadow: none !important;
+}
+
+body[data-app-theme="pure-black"] .timer-inputs-wrapper {
+  background: rgba(6, 6, 6, 0.95) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
 /* Theme 1: Pure Platinum */
 body[data-app-theme="platinum"] {
   --theme-bg: #030406;
@@ -2346,6 +2429,20 @@ main.timer-main {
 
 /* ═════ 17 INDEPENDENT CLOCK STYLES (Controlled by [data-clock-style]) ═════ */
 
+/* Flagship Default Clock Style: Pure Black (OLED Infinite Contrast) */
+body[data-clock-style="pure-black"] .chrome {
+  filter: none !important;
+}
+body[data-clock-style="pure-black"] .chrome span {
+  background: linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 65%, #E2E8F0 85%, #CBD5E1 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  -webkit-text-stroke: 0 !important;
+  text-shadow: none !important;
+}
+
 /* Clock Style 1: Executive Chrome 3D */
 body[data-clock-style="chrome-3d"] .chrome {
   filter: drop-shadow(0 4px 10px rgba(0,0,0,0.92));
@@ -2358,7 +2455,7 @@ body[data-clock-style="chrome-3d"] .chrome span {
 
 /* Clock Style 2: Royal 24K Radiant Gold */
 body[data-clock-style="gold"] .chrome {
-  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.9)) drop-shadow(0 0 25px rgba(217,185,92,0.25));
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.9));
 }
 body[data-clock-style="gold"] .chrome span {
   background: linear-gradient(180deg,#FFFBEB 0%,#FDE68A 18%,#F59E0B 48%,#78350F 70%,#FBBF24 88%,#FDE68A 100%);
@@ -2368,7 +2465,7 @@ body[data-clock-style="gold"] .chrome span {
 
 /* Clock Style 3: Cyberpunk Emerald Matrix */
 body[data-clock-style="cyber-emerald"] .chrome {
-  filter: drop-shadow(0 0 10px rgba(52,211,153,0.7)) drop-shadow(0 0 28px rgba(16,185,129,0.35));
+  filter: drop-shadow(0 0 10px rgba(52,211,153,0.7));
 }
 body[data-clock-style="cyber-emerald"] .chrome span {
   background: linear-gradient(180deg,#F0FDF4 0%,#A7F3D0 22%,#34D399 52%,#059669 82%,#10B981 100%);
@@ -2378,7 +2475,7 @@ body[data-clock-style="cyber-emerald"] .chrome span {
 
 /* Clock Style 4: Glacial Titanium & Ice Blue */
 body[data-clock-style="ice-titanium"] .chrome {
-  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.85)) drop-shadow(0 0 20px rgba(56,189,248,0.3));
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.85));
 }
 body[data-clock-style="ice-titanium"] .chrome span {
   background: linear-gradient(180deg,#F0F9FF 0%,#BAE6FD 20%,#38BDF8 50%,#0C4A6E 74%,#0284C7 88%,#7DD3FC 100%);
@@ -2388,7 +2485,7 @@ body[data-clock-style="ice-titanium"] .chrome span {
 
 /* Clock Style 5: Imperial Amethyst Purple */
 body[data-clock-style="amethyst"] .chrome {
-  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.9)) drop-shadow(0 0 22px rgba(192,132,252,0.4));
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.9));
 }
 body[data-clock-style="amethyst"] .chrome span {
   background: linear-gradient(180deg,#FAF5FF 0%,#E9D5FF 22%,#C084FC 50%,#7E22CE 76%,#A855F7 90%,#E9D5FF 100%);
@@ -2398,7 +2495,7 @@ body[data-clock-style="amethyst"] .chrome span {
 
 /* Clock Style 6: Sunset Rose Gold */
 body[data-clock-style="sunset-rose"] .chrome {
-  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.85)) drop-shadow(0 0 18px rgba(244,114,182,0.25));
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.85));
 }
 body[data-clock-style="sunset-rose"] .chrome span {
   background: linear-gradient(180deg,#FFF1F2 0%,#FECDD3 22%,#FB7185 50%,#4C0519 74%,#E11D48 88%,#FDA4AF 100%);
@@ -2408,7 +2505,7 @@ body[data-clock-style="sunset-rose"] .chrome span {
 
 /* Clock Style 7: Pure Minimalist Studio White */
 body[data-clock-style="minimal-white"] .chrome {
-  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.85)) drop-shadow(0 0 20px rgba(255,255,255,0.15));
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.85));
 }
 body[data-clock-style="minimal-white"] .chrome span {
   color: #FFFFFF !important;
@@ -2428,7 +2525,7 @@ body[data-clock-style="chronometer-din"] .chrome span {
 
 /* Clock Style 9: Blazing Sunset Amber */
 body[data-clock-style="sunset-amber"] .chrome {
-  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.9)) drop-shadow(0 0 25px rgba(245,158,11,0.35));
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.9));
 }
 body[data-clock-style="sunset-amber"] .chrome span {
   background: linear-gradient(180deg,#FFFBEB 0%,#FDE68A 20%,#F59E0B 52%,#451A03 76%,#D97706 90%,#FCD34D 100%);
@@ -2478,7 +2575,7 @@ body[data-clock-style="rainbow"] .chrome span {
 
 /* Clock Style 13: Green Nature Matrix */
 body[data-clock-style="green-nature"] .chrome {
-  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.85)) drop-shadow(0 0 20px rgba(34,197,94,0.3));
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.85));
 }
 body[data-clock-style="green-nature"] .chrome span {
   background: linear-gradient(180deg,#F0FDF4 0%,#86EFAC 22%,#22C55E 50%,#14532D 74%,#4ADE80 100%);
@@ -2488,7 +2585,7 @@ body[data-clock-style="green-nature"] .chrome span {
 
 /* Clock Style 14: Royal Sapphire & Cobalt Chrono */
 body[data-clock-style="royal-sapphire"] .chrome {
-  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.9)) drop-shadow(0 0 24px rgba(59,130,246,0.5));
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.9));
 }
 body[data-clock-style="royal-sapphire"] .chrome span {
   background: linear-gradient(180deg,#EFF6FF 0%,#BFDBFE 18%,#60A5FA 46%,#1E3A8A 72%,#2563EB 88%,#93C5FD 100%);
@@ -2498,7 +2595,7 @@ body[data-clock-style="royal-sapphire"] .chrome span {
 
 /* Clock Style 15: Cyberpunk Crimson Laser */
 body[data-clock-style="crimson-laser"] .chrome {
-  filter: drop-shadow(0 0 12px rgba(239,68,68,0.7)) drop-shadow(0 0 32px rgba(220,38,38,0.35));
+  filter: drop-shadow(0 0 12px rgba(239,68,68,0.7));
 }
 body[data-clock-style="crimson-laser"] .chrome span {
   background: linear-gradient(180deg,#FEF2F2 0%,#FECACA 20%,#F87171 48%,#7F1D1D 74%,#EF4444 88%,#FCA5A5 100%);
@@ -2518,7 +2615,7 @@ body[data-clock-style="obsidian-noir"] .chrome span {
 
 /* Clock Style 17: Solis Radiant 18K Yellow Gold */
 body[data-clock-style="solis-gold"] .chrome {
-  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.92)) drop-shadow(0 0 28px rgba(234,179,8,0.4));
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.92));
 }
 body[data-clock-style="solis-gold"] .chrome span {
   background: linear-gradient(180deg,#FEFCE8 0%,#FEF08A 18%,#FACC15 48%,#713F12 74%,#EAB308 88%,#FDE047 100%);
@@ -2528,7 +2625,7 @@ body[data-clock-style="solis-gold"] .chrome span {
 
 /* Clock Style 18: Supernova Cosmic Flare */
 body[data-clock-style="supernova-crimson"] .chrome {
-  filter: drop-shadow(0 0 16px rgba(255,0,85,0.75)) drop-shadow(0 0 36px rgba(255,0,85,0.4));
+  filter: drop-shadow(0 0 16px rgba(255,0,85,0.75));
 }
 body[data-clock-style="supernova-crimson"] .chrome span {
   background: linear-gradient(180deg,#FFF0F5 0%,#FFE4EF 18%,#FF0055 48%,#660022 74%,#FF3377 88%,#FFAACC 100%);
@@ -2538,7 +2635,7 @@ body[data-clock-style="supernova-crimson"] .chrome span {
 
 /* Clock Style 19: Quantum Singularity Void */
 body[data-clock-style="quantum-violet"] .chrome {
-  filter: drop-shadow(0 0 16px rgba(139,92,246,0.7)) drop-shadow(0 0 32px rgba(192,132,252,0.4));
+  filter: drop-shadow(0 0 16px rgba(139,92,246,0.7));
 }
 body[data-clock-style="quantum-violet"] .chrome span {
   background: linear-gradient(180deg,#FAF5FF 0%,#EDE9FE 18%,#8B5CF6 48%,#3B0764 74%,#C084FC 88%,#F3E8FF 100%);
@@ -2548,7 +2645,7 @@ body[data-clock-style="quantum-violet"] .chrome span {
 
 /* Clock Style 20: Tokyo Cyber-Night 2099 */
 body[data-clock-style="tokyo-neon"] .chrome {
-  filter: drop-shadow(0 0 14px rgba(0,240,255,0.7)) drop-shadow(0 0 32px rgba(255,0,127,0.45));
+  filter: drop-shadow(0 0 14px rgba(0,240,255,0.7));
 }
 body[data-clock-style="tokyo-neon"] .chrome span {
   background: linear-gradient(180deg,#FFFFFF 0%,#C5F9FF 18%,#00F0FF 48%,#55002B 74%,#FF007F 88%,#FFE5F1 100%);
@@ -2558,7 +2655,7 @@ body[data-clock-style="tokyo-neon"] .chrome span {
 
 /* Clock Style 21: Monaco Heritage Chrono */
 body[data-clock-style="monaco-racing"] .chrome {
-  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.92)) drop-shadow(0 0 24px rgba(229,192,123,0.45));
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.92));
 }
 body[data-clock-style="monaco-racing"] .chrome span {
   background: linear-gradient(180deg,#FFFDF5 0%,#F9EED4 18%,#E5C07B 48%,#063D23 74%,#D4A359 88%,#FFF2D6 100%);
@@ -2568,7 +2665,7 @@ body[data-clock-style="monaco-racing"] .chrome span {
 
 /* Clock Style 22: Arctic Borealis Aurora */
 body[data-clock-style="arctic-aurora"] .chrome {
-  filter: drop-shadow(0 0 16px rgba(0,255,163,0.7)) drop-shadow(0 0 34px rgba(0,229,255,0.4));
+  filter: drop-shadow(0 0 16px rgba(0,255,163,0.7));
 }
 body[data-clock-style="arctic-aurora"] .chrome span {
   background: linear-gradient(180deg,#FFFFFF 0%,#E6FFF6 18%,#00FFA3 48%,#003847 74%,#00E5FF 88%,#E6FCFF 100%);
@@ -2578,7 +2675,7 @@ body[data-clock-style="arctic-aurora"] .chrome span {
 
 /* Clock Style 23: Sahara Rose & Terracotta */
 body[data-clock-style="desert-dune"] .chrome {
-  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.92)) drop-shadow(0 0 24px rgba(226,177,138,0.4));
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.92));
 }
 body[data-clock-style="desert-dune"] .chrome span {
   background: linear-gradient(180deg,#FFFBF8 0%,#F6DEC8 18%,#E2B18A 48%,#572611 74%,#D97706 88%,#FDE68A 100%);
@@ -2588,7 +2685,7 @@ body[data-clock-style="desert-dune"] .chrome span {
 
 /* Clock Style 24: Forged Hypercar Carbon */
 body[data-clock-style="carbon-forged"] .chrome {
-  filter: drop-shadow(0 6px 14px rgba(0,0,0,0.96)) drop-shadow(0 0 24px rgba(226,248,0,0.45));
+  filter: drop-shadow(0 6px 14px rgba(0,0,0,0.96));
 }
 body[data-clock-style="carbon-forged"] .chrome span {
   background: linear-gradient(180deg,#FFFFFF 0%,#FAFFCC 18%,#E2F800 48%,#1A1E24 74%,#94A3B8 88%,#E2E8F0 100%);
@@ -2598,7 +2695,7 @@ body[data-clock-style="carbon-forged"] .chrome span {
 
 /* Clock Style 25: Liquid Quicksilver Mercury */
 body[data-clock-style="liquid-mercury"] .chrome {
-  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.95)) drop-shadow(0 0 32px rgba(255,255,255,0.65));
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.95));
 }
 body[data-clock-style="liquid-mercury"] .chrome span {
   background: linear-gradient(180deg,#FFFFFF 0%,#F1F5F9 22%,#CBD5E1 46%,#1E293B 70%,#64748B 84%,#FFFFFF 100%);
@@ -2608,7 +2705,7 @@ body[data-clock-style="liquid-mercury"] .chrome span {
 
 /* Clock Style 26: Mariana Oceanic Abyss */
 body[data-clock-style="deep-ocean-abyss"] .chrome {
-  filter: drop-shadow(0 0 16px rgba(0,229,255,0.75)) drop-shadow(0 0 36px rgba(0,102,255,0.45));
+  filter: drop-shadow(0 0 16px rgba(0,229,255,0.75));
 }
 body[data-clock-style="deep-ocean-abyss"] .chrome span {
   background: linear-gradient(180deg,#E6FCFF 0%,#BAF7FF 18%,#00E5FF 48%,#001C47 74%,#0284C7 88%,#E0F2FE 100%);
@@ -2618,7 +2715,7 @@ body[data-clock-style="deep-ocean-abyss"] .chrome span {
 
 /* Clock Style 27: Kyoto Imperial Sakura */
 body[data-clock-style="sakura-blossom"] .chrome {
-  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.92)) drop-shadow(0 0 28px rgba(244,114,182,0.45));
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.92));
 }
 body[data-clock-style="sakura-blossom"] .chrome span {
   background: linear-gradient(180deg,#FFF5F9 0%,#FCE7F3 18%,#F472B6 48%,#500724 74%,#FB7185 88%,#FFE4E6 100%);
@@ -2628,7 +2725,7 @@ body[data-clock-style="sakura-blossom"] .chrome span {
 
 /* Clock Style 28: Solaris Fusion 24K Plasma */
 body[data-clock-style="solaris-plasma"] .chrome {
-  filter: drop-shadow(0 0 16px rgba(255,102,0,0.75)) drop-shadow(0 0 36px rgba(255,204,0,0.45));
+  filter: drop-shadow(0 0 16px rgba(255,102,0,0.75));
 }
 body[data-clock-style="solaris-plasma"] .chrome span {
   background: linear-gradient(180deg,#FFFFEB 0%,#FFE4D1 18%,#FF6600 48%,#571A00 74%,#FFCC00 88%,#FFFBEB 100%);
@@ -2648,7 +2745,7 @@ body[data-clock-style="stealth-matte-black"] .chrome span {
 
 /* Clock Style 30: Neural Matrix Rain 2.0 */
 body[data-clock-style="cyber-matrix-rain"] .chrome {
-  filter: drop-shadow(0 0 16px rgba(57,255,20,0.8)) drop-shadow(0 0 34px rgba(0,255,102,0.4));
+  filter: drop-shadow(0 0 16px rgba(57,255,20,0.8));
 }
 body[data-clock-style="cyber-matrix-rain"] .chrome span {
   background: linear-gradient(180deg,#F0FFF0 0%,#D1FFC7 18%,#39FF14 48%,#003308 74%,#00FF66 88%,#E6FFF0 100%);
@@ -2679,7 +2776,7 @@ body[data-clock-style="cyber-matrix-rain"] .chrome span {
   width: 100%;
   background: var(--theme-primary-gradient);
   border-radius: 9999px;
-  box-shadow: 0 0 14px var(--theme-primary-glow);
+  box-shadow: 0 0 6px var(--theme-primary-glow);
   transition: width 0.25s linear;
   position: relative;
 }
@@ -2694,7 +2791,7 @@ body[data-clock-style="cyber-matrix-rain"] .chrome span {
   height: 13px;
   border-radius: 50%;
   background: #FFFFFF;
-  box-shadow: 0 0 14px 2px var(--theme-primary), 0 0 28px var(--theme-primary-glow);
+  box-shadow: 0 0 6px 1px var(--theme-primary);
   pointer-events: none;
   transition: transform 0.2s ease, opacity 0.3s ease;
 }
@@ -2840,7 +2937,7 @@ body[data-clock-style="cyber-matrix-rain"] .chrome span {
   width: 58px;
   height: 58px;
   color: var(--theme-primary);
-  filter: drop-shadow(0 0 24px var(--theme-primary-glow));
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.8));
   animation: pulseGlow 1.2s infinite ease-in-out;
 }
 
@@ -2974,34 +3071,34 @@ body[data-clock-style="cyber-matrix-rain"] .chrome span {
 .btn-primary-gold {
   background: var(--theme-primary-gradient);
   color: var(--theme-primary-text);
-  box-shadow: 0 0 24px var(--theme-primary-glow), 0 4px 14px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6), 0 0 8px var(--theme-primary-glow);
 }
 
 .btn-primary-gold:hover {
   transform: translateY(-2px);
-  box-shadow: 0 0 32px var(--theme-primary-glow), 0 6px 18px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.7), 0 0 12px var(--theme-primary-glow);
 }
 
 .btn-pause-amber {
   background: linear-gradient(135deg, #FFE4A0 0%, #F0A500 50%, #B87800 100%);
   color: #0c0c0e;
-  box-shadow: 0 0 20px rgba(240, 165, 0, 0.35);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6), 0 0 8px rgba(240, 165, 0, 0.2);
 }
 
 .btn-pause-amber:hover {
   transform: translateY(-2px);
-  box-shadow: 0 0 28px rgba(240, 165, 0, 0.5);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.7), 0 0 12px rgba(240, 165, 0, 0.3);
 }
 
 .btn-stop-rose {
   background: linear-gradient(135deg, #FFAEAE 0%, #F55B5B 50%, #C72020 100%);
   color: #ffffff;
-  box-shadow: 0 0 20px rgba(245, 91, 91, 0.35);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6), 0 0 8px rgba(245, 91, 91, 0.2);
 }
 
 .btn-stop-rose:hover {
   transform: translateY(-2px);
-  box-shadow: 0 0 28px rgba(245, 91, 91, 0.55);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.7), 0 0 12px rgba(245, 91, 91, 0.3);
 }
 
 .btn-ghost-silver {
@@ -3424,7 +3521,7 @@ input:checked + .slider:before {
 .ov-ring-bell {
   font-size: 72px;
   animation: bellWobble 0.8s infinite ease-in-out;
-  filter: drop-shadow(0 0 24px var(--theme-primary-glow));
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.8));
 }
 
 @keyframes bellWobble {

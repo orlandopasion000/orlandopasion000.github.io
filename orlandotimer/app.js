@@ -12,9 +12,11 @@
   'use strict';
 
   // ══════════════════════════════════════════════════════════════════════════
-  // 1. BESPOKE THEMES DEFINITION (30 WORLD-CLASS HOROLOGY THEMES)
+  // 1. BESPOKE THEMES DEFINITION (31 WORLD-CLASS HOROLOGY THEMES)
   // ══════════════════════════════════════════════════════════════════════════
   const THEMES = [
+    // Flagship OLED Monolith (Default)
+    "pure-black",
     // Precious Metals & Luxury (7)
     "platinum",
     "gold",
@@ -41,7 +43,7 @@
     "amethyst",
     "solaris-plasma",
     "deep-ocean-abyss",
-    // Minimalist & Monolith (3)
+    // Minimalist & Monolith (4)
     "minimal-white",
     "obsidian-noir",
     "stealth-matte-black",
@@ -54,6 +56,14 @@
   ];
 
   const THEME_DATA = {
+    "pure-black": {
+      name: "Pure Black",
+      category: "minimal",
+      desc: "Absolute True OLED #000000 solid void with razor-sharp architectural white contrast",
+      swatch: "#FFFFFF",
+      gradient: "linear-gradient(135deg, #FFFFFF 0%, #E2E8F0 50%, #94A3B8 100%)",
+      glow: "rgba(255, 255, 255, 0.06)"
+    },
     "platinum": {
       name: "Pure Platinum",
       category: "metals",
@@ -426,21 +436,38 @@
   // ══════════════════════════════════════════════════════════════════════════
   // 2. INDEPENDENT DUAL-CATEGORY CUSTOMIZATION ENGINE
   // ══════════════════════════════════════════════════════════════════════════
-  let currentAppTheme = "platinum";
-  let currentClockStyle = "platinum";
+  let currentAppTheme = "pure-black";
+  let currentClockStyle = "pure-black";
 
-  // Load independent preferences from localStorage
+  // Load independent preferences from localStorage (Default: pure-black for OLED Infinite Contrast)
   try {
     const savedApp = localStorage.getItem('orlando-app-theme');
-    if (savedApp && THEMES.includes(savedApp)) currentAppTheme = savedApp;
+    if (savedApp && THEMES.includes(savedApp)) {
+      currentAppTheme = savedApp;
+    } else {
+      currentAppTheme = "pure-black";
+    }
 
     const savedClock = localStorage.getItem('orlando-clock-style') || localStorage.getItem('orlando-clock-theme');
-    if (savedClock && THEMES.includes(savedClock)) currentClockStyle = savedClock;
+    if (savedClock && THEMES.includes(savedClock)) {
+      currentClockStyle = savedClock;
+    } else {
+      currentClockStyle = "pure-black";
+    }
+
+    // Default migration: Pure Black for OLED Infinite Contrast
+    if (!localStorage.getItem('orlando-pure-black-default-v1')) {
+      currentAppTheme = "pure-black";
+      currentClockStyle = "pure-black";
+      localStorage.setItem('orlando-app-theme', 'pure-black');
+      localStorage.setItem('orlando-clock-style', 'pure-black');
+      localStorage.setItem('orlando-pure-black-default-v1', 'true');
+    }
   } catch(e) {}
 
   // Category 1: Global Application Theme Controller
   function applyAppTheme(theme) {
-    if (!THEMES.includes(theme)) theme = "platinum";
+    if (!THEMES.includes(theme)) theme = "pure-black";
     currentAppTheme = theme;
     document.body.setAttribute('data-app-theme', theme);
 
@@ -464,7 +491,7 @@
 
   // Category 2: Clock and Typography Style Controller
   function applyClockStyle(style) {
-    if (!THEMES.includes(style)) style = "platinum";
+    if (!THEMES.includes(style)) style = "pure-black";
     currentClockStyle = style;
     document.body.setAttribute('data-clock-style', style);
 
