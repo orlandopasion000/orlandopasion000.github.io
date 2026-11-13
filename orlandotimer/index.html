@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#000000">
+  <title>Orlando Timer</title>
+
+  <!-- PWA & Favicon Meta -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/ot-icon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/ot-icon-512.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/ot-icon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/ot-icon-16.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Orlando Timer">
+  <meta name="description" content="Orlando Timer — Executive 3-in-1 Timer, Stopwatch, and Alarm Horology Suite by Sir Orlando V. Pasion, Jr.">
+
+  <!-- Relative Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Google Antigravity Signature Repulsive Particle Stage -->
+  <canvas id="antigravityCanvas" class="antigravity-fx-canvas" aria-hidden="true"></canvas>
+
+  <div class="app-wrapper">
+    <!-- 0. EXECUTIVE 24K SWISS GOLD BRAND HEADER -->
+    <header class="or-brand-header">
+      <a href="https://orlandopasion000.github.io/" class="or-brand-badge" title="Sir Orlando V. Pasion, Jr. — Master Portfolio">
+        <img src="assets/ot-icon-192.png" alt="Orlando Timer 24K Swiss Gold Monogram" class="or-brand-logo-img">
+        <div class="or-brand-titles">
+          <span class="or-brand-main">ORLANDO<span class="or-brand-accent">TIMER</span></span>
+          <span class="or-brand-sub">EXECUTIVE SUITE · 24K SWISS GOLD HOROLOGY</span>
+        </div>
+      </a>
+      <div class="or-header-right">
+        <!-- Keep Screen Awake status button -->
+        <button type="button" class="btn-topbar-desktop" id="btnWakeLock" title="Screen Wake Lock Status (Toggle)">
+          <span class="status-dot-wake"></span>
+          <span id="wakeLockText">Awake ON</span>
+        </button>
+
+        <!-- Fullscreen Button -->
+        <button type="button" class="btn-topbar-desktop" id="btnFullscreen" title="Toggle Fullscreen View">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+          </svg>
+          <span id="fsLabel">Fullscreen</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- MIDDLE SECTION: VERY BIG TIMER APP WITH THREE TABS -->
+    <main class="timer-main">
+      <!-- TABS NAVIGATION -->
+      <div class="tabs-nav-container">
+        <nav class="tabs-nav" role="tablist" aria-label="Orlando Timer Navigation">
+          <button type="button" class="tab-btn active" id="tab-timer" role="tab" aria-selected="true" data-tab="timer">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span>Timer</span>
+          </button>
+          <button type="button" class="tab-btn" id="tab-stopwatch" role="tab" aria-selected="false" data-tab="stopwatch">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="14" r="8"></circle>
+              <line x1="12" y1="2" x2="12" y2="6"></line>
+              <line x1="12" y1="6" x2="15" y2="6"></line>
+            </svg>
+            <span>Stopwatch</span>
+          </button>
+          <button type="button" class="tab-btn" id="tab-alarm" role="tab" aria-selected="false" data-tab="alarm">
+            <svg viewBox="0 0 24 24">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+            <span>Alarm</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- TAB 1: TIMER                               -->
+      <!-- ========================================== -->
+      <section class="tab-panel active" id="panel-timer" role="tabpanel" aria-labelledby="tab-timer">
+        <!-- Display Stage with HUGE Digits -->
+        <div class="display-stage">
+          <div class="huge-digits-container">
+            <div class="timer-digits" id="timerDigits">00:25:00</div>
+          </div>
+          <!-- Progress bar -->
+          <div class="progress-container">
+            <div class="progress-bar-fill" id="timerProgressBar" style="width: 100%"></div>
+          </div>
+        </div>
+
+        <!-- Inputs for Hours, Minutes, Seconds -->
+        <div class="timer-inputs-wrapper">
+          <!-- Hours -->
+          <div class="time-input-group">
+            <label for="timerHours">Hours</label>
+            <div class="time-input-spinner">
+              <input type="number" id="timerHours" class="time-input-box" min="0" max="99" value="00" aria-label="Timer Hours">
+              <div class="spinner-btn-col">
+                <button type="button" class="spinner-btn" onclick="stepTime('h', 1)" title="Increase Hours">▲</button>
+                <button type="button" class="spinner-btn" onclick="stepTime('h', -1)" title="Decrease Hours">▼</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="time-colon">:</div>
+
+          <!-- Minutes -->
+          <div class="time-input-group">
+            <label for="timerMinutes">Mins</label>
+            <div class="time-input-spinner">
+              <input type="number" id="timerMinutes" class="time-input-box" min="0" max="59" value="25" aria-label="Timer Minutes">
+              <div class="spinner-btn-col">
+                <button type="button" class="spinner-btn" onclick="stepTime('m', 1)" title="Increase Minutes">▲</button>
+                <button type="button" class="spinner-btn" onclick="stepTime('m', -1)" title="Decrease Minutes">▼</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="time-colon">:</div>
+
+          <!-- Seconds -->
+          <div class="time-input-group">
+            <label for="timerSeconds">Secs</label>
+            <div class="time-input-spinner">
+              <input type="number" id="timerSeconds" class="time-input-box" min="0" max="59" value="00" aria-label="Timer Seconds">
+              <div class="spinner-btn-col">
+                <button type="button" class="spinner-btn" onclick="stepTime('s', 1)" title="Increase Seconds">▲</button>
+                <button type="button" class="spinner-btn" onclick="stepTime('s', -1)" title="Decrease Seconds">▼</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Buttons: Start, Pause, Reset -->
+        <div class="controls-row">
+          <button type="button" class="btn-luxury btn-primary-gold" id="btnTimerStart">
+            <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <span>Start</span>
+          </button>
+          <button type="button" class="btn-luxury btn-pause-amber" id="btnTimerPause" style="display:none">
+            <svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+            <span>Pause</span>
+          </button>
+          <button type="button" class="btn-luxury btn-ghost-silver" id="btnTimerReset">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="1 4 1 10 7 10"></polyline>
+              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+            </svg>
+            <span>Reset</span>
+          </button>
+        </div>
+
+        <!-- Quick Presets: 5, 10, 15, 25, 45 minutes -->
+        <div class="presets-section">
+          <span class="presets-label">Quick Presets</span>
+          <div class="presets-row">
+            <button type="button" class="preset-pill" data-minutes="5">5 min</button>
+            <button type="button" class="preset-pill" data-minutes="10">10 min</button>
+            <button type="button" class="preset-pill" data-minutes="15">15 min</button>
+            <button type="button" class="preset-pill" data-minutes="25">25 min (Pomodoro)</button>
+            <button type="button" class="preset-pill" data-minutes="45">45 min</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- TAB 2: STOPWATCH                           -->
+      <!-- ========================================== -->
+      <section class="tab-panel" id="panel-stopwatch" role="tabpanel" aria-labelledby="tab-stopwatch">
+        <!-- Display Stage with HUGE Digits MM:SS.ms -->
+        <div class="display-stage">
+          <div class="huge-digits-container">
+            <span class="stopwatch-digits" id="swDigits">00:00</span><span class="stopwatch-ms" id="swMs">.00</span>
+          </div>
+        </div>
+
+        <!-- Buttons: Start, Stop, Lap, Reset -->
+        <div class="controls-row">
+          <button type="button" class="btn-luxury btn-primary-gold" id="btnSwStart">
+            <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <span>Start</span>
+          </button>
+          <button type="button" class="btn-luxury btn-stop-rose" id="btnSwStop" style="display:none">
+            <svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12"></rect></svg>
+            <span>Stop</span>
+          </button>
+          <button type="button" class="btn-luxury btn-lap" id="btnSwLap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+              <line x1="4" y1="22" x2="4" y2="15"></line>
+            </svg>
+            <span>Lap</span>
+          </button>
+          <button type="button" class="btn-luxury btn-ghost-silver" id="btnSwReset">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="1 4 1 10 7 10"></polyline>
+              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+            </svg>
+            <span>Reset</span>
+          </button>
+        </div>
+
+        <!-- Lap List Below -->
+        <div class="laps-wrapper">
+          <div class="laps-header">
+            <span>Lap #</span>
+            <span>Split Time</span>
+            <span>Total Time</span>
+          </div>
+          <div class="laps-list" id="lapsList">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- TAB 3: ALARM                               -->
+      <!-- ========================================== -->
+      <section class="tab-panel" id="panel-alarm" role="tabpanel" aria-labelledby="tab-alarm">
+        <!-- Set a Time (12-hour AM/PM) & Label -->
+        <div class="alarm-create-card">
+          <div class="alarm-time-picker-row">
+            <select id="alarmHour" class="alarm-select" aria-label="Alarm Hour">
+              <!-- Dynamically populated 01-12 -->
+            </select>
+            <span class="time-colon">:</span>
+            <select id="alarmMinute" class="alarm-select" aria-label="Alarm Minute">
+              <!-- Dynamically populated 00-59 -->
+            </select>
+            <div class="ampm-toggle" role="group" aria-label="AM or PM">
+              <button type="button" class="ampm-btn active" id="btnAm">AM</button>
+              <button type="button" class="ampm-btn" id="btnPm">PM</button>
+            </div>
+          </div>
+
+          <input type="text" id="alarmLabel" class="alarm-label-input" placeholder="Alarm Label (e.g. Mathematics Focus, Break, Recharge)" maxlength="48">
+
+          <div style="display:flex;justify-content:center;">
+            <button type="button" class="btn-luxury btn-primary-gold" id="btnAddAlarm" style="width:100%;max-width:320px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              <span>Add Alarm</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Multiple Alarms List with On/Off Switches -->
+        <div class="alarms-list-container" id="alarmsList">
+          <!-- Dynamically populated cards -->
+        </div>
+      </section>
+    </main>
+
+    <!-- EXECUTIVE FOOTER -->
+    <footer class="footer">
+      <div class="footer-name">Sir Orlando V. Pasion, Jr.</div>
+      <div class="footer-sub">Teacher VI · Mathematics Educator · EdTech Innovator</div>
+      <div class="footer-copy">&copy; 2026 Sir Orlando V. Pasion, Jr. — Designed and developed with HTML, CSS, and JavaScript</div>
+    </footer>
+  </div>
+
+  <!-- FULLSCREEN RINGING & FLASHING SCREEN OVERLAY -->
+  <div id="ov" role="alertdialog" aria-modal="true" aria-labelledby="ovTitle" aria-live="assertive">
+    <div class="ov-content">
+      <div class="ov-ring-bell">🔔</div>
+      <div class="ov-title" id="ovTitle">00:00:00</div>
+      <div class="ov-message" id="ovMessage">Time's Up!</div>
+      <div class="ov-actions">
+        <button type="button" class="btn-luxury btn-ghost-silver" id="btnOvSnooze">Snooze (5 min)</button>
+        <button type="button" class="btn-luxury btn-primary-gold" id="btnOvDismiss">Stop / Dismiss</button>
+      </div>
+      <div class="ov-keys-hint">S = Snooze (5m) · Esc / Space = Dismiss</div>
+    </div>
+  </div>
+
+  <!-- Audio element fallback (piano sound from existing assets) -->
+  <audio id="alarmAudioElement" preload="auto" src="sounds/piano.mp3"></audio>
+
+  <!-- Relative JavaScript -->
+  <script src="app.js"></script>
+</body>
+</html>
