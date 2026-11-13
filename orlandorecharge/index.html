@@ -1834,6 +1834,478 @@ body.light-theme .rest-mode-btn:hover {
   box-shadow: 0 6px 18px rgba(99, 102, 241, 0.18);
 }
 
+/* ───────── FUTURISTIC NAKED BORDERLESS GAME BUTTON ───────── */
+.naked-game-btn {
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  padding: 6px 14px !important;
+  margin: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  cursor: pointer !important;
+  color: #38bdf8 !important;
+  font-family: 'Chakra Petch', 'Orbitron', 'Lexend', var(--sans) !important;
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.65), 0 0 20px rgba(56, 189, 248, 0.3) !important;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  position: relative !important;
+  user-select: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+  z-index: 2;
+}
+
+.naked-game-btn .game-btn-glyph {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 0.95rem !important;
+  color: #ffd700 !important;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.85) !important;
+  transition: transform 0.4s ease, filter 0.4s ease !important;
+}
+
+.naked-game-btn:hover {
+  color: #ffffff !important;
+  text-shadow: 0 0 12px #38bdf8, 0 0 24px rgba(56, 189, 248, 0.9), 0 0 32px rgba(255, 215, 0, 0.5) !important;
+  transform: translateY(-1px) scale(1.04) !important;
+}
+
+.naked-game-btn:hover .game-btn-glyph {
+  transform: rotate(90deg) scale(1.25) !important;
+  filter: drop-shadow(0 0 10px #ffd700) !important;
+}
+
+.naked-game-btn:active {
+  transform: translateY(0) scale(0.97) !important;
+}
+
+.naked-game-btn:focus-visible {
+  outline: 2px dashed rgba(56, 189, 248, 0.6) !important;
+  outline-offset: 4px !important;
+}
+
+body.light-theme .naked-game-btn {
+  color: #0284c7 !important;
+  text-shadow: 0 0 10px rgba(2, 132, 199, 0.4) !important;
+}
+body.light-theme .naked-game-btn:hover {
+  color: #0369a1 !important;
+  text-shadow: 0 0 14px rgba(2, 132, 199, 0.7) !important;
+}
+
+/* ───────── IMMERSIVE UNIVERSE GAME ENVIRONMENT (#quantumGameOverlay) ───────── */
+body.universe-game-active {
+  overflow: hidden !important;
+}
+
+body.universe-game-active main {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: scale(0.97) !important;
+  filter: blur(12px) !important;
+  transition: opacity 0.95s cubic-bezier(0.16, 1, 0.3, 1), transform 0.95s cubic-bezier(0.16, 1, 0.3, 1), filter 0.95s ease !important;
+}
+
+/* Existing particles remain 100% visible and unaffected */
+body.universe-game-active .antigravity-fx-canvas,
+body.universe-game-active .antigravity-front-canvas {
+  opacity: 1 !important;
+  display: block !important;
+  pointer-events: none !important;
+}
+
+.quantum-game-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 85;
+  display: none;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  background: radial-gradient(ellipse at 50% 45%, rgba(10, 18, 36, 0.52) 0%, rgba(2, 6, 16, 0.78) 60%, rgba(0, 0, 0, 0.92) 100%);
+  user-select: none;
+}
+
+body.universe-game-active .quantum-game-overlay {
+  display: block;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.quantum-game-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Top Game HUD Bar */
+.qgame-hud-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: clamp(16px, 2.8vw, 32px) clamp(20px, 3.5vw, 42px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Upper Left: Futuristic Game Countdown Timer */
+.qgame-timer-hud {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  pointer-events: auto;
+}
+
+.qgame-hud-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'Chakra Petch', 'Orbitron', monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: #38bdf8;
+  text-transform: uppercase;
+}
+
+.qgame-tag-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 8px #38bdf8, 0 0 16px rgba(56, 189, 248, 0.8);
+  animation: qgameTagPulse 1.6s infinite ease-in-out;
+}
+@keyframes qgameTagPulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.3); opacity: 1; background: #ffd700; box-shadow: 0 0 10px #ffd700; }
+}
+
+.qgame-timer-display {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  font-family: 'Chakra Petch', 'Orbitron', monospace;
+  font-size: clamp(2.4rem, 4.6vw, 3.8rem);
+  font-weight: 800;
+  line-height: 0.95;
+  color: #ffffff;
+  text-shadow: 0 0 14px rgba(56, 189, 248, 0.8), 0 0 28px rgba(56, 189, 248, 0.4), 0 0 42px rgba(255, 215, 0, 0.25);
+  font-variant-numeric: tabular-nums;
+}
+
+.qgame-timer-display .qgame-unit {
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  font-weight: 600;
+  color: #ffd700;
+  opacity: 0.9;
+}
+
+.qgame-digits.victory-frozen {
+  color: #ffd700 !important;
+  text-shadow: 0 0 18px #ffd700, 0 0 36px rgba(255, 215, 0, 0.8), 0 0 54px rgba(56, 189, 248, 0.6) !important;
+  animation: victoryDigitsGlow 1.8s infinite ease-in-out;
+}
+@keyframes victoryDigitsGlow {
+  0%, 100% { transform: scale(1); filter: brightness(1); }
+  50% { transform: scale(1.03); filter: brightness(1.2); }
+}
+
+.qgame-timer-track {
+  width: clamp(160px, 22vw, 240px);
+  height: 4px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
+  overflow: hidden;
+  margin-top: 4px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.qgame-timer-fill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, #38bdf8 0%, #818cf8 50%, #ffd700 100%);
+  border-radius: 9999px;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.7);
+  transition: width 0.1s linear;
+}
+
+/* Center Top: Mission Telemetry Pill */
+.qgame-mission-hud {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  background: rgba(14, 20, 36, 0.78);
+  border: 1px solid rgba(56, 189, 248, 0.32);
+  border-radius: 9999px;
+  color: #e2e8f0;
+  font-family: 'Lexend', var(--sans);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4), 0 0 16px rgba(56, 189, 248, 0.15);
+  pointer-events: auto;
+  margin-top: 4px;
+}
+.qgame-mission-icon {
+  color: #ffd700;
+  font-size: 0.95rem;
+  animation: missionIconSpin 8s infinite linear;
+}
+@keyframes missionIconSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Upper Right: Return to Horizon Button */
+.qgame-exit-hud {
+  pointer-events: auto;
+}
+
+.qgame-btn-exit {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 18px;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 41, 59, 0.75) 100%);
+  border: 1px solid rgba(148, 163, 184, 0.32);
+  border-radius: 9999px;
+  color: #cbd5e1;
+  font-family: 'Lexend', var(--sans);
+  font-size: 0.80rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.qgame-btn-exit .qgame-exit-glyph {
+  font-size: 0.95rem;
+  color: #94a3b8;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.qgame-btn-exit .qgame-exit-key {
+  font-size: 0.68rem;
+  font-family: 'Space Mono', monospace;
+  padding: 1px 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  color: #94a3b8;
+}
+
+.qgame-btn-exit:hover {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(51, 65, 85, 0.85) 100%);
+  border-color: rgba(56, 189, 248, 0.65);
+  color: #ffffff;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.5), 0 0 18px rgba(56, 189, 248, 0.35);
+  transform: translateY(-1px);
+}
+
+.qgame-btn-exit:hover .qgame-exit-glyph {
+  transform: scale(1.15) rotate(90deg);
+  color: #38bdf8;
+}
+
+/* Victory Center Stage Hologram Card */
+.qgame-victory-modal {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 25;
+  pointer-events: auto;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 16px;
+  animation: qgameModalFade 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes qgameModalFade {
+  0% { opacity: 0; transform: scale(0.92); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.qgame-victory-card {
+  position: relative;
+  width: min(540px, 94vw);
+  background: linear-gradient(145deg, rgba(14, 20, 36, 0.94) 0%, rgba(20, 16, 32, 0.92) 50%, rgba(10, 15, 26, 0.96) 100%);
+  border: 1px solid rgba(255, 215, 0, 0.45);
+  border-radius: 24px;
+  padding: clamp(24px, 4vw, 36px);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.7), 0 0 36px rgba(255, 215, 0, 0.25), 0 0 54px rgba(56, 189, 248, 0.2);
+  text-align: center;
+  overflow: hidden;
+}
+
+.qgame-victory-aurora {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 50% 30%, rgba(255, 215, 0, 0.12) 0%, rgba(56, 189, 248, 0.10) 35%, transparent 65%);
+  pointer-events: none;
+  animation: auroraSpin 14s infinite linear;
+}
+@keyframes auroraSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.qgame-victory-icon {
+  width: 58px;
+  height: 58px;
+  margin: 0 auto 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0 16px rgba(255, 215, 0, 0.85));
+}
+.qgame-victory-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.qgame-victory-title {
+  font-family: 'Chakra Petch', 'Orbitron', var(--sans);
+  font-size: clamp(1.4rem, 2.8vw, 1.9rem);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  margin: 0 0 6px 0;
+  text-shadow: 0 0 12px rgba(255, 215, 0, 0.7);
+}
+
+.qgame-victory-subtitle {
+  font-family: 'Lexend', var(--sans);
+  font-size: 0.84rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: #38bdf8;
+  margin-bottom: 22px;
+}
+
+.qgame-victory-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 26px;
+}
+
+.qgame-stat-box {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 12px;
+  padding: 10px 8px;
+}
+
+.qgame-stat-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.64rem;
+  letter-spacing: 0.06em;
+  color: #94a3b8;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.qgame-stat-val {
+  font-family: 'Chakra Petch', 'Orbitron', monospace;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+.qgame-stat-val.highlight {
+  color: #ffd700;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+}
+.qgame-stat-val.success {
+  color: #86efac;
+}
+
+.qgame-victory-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.qgame-btn-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  border-radius: 9999px;
+  font-family: 'Lexend', var(--sans);
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.qgame-btn-action.primary {
+  background: linear-gradient(135deg, #ffd700 0%, #f59e0b 100%);
+  border: 1px solid #ffd700;
+  color: #000000;
+  box-shadow: 0 4px 18px rgba(245, 158, 11, 0.45);
+}
+.qgame-btn-action.primary:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 6px 26px rgba(255, 215, 0, 0.65);
+}
+
+.qgame-btn-action.secondary {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  color: #cbd5e1;
+}
+.qgame-btn-action.secondary:hover {
+  border-color: rgba(56, 189, 248, 0.7);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+  .qgame-hud-top {
+    flex-direction: column;
+    gap: 14px;
+    align-items: stretch;
+  }
+  .qgame-mission-hud {
+    display: none;
+  }
+  .qgame-exit-hud {
+    align-self: flex-end;
+  }
+  .qgame-victory-stats {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
+
 /* Volume (Streamlined Compact) */
 .vol{display:flex;align-items:center;gap:10px;margin-left:auto;border:1px solid var(--line2);border-radius:12px;padding:6px 12px;background:#000}
 #volIcon{background:none;padding:2px;font-size:1.15rem;line-height:1;border-radius:8px;box-shadow:none}
@@ -3413,6 +3885,12 @@ body.light-theme .highlight-card .dist-icon{
         </span>
         <span class="rest-btn-label">Rest Mode</span>
       </button>
+
+      <!-- Futuristic Naked Game Button: Borderless, frame-free, glowing neon typography -->
+      <button type="button" class="naked-game-btn" id="btnLaunchGame" title="Enter Quantum Universe Game Mode" aria-label="Launch Quantum Universe Game">
+        <span class="game-btn-glyph" aria-hidden="true">◈</span>
+        <span class="game-btn-label">Quantum Realm</span>
+      </button>
     </div>
     <div class="sched-head-right" id="schedActionsNormal">
       <div id="schedActionsEdit" style="display:none;gap:8px;align-items:center;">
@@ -3553,6 +4031,95 @@ body.light-theme .highlight-card .dist-icon{
 
 
 </main>
+
+<!-- ══════════════════════════════════════════════════════════════
+     FUTURISTIC QUANTUM UNIVERSE GAME ENVIRONMENT (#quantumGameOverlay)
+     Instant ~1s transition, countdown timer, continuous particle lock-on,
+     spectacular explosion, synchronized celebratory particle dance & fanfare.
+     ══════════════════════════════════════════════════════════════ -->
+<div id="quantumGameOverlay" class="quantum-game-overlay" aria-hidden="true">
+  <!-- Game Dedicated Canvas for Crosshairs, Reticle, Beams, Shockwaves & Spark Fragments -->
+  <canvas id="quantumGameCanvas" class="quantum-game-canvas"></canvas>
+
+  <!-- Top Game HUD Bar -->
+  <header class="qgame-hud-top">
+    <!-- Upper Left: Futuristic Countdown Timer -->
+    <div class="qgame-timer-hud" id="qGameTimerHud">
+      <div class="qgame-hud-tag">
+        <span class="qgame-tag-dot"></span>
+        <span class="qgame-tag-text">QUANTUM HARMONY COUNTDOWN</span>
+      </div>
+      <div class="qgame-timer-display" id="qGameTimerDisplay">
+        <span class="qgame-digits" id="qGameDigits">60.00</span><span class="qgame-unit">s</span>
+      </div>
+      <div class="qgame-timer-track">
+        <div class="qgame-timer-fill" id="qGameTimerFill"></div>
+      </div>
+    </div>
+
+    <!-- Center Top: Telemetry Instruction Badge -->
+    <div class="qgame-mission-hud">
+      <span class="qgame-mission-icon">◈</span>
+      <span class="qgame-mission-text" id="qGameMissionText">TARGET: TOUCH ANY PARTICLE · MAINTAIN CONTACT FOR 2.0s</span>
+    </div>
+
+    <!-- Upper Right: Subtle Futuristic Return Button -->
+    <div class="qgame-exit-hud">
+      <button type="button" class="qgame-btn-exit" id="btnExitGame" title="Return to OrlandoRecharge Horizon (Esc)" aria-label="Exit Game Mode">
+        <span class="qgame-exit-glyph">✕</span>
+        <span class="qgame-exit-label">RETURN TO HORIZON</span>
+        <span class="qgame-exit-key">ESC</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Victory Center Stage Modal / Hologram -->
+  <div class="qgame-victory-modal" id="qGameVictoryModal" style="display:none;">
+    <div class="qgame-victory-card">
+      <div class="qgame-victory-aurora"></div>
+      <div class="qgame-victory-icon">
+        <svg viewBox="0 0 24 24" fill="none" class="qgame-victory-svg">
+          <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="url(#vicGoldGrad)" stroke="#ffffff" stroke-width="1.2"/>
+          <defs>
+            <linearGradient id="vicGoldGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#ffd700"/>
+              <stop offset="50%" stop-color="#38bdf8"/>
+              <stop offset="100%" stop-color="#f59e0b"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <h2 class="qgame-victory-title">QUANTUM RESONANCE COMPLETE</h2>
+      <div class="qgame-victory-subtitle">TARGET SYNCHRONIZED · HARMONIC DANCE ACTIVE</div>
+      
+      <div class="qgame-victory-stats">
+        <div class="qgame-stat-box">
+          <div class="qgame-stat-label">FINAL TIME PRESERVED</div>
+          <div class="qgame-stat-val highlight" id="qGamePreservedTime">60.00s</div>
+        </div>
+        <div class="qgame-stat-box">
+          <div class="qgame-stat-label">LOCK DURATION</div>
+          <div class="qgame-stat-val">2.00s CONTINUOUS</div>
+        </div>
+        <div class="qgame-stat-box">
+          <div class="qgame-stat-label">SYSTEM STATUS</div>
+          <div class="qgame-stat-val success">CELEBRATION DANCE</div>
+        </div>
+      </div>
+
+      <div class="qgame-victory-actions">
+        <button type="button" class="qgame-btn-action primary" id="btnGamePlayAgain">
+          <span class="qgame-btn-icon">⚡</span>
+          <span>Play Again</span>
+        </button>
+        <button type="button" class="qgame-btn-action secondary" id="btnGameReturn">
+          <span class="qgame-btn-icon">✕</span>
+          <span>Return to Horizon</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- Rest Mode Screen -->
 <div id="rest" aria-label="Rest mode clock. Tap to exit.">
@@ -5492,6 +6059,7 @@ $("rest").onclick=exitRest;
 $("rest").addEventListener("mousemove",restIdle);
 document.addEventListener("keydown",function(e){
   if(e.key==="Escape"&&$("ov").className!=="show"){
+    if(window.quantumGame && window.quantumGame.isActive()){window.quantumGame.exit();return;}
     if($("addAlarmModal")&&$("addAlarmModal").classList.contains("open")){closeAddAlarmModal();return;}
     if($("qrModal")&&$("qrModal").classList.contains("open")){$("qrModal").classList.remove("open");return;}
     if($("installGuideModal")&&$("installGuideModal").classList.contains("open")){$("installGuideModal").classList.remove("open");return;}
@@ -7341,6 +7909,10 @@ try { checkUrlHashRoutine(); } catch(e){}
   var SHIELD_RADIUS = 76;
   var INFLUENCE_RADIUS = 168;
 
+  var isGameMode = false;
+  var isVictoryDancing = false;
+  var victoryDanceStartTime = 0;
+
   var mouse = {
     x: -9999,
     y: -9999,
@@ -7700,6 +8272,7 @@ try { checkUrlHashRoutine(); } catch(e){}
     // ── Main Particle Simulation Loop ──
     for (var i = 0; i < particles.length; i++) {
       var p = particles[i];
+      if (p.exploded) continue;
       p.pulsePhase += 0.025;
       p.dancePhase += 0.035;
 
@@ -7756,8 +8329,8 @@ try { checkUrlHashRoutine(); } catch(e){}
       }
       p.hue += (p.targetHue - p.hue) * 0.03;
 
-      // Antigravity Mouse Repulsion
-      if (mActive) {
+      // Antigravity Mouse Repulsion (Bypassed in game mode so player can touch particles)
+      if (mActive && !isGameMode) {
         var dx = p.x - mx;
         var dy = p.y - my;
         var dist = Math.hypot(dx, dy);
@@ -7841,8 +8414,24 @@ try { checkUrlHashRoutine(); } catch(e){}
         }
       }
 
-      // ── Engraved Song Choreography Physics + JOYFUL "HAPPY DANCE" ──
-      if (isAudioHot) {
+      // ── Engraved Song Choreography Physics + CELEBRATION DANCE ──
+      if (isVictoryDancing) {
+        var elapsed = (now - victoryDanceStartTime) * 0.001;
+        var danceFreq = 3.6; // Controlled rhythmic celebratory frequency
+        var danceDist = 7.5; // Shorter movement paths & smaller displacement distances than usual
+        var phaseOffset = i * 0.38;
+
+        var targetX = (p.victoryAnchorX || p.x) + Math.sin(elapsed * danceFreq + phaseOffset) * danceDist;
+        var targetY = (p.victoryAnchorY || p.y) + Math.sin(elapsed * danceFreq * 1.8 + phaseOffset) * (danceDist * 0.55);
+
+        p.x += (targetX - p.x) * 0.18;
+        p.y += (targetY - p.y) * 0.18;
+
+        // Controlled synchronized celebratory pulsation
+        p.alpha = Math.min(1.0, 0.65 + Math.sin(elapsed * danceFreq * 2 + phaseOffset) * 0.35);
+        var targetHue = (i % 2 === 0) ? 45 : 195; // Alternating 24K Swiss Gold and Cyber Cyan
+        p.hue += (targetHue - p.hue) * 0.08;
+      } else if (isAudioHot) {
         var mType = curChoreo ? curChoreo.motionType : "generic";
         var dForce = curChoreo ? curChoreo.danceForce : 0.65;
         if (p.isFront) dForce *= 1.35;
@@ -8192,6 +8781,39 @@ try { checkUrlHashRoutine(); } catch(e){}
     },
     isEnabled: function() {
       return enabled;
+    },
+    getParticles: function() {
+      return particles;
+    },
+    setGameMode: function(active) {
+      isGameMode = !!active;
+    },
+    isGameMode: function() {
+      return isGameMode;
+    },
+    startVictoryDance: function(targetParticle) {
+      isVictoryDancing = true;
+      victoryDanceStartTime = Date.now();
+      for (var vi = 0; vi < particles.length; vi++) {
+        var pt = particles[vi];
+        pt.victoryAnchorX = pt.x;
+        pt.victoryAnchorY = pt.y;
+        if (pt === targetParticle) {
+          pt.exploded = true;
+        }
+      }
+    },
+    stopVictoryDance: function() {
+      isVictoryDancing = false;
+      for (var vi = 0; vi < particles.length; vi++) {
+        var pt = particles[vi];
+        if (pt.exploded) {
+          pt.exploded = false;
+          pt.fadeMode = "emerging";
+          pt.fadeProgress = 0.1;
+          pt.emergeBloom = 1.0;
+        }
+      }
     }
   };
 })();
@@ -8482,6 +9104,575 @@ try { checkUrlHashRoutine(); } catch(e){}
     isActive: function(){
       return active;
     }
+  };
+})();
+
+/* ══════════════════════════════════════════════════════════════
+   FUTURISTIC QUANTUM UNIVERSE GAME SUITE (window.quantumGame)
+   - Instant ~1s Universe Transition
+   - Upper-Left High-Precision Countdown Timer (stops on victory)
+   - 2.0s Continuous Contact Lock-on Detection with Touch/Cursor
+   - Spectacular Target Explosion (radiant flare, triple shockwave, 76 sparks)
+   - Synchronized Celebratory Particle Dance (shorter paths, controlled harmonic rhythm)
+   - Zero-Latency Fanfare & Celebratory Music
+   - Seamless Return to Horizon Experience
+   ══════════════════════════════════════════════════════════════ */
+(function initQuantumUniverseGame() {
+  var overlay = document.getElementById("quantumGameOverlay");
+  var canvas = document.getElementById("quantumGameCanvas");
+  var btnLaunch = document.getElementById("btnLaunchGame");
+  var btnExit = document.getElementById("btnExitGame");
+  var btnPlayAgain = document.getElementById("btnGamePlayAgain");
+  var btnReturn = document.getElementById("btnGameReturn");
+  var digitsEl = document.getElementById("qGameDigits");
+  var fillEl = document.getElementById("qGameTimerFill");
+  var missionText = document.getElementById("qGameMissionText");
+  var victoryModal = document.getElementById("qGameVictoryModal");
+  var preservedTimeEl = document.getElementById("qGamePreservedTime");
+
+  if (!overlay || !canvas || !btnLaunch) return;
+
+  var ctx = canvas.getContext("2d");
+  if (!ctx) return;
+
+  var isActive = false;
+  var isWon = false;
+  var animId = null;
+  var width = 0, height = 0, dpr = 1;
+
+  var TOTAL_TIME = 60.0;
+  var remainingTime = TOTAL_TIME;
+  var preservedTimeStr = "60.00";
+  var lastFrameTime = 0;
+
+  var cursor = { x: -9999, y: -9999, active: false };
+  var lockedParticle = null;
+  var contactDuration = 0.0;
+  var REQUIRED_CONTACT = 2.0; // 2 seconds continuous
+  var HIT_RADIUS = 26;
+
+  var audioCtx = null;
+  var lockOsc = null;
+  var lockGain = null;
+  var activeExplosion = null;
+
+  function initAudioCtx() {
+    if (!audioCtx) {
+      try {
+        var AC = window.AudioContext || window.webkitAudioContext;
+        if (AC) audioCtx = new AC();
+      } catch(e){}
+    }
+    if (audioCtx && audioCtx.state === "suspended") {
+      audioCtx.resume().catch(function(){});
+    }
+  }
+
+  function startLockAudio() {
+    initAudioCtx();
+    if (!audioCtx || lockOsc) return;
+    try {
+      lockOsc = audioCtx.createOscillator();
+      lockGain = audioCtx.createGain();
+      lockOsc.type = "sine";
+      lockOsc.frequency.setValueAtTime(290, audioCtx.currentTime);
+      lockGain.gain.setValueAtTime(0.001, audioCtx.currentTime);
+      lockGain.gain.linearRampToValueAtTime(0.09, audioCtx.currentTime + 0.06);
+      lockOsc.connect(lockGain);
+      lockGain.connect(audioCtx.destination);
+      lockOsc.start();
+    } catch(e){
+      lockOsc = null;
+      lockGain = null;
+    }
+  }
+
+  function updateLockAudio(progress) {
+    if (!lockOsc || !audioCtx) return;
+    try {
+      var freq = 290 + Math.pow(Math.max(0, Math.min(1, progress)), 1.35) * 440;
+      lockOsc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+    } catch(e){}
+  }
+
+  function stopLockAudio() {
+    if (!lockGain || !audioCtx) {
+      if (lockOsc) { try { lockOsc.stop(); lockOsc.disconnect(); } catch(e){} lockOsc = null; }
+      return;
+    }
+    try {
+      lockGain.gain.linearRampToValueAtTime(0.0001, audioCtx.currentTime + 0.04);
+      var oldOsc = lockOsc;
+      var oldGain = lockGain;
+      lockOsc = null;
+      lockGain = null;
+      setTimeout(function() {
+        try { oldOsc.stop(); oldOsc.disconnect(); oldGain.disconnect(); } catch(e){}
+      }, 50);
+    } catch(e){
+      lockOsc = null;
+      lockGain = null;
+    }
+  }
+
+  function playVictorySoundtrack() {
+    initAudioCtx();
+    if (audioCtx) {
+      // 1. Deep Sub-bass Shockwave Impact Boom
+      try {
+        var boom = audioCtx.createOscillator();
+        var boomG = audioCtx.createGain();
+        boom.type = "sine";
+        boom.frequency.setValueAtTime(150, audioCtx.currentTime);
+        boom.frequency.exponentialRampToValueAtTime(32, audioCtx.currentTime + 0.65);
+        boomG.gain.setValueAtTime(0.35, audioCtx.currentTime);
+        boomG.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.75);
+        boom.connect(boomG);
+        boomG.connect(audioCtx.destination);
+        boom.start(audioCtx.currentTime);
+        boom.stop(audioCtx.currentTime + 0.80);
+      } catch(e){}
+
+      // 2. High-Tech Shimmer Fanfare Chord (C Major 9th Celestial Triumph)
+      var notes = [
+        { f: 523.25, t: 0.00, d: 0.70 },
+        { f: 659.25, t: 0.08, d: 0.75 },
+        { f: 783.99, t: 0.16, d: 0.80 },
+        { f: 987.77, t: 0.24, d: 0.90 },
+        { f: 1174.66, t: 0.32, d: 1.05 },
+        { f: 1567.98, t: 0.40, d: 1.50 }
+      ];
+      notes.forEach(function(n) {
+        try {
+          var osc = audioCtx.createOscillator();
+          var g = audioCtx.createGain();
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(n.f, audioCtx.currentTime + n.t);
+          g.gain.setValueAtTime(0.001, audioCtx.currentTime + n.t);
+          g.gain.linearRampToValueAtTime(0.20, audioCtx.currentTime + n.t + 0.03);
+          g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + n.t + n.d);
+          osc.connect(g);
+          g.connect(audioCtx.destination);
+          osc.start(audioCtx.currentTime + n.t);
+          osc.stop(audioCtx.currentTime + n.t + n.d + 0.05);
+        } catch(e){}
+      });
+    }
+
+    // 3. Play Synchronized Celebratory Song
+    try {
+      if (typeof playSong === "function" && typeof SONGS !== "undefined" && SONGS.length > 3) {
+        playSong(SONGS[3]); // "OKAY!" by Forrest Frank
+      }
+    } catch(e){}
+  }
+
+  function resize() {
+    dpr = window.devicePixelRatio || 1;
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = Math.floor(width * dpr);
+    canvas.height = Math.floor(height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    HIT_RADIUS = (width < 768) ? 36 : 24;
+  }
+
+  window.addEventListener("resize", function() {
+    if (isActive) resize();
+  });
+
+  function onPointer(e) {
+    if (!isActive) return;
+    cursor.x = e.clientX;
+    cursor.y = e.clientY;
+    cursor.active = true;
+  }
+
+  window.addEventListener("pointermove", onPointer, { passive: true });
+  window.addEventListener("pointerdown", onPointer, { passive: true });
+  window.addEventListener("pointerup", function() {
+    if (width < 768 && !isWon) {
+      contactDuration = 0;
+      lockedParticle = null;
+      stopLockAudio();
+    }
+  }, { passive: true });
+
+  function launchGame() {
+    if (isActive) return;
+    isActive = true;
+    isWon = false;
+    remainingTime = TOTAL_TIME;
+    preservedTimeStr = TOTAL_TIME.toFixed(2);
+    lastFrameTime = performance.now();
+    contactDuration = 0.0;
+    lockedParticle = null;
+    activeExplosion = null;
+
+    resize();
+    initAudioCtx();
+
+    // 1. Instant Universe Transition (~1s smooth fade of background interface)
+    document.body.classList.add("universe-game-active");
+    overlay.setAttribute("aria-hidden", "false");
+    overlay.style.display = "block";
+    victoryModal.style.display = "none";
+    missionText.textContent = "TARGET: TOUCH ANY PARTICLE · MAINTAIN CONTACT FOR 2.0s";
+    digitsEl.textContent = TOTAL_TIME.toFixed(2);
+    digitsEl.classList.remove("victory-frozen");
+    fillEl.style.width = "100%";
+
+    // 2. Enable Game Mode on particle engine (disables repulsion so player can touch particles!)
+    if (window.antigravityFX && typeof window.antigravityFX.setGameMode === "function") {
+      window.antigravityFX.setGameMode(true);
+      window.antigravityFX.stopVictoryDance();
+    }
+
+    if (!animId) {
+      animId = requestAnimationFrame(gameLoop);
+    }
+  }
+
+  function exitGame() {
+    if (!isActive) return;
+    isActive = false;
+    isWon = false;
+    stopLockAudio();
+
+    if (animId) {
+      cancelAnimationFrame(animId);
+      animId = null;
+    }
+
+    // 8. Seamless Return Experience
+    document.body.classList.remove("universe-game-active");
+    overlay.setAttribute("aria-hidden", "true");
+    victoryModal.style.display = "none";
+    setTimeout(function() {
+      if (!isActive) overlay.style.display = "none";
+    }, 900);
+
+    // Restore particle physics to normal cruise
+    if (window.antigravityFX) {
+      if (typeof window.antigravityFX.setGameMode === "function") {
+        window.antigravityFX.setGameMode(false);
+      }
+      if (typeof window.antigravityFX.stopVictoryDance === "function") {
+        window.antigravityFX.stopVictoryDance();
+      }
+    }
+  }
+
+  function triggerVictory(targetParticle) {
+    if (isWon) return;
+    isWon = true;
+    stopLockAudio();
+
+    // 1. Freeze timer immediately and preserve final time!
+    preservedTimeStr = Math.max(0, remainingTime).toFixed(2);
+    digitsEl.textContent = preservedTimeStr;
+    digitsEl.classList.add("victory-frozen");
+    if (preservedTimeEl) preservedTimeEl.textContent = preservedTimeStr + "s";
+
+    var expX = targetParticle ? targetParticle.x : (width * 0.5);
+    var expY = targetParticle ? targetParticle.y : (height * 0.5);
+    var expHue = (targetParticle && targetParticle.hue !== undefined) ? targetParticle.hue : 45;
+
+    // 2. Make touched particle explode
+    activeExplosion = {
+      x: expX,
+      y: expY,
+      hue: expHue,
+      startTime: performance.now(),
+      duration: 2200,
+      shockwaves: [
+        { r: 0, maxR: Math.max(width, height) * 0.45, speed: 18, alpha: 1.0, color: "#ffffff", lw: 3.5 },
+        { r: 0, maxR: Math.max(width, height) * 0.55, speed: 13, alpha: 0.9, color: "#38bdf8", lw: 2.5 },
+        { r: 0, maxR: Math.max(width, height) * 0.65, speed: 9,  alpha: 0.8, color: "#ffd700", lw: 2.0 }
+      ],
+      sparks: []
+    };
+
+    for (var s = 0; s < 76; s++) {
+      var ang = Math.random() * Math.PI * 2;
+      var spd = 3.5 + Math.random() * 11.0;
+      activeExplosion.sparks.push({
+        x: expX,
+        y: expY,
+        vx: Math.cos(ang) * spd,
+        vy: Math.sin(ang) * spd,
+        r: 2.0 + Math.random() * 3.2,
+        alpha: 1.0,
+        hue: (Math.random() < 0.5 ? 45 : 195) + (Math.random() * 30 - 15),
+        decay: 0.012 + Math.random() * 0.016,
+        tail: []
+      });
+    }
+
+    // 3. Make all remaining particles dance (shorter movement paths, controlled rhythmic harmony!)
+    if (window.antigravityFX && typeof window.antigravityFX.startVictoryDance === "function") {
+      window.antigravityFX.startVictoryDance(targetParticle);
+    }
+
+    // 4. Play celebratory music and fanfare immediately
+    playVictorySoundtrack();
+
+    missionText.textContent = "◈ QUANTUM RESONANCE ACHIEVED · CELEBRATION DANCE ACTIVE ◈";
+
+    // 5. Reveal Victory Hologram Card
+    setTimeout(function() {
+      if (isActive && isWon) {
+        victoryModal.style.display = "flex";
+      }
+    }, 650);
+  }
+
+  function gameLoop(now) {
+    if (!isActive) return;
+    animId = requestAnimationFrame(gameLoop);
+
+    var dt = (now - lastFrameTime) * 0.001;
+    lastFrameTime = now;
+    if (dt > 0.1) dt = 0.1;
+
+    ctx.clearRect(0, 0, width, height);
+
+    // ── Update Countdown Timer ──
+    if (!isWon) {
+      remainingTime -= dt;
+      if (remainingTime <= 0) {
+        remainingTime = 0;
+        digitsEl.textContent = "00.00";
+        fillEl.style.width = "0%";
+        missionText.textContent = "QUANTUM TIME EXPIRED · TRY AGAIN";
+        stopLockAudio();
+      } else {
+        digitsEl.textContent = remainingTime.toFixed(2);
+        var pct = (remainingTime / TOTAL_TIME) * 100;
+        fillEl.style.width = pct.toFixed(1) + "%";
+      }
+    }
+
+    // ── Particle Interaction & 2-Second Contact Detection ──
+    var particles = (window.antigravityFX && typeof window.antigravityFX.getParticles === "function") ? window.antigravityFX.getParticles() : [];
+
+    if (!isWon && remainingTime > 0 && cursor.active) {
+      if (lockedParticle) {
+        if (lockedParticle.exploded) {
+          lockedParticle = null;
+          contactDuration = 0;
+          stopLockAudio();
+        } else {
+          var dist = Math.hypot(cursor.x - lockedParticle.x, cursor.y - lockedParticle.y);
+          if (dist <= HIT_RADIUS) {
+            contactDuration += dt;
+            var progress = Math.min(1.0, contactDuration / REQUIRED_CONTACT);
+            startLockAudio();
+            updateLockAudio(progress);
+
+            drawLockReticle(lockedParticle.x, lockedParticle.y, progress, dist);
+
+            if (contactDuration >= REQUIRED_CONTACT) {
+              triggerVictory(lockedParticle);
+            }
+          } else {
+            contactDuration = 0.0;
+            lockedParticle = null;
+            stopLockAudio();
+          }
+        }
+      }
+
+      if (!lockedParticle) {
+        var closestDist = 999999;
+        var candidate = null;
+        for (var pi = 0; pi < particles.length; pi++) {
+          var p = particles[pi];
+          if (p.exploded || p.fadeProgress < 0.3) continue;
+          var pDist = Math.hypot(cursor.x - p.x, cursor.y - p.y);
+          if (pDist <= HIT_RADIUS && pDist < closestDist) {
+            closestDist = pDist;
+            candidate = p;
+          }
+        }
+        if (candidate) {
+          lockedParticle = candidate;
+          contactDuration = 0.0;
+          startLockAudio();
+        }
+      }
+    }
+
+    // ── Render Cursor Crosshair Guide (when not won) ──
+    if (!isWon && cursor.active) {
+      drawCursorGuide(cursor.x, cursor.y);
+    }
+
+    // ── Render Active Explosion & Spark Fragments ──
+    if (activeExplosion) {
+      renderExplosion(now);
+    }
+  }
+
+  function drawCursorGuide(cx, cy) {
+    ctx.save();
+    ctx.strokeStyle = "rgba(56, 189, 248, 0.45)";
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.arc(cx, cy, 6, 0, Math.PI * 2);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(cx - 12, cy); ctx.lineTo(cx - 7, cy);
+    ctx.moveTo(cx + 7, cy); ctx.lineTo(cx + 12, cy);
+    ctx.moveTo(cx, cy - 12); ctx.lineTo(cx, cy - 7);
+    ctx.moveTo(cx, cy + 7); ctx.lineTo(cx, cy + 12);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawLockReticle(px, py, progress, dist) {
+    ctx.save();
+    var r = 26;
+    var nowMs = performance.now();
+    var rot = nowMs * 0.0035;
+
+    // Glowing Holographic Beam between cursor & particle
+    ctx.beginPath();
+    ctx.moveTo(cursor.x, cursor.y);
+    ctx.lineTo(px, py);
+    ctx.strokeStyle = "rgba(56, 189, 248, " + (0.35 + progress * 0.45).toFixed(2) + ")";
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([4, 4]);
+    ctx.lineDashOffset = -nowMs * 0.02;
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // 4 Corner Brackets
+    ctx.translate(px, py);
+    ctx.rotate(rot);
+    ctx.strokeStyle = progress > 0.85 ? "#ffd700" : "#38bdf8";
+    ctx.shadowColor = progress > 0.85 ? "rgba(255, 215, 0, 0.8)" : "rgba(56, 189, 248, 0.8)";
+    ctx.shadowBlur = 10;
+    ctx.lineWidth = 2.0;
+
+    var bSize = 8;
+    var bOffset = r + 4;
+    ctx.beginPath(); ctx.moveTo(-bOffset, -bOffset + bSize); ctx.lineTo(-bOffset, -bOffset); ctx.lineTo(-bOffset + bSize, -bOffset); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(bOffset - bSize, -bOffset); ctx.lineTo(bOffset, -bOffset); ctx.lineTo(bOffset, -bOffset + bSize); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(bOffset, bOffset - bSize); ctx.lineTo(bOffset, bOffset); ctx.lineTo(bOffset - bSize, bOffset); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(-bOffset + bSize, bOffset); ctx.lineTo(-bOffset, bOffset); ctx.lineTo(-bOffset, bOffset - bSize); ctx.stroke();
+
+    // 360-Degree Radial Progress Ring (Fills 0% to 100% over 2.0s)
+    ctx.rotate(-rot);
+    ctx.beginPath();
+    ctx.arc(0, 0, r, 0, Math.PI * 2);
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.15)";
+    ctx.lineWidth = 3.0;
+    ctx.stroke();
+
+    if (progress > 0) {
+      ctx.beginPath();
+      ctx.arc(0, 0, r, -Math.PI / 2, -Math.PI / 2 + progress * Math.PI * 2);
+      ctx.strokeStyle = progress > 0.85 ? "#ffd700" : "#38bdf8";
+      ctx.lineWidth = 3.8;
+      ctx.lineCap = "round";
+      ctx.stroke();
+    }
+
+    // Digital Progress Readout
+    ctx.font = "700 11px 'Chakra Petch', monospace";
+    ctx.fillStyle = progress > 0.85 ? "#ffd700" : "#ffffff";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText((progress * 2.0).toFixed(1) + "s / 2.0s", 0, r + 18);
+
+    ctx.restore();
+  }
+
+  function renderExplosion(now) {
+    if (!activeExplosion) return;
+    var exp = activeExplosion;
+    var elapsed = now - exp.startTime;
+    var tNorm = elapsed / exp.duration;
+    if (tNorm >= 1.0) {
+      activeExplosion = null;
+      return;
+    }
+
+    ctx.save();
+
+    // 1. Core Radiant Singularity Flare
+    if (elapsed < 450) {
+      var flareNorm = elapsed / 450;
+      var flareR = 15 + flareNorm * 75;
+      var flareAlpha = (1 - flareNorm) * 0.9;
+      var grad = ctx.createRadialGradient(exp.x, exp.y, 0, exp.x, exp.y, flareR);
+      grad.addColorStop(0, "rgba(255, 255, 255, " + flareAlpha + ")");
+      grad.addColorStop(0.3, "rgba(255, 215, 0, " + (flareAlpha * 0.8) + ")");
+      grad.addColorStop(0.7, "rgba(56, 189, 248, " + (flareAlpha * 0.5) + ")");
+      grad.addColorStop(1, "transparent");
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(exp.x, exp.y, flareR, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // 2. Expanding Hyperspace Shockwave Rings
+    for (var w = 0; w < exp.shockwaves.length; w++) {
+      var sw = exp.shockwaves[w];
+      sw.r += sw.speed;
+      sw.alpha *= 0.96;
+      if (sw.alpha > 0.02 && sw.r < sw.maxR) {
+        ctx.beginPath();
+        ctx.arc(exp.x, exp.y, sw.r, 0, Math.PI * 2);
+        ctx.strokeStyle = sw.color;
+        ctx.lineWidth = sw.lw;
+        ctx.globalAlpha = sw.alpha;
+        ctx.shadowColor = sw.color;
+        ctx.shadowBlur = 16;
+        ctx.stroke();
+      }
+    }
+
+    // 3. 76 Glowing Spark Fragments
+    ctx.shadowBlur = 10;
+    for (var s = 0; s < exp.sparks.length; s++) {
+      var sp = exp.sparks[s];
+      sp.x += sp.vx;
+      sp.y += sp.vy;
+      sp.vx *= 0.965;
+      sp.vy *= 0.965;
+      sp.alpha -= sp.decay;
+      if (sp.alpha > 0.03) {
+        ctx.beginPath();
+        ctx.arc(sp.x, sp.y, sp.r, 0, Math.PI * 2);
+        ctx.fillStyle = "hsla(" + Math.round(sp.hue) + ", 95%, 70%, " + sp.alpha.toFixed(2) + ")";
+        ctx.shadowColor = "hsla(" + Math.round(sp.hue) + ", 100%, 65%, 0.8)";
+        ctx.globalAlpha = sp.alpha;
+        ctx.fill();
+      }
+    }
+
+    ctx.restore();
+  }
+
+  // Hook UI Click Handlers
+  btnLaunch.onclick = launchGame;
+  btnExit.onclick = exitGame;
+  if (btnReturn) btnReturn.onclick = exitGame;
+  if (btnPlayAgain) {
+    btnPlayAgain.onclick = function() {
+      exitGame();
+      setTimeout(launchGame, 100);
+    };
+  }
+
+  // Global Controller
+  window.quantumGame = {
+    launch: launchGame,
+    exit: exitGame,
+    isActive: function() { return isActive; }
   };
 })();
 
