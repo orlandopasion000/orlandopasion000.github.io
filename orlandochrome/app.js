@@ -5180,18 +5180,17 @@ ${jsRes}
 
       if (isStandaloneMode()) {
         btn.classList.add('btn-app-active');
-        btn.title = 'OrlandoChrome is currently running in Standalone App Window (PWA)';
+        btn.title = 'OrlandoChrome (Main Web App) is Active';
         label.textContent = 'App Active';
         if (icon) {
           icon.innerHTML = '<svg class="modern-icon modern-icon-emerald" viewBox="0 0 24 24" style="width:13px;height:13px;stroke:#5de8a0"><polyline points="20 6 9 17 4 12"></polyline></svg>';
         }
       } else {
         btn.classList.remove('btn-app-active');
-        btn.title = 'Launch OrlandoChrome as Standalone App Window (PWA)';
-        if (deferredInstallPrompt) {
-          label.textContent = 'Install App';
-        } else {
-          label.textContent = 'Launch App';
+        btn.title = 'Open OrlandoChrome (Main Web App)';
+        label.textContent = 'Open Main Web App';
+        if (icon) {
+          icon.innerHTML = '<svg class="modern-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>';
         }
       }
     }
@@ -5200,7 +5199,7 @@ ${jsRes}
       playSoundClick();
 
       if (isStandaloneMode()) {
-        showToast('✨ OrlandoChrome is already running in Standalone App Window!');
+        showToast('✨ OrlandoChrome is already running as Main Web App!');
         return;
       }
 
@@ -5224,7 +5223,7 @@ ${jsRes}
       const appWin = window.open(targetUrl, 'OrlandoChromeStandaloneWindow', windowFeatures);
 
       if (appWin) {
-        showToast('🚀 Launching OrlandoChrome (Main Version) Standalone App Window...');
+        showToast('🚀 Opening OrlandoChrome (Main Web App)...');
         try { appWin.focus(); } catch (err) {}
       } else {
         window.location.href = targetUrl;
