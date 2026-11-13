@@ -1913,7 +1913,7 @@
     }
   });
 
-  // 11. ANTIGRAVITY REPULSIVE PARTICLES CANVAS (Multi-Stage Celestial Engine)
+  // 11. ANTIGRAVITY REPULSIVE PARTICLES CANVAS (Ultra-Smooth 60/120 FPS Engine)
   // ══════════════════════════════════════════════════════════════════════════
   const canvas = document.getElementById('antigravityCanvas');
   if (canvas) {
@@ -1921,10 +1921,9 @@
     let width = 0;
     let height = 0;
     let particles = [];
-    let shockwaves = [];
-    let microFlashes = [];
-    const particleCount = 55;
-    let mouse = { x: -1000, y: -1000, radius: 140 };
+    let shockwave = null;
+    const particleCount = 28; // Lean, pristine, zero-lag budget
+    let mouse = { x: -1000, y: -1000, radius: 120 };
     let currentParticleColor = 'rgba(217, 185, 92, 0.45)';
 
     window.updateParticleThemeColor = function (hexColor) {
@@ -1937,82 +1936,43 @@
       const tele = getFocusTelemetry();
       const defaultTierInfo = getSupernovaTier(tele.mins);
       const tier = options.tier || defaultTierInfo.tier;
-      const count = tier === 3 ? 160 : (tier === 2 ? 100 : 70);
-      const baseSpeed = tier === 3 ? 14 : (tier === 2 ? 10.5 : 8);
 
-      // Reset shattered state on any existing ambient particles for the new wave
-      particles.forEach(p => {
-        if (!p.isDust && !p.isBurst) {
-          p.shattered = false;
+      // Reset any shattered states on existing ambient particles
+      for (let i = 0; i < particles.length; i++) {
+        if (!particles[i].isBurst) {
+          particles[i].shattered = false;
         }
-      });
+      }
 
-      // 1. One big explosion at the middle (the central epicentre blast)
-      for (let i = 0; i < count; i++) {
+      // 1. One big central explosion at the middle (lightweight ~22 radiant photons)
+      const burstCount = tier === 3 ? 28 : (tier === 2 ? 22 : 18);
+      for (let i = 0; i < burstCount; i++) {
         const angle = Math.random() * Math.PI * 2;
-        const speed = Math.random() * baseSpeed + 2.5;
+        const speed = Math.random() * 7 + 2.5;
         particles.push({
           x: ox,
           y: oy,
           vx: Math.cos(angle) * speed,
           vy: Math.sin(angle) * speed,
-          size: Math.random() * (tier === 3 ? 3.8 : 2.8) + 1.2,
+          size: Math.random() * 2.2 + 1.2,
           alpha: 1.0,
           isBurst: true,
-          decay: Math.random() * 0.012 + 0.007
+          decay: Math.random() * 0.015 + 0.01
         });
       }
 
-      // 2. Primary expanding Relativistic Shockwave that shatters particles on impact
-      shockwaves.push({
+      // 2. Single high-speed shockwave ring that smoothly triggers chain reaction
+      shockwave = {
         x: ox,
         y: oy,
         radius: 6,
-        maxRadius: Math.hypot(width, height),
-        speed: tier === 3 ? 15 : 12,
+        maxRadius: Math.hypot(width, height) * 0.95,
+        speed: 13,
         alpha: 0.95,
-        decay: 0.007, // Slow decay so it traverses the full viewport
-        lineWidth: tier === 3 ? 3 : 2,
-        color: currentParticleColor,
-        isTrigger: true // Propagates chain reaction explosion!
-      });
+        decay: 0.009
+      };
 
-      if (tier >= 2) {
-        setTimeout(() => {
-          shockwaves.push({
-            x: ox,
-            y: oy,
-            radius: 4,
-            maxRadius: Math.hypot(width, height) * 0.75,
-            speed: 9,
-            alpha: 0.75,
-            decay: 0.012,
-            lineWidth: 1.5,
-            color: '#FFFFFF'
-          });
-        }, 90);
-      }
-
-      if (tier === 3) {
-        setTimeout(() => {
-          shockwaves.push({
-            x: ox,
-            y: oy,
-            radius: 2,
-            maxRadius: Math.hypot(width, height) * 0.9,
-            speed: 16,
-            alpha: 0.85,
-            decay: 0.01,
-            lineWidth: 2.5,
-            color: currentParticleColor
-          });
-        }, 180);
-
-        document.body.classList.add('supernova-shake');
-        setTimeout(() => document.body.classList.remove('supernova-shake'), 450);
-      }
-
-      // Procedural Acoustic Shockwave
+      // Procedural Acoustic Sound
       AudioHUD.supernovaShockwave(tier);
 
       // Telemetry Toast
@@ -2020,7 +1980,7 @@
         const tierDetails = getSupernovaTier(tele.mins);
         showQuantumTelemetryToast(
           `✨ ${tierDetails.name} DETONATED`,
-          `TODAY'S FOCUS: ${tele.mins} MIN · CHAIN REACTION ACTIVE`
+          `TODAY'S FOCUS: ${tele.mins} MIN · SMOOTH CHAIN REACTION`
         );
       }
     };
@@ -2032,21 +1992,21 @@
 
     function initParticles() {
       particles = [];
-      shockwaves = [];
-      microFlashes = [];
+      shockwave = null;
       for (let i = 0; i < particleCount; i++) {
-        const size = Math.random() * 2.2 + 1.2;
+        const s = Math.random() * 1.8 + 1.2;
         particles.push({
-          x: Math.random() * (Math.max(10, width - size * 4)) + size * 2,
-          y: Math.random() * (Math.max(10, height - size * 4)) + size * 2,
-          vx: (Math.random() - 0.5) * 0.6,
-          vy: (Math.random() - 0.5) * 0.6,
-          size: size,
-          targetSize: size,
-          alpha: Math.random() * 0.5 + 0.3,
+          x: Math.random() * (Math.max(10, width - s * 4)) + s * 2,
+          y: Math.random() * (Math.max(10, height - s * 4)) + s * 2,
+          vx: (Math.random() - 0.5) * 0.5,
+          vy: (Math.random() - 0.5) * 0.5,
+          size: s,
+          targetSize: s,
+          alpha: Math.random() * 0.4 + 0.35,
           isDust: false,
           isBurst: false,
-          shattered: false
+          shattered: false,
+          dustTimer: 0
         });
       }
     }
@@ -2055,249 +2015,119 @@
       if (!ctx) return;
       ctx.clearRect(0, 0, width, height);
 
-      // ── 1. Update & Render Relativistic Shockwave Rings ──
-      for (let s = 0; s < shockwaves.length; s++) {
-        const sw = shockwaves[s];
-        sw.radius += sw.speed;
-        sw.alpha -= sw.decay;
+      // ── 1. Update & Render Smooth Shockwave Ring ──
+      if (shockwave) {
+        shockwave.radius += shockwave.speed;
+        shockwave.alpha -= shockwave.decay;
 
-        // Shockwave Impact Chain Reaction:
-        // As the shockwave reaches ambient particles, they also explode into micro-dust!
-        if (sw.isTrigger) {
-          const newDustClusters = [];
-          for (let i = 0; i < particles.length; i++) {
-            const p = particles[i];
-            if (!p.isBurst && !p.isDust && !p.shattered) {
-              const dx = p.x - sw.x;
-              const dy = p.y - sw.y;
-              const dist = Math.sqrt(dx * dx + dy * dy);
+        // Chain Reaction: as shockwave hits ambient particles, they explode into micro-dust!
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i];
+          if (!p.isBurst && !p.shattered) {
+            const dx = p.x - shockwave.x;
+            const dy = p.y - shockwave.y;
+            const distSq = dx * dx + dy * dy;
+            const swRad = shockwave.radius;
 
-              // When the expanding shockwave perimeter hits this particle
-              if (Math.abs(dist - sw.radius) <= sw.speed * 1.5 || dist <= sw.radius) {
-                p.shattered = true;
-
-                // Micro-flash visual detonation ring
-                microFlashes.push({
-                  x: p.x,
-                  y: p.y,
-                  radius: 2,
-                  maxRadius: 8,
-                  alpha: 1.0
-                });
-
-                // Explode into 6 very very tiny dust bits!
-                const numBits = 6;
-                const origSize = p.size || 1.8;
-                for (let b = 0; b < numBits; b++) {
-                  const bAngle = Math.random() * Math.PI * 2;
-                  const bSpeed = Math.random() * 3.8 + 1.2;
-                  newDustClusters.push({
-                    x: p.x + (Math.random() - 0.5) * 3,
-                    y: p.y + (Math.random() - 0.5) * 3,
-                    vx: Math.cos(bAngle) * bSpeed + p.vx * 0.25,
-                    vy: Math.sin(bAngle) * bSpeed + p.vy * 0.25,
-                    size: 0.45 + Math.random() * 0.25, // Micro dust speck (very tiny!)
-                    targetSize: origSize,
-                    merges: 0,
-                    alpha: 0.9,
-                    isDust: true,
-                    isBurst: false
-                  });
-                }
-
-                // Remove original parent particle
-                particles.splice(i, 1);
-                i--;
-              }
-            }
-          }
-          if (newDustClusters.length > 0) {
-            particles.push(...newDustClusters);
-          }
-        }
-
-        if (sw.alpha <= 0 || sw.radius >= sw.maxRadius) {
-          shockwaves.splice(s, 1);
-          s--;
-          continue;
-        }
-
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
-        ctx.strokeStyle = sw.color || currentParticleColor;
-        ctx.lineWidth = sw.lineWidth || 2;
-        ctx.globalAlpha = Math.max(0, sw.alpha);
-        ctx.shadowColor = sw.color || currentParticleColor;
-        ctx.shadowBlur = 18;
-        ctx.stroke();
-        ctx.restore();
-      }
-
-      // ── 2. Render Micro-Flashes (Chain Reaction Detonation Points) ──
-      for (let f = 0; f < microFlashes.length; f++) {
-        const mf = microFlashes[f];
-        mf.radius += 1.4;
-        mf.alpha -= 0.1;
-        if (mf.alpha <= 0) {
-          microFlashes.splice(f, 1);
-          f--;
-          continue;
-        }
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(mf.x, mf.y, mf.radius, 0, Math.PI * 2);
-        ctx.strokeStyle = '#FFFFFF';
-        ctx.lineWidth = 1;
-        ctx.globalAlpha = Math.max(0, mf.alpha);
-        ctx.shadowColor = '#FFFFFF';
-        ctx.shadowBlur = 8;
-        ctx.stroke();
-        ctx.restore();
-      }
-
-      // ── 3. Micro-Dust Accretion & Merging Physics ──
-      // Dust particles drift, attract each other, and merge little by little!
-      for (let i = 0; i < particles.length; i++) {
-        const p1 = particles[i];
-        if (!p1.isDust) continue;
-
-        for (let j = i + 1; j < particles.length; j++) {
-          const p2 = particles[j];
-          if (!p2.isDust) continue;
-
-          const dx = p2.x - p1.x;
-          const dy = p2.y - p1.y;
-          if (Math.abs(dx) > 36 || Math.abs(dy) > 36) continue;
-
-          const dist = Math.sqrt(dx * dx + dy * dy);
-
-          // Gentle mutual gravitational attraction when nearby
-          if (dist > 0 && dist < 32) {
-            const pull = 0.05 * (1 - dist / 32);
-            p1.vx += (dx / dist) * pull;
-            p1.vy += (dy / dist) * pull;
-            p2.vx -= (dx / dist) * pull;
-            p2.vy -= (dy / dist) * pull;
-          }
-
-          // Contact & Accretion: Merge little by little!
-          const contactRadius = (p1.size + p2.size) * 1.6 + 1.2;
-          if (dist < contactRadius) {
-            p1.merges += (p2.merges + 1);
-            p1.size = Math.min(p1.targetSize, p1.size + 0.24); // Grows little by little
-            p1.vx = (p1.vx + p2.vx) * 0.5;
-            p1.vy = (p1.vy + p2.vy) * 0.5;
-            p1.alpha = Math.min(0.8, p1.alpha + 0.04);
-
-            // Tiny specular sparkle upon merge
-            microFlashes.push({
-              x: (p1.x + p2.x) / 2,
-              y: (p1.y + p2.y) / 2,
-              radius: 0.8,
-              maxRadius: 2.5,
-              alpha: 0.6
-            });
-
-            // Remove absorbed dust speck p2
-            particles.splice(j, 1);
-            j--;
-
-            // Once it has merged enough times to reconstitute its small particle form:
-            if (p1.size >= p1.targetSize * 0.92 || p1.merges >= 5) {
-              p1.isDust = false;
-              p1.size = p1.targetSize;
-              p1.shattered = false;
-              p1.alpha = Math.random() * 0.45 + 0.3;
-              break;
+            // When the expanding shockwave front reaches this particle
+            if (distSq <= (swRad + 24) * (swRad + 24)) {
+              p.shattered = true;
+              p.isDust = true;
+              p.size = 0.45; // Turn into very very tiny micro-dust!
+              p.dustTimer = 0;
+              p.alpha = 0.9;
+              // Micro-blast kick outward
+              const kickAngle = Math.random() * Math.PI * 2;
+              p.vx += Math.cos(kickAngle) * 2.8;
+              p.vy += Math.sin(kickAngle) * 2.8;
             }
           }
         }
 
-        // Gradual cosmic coalescence fallback so isolated dust bits also gently recover
-        if (p1.isDust) {
-          p1.size = Math.min(p1.targetSize, p1.size + 0.0018);
-          if (p1.size >= p1.targetSize * 0.95) {
-            p1.isDust = false;
-            p1.size = p1.targetSize;
-            p1.shattered = false;
-            p1.alpha = Math.random() * 0.45 + 0.3;
-          }
+        // Draw clean shockwave ring without expensive shadow filters
+        if (shockwave.alpha > 0 && shockwave.radius < shockwave.maxRadius) {
+          ctx.beginPath();
+          ctx.arc(shockwave.x, shockwave.y, shockwave.radius, 0, Math.PI * 2);
+          ctx.strokeStyle = currentParticleColor;
+          ctx.lineWidth = 1.8;
+          ctx.globalAlpha = Math.max(0, shockwave.alpha);
+          ctx.stroke();
+        } else {
+          shockwave = null;
         }
       }
 
-      // ── 4. Render Stardust Constellation Filaments ──
-      ctx.save();
-      for (let i = 0; i < particles.length; i++) {
-        const p1 = particles[i];
-        if (!p1.isBurst || p1.alpha < 0.25) continue;
-        for (let j = i + 1; j < particles.length; j++) {
-          const p2 = particles[j];
-          if (!p2.isBurst) continue;
-          const cdx = p1.x - p2.x;
-          const cdy = p1.y - p2.y;
-          const cdist = Math.sqrt(cdx * cdx + cdy * cdy);
-          if (cdist < 65) {
-            ctx.beginPath();
-            ctx.moveTo(p1.x, p1.y);
-            ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = currentParticleColor;
-            ctx.globalAlpha = Math.min(p1.alpha, p2.alpha) * 0.3 * (1 - cdist / 65);
-            ctx.lineWidth = 1;
-            ctx.stroke();
-          }
-        }
-      }
-      ctx.restore();
-
-      // ── 5. Render All Particles (Normal, Dust, Burst) ──
-      ctx.fillStyle = currentParticleColor;
-
+      // ── 2. Update All Particles (Physics, Micro-Dust Merging & Boundaries) ──
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
 
+        // Central burst particles decay and fade away
         if (p.isBurst) {
           p.alpha -= p.decay;
-          p.vx *= 0.965;
-          p.vy *= 0.965;
+          p.vx *= 0.96;
+          p.vy *= 0.96;
+          p.x += p.vx;
+          p.y += p.vy;
           if (p.alpha <= 0) {
             particles.splice(i, 1);
             i--;
             continue;
           }
+          continue;
         }
 
-        // Mouse repulsion effect
+        // Micro-dust behavior: drifts tiny, then little by little merges into full particle form
+        if (p.isDust) {
+          p.dustTimer++;
+          p.vx *= 0.94; // Smooth fluid brake
+          p.vy *= 0.94;
+
+          // After initial expansion (~30 frames), begin smooth gradual merging / regrowth
+          if (p.dustTimer > 30) {
+            p.size += 0.016; // Merging little by little
+            if (p.size >= p.targetSize) {
+              p.size = p.targetSize;
+              p.isDust = false;
+              p.shattered = false;
+              p.alpha = Math.random() * 0.4 + 0.35;
+            }
+          }
+        }
+
+        // Mouse repulsion effect (works on both particles and dust)
         const dx = p.x - mouse.x;
         const dy = p.y - mouse.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
+        const distSq = dx * dx + dy * dy;
+        const mRadSq = mouse.radius * mouse.radius;
 
-        if (dist < mouse.radius && dist > 0) {
+        if (distSq < mRadSq && distSq > 0) {
+          const dist = Math.sqrt(distSq);
           const force = (mouse.radius - dist) / mouse.radius;
-          p.vx += (dx / dist) * force * 1.5;
-          p.vy += (dy / dist) * force * 1.5;
+          p.vx += (dx / dist) * force * 1.2;
+          p.vy += (dy / dist) * force * 1.2;
         }
 
-        // Fluid Damping
-        p.vx *= p.isDust ? 0.965 : 0.985;
-        p.vy *= p.isDust ? 0.965 : 0.985;
+        // Gentle fluid damping
+        p.vx *= 0.985;
+        p.vy *= 0.985;
 
-        // Ambient gentle drift (for normal particles)
-        if (!p.isDust && !p.isBurst) {
-          const currentSpeed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
-          if (currentSpeed < 0.2) {
-            p.vx += (Math.random() - 0.5) * 0.08;
-            p.vy += (Math.random() - 0.5) * 0.08;
-          } else if (currentSpeed > 4.5) {
-            p.vx = (p.vx / currentSpeed) * 4.5;
-            p.vy = (p.vy / currentSpeed) * 4.5;
+        // Ambient gentle drift
+        if (!p.isDust) {
+          const speedSq = p.vx * p.vx + p.vy * p.vy;
+          if (speedSq < 0.04) {
+            p.vx += (Math.random() - 0.5) * 0.06;
+            p.vy += (Math.random() - 0.5) * 0.06;
+          } else if (speedSq > 9.0) {
+            const spd = Math.sqrt(speedSq);
+            p.vx = (p.vx / spd) * 3.0;
+            p.vy = (p.vy / spd) * 3.0;
           }
         }
 
         p.x += p.vx;
         p.y += p.vy;
 
-        // Strict Screen Boundary Retention (Never leave view!)
+        // Strict Screen Boundary Retention (never leave screen!)
         const r = p.size;
         if (p.x <= r) {
           p.x = r;
@@ -2314,16 +2144,36 @@
           p.y = height - r;
           p.vy = -Math.abs(p.vy);
         }
-
-        // Draw particle/dust
-        ctx.save();
-        ctx.globalAlpha = p.alpha !== undefined ? Math.max(0, Math.min(1, p.alpha)) : 0.6;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
       }
 
+      // ── 3. High-Performance Batched Rendering (Single GPU Draw Pass) ──
+      ctx.fillStyle = currentParticleColor;
+
+      // Group 1: Dust & burst particles (higher luminescence)
+      ctx.beginPath();
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        if (p.isDust || p.isBurst) {
+          ctx.moveTo(p.x + p.size, p.y);
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        }
+      }
+      ctx.globalAlpha = 0.9;
+      ctx.fill();
+
+      // Group 2: Ambient particles (gentle luxury glow)
+      ctx.beginPath();
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        if (!p.isDust && !p.isBurst) {
+          ctx.moveTo(p.x + p.size, p.y);
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        }
+      }
+      ctx.globalAlpha = 0.45;
+      ctx.fill();
+
+      ctx.globalAlpha = 1.0;
       requestAnimationFrame(renderParticles);
     }
 
