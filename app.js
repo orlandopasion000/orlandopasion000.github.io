@@ -10,6 +10,49 @@
 
 (function () {
   'use strict';
+  // ── SAFE LOCAL STORAGE HELPERS ──
+  function safeGetItem(key, fallback = null) {
+    try {
+      const v = localStorage.getItem(key);
+      return v !== null ? v : fallback;
+    } catch (e) {
+      return fallback;
+    }
+  }
+
+  function safeSetItem(key, value) {
+    try {
+      localStorage.setItem(key, String(value));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // ── ACCESSIBILITY: SCREEN READER LIVE REGION ANNOUNCER ──
+  function announceSR(message) {
+    const sr = document.getElementById('srAnnouncements');
+    if (sr) {
+      sr.textContent = '';
+      setTimeout(() => { sr.textContent = message; }, 40);
+    }
+  }
+
+  // ── DESKTOP BROWSER NOTIFICATIONS ──
+  function sendBrowserNotification(title, body) {
+    try {
+      const enabled = safeGetItem('orlando-browser-notifs', 'true') === 'true';
+      if (!enabled) return;
+      if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification(title, {
+          body: body,
+          icon: 'favicon.ico',
+          badge: 'favicon.ico'
+        });
+      }
+    } catch (e) {}
+  }
+
 
   // ══════════════════════════════════════════════════════════════════════════
   // 1. BESPOKE THEMES DEFINITION (31 WORLD-CLASS HOROLOGY THEMES)
@@ -470,6 +513,11 @@
     if (!THEMES.includes(theme)) theme = "pure-black";
     currentAppTheme = theme;
     document.body.setAttribute('data-app-theme', theme);
+    const metaTheme = document.querySelector('meta[name="theme-color"]');
+    if (metaTheme) {
+      metaTheme.setAttribute('content', theme === 'pure-black' ? '#000000' : (THEME_SWATCHES[theme] || '#05070c'));
+    }
+
 
     const label = document.getElementById('appThemeLabel');
     if (label) label.textContent = THEME_NAMES[theme] || theme;
@@ -818,6 +866,92 @@
   window.addEventListener('click', unlockAudio, { once: true });
   window.addEventListener('touchstart', unlockAudio, { once: true });
 
+  
+  let currentAlarmSound = safeGetItem('orlando-alarm-sound', 'synth');
+  let currentAlarmVolume = parseInt(safeGetItem('orlando-alarm-volume', '80'), 10) / 100;
+
+  function synthesizeAlertSound(preset = currentAlarmSound, vol = currentAlarmVolume) {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+    const now = ctx.currentTime;
+    const v = Math.max(0.01, Math.min(1, vol));
+
+    if (preset === 'gong') {
+      // Zen Singularity Gong: Deep resonant bell with overtone harmonics
+      const freqs = [130.81, 196.00, 261.63, 392.00];
+      freqs.forEach((freq, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = idx === 0 ? 'sine' : (idx === 1 ? 'triangle' : 'sine');
+        osc.frequency.setValueAtTime(freq, now);
+        osc.frequency.exponentialRampToValueAtTime(freq * 0.98, now + 2.2);
+
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.exponentialRampToValueAtTime((0.35 / (idx + 1)) * v, now + 0.05);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 2.4);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 2.5);
+      });
+    } else if (preset === 'piano') {
+      // Acoustic Piano / Melodic Chime: Rich Major 9th chord
+      const freqs = [261.63, 329.63, 392.00, 493.88, 587.33];
+      freqs.forEach((freq, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now + idx * 0.04);
+
+        gain.gain.setValueAtTime(0.001, now + idx * 0.04);
+        gain.gain.exponentialRampToValueAtTime((0.28 / (idx + 1)) * v, now + idx * 0.04 + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.04 + 1.8);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now + idx * 0.04);
+        osc.stop(now + idx * 0.04 + 1.85);
+      });
+    } else if (preset === 'bell') {
+      // Horology Bell: High crystal Swiss escapement chime
+      const freqs = [880, 1174.66, 1760];
+      freqs.forEach((freq, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, now + idx * 0.12);
+
+        gain.gain.setValueAtTime(0.001, now + idx * 0.12);
+        gain.gain.exponentialRampToValueAtTime((0.26 / (idx + 1)) * v, now + idx * 0.12 + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.12 + 1.4);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now + idx * 0.12);
+        osc.stop(now + idx * 0.12 + 1.45);
+      });
+    } else {
+      // Cybernetic Synth / Luxury Chime
+      const freqs = [523.25, 659.25, 783.99, 1046.50];
+      freqs.forEach((freq, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+
+        gain.gain.setValueAtTime(0.001, now + idx * 0.08);
+        gain.gain.exponentialRampToValueAtTime((0.25 / (idx + 1)) * v, now + idx * 0.08 + 0.04);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.08 + 1.2);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now + idx * 0.08);
+        osc.stop(now + idx * 0.08 + 1.25);
+      });
+    }
+  }
+
   function playLuxuryChime() {
     const ctx = getAudioContext();
     if (!ctx) return;
@@ -845,14 +979,15 @@
   }
 
   function startRingingSound() {
-    playLuxuryChime();
+    synthesizeAlertSound(currentAlarmSound, currentAlarmVolume);
     if (alarmAudioInterval) clearInterval(alarmAudioInterval);
     alarmAudioInterval = setInterval(() => {
-      playLuxuryChime();
-    }, 1400);
+      synthesizeAlertSound(currentAlarmSound, currentAlarmVolume);
+    }, 1500);
 
     const audioEl = document.getElementById('alarmAudioElement');
     if (audioEl) {
+      audioEl.volume = currentAlarmVolume;
       audioEl.currentTime = 0;
       audioEl.play().catch(() => {});
     }
@@ -1016,7 +1151,29 @@
     return `${hh}:${mm}:${ss}`;
   }
 
+  
+  function updateTabTitle() {
+    if (timerIsRunning) {
+      const s = Math.max(0, Math.floor(timerRemaining));
+      const hours = Math.floor(s / 3600);
+      const minutes = Math.floor((s % 3600) / 60);
+      const seconds = s % 60;
+      const mm = String(minutes).padStart(2, '0');
+      const ss = String(seconds).padStart(2, '0');
+      const timeStr = hours > 0 ? `${hours}:${mm}:${ss}` : `${mm}:${ss}`;
+      document.title = `(${timeStr}) Orlando Timer`;
+    } else if (timerRemaining > 0 && timerRemaining < timerTotalDuration) {
+      const s = Math.max(0, Math.floor(timerRemaining));
+      const minutes = Math.floor((s % 3600) / 60);
+      const seconds = s % 60;
+      document.title = `(Paused ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}) Orlando Timer`;
+    } else {
+      document.title = "Orlando Timer — Executive Horology Suite";
+    }
+  }
+
   function updateTimerDisplay() {
+    updateTabTitle();
     if (timerDigitsEl) {
       const timeStr = formatTimeHHMMSS(timerRemaining);
       timerDigitsEl.innerHTML = chromeHTML(timeStr);
@@ -1057,6 +1214,89 @@
     updateTimerDisplay();
   }
 
+  
+  // ── CLASSROOM EXAM MODE CONTROLLER ──
+  let examModeEnabled = safeGetItem('orlando-exam-mode', 'false') === 'true';
+  let examAlertsFired = { 1800: false, 600: false, 300: false };
+
+  function checkExamCheckpoints(currentSec) {
+    if (!examModeEnabled || !timerIsRunning) return;
+    if (currentSec === 1800 && !examAlertsFired[1800]) {
+      examAlertsFired[1800] = true;
+      synthesizeAlertSound(currentAlarmSound, 0.7);
+      showQuantumTelemetryToast("📝 EXAM CHECKPOINT", "30 minutes remaining in exam.");
+      announceSR("Exam checkpoint: 30 minutes remaining.");
+    } else if (currentSec === 600 && !examAlertsFired[600]) {
+      examAlertsFired[600] = true;
+      synthesizeAlertSound(currentAlarmSound, 0.85);
+      showQuantumTelemetryToast("⚠️ EXAM CHECKPOINT", "10 minutes remaining. Finalize current section.");
+      announceSR("Exam checkpoint: 10 minutes remaining.");
+    } else if (currentSec === 300 && !examAlertsFired[300]) {
+      examAlertsFired[300] = true;
+      synthesizeAlertSound(currentAlarmSound, 1.0);
+      showQuantumTelemetryToast("⏳ EXAM FINAL 5 MINUTES", "Review answer sheets and check work.");
+      announceSR("Exam checkpoint: 5 minutes remaining. Final review.");
+    }
+  }
+
+  // ── POMODORO FOCUS CYCLE ENGINE (25m Focus / 5m Break / 15m Long Break) ──
+  let pomoMode = 'focus'; // 'focus' | 'shortBreak' | 'longBreak'
+  let pomoRound = 1;      // 1 through 4
+  let pomoAutoNext = safeGetItem('orlando-pomo-autonext', 'true') === 'true';
+
+  const btnPomoFocus = document.getElementById('btnPomoFocus');
+  const btnPomoShortBreak = document.getElementById('btnPomoShortBreak');
+  const btnPomoLongBreak = document.getElementById('btnPomoLongBreak');
+  const btnPomoAutoNext = document.getElementById('btnPomoAutoNext');
+  const pomoStageTitle = document.getElementById('pomoStageTitle');
+  const pomoRoundBadge = document.getElementById('pomoRoundBadge');
+  const pomoDot = document.getElementById('pomoDot');
+
+  function updatePomoUI() {
+    if (btnPomoFocus) btnPomoFocus.classList.toggle('active', pomoMode === 'focus');
+    if (btnPomoShortBreak) btnPomoShortBreak.classList.toggle('active', pomoMode === 'shortBreak');
+    if (btnPomoLongBreak) btnPomoLongBreak.classList.toggle('active', pomoMode === 'longBreak');
+
+    if (pomoStageTitle) {
+      if (pomoMode === 'focus') pomoStageTitle.textContent = `Focus Session (25m)`;
+      else if (pomoMode === 'shortBreak') pomoStageTitle.textContent = `Short Break (5m)`;
+      else pomoStageTitle.textContent = `Long Break (15m)`;
+    }
+
+    if (pomoRoundBadge) {
+      pomoRoundBadge.textContent = `Round ${pomoRound}/4`;
+    }
+
+    if (btnPomoAutoNext) {
+      btnPomoAutoNext.classList.toggle('active', pomoAutoNext);
+      btnPomoAutoNext.textContent = pomoAutoNext ? 'Auto: ON' : 'Auto: OFF';
+    }
+  }
+
+  function setPomoMode(mode, autostart = false) {
+    pomoMode = mode;
+    pauseTimer();
+
+    if (mode === 'focus') {
+      setTimerDuration(25 * 60);
+      announceSR(`Pomodoro Focus session set: 25 minutes. Round ${pomoRound} of 4.`);
+    } else if (mode === 'shortBreak') {
+      setTimerDuration(5 * 60);
+      announceSR(`Pomodoro Short Break set: 5 minutes. Round ${pomoRound} of 4.`);
+    } else if (mode === 'longBreak') {
+      setTimerDuration(15 * 60);
+      announceSR('Pomodoro Long Break set: 15 minutes.');
+    }
+
+    updatePomoUI();
+
+    if (autostart) {
+      setTimeout(() => {
+        startTimer();
+      }, 500);
+    }
+  }
+
   function startTimer() {
     if (timerIsRunning) return;
 
@@ -1071,6 +1311,7 @@
 
     timerIsRunning = true;
     timerEndTime = Date.now() + timerRemaining * 1000;
+    if (timerRemaining > 1800) examAlertsFired = { 1800: false, 600: false, 300: false };
 
     btnTimerStart.style.display = 'none';
     btnTimerPause.style.display = 'inline-flex';
@@ -1087,6 +1328,7 @@
         if (acousticTickEnabled && currentSec > 0) {
           AudioHUD.escapementTick();
         }
+        checkExamCheckpoints(currentSec);
       }
 
       timerRemaining = currentSec;
@@ -1107,6 +1349,7 @@
     }
     btnTimerStart.style.display = 'inline-flex';
     btnTimerPause.style.display = 'none';
+    updateTabTitle();
   }
 
   function resetTimer() {
@@ -1142,10 +1385,40 @@
       });
     }
 
-    showQuantumTelemetryToast(
-      `🌟 FOCUS SESSION COMPLETED (+${completedMins} MIN)`,
-      `TODAY: ${updatedTele.mins} MIN · ${tierInfo.name}`
-    );
+    // Tab Title & Accessibility announcements
+    document.title = "🔔 (00:00) Time's Up! — Orlando Timer";
+    sendBrowserNotification("Orlando Timer", `Time's up! Session of ${completedMins} min completed.`);
+    announceSR(`Time is up! Your timer session of ${completedMins} minutes has completed.`);
+
+    // Pomodoro Progression
+    if (pomoMode === 'focus') {
+      if (pomoRound >= 4) {
+        pomoRound = 1;
+        showQuantumTelemetryToast(
+          "🌟 4 POMODORO ROUNDS COMPLETE!",
+          "Entering 15-Minute Restorative Long Break."
+        );
+        setPomoMode('longBreak', pomoAutoNext);
+      } else {
+        pomoRound++;
+        showQuantumTelemetryToast(
+          "☕ FOCUS ROUND COMPLETE!",
+          `Entering 5-Minute Short Break (Next: Round ${pomoRound}/4).`
+        );
+        setPomoMode('shortBreak', pomoAutoNext);
+      }
+    } else if (pomoMode === 'shortBreak' || pomoMode === 'longBreak') {
+      showQuantumTelemetryToast(
+        "⚡ BREAK COMPLETED!",
+        `Ready for Focus Session: Round ${pomoRound}/4.`
+      );
+      setPomoMode('focus', pomoAutoNext);
+    } else {
+      showQuantumTelemetryToast(
+        `🌟 FOCUS SESSION COMPLETED (+${completedMins} MIN)`,
+        `TODAY: ${updatedTele.mins} MIN · ${tierInfo.name}`
+      );
+    }
 
     triggerAlertOverlay({
       type: 'timer',
@@ -1155,14 +1428,124 @@
     });
   }
 
-  const presetPills = document.querySelectorAll('.preset-pill');
-  presetPills.forEach((pill) => {
-    pill.addEventListener('click', () => {
-      pauseTimer();
-      const mins = parseInt(pill.getAttribute('data-minutes') || '25', 10);
-      setTimerDuration(mins * 60);
+  // ── CUSTOM SAVED PRESETS MANAGER ──
+  function loadCustomPresets() {
+    try {
+      const raw = localStorage.getItem('orlando-custom-presets');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) return parsed.filter(n => typeof n === 'number' && n > 0 && n <= 720);
+      }
+    } catch(e) {}
+    return [];
+  }
+
+  function saveCustomPresets(presets) {
+    try {
+      localStorage.setItem('orlando-custom-presets', JSON.stringify(presets));
+    } catch(e) {}
+  }
+
+  function renderPresets() {
+    const presetsRow = document.getElementById('presetsRow');
+    if (!presetsRow) return;
+    const defaultMins = [5, 10, 15, 25, 45];
+    const customMins = loadCustomPresets();
+
+    let html = '';
+    defaultMins.forEach(mins => {
+      const label = mins === 25 ? '25 min (Pomodoro)' : `${mins} min`;
+      html += `<button type="button" class="preset-pill" data-minutes="${mins}">${label}</button>`;
     });
-  });
+
+    customMins.forEach(mins => {
+      html += `
+        <div class="custom-preset-pill" data-minutes="${mins}">
+          <span>${mins} min</span>
+          <button type="button" class="btn-del-preset" data-del-minutes="${mins}" title="Delete ${mins}m preset" aria-label="Delete ${mins}m preset">×</button>
+        </div>
+      `;
+    });
+
+    presetsRow.innerHTML = html;
+
+    presetsRow.querySelectorAll('[data-minutes]').forEach(el => {
+      el.addEventListener('click', (e) => {
+        if (e.target.closest('.btn-del-preset')) return;
+        const mins = parseInt(el.getAttribute('data-minutes'), 10);
+        if (!isNaN(mins) && mins > 0) {
+          pauseTimer();
+          setTimerDuration(mins * 60);
+          AudioHUD.tick(920);
+        }
+      });
+    });
+
+    presetsRow.querySelectorAll('.btn-del-preset').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const minsToDel = parseInt(btn.getAttribute('data-del-minutes'), 10);
+        const currentCustom = loadCustomPresets().filter(m => m !== minsToDel);
+        saveCustomPresets(currentCustom);
+        renderPresets();
+        AudioHUD.tick(500);
+      });
+    });
+  }
+
+  const btnAddPreset = document.getElementById('btnAddPreset');
+  if (btnAddPreset) {
+    btnAddPreset.addEventListener('click', () => {
+      const input = prompt("Enter custom timer duration in minutes (e.g., 20, 50, 90):", "20");
+      if (input !== null) {
+        const mins = parseInt(input.trim(), 10);
+        if (!isNaN(mins) && mins > 0 && mins <= 720) {
+          const currentCustom = loadCustomPresets();
+          if (!currentCustom.includes(mins)) {
+            currentCustom.push(mins);
+            currentCustom.sort((a, b) => a - b);
+            saveCustomPresets(currentCustom);
+            renderPresets();
+            AudioHUD.confirm();
+          }
+        } else if (input.trim() !== '') {
+          alert("Please enter a valid duration between 1 and 720 minutes.");
+        }
+      }
+    });
+  }
+
+  // ── WIRE POMODORO FOCUS BUTTONS ──
+  if (btnPomoFocus) {
+    btnPomoFocus.addEventListener('click', () => {
+      setPomoMode('focus');
+      AudioHUD.confirm();
+    });
+  }
+  if (btnPomoShortBreak) {
+    btnPomoShortBreak.addEventListener('click', () => {
+      setPomoMode('shortBreak');
+      AudioHUD.confirm();
+    });
+  }
+  if (btnPomoLongBreak) {
+    btnPomoLongBreak.addEventListener('click', () => {
+      setPomoMode('longBreak');
+      AudioHUD.confirm();
+    });
+  }
+  if (btnPomoAutoNext) {
+    btnPomoAutoNext.addEventListener('click', () => {
+      pomoAutoNext = !pomoAutoNext;
+      safeSetItem('orlando-pomo-autonext', pomoAutoNext ? 'true' : 'false');
+      updatePomoUI();
+      AudioHUD.tick(pomoAutoNext ? 1200 : 600);
+    });
+  }
+
+  // Initialize presets and Pomodoro on load
+  renderPresets();
+  updatePomoUI();
 
   [timerHourInput, timerMinInput, timerSecInput].forEach((input) => {
     if (!input) return;
@@ -1719,12 +2102,84 @@
     return { date: today, mins: isNaN(mins) ? 0 : mins };
   }
 
+  
+  // ── WEEKLY FOCUS HISTORY CHART ENGINE ──
+  function getIsoWeekNumber(date) {
+    const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+    const dayNum = d.getUTCDay() || 7;
+    d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+    const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+  }
+
+  function getWeekKey() {
+    const d = new Date();
+    return `${d.getFullYear()}-W${getIsoWeekNumber(d)}`;
+  }
+
+  function getWeeklyFocusData() {
+    const currentKey = getWeekKey();
+    let data = { weekKey: currentKey, days: [0, 0, 0, 0, 0, 0, 0] };
+    try {
+      const raw = localStorage.getItem('orlando-weekly-focus');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && parsed.weekKey === currentKey && Array.isArray(parsed.days)) {
+          data = parsed;
+        }
+      }
+    } catch(e) {}
+    return data;
+  }
+
+  function recordWeeklyFocus(mins) {
+    if (!mins || mins <= 0) return;
+    const data = getWeeklyFocusData();
+    const dayIndex = (new Date().getDay() + 6) % 7; // Mon=0, Sun=6
+    data.days[dayIndex] = (data.days[dayIndex] || 0) + Math.round(mins);
+    try {
+      localStorage.setItem('orlando-weekly-focus', JSON.stringify(data));
+    } catch(e) {}
+    renderWeeklyFocusChart();
+  }
+
+  function renderWeeklyFocusChart() {
+    const chartBars = document.getElementById('weeklyChartBars');
+    const totalBadge = document.getElementById('weeklyTotalBadge');
+    const data = getWeeklyFocusData();
+    const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const todayIndex = (new Date().getDay() + 6) % 7;
+
+    const totalMins = data.days.reduce((a, b) => a + b, 0);
+    if (totalBadge) {
+      totalBadge.textContent = `${totalMins}m this week`;
+    }
+
+    if (!chartBars) return;
+    const maxMins = Math.max(60, ...data.days);
+
+    chartBars.innerHTML = data.days.map((mins, idx) => {
+      const isToday = idx === todayIndex;
+      const pct = Math.max(8, Math.min(100, Math.round((mins / maxMins) * 100)));
+      return `
+        <div class="weekly-chart-col ${isToday ? 'is-today' : ''}">
+          <span class="weekly-bar-val">${mins > 0 ? mins + 'm' : ''}</span>
+          <div class="weekly-bar-track">
+            <div class="weekly-bar-fill" style="height: ${pct}%;"></div>
+          </div>
+          <span class="weekly-bar-day">${dayNames[idx]}</span>
+        </div>
+      `;
+    }).join('');
+  }
+
   function addFocusMinutes(mins) {
     if (!mins || mins <= 0) return getFocusTelemetry();
     const current = getFocusTelemetry();
     const newMins = current.mins + Math.round(mins);
     localStorage.setItem('ot_focus_mins', String(newMins));
     updateFocusTelemetryUI();
+    recordWeeklyFocus(mins);
     return { date: current.date, mins: newMins };
   }
 
@@ -1750,6 +2205,10 @@
 
   let toastTimeout = null;
   function showQuantumTelemetryToast(title, message) {
+    // Respect user setting to prevent unwanted interruptions
+    const allowToast = safeGetItem('orlando-milestone-toast', 'true') === 'true';
+    if (!allowToast) return;
+
     const toast = document.getElementById('quantumTelemetryToast');
     const tTitle = document.getElementById('toastTitle');
     const tMsg = document.getElementById('toastMessage');
@@ -1860,19 +2319,38 @@
     if (!funMicroCockpit) return;
     const isOpen = funMicroCockpit.classList.contains('open');
     const shouldOpen = show !== undefined ? show : !isOpen;
+    const backdrop = document.getElementById('quantumDrawerBackdrop');
+
     if (shouldOpen) {
       updateEarthDayProgress();
       updateFocusTelemetryUI();
+      renderWeeklyFocusChart();
       funMicroCockpit.classList.add('open');
       funMicroCockpit.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('quantum-panel-open');
+      if (backdrop) backdrop.classList.add('open');
       if (btnLogoEasterEgg) btnLogoEasterEgg.classList.add('open');
       AudioHUD.tick(1000);
     } else {
       funMicroCockpit.classList.remove('open');
       funMicroCockpit.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('quantum-panel-open');
+      if (backdrop) backdrop.classList.remove('open');
       if (btnLogoEasterEgg) btnLogoEasterEgg.classList.remove('open');
     }
   }
+
+  const drawerBackdropEl = document.getElementById('quantumDrawerBackdrop');
+  if (drawerBackdropEl) {
+    drawerBackdropEl.addEventListener('click', () => {
+      toggleFunCockpit(false);
+    });
+  }
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && funMicroCockpit && funMicroCockpit.classList.contains('open')) {
+      toggleFunCockpit(false);
+    }
+  });
 
   if (btnLogoEasterEgg) {
     btnLogoEasterEgg.addEventListener('click', (e) => {
@@ -2085,8 +2563,33 @@
       }
     }
 
+    let particleLoopActive = true;
+
+    function checkParticleAnimationState() {
+      const isHidden = document.visibilityState === 'hidden';
+      const lowEffects = safeGetItem('orlando-low-effects', 'false') === 'true';
+      const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const shouldRun = !isHidden && !lowEffects && !prefersReduced;
+
+      if (shouldRun && !particleLoopActive) {
+        particleLoopActive = true;
+        requestAnimationFrame(renderParticles);
+      } else if (!shouldRun && particleLoopActive) {
+        particleLoopActive = false;
+        if (ctx) ctx.clearRect(0, 0, width, height);
+      }
+    }
+    window.checkParticleAnimationState = checkParticleAnimationState;
+
+    document.addEventListener('visibilitychange', checkParticleAnimationState);
+    if (window.matchMedia) {
+      try {
+        window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', checkParticleAnimationState);
+      } catch(e) {}
+    }
+
     function renderParticles() {
-      if (!ctx) return;
+      if (!ctx || !particleLoopActive) return;
       ctx.clearRect(0, 0, width, height);
 
       // ── 1. Update & Render Smooth Shockwave Ring ──
@@ -2248,7 +2751,7 @@
       ctx.fill();
 
       ctx.globalAlpha = 1.0;
-      requestAnimationFrame(renderParticles);
+      if (particleLoopActive) requestAnimationFrame(renderParticles);
     }
 
     window.addEventListener('resize', () => {
@@ -2274,6 +2777,127 @@
   // ══════════════════════════════════════════════════════════════════════════
   // 12. ATMOSPHERE & PARTICLE FIELD LAB CONTROLLER (Ambient Glow & Floating Particles)
   // ══════════════════════════════════════════════════════════════════════════
+  
+  // ══════════════════════════════════════════════════════════════════════════
+  // ── 10E. COMMAND HUB SYSTEM SETTINGS & QUICK-START ENGINE ──
+  // ══════════════════════════════════════════════════════════════════════════
+  function initCommandSettings() {
+    const soundSelect = document.getElementById('alarmSoundSelect');
+    const volSlider = document.getElementById('alarmVolumeSlider');
+    const volBadge = document.getElementById('alarmVolumeBadge');
+    const examToggle = document.getElementById('toggleExamMode');
+    const lowEffectsToggle = document.getElementById('toggleLowEffects');
+    const milestoneToggle = document.getElementById('toggleMilestoneToast');
+    const browserNotifsToggle = document.getElementById('toggleBrowserNotifs');
+
+    // 1. Alarm Sound Select
+    if (soundSelect) {
+      soundSelect.value = currentAlarmSound;
+      soundSelect.addEventListener('change', (e) => {
+        currentAlarmSound = e.target.value;
+        safeSetItem('orlando-alarm-sound', currentAlarmSound);
+        synthesizeAlertSound(currentAlarmSound, currentAlarmVolume);
+      });
+    }
+
+    // 2. Alarm Volume Slider
+    if (volSlider) {
+      volSlider.value = Math.round(currentAlarmVolume * 100);
+      if (volBadge) volBadge.textContent = `${volSlider.value}%`;
+
+      volSlider.addEventListener('input', (e) => {
+        const val = parseInt(e.target.value, 10);
+        currentAlarmVolume = val / 100;
+        if (volBadge) volBadge.textContent = `${val}%`;
+        safeSetItem('orlando-alarm-volume', val.toString());
+        const audioEl = document.getElementById('alarmAudioElement');
+        if (audioEl) audioEl.volume = currentAlarmVolume;
+      });
+      volSlider.addEventListener('change', () => {
+        synthesizeAlertSound(currentAlarmSound, currentAlarmVolume);
+      });
+    }
+
+    // 3. Classroom Exam Mode Toggle
+    if (examToggle) {
+      examToggle.checked = examModeEnabled;
+      examToggle.addEventListener('change', (e) => {
+        examModeEnabled = e.target.checked;
+        safeSetItem('orlando-exam-mode', examModeEnabled ? 'true' : 'false');
+        AudioHUD.tick(examModeEnabled ? 1100 : 550);
+        if (examModeEnabled) {
+          showQuantumTelemetryToast("📝 CLASSROOM EXAM MODE ACTIVE", "Alerts configured for 30m, 10m, and 5m checkpoints.");
+        }
+      });
+    }
+
+    // 4. Low Effects Mode Toggle
+    if (lowEffectsToggle) {
+      const savedLow = safeGetItem('orlando-low-effects', 'false') === 'true';
+      lowEffectsToggle.checked = savedLow;
+      lowEffectsToggle.addEventListener('change', (e) => {
+        safeSetItem('orlando-low-effects', e.target.checked ? 'true' : 'false');
+        if (window.checkParticleAnimationState) {
+          window.checkParticleAnimationState();
+        }
+        AudioHUD.tick(600);
+      });
+    }
+
+    // 5. Milestone Toast Notifications Toggle
+    if (milestoneToggle) {
+      const savedToast = safeGetItem('orlando-milestone-toast', 'true') === 'true';
+      milestoneToggle.checked = savedToast;
+      milestoneToggle.addEventListener('change', (e) => {
+        safeSetItem('orlando-milestone-toast', e.target.checked ? 'true' : 'false');
+        AudioHUD.tick(600);
+      });
+    }
+
+    // 6. Browser Desktop Notifications Toggle
+    if (browserNotifsToggle) {
+      const savedNotifs = safeGetItem('orlando-browser-notifs', 'true') === 'true';
+      browserNotifsToggle.checked = savedNotifs && ('Notification' in window && Notification.permission === 'granted');
+      browserNotifsToggle.addEventListener('change', async (e) => {
+        if (e.target.checked) {
+          if ('Notification' in window) {
+            const perm = await Notification.requestPermission();
+            if (perm === 'granted') {
+              safeSetItem('orlando-browser-notifs', 'true');
+              sendBrowserNotification("Orlando Timer", "Desktop alerts enabled successfully!");
+            } else {
+              e.target.checked = false;
+              safeSetItem('orlando-browser-notifs', 'false');
+            }
+          }
+        } else {
+          safeSetItem('orlando-browser-notifs', 'false');
+        }
+        AudioHUD.tick(700);
+      });
+    }
+  }
+
+  // ── URL QUERY PARAMETER QUICK-START (?t=25 or ?m=25) ──
+  function checkUrlQueryParams() {
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      const t = urlParams.get('t') || urlParams.get('m') || urlParams.get('min') || urlParams.get('minutes');
+      if (t) {
+        const mins = parseInt(t, 10);
+        if (!isNaN(mins) && mins > 0 && mins <= 1440) {
+          setTimerDuration(mins * 60);
+        }
+      }
+      if (urlParams.get('autostart') === '1' || urlParams.get('start') === 'true') {
+        setTimeout(startTimer, 600);
+      }
+    } catch(e) {}
+  }
+
+  initCommandSettings();
+  checkUrlQueryParams();
+
   function initAtmosphereLab() {
     const btnAtmosphere = document.getElementById('btnAtmosphere');
     const atmospherePopup = document.getElementById('atmospherePopup');

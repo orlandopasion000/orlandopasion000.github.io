@@ -20,17 +20,40 @@
   <meta name="apple-mobile-web-app-title" content="Orlando Timer">
   <meta name="description" content="Orlando Timer — Executive 3-in-1 Timer, Stopwatch, and Alarm Horology Suite by Sir Orlando V. Pasion, Jr.">
 
+  <!-- Open Graph / Social Sharing Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://orlandopasion000.github.io/orlandotimer/">
+  <meta property="og:title" content="Orlando Timer — 3-in-1 Executive Horology Suite">
+  <meta property="og:description" content="Precision 3-in-1 Timer, Stopwatch, and Alarm with Quantum Time Command, 30 Luxury Horology Themes, Pomodoro Focus Engine, and Classroom Exam Mode.">
+  <meta property="og:image" content="https://orlandopasion000.github.io/orlandotimer/assets/ot-icon-512.png">
+
+  <!-- Twitter Meta -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://orlandopasion000.github.io/orlandotimer/">
+  <meta name="twitter:title" content="Orlando Timer — 3-in-1 Executive Horology Suite">
+  <meta name="twitter:description" content="Precision 3-in-1 Timer, Stopwatch, and Alarm with Quantum Time Command, 30 Luxury Horology Themes, Pomodoro Focus Engine, and Classroom Exam Mode.">
+  <meta name="twitter:image" content="https://orlandopasion000.github.io/orlandotimer/assets/ot-icon-512.png">
+
   <!-- Google Fonts Preconnect & Inter / Lexend Master Horology Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&family=Orbitron:wght@600;700;800;900&family=Outfit:wght@600;700;800;900&family=Space+Grotesk:wght@600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
   <!-- Relative Stylesheet (with cache-bust versioning) -->
-  <link rel="stylesheet" href="style.css?v=11.0">
+  <link rel="stylesheet" href="style.css?v=14.0">
 </head>
 <body data-app-theme="pure-black" data-clock-style="pure-black">
+  <!-- Accessibility Live Region for Screen Readers -->
+  <div id="srAnnouncements" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Quantum Time Command Drawer Mobile Backdrop -->
+  <div class="quantum-drawer-backdrop" id="quantumDrawerBackdrop" aria-hidden="true"></div>
+
   <!-- Google Antigravity Signature Repulsive Particle Stage -->
   <canvas id="antigravityCanvas" class="antigravity-fx-canvas" aria-hidden="true"></canvas>
+
+  <!-- Ambient Glow Background Radial Wash Layer -->
+  <div id="ambientGlowBackdrop" class="ambient-glow-backdrop" aria-hidden="true"></div>
 
   <div class="app-wrapper">
     <!-- 0. EXECUTIVE BRAND HEADER (TRANSPARENT LUXURY CRYSTAL & QUANTUM TIME COMMAND) -->
@@ -133,20 +156,101 @@
 
               <!-- Action Pills -->
               <div class="supernova-action-pills">
-                <button type="button" class="sn-action-pill primary" id="btnFireSupernova" title="Detonate Celestial Supernova Shockwave">
+                <button type="button" class="sn-action-pill primary" id="btnFireSupernova" title="Detonate Celestial Supernova Shockwave (Particle Burst)">
                   <svg class="sn-pill-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
                   </svg>
-                  <span>Erupt Supernova</span>
+                  <span>Erupt Supernova (Burst)</span>
                 </button>
                 <button type="button" class="sn-action-pill" id="btnStartBreathing" title="Calibrate Focus with Quantum Resonance Breathing">
                   <svg class="sn-pill-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="12" cy="12" r="9"/>
                     <circle cx="12" cy="12" r="3.5" fill="currentColor" fill-opacity="0.3"/>
                   </svg>
-                  <span>Breathing Reset</span>
+                  <span>Breathing (Reset)</span>
                 </button>
               </div>
+            </div>
+
+            <!-- Feature 2B: Weekly Focus-History Chart -->
+            <div class="weekly-focus-card" id="weeklyFocusCard">
+              <div class="weekly-focus-header">
+                <span class="weekly-focus-title">
+                  <svg class="cyber-widget-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="20" x2="18" y2="10"/>
+                    <line x1="12" y1="20" x2="12" y2="4"/>
+                    <line x1="6" y1="20" x2="6" y2="14"/>
+                  </svg>
+                  Weekly Focus History
+                </span>
+                <span class="weekly-total-badge" id="weeklyTotalBadge">0m this week</span>
+              </div>
+              <div class="weekly-chart-bars" id="weeklyChartBars">
+                <!-- 7 Daily Bars: Mon - Sun rendered via JS -->
+              </div>
+            </div>
+
+            <!-- Feature 2C: Sound, Exam Mode & Productivity Controls -->
+            <div class="command-settings-card">
+              <div class="cmd-settings-header">
+                <span class="cmd-settings-title">Sound, Exam &amp; System Settings</span>
+              </div>
+              
+              <!-- Sound Chime Picker -->
+              <div class="cmd-setting-row">
+                <label for="alarmSoundSelect" class="cmd-setting-label">Alert Sound:</label>
+                <select id="alarmSoundSelect" class="cmd-select" aria-label="Completion Alert Sound">
+                  <option value="synth">Cybernetic Synth (Chime)</option>
+                  <option value="gong">Zen Singularity (Gong)</option>
+                  <option value="piano">Acoustic Piano (Melodic)</option>
+                  <option value="bell">Horology Bell (Dual Chime)</option>
+                </select>
+              </div>
+
+              <!-- Volume Slider -->
+              <div class="cmd-setting-row">
+                <div class="cmd-setting-label-row">
+                  <label for="alarmVolumeSlider" class="cmd-setting-label">Alert Volume:</label>
+                  <span class="cmd-val-badge" id="alarmVolumeBadge">80%</span>
+                </div>
+                <input type="range" id="alarmVolumeSlider" class="atmo-range-slider" min="0" max="100" step="5" value="80" aria-label="Alert Sound Volume">
+              </div>
+
+              <!-- Classroom Exam Mode Toggle -->
+              <label class="cmd-toggle-row">
+                <input type="checkbox" id="toggleExamMode">
+                <span class="cmd-toggle-text">
+                  <strong>Classroom Exam Mode</strong>
+                  <small>Audio &amp; visual checkpoints at 30m, 10m, and 5m remaining</small>
+                </span>
+              </label>
+
+              <!-- Low Effects Mode Toggle -->
+              <label class="cmd-toggle-row">
+                <input type="checkbox" id="toggleLowEffects">
+                <span class="cmd-toggle-text">
+                  <strong>Low Effects Mode (Power Saver)</strong>
+                  <small>Pauses particle canvas, minimizes animations &amp; saves battery</small>
+                </span>
+              </label>
+
+              <!-- Milestone Notifications Toggle (Tier I · Nova Detonated) -->
+              <label class="cmd-toggle-row">
+                <input type="checkbox" id="toggleMilestoneToast" checked>
+                <span class="cmd-toggle-text">
+                  <strong>Focus Milestone Notifications</strong>
+                  <small>Bottom-center notifications on tier completion (never blocks clicks)</small>
+                </span>
+              </label>
+
+              <!-- Browser Desktop Notifications Toggle -->
+              <label class="cmd-toggle-row">
+                <input type="checkbox" id="toggleBrowserNotifs">
+                <span class="cmd-toggle-text">
+                  <strong>Browser Desktop Notifications</strong>
+                  <small>System notification when timer or alarm finishes</small>
+                </span>
+              </label>
             </div>
 
             <!-- Feature 3: Zen Immersion Mode -->
@@ -167,6 +271,110 @@
         </div>
       </div>
       <div class="or-header-right">
+        <!-- Atmosphere & Particle Field Controller (Ambient Glow & Floating Particles) -->
+        <div class="atmo-dropdown-container">
+          <button type="button" class="btn-topbar-desktop btn-atmosphere" id="btnAtmosphere" title="Control Ambient Glow & Floating Particles" aria-expanded="false" aria-controls="atmospherePopup">
+            <svg class="cyber-topbar-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3" fill="currentColor"/>
+              <circle cx="12" cy="12" r="7" stroke-dasharray="2 3"/>
+              <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke-linecap="round"/>
+            </svg>
+            <span class="status-dot-atmo" id="atmoDot"></span>
+            <span id="atmoLabel">Atmosphere</span>
+          </button>
+
+          <!-- Atmosphere & Floating Particles Control Popup Panel -->
+          <div class="atmo-popup-panel" id="atmospherePopup" role="dialog" aria-label="Ambient Glow and Floating Particles Controller">
+            <div class="atmo-popup-header">
+              <div class="atmo-header-title-wrap">
+                <span class="atmo-badge-icon">✦</span>
+                <div>
+                  <div class="atmo-popup-title">ATMOSPHERE &amp; PARTICLE LAB</div>
+                  <div class="atmo-popup-subtitle">Cosmic Radial Wash &amp; Dynamic Particle Field</div>
+                </div>
+              </div>
+              <button type="button" class="atmo-close-btn" id="btnCloseAtmosphere" title="Close Panel">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+              </button>
+            </div>
+
+            <div class="atmo-controls-body">
+              <!-- CONTROL 1: AMBIENT GLOW (RADIAL GRADIENT BACKGROUND) -->
+              <div class="atmo-control-section">
+                <div class="atmo-row-header">
+                  <div class="atmo-label-wrap">
+                    <svg class="atmo-sec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="9"/>
+                      <circle cx="12" cy="12" r="4" fill="currentColor" opacity="0.3"/>
+                    </svg>
+                    <span class="atmo-sec-label">Ambient Glow</span>
+                  </div>
+                  <span class="atmo-val-badge" id="glowValBadge">100% Vivid</span>
+                </div>
+                <p class="atmo-sec-desc">
+                  Radial gradient background wash. Brightest at center top, fading to pure black toward edges.
+                </p>
+
+                <div class="atmo-slider-container">
+                  <div class="atmo-track-meta">
+                    <span class="atmo-track-end">Pure Black (0%)</span>
+                    <span class="atmo-track-end">Max Glow (100%)</span>
+                  </div>
+                  <div class="atmo-slider-wrapper">
+                    <input type="range" id="sliderAmbientGlow" class="atmo-range-slider" min="0" max="100" step="1" value="100" aria-label="Ambient Glow Intensity">
+                    <div class="atmo-slider-fill" id="glowSliderFill"></div>
+                  </div>
+                  <div class="atmo-presets-row">
+                    <button type="button" class="atmo-preset-chip" data-glow="0">OLED Black (0%)</button>
+                    <button type="button" class="atmo-preset-chip" data-glow="35">Subtle (35%)</button>
+                    <button type="button" class="atmo-preset-chip" data-glow="70">Balanced (70%)</button>
+                    <button type="button" class="atmo-preset-chip active" data-glow="100">Max Glow (100%)</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="atmo-divider"></div>
+
+              <!-- CONTROL 2: FLOATING PARTICLES (PARTICLE FIELD) -->
+              <div class="atmo-control-section">
+                <div class="atmo-row-header">
+                  <div class="atmo-label-wrap">
+                    <svg class="atmo-sec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="7" cy="8" r="2" fill="currentColor"/>
+                      <circle cx="17" cy="6" r="1.5" fill="currentColor"/>
+                      <circle cx="12" cy="15" r="2.5" fill="currentColor"/>
+                      <circle cx="19" cy="16" r="1.2" fill="currentColor"/>
+                      <circle cx="5" cy="17" r="1" fill="currentColor"/>
+                    </svg>
+                    <span class="atmo-sec-label">Floating Particles</span>
+                  </div>
+                  <span class="atmo-val-badge" id="particlesValBadge">Min (Lean)</span>
+                </div>
+                <p class="atmo-sec-desc">
+                  Particle field density, dot diameter, and cosmic luminescence. Current is minimum.
+                </p>
+
+                <div class="atmo-slider-container">
+                  <div class="atmo-track-meta">
+                    <span class="atmo-track-end">Minimum (Current Lean)</span>
+                    <span class="atmo-track-end">Maximum (Hyper-Field)</span>
+                  </div>
+                  <div class="atmo-slider-wrapper">
+                    <input type="range" id="sliderParticles" class="atmo-range-slider" min="0" max="100" step="1" value="0" aria-label="Floating Particles Field Intensity">
+                    <div class="atmo-slider-fill" id="particlesSliderFill"></div>
+                  </div>
+                  <div class="atmo-presets-row">
+                    <button type="button" class="atmo-preset-chip active" data-particles="0">Min (Current)</button>
+                    <button type="button" class="atmo-preset-chip" data-particles="33">2x Balanced</button>
+                    <button type="button" class="atmo-preset-chip" data-particles="66">3x Stellar</button>
+                    <button type="button" class="atmo-preset-chip" data-particles="100">Max Swarm</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Mechanical Quartz / Acoustic Tick Toggle with Futuristic Resonator SVG -->
         <button type="button" class="btn-topbar-desktop" id="btnAcousticTick" title="Toggle Mechanical Escapement / Acoustic Resonator">
           <svg class="cyber-topbar-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -382,15 +590,33 @@
           </button>
         </div>
 
-        <!-- Quick Presets: 5, 10, 15, 25, 45 minutes -->
+        <!-- Presets & Pomodoro Focus Cycle -->
         <div class="presets-section">
-          <span class="presets-label">Quick Presets</span>
-          <div class="presets-row">
+          <div class="presets-header-row">
+            <span class="presets-label">Timer Presets &amp; Pomodoro</span>
+            <button type="button" class="btn-add-preset" id="btnAddPreset" title="Add Custom Preset Minute">+ Custom Preset</button>
+          </div>
+          <div class="presets-row" id="presetsRow">
             <button type="button" class="preset-pill" data-minutes="5">5 min</button>
             <button type="button" class="preset-pill" data-minutes="10">10 min</button>
             <button type="button" class="preset-pill" data-minutes="15">15 min</button>
             <button type="button" class="preset-pill" data-minutes="25">25 min (Pomodoro)</button>
             <button type="button" class="preset-pill" data-minutes="45">45 min</button>
+          </div>
+
+          <!-- Pomodoro Cycle Controller & Status Strip -->
+          <div class="pomodoro-cycle-strip" id="pomodoroCycleStrip">
+            <div class="pomo-status-left">
+              <span class="pomo-dot" id="pomoDot"></span>
+              <span class="pomo-stage-title" id="pomoStageTitle">Focus Session</span>
+              <span class="pomo-round-badge" id="pomoRoundBadge">Round 1/4</span>
+            </div>
+            <div class="pomo-buttons-right">
+              <button type="button" class="pomo-step-btn active" id="btnPomoFocus" title="25 Minute Focus Session">25m Focus</button>
+              <button type="button" class="pomo-step-btn" id="btnPomoShortBreak" title="5 Minute Short Break">5m Break</button>
+              <button type="button" class="pomo-step-btn" id="btnPomoLongBreak" title="15 Minute Long Break (after 4 rounds)">15m Long</button>
+              <button type="button" class="pomo-toggle-btn active" id="btnPomoAutoNext" title="Auto-advance Pomodoro Cycles">Auto: ON</button>
+            </div>
           </div>
         </div>
       </section>
@@ -660,6 +886,6 @@
   <audio id="alarmAudioElement" preload="auto" src="sounds/piano.mp3"></audio>
 
   <!-- Relative JavaScript (with cache-bust versioning) -->
-  <script src="app.js?v=11.0"></script>
+  <script src="app.js?v=14.0"></script>
 </body>
 </html>
