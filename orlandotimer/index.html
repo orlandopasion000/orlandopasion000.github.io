@@ -20,8 +20,8 @@
   <meta name="apple-mobile-web-app-title" content="Orlando Timer">
   <meta name="description" content="Orlando Timer — Executive 3-in-1 Timer, Stopwatch, and Alarm Horology Suite by Sir Orlando V. Pasion, Jr.">
 
-  <!-- Relative Stylesheet -->
-  <link rel="stylesheet" href="style.css">
+  <!-- Relative Stylesheet (with cache-bust versioning) -->
+  <link rel="stylesheet" href="style.css?v=2.2">
 </head>
 <body data-app-theme="platinum" data-clock-style="platinum">
   <!-- Google Antigravity Signature Repulsive Particle Stage -->
@@ -67,7 +67,7 @@
         <div class="customizer-box customizer-theme">
           <label for="appThemeSelect" class="customizer-badge" title="Controls entire application background, surfaces, cards, and buttons">
             <span class="customizer-badge-icon">🎨</span>
-            <span class="customizer-badge-text">Theme</span>
+            <span class="customizer-badge-text">App Theme</span>
           </label>
           <div class="customizer-select-wrap">
             <span class="theme-color-preview" id="appThemeSwatch"></span>
@@ -332,7 +332,7 @@
   <!-- Audio element fallback (piano sound from existing assets) -->
   <audio id="alarmAudioElement" preload="auto" src="sounds/piano.mp3"></audio>
 
-  <!-- Relative JavaScript -->
-  <script src="app.js"></script>
+  <!-- Relative JavaScript (with cache-bust versioning) -->
+  <script src="app.js?v=2.2"></script>
 </body>
 </html>

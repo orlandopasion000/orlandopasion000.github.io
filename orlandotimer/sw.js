@@ -3,7 +3,7 @@
  * Enables ultra-fast offline caching & PWA installation
  */
 
-const CACHE_NAME = 'orlandotimer-v1';
+const CACHE_NAME = 'orlandotimer-v3';
 const ASSETS_TO_CACHE = [
   './',
   'index.html',
@@ -44,17 +44,25 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
+// Network-first strategy: always serve latest code, fallback to cache when offline
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        return cachedResponse;
-      }
-      return fetch(event.request).catch(() => {
-        // Offline fallback
-        return caches.match('./') || caches.match('index.html');
-      });
-    })
+    fetch(event.request)
+      .then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200) {
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseToCache);
+          });
+        }
+        return networkResponse;
+      })
+      .catch(() => {
+        return caches.match(event.request).then((cachedResponse) => {
+          if (cachedResponse) return cachedResponse;
+          return caches.match('./') || caches.match('index.html');
+        });
+      })
   );
 });
