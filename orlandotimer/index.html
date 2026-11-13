@@ -21,7 +21,7 @@
   <meta name="description" content="Orlando Timer — Executive 3-in-1 Timer, Stopwatch, and Alarm Horology Suite by Sir Orlando V. Pasion, Jr.">
 
   <!-- Relative Stylesheet (with cache-bust versioning) -->
-  <link rel="stylesheet" href="style.css?v=2.2">
+  <link rel="stylesheet" href="style.css?v=3.0">
 </head>
 <body data-app-theme="platinum" data-clock-style="platinum">
   <!-- Google Antigravity Signature Repulsive Particle Stage -->
@@ -58,42 +58,34 @@
     <main class="timer-main">
 
       <!-- ════════════════════════════════════════════════════════════════════
-           DUAL CUSTOMIZATION COCKPIT (TWO SEPARATE INDEPENDENT CONTROLS)
-           LEFT: Theme (Controls entire application appearance)
-           RIGHT: Clock Style (Controls only clock digits typography & finish)
+           DUAL HOLOGRAPHIC COCKPIT (FUTURISTIC INDEPENDENT TRIGGERS)
+           LEFT: App Theme (Global environment, canvas & surfaces)
+           RIGHT: Clock Style (Typography finish & specular horizon)
            ════════════════════════════════════════════════════════════════════ -->
       <section class="customization-cockpit" aria-label="Visual Appearance Customization">
-        <!-- Control 1 (Left): Global Application Theme -->
+        <!-- Trigger 1 (Left): Global Application Theme -->
         <div class="customizer-box customizer-theme">
-          <label for="appThemeSelect" class="customizer-badge" title="Controls entire application background, surfaces, cards, and buttons">
+          <button type="button" class="holo-trigger-btn" id="btnOpenThemeVault" aria-haspopup="dialog" aria-expanded="false" title="Open Holographic Theme Vault (Hotkey: T)">
             <span class="customizer-badge-icon">🎨</span>
             <span class="customizer-badge-text">App Theme</span>
-          </label>
-          <div class="customizer-select-wrap">
             <span class="theme-color-preview" id="appThemeSwatch"></span>
-            <select id="appThemeSelect" class="luxury-theme-select" aria-label="Select Global Application Theme">
-              <!-- Dynamically populated with 17 themes in JS -->
-            </select>
-            <span class="select-chevron">▼</span>
-          </div>
+            <span class="holo-current-label" id="appThemeLabel">Pure Platinum</span>
+            <span class="holo-open-arrow">⬡</span>
+          </button>
         </div>
 
         <!-- Distinct Separation Divider -->
         <div class="customizer-divider"></div>
 
-        <!-- Control 2 (Right): Clock Style Only -->
+        <!-- Trigger 2 (Right): Clock Style Only -->
         <div class="customizer-box customizer-clock">
-          <label for="clockStyleSelect" class="customizer-badge" title="Controls only the clock digits finish, font, and specular reflection">
+          <button type="button" class="holo-trigger-btn" id="btnOpenClockVault" aria-haspopup="dialog" aria-expanded="false" title="Open Clock Typography Vault (Hotkey: C)">
             <span class="customizer-badge-icon">⏱️</span>
             <span class="customizer-badge-text">Clock Style</span>
-          </label>
-          <div class="customizer-select-wrap">
             <span class="theme-color-preview" id="clockStyleSwatch"></span>
-            <select id="clockStyleSelect" class="luxury-theme-select" aria-label="Select Clock & Typography Style Only">
-              <!-- Dynamically populated with 17 clock styles in JS -->
-            </select>
-            <span class="select-chevron">▼</span>
-          </div>
+            <span class="holo-current-label" id="clockStyleLabel">Pure Platinum</span>
+            <span class="holo-open-arrow">⬡</span>
+          </button>
         </div>
       </section>
 
@@ -313,6 +305,56 @@
     </footer>
   </div>
 
+  <!-- ══════════════════════════════════════════════════════════════════════
+       HOLOGRAPHIC THEME & CLOCK VAULT (FUTURISTIC 3D GLASS MODAL + LIVE HOLO-SCRUB)
+       ══════════════════════════════════════════════════════════════════════ -->
+  <div id="holoVaultModal" class="holo-vault-modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="holo-vault-backdrop" id="holoVaultBackdrop"></div>
+    <div class="holo-vault-container">
+      
+      <!-- Vault Header -->
+      <div class="holo-vault-header">
+        <div class="holo-vault-title-wrap">
+          <span class="holo-vault-kicker" id="holoVaultKicker">FUTURISTIC HOROLOGY SUITE · LIVE HOLO-PREVIEW</span>
+          <h2 class="holo-vault-title" id="holoVaultTitle">HOLOGRAPHIC THEME VAULT</h2>
+          <p class="holo-vault-subtitle" id="holoVaultSubtitle">Hover over any luxury card for instant live preview. Click to lock in selection.</p>
+        </div>
+        <button type="button" class="holo-vault-close-btn" id="btnHoloVaultClose" aria-label="Close Vault (Esc)">
+          <span>✕</span>
+          <span class="esc-badge">ESC</span>
+        </button>
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div class="holo-filter-bar">
+        <button type="button" class="holo-filter-pill active" data-category="all">All (17)</button>
+        <button type="button" class="holo-filter-pill" data-category="metals">Precious Metals</button>
+        <button type="button" class="holo-filter-pill" data-category="cyber">Cyberpunk & Sci-Fi</button>
+        <button type="button" class="holo-filter-pill" data-category="chrono">Chronometer & Noir</button>
+        <button type="button" class="holo-filter-pill" data-category="nature">Vibrant & Nature</button>
+      </div>
+
+      <!-- Holographic Grid of 17 Bespoke Cards -->
+      <div class="holo-cards-grid" id="holoCardsGrid" role="listbox">
+        <!-- Injected via JavaScript with live radiant cards -->
+      </div>
+
+      <!-- Vault Footer / Status Bar -->
+      <div class="holo-vault-footer">
+        <div class="holo-status-indicator">
+          <span class="holo-status-dot"></span>
+          <span id="holoStatusText">Awaiting selection · Live Holo-Scrubbing Active</span>
+        </div>
+        <div class="holo-vault-shortcuts">
+          <span><kbd>T</kbd> App Theme</span>
+          <span><kbd>C</kbd> Clock Style</span>
+          <span><kbd>Esc</kbd> Close</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- FULLSCREEN RINGING & FLASHING SCREEN OVERLAY -->
   <div id="ov" role="alertdialog" aria-modal="true" aria-labelledby="ovTitle" aria-live="assertive">
     <div class="ov-content">
@@ -333,6 +375,6 @@
   <audio id="alarmAudioElement" preload="auto" src="sounds/piano.mp3"></audio>
 
   <!-- Relative JavaScript (with cache-bust versioning) -->
-  <script src="app.js?v=2.2"></script>
+  <script src="app.js?v=3.0"></script>
 </body>
 </html>

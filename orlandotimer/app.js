@@ -34,45 +34,207 @@
     "green-nature"      // Green Nature Matrix
   ];
 
-  const THEME_NAMES = {
-    "platinum": "Pure Platinum",
-    "gold": "Royal 24K Radiant Gold",
-    "royal-sapphire": "Royal Sapphire & Cobalt Chrono",
-    "crimson-laser": "Cyberpunk Crimson Laser",
-    "obsidian-noir": "Titanium Obsidian Noir",
-    "solis-gold": "Solis Radiant 18K Gold",
-    "rainbow": "Prismatic Rainbow",
-    "chrome-3d": "Executive Chrome 3D",
-    "cyber-emerald": "Cyberpunk Emerald Matrix",
-    "ice-titanium": "Glacial Titanium & Ice Blue",
-    "amethyst": "Imperial Amethyst Purple",
-    "sunset-rose": "Sunset Rose Gold",
-    "minimal-white": "Pure Minimalist Studio White",
-    "chronometer-din": "German Chronometer DIN",
-    "sunset-amber": "Blazing Sunset Amber",
-    "midnight-gold": "Midnight Gold Dual-Tone Rim",
-    "green-nature": "Green Nature Matrix"
+  const THEME_DATA = {
+    "platinum": {
+      name: "Pure Platinum",
+      category: "metals",
+      desc: "Specular Horizon 950 Platinum with frosted mirror sheen",
+      swatch: "#F1F5F9",
+      gradient: "linear-gradient(135deg, #FFFFFF 0%, #E2E8F0 50%, #94A3B8 100%)",
+      glow: "rgba(241, 245, 249, 0.45)"
+    },
+    "gold": {
+      name: "Royal 24K Radiant Gold",
+      category: "metals",
+      desc: "24K Swiss Solid Gold & radiant cosmic obsidian backdrop",
+      swatch: "#D9B95C",
+      gradient: "linear-gradient(135deg, #FFFFFF 0%, #F5E5B8 25%, #D9B95C 60%, #997B28 100%)",
+      glow: "rgba(217, 185, 92, 0.55)"
+    },
+    "royal-sapphire": {
+      name: "Royal Sapphire & Cobalt Chrono",
+      category: "cyber",
+      desc: "Deep ocean cobalt crystal & electric sapphire chronometer",
+      swatch: "#3B82F6",
+      gradient: "linear-gradient(135deg, #93C5FD 0%, #3B82F6 50%, #1D4ED8 100%)",
+      glow: "rgba(59, 130, 246, 0.55)"
+    },
+    "crimson-laser": {
+      name: "Cyberpunk Crimson Laser",
+      category: "cyber",
+      desc: "High-voltage neon red laser grid & tachyon beam aura",
+      swatch: "#EF4444",
+      gradient: "linear-gradient(135deg, #FCA5A5 0%, #EF4444 50%, #991B1B 100%)",
+      glow: "rgba(239, 68, 68, 0.6)"
+    },
+    "obsidian-noir": {
+      name: "Titanium Obsidian Noir",
+      category: "chrono",
+      desc: "Stealth DLC matte charcoal & brushed titanium chassis",
+      swatch: "#94A3B8",
+      gradient: "linear-gradient(135deg, #CBD5E1 0%, #64748B 50%, #1E293B 100%)",
+      glow: "rgba(148, 163, 184, 0.4)"
+    },
+    "solis-gold": {
+      name: "Solis Radiant 18K Gold",
+      category: "metals",
+      desc: "High-noon solar corona brilliance & amber luminescence",
+      swatch: "#EAB308",
+      gradient: "linear-gradient(135deg, #FEF08A 0%, #EAB308 50%, #854D0E 100%)",
+      glow: "rgba(234, 179, 8, 0.55)"
+    },
+    "rainbow": {
+      name: "Prismatic Rainbow",
+      category: "cyber",
+      desc: "Iridescent chromatic dispersion & hyper-spectrum wave",
+      swatch: "#FD79A8",
+      gradient: "linear-gradient(135deg, #FF6B6B 0%, #FECA57 25%, #48DBFB 50%, #FF9FF3 75%, #54A0FF 100%)",
+      glow: "rgba(253, 121, 168, 0.6)"
+    },
+    "chrome-3d": {
+      name: "Executive Chrome 3D",
+      category: "metals",
+      desc: "Polished aerospace billet aluminum & horizon edge",
+      swatch: "#E2E8F0",
+      gradient: "linear-gradient(135deg, #FFFFFF 0%, #CBD5E1 50%, #64748B 100%)",
+      glow: "rgba(226, 232, 240, 0.5)"
+    },
+    "cyber-emerald": {
+      name: "Cyberpunk Emerald Matrix",
+      category: "cyber",
+      desc: "Quantum data stream & bioluminescent neural green pulse",
+      swatch: "#10B981",
+      gradient: "linear-gradient(135deg, #6EE7B7 0%, #10B981 50%, #064E3B 100%)",
+      glow: "rgba(16, 185, 129, 0.55)"
+    },
+    "ice-titanium": {
+      name: "Glacial Titanium & Ice Blue",
+      category: "cyber",
+      desc: "Sub-zero cryogenic cerulean & diamond frost reflection",
+      swatch: "#38BDF8",
+      gradient: "linear-gradient(135deg, #BAE6FD 0%, #38BDF8 50%, #0369A1 100%)",
+      glow: "rgba(56, 189, 248, 0.55)"
+    },
+    "amethyst": {
+      name: "Imperial Amethyst Purple",
+      category: "chrono",
+      desc: "Imperial dynasty violet crystal & ultraviolet corona",
+      swatch: "#A855F7",
+      gradient: "linear-gradient(135deg, #E9D5FF 0%, #A855F7 50%, #6B21A8 100%)",
+      glow: "rgba(168, 85, 247, 0.55)"
+    },
+    "sunset-rose": {
+      name: "Sunset Rose Gold",
+      category: "metals",
+      desc: "Venetian rose gold alloy & warm twilight copper glow",
+      swatch: "#FB7185",
+      gradient: "linear-gradient(135deg, #FECDD3 0%, #FB7185 50%, #9F1239 100%)",
+      glow: "rgba(251, 113, 133, 0.55)"
+    },
+    "minimal-white": {
+      name: "Pure Minimalist Studio White",
+      category: "nature",
+      desc: "Ultra-clean high-contrast architectural luminescence",
+      swatch: "#FFFFFF",
+      gradient: "linear-gradient(135deg, #FFFFFF 0%, #F1F5F9 50%, #CBD5E1 100%)",
+      glow: "rgba(255, 255, 255, 0.5)"
+    },
+    "chronometer-din": {
+      name: "German Chronometer DIN",
+      category: "chrono",
+      desc: "High-visibility aviation cockpit instrumentation orange",
+      swatch: "#F97316",
+      gradient: "linear-gradient(135deg, #FFEDD5 0%, #F97316 50%, #9A3412 100%)",
+      glow: "rgba(249, 115, 22, 0.55)"
+    },
+    "sunset-amber": {
+      name: "Blazing Sunset Amber",
+      category: "chrono",
+      desc: "Molten volcanic horizon fire & liquid amber warmth",
+      swatch: "#F59E0B",
+      gradient: "linear-gradient(135deg, #FEF3C7 0%, #F59E0B 50%, #78350F 100%)",
+      glow: "rgba(245, 158, 11, 0.55)"
+    },
+    "midnight-gold": {
+      name: "Midnight Gold Dual-Tone Rim",
+      category: "metals",
+      desc: "Deep obsidian navy dial with 24K gilded fluted rim",
+      swatch: "#F5E5B8",
+      gradient: "linear-gradient(135deg, #FFFFFF 0%, #D9B95C 40%, #1E3A8A 100%)",
+      glow: "rgba(217, 185, 92, 0.5)"
+    },
+    "green-nature": {
+      name: "Green Nature Matrix",
+      category: "nature",
+      desc: "Organic deep forest canopy & vibrant emerald aurora",
+      swatch: "#22C55E",
+      gradient: "linear-gradient(135deg, #DCFCE7 0%, #22C55E 50%, #14532D 100%)",
+      glow: "rgba(34, 197, 94, 0.55)"
+    }
   };
 
-  const THEME_SWATCHES = {
-    "platinum": "#F1F5F9",
-    "gold": "#D9B95C",
-    "royal-sapphire": "#3B82F6",
-    "crimson-laser": "#EF4444",
-    "obsidian-noir": "#94A3B8",
-    "solis-gold": "#EAB308",
-    "rainbow": "#FD79A8",
-    "chrome-3d": "#E2E8F0",
-    "cyber-emerald": "#10B981",
-    "ice-titanium": "#38BDF8",
-    "amethyst": "#A855F7",
-    "sunset-rose": "#FB7185",
-    "minimal-white": "#FFFFFF",
-    "chronometer-din": "#F97316",
-    "sunset-amber": "#F59E0B",
-    "midnight-gold": "#F5E5B8",
-    "green-nature": "#22C55E"
-  };
+  const THEME_NAMES = {};
+  const THEME_SWATCHES = {};
+  THEMES.forEach((t) => {
+    THEME_NAMES[t] = THEME_DATA[t].name;
+    THEME_SWATCHES[t] = THEME_DATA[t].swatch;
+  });
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // 1B. CYBERNETIC WEB AUDIO SYNTHESIZER (Sci-Fi Micro-Ticks & Confirmations)
+  // ══════════════════════════════════════════════════════════════════════════
+  const AudioHUD = (function () {
+    let ctx = null;
+    function getCtx() {
+      if (!ctx) {
+        const AudioCtor = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtor) ctx = new AudioCtor();
+      }
+      if (ctx && ctx.state === 'suspended') {
+        ctx.resume().catch(() => {});
+      }
+      return ctx;
+    }
+
+    return {
+      tick: function (freq = 880) {
+        try {
+          const c = getCtx();
+          if (!c) return;
+          const osc = c.createOscillator();
+          const gain = c.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, c.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(freq * 1.4, c.currentTime + 0.022);
+          gain.gain.setValueAtTime(0.035, c.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + 0.022);
+          osc.connect(gain);
+          gain.connect(c.destination);
+          osc.start();
+          osc.stop(c.currentTime + 0.025);
+        } catch (e) {}
+      },
+      confirm: function () {
+        try {
+          const c = getCtx();
+          if (!c) return;
+          const now = c.currentTime;
+          [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+            const osc = c.createOscillator();
+            const gain = c.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now + i * 0.032);
+            gain.gain.setValueAtTime(0.05, now + i * 0.032);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.032 + 0.16);
+            osc.connect(gain);
+            gain.connect(c.destination);
+            osc.start(now + i * 0.032);
+            osc.stop(now + i * 0.032 + 0.18);
+          });
+        } catch (e) {}
+      }
+    };
+  })();
 
   // ══════════════════════════════════════════════════════════════════════════
   // 2. INDEPENDENT DUAL-CATEGORY CUSTOMIZATION ENGINE
@@ -104,10 +266,6 @@
       swatch.style.color = THEME_SWATCHES[theme] || '#D9B95C';
     }
 
-    const select = document.getElementById('appThemeSelect');
-    if (select && select.value !== theme) select.value = theme;
-
-    // Dynamically update canvas particle color
     if (window.updateParticleThemeColor) {
       window.updateParticleThemeColor(THEME_SWATCHES[theme]);
     }
@@ -132,55 +290,181 @@
       swatch.style.color = THEME_SWATCHES[style] || '#D9B95C';
     }
 
-    const select = document.getElementById('clockStyleSelect');
-    if (select && select.value !== style) select.value = style;
-
     try {
       localStorage.setItem('orlando-clock-style', style);
     } catch(e) {}
   }
 
-  // Initialize UI Controls for Category 1 (App Theme)
-  const appThemeSelect = document.getElementById('appThemeSelect');
-  if (appThemeSelect) {
-    THEMES.forEach((t) => {
-      const opt = document.createElement('option');
-      opt.value = t;
-      opt.textContent = THEME_NAMES[t];
-      if (t === currentAppTheme) opt.selected = true;
-      appThemeSelect.appendChild(opt);
-    });
-    appThemeSelect.addEventListener('change', (e) => applyAppTheme(e.target.value));
+  // ══════════════════════════════════════════════════════════════════════════
+  // 2B. HOLOGRAPHIC HUD THEME VAULT (LIVE PREVIEW & 3D GLASS CARDS)
+  // ══════════════════════════════════════════════════════════════════════════
+  let activeVaultTarget = null; // 'theme' | 'clock'
+  let savedActiveTheme = currentAppTheme;
+  let savedActiveClock = currentClockStyle;
+  let currentFilter = 'all';
+
+  const holoVaultModal = document.getElementById('holoVaultModal');
+  const holoVaultBackdrop = document.getElementById('holoVaultBackdrop');
+  const btnHoloVaultClose = document.getElementById('btnHoloVaultClose');
+  const holoCardsGrid = document.getElementById('holoCardsGrid');
+  const holoVaultKicker = document.getElementById('holoVaultKicker');
+  const holoVaultTitle = document.getElementById('holoVaultTitle');
+  const holoVaultSubtitle = document.getElementById('holoVaultSubtitle');
+  const holoStatusText = document.getElementById('holoStatusText');
+  const filterPills = document.querySelectorAll('.holo-filter-pill');
+
+  function openHoloVault(target) {
+    activeVaultTarget = target;
+    savedActiveTheme = currentAppTheme;
+    savedActiveClock = currentClockStyle;
+
+    if (target === 'theme') {
+      if (holoVaultKicker) holoVaultKicker.textContent = 'GLOBAL APPLICATION ENVIRONMENT · LIVE HOLO-SCRUB';
+      if (holoVaultTitle) holoVaultTitle.textContent = 'HOLOGRAPHIC THEME VAULT';
+      if (holoVaultSubtitle) holoVaultSubtitle.textContent = 'Hover over any card for instant ambient preview across the application. Click to lock in.';
+    } else {
+      if (holoVaultKicker) holoVaultKicker.textContent = 'CHRONOMETER TYPOGRAPHY & FINISH ONLY · LIVE HOLO-SCRUB';
+      if (holoVaultTitle) holoVaultTitle.textContent = 'CHRONO TYPOGRAPHY VAULT';
+      if (holoVaultSubtitle) holoVaultSubtitle.textContent = 'Hover over any card to preview specular reflections on clock numerals. Click to lock in.';
+    }
+
+    if (holoStatusText) {
+      holoStatusText.textContent = `Awaiting selection · Active: ${target === 'theme' ? THEME_NAMES[currentAppTheme] : THEME_NAMES[currentClockStyle]}`;
+    }
+
+    renderHoloCards(currentFilter);
+
+    if (holoVaultModal) {
+      holoVaultModal.classList.add('open');
+      holoVaultModal.setAttribute('aria-hidden', 'false');
+    }
+    AudioHUD.tick(1200);
   }
 
-  const appThemeCycleBtn = document.getElementById('appThemeCycleBtn');
-  if (appThemeCycleBtn) {
-    appThemeCycleBtn.addEventListener('click', () => {
-      const nextIdx = (THEMES.indexOf(currentAppTheme) + 1) % THEMES.length;
-      applyAppTheme(THEMES[nextIdx]);
+  function closeHoloVault(commit = false) {
+    if (!holoVaultModal || !holoVaultModal.classList.contains('open')) return;
+
+    if (!commit) {
+      // Revert live preview to saved settings
+      if (activeVaultTarget === 'theme') {
+        document.body.setAttribute('data-app-theme', savedActiveTheme);
+        if (window.updateParticleThemeColor) window.updateParticleThemeColor(THEME_SWATCHES[savedActiveTheme]);
+      } else if (activeVaultTarget === 'clock') {
+        document.body.setAttribute('data-clock-style', savedActiveClock);
+      }
+    }
+
+    holoVaultModal.classList.remove('open');
+    holoVaultModal.setAttribute('aria-hidden', 'true');
+    activeVaultTarget = null;
+    AudioHUD.tick(600);
+  }
+
+  function renderHoloCards(filterCategory = 'all') {
+    if (!holoCardsGrid) return;
+    holoCardsGrid.innerHTML = '';
+
+    const currentSelected = activeVaultTarget === 'theme' ? currentAppTheme : currentClockStyle;
+
+    THEMES.forEach((themeKey) => {
+      const data = THEME_DATA[themeKey];
+      if (filterCategory !== 'all' && data.category !== filterCategory) return;
+
+      const card = document.createElement('div');
+      card.className = 'holo-theme-card' + (themeKey === currentSelected ? ' active' : '');
+      card.setAttribute('role', 'option');
+      card.setAttribute('aria-selected', themeKey === currentSelected ? 'true' : 'false');
+      card.style.setProperty('--card-color', data.swatch);
+      card.style.setProperty('--card-glow', data.glow);
+      card.style.setProperty('--card-gradient', data.gradient);
+
+      card.innerHTML = `
+        <div class="card-top-row">
+          <div class="card-swatch-badge">
+            <span class="card-orb"></span>
+            <span class="card-meta-name">${data.name}</span>
+          </div>
+          <span class="card-active-led">Active</span>
+        </div>
+        <p class="card-meta-desc">${data.desc}</p>
+      `;
+
+      // Live Holo-Scrub on hover
+      card.addEventListener('mouseenter', () => {
+        AudioHUD.tick(920);
+        if (holoStatusText) {
+          holoStatusText.textContent = `Previewing: ${data.name} (Holo-Scrub Active)`;
+        }
+        if (activeVaultTarget === 'theme') {
+          document.body.setAttribute('data-app-theme', themeKey);
+          if (window.updateParticleThemeColor) window.updateParticleThemeColor(data.swatch);
+        } else if (activeVaultTarget === 'clock') {
+          document.body.setAttribute('data-clock-style', themeKey);
+        }
+      });
+
+      // Commit on click
+      card.addEventListener('click', () => {
+        AudioHUD.confirm();
+        if (activeVaultTarget === 'theme') {
+          applyAppTheme(themeKey);
+          savedActiveTheme = themeKey;
+        } else if (activeVaultTarget === 'clock') {
+          applyClockStyle(themeKey);
+          savedActiveClock = themeKey;
+        }
+        closeHoloVault(true);
+      });
+
+      holoCardsGrid.appendChild(card);
     });
   }
 
-  // Initialize UI Controls for Category 2 (Clock Style)
-  const clockStyleSelect = document.getElementById('clockStyleSelect');
-  if (clockStyleSelect) {
-    THEMES.forEach((t) => {
-      const opt = document.createElement('option');
-      opt.value = t;
-      opt.textContent = THEME_NAMES[t];
-      if (t === currentClockStyle) opt.selected = true;
-      clockStyleSelect.appendChild(opt);
+  // Filter Pills event listeners
+  if (filterPills) {
+    filterPills.forEach((pill) => {
+      pill.addEventListener('click', () => {
+        filterPills.forEach((p) => p.classList.remove('active'));
+        pill.classList.add('active');
+        currentFilter = pill.getAttribute('data-category') || 'all';
+        AudioHUD.tick(1050);
+        renderHoloCards(currentFilter);
+      });
     });
-    clockStyleSelect.addEventListener('change', (e) => applyClockStyle(e.target.value));
   }
 
-  const clockStyleCycleBtn = document.getElementById('clockStyleCycleBtn');
-  if (clockStyleCycleBtn) {
-    clockStyleCycleBtn.addEventListener('click', () => {
-      const nextIdx = (THEMES.indexOf(currentClockStyle) + 1) % THEMES.length;
-      applyClockStyle(THEMES[nextIdx]);
-    });
+  // Vault Close buttons
+  if (btnHoloVaultClose) btnHoloVaultClose.addEventListener('click', () => closeHoloVault(false));
+  if (holoVaultBackdrop) holoVaultBackdrop.addEventListener('click', () => closeHoloVault(false));
+
+  // Cockpit Trigger Buttons
+  const btnOpenThemeVault = document.getElementById('btnOpenThemeVault');
+  if (btnOpenThemeVault) {
+    btnOpenThemeVault.addEventListener('click', () => openHoloVault('theme'));
   }
+
+  const btnOpenClockVault = document.getElementById('btnOpenClockVault');
+  if (btnOpenClockVault) {
+    btnOpenClockVault.addEventListener('click', () => openHoloVault('clock'));
+  }
+
+  // Keyboard Accelerators: 'T' for Theme Vault, 'C' for Clock Vault, 'Esc' to close
+  window.addEventListener('keydown', (e) => {
+    // If user is typing in an input field, do not hijack
+    if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return;
+
+    if (e.key === 'Escape') {
+      if (holoVaultModal && holoVaultModal.classList.contains('open')) {
+        closeHoloVault(false);
+      }
+    } else if (e.key === 't' || e.key === 'T') {
+      e.preventDefault();
+      openHoloVault('theme');
+    } else if (e.key === 'c' || e.key === 'C') {
+      e.preventDefault();
+      openHoloVault('clock');
+    }
+  });
 
   // Apply initial decoupled themes
   applyAppTheme(currentAppTheme);
