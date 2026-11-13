@@ -411,7 +411,7 @@
   // Register Service Worker for Offline PWA & iOS Home Screen Support
   if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js?v=pure5').catch(() => {});
+      navigator.serviceWorker.register('sw.js?v=pure72').catch(() => {});
     });
   }
 
@@ -5174,9 +5174,10 @@ ${jsRes}
 
     function updateLaunchButtonState() {
       const btn = $('#btnTopbarLaunchApp');
-      const label = $('#topbarLaunchLabel');
-      const icon = $('#topbarLaunchIcon');
-      if (!btn || !label) return;
+      if (!btn) return;
+      const label = $('#topbarLaunchLabel') || btn.querySelector('.desktop-btn-label');
+      const icon = $('#topbarLaunchIcon') || btn.querySelector('.desktop-btn-icon');
+      if (!label) return;
 
       if (isStandaloneMode()) {
         btn.classList.add('btn-app-active');
