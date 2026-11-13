@@ -84,7 +84,7 @@ body{color:var(--text);font-family:var(--sans);font-size:19.5px;line-height:1.5;
   opacity: 0.96;
   transition: opacity 0.4s ease;
 }
-main{position:relative;z-index:2;width:100%;max-width:1280px;margin:0 auto;padding:clamp(14px,2.8vw,28px) clamp(12px,3vw,32px) 80px;transition:opacity 0.85s cubic-bezier(0.16,1,0.3,1);will-change:opacity}
+main{position:relative;z-index:2;width:100%;max-width:1280px;margin:0 auto;padding:clamp(14px,2.8vw,28px) clamp(12px,3vw,32px) 80px;transition:opacity 1.35s cubic-bezier(0.4,0,0.2,1);will-change:opacity}
 
 /* ===== HERO CLOCK (Very Big Clock with Date, Next Alarm, Countdown) ===== */
 .hero{position:relative;padding:clamp(16px,2.5vw,28px) clamp(16px,2.8vw,32px) clamp(14px,2vw,22px);border:1px solid var(--line);border-radius:26px;background:#000;margin-bottom:14px;overflow:hidden}
@@ -1903,7 +1903,7 @@ body.light-theme .naked-game-btn:hover {
 body.universe-game-active main {
   opacity: 0 !important;
   pointer-events: none !important;
-  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  transition: opacity 1.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
 /* Existing particles remain 100% visible, fully illuminated and razor sharp */
@@ -1923,7 +1923,7 @@ body.universe-game-active .antigravity-front-canvas {
   pointer-events: none;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 1.35s cubic-bezier(0.4, 0, 0.2, 1), visibility 1.35s cubic-bezier(0.4, 0, 0.2, 1);
   background: radial-gradient(ellipse at 50% 45%, rgba(7, 13, 29, 0.40) 0%, rgba(2, 6, 16, 0.65) 60%, rgba(0, 0, 0, 0.88) 100%);
   user-select: none;
   will-change: opacity;
@@ -1958,19 +1958,105 @@ body.universe-game-active .quantum-game-overlay {
   z-index: 10;
 }
 
-/* Upper Left: Futuristic Game Countdown Timer (Smooth Staggered Entrance) */
+/* Upper Left: Music Controller & Countdown Timer Cluster (Cinematic Staggered Entrance) */
+.qgame-left-hud {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: flex-start;
+  pointer-events: auto;
+  opacity: 0;
+  transform: translateY(-12px);
+  transition: opacity 1.1s cubic-bezier(0.4, 0, 0.2, 1) 0.20s, transform 1.1s cubic-bezier(0.4, 0, 0.2, 1) 0.20s;
+}
+body.universe-game-active .qgame-left-hud {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* In-Game "Play Music" Button */
+.qgame-btn-music {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.88) 0%, rgba(30, 41, 59, 0.78) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 9999px;
+  color: #e2e8f0;
+  font-family: 'Lexend', var(--sans);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 10px rgba(56, 189, 248, 0.12);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+}
+.qgame-btn-music:hover {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(51, 65, 85, 0.85) 100%);
+  border-color: rgba(56, 189, 248, 0.75);
+  color: #38bdf8;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 16px rgba(56, 189, 248, 0.35);
+  transform: translateY(-1px);
+}
+.qgame-btn-music:active {
+  transform: translateY(0) scale(0.97);
+}
+.qgame-btn-music.is-playing {
+  border-color: rgba(255, 215, 0, 0.65);
+  color: #ffd700;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45), 0 0 18px rgba(255, 215, 0, 0.30);
+}
+.qgame-music-glyph {
+  font-size: 0.84rem;
+  color: #38bdf8;
+  line-height: 1;
+  transition: color 0.3s ease;
+}
+.qgame-btn-music.is-playing .qgame-music-glyph {
+  color: #ffd700;
+}
+.qgame-music-bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2.5px;
+  height: 12px;
+  margin-left: 2px;
+}
+.qg-bar {
+  width: 2.5px;
+  height: 4px;
+  background: #64748b;
+  border-radius: 1px;
+  transition: height 0.15s ease, background 0.3s ease;
+}
+.qgame-btn-music.is-playing .qg-bar {
+  background: #38bdf8;
+}
+.qgame-btn-music.is-playing .qg-bar.b1 {
+  animation: qgEqBar 0.65s infinite ease-in-out alternate;
+}
+.qgame-btn-music.is-playing .qg-bar.b2 {
+  animation: qgEqBar 0.48s 0.18s infinite ease-in-out alternate;
+}
+.qgame-btn-music.is-playing .qg-bar.b3 {
+  animation: qgEqBar 0.72s 0.32s infinite ease-in-out alternate;
+}
+@keyframes qgEqBar {
+  0% { height: 3px; background: #38bdf8; }
+  50% { background: #ffd700; }
+  100% { height: 12px; background: #38bdf8; }
+}
+
+/* Countdown Timer */
 .qgame-timer-hud {
   display: flex;
   flex-direction: column;
   gap: 6px;
   pointer-events: auto;
-  opacity: 0;
-  transform: translateY(-12px);
-  transition: opacity 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.25s, transform 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.25s;
-}
-body.universe-game-active .qgame-timer-hud {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 .qgame-hud-tag {
@@ -2068,7 +2154,7 @@ body.universe-game-active .qgame-timer-hud {
   margin-top: 4px;
   opacity: 0;
   transform: translateY(-10px);
-  transition: opacity 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.40s, transform 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.40s;
+  transition: opacity 1.1s cubic-bezier(0.4, 0, 0.2, 1) 0.35s, transform 1.1s cubic-bezier(0.4, 0, 0.2, 1) 0.35s;
 }
 body.universe-game-active .qgame-mission-hud {
   opacity: 1;
@@ -2108,7 +2194,7 @@ body.universe-game-active .qgame-mission-hud {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
   opacity: 0;
   transform: translateY(-12px);
-  transition: opacity 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.30s, transform 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.30s, background 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+  transition: opacity 1.1s cubic-bezier(0.4, 0, 0.2, 1) 0.25s, transform 1.1s cubic-bezier(0.4, 0, 0.2, 1) 0.25s, background 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
 body.universe-game-active .qgame-btn-exit {
   opacity: 1;
@@ -4058,17 +4144,31 @@ body.light-theme .highlight-card .dist-icon{
 
   <!-- Top Game HUD Bar -->
   <header class="qgame-hud-top">
-    <!-- Upper Left: Futuristic Countdown Timer -->
-    <div class="qgame-timer-hud" id="qGameTimerHud">
-      <div class="qgame-hud-tag">
-        <span class="qgame-tag-dot"></span>
-        <span class="qgame-tag-text">QUANTUM HARMONY COUNTDOWN</span>
-      </div>
-      <div class="qgame-timer-display" id="qGameTimerDisplay">
-        <span class="qgame-digits" id="qGameDigits">60.00</span><span class="qgame-unit">s</span>
-      </div>
-      <div class="qgame-timer-track">
-        <div class="qgame-timer-fill" id="qGameTimerFill"></div>
+    <!-- Upper Left: Music Controller & Countdown Timer Cluster -->
+    <div class="qgame-left-hud">
+      <!-- In-Game Play Music Button -->
+      <button type="button" class="qgame-btn-music" id="btnGamePlayMusic" title="Play Curated Alarm Music & Antigravity Beats" aria-label="Play Music in Game">
+        <span class="qgame-music-glyph" id="qGameMusicGlyph">▶</span>
+        <span class="qgame-music-text" id="qGameMusicText">Play Music</span>
+        <span class="qgame-music-bars" id="qGameMusicBars" aria-hidden="true">
+          <span class="qg-bar b1"></span>
+          <span class="qg-bar b2"></span>
+          <span class="qg-bar b3"></span>
+        </span>
+      </button>
+
+      <!-- Futuristic Countdown Timer -->
+      <div class="qgame-timer-hud" id="qGameTimerHud">
+        <div class="qgame-hud-tag">
+          <span class="qgame-tag-dot"></span>
+          <span class="qgame-tag-text">QUANTUM HARMONY COUNTDOWN</span>
+        </div>
+        <div class="qgame-timer-display" id="qGameTimerDisplay">
+          <span class="qgame-digits" id="qGameDigits">60.00</span><span class="qgame-unit">s</span>
+        </div>
+        <div class="qgame-timer-track">
+          <div class="qgame-timer-fill" id="qGameTimerFill"></div>
+        </div>
       </div>
     </div>
 
@@ -5082,6 +5182,9 @@ function showSong(){
   } else if ($("test")) {
     $("test").classList.toggle("active", t);
     $("test").classList.toggle("is-playing", t);
+  }
+  if (typeof window.syncGameMusicBtn === "function") {
+    window.syncGameMusicBtn();
   }
   prepare();
 }
@@ -8052,6 +8155,7 @@ try { checkUrlHashRoutine(); } catch(e){}
       fadeProgress: 1.0,
       fadeSpeed: 0.08,
       emergeBloom: 0.0,
+      lumiTier: 0, // 0 = baseline radiant (40%), 1 = a little brighter (50%), 2 = more brighter (10%)
       trail: []
     };
   }
@@ -8065,6 +8169,21 @@ try { checkUrlHashRoutine(); } catch(e){}
   // 2. Create Ambient Swarm
   for (var b = 0; b < AMBIENT_COUNT; b++) {
     particles.push(createParticle(false));
+  }
+
+  // 3. Exact Deterministic Luminosity Tiers for Game Mode
+  // Exactly 10% Tier 2 ("More Brighter" ultra-luminous beacons)
+  // Exactly 50% Tier 1 ("A Little Brighter" enhanced radiant)
+  // Exactly 40% Tier 0 (Baseline radiant)
+  for (var pi = 0; pi < particles.length; pi++) {
+    var mod = pi % 10;
+    if (mod === 0) {
+      particles[pi].lumiTier = 2; // Exactly 1 out of 10 = 10%
+    } else if (mod >= 1 && mod <= 5) {
+      particles[pi].lumiTier = 1; // Exactly 5 out of 10 = 50%
+    } else {
+      particles[pi].lumiTier = 0; // Exactly 4 out of 10 = 40%
+    }
   }
 
   function onPointerMove(e) {
@@ -8117,9 +8236,9 @@ try { checkUrlHashRoutine(); } catch(e){}
     var now = Date.now();
     if (!isGameMode) updateGravitonRects();
 
-    // Smooth ~1s universe illumination transition curve
+    // Smooth ~1.35s universe illumination transition curve matching surroundings S-curve
     var targetGameGlow = isGameMode ? 1.0 : 0.0;
-    gameGlowProgress += (targetGameGlow - gameGlowProgress) * 0.045;
+    gameGlowProgress += (targetGameGlow - gameGlowProgress) * 0.028;
 
     // ── Kinetic Jet Cursor Velocity Calculation ──
     if (mouse.active) {
@@ -8573,7 +8692,9 @@ try { checkUrlHashRoutine(); } catch(e){}
       var bowOffset = p.turnFlex * 1.5;
       var isCurved = Math.abs(bowOffset) > 0.12;
 
-      var dynamicLength = Math.max(baseLength, Math.min(renderAsBrightest ? 18 : 15, baseLength + currentSpeed * 2.2));
+      var pTier = p.lumiTier || 0;
+      var tierLenBoost = (pTier === 2) ? 4.0 : ((pTier === 1) ? 2.0 : 0);
+      var dynamicLength = Math.max(baseLength, Math.min(renderAsBrightest ? (18 + tierLenBoost) : 15, baseLength + currentSpeed * 2.2 + gameGlowProgress * tierLenBoost));
 
       // 100% Engraved Beat Length Elasticity
       if (isAudioHot) {
@@ -8619,9 +8740,14 @@ try { checkUrlHashRoutine(); } catch(e){}
         var fGrad = targetCtx.createLinearGradient(-dynamicLength / 2, 0, dynamicLength / 2, 0);
         var fLitBoost = isAudioHot ? (liveBass * 24 + beatKickImpulse * 16) : 0;
 
-        // Extra game mode luminosity boost: "make them all a little brighter during the game, just a little brighter"
-        var gameLitBoost = gameGlowProgress * 8; // +8% lightness boost
-        var gameAlphaBoost = gameGlowProgress * 0.15; // +15% alpha boost
+        // 3-Tier Game Mode Luminosity: Exactly 10% "more brighter", 50% "a little brighter", 40% baseline radiant
+        var tier = p.lumiTier || 0;
+        var gameLitBoost = (tier === 2) ? (gameGlowProgress * 18) : ((tier === 1) ? (gameGlowProgress * 11) : (gameGlowProgress * 6));
+        var gameAlphaBoost = (tier === 2) ? (gameGlowProgress * 0.35) : ((tier === 1) ? (gameGlowProgress * 0.20) : (gameGlowProgress * 0.10));
+        var sparkScale = (tier === 2) ? (1.0 + gameGlowProgress * 0.40) : ((tier === 1) ? (1.0 + gameGlowProgress * 0.20) : (1.0 + gameGlowProgress * 0.08));
+        var coronaScale = (tier === 2) ? 3.0 : ((tier === 1) ? 2.4 : 2.0);
+        var coronaAlphaMult = (tier === 2) ? 0.42 : ((tier === 1) ? 0.28 : 0.18);
+        var midBulbAlphaMult = (tier === 2) ? 0.78 : ((tier === 1) ? 0.65 : 0.50);
 
         // Doppler blueshift on leading tip + redshift on tail
         var fHeadLit = Math.min(100, 80 + fLitBoost + dopplerBoost * 12 + gameLitBoost);
@@ -8654,19 +8780,19 @@ try { checkUrlHashRoutine(); } catch(e){}
         }
 
         // Diamond white-hot leading spark bulb (High-Speed Concentric Geometry: 120 FPS, ZERO Gaussian lag!)
-        var sparkRadius = curSize * (0.65 + gameGlowProgress * 0.12);
+        var sparkRadius = curSize * (0.65 + gameGlowProgress * 0.12) * sparkScale;
         var tipX = dynamicLength / 2;
 
         // 1. Radiant Outer Aura Ring (soft, high-speed pure alpha corona)
         targetCtx.beginPath();
-        targetCtx.arc(tipX, 0, sparkRadius * 2.1, 0, Math.PI * 2);
-        targetCtx.fillStyle = "hsla(" + Math.round(fHeadHue) + ",100%,75%," + (renderAlpha * 0.22).toFixed(2) + ")";
+        targetCtx.arc(tipX, 0, sparkRadius * coronaScale, 0, Math.PI * 2);
+        targetCtx.fillStyle = "hsla(" + Math.round(fHeadHue) + ",100%,75%," + (renderAlpha * coronaAlphaMult).toFixed(2) + ")";
         targetCtx.fill();
 
         // 2. Luminous Mid Bulb
         targetCtx.beginPath();
         targetCtx.arc(tipX, 0, sparkRadius * 1.35, 0, Math.PI * 2);
-        targetCtx.fillStyle = "hsla(" + Math.round(fHeadHue) + ",100%,88%," + (renderAlpha * 0.58).toFixed(2) + ")";
+        targetCtx.fillStyle = "hsla(" + Math.round(fHeadHue) + ",100%,88%," + (renderAlpha * midBulbAlphaMult).toFixed(2) + ")";
         targetCtx.fill();
 
         // 3. Diamond White-Hot Brilliant Core
@@ -9162,6 +9288,9 @@ try { checkUrlHashRoutine(); } catch(e){}
   var btnExit = document.getElementById("btnExitGame");
   var btnPlayAgain = document.getElementById("btnGamePlayAgain");
   var btnReturn = document.getElementById("btnGameReturn");
+  var btnGamePlayMusic = document.getElementById("btnGamePlayMusic");
+  var qGameMusicGlyph = document.getElementById("qGameMusicGlyph");
+  var qGameMusicText = document.getElementById("qGameMusicText");
   var digitsEl = document.getElementById("qGameDigits");
   var fillEl = document.getElementById("qGameTimerFill");
   var missionText = document.getElementById("qGameMissionText");
@@ -9183,7 +9312,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   var preservedTimeStr = "60.00";
   var lastFrameTime = 0;
   var gameStartTime = 0;
-  var WARMUP_MS = 1200; // 1.2s smooth entrance grace period: prevents false locks or instant wins on start
+  var WARMUP_MS = 1400; // 1.4s smooth entrance grace period matching 1.35s fade: prevents false locks or instant wins on start
   var hasDeliberateMove = false;
 
   var cursor = { x: -9999, y: -9999, active: false };
@@ -9196,6 +9325,16 @@ try { checkUrlHashRoutine(); } catch(e){}
   var lockOsc = null;
   var lockGain = null;
   var activeExplosion = null;
+
+  function syncGameMusicBtn() {
+    if (!btnGamePlayMusic) return;
+    var isPlaying = (typeof current !== "undefined" && current !== null);
+    btnGamePlayMusic.classList.toggle("is-playing", isPlaying);
+    if (qGameMusicGlyph) qGameMusicGlyph.textContent = isPlaying ? "❚❚" : "▶";
+    if (qGameMusicText) qGameMusicText.textContent = isPlaying ? "Pause Music" : "Play Music";
+    btnGamePlayMusic.title = isPlaying ? "Music Playing · Click to Pause" : "Play Curated Alarm Music & Antigravity Beats";
+  }
+  window.syncGameMusicBtn = syncGameMusicBtn;
 
   function initAudioCtx() {
     if (!audioCtx) {
@@ -9306,6 +9445,7 @@ try { checkUrlHashRoutine(); } catch(e){}
         playSong(SONGS[3]); // "OKAY!" by Forrest Frank
       }
     } catch(e){}
+    syncGameMusicBtn();
   }
 
   function resize() {
@@ -9325,7 +9465,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   function onPointer(e) {
     if (!isActive) return;
     var nowMs = performance.now();
-    // During 1.2s transition warmup, discard pointer events so cursor position from launch button is discarded
+    // During 1.4s transition warmup, discard pointer events so cursor position from launch button is discarded
     if (nowMs - gameStartTime < WARMUP_MS) return;
 
     cursor.x = e.clientX;
@@ -9365,7 +9505,7 @@ try { checkUrlHashRoutine(); } catch(e){}
     resize();
     initAudioCtx();
 
-    // 1. Instant Universe Transition (~1s smooth fade of background interface)
+    // 1. Instant Universe Transition (1.35s cinematic ease-in-out S-curve fade of surroundings)
     document.body.classList.add("universe-game-active");
     overlay.setAttribute("aria-hidden", "false");
     victoryModal.style.display = "none";
@@ -9373,6 +9513,7 @@ try { checkUrlHashRoutine(); } catch(e){}
     digitsEl.textContent = TOTAL_TIME.toFixed(2);
     digitsEl.classList.remove("victory-frozen");
     fillEl.style.width = "100%";
+    syncGameMusicBtn();
 
     // 2. Prepare Game Mode (particles retain their full avoidance behavior!)
     if (window.antigravityFX && typeof window.antigravityFX.setGameMode === "function") {
@@ -9391,6 +9532,10 @@ try { checkUrlHashRoutine(); } catch(e){}
     isWon = false;
     stopLockAudio();
 
+    // Automatically stop celebratory or game music when exiting to horizon
+    if (typeof stopSong === "function") stopSong();
+    syncGameMusicBtn();
+
     cursor.x = -9999;
     cursor.y = -9999;
     cursor.active = false;
@@ -9403,7 +9548,7 @@ try { checkUrlHashRoutine(); } catch(e){}
       animId = null;
     }
 
-    // 8. Seamless Return Experience
+    // 8. Seamless Return Experience (1.35s cinematic ease-in-out S-curve emergence)
     document.body.classList.remove("universe-game-active");
     overlay.setAttribute("aria-hidden", "true");
     victoryModal.style.display = "none";
@@ -9737,8 +9882,26 @@ try { checkUrlHashRoutine(); } catch(e){}
   if (btnReturn) btnReturn.onclick = exitGame;
   if (btnPlayAgain) {
     btnPlayAgain.onclick = function() {
+      // Automatically stop celebratory or game music when starting a new round
+      if (typeof stopSong === "function") stopSong();
       exitGame();
       setTimeout(launchGame, 100);
+    };
+  }
+  if (btnGamePlayMusic) {
+    btnGamePlayMusic.onclick = function(e) {
+      if (e) e.stopPropagation();
+      var isPlaying = (typeof current !== "undefined" && current !== null);
+      if (isPlaying) {
+        if (typeof stopSong === "function") stopSong();
+      } else {
+        if (typeof playSong === "function") {
+          var s = (typeof queued !== "undefined" && queued) ? queued : ((typeof nextSong === "function") ? nextSong() : null);
+          if (typeof queued !== "undefined" && typeof nextSong === "function") queued = nextSong();
+          if (s) playSong(s, null, "test");
+        }
+      }
+      syncGameMusicBtn();
     };
   }
 
