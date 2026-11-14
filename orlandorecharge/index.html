@@ -1897,6 +1897,12 @@ body.light-theme .qgame-btn-launch:hover {
 }
 
 /* ───────── IMMERSIVE UNIVERSE GAME ENVIRONMENT (#quantumGameOverlay) ───────── */
+body.universe-game-active {
+  background: #000000 !important;
+  background-color: #000000 !important;
+  overflow: hidden !important;
+}
+
 body.universe-game-active main {
   opacity: 0 !important;
   pointer-events: none !important;
@@ -1921,7 +1927,7 @@ body.universe-game-active .antigravity-front-canvas {
   opacity: 0;
   visibility: hidden;
   transition: opacity 1.35s cubic-bezier(0.4, 0, 0.2, 1), visibility 1.35s cubic-bezier(0.4, 0, 0.2, 1);
-  background: radial-gradient(ellipse at 50% 45%, rgba(7, 13, 29, 0.40) 0%, rgba(2, 6, 16, 0.65) 60%, rgba(0, 0, 0, 0.88) 100%);
+  background: transparent !important;
   user-select: none;
   will-change: opacity;
 }
@@ -1930,6 +1936,7 @@ body.universe-game-active .quantum-game-overlay {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
+  background: transparent !important;
 }
 
 .quantum-game-canvas {
@@ -8221,7 +8228,8 @@ try { checkUrlHashRoutine(); } catch(e){}
       fadeProgress: 1.0,
       fadeSpeed: 0.08,
       emergeBloom: 0.0,
-      lumiTier: 0, // 0 = baseline radiant (40%), 1 = a little brighter (50%), 2 = more brighter (10%)
+      growthMultiplier: 1.0,
+      lumiTier: 0, // 0 = baseline, 1 = grow 2x + brighter, 2 = grow 3x + most bright
       stardust: [],
       trail: []
     };
@@ -8238,18 +8246,26 @@ try { checkUrlHashRoutine(); } catch(e){}
     particles.push(createParticle(false));
   }
 
-  // 3. Exact Deterministic Luminosity Tiers for Game Mode
-  // Exactly 10% Tier 2 ("More Brighter" ultra-luminous beacons)
-  // Exactly 50% Tier 1 ("A Little Brighter" enhanced radiant)
-  // Exactly 40% Tier 0 (Baseline radiant)
+  // 3. Exact Deterministic Tiers & Growth Multipliers for Game Mode
+  // User Requirement: "some particles must grow twice, some grows thrice"
+  // User Requirement: "Make the particles glow more brighter"
+  // Exactly 20% grow 3.0x (thrice) and shine with Tier 2 super-radiance (lumiTier = 2)
+  // Exactly 40% grow 2.0x (twice) and shine with Tier 1 enhanced radiance (lumiTier = 1)
+  // Exactly 40% grow 1.25x (baseline) and shine with Tier 0 refined radiance (lumiTier = 0)
   for (var pi = 0; pi < particles.length; pi++) {
     var mod = pi % 10;
-    if (mod === 0) {
-      particles[pi].lumiTier = 2; // Exactly 1 out of 10 = 10%
-    } else if (mod >= 1 && mod <= 5) {
-      particles[pi].lumiTier = 1; // Exactly 5 out of 10 = 50%
+    if (mod === 0 || mod === 5) {
+      // 2 out of 10 = 20%: Grow THRICE (3.0x), Tier 2 Beacon
+      particles[pi].growthMultiplier = 3.0;
+      particles[pi].lumiTier = 2;
+    } else if (mod === 1 || mod === 3 || mod === 7 || mod === 9) {
+      // 4 out of 10 = 40%: Grow TWICE (2.0x), Tier 1 Comet
+      particles[pi].growthMultiplier = 2.0;
+      particles[pi].lumiTier = 1;
     } else {
-      particles[pi].lumiTier = 0; // Exactly 4 out of 10 = 40%
+      // 4 out of 10 = 40%: Baseline (1.25x), Tier 0
+      particles[pi].growthMultiplier = 1.25;
+      particles[pi].lumiTier = 0;
     }
   }
 
@@ -8521,12 +8537,14 @@ try { checkUrlHashRoutine(); } catch(e){}
       }
 
       // Dynamic size and glow based on 3D depth + game mode illumination
-      // Smoothly grows bigger and brighter during game mode, and smoothly returns to normal after game mode
+      // User Requirement: "some particles must grow twice, some grows thrice"
+      // User Requirement: "When the game ends, they go back smoothly to the original state"
       var depthScale = p.isWeaver ? (0.86 + Math.max(0, p.z) * 0.44) : 1.0;
-      var gameSizeFactor = 1.0 + gameGlowProgress * 0.32;
-      var curSize = (p.baseSize * depthScale) * gameSizeFactor + (gameGlowProgress * 0.5);
-      var gameLenFactor = 1.0 + gameGlowProgress * 0.35;
-      var baseLength = (p.baseLength * (p.isWeaver ? (0.90 + Math.max(0, p.z) * 0.38) : 1.0)) * gameLenFactor + (gameGlowProgress * 3.0);
+      var mult = p.growthMultiplier || 1.25;
+      var curGrowth = 1.0 + (mult - 1.0) * gameGlowProgress;
+      var curSize = (p.baseSize * depthScale) * curGrowth;
+      var lenGrowth = 1.0 + (mult - 1.0) * gameGlowProgress * 0.85;
+      var baseLength = (p.baseLength * (p.isWeaver ? (0.90 + Math.max(0, p.z) * 0.38) : 1.0)) * lenGrowth;
 
       // Select target canvas based on layer (all particles elevate to foreground in game mode)
       var renderAsBrightest = p.isFront || (gameGlowProgress > 0.04);
@@ -8783,9 +8801,9 @@ try { checkUrlHashRoutine(); } catch(e){}
       var isCurved = Math.abs(bowOffset) > 0.12;
 
       var pTier = p.lumiTier || 0;
-      var tierLenBoost = (pTier === 2) ? 4.0 : ((pTier === 1) ? 2.0 : 0);
-      var maxLen = renderAsBrightest ? (20 + tierLenBoost + gameGlowProgress * 6) : (15 + gameGlowProgress * 4);
-      var dynamicLength = Math.max(baseLength, Math.min(maxLen, baseLength + currentSpeed * 2.2 + gameGlowProgress * tierLenBoost));
+      var tierLenBoost = (pTier === 2) ? 6.0 : ((pTier === 1) ? 3.0 : 0);
+      var maxLen = (renderAsBrightest ? 26 : 18) * curGrowth + (gameGlowProgress * tierLenBoost);
+      var dynamicLength = Math.max(baseLength, Math.min(maxLen, baseLength + currentSpeed * 2.2 * curGrowth));
 
       // Expose current real-time geometry for strict physical touch detection
       p.curSize = curSize;
@@ -8824,37 +8842,37 @@ try { checkUrlHashRoutine(); } catch(e){}
       if (renderAsBrightest) {
         // ── FOREGROUND & GAME RADIANT DANCER: HAUTE HORLOGERIE PHOTONIC COMET ──
         var tier = p.lumiTier || 0;
-        var gameLitBoost = (tier === 2) ? (gameGlowProgress * 22) : ((tier === 1) ? (gameGlowProgress * 14) : (gameGlowProgress * 8));
-        var gameAlphaBoost = (tier === 2) ? (gameGlowProgress * 0.48) : ((tier === 1) ? (gameGlowProgress * 0.32) : (gameGlowProgress * 0.18));
+        var gameLitBoost = (tier === 2) ? (gameGlowProgress * 30) : ((tier === 1) ? (gameGlowProgress * 22) : (gameGlowProgress * 15));
+        var gameAlphaBoost = (tier === 2) ? (gameGlowProgress * 0.65) : ((tier === 1) ? (gameGlowProgress * 0.48) : (gameGlowProgress * 0.32));
 
         var fLitBoost = isAudioHot ? (liveBass * 22 + beatKickImpulse * 14) : 0;
-        var fHeadLit = Math.min(100, 80 + fLitBoost + dopplerBoost * 12 + gameLitBoost);
-        var fTailLit = Math.min(94, Math.max(50, p.lit + fLitBoost * 0.6 - dopplerBoost * 8 + gameLitBoost * 0.7));
+        var fHeadLit = Math.min(100, (tier === 2 ? 88 : (tier === 1 ? 84 : 80)) + fLitBoost + dopplerBoost * 12 + gameLitBoost);
+        var fTailLit = Math.min(96, Math.max(58, p.lit + fLitBoost * 0.6 - dopplerBoost * 6 + gameLitBoost * 0.85));
         var fHeadHue = (dopplerBoost > 0.12) ? Math.round(p.hue2 * (1 - dopplerBoost * 0.5) + 198 * (dopplerBoost * 0.5)) : p.hue2;
         var fTailHue = (dopplerBoost > 0.12) ? Math.round(p.hue * (1 - dopplerBoost * 0.4) + 22 * (dopplerBoost * 0.4)) : p.hue;
 
-        var renderAlpha = Math.min(1.0, currentAlpha * (1.0 + gameAlphaBoost) + (gameGlowProgress * 0.16));
+        var renderAlpha = Math.min(1.0, currentAlpha * (1.0 + gameAlphaBoost) + (gameGlowProgress * 0.28));
 
-        // ── 1. Anamorphic Optical Laser Envelope (Tier 2 & Tier 1 only - optimized) ──
-        if (tier >= 1) {
-          var auraRadius = curSize * (tier === 2 ? 6.5 : 4.8);
-          var auraAlphaBase = renderAlpha * (tier === 2 ? 0.38 : 0.24);
+        // ── 1. Anamorphic Optical Laser Envelope & Multi-Stage Radiant Aura ──
+        // In game mode: ALL particles emit radiant luminous auras against the solid black void!
+        var auraRadius = curSize * (tier === 2 ? 7.5 : (tier === 1 ? 5.8 : 4.2));
+        var auraAlphaBase = renderAlpha * (tier === 2 ? 0.46 : (tier === 1 ? 0.34 : (gameGlowProgress * 0.24)));
 
-          if (auraAlphaBase > 0.03) {
-            targetCtx.save();
-            targetCtx.translate(focalX, 0);
-            targetCtx.scale(1.75, 0.82); // Anamorphic 2:1 horizontal stretch along flight vector
-            var auraGrad = targetCtx.createRadialGradient(0, 0, 0, 0, 0, auraRadius);
-            auraGrad.addColorStop(0.0, "rgba(255, 255, 255, " + (auraAlphaBase * 0.85).toFixed(3) + ")");
-            auraGrad.addColorStop(0.25, "hsla(" + Math.round(fHeadHue) + ", 100%, 75%, " + (auraAlphaBase * 0.50).toFixed(3) + ")");
-            auraGrad.addColorStop(0.60, "hsla(" + Math.round(fHeadHue) + ", 100%, 60%, " + (auraAlphaBase * 0.15).toFixed(3) + ")");
-            auraGrad.addColorStop(1.0, "hsla(" + Math.round(fHeadHue) + ", 100%, 50%, 0)"); // 100% transparent at perimeter!
-            targetCtx.fillStyle = auraGrad;
-            targetCtx.beginPath();
-            targetCtx.arc(0, 0, auraRadius, 0, Math.PI * 2);
-            targetCtx.fill();
-            targetCtx.restore();
-          }
+        if (auraAlphaBase > 0.02) {
+          targetCtx.save();
+          targetCtx.translate(focalX, 0);
+          targetCtx.scale(1.75, 0.82); // Anamorphic 2:1 horizontal stretch along flight vector
+          var auraGrad = targetCtx.createRadialGradient(0, 0, 0, 0, 0, auraRadius);
+          auraGrad.addColorStop(0.0, "rgba(255, 255, 255, " + (auraAlphaBase * 0.95).toFixed(3) + ")");
+          auraGrad.addColorStop(0.22, "hsla(" + Math.round(fHeadHue) + ", 100%, 82%, " + (auraAlphaBase * 0.68).toFixed(3) + ")");
+          auraGrad.addColorStop(0.55, "hsla(" + Math.round(fHeadHue) + ", 100%, 65%, " + (auraAlphaBase * 0.30).toFixed(3) + ")");
+          auraGrad.addColorStop(0.85, "hsla(" + Math.round(fHeadHue) + ", 100%, 55%, " + (auraAlphaBase * 0.08).toFixed(3) + ")");
+          auraGrad.addColorStop(1.0, "hsla(" + Math.round(fHeadHue) + ", 100%, 50%, 0)"); // 100% transparent at perimeter!
+          targetCtx.fillStyle = auraGrad;
+          targetCtx.beginPath();
+          targetCtx.arc(0, 0, auraRadius, 0, Math.PI * 2);
+          targetCtx.fill();
+          targetCtx.restore();
         }
 
         // ── 2. Streamlined Aerodynamic Tapered Photonic Needle Body (Seamless Single Form) ──
@@ -8876,9 +8894,9 @@ try { checkUrlHashRoutine(); } catch(e){}
 
         var fGrad = targetCtx.createLinearGradient(-halfL, 0, halfL, 0);
         fGrad.addColorStop(0.0, "hsla(" + Math.round(fTailHue) + ",95%," + fTailLit.toFixed(1) + "%,0)"); // Tail tip seamlessly dissolves into black
-        fGrad.addColorStop(0.20, "hsla(" + Math.round(fTailHue) + ",98%," + fTailLit.toFixed(1) + "%," + (renderAlpha * 0.45).toFixed(2) + ")");
-        fGrad.addColorStop(0.68, "hsla(" + Math.round(fHeadHue) + ",100%," + fHeadLit.toFixed(1) + "%," + (renderAlpha * 0.88).toFixed(2) + ")");
-        fGrad.addColorStop(0.92, "hsla(" + Math.round(fHeadHue) + ",100%,94%," + (renderAlpha * 0.98).toFixed(2) + ")");
+        fGrad.addColorStop(0.18, "hsla(" + Math.round(fTailHue) + ",98%," + fTailLit.toFixed(1) + "%," + (renderAlpha * 0.55).toFixed(2) + ")");
+        fGrad.addColorStop(0.65, "hsla(" + Math.round(fHeadHue) + ",100%," + fHeadLit.toFixed(1) + "%," + (renderAlpha * 0.92).toFixed(2) + ")");
+        fGrad.addColorStop(0.90, "hsla(" + Math.round(fHeadHue) + ",100%,96%," + (renderAlpha * 0.99).toFixed(2) + ")");
         fGrad.addColorStop(1.0, "rgba(255,255,255," + (renderAlpha * 1.0).toFixed(2) + ")"); // Pure diamond white-hot crest
 
         if (isCurved) {
@@ -8889,12 +8907,13 @@ try { checkUrlHashRoutine(); } catch(e){}
           targetCtx.fill();
         }
 
-        // ── 3. Haute Horlogerie Diamond Anamorphic Star Glint (✦) strictly for Tier 2 Beacons ──
-        if (tier === 2 && renderAlpha > 0.25) {
+        // ── 3. Haute Horlogerie Diamond Anamorphic Star Glint (✦) for Tier 2 and Tier 1 in Game Mode ──
+        var showStarGlint = (tier === 2 && renderAlpha > 0.25) || (tier === 1 && gameGlowProgress > 0.20 && renderAlpha > 0.35);
+        if (showStarGlint) {
           // 1. Axial Laser Core Streak (razor-thin horizontal photonic filament)
-          var laserSpan = dynamicLength * 0.90;
+          var laserSpan = dynamicLength * (tier === 2 ? 0.95 : 0.80);
           var lGrad = targetCtx.createLinearGradient(focalX - laserSpan * 0.65, 0, focalX + laserSpan * 0.45, 0);
-          var laserAlpha = renderAlpha * 0.95;
+          var laserAlpha = renderAlpha * (tier === 2 ? 0.96 : 0.82);
           lGrad.addColorStop(0.0, "rgba(255,255,255,0)");
           lGrad.addColorStop(0.55, "rgba(255,255,255," + laserAlpha.toFixed(2) + ")");
           lGrad.addColorStop(1.0, "rgba(255,255,255,0)");
@@ -8903,14 +8922,14 @@ try { checkUrlHashRoutine(); } catch(e){}
           targetCtx.moveTo(focalX - laserSpan * 0.65, 0);
           targetCtx.lineTo(focalX + laserSpan * 0.45, 0);
           targetCtx.strokeStyle = lGrad;
-          targetCtx.lineWidth = 1.3;
+          targetCtx.lineWidth = tier === 2 ? 1.4 : 1.1;
           targetCtx.lineCap = "round";
           targetCtx.stroke();
 
           // 2. Transverse Micro-Diffraction Spike (Swiss Diamond Cross-Glint)
-          var spikeSpan = curSize * 3.8;
+          var spikeSpan = curSize * (tier === 2 ? 3.8 : 2.6);
           var sGrad = targetCtx.createLinearGradient(0, -spikeSpan, 0, spikeSpan);
-          var spikeAlpha = renderAlpha * 0.85;
+          var spikeAlpha = renderAlpha * (tier === 2 ? 0.88 : 0.72);
           sGrad.addColorStop(0.0, "rgba(255,255,255,0)");
           sGrad.addColorStop(0.5, "rgba(255,255,255," + spikeAlpha.toFixed(2) + ")");
           sGrad.addColorStop(1.0, "rgba(255,255,255,0)");
@@ -8919,24 +8938,26 @@ try { checkUrlHashRoutine(); } catch(e){}
           targetCtx.moveTo(focalX, -spikeSpan);
           targetCtx.lineTo(focalX, spikeSpan);
           targetCtx.strokeStyle = sGrad;
-          targetCtx.lineWidth = 1.0;
+          targetCtx.lineWidth = tier === 2 ? 1.1 : 0.9;
           targetCtx.stroke();
 
-          // 3. For Tier 2 (Top 10% Supernovas): 8-Facet Gemstone Micro-Diagonals
-          var diagSpan = spikeSpan * 0.45;
-          var dGrad = targetCtx.createLinearGradient(-diagSpan, -diagSpan, diagSpan, diagSpan);
-          dGrad.addColorStop(0.0, "rgba(255,255,255,0)");
-          dGrad.addColorStop(0.5, "rgba(255,255,255," + (spikeAlpha * 0.65).toFixed(2) + ")");
-          dGrad.addColorStop(1.0, "rgba(255,255,255,0)");
+          // 3. For Tier 2 (3x Supernovas): 8-Facet Gemstone Micro-Diagonals
+          if (tier === 2) {
+            var diagSpan = spikeSpan * 0.45;
+            var dGrad = targetCtx.createLinearGradient(-diagSpan, -diagSpan, diagSpan, diagSpan);
+            dGrad.addColorStop(0.0, "rgba(255,255,255,0)");
+            dGrad.addColorStop(0.5, "rgba(255,255,255," + (spikeAlpha * 0.65).toFixed(2) + ")");
+            dGrad.addColorStop(1.0, "rgba(255,255,255,0)");
 
-          targetCtx.beginPath();
-          targetCtx.moveTo(focalX - diagSpan, -diagSpan);
-          targetCtx.lineTo(focalX + diagSpan, diagSpan);
-          targetCtx.moveTo(focalX - diagSpan, diagSpan);
-          targetCtx.lineTo(focalX + diagSpan, -diagSpan);
-          targetCtx.strokeStyle = dGrad;
-          targetCtx.lineWidth = 0.8;
-          targetCtx.stroke();
+            targetCtx.beginPath();
+            targetCtx.moveTo(focalX - diagSpan, -diagSpan);
+            targetCtx.lineTo(focalX + diagSpan, diagSpan);
+            targetCtx.moveTo(focalX - diagSpan, diagSpan);
+            targetCtx.lineTo(focalX + diagSpan, -diagSpan);
+            targetCtx.strokeStyle = dGrad;
+            targetCtx.lineWidth = 0.8;
+            targetCtx.stroke();
+          }
         }
 
         // ── 4. Micro-Stardust Quantum Sparks (Tier 2 Beacons Only) ──
