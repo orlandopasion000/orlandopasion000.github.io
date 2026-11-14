@@ -1841,7 +1841,6 @@ body.light-theme .rest-mode-btn:hover {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  width: 190px;
   height: 38px;
   box-sizing: border-box;
   padding: 0 16px;
@@ -1853,47 +1852,78 @@ body.light-theme .rest-mode-btn:hover {
   cursor: pointer;
   user-select: none;
   text-decoration: none !important;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  /* Transparent futuristic glassmorphism */
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.28) 0%, rgba(30, 41, 59, 0.18) 100%) !important;
+  border: 1px solid rgba(56, 189, 248, 0.35) !important;
+  color: rgba(241, 245, 249, 0.92) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.30), 0 0 14px rgba(56, 189, 248, 0.12) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
   white-space: nowrap;
 }
 
-.qgame-btn-launch {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.88) 0%, rgba(30, 41, 59, 0.78) 100%);
-  border: 1px solid rgba(56, 189, 248, 0.40);
-  color: #e2e8f0;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45), 0 0 14px rgba(56, 189, 248, 0.16);
-}
-.qgame-btn-launch:hover {
-  background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(51, 65, 85, 0.85) 100%);
-  border-color: rgba(56, 189, 248, 0.80);
-  color: #ffffff;
-  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.55), 0 0 20px rgba(56, 189, 248, 0.40);
+.qgame-btn-launch:hover,
+.qgame-btn-exit:hover {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.45) 0%, rgba(51, 65, 85, 0.35) 100%) !important;
+  border-color: rgba(56, 189, 248, 0.75) !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.40), 0 0 20px rgba(56, 189, 248, 0.35) !important;
   transform: translateY(-1px);
 }
-.qgame-btn-launch:active {
+
+.qgame-btn-launch:active,
+.qgame-btn-exit:active {
   transform: translateY(0) scale(0.98);
 }
-.qgame-btn-launch .game-btn-glyph {
-  font-size: 0.90rem;
+
+.qgame-btn-launch .game-btn-glyph,
+.qgame-btn-exit .qgame-exit-glyph {
+  font-size: 0.88rem;
   color: #38bdf8;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.6));
   transition: transform 0.3s ease, color 0.3s ease;
 }
+
 .qgame-btn-launch:hover .game-btn-glyph {
   transform: rotate(90deg) scale(1.15);
   color: #ffd700;
 }
 
-body.light-theme .qgame-btn-launch {
-  background: linear-gradient(135deg, rgba(241, 245, 249, 0.94) 0%, rgba(226, 232, 240, 0.90) 100%);
-  border-color: rgba(2, 132, 199, 0.45);
-  color: #0369a1;
-  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.15);
+.qgame-btn-exit:hover .qgame-exit-glyph {
+  transform: rotate(90deg) scale(1.15);
+  color: #ffd700;
 }
-body.light-theme .qgame-btn-launch:hover {
-  border-color: rgba(2, 132, 199, 0.85);
-  color: #0284c7;
+
+.qgame-exit-key {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: rgba(56, 189, 248, 0.14);
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  color: rgba(125, 211, 252, 0.90);
+  letter-spacing: 0.08em;
+  margin-left: 2px;
+  line-height: 1.2;
+}
+
+body.light-theme .qgame-btn-launch,
+body.light-theme .qgame-btn-exit {
+  background: linear-gradient(135deg, rgba(241, 245, 249, 0.45) 0%, rgba(226, 232, 240, 0.35) 100%) !important;
+  border-color: rgba(2, 132, 199, 0.40) !important;
+  color: #0369a1 !important;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.12) !important;
+}
+
+body.light-theme .qgame-btn-launch:hover,
+body.light-theme .qgame-btn-exit:hover {
+  border-color: rgba(2, 132, 199, 0.80) !important;
+  color: #0284c7 !important;
 }
 
 /* ───────── IMMERSIVE UNIVERSE GAME ENVIRONMENT (#quantumGameOverlay) ───────── */
@@ -2008,26 +2038,26 @@ body.universe-game-active .qgame-left-hud {
   align-items: center;
   gap: 8px;
   padding: 8px 18px;
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.88) 0%, rgba(30, 41, 59, 0.78) 100%);
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.28) 0%, rgba(30, 41, 59, 0.18) 100%);
   border: 1px solid rgba(56, 189, 248, 0.35);
   border-radius: 9999px;
-  color: #e2e8f0;
+  color: rgba(241, 245, 249, 0.92);
   font-family: 'Lexend', var(--sans);
   font-size: 0.82rem;
   font-weight: 700;
   letter-spacing: 0.05em;
   cursor: pointer;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 10px rgba(56, 189, 248, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.30), 0 0 10px rgba(56, 189, 248, 0.12);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   user-select: none;
 }
 .qgame-btn-music:hover {
-  background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(51, 65, 85, 0.85) 100%);
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.45) 0%, rgba(51, 65, 85, 0.35) 100%);
   border-color: rgba(56, 189, 248, 0.75);
   color: #38bdf8;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 16px rgba(56, 189, 248, 0.35);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 16px rgba(56, 189, 248, 0.35);
   transform: translateY(-1px);
 }
 .qgame-btn-music:active {
@@ -2083,58 +2113,67 @@ body.universe-game-active .qgame-left-hud {
 .qgame-timer-hud {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
   pointer-events: auto;
 }
 
 .qgame-hud-tag {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  font-family: 'Chakra Petch', 'Orbitron', monospace;
-  font-size: 0.72rem;
+  gap: 6px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.65rem;
   font-weight: 700;
-  letter-spacing: 0.16em;
-  color: #38bdf8;
+  letter-spacing: 0.12em;
+  color: rgba(148, 163, 184, 0.70);
   text-transform: uppercase;
 }
 
 .qgame-tag-dot {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  background: #38bdf8;
-  box-shadow: 0 0 8px #38bdf8, 0 0 16px rgba(56, 189, 248, 0.8);
-  animation: qgameTagPulse 1.6s infinite ease-in-out;
+  background: rgba(56, 189, 248, 0.75);
+  box-shadow: 0 0 6px rgba(56, 189, 248, 0.6);
+  animation: qgameTagPulse 1.8s infinite ease-in-out;
 }
 @keyframes qgameTagPulse {
-  0%, 100% { transform: scale(1); opacity: 0.8; }
-  50% { transform: scale(1.3); opacity: 1; background: #ffd700; box-shadow: 0 0 10px #ffd700; }
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.25); opacity: 1; background: #ffd700; box-shadow: 0 0 8px #ffd700; }
 }
 
 .qgame-timer-display {
   display: inline-flex;
   align-items: baseline;
-  gap: 4px;
-  font-family: 'Chakra Petch', 'Orbitron', monospace;
-  font-size: clamp(2.4rem, 4.6vw, 3.8rem);
-  font-weight: 800;
-  line-height: 0.95;
-  color: #ffffff;
-  text-shadow: 0 0 14px rgba(56, 189, 248, 0.8), 0 0 28px rgba(56, 189, 248, 0.4), 0 0 42px rgba(255, 215, 0, 0.25);
+  gap: 3px;
+  white-space: nowrap;
+}
+
+.qgame-digits {
+  /* IDENTICAL FONT STYLE TO THE HERO CLOCK (Inter 900) */
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-weight: 900 !important;
+  font-size: clamp(1.6rem, 2.8vw, 2.3rem);
+  line-height: 0.92;
+  letter-spacing: 0.01em !important;
   font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  color: rgba(241, 245, 249, 0.82);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8), 0 0 16px rgba(56, 189, 248, 0.22);
+  transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
 .qgame-timer-display .qgame-unit {
-  font-size: clamp(1.1rem, 2vw, 1.5rem);
-  font-weight: 600;
-  color: #ffd700;
-  opacity: 0.9;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(0.9rem, 1.4vw, 1.2rem);
+  font-weight: 700;
+  color: rgba(255, 215, 0, 0.75);
+  margin-left: 2px;
 }
 
 .qgame-digits.victory-frozen {
   color: #ffd700 !important;
-  text-shadow: 0 0 18px #ffd700, 0 0 36px rgba(255, 215, 0, 0.8), 0 0 54px rgba(56, 189, 248, 0.6) !important;
+  text-shadow: 0 0 16px #ffd700, 0 0 32px rgba(255, 215, 0, 0.8) !important;
   animation: victoryDigitsGlow 1.8s infinite ease-in-out;
 }
 @keyframes victoryDigitsGlow {
@@ -2144,7 +2183,7 @@ body.universe-game-active .qgame-left-hud {
 
 .qgame-digits.defeat-frozen {
   color: #ef4444 !important;
-  text-shadow: 0 0 18px #ef4444, 0 0 36px rgba(239, 68, 68, 0.8), 0 0 54px rgba(185, 28, 28, 0.6) !important;
+  text-shadow: 0 0 16px #ef4444, 0 0 32px rgba(239, 68, 68, 0.8) !important;
   animation: defeatDigitsPulse 1.8s infinite ease-in-out;
 }
 @keyframes defeatDigitsPulse {
@@ -2153,21 +2192,21 @@ body.universe-game-active .qgame-left-hud {
 }
 
 .qgame-timer-track {
-  width: clamp(160px, 22vw, 240px);
-  height: 4px;
-  background: rgba(255, 255, 255, 0.12);
+  width: clamp(120px, 15vw, 175px);
+  height: 3px;
+  background: rgba(255, 255, 255, 0.08);
   border-radius: 9999px;
   overflow: hidden;
-  margin-top: 4px;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+  margin-top: 3px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.6);
 }
 
 .qgame-timer-fill {
   height: 100%;
   width: 100%;
-  background: linear-gradient(90deg, #38bdf8 0%, #818cf8 50%, #ffd700 100%);
+  background: linear-gradient(90deg, rgba(56, 189, 248, 0.75) 0%, rgba(129, 140, 248, 0.75) 50%, rgba(255, 215, 0, 0.80) 100%);
   border-radius: 9999px;
-  box-shadow: 0 0 10px rgba(56, 189, 248, 0.7);
+  box-shadow: 0 0 6px rgba(56, 189, 248, 0.35);
   transition: width 0.1s linear;
 }
 
@@ -2177,17 +2216,17 @@ body.universe-game-active .qgame-left-hud {
   align-items: center;
   gap: 8px;
   padding: 8px 18px;
-  background: rgba(14, 20, 36, 0.78);
+  background: rgba(14, 20, 36, 0.28);
   border: 1px solid rgba(56, 189, 248, 0.32);
   border-radius: 9999px;
-  color: #e2e8f0;
+  color: rgba(241, 245, 249, 0.90);
   font-family: 'Lexend', var(--sans);
   font-size: 0.82rem;
   font-weight: 600;
   letter-spacing: 0.05em;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4), 0 0 16px rgba(56, 189, 248, 0.15);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.30), 0 0 14px rgba(56, 189, 248, 0.12);
   pointer-events: auto;
   margin-top: 3px;
   opacity: 0;

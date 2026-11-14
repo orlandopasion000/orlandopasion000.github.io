@@ -40,7 +40,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&family=Orbitron:wght@600;700;800;900&family=Outfit:wght@600;700;800;900&family=Space+Grotesk:wght@600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
   <!-- Relative Stylesheet (with cache-bust versioning) -->
-  <link rel="stylesheet" href="style.css?v=18.0">
+  <link rel="stylesheet" href="style.css?v=19.0">
 </head>
 <body data-app-theme="pure-black" data-clock-style="pure-black">
   <!-- Accessibility Live Region for Screen Readers -->
@@ -492,6 +492,41 @@
                     <button type="button" class="atmo-preset-chip" data-particles="33">2x Balanced</button>
                     <button type="button" class="atmo-preset-chip" data-particles="66">3x Stellar</button>
                     <button type="button" class="atmo-preset-chip" data-particles="100">Max Swarm</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="atmo-divider"></div>
+
+              <!-- CONTROL 3: PARTICLE MOVEMENT (DRIFT & SPEED) -->
+              <div class="atmo-control-section">
+                <div class="atmo-row-header">
+                  <div class="atmo-label-wrap">
+                    <svg class="atmo-sec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span class="atmo-sec-label">Particle Movement</span>
+                  </div>
+                  <span class="atmo-val-badge" id="speedValBadge">50% Cosmic</span>
+                </div>
+                <p class="atmo-sec-desc">
+                  Cosmic drift &amp; kinetic velocity of floating particles across space.
+                </p>
+
+                <div class="atmo-slider-container">
+                  <div class="atmo-track-meta">
+                    <span class="atmo-track-end">Still (0%)</span>
+                    <span class="atmo-track-end">Hyper (100%)</span>
+                  </div>
+                  <div class="atmo-slider-wrapper">
+                    <input type="range" id="sliderSpeed" class="atmo-range-slider" min="0" max="100" step="1" value="50" aria-label="Particle Movement Speed">
+                    <div class="atmo-slider-fill" id="speedSliderFill"></div>
+                  </div>
+                  <div class="atmo-presets-row">
+                    <button type="button" class="atmo-preset-chip" data-speed="0">Still (0%)</button>
+                    <button type="button" class="atmo-preset-chip" data-speed="30">Gentle (30%)</button>
+                    <button type="button" class="atmo-preset-chip active" data-speed="50">Cosmic (50%)</button>
+                    <button type="button" class="atmo-preset-chip" data-speed="100">Hyper (100%)</button>
                   </div>
                 </div>
               </div>
@@ -1003,6 +1038,6 @@
   <audio id="alarmAudioElement" preload="auto" src="sounds/piano.mp3"></audio>
 
   <!-- Relative JavaScript (with cache-bust versioning) -->
-  <script src="app.js?v=18.0"></script>
+  <script src="app.js?v=19.0"></script>
 </body>
 </html>

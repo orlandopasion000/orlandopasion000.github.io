@@ -2834,9 +2834,14 @@
     let particleFieldFactor = 0; // 0 = Minimum (current lean 28 dots), 1 = Maximum (112 radiant stars)
     let mouse = { x: -1000, y: -1000, radius: 120 };
     let currentParticleColor = 'rgba(217, 185, 92, 0.45)';
+    let particleSpeedFactor = 1.0;
 
     window.updateParticleThemeColor = function (hexColor) {
       if (hexColor) currentParticleColor = hexColor;
+    };
+
+    window.updateParticleSpeed = function (factor) {
+      particleSpeedFactor = Math.max(0, factor);
     };
 
     window.updateParticleFieldSettings = function (factor) {
@@ -2858,7 +2863,7 @@
             vy: (Math.random() - 0.5) * (0.5 + particleFieldFactor * 0.35),
             size: s,
             targetSize: s,
-            alpha: Math.random() * 0.4 + (0.35 + particleFieldFactor * 0.25),
+            alpha: Math.random() * 0.25 + (0.18 + particleFieldFactor * 0.18),
             isDust: false,
             isBurst: false,
             shattered: false,
@@ -2957,7 +2962,7 @@
           vy: (Math.random() - 0.5) * (0.5 + particleFieldFactor * 0.35),
           size: s,
           targetSize: s,
-          alpha: Math.random() * 0.4 + (0.35 + particleFieldFactor * 0.25),
+          alpha: Math.random() * 0.25 + (0.18 + particleFieldFactor * 0.18),
           isDust: false,
           isBurst: false,
           shattered: false,
@@ -3074,55 +3079,57 @@
           }
         }
 
-        // Mouse repulsion effect (works on both particles and dust)
-        const dx = p.x - mouse.x;
-        const dy = p.y - mouse.y;
-        const distSq = dx * dx + dy * dy;
-        const mRadSq = mouse.radius * mouse.radius;
+        if (particleSpeedFactor > 0) {
+          // Mouse repulsion effect (works on both particles and dust)
+          const dx = p.x - mouse.x;
+          const dy = p.y - mouse.y;
+          const distSq = dx * dx + dy * dy;
+          const mRadSq = mouse.radius * mouse.radius;
 
-        if (distSq < mRadSq && distSq > 0) {
-          const dist = Math.sqrt(distSq);
-          const force = (mouse.radius - dist) / mouse.radius;
-          p.vx += (dx / dist) * force * 1.2;
-          p.vy += (dy / dist) * force * 1.2;
-        }
-
-        // Gentle fluid damping
-        p.vx *= 0.985;
-        p.vy *= 0.985;
-
-        // Ambient gentle drift
-        if (!p.isDust) {
-          const speedSq = p.vx * p.vx + p.vy * p.vy;
-          if (speedSq < 0.04) {
-            p.vx += (Math.random() - 0.5) * 0.06;
-            p.vy += (Math.random() - 0.5) * 0.06;
-          } else if (speedSq > 9.0) {
-            const spd = Math.sqrt(speedSq);
-            p.vx = (p.vx / spd) * 3.0;
-            p.vy = (p.vy / spd) * 3.0;
+          if (distSq < mRadSq && distSq > 0) {
+            const dist = Math.sqrt(distSq);
+            const force = (mouse.radius - dist) / mouse.radius;
+            p.vx += (dx / dist) * force * 1.2;
+            p.vy += (dy / dist) * force * 1.2;
           }
-        }
 
-        p.x += p.vx;
-        p.y += p.vy;
+          // Gentle fluid damping
+          p.vx *= 0.985;
+          p.vy *= 0.985;
 
-        // Strict Screen Boundary Retention (never leave screen!)
-        const r = p.size;
-        if (p.x <= r) {
-          p.x = r;
-          p.vx = Math.abs(p.vx);
-        } else if (p.x >= width - r) {
-          p.x = width - r;
-          p.vx = -Math.abs(p.vx);
-        }
+          // Ambient gentle drift
+          if (!p.isDust) {
+            const speedSq = p.vx * p.vx + p.vy * p.vy;
+            if (speedSq < 0.04) {
+              p.vx += (Math.random() - 0.5) * 0.06;
+              p.vy += (Math.random() - 0.5) * 0.06;
+            } else if (speedSq > 9.0) {
+              const spd = Math.sqrt(speedSq);
+              p.vx = (p.vx / spd) * 3.0;
+              p.vy = (p.vy / spd) * 3.0;
+            }
+          }
 
-        if (p.y <= r) {
-          p.y = r;
-          p.vy = Math.abs(p.vy);
-        } else if (p.y >= height - r) {
-          p.y = height - r;
-          p.vy = -Math.abs(p.vy);
+          p.x += p.vx * particleSpeedFactor;
+          p.y += p.vy * particleSpeedFactor;
+
+          // Strict Screen Boundary Retention (never leave screen!)
+          const r = p.size;
+          if (p.x <= r) {
+            p.x = r;
+            p.vx = Math.abs(p.vx);
+          } else if (p.x >= width - r) {
+            p.x = width - r;
+            p.vx = -Math.abs(p.vx);
+          }
+
+          if (p.y <= r) {
+            p.y = r;
+            p.vy = Math.abs(p.vy);
+          } else if (p.y >= height - r) {
+            p.y = height - r;
+            p.vy = -Math.abs(p.vy);
+          }
         }
       }
 
@@ -3315,6 +3322,10 @@
     const particlesValBadge = document.getElementById('particlesValBadge');
     const particleChips = document.querySelectorAll('.atmo-preset-chip[data-particles]');
 
+    const sliderSpeed = document.getElementById('sliderSpeed');
+    const speedValBadge = document.getElementById('speedValBadge');
+    const speedChips = document.querySelectorAll('.atmo-preset-chip[data-speed]');
+
     // Toggle Atmosphere Popup
     function toggleAtmospherePopup(force) {
       if (!atmospherePopup) return;
@@ -3503,9 +3514,80 @@
       });
     });
 
+    // ── 3. PARTICLE MOVEMENT (SPEED) CONTROLLER (0% Still -> 100% Hyper) ──
+    let currentParticleSpeed = 50; // default 50% = 1.0x cosmic drift
+    try {
+      const savedS = localStorage.getItem('orlando-particle-speed');
+      if (savedS !== null) {
+        const parsedS = parseInt(savedS, 10);
+        if (!isNaN(parsedS) && parsedS >= 0 && parsedS <= 100) {
+          currentParticleSpeed = parsedS;
+        }
+      }
+    } catch(e) {}
+
+    function applyParticleSpeed(value, save = true) {
+      currentParticleSpeed = Math.max(0, Math.min(100, Math.round(value)));
+      // 0% -> 0.0x (Still), 50% -> 1.0x (Cosmic), 100% -> 2.0x (Hyper)
+      const factor = currentParticleSpeed / 50.0;
+
+      if (sliderSpeed) {
+        sliderSpeed.value = currentParticleSpeed;
+      }
+
+      if (speedValBadge) {
+        if (currentParticleSpeed === 0) {
+          speedValBadge.textContent = '0% Still';
+        } else if (currentParticleSpeed < 35) {
+          speedValBadge.textContent = `${currentParticleSpeed}% Gentle`;
+        } else if (currentParticleSpeed < 70) {
+          speedValBadge.textContent = `${currentParticleSpeed}% Cosmic`;
+        } else {
+          speedValBadge.textContent = `${currentParticleSpeed}% Hyper`;
+        }
+      }
+
+      // Update active preset chips
+      speedChips.forEach((chip) => {
+        const chipVal = parseInt(chip.getAttribute('data-speed'), 10);
+        if (chipVal === currentParticleSpeed) {
+          chip.classList.add('active');
+        } else {
+          chip.classList.remove('active');
+        }
+      });
+
+      // Notify particle canvas engine
+      if (window.updateParticleSpeed) {
+        window.updateParticleSpeed(factor);
+      }
+
+      if (save) {
+        try {
+          localStorage.setItem('orlando-particle-speed', currentParticleSpeed.toString());
+        } catch(e) {}
+      }
+    }
+
+    if (sliderSpeed) {
+      sliderSpeed.addEventListener('input', (e) => {
+        applyParticleSpeed(parseFloat(e.target.value), true);
+      });
+    }
+
+    speedChips.forEach((chip) => {
+      chip.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const val = parseInt(chip.getAttribute('data-speed'), 10);
+        applyParticleSpeed(val, true);
+        if (typeof AudioHUD !== 'undefined' && AudioHUD.tick) AudioHUD.tick(1100);
+      });
+    });
+
     // Initialize defaults on load
     applyAmbientGlow(currentAmbientGlow, false);
     applyParticleField(currentParticleField, false);
+    applyParticleSpeed(currentParticleSpeed, false);
   }
 
   // Initialize Atmosphere & Particle Field Lab
