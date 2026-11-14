@@ -585,9 +585,9 @@
       if (holoVaultTitle) holoVaultTitle.textContent = 'HOLOGRAPHIC THEME VAULT';
       if (holoVaultSubtitle) holoVaultSubtitle.textContent = 'Hover over any card for instant ambient preview across the application. Click to lock in.';
     } else {
-      if (holoVaultKicker) holoVaultKicker.textContent = 'CHRONOMETER TYPOGRAPHY & FINISH ONLY · LIVE HOLO-SCRUB';
-      if (holoVaultTitle) holoVaultTitle.textContent = 'CHRONO TYPOGRAPHY VAULT';
-      if (holoVaultSubtitle) holoVaultSubtitle.textContent = 'Hover over any card to preview specular reflections on clock numerals. Click to lock in.';
+      if (holoVaultKicker) holoVaultKicker.textContent = 'DIGIT TYPOGRAPHY & MATERIAL FINISH · LIVE HOLO-SCRUB';
+      if (holoVaultTitle) holoVaultTitle.textContent = 'DIGIT STYLE VAULT';
+      if (holoVaultSubtitle) holoVaultSubtitle.textContent = 'Hover over any luxury card to preview specular reflections on timer, stopwatch & clock numerals. Click to lock in.';
     }
 
     if (holoStatusText) {
@@ -810,7 +810,7 @@
     } else if (e.key === 't' || e.key === 'T') {
       e.preventDefault();
       openHoloVault('theme');
-    } else if (e.key === 'c' || e.key === 'C') {
+    } else if (e.key === 'c' || e.key === 'C' || e.key === 'd' || e.key === 'D') {
       e.preventDefault();
       openHoloVault('clock');
     }

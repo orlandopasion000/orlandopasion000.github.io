@@ -1962,6 +1962,29 @@ body.universe-game-active {
   overflow: hidden !important;
 }
 
+/* Custom hardware-composited target icon cursor (0ms latency, 100% synchronized at all times) */
+body.universe-game-active,
+body.universe-game-active .quantum-game-overlay,
+body.universe-game-active .quantum-game-canvas {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='6' fill='none' stroke='%230284c7' stroke-width='2.5' opacity='0.45'/%3E%3Ccircle cx='16' cy='16' r='6' fill='none' stroke='%2338bdf8' stroke-width='1.5'/%3E%3Cline x1='4' y1='16' x2='9' y2='16' stroke='%2338bdf8' stroke-width='1.5' stroke-linecap='round'/%3E%3Cline x1='23' y1='16' x2='28' y2='16' stroke='%2338bdf8' stroke-width='1.5' stroke-linecap='round'/%3E%3Cline x1='16' y1='4' x2='16' y2='9' stroke='%2338bdf8' stroke-width='1.5' stroke-linecap='round'/%3E%3Cline x1='16' y1='23' x2='16' y2='28' stroke='%2338bdf8' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E") 16 16, crosshair !important;
+}
+
+/* Ensure all HUD buttons and interactive elements retain clean pointer cursor */
+body.universe-game-active button,
+body.universe-game-active a,
+body.universe-game-active [role="button"],
+body.universe-game-active .fs-toggle-btn,
+body.universe-game-active .qgame-btn-exit,
+body.universe-game-active .qgame-btn-music,
+body.universe-game-active .qgame-btn-action,
+body.universe-game-active .qgame-victory-actions * {
+  cursor: pointer !important;
+}
+
+.qgame-victory-modal {
+  cursor: default;
+}
+
 body.universe-game-active main {
   opacity: 0 !important;
   pointer-events: none !important;
@@ -9996,18 +10019,16 @@ try { checkUrlHashRoutine(); } catch(e){}
 
   function onPointer(e) {
     if (!isActive) return;
-    var nowMs = performance.now();
-    // During 1.4s transition warmup, discard pointer events so cursor position from launch button is discarded
-    if (nowMs - gameStartTime < WARMUP_MS) return;
-
     cursor.x = e.clientX;
     cursor.y = e.clientY;
     cursor.active = true;
     hasDeliberateMove = true;
+    cursor.isTouch = (e.pointerType === "touch");
   }
 
   window.addEventListener("pointermove", onPointer, { passive: true });
   window.addEventListener("pointerdown", onPointer, { passive: true });
+  window.addEventListener("mousemove", onPointer, { passive: true });
   window.addEventListener("pointerup", function() {
     if (width < 768 && !isWon && !isGameOver) {
       contactDuration = 0;
@@ -10345,8 +10366,8 @@ try { checkUrlHashRoutine(); } catch(e){}
       }
     }
 
-    // ── Render Cursor Crosshair Guide (when active and moved) ──
-    if (!isWon && !isGameOver && !isWarmingUp && cursor.active && hasDeliberateMove) {
+    // ── Render Cursor Crosshair Guide on Canvas for Touch Devices (Mouse uses hardware SVG cursor for 0ms latency) ──
+    if (!isWon && !isGameOver && cursor.active && hasDeliberateMove && cursor.isTouch) {
       drawCursorGuide(cursor.x, cursor.y);
     }
 
@@ -10358,8 +10379,10 @@ try { checkUrlHashRoutine(); } catch(e){}
 
   function drawCursorGuide(cx, cy) {
     ctx.save();
-    ctx.strokeStyle = "rgba(56, 189, 248, 0.45)";
-    ctx.lineWidth = 1.2;
+    ctx.strokeStyle = "#38bdf8";
+    ctx.shadowColor = "rgba(56, 189, 248, 0.65)";
+    ctx.shadowBlur = 6;
+    ctx.lineWidth = 1.5;
     ctx.beginPath();
     ctx.arc(cx, cy, 6, 0, Math.PI * 2);
     ctx.stroke();

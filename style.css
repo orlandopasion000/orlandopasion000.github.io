@@ -3033,23 +3033,46 @@ main.timer-main {
 }
 
 .alarm-digits-huge {
-  font-size: clamp(2.4rem, 10vw, 9.8rem);
+  font-size: clamp(2.0rem, 8.2vw, 8.4rem) !important;
   flex-shrink: 0;
   max-width: 100%;
   display: inline-flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: center;
+  white-space: nowrap;
 }
 
+.chrome span.ampm-indicator,
 .alarm-digits-huge .ampm-indicator {
-  font-family: var(--sans);
-  font-size: 0.32em;
-  font-weight: 800;
-  letter-spacing: 2px;
-  margin-left: 0.3em;
-  color: var(--theme-primary);
-  opacity: 0.9;
-  text-shadow: none;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: auto !important;
+  min-width: 2.2em !important;
+  max-width: none !important;
+  font-family: var(--mono), var(--sans) !important;
+  font-size: 0.26em !important;
+  font-weight: 800 !important;
+  letter-spacing: 1.5px !important;
+  margin-left: 0.3em !important;
+  padding: 3px 8px !important;
+  border-radius: 6px !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  color: var(--theme-primary, #FFFFFF) !important;
+  line-height: 1 !important;
+  vertical-align: middle !important;
+  white-space: nowrap !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5) !important;
+  text-shadow: none !important;
+  transform: translateY(-0.12em) !important;
+}
+
+body[data-clock-style="pure-black"] .chrome span.ampm-indicator {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.22) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
 }
 
 /* ═════ 17 INDEPENDENT CLOCK STYLES (Controlled by [data-clock-style]) ═════ */
