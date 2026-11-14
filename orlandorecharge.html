@@ -8900,20 +8900,19 @@ try { checkUrlHashRoutine(); } catch(e){}
         var renderAlpha = Math.min(1.0, currentAlpha * (1.0 + gameAlphaBoost) + (gameGlowProgress * 0.28));
 
         // ── 1. Anamorphic Optical Laser Envelope & Multi-Stage Radiant Aura ──
-        // In game mode: ALL particles emit radiant luminous auras against the solid black void!
+        // Only Tier 2 (3x) and Tier 1 (2x) allocate auras; baseline particles remain crisp and sleek
         var auraRadius = curSize * (tier === 2 ? 7.5 : (tier === 1 ? 5.8 : 4.2));
         var auraAlphaBase = renderAlpha * (tier === 2 ? 0.46 : (tier === 1 ? 0.34 : (gameGlowProgress * 0.24)));
 
-        if (auraAlphaBase > 0.02) {
+        if (auraAlphaBase > 0.05 && tier >= 1) {
           targetCtx.save();
           targetCtx.translate(focalX, 0);
           targetCtx.scale(1.75, 0.82); // Anamorphic 2:1 horizontal stretch along flight vector
+          var auraHueInt = fHeadHue | 0;
           var auraGrad = targetCtx.createRadialGradient(0, 0, 0, 0, 0, auraRadius);
-          auraGrad.addColorStop(0.0, "rgba(255, 255, 255, " + (auraAlphaBase * 0.95).toFixed(3) + ")");
-          auraGrad.addColorStop(0.22, "hsla(" + Math.round(fHeadHue) + ", 100%, 82%, " + (auraAlphaBase * 0.68).toFixed(3) + ")");
-          auraGrad.addColorStop(0.55, "hsla(" + Math.round(fHeadHue) + ", 100%, 65%, " + (auraAlphaBase * 0.30).toFixed(3) + ")");
-          auraGrad.addColorStop(0.85, "hsla(" + Math.round(fHeadHue) + ", 100%, 55%, " + (auraAlphaBase * 0.08).toFixed(3) + ")");
-          auraGrad.addColorStop(1.0, "hsla(" + Math.round(fHeadHue) + ", 100%, 50%, 0)"); // 100% transparent at perimeter!
+          auraGrad.addColorStop(0.0, "rgba(255, 255, 255, " + (auraAlphaBase * 0.90).toFixed(2) + ")");
+          auraGrad.addColorStop(0.35, "hsla(" + auraHueInt + ", 100%, 75%, " + (auraAlphaBase * 0.40).toFixed(2) + ")");
+          auraGrad.addColorStop(1.0, "hsla(" + auraHueInt + ", 100%, 50%, 0)"); // 100% transparent at perimeter!
           targetCtx.fillStyle = auraGrad;
           targetCtx.beginPath();
           targetCtx.arc(0, 0, auraRadius, 0, Math.PI * 2);
@@ -8956,67 +8955,53 @@ try { checkUrlHashRoutine(); } catch(e){}
         // ── 3. Haute Horlogerie Diamond Anamorphic Star Glint (✦) for Tier 2 and Tier 1 in Game Mode ──
         var showStarGlint = (tier === 2 && renderAlpha > 0.25) || (tier === 1 && gameGlowProgress > 0.20 && renderAlpha > 0.35);
         if (showStarGlint) {
-          // 1. Axial Laser Core Streak (razor-thin horizontal photonic filament)
+          // 1. Axial Laser Core Streak (razor-thin horizontal photonic filament - zero gradient allocation)
           var laserSpan = dynamicLength * (tier === 2 ? 0.95 : 0.80);
-          var lGrad = targetCtx.createLinearGradient(focalX - laserSpan * 0.65, 0, focalX + laserSpan * 0.45, 0);
           var laserAlpha = renderAlpha * (tier === 2 ? 0.96 : 0.82);
-          lGrad.addColorStop(0.0, "rgba(255,255,255,0)");
-          lGrad.addColorStop(0.55, "rgba(255,255,255," + laserAlpha.toFixed(2) + ")");
-          lGrad.addColorStop(1.0, "rgba(255,255,255,0)");
-
           targetCtx.beginPath();
-          targetCtx.moveTo(focalX - laserSpan * 0.65, 0);
+          targetCtx.moveTo(focalX - laserSpan * 0.55, 0);
           targetCtx.lineTo(focalX + laserSpan * 0.45, 0);
-          targetCtx.strokeStyle = lGrad;
+          targetCtx.strokeStyle = "rgba(255, 255, 255, " + laserAlpha.toFixed(2) + ")";
           targetCtx.lineWidth = tier === 2 ? 1.4 : 1.1;
           targetCtx.lineCap = "round";
           targetCtx.stroke();
 
           // 2. Transverse Micro-Diffraction Spike (Swiss Diamond Cross-Glint)
           var spikeSpan = curSize * (tier === 2 ? 3.8 : 2.6);
-          var sGrad = targetCtx.createLinearGradient(0, -spikeSpan, 0, spikeSpan);
           var spikeAlpha = renderAlpha * (tier === 2 ? 0.88 : 0.72);
-          sGrad.addColorStop(0.0, "rgba(255,255,255,0)");
-          sGrad.addColorStop(0.5, "rgba(255,255,255," + spikeAlpha.toFixed(2) + ")");
-          sGrad.addColorStop(1.0, "rgba(255,255,255,0)");
-
           targetCtx.beginPath();
-          targetCtx.moveTo(focalX, -spikeSpan);
-          targetCtx.lineTo(focalX, spikeSpan);
-          targetCtx.strokeStyle = sGrad;
+          targetCtx.moveTo(focalX, -spikeSpan * 0.75);
+          targetCtx.lineTo(focalX, spikeSpan * 0.75);
+          targetCtx.strokeStyle = "rgba(255, 255, 255, " + (spikeAlpha * 0.85).toFixed(2) + ")";
           targetCtx.lineWidth = tier === 2 ? 1.1 : 0.9;
           targetCtx.stroke();
 
           // 3. For Tier 2 (3x Supernovas): 8-Facet Gemstone Micro-Diagonals
           if (tier === 2) {
-            var diagSpan = spikeSpan * 0.45;
-            var dGrad = targetCtx.createLinearGradient(-diagSpan, -diagSpan, diagSpan, diagSpan);
-            dGrad.addColorStop(0.0, "rgba(255,255,255,0)");
-            dGrad.addColorStop(0.5, "rgba(255,255,255," + (spikeAlpha * 0.65).toFixed(2) + ")");
-            dGrad.addColorStop(1.0, "rgba(255,255,255,0)");
-
+            var diagSpan = spikeSpan * 0.38;
             targetCtx.beginPath();
             targetCtx.moveTo(focalX - diagSpan, -diagSpan);
             targetCtx.lineTo(focalX + diagSpan, diagSpan);
             targetCtx.moveTo(focalX - diagSpan, diagSpan);
             targetCtx.lineTo(focalX + diagSpan, -diagSpan);
-            targetCtx.strokeStyle = dGrad;
+            targetCtx.strokeStyle = "rgba(255, 255, 255, " + (spikeAlpha * 0.55).toFixed(2) + ")";
             targetCtx.lineWidth = 0.8;
             targetCtx.stroke();
           }
         }
 
         // ── 4. Micro-Stardust Quantum Sparks (Tier 2 Beacons Only) ──
-        if (!p.stardust) p.stardust = [];
-        if (tier === 2 && Math.random() < 0.35) {
-          p.stardust.push({
-            x: p.x - Math.cos(currentAngle) * (halfL * 0.75) + (Math.random() - 0.5) * 1.5,
-            y: p.y - Math.sin(currentAngle) * (halfL * 0.75) + (Math.random() - 0.5) * 1.5,
-            alpha: 0.85,
-            r: 0.65 + Math.random() * 0.45,
-            hue: fHeadHue
-          });
-          if (p.stardust.length > 5) p.stardust.shift();
+        if (tier === 2 && Math.random() < 0.25) {
+          if (!p.stardust) p.stardust = [];
+          if (p.stardust.length < 3) {
+            p.stardust.push({
+              x: p.x - Math.cos(currentAngle) * (halfL * 0.75) + (Math.random() - 0.5) * 1.5,
+              y: p.y - Math.sin(currentAngle) * (halfL * 0.75) + (Math.random() - 0.5) * 1.5,
+              alpha: 0.80,
+              r: 0.65 + Math.random() * 0.35,
+              hue: fHeadHue | 0
+            });
+          }
         }
 
       } else if (p.isRadiant) {
@@ -9566,6 +9551,8 @@ try { checkUrlHashRoutine(); } catch(e){}
   var preservedTimeStr = "60.00";
   var lastFrameTime = 0;
   var gameStartTime = 0;
+  var lastDisplayedDigits = "";
+  var lastFillTime = 0;
   var WARMUP_MS = 1400; // 1.4s smooth entrance grace period matching 1.35s fade: prevents false locks or instant wins on start
   var hasDeliberateMove = false;
 
@@ -9856,6 +9843,8 @@ try { checkUrlHashRoutine(); } catch(e){}
     contactDuration = 0.0;
     lockedParticle = null;
     activeExplosion = null;
+    lastDisplayedDigits = "";
+    lastFillTime = 0;
     cursor.x = -9999;
     cursor.y = -9999;
     cursor.active = false;
@@ -9891,6 +9880,8 @@ try { checkUrlHashRoutine(); } catch(e){}
     contactDuration = 0.0;
     lockedParticle = null;
     activeExplosion = null;
+    lastDisplayedDigits = "";
+    lastFillTime = 0;
 
     // Reset cursor state: prevent inheriting launch button location
     cursor.x = -9999;
@@ -10078,7 +10069,10 @@ try { checkUrlHashRoutine(); } catch(e){}
     if (!isWon && !isGameOver) {
       if (isWarmingUp) {
         lastFrameTime = now;
-        digitsEl.textContent = TOTAL_TIME.toFixed(2);
+        if (lastDisplayedDigits !== "60.00") {
+          digitsEl.textContent = TOTAL_TIME.toFixed(2);
+          lastDisplayedDigits = "60.00";
+        }
         fillEl.style.width = "100%";
       } else {
         if (missionText.textContent.indexOf("INITIALIZING") !== -1) {
@@ -10087,11 +10081,23 @@ try { checkUrlHashRoutine(); } catch(e){}
         remainingTime -= dt;
         if (remainingTime <= 0) {
           remainingTime = 0;
+          if (lastDisplayedDigits !== "00.00") {
+            digitsEl.textContent = "00.00";
+            lastDisplayedDigits = "00.00";
+          }
+          fillEl.style.width = "0%";
           triggerGameOver();
         } else {
-          digitsEl.textContent = remainingTime.toFixed(2);
-          var pct = (remainingTime / TOTAL_TIME) * 100;
-          fillEl.style.width = pct.toFixed(1) + "%";
+          var curDigits = remainingTime.toFixed(2);
+          if (curDigits !== lastDisplayedDigits) {
+            digitsEl.textContent = curDigits;
+            lastDisplayedDigits = curDigits;
+          }
+          if (now - lastFillTime > 32) {
+            var pct = (remainingTime / TOTAL_TIME) * 100;
+            fillEl.style.width = pct.toFixed(1) + "%";
+            lastFillTime = now;
+          }
         }
       }
     }
