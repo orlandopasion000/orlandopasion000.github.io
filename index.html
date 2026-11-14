@@ -40,7 +40,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&family=Orbitron:wght@600;700;800;900&family=Outfit:wght@600;700;800;900&family=Space+Grotesk:wght@600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
   <!-- Relative Stylesheet (with cache-bust versioning) -->
-  <link rel="stylesheet" href="style.css?v=15.0">
+  <link rel="stylesheet" href="style.css?v=16.0">
 </head>
 <body data-app-theme="pure-black" data-clock-style="pure-black">
   <!-- Accessibility Live Region for Screen Readers -->
@@ -49,14 +49,33 @@
   <!-- Quantum Time Command Drawer Mobile Backdrop -->
   <div class="quantum-drawer-backdrop" id="quantumDrawerBackdrop" aria-hidden="true"></div>
 
-  <!-- Zen Immersion Mode Floating HUD -->
+  <!-- Zen Immersion Mode Floating HUD (Hardware-Accelerated Ghost Controls) -->
   <div class="zen-floating-hud" id="zenFloatingHUD" aria-hidden="true">
-    <button type="button" class="btn-zen-hud" id="btnExitZenHUD" title="Exit Zen Mode (Esc or Z)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 12px; height: 12px;">
+    <button type="button" class="btn-zen-hud" id="btnZenPlayPause" title="Start / Pause Timer (Spacebar)">
+      <svg class="zen-hud-icon" id="zenPlayIcon" viewBox="0 0 24 24" fill="currentColor">
+        <polygon points="6 4 20 12 6 20"/>
+      </svg>
+      <span id="zenPlayText">Start</span>
+    </button>
+    <button type="button" class="btn-zen-hud" id="btnZenSoundToggle" title="Toggle Zen Singing Bowl / 432Hz Drone / Silent">
+      <svg class="zen-hud-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+      </svg>
+      <span id="zenSoundText">Singing Bowl</span>
+    </button>
+    <button type="button" class="btn-zen-hud" id="btnZenFullscreen" title="Toggle Fullscreen (F)">
+      <svg class="zen-hud-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+      </svg>
+      <span>Fullscreen</span>
+    </button>
+    <button type="button" class="btn-zen-hud btn-zen-exit" id="btnExitZenHUD" title="Exit Zen Mode (Esc or Z)">
+      <svg class="zen-hud-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="18" y1="6" x2="6" y2="18"/>
         <line x1="6" y1="6" x2="18" y2="18"/>
       </svg>
-      <span>Exit Zen (Esc)</span>
+      <span>Exit (Esc)</span>
     </button>
   </div>
 
@@ -734,16 +753,9 @@
         </div>
       </section>
     </main>
-
-    <!-- EXECUTIVE FOOTER -->
-    <footer class="footer">
-      <div class="footer-name">Sir Orlando V. Pasion, Jr.</div>
-      <div class="footer-sub">Teacher VI · Mathematics Educator · EdTech Innovator</div>
-      <div class="footer-copy">&copy; 2026 Sir Orlando V. Pasion, Jr. — Designed and developed with HTML, CSS, and JavaScript</div>
-    </footer>
   </div>
 
-  <!-- ══════════════════════════════════════════════════════════════════════
+<!-- ══════════════════════════════════════════════════════════════════════
        HOLOGRAPHIC THEME & CLOCK VAULT (FUTURISTIC 3D GLASS MODAL + LIVE HOLO-SCRUB)
        ══════════════════════════════════════════════════════════════════════ -->
   <div id="holoVaultModal" class="holo-vault-modal" role="dialog" aria-modal="true" aria-hidden="true">
@@ -897,6 +909,6 @@
   <audio id="alarmAudioElement" preload="auto" src="sounds/piano.mp3"></audio>
 
   <!-- Relative JavaScript (with cache-bust versioning) -->
-  <script src="app.js?v=15.0"></script>
+  <script src="app.js?v=16.0"></script>
 </body>
 </html>

@@ -952,6 +952,95 @@
     }
   }
 
+  
+  // ── ENHANCEMENT 3: TIBETAN SINGING BOWL & 432Hz SOLFEGGIO DRONE SYNTHESIZER ──
+  let zenSoundMode = safeGetItem('orlando-zen-sound-mode', 'bowl'); // 'bowl' | 'drone' | 'silent'
+  let zenDroneOsc1 = null;
+  let zenDroneOsc2 = null;
+  let zenDroneGain = null;
+
+  function playTibetanSingingBowl(volume = currentAlarmVolume) {
+    if (zenSoundMode === 'silent') return;
+    const ctx = getAudioContext();
+    if (!ctx) return;
+    const now = ctx.currentTime;
+    const v = Math.max(0.01, Math.min(1, volume));
+
+    // Authentic 5-Harmonic Tibetan Singing Bowl Overtones
+    const partials = [
+      { freq: 130.81, gain: 0.38, decay: 5.2 }, // C3 deep singing bowl fundamental
+      { freq: 196.00, gain: 0.28, decay: 4.6 }, // G3 fifth overtone
+      { freq: 261.63, gain: 0.22, decay: 4.0 }, // C4 octave
+      { freq: 392.00, gain: 0.15, decay: 3.4 }, // G4 harmonic shimmer
+      { freq: 523.25, gain: 0.09, decay: 2.8 }  // C5 crystalline halo
+    ];
+
+    partials.forEach((p, idx) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'sine';
+      const detune = idx === 1 ? 1.6 : (idx === 2 ? -1.4 : 0);
+      osc.frequency.setValueAtTime(p.freq + detune, now);
+      osc.frequency.exponentialRampToValueAtTime(p.freq * 0.998, now + p.decay);
+
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.linearRampToValueAtTime(p.gain * v, now + 0.04);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + p.decay);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + p.decay + 0.15);
+    });
+  }
+
+  function startZenDrone() {
+    if (zenSoundMode !== 'drone' || !document.body.classList.contains('zen-mode')) return;
+    stopZenDrone();
+    const ctx = getAudioContext();
+    if (!ctx) return;
+
+    try {
+      zenDroneGain = ctx.createGain();
+      zenDroneGain.gain.setValueAtTime(0.0001, ctx.currentTime);
+      zenDroneGain.gain.linearRampToValueAtTime(0.035 * currentAlarmVolume, ctx.currentTime + 3.0);
+      zenDroneGain.connect(ctx.destination);
+
+      // 432 Hz Harmonic Meditation Octaves
+      zenDroneOsc1 = ctx.createOscillator();
+      zenDroneOsc1.type = 'sine';
+      zenDroneOsc1.frequency.setValueAtTime(108.0, ctx.currentTime);
+
+      zenDroneOsc2 = ctx.createOscillator();
+      zenDroneOsc2.type = 'sine';
+      zenDroneOsc2.frequency.setValueAtTime(216.0, ctx.currentTime);
+
+      zenDroneOsc1.connect(zenDroneGain);
+      zenDroneOsc2.connect(zenDroneGain);
+
+      zenDroneOsc1.start();
+      zenDroneOsc2.start();
+    } catch(e) {}
+  }
+
+  function stopZenDrone() {
+    if (zenDroneGain) {
+      try {
+        const ctx = getAudioContext();
+        if (ctx) {
+          zenDroneGain.gain.linearRampToValueAtTime(0.0001, ctx.currentTime + 1.2);
+          setTimeout(() => {
+            if (zenDroneOsc1) { zenDroneOsc1.stop(); zenDroneOsc1.disconnect(); zenDroneOsc1 = null; }
+            if (zenDroneOsc2) { zenDroneOsc2.stop(); zenDroneOsc2.disconnect(); zenDroneOsc2 = null; }
+            if (zenDroneGain) { zenDroneGain.disconnect(); zenDroneGain = null; }
+          }, 1300);
+        }
+      } catch(e) {}
+    }
+  }
+
   function playLuxuryChime() {
     const ctx = getAudioContext();
     if (!ctx) return;
@@ -1174,6 +1263,19 @@
 
   function updateTimerDisplay() {
     updateTabTitle();
+    // Update Zen HUD Ghost Controls
+    const zenPlayText = document.getElementById('zenPlayText');
+    const zenPlayIcon = document.getElementById('zenPlayIcon');
+    if (zenPlayText && zenPlayIcon) {
+      if (timerIsRunning) {
+        zenPlayText.textContent = 'Pause';
+        zenPlayIcon.innerHTML = '<rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/>';
+      } else {
+        zenPlayText.textContent = 'Start';
+        zenPlayIcon.innerHTML = '<polygon points="6 4 20 12 6 20"/>';
+      }
+    }
+
     if (timerDigitsEl) {
       const timeStr = formatTimeHHMMSS(timerRemaining);
       timerDigitsEl.innerHTML = chromeHTML(timeStr);
@@ -1218,6 +1320,28 @@
   // ── CLASSROOM EXAM MODE CONTROLLER ──
   let examModeEnabled = safeGetItem('orlando-exam-mode', 'false') === 'true';
   let examAlertsFired = { 1800: false, 600: false, 300: false };
+
+  
+  let zenMilestonesTriggered = { 25: false, 50: false, 75: false };
+  function checkZenMilestones(currentSec) {
+    if (!document.body.classList.contains('zen-mode') || !timerIsRunning || timerTotalDuration <= 0) return;
+    const elapsed = timerTotalDuration - currentSec;
+    const pct = Math.floor((elapsed / timerTotalDuration) * 100);
+    [25, 50, 75].forEach(m => {
+      if (pct >= m && !zenMilestonesTriggered[m]) {
+        zenMilestonesTriggered[m] = true;
+        if (timerDigitsEl) {
+          timerDigitsEl.classList.remove('zen-shimmer-active');
+          void timerDigitsEl.offsetWidth;
+          timerDigitsEl.classList.add('zen-shimmer-active');
+        }
+        if (zenSoundMode === 'bowl') {
+          AudioHUD.tick(1760); // Gentle crystal harmonic ping
+        }
+        announceSR(`Zen flow checkpoint: ${m} percent completed.`);
+      }
+    });
+  }
 
   function checkExamCheckpoints(currentSec) {
     if (!examModeEnabled || !timerIsRunning) return;
@@ -1312,6 +1436,7 @@
     timerIsRunning = true;
     timerEndTime = Date.now() + timerRemaining * 1000;
     if (timerRemaining > 1800) examAlertsFired = { 1800: false, 600: false, 300: false };
+    zenMilestonesTriggered = { 25: false, 50: false, 75: false };
 
     btnTimerStart.style.display = 'none';
     btnTimerPause.style.display = 'inline-flex';
@@ -1329,6 +1454,7 @@
           AudioHUD.escapementTick();
         }
         checkExamCheckpoints(currentSec);
+        checkZenMilestones(currentSec);
       }
 
       timerRemaining = currentSec;
@@ -1420,12 +1546,22 @@
       );
     }
 
-    triggerAlertOverlay({
-      type: 'timer',
-      title: "00:00:00",
-      message: `SESSION COMPLETE! +${completedMins}m Focus Logged (${tierInfo.name})`,
-      canSnooze: false
-    });
+    if (document.body.classList.contains('zen-mode')) {
+      playTibetanSingingBowl();
+      if (timerDigitsEl) {
+        timerDigitsEl.classList.remove('zen-shimmer-active');
+        void timerDigitsEl.offsetWidth;
+        timerDigitsEl.classList.add('zen-shimmer-active');
+      }
+      announceSR(`Zen session complete. ${completedMins} minutes focused in tranquil state.`);
+    } else {
+      triggerAlertOverlay({
+        type: 'timer',
+        title: "00:00:00",
+        message: `SESSION COMPLETE! +${completedMins}m Focus Logged (${tierInfo.name})`,
+        canSnooze: false
+      });
+    }
   }
 
   // ── CUSTOM SAVED PRESETS MANAGER ──
@@ -2389,21 +2525,42 @@
     });
   }
 
-  // ── ENHANCED ZEN IMMERSION CONTROLLER ──
+  // ── ENHANCED ZEN IMMERSION CONTROLLER (HARDWARE-ACCELERATED ZERO-LAG) ──
   const btnExitZenHUD = document.getElementById('btnExitZenHUD');
+  const btnZenPlayPause = document.getElementById('btnZenPlayPause');
+  const btnZenSoundToggle = document.getElementById('btnZenSoundToggle');
+  const btnZenFullscreen = document.getElementById('btnZenFullscreen');
+  const zenSoundText = document.getElementById('zenSoundText');
   let zenIdleTimeout = null;
+
+  function updateZenSoundButtonText() {
+    if (!zenSoundText) return;
+    if (zenSoundMode === 'bowl') {
+      zenSoundText.textContent = 'Singing Bowl';
+    } else if (zenSoundMode === 'drone') {
+      zenSoundText.textContent = '432Hz Drone';
+    } else {
+      zenSoundText.textContent = 'Silent Zen';
+    }
+  }
 
   function toggleZenMode(force) {
     const isZen = force !== undefined ? force : !document.body.classList.contains('zen-mode');
     document.body.classList.toggle('zen-mode', isZen);
     document.body.classList.remove('zen-idle');
     if (zenModeLabel) zenModeLabel.textContent = isZen ? 'Exit Zen Mode' : 'Zen Immersion Mode';
+    
     if (isZen) {
       toggleFunCockpit(false);
-      announceSR("Zen Immersion Mode active. Minimalist tranquil focus display. Press Escape or Z to exit.");
+      announceSR("Zen Immersion Mode activated. Press Escape or Z to exit.");
       AudioHUD.confirm();
       resetZenIdleTimer();
+      updateZenSoundButtonText();
+      if (zenSoundMode === 'drone') {
+        startZenDrone();
+      }
     } else {
+      stopZenDrone();
       announceSR("Zen Immersion Mode exited.");
       AudioHUD.tick(600);
       if (zenIdleTimeout) clearTimeout(zenIdleTimeout);
@@ -2418,16 +2575,57 @@
       if (document.body.classList.contains('zen-mode')) {
         document.body.classList.add('zen-idle');
       }
-    }, 2800);
+    }, 2500);
   }
 
-  window.addEventListener('mousemove', resetZenIdleTimer);
-  window.addEventListener('touchstart', resetZenIdleTimer);
+  window.addEventListener('mousemove', resetZenIdleTimer, { passive: true });
+  window.addEventListener('touchstart', resetZenIdleTimer, { passive: true });
 
+  // Floating HUD Button Listeners
   if (btnExitZenHUD) {
     btnExitZenHUD.addEventListener('click', (e) => {
       e.stopPropagation();
       toggleZenMode(false);
+    });
+  }
+
+  if (btnZenPlayPause) {
+    btnZenPlayPause.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (timerIsRunning) {
+        pauseTimer();
+        AudioHUD.tick(600);
+      } else {
+        startTimer();
+        AudioHUD.tick(1200);
+      }
+    });
+  }
+
+  if (btnZenSoundToggle) {
+    btnZenSoundToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (zenSoundMode === 'bowl') {
+        zenSoundMode = 'drone';
+        startZenDrone();
+      } else if (zenSoundMode === 'drone') {
+        stopZenDrone();
+        zenSoundMode = 'silent';
+      } else {
+        stopZenDrone();
+        zenSoundMode = 'bowl';
+        playTibetanSingingBowl(0.6);
+      }
+      safeSetItem('orlando-zen-sound-mode', zenSoundMode);
+      updateZenSoundButtonText();
+      AudioHUD.tick(1100);
+    });
+  }
+
+  if (btnZenFullscreen) {
+    btnZenFullscreen.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (btnFullscreen) btnFullscreen.click();
     });
   }
 
@@ -2438,9 +2636,18 @@
     });
   }
 
-  // Keyboard hotkeys: Z toggles Zen Mode, Escape exits
+  // Brand Header Zen Tag click directly toggles Zen Mode
+  if (brandFunTag) {
+    brandFunTag.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleZenMode();
+    });
+  }
+
+  // Keyboard hotkeys: Z toggles Zen Mode, Spacebar toggles Play/Pause, Escape exits
   document.addEventListener('keydown', (e) => {
     if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA')) return;
+    
     if (e.key === 'z' || e.key === 'Z') {
       toggleZenMode();
     } else if (e.key === 'Escape') {
@@ -2448,10 +2655,19 @@
         toggleZenMode(false);
       }
       stopBreathingSession();
+    } else if (e.code === 'Space') {
+      e.preventDefault();
+      if (timerIsRunning) {
+        pauseTimer();
+        AudioHUD.tick(600);
+      } else {
+        startTimer();
+        AudioHUD.tick(1200);
+      }
     }
   });
 
-  // Clicking on digits in Zen Mode toggles Play / Pause without leaving Zen Mode
+  // Clicking directly on digits in Zen Mode toggles Play / Pause
   if (timerDigitsEl) {
     timerDigitsEl.addEventListener('click', () => {
       if (document.body.classList.contains('zen-mode')) {

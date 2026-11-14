@@ -7873,6 +7873,11 @@ try { checkUrlHashRoutine(); } catch(e){}
   }
 
   function loop() {
+    if (document.body.classList.contains("universe-game-active")) {
+      animFrameId = requestAnimationFrame(loop);
+      return;
+    }
+
     if (!isPlaying && particles.length === 0) {
       if (ctx && canvas) {
         ctx.clearRect(0, 0, canvasW || canvas.width, canvasH || canvas.height);
@@ -8516,9 +8521,12 @@ try { checkUrlHashRoutine(); } catch(e){}
       }
 
       // Dynamic size and glow based on 3D depth + game mode illumination
+      // Smoothly grows bigger and brighter during game mode, and smoothly returns to normal after game mode
       var depthScale = p.isWeaver ? (0.86 + Math.max(0, p.z) * 0.44) : 1.0;
-      var curSize = (p.baseSize * depthScale) + (gameGlowProgress * 0.35);
-      var baseLength = (p.baseLength * (p.isWeaver ? (0.90 + Math.max(0, p.z) * 0.38) : 1.0)) + (gameGlowProgress * 1.5);
+      var gameSizeFactor = 1.0 + gameGlowProgress * 0.32;
+      var curSize = (p.baseSize * depthScale) * gameSizeFactor + (gameGlowProgress * 0.5);
+      var gameLenFactor = 1.0 + gameGlowProgress * 0.35;
+      var baseLength = (p.baseLength * (p.isWeaver ? (0.90 + Math.max(0, p.z) * 0.38) : 1.0)) * gameLenFactor + (gameGlowProgress * 3.0);
 
       // Select target canvas based on layer (all particles elevate to foreground in game mode)
       var renderAsBrightest = p.isFront || (gameGlowProgress > 0.04);
@@ -8531,40 +8539,60 @@ try { checkUrlHashRoutine(); } catch(e){}
       }
       p.hue += (p.targetHue - p.hue) * 0.03;
 
-      // Antigravity Mouse Repulsion (Preserved: particles actively avoid the cursor!)
+      // Antigravity Mouse Repulsion & Dynamic Evasion
+      // In normal mode: Hard clearance shield keeps particles away from reading areas & cursor
+      // In game mode: Pure fluid evasion physics! Particles actively dart, bank and flee from the cursor
+      // without artificial positional clamping, allowing precise physical touch & contact tracking!
       if (mActive) {
         var dx = p.x - mx;
         var dy = p.y - my;
         var dist = Math.hypot(dx, dy);
 
-        if (dist < SHIELD_RADIUS) {
-          var angle = Math.atan2(dy, dx);
-          p.x = mx + Math.cos(angle) * SHIELD_RADIUS;
-          p.y = my + Math.sin(angle) * SHIELD_RADIUS;
-
-          var tanX = -Math.sin(angle);
-          var tanY = Math.cos(angle);
-          var spinMag = p.isFront ? 3.8 : 3.2;
-          p.vx = p.vx * 0.5 + tanX * spinMag;
-          p.vy = p.vy * 0.5 + tanY * spinMag;
-
-          // Subtle momentary flex specifically when banking around mouse shield
-          p.turnFlex = Math.sign(tanY || 1) * 0.75;
-
-          if (isHighSpeedCursor && p.isRadiant) {
-            p.trail.push({ x: p.x, y: p.y, alpha: p.isFront ? 0.85 : 0.65 });
-            if (p.trail.length > 3) p.trail.shift();
+        if (isGameMode) {
+          if (dist < INFLUENCE_RADIUS) {
+            var norm = Math.max(0, 1 - dist / INFLUENCE_RADIUS);
+            var evadeForce = Math.pow(norm, 1.4) * 3.8;
+            var angle = Math.atan2(dy, dx);
+            var tanX = -Math.sin(angle);
+            var tanY = Math.cos(angle);
+            p.vx += (Math.cos(angle) * 1.8 + tanX * 1.3) * evadeForce * 0.42;
+            p.vy += (Math.sin(angle) * 1.8 + tanY * 1.3) * evadeForce * 0.42;
+            p.turnFlex = Math.sign(tanY || 1) * 0.65;
+            if (isHighSpeedCursor && p.isRadiant) {
+              p.trail.push({ x: p.x, y: p.y, alpha: p.isFront ? 0.85 : 0.65 });
+              if (p.trail.length > 3) p.trail.shift();
+            }
           }
+        } else {
+          if (dist < SHIELD_RADIUS) {
+            var angle = Math.atan2(dy, dx);
+            p.x = mx + Math.cos(angle) * SHIELD_RADIUS;
+            p.y = my + Math.sin(angle) * SHIELD_RADIUS;
 
-        } else if (dist < INFLUENCE_RADIUS) {
-          var norm = (dist - SHIELD_RADIUS) / (INFLUENCE_RADIUS - SHIELD_RADIUS);
-          var force = Math.pow(1 - norm, 1.8) * 3.8;
-          var angle = Math.atan2(dy, dx);
-          var tanX = -Math.sin(angle);
-          var tanY = Math.cos(angle);
+            var tanX = -Math.sin(angle);
+            var tanY = Math.cos(angle);
+            var spinMag = p.isFront ? 3.8 : 3.2;
+            p.vx = p.vx * 0.5 + tanX * spinMag;
+            p.vy = p.vy * 0.5 + tanY * spinMag;
 
-          p.vx += (Math.cos(angle) * 1.6 + tanX * 1.3) * force * 0.38;
-          p.vy += (Math.sin(angle) * 1.6 + tanY * 1.3) * force * 0.38;
+            // Subtle momentary flex specifically when banking around mouse shield
+            p.turnFlex = Math.sign(tanY || 1) * 0.75;
+
+            if (isHighSpeedCursor && p.isRadiant) {
+              p.trail.push({ x: p.x, y: p.y, alpha: p.isFront ? 0.85 : 0.65 });
+              if (p.trail.length > 3) p.trail.shift();
+            }
+
+          } else if (dist < INFLUENCE_RADIUS) {
+            var norm = (dist - SHIELD_RADIUS) / (INFLUENCE_RADIUS - SHIELD_RADIUS);
+            var force = Math.pow(1 - norm, 1.8) * 3.8;
+            var angle = Math.atan2(dy, dx);
+            var tanX = -Math.sin(angle);
+            var tanY = Math.cos(angle);
+
+            p.vx += (Math.cos(angle) * 1.6 + tanX * 1.3) * force * 0.38;
+            p.vy += (Math.sin(angle) * 1.6 + tanY * 1.3) * force * 0.38;
+          }
         }
       }
 
@@ -8756,7 +8784,13 @@ try { checkUrlHashRoutine(); } catch(e){}
 
       var pTier = p.lumiTier || 0;
       var tierLenBoost = (pTier === 2) ? 4.0 : ((pTier === 1) ? 2.0 : 0);
-      var dynamicLength = Math.max(baseLength, Math.min(renderAsBrightest ? (18 + tierLenBoost) : 15, baseLength + currentSpeed * 2.2 + gameGlowProgress * tierLenBoost));
+      var maxLen = renderAsBrightest ? (20 + tierLenBoost + gameGlowProgress * 6) : (15 + gameGlowProgress * 4);
+      var dynamicLength = Math.max(baseLength, Math.min(maxLen, baseLength + currentSpeed * 2.2 + gameGlowProgress * tierLenBoost));
+
+      // Expose current real-time geometry for strict physical touch detection
+      p.curSize = curSize;
+      p.dynamicLength = dynamicLength;
+      p.currentAngle = currentAngle;
 
       // 100% Engraved Beat Length Elasticity
       if (isAudioHot) {
@@ -8766,6 +8800,7 @@ try { checkUrlHashRoutine(); } catch(e){}
                                 (curChoreo && curChoreo.focus === "piano-sub") ? (livePiano * 1.4 + liveSub * 1.2) :
                                 (liveBass * 1.65 + liveMid * 0.65 + beatKickImpulse * 0.45);
         dynamicLength *= (1 + primaryInstEnergy * elas);
+        p.dynamicLength = dynamicLength;
       }
 
       // ── FEATURE 1: RELATIVISTIC SPEED-DILATION (Micro Doppler Shift on Acceleration) ──
@@ -8789,8 +8824,8 @@ try { checkUrlHashRoutine(); } catch(e){}
       if (renderAsBrightest) {
         // ── FOREGROUND & GAME RADIANT DANCER: HAUTE HORLOGERIE PHOTONIC COMET ──
         var tier = p.lumiTier || 0;
-        var gameLitBoost = (tier === 2) ? (gameGlowProgress * 16) : ((tier === 1) ? (gameGlowProgress * 10) : (gameGlowProgress * 5));
-        var gameAlphaBoost = (tier === 2) ? (gameGlowProgress * 0.35) : ((tier === 1) ? (gameGlowProgress * 0.20) : (gameGlowProgress * 0.10));
+        var gameLitBoost = (tier === 2) ? (gameGlowProgress * 22) : ((tier === 1) ? (gameGlowProgress * 14) : (gameGlowProgress * 8));
+        var gameAlphaBoost = (tier === 2) ? (gameGlowProgress * 0.48) : ((tier === 1) ? (gameGlowProgress * 0.32) : (gameGlowProgress * 0.18));
 
         var fLitBoost = isAudioHot ? (liveBass * 22 + beatKickImpulse * 14) : 0;
         var fHeadLit = Math.min(100, 80 + fLitBoost + dopplerBoost * 12 + gameLitBoost);
@@ -8798,26 +8833,28 @@ try { checkUrlHashRoutine(); } catch(e){}
         var fHeadHue = (dopplerBoost > 0.12) ? Math.round(p.hue2 * (1 - dopplerBoost * 0.5) + 198 * (dopplerBoost * 0.5)) : p.hue2;
         var fTailHue = (dopplerBoost > 0.12) ? Math.round(p.hue * (1 - dopplerBoost * 0.4) + 22 * (dopplerBoost * 0.4)) : p.hue;
 
-        var renderAlpha = Math.min(1.0, currentAlpha * (1.0 + gameAlphaBoost) + (gameGlowProgress * 0.10));
+        var renderAlpha = Math.min(1.0, currentAlpha * (1.0 + gameAlphaBoost) + (gameGlowProgress * 0.16));
 
-        // ── 1. Anamorphic Optical Laser Envelope (Soft elliptical aura along motion axis - ZERO hard borders) ──
-        var auraRadius = curSize * (tier === 2 ? 6.2 : (tier === 1 ? 4.6 : 3.2));
-        var auraAlphaBase = renderAlpha * (tier === 2 ? 0.34 : (tier === 1 ? 0.22 : 0.12));
+        // ── 1. Anamorphic Optical Laser Envelope (Tier 2 & Tier 1 only - optimized) ──
+        if (tier >= 1) {
+          var auraRadius = curSize * (tier === 2 ? 6.5 : 4.8);
+          var auraAlphaBase = renderAlpha * (tier === 2 ? 0.38 : 0.24);
 
-        if (auraAlphaBase > 0.02) {
-          targetCtx.save();
-          targetCtx.translate(focalX, 0);
-          targetCtx.scale(1.75, 0.82); // Anamorphic 2:1 horizontal stretch along flight vector
-          var auraGrad = targetCtx.createRadialGradient(0, 0, 0, 0, 0, auraRadius);
-          auraGrad.addColorStop(0.0, "rgba(255, 255, 255, " + (auraAlphaBase * 0.85).toFixed(3) + ")");
-          auraGrad.addColorStop(0.22, "hsla(" + Math.round(fHeadHue) + ", 100%, 75%, " + (auraAlphaBase * 0.50).toFixed(3) + ")");
-          auraGrad.addColorStop(0.55, "hsla(" + Math.round(fHeadHue) + ", 100%, 60%, " + (auraAlphaBase * 0.15).toFixed(3) + ")");
-          auraGrad.addColorStop(1.0, "hsla(" + Math.round(fHeadHue) + ", 100%, 50%, 0)"); // 100% transparent at perimeter!
-          targetCtx.fillStyle = auraGrad;
-          targetCtx.beginPath();
-          targetCtx.arc(0, 0, auraRadius, 0, Math.PI * 2);
-          targetCtx.fill();
-          targetCtx.restore();
+          if (auraAlphaBase > 0.03) {
+            targetCtx.save();
+            targetCtx.translate(focalX, 0);
+            targetCtx.scale(1.75, 0.82); // Anamorphic 2:1 horizontal stretch along flight vector
+            var auraGrad = targetCtx.createRadialGradient(0, 0, 0, 0, 0, auraRadius);
+            auraGrad.addColorStop(0.0, "rgba(255, 255, 255, " + (auraAlphaBase * 0.85).toFixed(3) + ")");
+            auraGrad.addColorStop(0.25, "hsla(" + Math.round(fHeadHue) + ", 100%, 75%, " + (auraAlphaBase * 0.50).toFixed(3) + ")");
+            auraGrad.addColorStop(0.60, "hsla(" + Math.round(fHeadHue) + ", 100%, 60%, " + (auraAlphaBase * 0.15).toFixed(3) + ")");
+            auraGrad.addColorStop(1.0, "hsla(" + Math.round(fHeadHue) + ", 100%, 50%, 0)"); // 100% transparent at perimeter!
+            targetCtx.fillStyle = auraGrad;
+            targetCtx.beginPath();
+            targetCtx.arc(0, 0, auraRadius, 0, Math.PI * 2);
+            targetCtx.fill();
+            targetCtx.restore();
+          }
         }
 
         // ── 2. Streamlined Aerodynamic Tapered Photonic Needle Body (Seamless Single Form) ──
@@ -8852,13 +8889,12 @@ try { checkUrlHashRoutine(); } catch(e){}
           targetCtx.fill();
         }
 
-        // ── 3. Haute Horlogerie Diamond Anamorphic Star Glint (✦) ──
-        // Crisp, microscopic optical diamond refraction on Tier 1 & Tier 2 stars
-        if (tier >= 1 && renderAlpha > 0.25) {
+        // ── 3. Haute Horlogerie Diamond Anamorphic Star Glint (✦) strictly for Tier 2 Beacons ──
+        if (tier === 2 && renderAlpha > 0.25) {
           // 1. Axial Laser Core Streak (razor-thin horizontal photonic filament)
-          var laserSpan = dynamicLength * (tier === 2 ? 0.90 : 0.65);
+          var laserSpan = dynamicLength * 0.90;
           var lGrad = targetCtx.createLinearGradient(focalX - laserSpan * 0.65, 0, focalX + laserSpan * 0.45, 0);
-          var laserAlpha = renderAlpha * (tier === 2 ? 0.95 : 0.75);
+          var laserAlpha = renderAlpha * 0.95;
           lGrad.addColorStop(0.0, "rgba(255,255,255,0)");
           lGrad.addColorStop(0.55, "rgba(255,255,255," + laserAlpha.toFixed(2) + ")");
           lGrad.addColorStop(1.0, "rgba(255,255,255,0)");
@@ -8867,14 +8903,14 @@ try { checkUrlHashRoutine(); } catch(e){}
           targetCtx.moveTo(focalX - laserSpan * 0.65, 0);
           targetCtx.lineTo(focalX + laserSpan * 0.45, 0);
           targetCtx.strokeStyle = lGrad;
-          targetCtx.lineWidth = tier === 2 ? 1.3 : 1.0;
+          targetCtx.lineWidth = 1.3;
           targetCtx.lineCap = "round";
           targetCtx.stroke();
 
           // 2. Transverse Micro-Diffraction Spike (Swiss Diamond Cross-Glint)
-          var spikeSpan = curSize * (tier === 2 ? 3.8 : 2.4);
+          var spikeSpan = curSize * 3.8;
           var sGrad = targetCtx.createLinearGradient(0, -spikeSpan, 0, spikeSpan);
-          var spikeAlpha = renderAlpha * (tier === 2 ? 0.85 : 0.55);
+          var spikeAlpha = renderAlpha * 0.85;
           sGrad.addColorStop(0.0, "rgba(255,255,255,0)");
           sGrad.addColorStop(0.5, "rgba(255,255,255," + spikeAlpha.toFixed(2) + ")");
           sGrad.addColorStop(1.0, "rgba(255,255,255,0)");
@@ -8887,22 +8923,20 @@ try { checkUrlHashRoutine(); } catch(e){}
           targetCtx.stroke();
 
           // 3. For Tier 2 (Top 10% Supernovas): 8-Facet Gemstone Micro-Diagonals
-          if (tier === 2) {
-            var diagSpan = spikeSpan * 0.45;
-            var dGrad = targetCtx.createLinearGradient(-diagSpan, -diagSpan, diagSpan, diagSpan);
-            dGrad.addColorStop(0.0, "rgba(255,255,255,0)");
-            dGrad.addColorStop(0.5, "rgba(255,255,255," + (spikeAlpha * 0.65).toFixed(2) + ")");
-            dGrad.addColorStop(1.0, "rgba(255,255,255,0)");
+          var diagSpan = spikeSpan * 0.45;
+          var dGrad = targetCtx.createLinearGradient(-diagSpan, -diagSpan, diagSpan, diagSpan);
+          dGrad.addColorStop(0.0, "rgba(255,255,255,0)");
+          dGrad.addColorStop(0.5, "rgba(255,255,255," + (spikeAlpha * 0.65).toFixed(2) + ")");
+          dGrad.addColorStop(1.0, "rgba(255,255,255,0)");
 
-            targetCtx.beginPath();
-            targetCtx.moveTo(focalX - diagSpan, -diagSpan);
-            targetCtx.lineTo(focalX + diagSpan, diagSpan);
-            targetCtx.moveTo(focalX - diagSpan, diagSpan);
-            targetCtx.lineTo(focalX + diagSpan, -diagSpan);
-            targetCtx.strokeStyle = dGrad;
-            targetCtx.lineWidth = 0.8;
-            targetCtx.stroke();
-          }
+          targetCtx.beginPath();
+          targetCtx.moveTo(focalX - diagSpan, -diagSpan);
+          targetCtx.lineTo(focalX + diagSpan, diagSpan);
+          targetCtx.moveTo(focalX - diagSpan, diagSpan);
+          targetCtx.lineTo(focalX + diagSpan, -diagSpan);
+          targetCtx.strokeStyle = dGrad;
+          targetCtx.lineWidth = 0.8;
+          targetCtx.stroke();
         }
 
         // ── 4. Micro-Stardust Quantum Sparks (Tier 2 Beacons Only) ──
@@ -9466,12 +9500,36 @@ try { checkUrlHashRoutine(); } catch(e){}
   var lockedParticle = null;
   var contactDuration = 0.0;
   var REQUIRED_CONTACT = 2.0; // 2 seconds continuous
-  var HIT_RADIUS = 88; // Active evasion capture perimeter (tuned to 76px repulsion shield)
+  var STRICT_HIT_RADIUS = 14; // Strict physical contact radius (desktop: 14px, mobile: 18px)
+
+  // Exact point-to-particle physical touch detection
+  function getParticleTouchDistance(cx, cy, p) {
+    if (!p) return 999999;
+    var ang = (p.currentAngle !== undefined) ? p.currentAngle : Math.atan2(p.vy, p.vx);
+    var halfL = ((p.dynamicLength || 18) * 0.5);
+    var headR = ((p.curSize || 3.5) * 0.52);
+
+    var tx = p.x - Math.cos(ang) * (halfL - headR);
+    var ty = p.y - Math.sin(ang) * (halfL - headR);
+    var hx = p.x + Math.cos(ang) * (halfL - headR);
+    var hy = p.y + Math.sin(ang) * (halfL - headR);
+
+    var dx = hx - tx;
+    var dy = hy - ty;
+    var lenSq = dx * dx + dy * dy;
+    if (lenSq === 0) return Math.hypot(cx - p.x, cy - p.y);
+
+    var t = Math.max(0, Math.min(1, ((cx - tx) * dx + (cy - ty) * dy) / lenSq));
+    var projX = tx + t * dx;
+    var projY = ty + t * dy;
+    return Math.hypot(cx - projX, cy - projY);
+  }
 
   var audioCtx = null;
   var lockOsc = null;
   var lockGain = null;
   var activeExplosion = null;
+  var lastLockAudioFreq = 0;
 
   function syncGameMusicBtn() {
     if (!btnGamePlayMusic) return;
@@ -9484,10 +9542,12 @@ try { checkUrlHashRoutine(); } catch(e){}
   window.syncGameMusicBtn = syncGameMusicBtn;
 
   function initAudioCtx() {
-    if (!audioCtx) {
+    if (typeof ac !== "undefined" && ac && ac.state !== "closed") {
+      audioCtx = ac;
+    } else if (!audioCtx) {
       try {
         var AC = window.AudioContext || window.webkitAudioContext;
-        if (AC) audioCtx = new AC();
+        if (AC) audioCtx = new AC({ latencyHint: "interactive" });
       } catch(e){}
     }
     if (audioCtx && audioCtx.state === "suspended") {
@@ -9502,6 +9562,7 @@ try { checkUrlHashRoutine(); } catch(e){}
       lockOsc = audioCtx.createOscillator();
       lockGain = audioCtx.createGain();
       lockOsc.type = "sine";
+      lastLockAudioFreq = 290;
       lockOsc.frequency.setValueAtTime(290, audioCtx.currentTime);
       lockGain.gain.setValueAtTime(0.001, audioCtx.currentTime);
       lockGain.gain.linearRampToValueAtTime(0.09, audioCtx.currentTime + 0.06);
@@ -9518,11 +9579,15 @@ try { checkUrlHashRoutine(); } catch(e){}
     if (!lockOsc || !audioCtx) return;
     try {
       var freq = 290 + Math.pow(Math.max(0, Math.min(1, progress)), 1.35) * 440;
-      lockOsc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      if (Math.abs(freq - lastLockAudioFreq) >= 2.0) {
+        lastLockAudioFreq = freq;
+        lockOsc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      }
     } catch(e){}
   }
 
   function stopLockAudio() {
+    lastLockAudioFreq = 0;
     if (!lockGain || !audioCtx) {
       if (lockOsc) { try { lockOsc.stop(); lockOsc.disconnect(); } catch(e){} lockOsc = null; }
       return;
@@ -9677,7 +9742,7 @@ try { checkUrlHashRoutine(); } catch(e){}
     canvas.width = Math.floor(width * dpr);
     canvas.height = Math.floor(height * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    HIT_RADIUS = (width < 768) ? 104 : 88;
+    STRICT_HIT_RADIUS = (width < 768) ? 18 : 14;
   }
 
   window.addEventListener("resize", function() {
@@ -9964,8 +10029,8 @@ try { checkUrlHashRoutine(); } catch(e){}
           contactDuration = 0;
           stopLockAudio();
         } else {
-          var dist = Math.hypot(cursor.x - lockedParticle.x, cursor.y - lockedParticle.y);
-          if (dist <= HIT_RADIUS) {
+          var dist = getParticleTouchDistance(cursor.x, cursor.y, lockedParticle);
+          if (dist <= STRICT_HIT_RADIUS) {
             contactDuration += dt;
             var progress = Math.min(1.0, contactDuration / REQUIRED_CONTACT);
             startLockAudio();
@@ -9977,6 +10042,7 @@ try { checkUrlHashRoutine(); } catch(e){}
               triggerVictory(lockedParticle);
             }
           } else {
+            // Strict physical touch lost: immediate reset
             contactDuration = 0.0;
             lockedParticle = null;
             stopLockAudio();
@@ -9990,8 +10056,8 @@ try { checkUrlHashRoutine(); } catch(e){}
         for (var pi = 0; pi < particles.length; pi++) {
           var p = particles[pi];
           if (p.exploded || p.fadeProgress < 0.3) continue;
-          var pDist = Math.hypot(cursor.x - p.x, cursor.y - p.y);
-          if (pDist <= HIT_RADIUS && pDist < closestDist) {
+          var pDist = getParticleTouchDistance(cursor.x, cursor.y, p);
+          if (pDist <= STRICT_HIT_RADIUS && pDist < closestDist) {
             closestDist = pDist;
             candidate = p;
           }
@@ -10040,31 +10106,33 @@ try { checkUrlHashRoutine(); } catch(e){}
 
   function drawLockReticle(px, py, progress, dist) {
     ctx.save();
-    var r = 26;
+    var r = 14;
     var nowMs = performance.now();
     var rot = nowMs * 0.0035;
 
-    // Glowing Holographic Beam between cursor & particle
-    ctx.beginPath();
-    ctx.moveTo(cursor.x, cursor.y);
-    ctx.lineTo(px, py);
-    ctx.strokeStyle = "rgba(56, 189, 248, " + (0.35 + progress * 0.45).toFixed(2) + ")";
-    ctx.lineWidth = 1.5;
-    ctx.setLineDash([4, 4]);
-    ctx.lineDashOffset = -nowMs * 0.02;
-    ctx.stroke();
-    ctx.setLineDash([]);
+    // Glowing Holographic Beam between cursor & particle (tight quantum tether)
+    if (dist > 2) {
+      ctx.beginPath();
+      ctx.moveTo(cursor.x, cursor.y);
+      ctx.lineTo(px, py);
+      ctx.strokeStyle = "rgba(56, 189, 248, " + (0.45 + progress * 0.45).toFixed(2) + ")";
+      ctx.lineWidth = 1.4;
+      ctx.setLineDash([3, 3]);
+      ctx.lineDashOffset = -nowMs * 0.02;
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
 
-    // 4 Corner Brackets
+    // 4 Corner Precision Brackets hugging particle
     ctx.translate(px, py);
     ctx.rotate(rot);
     ctx.strokeStyle = progress > 0.85 ? "#ffd700" : "#38bdf8";
-    ctx.shadowColor = progress > 0.85 ? "rgba(255, 215, 0, 0.8)" : "rgba(56, 189, 248, 0.8)";
-    ctx.shadowBlur = 10;
-    ctx.lineWidth = 2.0;
+    ctx.shadowColor = progress > 0.85 ? "rgba(255, 215, 0, 0.75)" : "rgba(56, 189, 248, 0.75)";
+    ctx.shadowBlur = 6;
+    ctx.lineWidth = 1.8;
 
-    var bSize = 8;
-    var bOffset = r + 4;
+    var bSize = 5;
+    var bOffset = r + 3;
     ctx.beginPath(); ctx.moveTo(-bOffset, -bOffset + bSize); ctx.lineTo(-bOffset, -bOffset); ctx.lineTo(-bOffset + bSize, -bOffset); ctx.stroke();
     ctx.beginPath(); ctx.moveTo(bOffset - bSize, -bOffset); ctx.lineTo(bOffset, -bOffset); ctx.lineTo(bOffset, -bOffset + bSize); ctx.stroke();
     ctx.beginPath(); ctx.moveTo(bOffset, bOffset - bSize); ctx.lineTo(bOffset, bOffset); ctx.lineTo(bOffset - bSize, bOffset); ctx.stroke();
@@ -10074,25 +10142,25 @@ try { checkUrlHashRoutine(); } catch(e){}
     ctx.rotate(-rot);
     ctx.beginPath();
     ctx.arc(0, 0, r, 0, Math.PI * 2);
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.15)";
-    ctx.lineWidth = 3.0;
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.16)";
+    ctx.lineWidth = 2.4;
     ctx.stroke();
 
     if (progress > 0) {
       ctx.beginPath();
       ctx.arc(0, 0, r, -Math.PI / 2, -Math.PI / 2 + progress * Math.PI * 2);
       ctx.strokeStyle = progress > 0.85 ? "#ffd700" : "#38bdf8";
-      ctx.lineWidth = 3.8;
+      ctx.lineWidth = 3.0;
       ctx.lineCap = "round";
       ctx.stroke();
     }
 
     // Digital Progress Readout
-    ctx.font = "700 11px 'Chakra Petch', monospace";
+    ctx.font = "700 10px 'Chakra Petch', monospace";
     ctx.fillStyle = progress > 0.85 ? "#ffd700" : "#ffffff";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText((progress * 2.0).toFixed(1) + "s / 2.0s", 0, r + 18);
+    ctx.fillText((progress * 2.0).toFixed(1) + "s / 2.0s", 0, r + 15);
 
     ctx.restore();
   }
