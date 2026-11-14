@@ -40,7 +40,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&family=Orbitron:wght@600;700;800;900&family=Outfit:wght@600;700;800;900&family=Space+Grotesk:wght@600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
   <!-- Relative Stylesheet (with cache-bust versioning) -->
-  <link rel="stylesheet" href="style.css?v=19.0">
+  <link rel="stylesheet" href="style.css?v=20.0">
 </head>
 <body data-app-theme="pure-black" data-clock-style="pure-black">
   <!-- Accessibility Live Region for Screen Readers -->
@@ -527,6 +527,42 @@
                     <button type="button" class="atmo-preset-chip" data-speed="30">Gentle (30%)</button>
                     <button type="button" class="atmo-preset-chip active" data-speed="50">Cosmic (50%)</button>
                     <button type="button" class="atmo-preset-chip" data-speed="100">Hyper (100%)</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="atmo-divider"></div>
+
+              <!-- CONTROL 4: PANEL OPACITY (TRANSPARENCY) -->
+              <div class="atmo-control-section">
+                <div class="atmo-row-header">
+                  <div class="atmo-label-wrap">
+                    <svg class="atmo-sec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="3" width="12" height="12" rx="2" stroke-dasharray="2 2"/>
+                      <rect x="9" y="9" width="12" height="12" rx="2" fill="currentColor" opacity="0.4"/>
+                    </svg>
+                    <span class="atmo-sec-label">Panel Opacity</span>
+                  </div>
+                  <span class="atmo-val-badge" id="panelOpacityValBadge">88% Deep</span>
+                </div>
+                <p class="atmo-sec-desc">
+                  Glass transparency vs solid opacity of this atmosphere panel.
+                </p>
+
+                <div class="atmo-slider-container">
+                  <div class="atmo-track-meta">
+                    <span class="atmo-track-end">Glass (35%)</span>
+                    <span class="atmo-track-end">Solid (100%)</span>
+                  </div>
+                  <div class="atmo-slider-wrapper">
+                    <input type="range" id="sliderPanelOpacity" class="atmo-range-slider" min="35" max="100" step="1" value="88" aria-label="Panel Transparency Opacity">
+                    <div class="atmo-slider-fill" id="panelOpacitySliderFill"></div>
+                  </div>
+                  <div class="atmo-presets-row">
+                    <button type="button" class="atmo-preset-chip" data-panel-opacity="45">Glass (45%)</button>
+                    <button type="button" class="atmo-preset-chip" data-panel-opacity="70">Balanced (70%)</button>
+                    <button type="button" class="atmo-preset-chip active" data-panel-opacity="88">Deep (88%)</button>
+                    <button type="button" class="atmo-preset-chip" data-panel-opacity="100">Solid (100%)</button>
                   </div>
                 </div>
               </div>
@@ -1038,6 +1074,6 @@
   <audio id="alarmAudioElement" preload="auto" src="sounds/piano.mp3"></audio>
 
   <!-- Relative JavaScript (with cache-bust versioning) -->
-  <script src="app.js?v=19.0"></script>
+  <script src="app.js?v=20.0"></script>
 </body>
 </html>

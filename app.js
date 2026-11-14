@@ -2589,7 +2589,11 @@
       setPomoMode('focus');
     } else if (modeKey === 'zen-immersion') {
       switchAppTab('timer');
-      toggleZenMode(true);
+      if (userAction) {
+        toggleZenMode(true);
+      } else {
+        toggleZenMode(false); // ALWAYS show full buttons and UI on page load/refresh
+      }
     } else if (modeKey === 'deep-work') {
       switchAppTab('timer');
       toggleZenMode(false);
@@ -2807,6 +2811,9 @@
     }
   });
 
+  // On initial page load / refresh, always ensure Zen Mode is exited so buttons are visible
+  toggleZenMode(false);
+  document.body.classList.remove('zen-mode', 'zen-idle');
   // Initialize saved productivity mode on load (without triggering user action toast)
   applyProductivityMode(currentProductivityMode, false);
   updateEarthDayProgress();
@@ -3584,10 +3591,86 @@
       });
     });
 
+    // ── 4. ATMOSPHERE PANEL OPACITY (TRANSPARENCY) CONTROLLER ──
+    const sliderPanelOpacity = document.getElementById('sliderPanelOpacity');
+    const panelOpacityValBadge = document.getElementById('panelOpacityValBadge');
+    const panelOpacityChips = document.querySelectorAll('.atmo-preset-chip[data-panel-opacity]');
+
+    let currentPanelOpacity = 88; // Default 88% = Deep, crisp & readable
+    try {
+      const savedO = localStorage.getItem('orlando-atmo-panel-opacity');
+      if (savedO !== null) {
+        const parsedO = parseInt(savedO, 10);
+        if (!isNaN(parsedO) && parsedO >= 35 && parsedO <= 100) {
+          currentPanelOpacity = parsedO;
+        }
+      }
+    } catch(e) {}
+
+    function applyPanelOpacity(value, save = true) {
+      currentPanelOpacity = Math.max(35, Math.min(100, Math.round(value)));
+      const alpha = (currentPanelOpacity / 100).toFixed(2);
+
+      if (sliderPanelOpacity) {
+        sliderPanelOpacity.value = currentPanelOpacity;
+      }
+
+      if (panelOpacityValBadge) {
+        if (currentPanelOpacity >= 98) {
+          panelOpacityValBadge.textContent = '100% Solid';
+        } else if (currentPanelOpacity >= 82) {
+          panelOpacityValBadge.textContent = `${currentPanelOpacity}% Deep`;
+        } else if (currentPanelOpacity >= 60) {
+          panelOpacityValBadge.textContent = `${currentPanelOpacity}% Balanced`;
+        } else {
+          panelOpacityValBadge.textContent = `${currentPanelOpacity}% Glass`;
+        }
+      }
+
+      // Update active preset chips
+      panelOpacityChips.forEach((chip) => {
+        const chipVal = parseInt(chip.getAttribute('data-panel-opacity'), 10);
+        if (chipVal === currentPanelOpacity) {
+          chip.classList.add('active');
+        } else {
+          chip.classList.remove('active');
+        }
+      });
+
+      // Apply dynamic opacity to atmosphere popup panel
+      if (atmospherePopup) {
+        const isPureBlack = document.body.getAttribute('data-app-theme') === 'pure-black';
+        const rgb = isPureBlack ? '3, 4, 7' : '10, 14, 22';
+        atmospherePopup.style.setProperty('background', `rgba(${rgb}, ${alpha})`, 'important');
+      }
+
+      if (save) {
+        try {
+          localStorage.setItem('orlando-atmo-panel-opacity', currentPanelOpacity.toString());
+        } catch(e) {}
+      }
+    }
+
+    if (sliderPanelOpacity) {
+      sliderPanelOpacity.addEventListener('input', (e) => {
+        applyPanelOpacity(parseFloat(e.target.value), true);
+      });
+    }
+
+    panelOpacityChips.forEach((chip) => {
+      chip.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const val = parseInt(chip.getAttribute('data-panel-opacity'), 10);
+        applyPanelOpacity(val, true);
+        if (typeof AudioHUD !== 'undefined' && AudioHUD.tick) AudioHUD.tick(1100);
+      });
+    });
+
     // Initialize defaults on load
     applyAmbientGlow(currentAmbientGlow, false);
     applyParticleField(currentParticleField, false);
     applyParticleSpeed(currentParticleSpeed, false);
+    applyPanelOpacity(currentPanelOpacity, false);
   }
 
   // Initialize Atmosphere & Particle Field Lab
