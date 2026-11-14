@@ -40,7 +40,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&family=Orbitron:wght@600;700;800;900&family=Outfit:wght@600;700;800;900&family=Space+Grotesk:wght@600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
   <!-- Relative Stylesheet (with cache-bust versioning) -->
-  <link rel="stylesheet" href="style.css?v=16.0">
+  <link rel="stylesheet" href="style.css?v=18.0">
 </head>
 <body data-app-theme="pure-black" data-clock-style="pure-black">
   <!-- Accessibility Live Region for Screen Readers -->
@@ -91,23 +91,117 @@
       <div class="or-brand-left-container">
         <!-- Glassmorphic Translucent Logo + Title Button with Supernova Easter Egg -->
         <div class="or-brand-badge-wrap">
-          <button type="button" class="or-brand-badge transparent-brand" id="btnLogoEasterEgg" title="Quantum Supernova Protocol (Click to Trigger)">
+          <button type="button" class="or-brand-badge transparent-brand" id="btnLogoEasterEgg" title="Open Quantum Time Command (Supernova Detonation & Hub)">
             <div class="or-brand-logo-glass">
               <img src="assets/ot-icon-192.png" alt="Orlando Timer Transparent Emblem" class="or-brand-logo-img transparent-logo">
               <span class="logo-specular-shimmer"></span>
             </div>
             <div class="or-brand-titles">
               <span class="or-brand-main transparent-text">ORLANDO<span class="or-brand-accent transparent-accent">TIMER</span></span>
-              <!-- Futuristic Executive Mode Badge -->
-              <div class="or-brand-fun-tag" id="brandFunTag" title="Toggle Quantum Time Command">
-                <span class="fun-sparkle-dot"></span>
-                <span class="fun-tag-label" id="funTagLabel">Focus Protocol</span>
-                <svg class="cyber-chevron-svg" viewBox="0 0 12 12" fill="none">
-                  <path d="M2.5 4.5L6 8l3.5-3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </div>
             </div>
           </button>
+
+          <!-- Real Productivity Mode Selector Dropdown -->
+          <div class="mode-dropdown-wrapper" id="modeDropdownWrapper">
+            <button type="button" class="or-brand-fun-tag" id="brandFunTag" aria-haspopup="true" aria-expanded="false" title="Switch Productivity Workflow Mode">
+              <span class="fun-sparkle-dot"></span>
+              <span class="fun-tag-label" id="funTagLabel">Focus Protocol</span>
+              <svg class="cyber-chevron-svg" viewBox="0 0 12 12" fill="none">
+                <path d="M2.5 4.5L6 8l3.5-3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+
+            <!-- Mode Selector Dropdown Menu -->
+            <div class="mode-dropdown-menu" id="modeDropdownMenu" role="menu" aria-label="Productivity Protocol Modes">
+              <div class="mode-dropdown-header">
+                <span>PRODUCTIVITY PROTOCOLS</span>
+              </div>
+              <!-- Mode 1: Focus Protocol -->
+              <button type="button" class="mode-option-btn active" data-mode="focus-protocol" role="menuitem">
+                <div class="mode-opt-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="9"/>
+                    <path d="M12 7v5l3 3"/>
+                  </svg>
+                </div>
+                <div class="mode-opt-text">
+                  <div class="mode-opt-title-row">
+                    <strong>Focus Protocol</strong>
+                    <span class="mode-badge">Pomodoro</span>
+                  </div>
+                  <small>Classic 25m Focus &amp; 5m Break rhythm with auto-advance</small>
+                </div>
+              </button>
+
+              <!-- Mode 2: Zen Immersion -->
+              <button type="button" class="mode-option-btn" data-mode="zen-immersion" role="menuitem">
+                <div class="mode-opt-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="9"/>
+                    <circle cx="12" cy="12" r="3.5" fill="currentColor" fill-opacity="0.3"/>
+                    <path d="M12 2v2M12 20v2M2 12h2M20 12h2"/>
+                  </svg>
+                </div>
+                <div class="mode-opt-text">
+                  <div class="mode-opt-title-row">
+                    <strong>Zen Immersion</strong>
+                    <span class="mode-badge">Void</span>
+                  </div>
+                  <small>Colossal floating clock in void with 4-7-8 breathing halo &amp; singing bowl</small>
+                </div>
+              </button>
+
+              <!-- Mode 3: Deep Work -->
+              <button type="button" class="mode-option-btn" data-mode="deep-work" role="menuitem">
+                <div class="mode-opt-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                  </svg>
+                </div>
+                <div class="mode-opt-text">
+                  <div class="mode-opt-title-row">
+                    <strong>Deep Work</strong>
+                    <span class="mode-badge">90m Ultra</span>
+                  </div>
+                  <small>90-minute human ultradian cycle with 432 Hz Solfeggio focus drone</small>
+                </div>
+              </button>
+
+              <!-- Mode 4: Quantum Flow -->
+              <button type="button" class="mode-option-btn" data-mode="quantum-flow" role="menuitem">
+                <div class="mode-opt-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M2 12h5l3-9 4 18 3-9h5"/>
+                  </svg>
+                </div>
+                <div class="mode-opt-text">
+                  <div class="mode-opt-title-row">
+                    <strong>Quantum Flow</strong>
+                    <span class="mode-badge">Stopwatch</span>
+                  </div>
+                  <small>Open-ended count-up timer to track creative flow with zero pressure</small>
+                </div>
+              </button>
+
+              <!-- Mode 5: Precision Chrono -->
+              <button type="button" class="mode-option-btn" data-mode="precision-chrono" role="menuitem">
+                <div class="mode-opt-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="13" r="8"/>
+                    <path d="M12 9v4l2.5 2.5"/>
+                    <path d="M10 2h4M12 2v3"/>
+                  </svg>
+                </div>
+                <div class="mode-opt-text">
+                  <div class="mode-opt-title-row">
+                    <strong>Precision Chrono</strong>
+                    <span class="mode-badge">Split Laps</span>
+                  </div>
+                  <small>Swiss chronometer with millisecond precision &amp; lap telemetry</small>
+                </div>
+              </button>
+            </div>
+          </div>
         </div>
 
         <!-- Futuristic Micro-Cockpit Drawer (Quantum Time Command) -->
@@ -909,6 +1003,6 @@
   <audio id="alarmAudioElement" preload="auto" src="sounds/piano.mp3"></audio>
 
   <!-- Relative JavaScript (with cache-bust versioning) -->
-  <script src="app.js?v=16.0"></script>
+  <script src="app.js?v=18.0"></script>
 </body>
 </html>

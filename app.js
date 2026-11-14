@@ -1193,6 +1193,14 @@
   const tabBtns = document.querySelectorAll('.tab-btn');
   const tabPanels = document.querySelectorAll('.tab-panel');
 
+  
+  function switchAppTab(tabName) {
+    const targetBtn = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
+    if (targetBtn) {
+      targetBtn.click();
+    }
+  }
+
   tabBtns.forEach((btn) => {
     btn.addEventListener('click', () => {
       const tabTarget = btn.getAttribute('data-tab');
@@ -2196,14 +2204,109 @@
   const dayProgressBar = document.getElementById('dayProgressBar');
   const dayCountdownSub = document.getElementById('dayCountdownSub');
 
-  const funModes = [
-    'Focus Protocol',
-    'Zen Immersion',
-    'Deep Work',
-    'Quantum Flow',
-    'Precision Chrono'
-  ];
-  let funModeIndex = 0;
+  // ── REAL PRODUCTIVITY PROTOCOL MODES CONTROLLER ──
+  const MODE_METADATA = {
+    'focus-protocol': {
+      title: 'Focus Protocol',
+      badge: 'Pomodoro',
+      toastTitle: '🍅 FOCUS PROTOCOL ACTIVE',
+      toastDesc: '25m Focus / 5m Break Pomodoro rhythm with auto-advance.',
+      srText: 'Focus Protocol activated: 25-minute Pomodoro rhythm.'
+    },
+    'zen-immersion': {
+      title: 'Zen Immersion',
+      badge: 'Void',
+      toastTitle: '🧘 ZEN IMMERSION ACTIVE',
+      toastDesc: 'Tranquil floating void with 4-7-8 breathing halo & singing bowl.',
+      srText: 'Zen Immersion activated: Minimalist focus void.'
+    },
+    'deep-work': {
+      title: 'Deep Work',
+      badge: '90m Ultra',
+      toastTitle: '⚡ DEEP WORK ACTIVE',
+      toastDesc: '90-minute human ultradian cycle with 432 Hz Solfeggio drone.',
+      srText: 'Deep Work activated: 90-minute ultradian rhythm with 432 Hz focus drone.'
+    },
+    'quantum-flow': {
+      title: 'Quantum Flow',
+      badge: 'Stopwatch',
+      toastTitle: '🌌 QUANTUM FLOW ACTIVE',
+      toastDesc: 'Open-ended count-up stopwatch to track flow state with zero pressure.',
+      srText: 'Quantum Flow activated: Stopwatch flow tracking.'
+    },
+    'precision-chrono': {
+      title: 'Precision Chrono',
+      badge: 'Split Laps',
+      toastTitle: '⏱️ PRECISION CHRONO ACTIVE',
+      toastDesc: 'High-precision Swiss chronometer with millisecond precision & split laps.',
+      srText: 'Precision Chrono activated: Millisecond chronometer with split laps.'
+    }
+  };
+
+  let currentProductivityMode = safeGetItem('orlando-productivity-mode', 'focus-protocol');
+
+  function applyProductivityMode(modeKey, userAction = true) {
+    if (!MODE_METADATA[modeKey]) modeKey = 'focus-protocol';
+    currentProductivityMode = modeKey;
+    safeSetItem('orlando-productivity-mode', modeKey);
+
+    const meta = MODE_METADATA[modeKey];
+    if (funTagLabel) funTagLabel.textContent = meta.title;
+
+    // Update active state in dropdown
+    const modeBtns = document.querySelectorAll('.mode-option-btn');
+    modeBtns.forEach((btn) => {
+      btn.classList.toggle('active', btn.getAttribute('data-mode') === modeKey);
+    });
+
+    if (modeKey === 'focus-protocol') {
+      switchAppTab('timer');
+      toggleZenMode(false);
+      setPomoMode('focus');
+    } else if (modeKey === 'zen-immersion') {
+      switchAppTab('timer');
+      toggleZenMode(true);
+    } else if (modeKey === 'deep-work') {
+      switchAppTab('timer');
+      toggleZenMode(false);
+      setTimerDuration(90 * 60); // 90 min
+      zenSoundMode = 'drone';
+      safeSetItem('orlando-zen-sound-mode', 'drone');
+      startZenDrone();
+    } else if (modeKey === 'quantum-flow') {
+      switchAppTab('stopwatch');
+      toggleZenMode(false);
+    } else if (modeKey === 'precision-chrono') {
+      switchAppTab('stopwatch');
+      toggleZenMode(false);
+      const laps = document.getElementById('lapsWrapper');
+      if (laps) laps.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    if (userAction) {
+      showQuantumTelemetryToast(meta.toastTitle, meta.toastDesc);
+      announceSR(meta.srText);
+      AudioHUD.confirm();
+    }
+  }
+
+  function toggleModeDropdown(force) {
+    const menu = document.getElementById('modeDropdownMenu');
+    const tag = document.getElementById('brandFunTag');
+    if (!menu || !tag) return;
+
+    const isOpen = force !== undefined ? force : !menu.classList.contains('open');
+    if (isOpen) {
+      menu.classList.add('open');
+      tag.classList.add('open');
+      tag.setAttribute('aria-expanded', 'true');
+      AudioHUD.tick(880);
+    } else {
+      menu.classList.remove('open');
+      tag.classList.remove('open');
+      tag.setAttribute('aria-expanded', 'false');
+    }
+  }
 
   function updateEarthDayProgress() {
     const now = new Date();
@@ -2495,13 +2598,46 @@
         window.spawnSupernovaBurst(e.clientX, e.clientY);
       }
       AudioHUD.confirm();
-      // Cycle focus protocol tag
-      funModeIndex = (funModeIndex + 1) % funModes.length;
-      if (funTagLabel) funTagLabel.textContent = funModes[funModeIndex];
-      // Toggle cockpit
+      // Open Quantum Time Command Hub drawer!
       toggleFunCockpit();
     });
   }
+
+  // Brand Fun Tag Dropdown Listener
+  if (brandFunTag) {
+    brandFunTag.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleModeDropdown();
+    });
+  }
+
+  // Wire each of the 5 Real Mode Options
+  const modeOptionBtns = document.querySelectorAll('.mode-option-btn');
+  modeOptionBtns.forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const modeKey = btn.getAttribute('data-mode');
+      applyProductivityMode(modeKey, true);
+      toggleModeDropdown(false);
+    });
+  });
+
+  // Close mode dropdown on outside click or Escape
+  document.addEventListener('click', (e) => {
+    const wrapper = document.getElementById('modeDropdownWrapper');
+    if (wrapper && !wrapper.contains(e.target)) {
+      toggleModeDropdown(false);
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      toggleModeDropdown(false);
+    }
+  });
+
+  // Initialize saved productivity mode on load
+  applyProductivityMode(currentProductivityMode, false);
 
   if (btnCloseFunCockpit) {
     btnCloseFunCockpit.addEventListener('click', (e) => {
