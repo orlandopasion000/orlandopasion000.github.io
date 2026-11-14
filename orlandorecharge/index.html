@@ -9208,32 +9208,28 @@ try { checkUrlHashRoutine(); } catch(e){}
             isChasedInGame = true;
             var norm = Math.max(0, 1 - dist / INFLUENCE_RADIUS);
 
-            // Detect proximity to walls and the 4 corners so particles can be herded & pinned in corners!
+            // Balanced corner awareness (105px zone): particles stay lively & try to evade, yet can be skillfully cornered!
             var distWallX = Math.min(p.x - MIN_X, MAX_X - p.x);
             var distWallY = Math.min(p.y - MIN_Y, MAX_Y - p.y);
-            var nearWallX = Math.max(0, Math.min(1, 1 - distWallX / 150));
-            var nearWallY = Math.max(0, Math.min(1, 1 - distWallY / 150));
+            var nearWallX = Math.max(0, Math.min(1, 1 - distWallX / 105));
+            var nearWallY = Math.max(0, Math.min(1, 1 - distWallY / 105));
             var nearEdgeFactor = Math.max(nearWallX, nearWallY);
             var inCornerPocket = nearWallX * nearWallY;
 
-            var isMouseStationary = !p.isLocked && (inCornerPocket < 0.1) && (now - mouse.lastActiveTime > 350);
-            var evadeMultiplier = isMouseStationary ? 1.8 : 1.0;
-            var evadeForce = Math.pow(norm, 1.4) * 2.2 * evadeMultiplier * (1 - inCornerPocket * 0.72);
+            var isMouseStationary = !p.isLocked && (inCornerPocket < 0.25) && (now - mouse.lastActiveTime > 280);
+            var evadeMultiplier = isMouseStationary ? 1.95 : 1.0;
+            var evadeForce = Math.pow(norm, 1.4) * 2.85 * evadeMultiplier * (1 - inCornerPocket * 0.42);
             var angle = Math.atan2(dy, dx);
-            var tanScale = 1.0 - nearEdgeFactor * 0.92; // Fade out sideways slip near walls/corners so particles go into the corner
+            var tanScale = Math.max(0.22, 1.0 - nearEdgeFactor * 0.45 - inCornerPocket * 0.30);
             var tanX = -Math.sin(angle) * tanScale;
             var tanY = Math.cos(angle) * tanScale;
 
-            p.vx += (Math.cos(angle) * 1.5 + tanX * 1.05) * evadeForce * 0.36;
-            p.vy += (Math.sin(angle) * 1.5 + tanY * 1.05) * evadeForce * 0.36;
+            p.vx += (Math.cos(angle) * 1.65 + tanX * 1.15) * evadeForce * 0.39;
+            p.vy += (Math.sin(angle) * 1.65 + tanY * 1.15) * evadeForce * 0.39;
 
-            // Corner Pocket Pinning: when herded into any of the 4 corners, dampen sideways escape & nestle into corner
-            if (inCornerPocket > 0.08) {
-              var cornerX = (p.x < width * 0.5) ? MIN_X : MAX_X;
-              var cornerY = (p.y < height * 0.5) ? MIN_Y : MAX_Y;
-              p.vx += (cornerX - p.x) * 0.065 * inCornerPocket;
-              p.vy += (cornerY - p.y) * 0.065 * inCornerPocket;
-              var cornerDamp = 1 - inCornerPocket * 0.52;
+            // Subtle corner damping (no artificial magnetic pull — particles still squirm and must be actively trapped!)
+            if (inCornerPocket > 0.12) {
+              var cornerDamp = 1 - inCornerPocket * 0.22;
               p.vx *= cornerDamp;
               p.vy *= cornerDamp;
             }
@@ -9399,48 +9395,47 @@ try { checkUrlHashRoutine(); } catch(e){}
       p.y += p.vy;
 
       // ── LINE-OF-SIGHT SCREEN CONTAINMENT (Aerodynamic / Hydrodynamic Curving Perimeter - Zero Hard Bounces) ──
-      // When a particle is actively being herded by the cursor in Game Mode, disable wall pushback so it can be cornered!
-      if (!isChasedInGame) {
-        var TURN_BUFFER = 75;
-        if (p.x < MIN_X + TURN_BUFFER) {
-          var f = (MIN_X + TURN_BUFFER - p.x) / TURN_BUFFER;
-          p.vx += f * f * 0.35;
-          p.vy += (p.vy >= 0 ? 0.16 : -0.16) * f;
-        } else if (p.x > MAX_X - TURN_BUFFER) {
-          var f = (p.x - (MAX_X - TURN_BUFFER)) / TURN_BUFFER;
-          p.vx -= f * f * 0.35;
-          p.vy += (p.vy >= 0 ? 0.16 : -0.16) * f;
-        }
-        if (p.y < MIN_Y + TURN_BUFFER) {
-          var f = (MIN_Y + TURN_BUFFER - p.y) / TURN_BUFFER;
-          p.vy += f * f * 0.35;
-          p.vx += (p.vx >= 0 ? 0.16 : -0.16) * f;
-        } else if (p.y > MAX_Y - TURN_BUFFER) {
-          var f = (p.y - (MAX_Y - TURN_BUFFER)) / TURN_BUFFER;
-          p.vy -= f * f * 0.35;
-          p.vx += (p.vx >= 0 ? 0.16 : -0.16) * f;
-        }
+      // In Game Mode pursuit, retain 32% perimeter cushion so particles stay lively near walls yet can still be cornered
+      var turnScale = isChasedInGame ? 0.32 : 1.0;
+      var TURN_BUFFER = 75;
+      if (p.x < MIN_X + TURN_BUFFER) {
+        var f = ((MIN_X + TURN_BUFFER - p.x) / TURN_BUFFER) * turnScale;
+        p.vx += f * f * 0.35;
+        p.vy += (p.vy >= 0 ? 0.16 : -0.16) * f;
+      } else if (p.x > MAX_X - TURN_BUFFER) {
+        var f = ((p.x - (MAX_X - TURN_BUFFER)) / TURN_BUFFER) * turnScale;
+        p.vx -= f * f * 0.35;
+        p.vy += (p.vy >= 0 ? 0.16 : -0.16) * f;
+      }
+      if (p.y < MIN_Y + TURN_BUFFER) {
+        var f = ((MIN_Y + TURN_BUFFER - p.y) / TURN_BUFFER) * turnScale;
+        p.vy += f * f * 0.35;
+        p.vx += (p.vx >= 0 ? 0.16 : -0.16) * f;
+      } else if (p.y > MAX_Y - TURN_BUFFER) {
+        var f = ((p.y - (MAX_Y - TURN_BUFFER)) / TURN_BUFFER) * turnScale;
+        p.vy -= f * f * 0.35;
+        p.vx += (p.vx >= 0 ? 0.16 : -0.16) * f;
       }
 
-      // Soft perimeter containment (absorbs velocity when cornered in game mode so particles stay pinned in corners)
-      var wallBounce = isChasedInGame ? 0.05 : 0.45;
+      // Soft perimeter containment (balanced 0.20 rebound & 0.85 glide when chased in game mode)
+      var wallBounce = isChasedInGame ? 0.20 : 0.45;
       if (p.x < MIN_X) {
         p.x = MIN_X;
         if (p.vx < 0) p.vx = -p.vx * wallBounce;
-        if (isChasedInGame) p.vy *= 0.72;
+        if (isChasedInGame) p.vy *= 0.85;
       } else if (p.x > MAX_X) {
         p.x = MAX_X;
         if (p.vx > 0) p.vx = -p.vx * wallBounce;
-        if (isChasedInGame) p.vy *= 0.72;
+        if (isChasedInGame) p.vy *= 0.85;
       }
       if (p.y < MIN_Y) {
         p.y = MIN_Y;
         if (p.vy < 0) p.vy = -p.vy * wallBounce;
-        if (isChasedInGame) p.vx *= 0.72;
+        if (isChasedInGame) p.vx *= 0.85;
       } else if (p.y > MAX_Y) {
         p.y = MAX_Y;
         if (p.vy > 0) p.vy = -p.vy * wallBounce;
-        if (isChasedInGame) p.vx *= 0.72;
+        if (isChasedInGame) p.vx *= 0.85;
       }
 
       if (!p.isFront && p.isRadiant) radiantBackNodes.push(p);
@@ -10181,7 +10176,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   var contactDuration = 0.0;
   var lastTouchContactTime = 0;
   var REQUIRED_CONTACT = 2.0; // 2 seconds continuous
-  var STRICT_HIT_RADIUS = 16; // Smooth physical contact radius (desktop: 16px, tablet: 20px, mobile: 24px)
+  var STRICT_HIT_RADIUS = 15; // Balanced physical contact radius (desktop: 15px, tablet: 19px, mobile: 23px)
 
   // Exact point-to-particle physical touch detection (measures against living multi-joint quantum spine)
   function getParticleTouchDistance(cx, cy, p) {
@@ -10444,7 +10439,7 @@ try { checkUrlHashRoutine(); } catch(e){}
     canvas.width = Math.floor(width * dpr);
     canvas.height = Math.floor(height * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    STRICT_HIT_RADIUS = (width < 600) ? 24 : ((width < 1024) ? 20 : 16);
+    STRICT_HIT_RADIUS = (width < 600) ? 23 : ((width < 1024) ? 19 : 15);
   }
 
   // Cross-device capability check (e.g. iOS Safari does not support DOM Fullscreen API)
@@ -10777,9 +10772,9 @@ try { checkUrlHashRoutine(); } catch(e){}
     var particles = (window.antigravityFX && typeof window.antigravityFX.getParticles === "function") ? window.antigravityFX.getParticles() : [];
 
     // Active pursuit for lock ACQUISITION: to engage a lock on a new particle, cursor must have moved recently
-    // or be actively cornering near the arena perimeter (prevents AFK camping in the center of the screen)
-    var cursorNearCorner = (cursor.x < 170 || cursor.x > width - 170) && (cursor.y < 170 || cursor.y > height - 170);
-    var canAcquireNewLock = hasDeliberateMove && ((now - lastCursorMoveTime < 550) || cursorNearCorner);
+    // (allows brief 850ms pause when actively cornering in the 115px corner zone, while preventing AFK camping)
+    var cursorNearCorner = (cursor.x < 115 || cursor.x > width - 115) && (cursor.y < 115 || cursor.y > height - 115);
+    var canAcquireNewLock = hasDeliberateMove && ((now - lastCursorMoveTime < 380) || (cursorNearCorner && (now - lastCursorMoveTime < 850)));
 
     if (!isWon && !isGameOver && !isWarmingUp && remainingTime > 0 && cursor.active && hasDeliberateMove) {
       if (lockedParticle) {
@@ -10809,8 +10804,8 @@ try { checkUrlHashRoutine(); } catch(e){}
               triggerVictory(lockedParticle);
             }
           } else {
-            // Particle actively evades fast: allow 240ms chase grace window so high-speed & corner pursuit accumulates count!
-            if (now - lastTouchContactTime > 240) {
+            // Particle actively evades: 205ms chase grace window so active pursuit & cornering is challenging yet winnable!
+            if (now - lastTouchContactTime > 205) {
               lockedParticle.isLocked = false;
               contactDuration = 0.0;
               lockedParticle = null;
