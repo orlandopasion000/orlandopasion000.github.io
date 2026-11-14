@@ -10799,152 +10799,274 @@ try { checkUrlHashRoutine(); } catch(e){}
     ctx.translate(cx, cy);
 
     var t = now * 0.0016;
-    var rotBase = now * 0.0004;
-    var colorShift = (now * 0.04) % 360;
+    var rotBase = now * 0.00025;
+    var colorShift = (now * 0.025) % 360;
 
-    // Contact resonance: when locking onto a particle, cursor pulses with excitation
+    // Contact excitation
     var exc = (progress > 0) ? (progress * 0.35) : 0;
-    var spinMult = 1.0 + exc * 2.5;
+    var spinMult = 1.0 + exc * 2.2;
 
-    // ── 1. Diffracted Horizontal & Diagonal Photonic Lens Flares ──
-    var flareLen = 44 + exc * 12;
-    var flareW = 2.8 + exc * 1.0;
-
-    // Horizontal primary flare beam (cyan to purple to violet)
-    var hGrad = ctx.createLinearGradient(-flareLen, 0, flareLen, 0);
-    hGrad.addColorStop(0.0, "rgba(168, 85, 247, 0)");
-    hGrad.addColorStop(0.2, "rgba(192, 132, 252, 0.40)");
-    hGrad.addColorStop(0.38, "rgba(56, 189, 248, 0.75)");
-    hGrad.addColorStop(0.5, "rgba(255, 255, 255, 0.95)");
-    hGrad.addColorStop(0.62, "rgba(56, 189, 248, 0.75)");
-    hGrad.addColorStop(0.8, "rgba(192, 132, 252, 0.40)");
-    hGrad.addColorStop(1.0, "rgba(168, 85, 247, 0)");
-
-    ctx.fillStyle = hGrad;
+    // ── 1. Diffused Nebula Glow (Cosmic atmosphere matching reference photo) ──
+    var rNebula = 44 + exc * 6;
+    // Golden amber top-right nebula
+    var nebGold = ctx.createRadialGradient(6, -14, 2, 6, -14, rNebula * 0.95);
+    nebGold.addColorStop(0.0, "rgba(245, 158, 11, 0.35)");
+    nebGold.addColorStop(0.55, "rgba(245, 158, 11, 0.09)");
+    nebGold.addColorStop(1.0, "rgba(245, 158, 11, 0)");
+    ctx.fillStyle = nebGold;
     ctx.beginPath();
-    ctx.moveTo(-flareLen, 0);
-    ctx.lineTo(0, -flareW);
-    ctx.lineTo(flareLen, 0);
-    ctx.lineTo(0, flareW);
+    ctx.arc(6, -14, rNebula * 0.95, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Cyan bottom-left nebula
+    var nebCyan = ctx.createRadialGradient(-8, 12, 2, -8, 12, rNebula * 0.9);
+    nebCyan.addColorStop(0.0, "rgba(6, 182, 212, 0.30)");
+    nebCyan.addColorStop(0.55, "rgba(6, 182, 212, 0.08)");
+    nebCyan.addColorStop(1.0, "rgba(6, 182, 212, 0)");
+    ctx.fillStyle = nebCyan;
+    ctx.beginPath();
+    ctx.arc(-8, 12, rNebula * 0.9, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Violet ambient core nebula
+    var nebViolet = ctx.createRadialGradient(0, 0, 4, 0, 0, rNebula * 0.9);
+    nebViolet.addColorStop(0.0, "rgba(168, 85, 247, 0.45)");
+    nebViolet.addColorStop(0.55, "rgba(126, 34, 206, 0.20)");
+    nebViolet.addColorStop(1.0, "rgba(88, 28, 135, 0)");
+    ctx.fillStyle = nebViolet;
+    ctx.beginPath();
+    ctx.arc(0, 0, rNebula * 0.9, 0, Math.PI * 2);
+    ctx.fill();
+
+    // ── 2. Light Rays / Photonic Lens Flares ──
+    // A. Vertical Electric Blue Ray
+    var vertRayLen = 48 + exc * 10;
+    var vGrad = ctx.createLinearGradient(0, -vertRayLen, 0, vertRayLen);
+    vGrad.addColorStop(0.0, "rgba(56, 189, 248, 0)");
+    vGrad.addColorStop(0.3, "rgba(56, 189, 248, 0.35)");
+    vGrad.addColorStop(0.5, "rgba(224, 242, 254, 0.75)");
+    vGrad.addColorStop(0.7, "rgba(56, 189, 248, 0.35)");
+    vGrad.addColorStop(1.0, "rgba(56, 189, 248, 0)");
+    ctx.fillStyle = vGrad;
+    ctx.beginPath();
+    ctx.moveTo(0, -vertRayLen);
+    ctx.lineTo(2.6, 0);
+    ctx.lineTo(0, vertRayLen);
+    ctx.lineTo(-2.6, 0);
     ctx.closePath();
     ctx.fill();
 
-    // Diagonal flares (golden amber along 60 deg and 120 deg axes)
+    // B. Diagonal Golden Amber Rays (Along ~60 deg and ~120 deg)
     for (var d = 0; d < 2; d++) {
-      var dAngle = d === 0 ? (Math.PI / 3) : (-Math.PI / 3);
+      var dAngle = (d === 0 ? 1 : -1) * (Math.PI / 3.2);
       ctx.save();
       ctx.rotate(dAngle);
-      var dGrad = ctx.createLinearGradient(-flareLen * 0.75, 0, flareLen * 0.75, 0);
+      var dRayLen = 52 + exc * 10;
+      var dGrad = ctx.createLinearGradient(-dRayLen, 0, dRayLen, 0);
       dGrad.addColorStop(0.0, "rgba(245, 158, 11, 0)");
-      dGrad.addColorStop(0.3, "rgba(251, 191, 36, 0.40)");
-      dGrad.addColorStop(0.5, "rgba(255, 255, 255, 0.85)");
-      dGrad.addColorStop(0.7, "rgba(251, 191, 36, 0.40)");
+      dGrad.addColorStop(0.3, "rgba(251, 191, 36, 0.32)");
+      dGrad.addColorStop(0.5, "rgba(254, 240, 138, 0.80)");
+      dGrad.addColorStop(0.7, "rgba(251, 191, 36, 0.32)");
       dGrad.addColorStop(1.0, "rgba(245, 158, 11, 0)");
       ctx.fillStyle = dGrad;
       ctx.beginPath();
-      ctx.moveTo(-flareLen * 0.75, 0);
-      ctx.lineTo(0, -1.8);
-      ctx.lineTo(flareLen * 0.75, 0);
-      ctx.lineTo(0, 1.8);
+      ctx.moveTo(-dRayLen, 0);
+      ctx.lineTo(0, -2.8);
+      ctx.lineTo(dRayLen, 0);
+      ctx.lineTo(0, 2.8);
       ctx.closePath();
       ctx.fill();
       ctx.restore();
     }
 
-    // ── 2. Central Quantum Nucleus (Sphere with deep iridescent shading) ──
-    var rCore = 14.5 + exc * 2.0;
-
-    // Outer ambient core halo (controlled, crisp, not too much glow!)
-    var haloGrad = ctx.createRadialGradient(0, 0, rCore * 0.7, 0, 0, rCore * 1.55);
-    haloGrad.addColorStop(0.0, "rgba(168, 85, 247, 0.40)");
-    haloGrad.addColorStop(0.5, "rgba(56, 189, 248, 0.20)");
-    haloGrad.addColorStop(1.0, "rgba(0, 0, 0, 0)");
-    ctx.fillStyle = haloGrad;
+    // C. Horizontal Anamorphic Primary Lens Flare (Wide Purple/Electric Blue Wings + White/Cyan Core)
+    var hFlareLen = 64 + exc * 16;
+    var hFlareW = 5.2 + exc * 1.2;
+    // Broad soft outer horizontal beam
+    var hSoftGrad = ctx.createLinearGradient(-hFlareLen, 0, hFlareLen, 0);
+    hSoftGrad.addColorStop(0.0, "rgba(168, 85, 247, 0)");
+    hSoftGrad.addColorStop(0.18, "rgba(192, 132, 252, 0.45)");
+    hSoftGrad.addColorStop(0.38, "rgba(99, 102, 241, 0.75)");
+    hSoftGrad.addColorStop(0.5, "rgba(255, 255, 255, 0.98)");
+    hSoftGrad.addColorStop(0.62, "rgba(99, 102, 241, 0.75)");
+    hSoftGrad.addColorStop(0.82, "rgba(192, 132, 252, 0.45)");
+    hSoftGrad.addColorStop(1.0, "rgba(168, 85, 247, 0)");
+    ctx.fillStyle = hSoftGrad;
     ctx.beginPath();
-    ctx.arc(0, 0, rCore * 1.55, 0, Math.PI * 2);
+    ctx.moveTo(-hFlareLen, 0);
+    ctx.lineTo(0, -hFlareW);
+    ctx.lineTo(hFlareLen, 0);
+    ctx.lineTo(0, hFlareW);
+    ctx.closePath();
     ctx.fill();
 
-    // 3D Spherical plasma body
-    var sphereGrad = ctx.createRadialGradient(-2, -3, 1, 0, 0, rCore);
-    sphereGrad.addColorStop(0.0, "rgba(233, 213, 255, 0.98)");
-    sphereGrad.addColorStop(0.25, "rgba(168, 85, 247, 0.95)");
-    sphereGrad.addColorStop(0.55, "rgba(67, 20, 103, 0.95)");
-    var hueRim1 = (colorShift + 30) % 360;
-    var hueRim2 = (colorShift + 180) % 360;
-    sphereGrad.addColorStop(0.80, "hsla(" + hueRim1 + ", 90%, 55%, 0.85)");
-    sphereGrad.addColorStop(0.95, "hsla(" + hueRim2 + ", 95%, 65%, 0.92)");
-    sphereGrad.addColorStop(1.0, progress > 0.8 ? "rgba(255, 215, 0, 0.98)" : "rgba(254, 240, 138, 0.95)");
+    // Intense needle-thin white/cyan center streak
+    var hNeedleGrad = ctx.createLinearGradient(-hFlareLen * 0.9, 0, hFlareLen * 0.9, 0);
+    hNeedleGrad.addColorStop(0.0, "rgba(56, 189, 248, 0)");
+    hNeedleGrad.addColorStop(0.28, "rgba(56, 189, 248, 0.75)");
+    hNeedleGrad.addColorStop(0.5, "rgba(255, 255, 255, 1.0)");
+    hNeedleGrad.addColorStop(0.72, "rgba(56, 189, 248, 0.75)");
+    hNeedleGrad.addColorStop(1.0, "rgba(56, 189, 248, 0)");
+    ctx.fillStyle = hNeedleGrad;
+    ctx.beginPath();
+    ctx.moveTo(-hFlareLen * 0.9, 0);
+    ctx.lineTo(0, -1.2);
+    ctx.lineTo(hFlareLen * 0.9, 0);
+    ctx.lineTo(0, 1.2);
+    ctx.closePath();
+    ctx.fill();
 
+    // ── 3. Central Quantum Nucleus (Deep Purple Orb with Rainbow Iridescent Rim) ──
+    var rCore = 16.2 + exc * 2.0;
+
+    // 3D Spherical plasma body with rich violet shading
+    var sphereGrad = ctx.createRadialGradient(-3, -3, 1, 0, 0, rCore);
+    sphereGrad.addColorStop(0.0, "rgba(243, 232, 255, 0.95)");
+    sphereGrad.addColorStop(0.25, "rgba(192, 132, 252, 0.90)");
+    sphereGrad.addColorStop(0.55, "rgba(88, 28, 135, 0.95)");
+    sphereGrad.addColorStop(0.85, "rgba(46, 16, 101, 0.98)");
+    sphereGrad.addColorStop(1.0, "rgba(24, 9, 58, 1.0)");
     ctx.fillStyle = sphereGrad;
     ctx.beginPath();
     ctx.arc(0, 0, rCore, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.65)";
-    ctx.lineWidth = 0.9;
+    // Multi-colored Iridescent Rim (Yellow top, Cyan bottom, Magenta sides)
+    var rimGrad = ctx.createConicGradient(colorShift * Math.PI / 180, 0, 0);
+    rimGrad.addColorStop(0.0, "rgba(251, 191, 36, 0.95)");
+    rimGrad.addColorStop(0.2, "rgba(217, 70, 239, 0.92)");
+    rimGrad.addColorStop(0.45, "rgba(56, 189, 248, 0.95)");
+    rimGrad.addColorStop(0.7, "rgba(74, 222, 128, 0.88)");
+    rimGrad.addColorStop(0.85, "rgba(250, 204, 21, 0.95)");
+    rimGrad.addColorStop(1.0, "rgba(251, 191, 36, 0.95)");
+    ctx.strokeStyle = rimGrad;
+    ctx.lineWidth = 1.8;
     ctx.stroke();
 
-    // ── 3. Three 3D Precessing Orbital Rings with Radiant Shifting Colors ──
-    var majorA = 26 + exc * 4;
-    var minorB = 9.8 + exc * 1.5;
+    // ── 4. Three Glowing Golden Bohr Orbitals ──
+    var majorA = 26.2 + exc * 3.8;
+    var minorB = 10.4 + exc * 1.4;
 
-    var rings = [
-      { baseAngle: 0, phaseOffset: 0, hueBase: colorShift },
-      { baseAngle: Math.PI / 3, phaseOffset: 2.094, hueBase: (colorShift + 120) % 360 },
-      { baseAngle: 2 * Math.PI / 3, phaseOffset: 4.188, hueBase: (colorShift + 240) % 360 }
+    var ringAngles = [
+      0,               // Horizontal ring
+      Math.PI / 3.05,  // Tilted right-up ~59 deg
+      2 * Math.PI / 3.05 // Tilted left-up ~118 deg
     ];
 
     for (var ri = 0; ri < 3; ri++) {
-      var ring = rings[ri];
+      var baseAngle = ringAngles[ri];
       ctx.save();
-      var wobble = Math.sin(t * 1.4 * spinMult + ring.phaseOffset) * 0.08;
-      var curAngle = ring.baseAngle + wobble + rotBase * spinMult;
+      var wobble = Math.sin(t * 1.5 * spinMult + ri * 2.094) * 0.04;
+      var curAngle = baseAngle + wobble + rotBase * spinMult;
       ctx.rotate(curAngle);
 
-      var curB = minorB * (1.0 + 0.12 * Math.cos(t * 1.6 * spinMult + ring.phaseOffset));
+      var curB = minorB * (1.0 + 0.06 * Math.cos(t * 1.8 * spinMult + ri * 2.094));
 
-      var rGrad = ctx.createLinearGradient(-majorA, 0, majorA, 0);
-      var h1 = Math.round(ring.hueBase);
-      var h2 = Math.round((ring.hueBase + 60) % 360);
-      rGrad.addColorStop(0.0, "hsla(" + h1 + ", 95%, 68%, 0.95)");
-      rGrad.addColorStop(0.3, "rgba(255, 255, 255, 0.95)");
-      rGrad.addColorStop(0.5, "hsla(" + h2 + ", 100%, 72%, 0.90)");
-      rGrad.addColorStop(0.7, "rgba(255, 255, 255, 0.95)");
-      rGrad.addColorStop(1.0, "hsla(" + h1 + ", 95%, 68%, 0.95)");
-
-      ctx.strokeStyle = rGrad;
-      ctx.lineWidth = 1.6;
+      // Outer warm gold neon glow
+      ctx.strokeStyle = "rgba(245, 158, 11, 0.40)";
+      ctx.lineWidth = 3.6;
       ctx.beginPath();
       ctx.ellipse(0, 0, majorA, curB, 0, 0, Math.PI * 2);
       ctx.stroke();
 
-      // Circulating electron quantum wavepacket spark
-      var eSpeed = 0.0032 * spinMult;
-      var u = (now * eSpeed + ring.phaseOffset) % (Math.PI * 2);
-      var ex = majorA * Math.cos(u);
-      var ey = curB * Math.sin(u);
-
+      // Vibrant golden-yellow body stroke
+      var goldGrad = ctx.createLinearGradient(-majorA, 0, majorA, 0);
+      goldGrad.addColorStop(0.0, "#f59e0b");
+      goldGrad.addColorStop(0.25, "#fbbf24");
+      goldGrad.addColorStop(0.5, "#fef08a");
+      goldGrad.addColorStop(0.75, "#fbbf24");
+      goldGrad.addColorStop(1.0, "#f59e0b");
+      ctx.strokeStyle = goldGrad;
+      ctx.lineWidth = 1.9;
       ctx.beginPath();
-      ctx.arc(ex, ey, 2.0, 0, Math.PI * 2);
-      ctx.fillStyle = "#ffffff";
-      ctx.shadowColor = "hsla(" + h1 + ", 100%, 70%, 1.0)";
-      ctx.shadowBlur = 6;
+      ctx.ellipse(0, 0, majorA, curB, 0, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Inner white-hot incandescent core line
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.92)";
+      ctx.lineWidth = 0.85;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, majorA, curB, 0, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.restore();
+    }
+
+    // ── 5. Starburst Glints at Intersection Nodes & Ring Apexes ──
+    function drawGlint(gx, gy, size, isApex) {
+      ctx.save();
+      ctx.translate(gx, gy);
+
+      // Warm golden starburst halo
+      var gHalo = ctx.createRadialGradient(0, 0, 0, 0, 0, size * 2.2);
+      gHalo.addColorStop(0.0, "rgba(255, 255, 255, 0.98)");
+      gHalo.addColorStop(0.3, "rgba(254, 240, 138, 0.88)");
+      gHalo.addColorStop(0.7, "rgba(245, 158, 11, 0.40)");
+      gHalo.addColorStop(1.0, "rgba(245, 158, 11, 0)");
+      ctx.fillStyle = gHalo;
+      ctx.beginPath();
+      ctx.arc(0, 0, size * 2.2, 0, Math.PI * 2);
       ctx.fill();
-      ctx.shadowBlur = 0;
 
-      // Apex flares at ring tips
+      // Intense 4-point micro cross flare
+      var rayLen = size * 2.5;
+      var rayW = size * 0.45;
+      ctx.fillStyle = "rgba(255, 255, 255, 0.98)";
       ctx.beginPath();
-      ctx.arc(majorA, 0, 1.4, 0, Math.PI * 2);
-      ctx.arc(-majorA, 0, 1.4, 0, Math.PI * 2);
-      ctx.fillStyle = "rgba(255, 255, 255, 0.90)";
+      ctx.moveTo(0, -rayLen);
+      ctx.lineTo(rayW, 0);
+      ctx.lineTo(0, rayLen);
+      ctx.lineTo(-rayW, 0);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(-rayLen * (isApex ? 1.7 : 1.0), 0);
+      ctx.lineTo(0, rayW);
+      ctx.lineTo(rayLen * (isApex ? 1.7 : 1.0), 0);
+      ctx.lineTo(0, -rayW);
+      ctx.closePath();
+      ctx.fill();
+
+      // Center white dot
+      ctx.beginPath();
+      ctx.arc(0, 0, size * 0.5, 0, Math.PI * 2);
+      ctx.fillStyle = "#ffffff";
       ctx.fill();
 
       ctx.restore();
     }
 
-    // ── 4. Precision Micro-Singularity Center Reticle ──
+    // A. Top and Bottom Apexes
+    var topY = -majorA * Math.sin(Math.PI / 3.05);
+    var botY = majorA * Math.sin(Math.PI / 3.05);
+    drawGlint(0, topY * 0.98, 3.8 + exc * 1.0, true);
+    drawGlint(0, botY * 0.98, 3.2 + exc * 0.9, true);
+
+    // B. Left and Right Horizontal Apexes
+    drawGlint(-majorA, 0, 3.8 + exc * 1.0, true);
+    drawGlint(majorA, 0, 3.8 + exc * 1.0, true);
+
+    // C. Front Intersection Crossings over the Sphere
+    var rInter = rCore * 0.85;
+    var glintNodes = [
+      { x: -rInter * 0.70, y: -rInter * 0.65 },
+      { x: rInter * 0.70, y: -rInter * 0.65 },
+      { x: -rInter * 0.70, y: rInter * 0.65 },
+      { x: rInter * 0.70, y: rInter * 0.65 },
+      { x: 0, y: -rInter * 0.42 },
+      { x: 0, y: rInter * 0.42 }
+    ];
+
+    for (var ni = 0; ni < glintNodes.length; ni++) {
+      var node = glintNodes[ni];
+      var pulse = Math.sin(t * 3.0 + ni * 1.0) * 0.25 + 0.95;
+      drawGlint(node.x, node.y, 1.9 * pulse + exc * 0.5, false);
+    }
+
+    // ── 6. Precision Micro-Singularity Center Reticle ──
     ctx.beginPath();
-    ctx.arc(0, 0, 1.5, 0, Math.PI * 2);
+    ctx.arc(0, 0, 1.4, 0, Math.PI * 2);
     ctx.fillStyle = "#ffffff";
     ctx.fill();
 
