@@ -953,14 +953,18 @@
   }
 
   
-  // ── ENHANCEMENT 3: TIBETAN SINGING BOWL & 432Hz SOLFEGGIO DRONE SYNTHESIZER ──
-  let zenSoundMode = safeGetItem('orlando-zen-sound-mode', 'bowl'); // 'bowl' | 'drone' | 'silent'
+  // ── ENHANCEMENT 3: TIBETAN SINGING BOWL, 432Hz DRONE, BROWN NOISE & CELESTIAL RAIN ──
+  let zenSoundMode = safeGetItem('orlando-zen-sound-mode', 'bowl'); // 'bowl' | 'rain' | 'drone' | 'silent'
+  let cognitiveShieldMode = safeGetItem('orlando-cognitive-shield', 'drone'); // 'drone' | 'brown' | 'silent'
   let zenDroneOsc1 = null;
   let zenDroneOsc2 = null;
   let zenDroneGain = null;
+  let brownNoiseNode = null;
+  let brownNoiseGain = null;
+  let rainNoiseNode = null;
+  let rainNoiseGain = null;
 
   function playTibetanSingingBowl(volume = currentAlarmVolume) {
-    if (zenSoundMode === 'silent') return;
     const ctx = getAudioContext();
     if (!ctx) return;
     const now = ctx.currentTime;
@@ -976,28 +980,30 @@
     ];
 
     partials.forEach((p, idx) => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
+      try {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
 
-      osc.type = 'sine';
-      const detune = idx === 1 ? 1.6 : (idx === 2 ? -1.4 : 0);
-      osc.frequency.setValueAtTime(p.freq + detune, now);
-      osc.frequency.exponentialRampToValueAtTime(p.freq * 0.998, now + p.decay);
+        osc.type = 'sine';
+        const detune = idx === 1 ? 1.6 : (idx === 2 ? -1.4 : 0);
+        osc.frequency.setValueAtTime(p.freq + detune, now);
+        osc.frequency.exponentialRampToValueAtTime(p.freq * 0.998, now + p.decay);
 
-      gain.gain.setValueAtTime(0.0001, now);
-      gain.gain.linearRampToValueAtTime(p.gain * v, now + 0.04);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + p.decay);
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.linearRampToValueAtTime(p.gain * v, now + 0.04);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + p.decay);
 
-      osc.connect(gain);
-      gain.connect(ctx.destination);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
 
-      osc.start(now);
-      osc.stop(now + p.decay + 0.15);
+        osc.start(now);
+        osc.stop(now + p.decay + 0.15);
+      } catch(e) {}
     });
   }
 
-  function startZenDrone() {
-    if (zenSoundMode !== 'drone' || !document.body.classList.contains('zen-mode')) return;
+  function startZenDrone(force = false) {
+    if (!force && zenSoundMode !== 'drone' && cognitiveShieldMode !== 'drone') return;
     stopZenDrone();
     const ctx = getAudioContext();
     if (!ctx) return;
@@ -1005,7 +1011,7 @@
     try {
       zenDroneGain = ctx.createGain();
       zenDroneGain.gain.setValueAtTime(0.0001, ctx.currentTime);
-      zenDroneGain.gain.linearRampToValueAtTime(0.035 * currentAlarmVolume, ctx.currentTime + 3.0);
+      zenDroneGain.gain.linearRampToValueAtTime(0.035 * currentAlarmVolume, ctx.currentTime + 2.5);
       zenDroneGain.connect(ctx.destination);
 
       // 432 Hz Harmonic Meditation Octaves
@@ -1030,14 +1036,137 @@
       try {
         const ctx = getAudioContext();
         if (ctx) {
-          zenDroneGain.gain.linearRampToValueAtTime(0.0001, ctx.currentTime + 1.2);
+          zenDroneGain.gain.linearRampToValueAtTime(0.0001, ctx.currentTime + 0.8);
           setTimeout(() => {
-            if (zenDroneOsc1) { zenDroneOsc1.stop(); zenDroneOsc1.disconnect(); zenDroneOsc1 = null; }
-            if (zenDroneOsc2) { zenDroneOsc2.stop(); zenDroneOsc2.disconnect(); zenDroneOsc2 = null; }
-            if (zenDroneGain) { zenDroneGain.disconnect(); zenDroneGain = null; }
-          }, 1300);
+            if (zenDroneOsc1) { try { zenDroneOsc1.stop(); zenDroneOsc1.disconnect(); } catch(e){} zenDroneOsc1 = null; }
+            if (zenDroneOsc2) { try { zenDroneOsc2.stop(); zenDroneOsc2.disconnect(); } catch(e){} zenDroneOsc2 = null; }
+            if (zenDroneGain) { try { zenDroneGain.disconnect(); } catch(e){} zenDroneGain = null; }
+          }, 900);
         }
       } catch(e) {}
+    }
+  }
+
+  // Pure Synthetic Deep Brown Noise (for Deep Work Cognitive Shield)
+  function startBrownNoise() {
+    stopBrownNoise();
+    const ctx = getAudioContext();
+    if (!ctx) return;
+
+    try {
+      const bufferSize = 5 * ctx.sampleRate;
+      const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const output = noiseBuffer.getChannelData(0);
+      let lastOut = 0.0;
+      for (let i = 0; i < bufferSize; i++) {
+        const white = Math.random() * 2 - 1;
+        output[i] = (lastOut + (0.02 * white)) / 1.02;
+        lastOut = output[i];
+        output[i] *= 3.5; // Gain compensation
+      }
+
+      brownNoiseNode = ctx.createBufferSource();
+      brownNoiseNode.buffer = noiseBuffer;
+      brownNoiseNode.loop = true;
+
+      brownNoiseGain = ctx.createGain();
+      brownNoiseGain.gain.setValueAtTime(0.0001, ctx.currentTime);
+      brownNoiseGain.gain.linearRampToValueAtTime(0.045 * currentAlarmVolume, ctx.currentTime + 2.0);
+
+      brownNoiseNode.connect(brownNoiseGain);
+      brownNoiseGain.connect(ctx.destination);
+      brownNoiseNode.start();
+    } catch(e) {}
+  }
+
+  function stopBrownNoise() {
+    if (brownNoiseGain) {
+      try {
+        const ctx = getAudioContext();
+        if (ctx) {
+          brownNoiseGain.gain.linearRampToValueAtTime(0.0001, ctx.currentTime + 0.6);
+          setTimeout(() => {
+            if (brownNoiseNode) { try { brownNoiseNode.stop(); brownNoiseNode.disconnect(); } catch(e){} brownNoiseNode = null; }
+            if (brownNoiseGain) { try { brownNoiseGain.disconnect(); } catch(e){} brownNoiseGain = null; }
+          }, 700);
+        }
+      } catch(e) {}
+    }
+  }
+
+  // Generative Celestial Rain Soundscape (for Zen Immersion)
+  function startCelestialRain() {
+    stopCelestialRain();
+    const ctx = getAudioContext();
+    if (!ctx) return;
+
+    try {
+      const bufferSize = 4 * ctx.sampleRate;
+      const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const output = noiseBuffer.getChannelData(0);
+      let b0 = 0, b1 = 0, b2 = 0;
+      for (let i = 0; i < bufferSize; i++) {
+        const white = Math.random() * 2 - 1;
+        b0 = 0.99886 * b0 + white * 0.0555179;
+        b1 = 0.99332 * b1 + white * 0.0750759;
+        b2 = 0.96900 * b2 + white * 0.1538520;
+        output[i] = (b0 + b1 + b2) * 0.18;
+      }
+
+      rainNoiseNode = ctx.createBufferSource();
+      rainNoiseNode.buffer = noiseBuffer;
+      rainNoiseNode.loop = true;
+
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(1400, ctx.currentTime);
+
+      rainNoiseGain = ctx.createGain();
+      rainNoiseGain.gain.setValueAtTime(0.0001, ctx.currentTime);
+      rainNoiseGain.gain.linearRampToValueAtTime(0.04 * currentAlarmVolume, ctx.currentTime + 2.0);
+
+      rainNoiseNode.connect(filter);
+      filter.connect(rainNoiseGain);
+      rainNoiseGain.connect(ctx.destination);
+      rainNoiseNode.start();
+    } catch(e) {}
+  }
+
+  function stopCelestialRain() {
+    if (rainNoiseGain) {
+      try {
+        const ctx = getAudioContext();
+        if (ctx) {
+          rainNoiseGain.gain.linearRampToValueAtTime(0.0001, ctx.currentTime + 0.6);
+          setTimeout(() => {
+            if (rainNoiseNode) { try { rainNoiseNode.stop(); rainNoiseNode.disconnect(); } catch(e){} rainNoiseNode = null; }
+            if (rainNoiseGain) { try { rainNoiseGain.disconnect(); } catch(e){} rainNoiseGain = null; }
+          }, 700);
+        }
+      } catch(e) {}
+    }
+  }
+
+  function stopAllShieldAudio() {
+    stopZenDrone();
+    stopBrownNoise();
+    stopCelestialRain();
+  }
+
+  function setCognitiveShield(shieldType) {
+    cognitiveShieldMode = shieldType;
+    safeSetItem('orlando-cognitive-shield', shieldType);
+
+    const shieldBtns = document.querySelectorAll('.shield-btn');
+    shieldBtns.forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-shield') === shieldType);
+    });
+
+    stopAllShieldAudio();
+    if (shieldType === 'drone') {
+      startZenDrone(true);
+    } else if (shieldType === 'brown') {
+      startBrownNoise();
     }
   }
 
@@ -1314,6 +1443,10 @@
       timerProgressBar.style.width = '100%';
       if (cometHead) cometHead.style.opacity = '1';
     }
+
+    if (currentProductivityMode === 'deep-work' && timerTotalDuration > 0) {
+      updateUltradianCurve(Math.max(0, timerTotalDuration - timerRemaining));
+    }
   }
 
   function syncInputsFromRemaining(seconds) {
@@ -1388,7 +1521,7 @@
     }
   }
 
-  // ── POMODORO FOCUS CYCLE ENGINE (25m Focus / 5m Break / 15m Long Break) ──
+  // ── POMODORO FOCUS CYCLE ENGINE & PROTOCOL OPERATING SYSTEM ──
   let pomoMode = 'focus'; // 'focus' | 'shortBreak' | 'longBreak'
   let pomoRound = 1;      // 1 through 4
   let pomoAutoNext = safeGetItem('orlando-pomo-autonext', 'true') === 'true';
@@ -1401,6 +1534,46 @@
   const pomoRoundBadge = document.getElementById('pomoRoundBadge');
   const pomoDot = document.getElementById('pomoDot');
 
+  // Daily Sprint Count Tracker
+  function getTodayDateStr() {
+    return new Date().toISOString().slice(0, 10);
+  }
+
+  function getDailySprintCount() {
+    const savedDate = safeGetItem('orlando-sprint-tally-date', '');
+    const today = getTodayDateStr();
+    if (savedDate !== today) {
+      safeSetItem('orlando-sprint-tally-date', today);
+      safeSetItem('orlando-sprint-tally-count', '0');
+      return 0;
+    }
+    return parseInt(safeGetItem('orlando-sprint-tally-count', '0'), 10) || 0;
+  }
+
+  function incrementDailySprintCount() {
+    const today = getTodayDateStr();
+    safeSetItem('orlando-sprint-tally-date', today);
+    const count = getDailySprintCount() + 1;
+    safeSetItem('orlando-sprint-tally-count', String(count));
+    updateDailySprintUI();
+    return count;
+  }
+
+  function resetDailySprintCount() {
+    safeSetItem('orlando-sprint-tally-count', '0');
+    updateDailySprintUI();
+    AudioHUD.tick(440);
+  }
+
+  function updateDailySprintUI() {
+    const textEl = document.getElementById('sprintDailyCountText');
+    if (textEl) {
+      const count = getDailySprintCount();
+      const mins = count * 25;
+      textEl.textContent = `${count} Sprint${count === 1 ? '' : 's'} Done Today (${mins}m Focus)`;
+    }
+  }
+
   function updatePomoUI() {
     if (btnPomoFocus) btnPomoFocus.classList.toggle('active', pomoMode === 'focus');
     if (btnPomoShortBreak) btnPomoShortBreak.classList.toggle('active', pomoMode === 'shortBreak');
@@ -1408,8 +1581,8 @@
 
     if (pomoStageTitle) {
       if (pomoMode === 'focus') pomoStageTitle.textContent = `Focus Session (25m)`;
-      else if (pomoMode === 'shortBreak') pomoStageTitle.textContent = `Short Break (5m)`;
-      else pomoStageTitle.textContent = `Long Break (15m)`;
+      else if (pomoMode === 'shortBreak') pomoStageTitle.textContent = `Short Rest (5m)`;
+      else pomoStageTitle.textContent = `Deep Rest (15m)`;
     }
 
     if (pomoRoundBadge) {
@@ -1420,6 +1593,16 @@
       btnPomoAutoNext.classList.toggle('active', pomoAutoNext);
       btnPomoAutoNext.textContent = pomoAutoNext ? 'Auto: ON' : 'Auto: OFF';
     }
+
+    // Update 4 Sprint Pips
+    const pips = document.querySelectorAll('.sprint-pip');
+    pips.forEach(pip => {
+      const r = parseInt(pip.getAttribute('data-round'), 10);
+      pip.classList.toggle('active', r === pomoRound && pomoMode === 'focus');
+      pip.classList.toggle('completed', r < pomoRound);
+    });
+
+    updateDailySprintUI();
   }
 
   function setPomoMode(mode, autostart = false) {
@@ -1428,13 +1611,13 @@
 
     if (mode === 'focus') {
       setTimerDuration(25 * 60);
-      announceSR(`Pomodoro Focus session set: 25 minutes. Round ${pomoRound} of 4.`);
+      announceSR(`Focus session set: 25 minutes. Round ${pomoRound} of 4.`);
     } else if (mode === 'shortBreak') {
       setTimerDuration(5 * 60);
-      announceSR(`Pomodoro Short Break set: 5 minutes. Round ${pomoRound} of 4.`);
+      announceSR(`Short break set: 5 minutes. Round ${pomoRound} of 4.`);
     } else if (mode === 'longBreak') {
       setTimerDuration(15 * 60);
-      announceSR('Pomodoro Long Break set: 15 minutes.');
+      announceSR('Long restorative break set: 15 minutes.');
     }
 
     updatePomoUI();
@@ -1445,6 +1628,159 @@
       }, 500);
     }
   }
+
+  function skipPomoPhase() {
+    if (pomoMode === 'focus') {
+      if (pomoRound >= 4) {
+        pomoRound = 1;
+        setPomoMode('longBreak', false);
+      } else {
+        pomoRound++;
+        setPomoMode('shortBreak', false);
+      }
+    } else {
+      setPomoMode('focus', false);
+    }
+    AudioHUD.tick(900);
+  }
+
+  // ── TIMER SUB-MODES: FOCUS PROTOCOL vs DEEP WORK vs PRESETS ──
+  function setTimerSubMode(subMode) {
+    const panelTimer = document.getElementById('panel-timer');
+    const badgeIcon = document.getElementById('timerBadgeIcon');
+    const badgeTitle = document.getElementById('timerBadgeTitle');
+    const focusDeck = document.getElementById('focusProtocolDeck');
+    const deepDeck = document.getElementById('deepWorkDeck');
+    const presetsSec = document.getElementById('timerPresetsSection');
+
+    if (panelTimer) panelTimer.setAttribute('data-timer-mode', subMode);
+
+    if (subMode === 'focus-protocol') {
+      if (badgeIcon) badgeIcon.textContent = '🎯';
+      if (badgeTitle) badgeTitle.textContent = 'FOCUS PROTOCOL · TACTICAL SPRINT ENGINE';
+      if (focusDeck) focusDeck.style.display = 'flex';
+      if (deepDeck) deepDeck.style.display = 'none';
+      if (presetsSec) presetsSec.style.display = 'block';
+      updatePomoUI();
+    } else if (subMode === 'deep-work') {
+      if (badgeIcon) badgeIcon.textContent = '⚡';
+      if (badgeTitle) badgeTitle.textContent = 'DEEP WORK · COGNITIVE FORTRESS (90M ULTRADIAN)';
+      if (focusDeck) focusDeck.style.display = 'none';
+      if (deepDeck) deepDeck.style.display = 'flex';
+      if (presetsSec) presetsSec.style.display = 'none';
+      updateUltradianCurve(Math.max(0, timerTotalDuration - timerRemaining));
+      renderDistractionItems();
+    } else {
+      if (badgeIcon) badgeIcon.textContent = '⏳';
+      if (badgeTitle) badgeTitle.textContent = 'CUSTOM TIMER · PRECISION COUNTDOWN';
+      if (focusDeck) focusDeck.style.display = 'none';
+      if (deepDeck) deepDeck.style.display = 'none';
+      if (presetsSec) presetsSec.style.display = 'block';
+    }
+  }
+
+  // 3-Phase Ultradian Progression Curve Calculation (0–15m Priming, 15–75m Peak, 75–90m Synthesis)
+  function updateUltradianCurve(elapsedSecs) {
+    const elapsedMins = elapsedSecs / 60;
+    const p1 = document.getElementById('dwPhase1');
+    const p2 = document.getElementById('dwPhase2');
+    const p3 = document.getElementById('dwPhase3');
+    const f1 = document.getElementById('dwPhase1Fill');
+    const f2 = document.getElementById('dwPhase2Fill');
+    const f3 = document.getElementById('dwPhase3Fill');
+    const statusText = document.getElementById('dwActivePhaseStatus');
+
+    // Phase 1: 0 to 15m (900s)
+    const p1Pct = Math.min(100, Math.max(0, (elapsedMins / 15) * 100));
+    if (f1) f1.style.width = `${p1Pct}%`;
+
+    // Phase 2: 15m to 75m (60m duration)
+    const p2Pct = Math.min(100, Math.max(0, ((elapsedMins - 15) / 60) * 100));
+    if (f2) f2.style.width = `${p2Pct}%`;
+
+    // Phase 3: 75m to 90m (15m duration)
+    const p3Pct = Math.min(100, Math.max(0, ((elapsedMins - 75) / 15) * 100));
+    if (f3) f3.style.width = `${p3Pct}%`;
+
+    if (elapsedMins < 15) {
+      if (p1) p1.classList.add('active');
+      if (p2) p2.classList.remove('active');
+      if (p3) p3.classList.remove('active');
+      if (statusText) statusText.textContent = `Phase 1: Priming & Warm-Up (${Math.round(p1Pct)}%)`;
+    } else if (elapsedMins < 75) {
+      if (p1) p1.classList.remove('active');
+      if (p2) p2.classList.add('active');
+      if (p3) p3.classList.remove('active');
+      if (statusText) statusText.textContent = `Phase 2: Peak Immersion (${Math.round(p2Pct)}%)`;
+    } else {
+      if (p1) p1.classList.remove('active');
+      if (p2) p2.classList.remove('active');
+      if (p3) p3.classList.add('active');
+      if (statusText) statusText.textContent = `Phase 3: Synthesis & Review (${Math.round(p3Pct)}%)`;
+    }
+  }
+
+  // Distraction Interceptor Quick Scratchpad
+  function getDistractionItems() {
+    try {
+      const raw = safeGetItem('orlando-distraction-log', '[]');
+      return JSON.parse(raw) || [];
+    } catch(e) {
+      return [];
+    }
+  }
+
+  function saveDistractionItems(items) {
+    safeSetItem('orlando-distraction-log', JSON.stringify(items));
+    renderDistractionItems();
+  }
+
+  function addDistractionItem(text) {
+    if (!text || !text.trim()) return;
+    const items = getDistractionItems();
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    items.unshift({ id: 'dist_' + Date.now(), text: text.trim(), time: timeStr });
+    saveDistractionItems(items);
+    AudioHUD.tick(880);
+  }
+
+  function deleteDistractionItem(id) {
+    let items = getDistractionItems();
+    items = items.filter(it => it.id !== id);
+    saveDistractionItems(items);
+    AudioHUD.tick(500);
+  }
+
+  function renderDistractionItems() {
+    const listEl = document.getElementById('distractionList');
+    const badgeEl = document.getElementById('distractionCountBadge');
+    if (!listEl) return;
+
+    const items = getDistractionItems();
+    if (badgeEl) {
+      badgeEl.textContent = `${items.length} Thought${items.length === 1 ? '' : 's'} Parked`;
+    }
+
+    if (items.length === 0) {
+      listEl.innerHTML = '<li style="font-size:11px;color:rgba(255,255,255,0.35);padding:6px;font-style:italic;">No thoughts parked. Clean mind, unbroken flow.</li>';
+      return;
+    }
+
+    listEl.innerHTML = items.map(it => `
+      <li class="distraction-item">
+        <div>
+          <span class="distraction-item-time">[${it.time}]</span>
+          <span>${escapeHtml(it.text)}</span>
+        </div>
+        <button type="button" class="btn-dismiss-thought" onclick="window.dismissDistraction('${it.id}')" title="Dismiss Thought">✕</button>
+      </li>
+    `).join('');
+  }
+
+  window.dismissDistraction = function(id) {
+    deleteDistractionItem(id);
+  };
 
   function startTimer() {
     if (timerIsRunning) return;
@@ -1543,6 +1879,7 @@
 
     // Pomodoro Progression
     if (pomoMode === 'focus') {
+      incrementDailySprintCount();
       if (pomoRound >= 4) {
         pomoRound = 1;
         showQuantumTelemetryToast(
@@ -1760,12 +2097,18 @@
 
   let currentChronoMode = 'precision'; // 'precision' | 'flow'
 
+  // ── QUANTUM FLOW STATE ENGINE (Levels 1-5, Horizons, Marker Logger & Debrief) ──
+  let currentFlowHorizon = parseInt(safeGetItem('orlando-flow-horizon', '0'), 10) || 0; // 0 (free), 30, 45, 60, 90
+  let flowMarkers = [];
+  let peakFlowLevel = 1;
+
   function setChronoMode(mode) {
     currentChronoMode = mode;
     const panelSw = document.getElementById('panel-stopwatch');
     const badgeIcon = document.getElementById('chronoBadgeIcon');
     const badgeTitle = document.getElementById('chronoBadgeTitle');
     const btnLap = document.getElementById('btnSwLap');
+    const btnFlowMarker = document.getElementById('btnSwFlowMarker');
     const btnStartText = document.getElementById('btnSwStartText');
     const btnStopText = document.getElementById('btnSwStopText');
     const btnResetText = document.getElementById('btnSwResetText');
@@ -1776,18 +2119,22 @@
 
     if (mode === 'flow') {
       if (badgeIcon) badgeIcon.textContent = '🌌';
-      if (badgeTitle) badgeTitle.textContent = 'QUANTUM FLOW · CREATIVE FOCUS';
+      if (badgeTitle) badgeTitle.textContent = 'QUANTUM FLOW · FLOW STATE ENGINE';
       if (btnLap) btnLap.style.display = 'none';
+      if (btnFlowMarker) btnFlowMarker.style.display = 'inline-flex';
       if (btnStartText) btnStartText.textContent = 'Enter Flow';
       if (btnStopText) btnStopText.textContent = 'Pause Flow';
       if (btnResetText) btnResetText.textContent = 'End Session';
       if (lapsWrapper) lapsWrapper.style.display = 'none';
       if (flowDeck) flowDeck.style.display = 'flex';
       updateFlowJourneyUI(swElapsedTime);
+      updateHorizonPillUI();
+      renderFlowMarkers();
     } else {
       if (badgeIcon) badgeIcon.textContent = '⏱️';
       if (badgeTitle) badgeTitle.textContent = 'PRECISION CHRONOMETER · SPLIT LAPS';
       if (btnLap) btnLap.style.display = 'inline-flex';
+      if (btnFlowMarker) btnFlowMarker.style.display = 'none';
       if (btnStartText) btnStartText.textContent = 'Start';
       if (btnStopText) btnStopText.textContent = 'Stop';
       if (btnResetText) btnResetText.textContent = 'Reset';
@@ -1797,11 +2144,75 @@
     updateStopwatchDisplay();
   }
 
+  function setFlowHorizon(targetMin) {
+    currentFlowHorizon = targetMin;
+    safeSetItem('orlando-flow-horizon', String(targetMin));
+    updateHorizonPillUI();
+    updateFlowJourneyUI(swElapsedTime);
+    AudioHUD.tick(750);
+  }
+
+  function updateHorizonPillUI() {
+    const pills = document.querySelectorAll('.horizon-pill');
+    pills.forEach(p => {
+      const min = parseInt(p.getAttribute('data-horizon'), 10);
+      p.classList.toggle('active', min === currentFlowHorizon);
+    });
+  }
+
+  function dropFlowMarker(customTag = '✨ Milestone') {
+    if (!swIsRunning && swElapsedTime <= 0) return;
+    const timeFormatted = formatStopwatchTime(swElapsedTime);
+    const marker = {
+      id: 'fm_' + Date.now(),
+      timeStr: timeFormatted,
+      tag: customTag
+    };
+    flowMarkers.unshift(marker);
+    renderFlowMarkers();
+    AudioHUD.confirm();
+
+    if (window.spawnSupernovaBurst) {
+      window.spawnSupernovaBurst(window.innerWidth / 2, window.innerHeight * 0.45, {
+        tier: 1,
+        showToast: false
+      });
+    }
+    showQuantumTelemetryToast("✨ FLOW MARKER DROPPED", `Moment captured at ${timeFormatted}: ${customTag}`);
+  }
+
+  function renderFlowMarkers() {
+    const listEl = document.getElementById('flowMarkersList');
+    const countEl = document.getElementById('flowMarkerCount');
+    if (!listEl) return;
+
+    if (countEl) countEl.textContent = `${flowMarkers.length} Moment${flowMarkers.length === 1 ? '' : 's'} Logged`;
+
+    if (flowMarkers.length === 0) {
+      listEl.innerHTML = '<li class="flow-marker-empty">Click "✨ Drop Flow Marker" during your session to log breakthroughs and insights without breaking flow.</li>';
+      return;
+    }
+
+    listEl.innerHTML = flowMarkers.map(m => `
+      <li class="flow-marker-entry">
+        <div>
+          <span class="fme-time">${m.timeStr}</span>
+          <span class="fme-tag">${escapeHtml(m.tag)}</span>
+        </div>
+        <span style="font-size:10px;color:rgba(255,255,255,0.4);font-family:var(--mono);">Saved</span>
+      </li>
+    `).join('');
+  }
+
   function updateFlowJourneyUI(elapsedMs) {
     const totalSecs = Math.floor(elapsedMs / 1000);
     const totalMins = Math.floor(totalSecs / 60);
     const stageTitle = document.getElementById('flowStageTitle');
     const totalBadge = document.getElementById('flowTotalBadge');
+    const depthLvl = document.getElementById('flowDepthLvl');
+    const depthPct = document.getElementById('flowDepthPct');
+    const depthBar = document.getElementById('flowDepthBarFill');
+    const horizonStatus = document.getElementById('flowHorizonStatus');
 
     if (totalBadge) {
       if (totalMins >= 60) {
@@ -1809,6 +2220,53 @@
         totalBadge.textContent = `${hrs}h in Flow`;
       } else {
         totalBadge.textContent = `${totalMins}m in Flow`;
+      }
+    }
+
+    // Dynamic Flow Depth Meter Calculation (Levels 1 to 5)
+    let currentLvl = 1;
+    let lvlLabel = 'LEVEL 1 · GROUNDING & ACTIVATION';
+    let progressInLvl = 0;
+
+    if (totalMins < 15) {
+      currentLvl = 1;
+      lvlLabel = 'LEVEL 1 · GROUNDING & ACTIVATION';
+      progressInLvl = (totalMins / 15) * 100;
+    } else if (totalMins < 30) {
+      currentLvl = 2;
+      lvlLabel = 'LEVEL 2 · FRICTION DISSOLUTION';
+      progressInLvl = ((totalMins - 15) / 15) * 100;
+    } else if (totalMins < 60) {
+      currentLvl = 3;
+      lvlLabel = 'LEVEL 3 · DEEP ALPHA CURRENT';
+      progressInLvl = ((totalMins - 30) / 30) * 100;
+    } else if (totalMins < 90) {
+      currentLvl = 4;
+      lvlLabel = 'LEVEL 4 · HYPER-FOCUS SINGULARITY';
+      progressInLvl = ((totalMins - 60) / 30) * 100;
+    } else {
+      currentLvl = 5;
+      lvlLabel = 'LEVEL 5 · QUANTUM MASTERY (TRANSCENDENT)';
+      progressInLvl = 100;
+    }
+
+    if (currentLvl > peakFlowLevel) peakFlowLevel = currentLvl;
+
+    if (depthLvl) depthLvl.textContent = lvlLabel;
+    if (depthPct) depthPct.textContent = `Flow Velocity: ${Math.round(progressInLvl)}%`;
+    if (depthBar) depthBar.style.width = `${Math.min(100, Math.max(8, progressInLvl))}%`;
+
+    // Flow Horizon Status
+    if (horizonStatus) {
+      if (currentFlowHorizon === 0) {
+        horizonStatus.textContent = 'Free Flow ∞';
+      } else {
+        const remainingMin = currentFlowHorizon - totalMins;
+        if (remainingMin > 0) {
+          horizonStatus.textContent = `${remainingMin}m to Horizon (${currentFlowHorizon}m)`;
+        } else {
+          horizonStatus.textContent = `🎯 Horizon Crossed (+${Math.abs(remainingMin)}m)`;
+        }
       }
     }
 
@@ -1837,6 +2295,85 @@
     const thresholds = [15, 30, 60];
     lines.forEach((line, idx) => {
       line.classList.toggle('achieved', totalMins >= thresholds[idx]);
+    });
+  }
+
+  // Executive Flow Debrief Summary Modal
+  function openFlowSummaryModal() {
+    const modal = document.getElementById('flowSummaryModal');
+    if (!modal) return;
+
+    const timeFormatted = formatStopwatchTime(swElapsedTime);
+    const sumTime = document.getElementById('summaryTotalTime');
+    const sumLvl = document.getElementById('summaryPeakLevel');
+    const sumCount = document.getElementById('summaryMarkersCount');
+    const sumLog = document.getElementById('summaryLogPreview');
+
+    if (sumTime) sumTime.textContent = timeFormatted;
+    if (sumLvl) sumLvl.textContent = `Level ${peakFlowLevel}`;
+    if (sumCount) sumCount.textContent = `${flowMarkers.length} Moments`;
+
+    if (sumLog) {
+      if (flowMarkers.length === 0) {
+        sumLog.innerHTML = '<span style="font-size:11px;color:rgba(255,255,255,0.4);font-style:italic;">No discrete markers dropped. Continuous unbroken immersion.</span>';
+      } else {
+        sumLog.innerHTML = flowMarkers.map(m => `
+          <div style="font-size:11px;display:flex;justify-content:space-between;color:rgba(255,255,255,0.85);">
+            <strong style="color:#38BDF8;font-family:var(--mono);">${m.timeStr}</strong>
+            <span>${escapeHtml(m.tag)}</span>
+          </div>
+        `).join('');
+      }
+    }
+
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    AudioHUD.confirm();
+
+    if (window.spawnSupernovaBurst) {
+      window.spawnSupernovaBurst(window.innerWidth / 2, window.innerHeight * 0.4, {
+        tier: Math.min(5, peakFlowLevel),
+        showToast: false,
+        celebration: true
+      });
+    }
+  }
+
+  function closeFlowSummaryModal() {
+    const modal = document.getElementById('flowSummaryModal');
+    if (modal) {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+    // Now fully reset stopwatch
+    swElapsedTime = 0;
+    lastLapTotalTime = 0;
+    flowMarkers = [];
+    peakFlowLevel = 1;
+    renderFlowMarkers();
+    updateStopwatchDisplay();
+    updateFlowJourneyUI(0);
+  }
+
+  function copyFlowSummary() {
+    const timeFormatted = formatStopwatchTime(swElapsedTime);
+    let text = `👑 ORLANDO TIMER — EXECUTIVE FLOW DEBRIEF\n`;
+    text += `Duration: ${timeFormatted}\n`;
+    text += `Peak Flow: Level ${peakFlowLevel}\n`;
+    text += `Markers Logged: ${flowMarkers.length}\n`;
+    if (flowMarkers.length > 0) {
+      text += `Journey Milestones:\n`;
+      flowMarkers.forEach(m => {
+        text += `  • [${m.timeStr}] ${m.tag}\n`;
+      });
+    }
+    text += `Generated with Orlando Timer`;
+
+    navigator.clipboard.writeText(text).then(() => {
+      showQuantumTelemetryToast("📋 COPIED TO CLIPBOARD", "Flow session debrief copied.");
+      AudioHUD.confirm();
+    }).catch(() => {
+      showQuantumTelemetryToast("📋 COPIED", text);
     });
   }
 
@@ -2323,11 +2860,142 @@
   let zenIdleTimeout = null;
   let toastTimeout = null;
 
-  // ── ZEN IMMERSION HELPER FUNCTIONS ──
+    // ── ZEN IMMERSION SANCTUARY: GUIDED BREATHING RHYTHMS & MANTRAS ──
+  let zenBreathingRhythm = safeGetItem('orlando-zen-breathing', '4-7-8'); // '4-7-8' | 'box' | 'coherent' | 'off'
+  let zenBreathingTimer = null;
+
+  const ZEN_MANTRAS = [
+    "Stillness in Motion · Unshakable Clarity",
+    "Present in this breath · Calm mind",
+    "Release resistance · Infinite quietness",
+    "Deep focus flowing effortlessly",
+    "Pure awareness · Centered strength"
+  ];
+  let zenMantraIdx = 0;
+
+  function cycleZenMantra() {
+    zenMantraIdx = (zenMantraIdx + 1) % ZEN_MANTRAS.length;
+    const textEl = document.getElementById('zenMantraText');
+    if (textEl) {
+      textEl.style.opacity = '0';
+      setTimeout(() => {
+        textEl.textContent = ZEN_MANTRAS[zenMantraIdx];
+        textEl.style.opacity = '1';
+      }, 200);
+    }
+    AudioHUD.tick(1200);
+  }
+
+  function updateZenBreathingButtonText() {
+    const textEl = document.getElementById('zenBreathingText');
+    if (!textEl) return;
+    if (zenBreathingRhythm === '4-7-8') textEl.textContent = 'Breath: 4-7-8';
+    else if (zenBreathingRhythm === 'box') textEl.textContent = 'Breath: Box 4s';
+    else if (zenBreathingRhythm === 'coherent') textEl.textContent = 'Breath: 5.5s';
+    else textEl.textContent = 'Breath: Off';
+  }
+
+  function cycleZenBreathing() {
+    if (zenBreathingRhythm === '4-7-8') zenBreathingRhythm = 'box';
+    else if (zenBreathingRhythm === 'box') zenBreathingRhythm = 'coherent';
+    else if (zenBreathingRhythm === 'coherent') zenBreathingRhythm = 'off';
+    else zenBreathingRhythm = '4-7-8';
+
+    safeSetItem('orlando-zen-breathing', zenBreathingRhythm);
+    updateZenBreathingButtonText();
+    restartGuidedBreathing();
+    AudioHUD.tick(950);
+  }
+
+  function restartGuidedBreathing() {
+    stopGuidedBreathing();
+    const guide = document.getElementById('zenBreathingGuide');
+    if (!document.body.classList.contains('zen-mode') || zenBreathingRhythm === 'off') {
+      if (guide) guide.style.display = 'none';
+      return;
+    }
+
+    if (guide) guide.style.display = 'flex';
+    runBreathingCycleStep();
+  }
+
+  function stopGuidedBreathing() {
+    if (zenBreathingTimer) {
+      clearTimeout(zenBreathingTimer);
+      zenBreathingTimer = null;
+    }
+  }
+
+  function runBreathingCycleStep() {
+    const ring = document.getElementById('zenBreathingRing');
+    const prompt = document.getElementById('zenBreathPrompt');
+    if (!ring || !prompt || !document.body.classList.contains('zen-mode') || zenBreathingRhythm === 'off') return;
+
+    if (zenBreathingRhythm === '4-7-8') {
+      // 4-7-8: Inhale 4s -> Hold 7s -> Exhale 8s
+      ring.className = 'zen-breathing-ring inhale';
+      prompt.textContent = 'Inhale slowly (4s)...';
+      zenBreathingTimer = setTimeout(() => {
+        ring.className = 'zen-breathing-ring hold';
+        prompt.textContent = 'Hold gently (7s)...';
+        zenBreathingTimer = setTimeout(() => {
+          ring.className = 'zen-breathing-ring exhale';
+          prompt.textContent = 'Exhale completely (8s)...';
+          zenBreathingTimer = setTimeout(() => {
+            runBreathingCycleStep();
+          }, 8000);
+        }, 7000);
+      }, 4000);
+    } else if (zenBreathingRhythm === 'box') {
+      // Box: Inhale 4s -> Hold 4s -> Exhale 4s -> Hold 4s
+      ring.className = 'zen-breathing-ring inhale';
+      prompt.textContent = 'Inhale (4s)...';
+      zenBreathingTimer = setTimeout(() => {
+        ring.className = 'zen-breathing-ring hold';
+        prompt.textContent = 'Hold (4s)...';
+        zenBreathingTimer = setTimeout(() => {
+          ring.className = 'zen-breathing-ring exhale';
+          prompt.textContent = 'Exhale (4s)...';
+          zenBreathingTimer = setTimeout(() => {
+            ring.className = 'zen-breathing-ring hold';
+            prompt.textContent = 'Hold empty (4s)...';
+            zenBreathingTimer = setTimeout(() => {
+              runBreathingCycleStep();
+            }, 4000);
+          }, 4000);
+        }, 4000);
+      }, 4000);
+    } else if (zenBreathingRhythm === 'coherent') {
+      // Coherent: Inhale 5.5s -> Exhale 5.5s
+      ring.className = 'zen-breathing-ring inhale';
+      prompt.textContent = 'Inhale smoothly (5.5s)...';
+      zenBreathingTimer = setTimeout(() => {
+        ring.className = 'zen-breathing-ring exhale';
+        prompt.textContent = 'Exhale softly (5.5s)...';
+        zenBreathingTimer = setTimeout(() => {
+          runBreathingCycleStep();
+        }, 5500);
+      }, 5500);
+    }
+  }
+
+  function strikeZenBowl() {
+    playTibetanSingingBowl(1.0);
+    if (window.spawnSupernovaBurst) {
+      window.spawnSupernovaBurst(window.innerWidth / 2, window.innerHeight * 0.45, {
+        tier: 1,
+        showToast: false
+      });
+    }
+    showQuantumTelemetryToast("🔔 TIBETAN SINGING BOWL", "Harmonic meditation resonant struck.");
+  }
+
   function updateZenSoundButtonText() {
     if (!zenSoundText) return;
     if (zenSoundMode === 'bowl') {
       zenSoundText.textContent = 'Singing Bowl';
+    } else if (zenSoundMode === 'rain') {
+      zenSoundText.textContent = 'Celestial Rain';
     } else if (zenSoundMode === 'drone') {
       zenSoundText.textContent = '432Hz Drone';
     } else {
@@ -2343,7 +3011,7 @@
       if (document.body.classList.contains('zen-mode')) {
         document.body.classList.add('zen-idle');
       }
-    }, 2500);
+    }, 4500);
   }
 
   function toggleZenMode(force) {
@@ -2359,11 +3027,19 @@
       AudioHUD.confirm();
       resetZenIdleTimer();
       updateZenSoundButtonText();
+      updateZenBreathingButtonText();
+      restartGuidedBreathing();
+
       if (zenSoundMode === 'drone') {
-        startZenDrone();
+        startZenDrone(true);
+      } else if (zenSoundMode === 'rain') {
+        startCelestialRain();
+      } else if (zenSoundMode === 'bowl') {
+        playTibetanSingingBowl(0.6);
       }
     } else {
-      stopZenDrone();
+      stopAllShieldAudio();
+      stopGuidedBreathing();
       announceSR("Zen Immersion Mode exited.");
       AudioHUD.tick(600);
       if (zenIdleTimeout) clearTimeout(zenIdleTimeout);
@@ -2695,6 +3371,7 @@
     if (modeKey === 'focus-protocol') {
       switchAppTab('timer');
       toggleZenMode(false);
+      setTimerSubMode('focus-protocol');
       setPomoMode('focus');
     } else if (modeKey === 'zen-immersion') {
       switchAppTab('timer');
@@ -2706,10 +3383,9 @@
     } else if (modeKey === 'deep-work') {
       switchAppTab('timer');
       toggleZenMode(false);
-      setTimerDuration(90 * 60); // 90 min
-      zenSoundMode = 'drone';
-      safeSetItem('orlando-zen-sound-mode', 'drone');
-      startZenDrone();
+      setTimerSubMode('deep-work');
+      setTimerDuration(90 * 60); // 90 min ultradian
+      setCognitiveShield('drone');
     } else if (modeKey === 'quantum-flow') {
       switchAppTab('stopwatch');
       toggleZenMode(false);
@@ -2840,14 +3516,16 @@
   if (btnZenSoundToggle) {
     btnZenSoundToggle.addEventListener('click', (e) => {
       e.stopPropagation();
+      stopAllShieldAudio();
       if (zenSoundMode === 'bowl') {
+        zenSoundMode = 'rain';
+        startCelestialRain();
+      } else if (zenSoundMode === 'rain') {
         zenSoundMode = 'drone';
-        startZenDrone();
+        startZenDrone(true);
       } else if (zenSoundMode === 'drone') {
-        stopZenDrone();
         zenSoundMode = 'silent';
       } else {
-        stopZenDrone();
         zenSoundMode = 'bowl';
         playTibetanSingingBowl(0.6);
       }
@@ -2856,6 +3534,181 @@
       AudioHUD.tick(1100);
     });
   }
+
+  // Zen Breathing Button
+  const btnZenBreathing = document.getElementById('btnZenBreathing');
+  if (btnZenBreathing) {
+    btnZenBreathing.addEventListener('click', (e) => {
+      e.stopPropagation();
+      cycleZenBreathing();
+    });
+  }
+
+  // Zen Strike Bowl Button
+  const btnZenStrikeBowl = document.getElementById('btnZenStrikeBowl');
+  if (btnZenStrikeBowl) {
+    btnZenStrikeBowl.addEventListener('click', (e) => {
+      e.stopPropagation();
+      strikeZenBowl();
+    });
+  }
+
+  // Zen Mantra Capsule click
+  const zenMantraCapsule = document.getElementById('zenMantraCapsule');
+  if (zenMantraCapsule) {
+    zenMantraCapsule.addEventListener('click', (e) => {
+      e.stopPropagation();
+      cycleZenMantra();
+    });
+  }
+
+  // Focus Protocol: Micro-Goal Auto-Save
+  const focusGoalInput = document.getElementById('focusGoalInput');
+  const focusGoalSaved = document.getElementById('focusGoalSaved');
+  if (focusGoalInput) {
+    focusGoalInput.value = safeGetItem('orlando-focus-goal', '');
+    focusGoalInput.addEventListener('input', () => {
+      safeSetItem('orlando-focus-goal', focusGoalInput.value);
+      if (focusGoalSaved) {
+        focusGoalSaved.classList.add('visible');
+        clearTimeout(focusGoalSaved._timer);
+        focusGoalSaved._timer = setTimeout(() => focusGoalSaved.classList.remove('visible'), 1200);
+      }
+    });
+  }
+
+  // Focus Protocol: Skip Phase Button
+  const btnPomoSkip = document.getElementById('btnPomoSkip');
+  if (btnPomoSkip) {
+    btnPomoSkip.addEventListener('click', (e) => {
+      e.stopPropagation();
+      skipPomoPhase();
+    });
+  }
+
+  // Focus Protocol: Auto-Advance Toggle on deck
+  const btnSprintAutoToggle = document.getElementById('btnSprintAutoToggle');
+  if (btnSprintAutoToggle) {
+    btnSprintAutoToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      pomoAutoNext = !pomoAutoNext;
+      safeSetItem('orlando-pomo-autonext', String(pomoAutoNext));
+      updatePomoUI();
+      AudioHUD.tick(pomoAutoNext ? 1200 : 600);
+    });
+  }
+
+  // Focus Protocol: Reset Daily Sprint Tally
+  const btnResetSprintTally = document.getElementById('btnResetSprintTally');
+  if (btnResetSprintTally) {
+    btnResetSprintTally.addEventListener('click', (e) => {
+      e.stopPropagation();
+      resetDailySprintCount();
+    });
+  }
+
+  // Deep Work: Mission Auto-Save
+  const deepWorkMissionInput = document.getElementById('deepWorkMissionInput');
+  const deepWorkMissionSaved = document.getElementById('deepWorkMissionSaved');
+  if (deepWorkMissionInput) {
+    deepWorkMissionInput.value = safeGetItem('orlando-deepwork-mission', '');
+    deepWorkMissionInput.addEventListener('input', () => {
+      safeSetItem('orlando-deepwork-mission', deepWorkMissionInput.value);
+      if (deepWorkMissionSaved) {
+        deepWorkMissionSaved.classList.add('visible');
+        clearTimeout(deepWorkMissionSaved._timer);
+        deepWorkMissionSaved._timer = setTimeout(() => deepWorkMissionSaved.classList.remove('visible'), 1200);
+      }
+    });
+  }
+
+  // Deep Work: Cognitive Shield Sound Buttons
+  const shieldBtns = document.querySelectorAll('.shield-btn');
+  shieldBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const shieldType = btn.getAttribute('data-shield');
+      setCognitiveShield(shieldType);
+      AudioHUD.tick(1000);
+    });
+  });
+
+  // Deep Work: Distraction Interceptor Scratchpad
+  const btnAddDistraction = document.getElementById('btnAddDistraction');
+  const distractionInput = document.getElementById('distractionInput');
+  if (btnAddDistraction && distractionInput) {
+    const handleAddThought = () => {
+      const val = distractionInput.value;
+      if (val && val.trim()) {
+        addDistractionItem(val);
+        distractionInput.value = '';
+      }
+    };
+    btnAddDistraction.addEventListener('click', handleAddThought);
+    distractionInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        handleAddThought();
+      }
+    });
+  }
+
+  // Quantum Flow: Drop Flow Marker Button
+  const btnSwFlowMarker = document.getElementById('btnSwFlowMarker');
+  if (btnSwFlowMarker) {
+    btnSwFlowMarker.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropFlowMarker('✨ Milestone');
+    });
+  }
+
+  // Quantum Flow: Quick Tag Buttons
+  const flowTagBtns = document.querySelectorAll('.flow-tag-btn');
+  flowTagBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const tag = btn.getAttribute('data-tag');
+      dropFlowMarker(tag);
+    });
+  });
+
+  // Quantum Flow: Horizon Pills
+  const horizonPills = document.querySelectorAll('.horizon-pill');
+  horizonPills.forEach(pill => {
+    pill.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const horizon = parseInt(pill.getAttribute('data-horizon'), 10);
+      setFlowHorizon(horizon);
+    });
+  });
+
+  // Flow Summary Modal Buttons
+  const btnSummaryClose = document.getElementById('btnSummaryClose');
+  const btnSummaryCopy = document.getElementById('btnSummaryCopy');
+  const flowSummaryBackdrop = document.getElementById('flowSummaryBackdrop');
+  if (btnSummaryClose) btnSummaryClose.addEventListener('click', closeFlowSummaryModal);
+  if (flowSummaryBackdrop) flowSummaryBackdrop.addEventListener('click', closeFlowSummaryModal);
+  if (btnSummaryCopy) btnSummaryCopy.addEventListener('click', copyFlowSummary);
+
+  // Hook into Stopwatch Reset button for Quantum Flow Debrief Modal
+  if (btnSwReset) {
+    btnSwReset.addEventListener('click', (e) => {
+      if (currentChronoMode === 'flow' && swElapsedTime > 20000) {
+        e.stopImmediatePropagation();
+        openFlowSummaryModal();
+      }
+    }, true);
+  }
+
+  // Global Keydown Shortcut: B strikes Tibetan Singing Bowl in Zen Mode
+  window.addEventListener('keydown', (e) => {
+    if ((e.key === 'b' || e.key === 'B') && document.body.classList.contains('zen-mode')) {
+      const activeTag = document.activeElement ? document.activeElement.tagName : '';
+      if (activeTag !== 'INPUT' && activeTag !== 'TEXTAREA') {
+        strikeZenBowl();
+      }
+    }
+  });
 
   if (btnZenFullscreen) {
     btnZenFullscreen.addEventListener('click', (e) => {

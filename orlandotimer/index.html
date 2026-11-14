@@ -40,7 +40,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&family=Orbitron:wght@600;700;800;900&family=Outfit:wght@600;700;800;900&family=Space+Grotesk:wght@600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
   <!-- Relative Stylesheet (with cache-bust versioning) -->
-  <link rel="stylesheet" href="style.css?v=23.0">
+  <link rel="stylesheet" href="style.css?v=24.0">
 </head>
 <body data-app-theme="pure-black" data-clock-style="pure-black">
   <!-- Accessibility Live Region for Screen Readers -->
@@ -57,7 +57,18 @@
       </svg>
       <span id="zenPlayText">Start</span>
     </button>
-    <button type="button" class="btn-zen-hud" id="btnZenSoundToggle" title="Toggle Zen Singing Bowl / 432Hz Drone / Silent">
+    <button type="button" class="btn-zen-hud" id="btnZenBreathing" title="Cycle Guided Breathing: 4-7-8 / Box / Coherent / Off">
+      <svg class="zen-hud-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="9"/>
+        <circle cx="12" cy="12" r="3.5" fill="currentColor" fill-opacity="0.3"/>
+      </svg>
+      <span id="zenBreathingText">Breath: 4-7-8</span>
+    </button>
+    <button type="button" class="btn-zen-hud btn-strike-bowl" id="btnZenStrikeBowl" title="Resonate Tibetan Singing Bowl (B)">
+      <span class="zen-strike-bell-icon">🔔</span>
+      <span>Strike Bowl</span>
+    </button>
+    <button type="button" class="btn-zen-hud" id="btnZenSoundToggle" title="Toggle Soundscape: Bowl / Rain / 432Hz Drone / Silent">
       <svg class="zen-hud-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
         <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
@@ -77,6 +88,19 @@
       </svg>
       <span>Exit (Esc)</span>
     </button>
+  </div>
+
+  <!-- Zen Immersion Guided Breathing Horizon & Sanctuary Elements -->
+  <div class="zen-sanctuary-stage" id="zenSanctuaryStage" aria-hidden="true">
+    <div class="zen-breathing-guide" id="zenBreathingGuide">
+      <div class="zen-breathing-ring" id="zenBreathingRing"></div>
+      <span class="zen-breath-prompt" id="zenBreathPrompt">Inhale slowly...</span>
+    </div>
+    <div class="zen-mantra-capsule" id="zenMantraCapsule" title="Click to cycle Zen Affirmations">
+      <span class="zen-mantra-icon">✦</span>
+      <span class="zen-mantra-text" id="zenMantraText">Stillness in Motion · Unshakable Clarity</span>
+      <span class="zen-mantra-icon">✦</span>
+    </div>
   </div>
 
   <!-- Google Antigravity Signature Repulsive Particle Stage -->
@@ -691,7 +715,13 @@
       <!-- ========================================== -->
       <!-- TAB 1: TIMER                               -->
       <!-- ========================================== -->
-      <section class="tab-panel active" id="panel-timer" role="tabpanel" aria-labelledby="tab-timer">
+            <section class="tab-panel active" id="panel-timer" role="tabpanel" aria-labelledby="tab-timer" data-timer-mode="focus-protocol">
+        <!-- Distinct Timer Sub-Mode Header Badge -->
+        <div class="timer-mode-header-badge" id="timerModeHeaderBadge">
+          <span class="timer-badge-icon" id="timerBadgeIcon">🎯</span>
+          <span class="timer-badge-title" id="timerBadgeTitle">FOCUS PROTOCOL · TACTICAL SPRINT ENGINE</span>
+        </div>
+
         <!-- Display Stage with HUGE Digits -->
         <div class="display-stage">
           <div class="chrome timer-digits-huge" id="timerDigits">
@@ -706,7 +736,7 @@
         </div>
 
         <!-- Inputs for Hours, Minutes, Seconds -->
-        <div class="timer-inputs-wrapper">
+        <div class="timer-inputs-wrapper" id="timerInputsWrapper">
           <!-- Hours -->
           <div class="time-input-group">
             <label for="timerHours">Hours</label>
@@ -785,33 +815,133 @@
           </button>
         </div>
 
-        <!-- Presets & Pomodoro Focus Cycle -->
-        <div class="presets-section">
-          <div class="presets-header-row">
-            <span class="presets-label">Timer Presets &amp; Pomodoro</span>
-            <button type="button" class="btn-add-preset" id="btnAddPreset" title="Add Custom Preset Minute">+ Custom Preset</button>
-          </div>
-          <div class="presets-row" id="presetsRow">
-            <button type="button" class="preset-pill" data-minutes="5">5 min</button>
-            <button type="button" class="preset-pill" data-minutes="10">10 min</button>
-            <button type="button" class="preset-pill" data-minutes="15">15 min</button>
-            <button type="button" class="preset-pill" data-minutes="25">25 min (Pomodoro)</button>
-            <button type="button" class="preset-pill" data-minutes="45">45 min</button>
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- SUB-DECK A: FOCUS PROTOCOL (Tactical Sprint OS / Pomodoro 2.0)  -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <div class="focus-protocol-deck" id="focusProtocolDeck">
+          <!-- Active Micro-Target Bar -->
+          <div class="focus-target-bar">
+            <span class="target-icon">🎯</span>
+            <input type="text" id="focusGoalInput" class="focus-goal-input" placeholder="Current sprint target... (e.g. Finish math lesson slides)" maxlength="90">
+            <span class="target-save-indicator" id="focusGoalSaved">Saved</span>
           </div>
 
           <!-- Pomodoro Cycle Controller & Status Strip -->
           <div class="pomodoro-cycle-strip" id="pomodoroCycleStrip">
             <div class="pomo-status-left">
               <span class="pomo-dot" id="pomoDot"></span>
-              <span class="pomo-stage-title" id="pomoStageTitle">Focus Session</span>
+              <span class="pomo-stage-title" id="pomoStageTitle">Focus Session (25m)</span>
               <span class="pomo-round-badge" id="pomoRoundBadge">Round 1/4</span>
             </div>
             <div class="pomo-buttons-right">
               <button type="button" class="pomo-step-btn active" id="btnPomoFocus" title="25 Minute Focus Session">25m Focus</button>
-              <button type="button" class="pomo-step-btn" id="btnPomoShortBreak" title="5 Minute Short Break">5m Break</button>
-              <button type="button" class="pomo-step-btn" id="btnPomoLongBreak" title="15 Minute Long Break (after 4 rounds)">15m Long</button>
+              <button type="button" class="pomo-step-btn" id="btnPomoShortBreak" title="5 Minute Short Break">5m Rest</button>
+              <button type="button" class="pomo-step-btn" id="btnPomoLongBreak" title="15 Minute Long Break (after 4 rounds)">15m Deep Rest</button>
               <button type="button" class="pomo-toggle-btn active" id="btnPomoAutoNext" title="Auto-advance Pomodoro Cycles">Auto: ON</button>
+              <button type="button" class="pomo-skip-btn" id="btnPomoSkip" title="Skip to next Pomodoro phase">⏭ Skip</button>
             </div>
+          </div>
+
+          <!-- 4-Sprint Visual Indicators & Daily Tally -->
+          <div class="sprint-indicators-bar">
+            <div class="sprint-pips-deck" id="sprintPipsDeck">
+              <div class="sprint-pip active" data-round="1"><span class="pip-icon">🍅</span><span class="pip-label">Sprint 1</span></div>
+              <div class="sprint-pip" data-round="2"><span class="pip-icon">🍅</span><span class="pip-label">Sprint 2</span></div>
+              <div class="sprint-pip" data-round="3"><span class="pip-icon">🍅</span><span class="pip-label">Sprint 3</span></div>
+              <div class="sprint-pip" data-round="4"><span class="pip-icon">🍅</span><span class="pip-label">Sprint 4</span></div>
+            </div>
+            <div class="sprint-daily-tally">
+              <span class="tally-flame">🔥</span>
+              <span id="sprintDailyCountText">0 Sprints Done Today (0m Focus)</span>
+              <button type="button" class="btn-reset-tally" id="btnResetSprintTally" title="Reset Today's Sprint Counter">↺</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- SUB-DECK B: DEEP WORK (Cognitive Fortress / 90m Ultradian)     -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <div class="deep-work-deck" id="deepWorkDeck" style="display:none;">
+          <!-- Active Fortress Mission Bar -->
+          <div class="deepwork-mission-bar">
+            <span class="mission-shield-icon">🛡️</span>
+            <input type="text" id="deepWorkMissionInput" class="deepwork-mission-input" placeholder="Cognitive Fortress Mission... (e.g. Master Neural Engine Architecture)" maxlength="90">
+            <span class="mission-save-indicator" id="deepWorkMissionSaved">Saved</span>
+          </div>
+
+          <!-- 3-Phase Ultradian Progression Curve -->
+          <div class="ultradian-progression-deck">
+            <div class="ultradian-header-row">
+              <span class="ultradian-label">90-MINUTE ULTRADIAN RHYTHM</span>
+              <span class="ultradian-active-status" id="dwActivePhaseStatus">Phase 1: Priming &amp; Warm-Up (0–15m)</span>
+            </div>
+            <div class="ultradian-phases-grid">
+              <div class="ultradian-phase active" id="dwPhase1" data-phase="1">
+                <div class="phase-badge"><span class="phase-dot"></span> PHASE 1</div>
+                <strong class="phase-name">Priming &amp; Warm-Up</strong>
+                <span class="phase-interval">0m – 15m (Ramp)</span>
+                <div class="phase-mini-track"><div class="phase-mini-fill" id="dwPhase1Fill" style="width: 0%"></div></div>
+              </div>
+              <div class="ultradian-phase" id="dwPhase2" data-phase="2">
+                <div class="phase-badge"><span class="phase-dot"></span> PHASE 2</div>
+                <strong class="phase-name">Peak Immersion</strong>
+                <span class="phase-interval">15m – 75m (Hyper-Focus)</span>
+                <div class="phase-mini-track"><div class="phase-mini-fill" id="dwPhase2Fill" style="width: 0%"></div></div>
+              </div>
+              <div class="ultradian-phase" id="dwPhase3" data-phase="3">
+                <div class="phase-badge"><span class="phase-dot"></span> PHASE 3</div>
+                <strong class="phase-name">Synthesis &amp; Review</strong>
+                <span class="phase-interval">75m – 90m (Consolidate)</span>
+                <div class="phase-mini-track"><div class="phase-mini-fill" id="dwPhase3Fill" style="width: 0%"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Built-in Cognitive Shield Soundscape Bar -->
+          <div class="cognitive-shield-card">
+            <div class="shield-header">
+              <span class="shield-icon-badge">🧠</span>
+              <strong>Cognitive Shield Soundscape</strong>
+              <span class="shield-desc">Zero audio distraction</span>
+            </div>
+            <div class="shield-options-row">
+              <button type="button" class="shield-btn active" data-shield="drone" id="btnShieldDrone">🧘 432Hz Drone</button>
+              <button type="button" class="shield-btn" data-shield="brown" id="btnShieldBrown">🛡️ Deep Brown Noise</button>
+              <button type="button" class="shield-btn" data-shield="silent" id="btnShieldSilent">🤫 Pure Silence</button>
+            </div>
+          </div>
+
+          <!-- Distraction Interceptor Quick Thought Dump Scratchpad -->
+          <div class="distraction-interceptor-card">
+            <div class="distraction-card-header">
+              <div class="distraction-title-left">
+                <span class="distraction-icon">📝</span>
+                <strong>Distraction Interceptor</strong>
+              </div>
+              <span class="distraction-counter-badge" id="distractionCountBadge">0 Thoughts Parked</span>
+            </div>
+            <p class="distraction-subtext">Sudden thought popping up? Dump it here so your brain can let go and stay deep in the zone.</p>
+            <div class="distraction-form-row">
+              <input type="text" id="distractionInput" class="distraction-text-input" placeholder="Drop sudden thought to handle later...">
+              <button type="button" id="btnAddDistraction" class="btn-dump-thought">+ Park Thought</button>
+            </div>
+            <ul id="distractionList" class="distraction-items-list"></ul>
+          </div>
+        </div>
+
+        <!-- Presets Section (Custom Preset Minutes) -->
+        <div class="presets-section" id="timerPresetsSection">
+          <div class="presets-header-row">
+            <span class="presets-label">Custom Duration Presets</span>
+            <button type="button" class="btn-add-preset" id="btnAddPreset" title="Add Custom Preset Minute">+ Custom Preset</button>
+          </div>
+          <div class="presets-row" id="presetsRow">
+            <button type="button" class="preset-pill" data-minutes="5">5 min</button>
+            <button type="button" class="preset-pill" data-minutes="10">10 min</button>
+            <button type="button" class="preset-pill" data-minutes="15">15 min</button>
+            <button type="button" class="preset-pill" data-minutes="25">25 min</button>
+            <button type="button" class="preset-pill" data-minutes="45">45 min</button>
+            <button type="button" class="preset-pill" data-minutes="90">90 min</button>
           </div>
         </div>
       </section>
@@ -819,7 +949,7 @@
       <!-- ========================================== -->
       <!-- TAB 2: STOPWATCH (QUANTUM FLOW & PRECISION CHRONO) -->
       <!-- ========================================== -->
-      <section class="tab-panel" id="panel-stopwatch" role="tabpanel" aria-labelledby="tab-stopwatch" data-chrono-mode="precision">
+            <section class="tab-panel" id="panel-stopwatch" role="tabpanel" aria-labelledby="tab-stopwatch" data-chrono-mode="precision">
         <!-- Display Stage with HUGE Digits -->
         <div class="display-stage">
           <!-- Distinct Chrono Sub-Mode Badge -->
@@ -833,7 +963,7 @@
           </div>
         </div>
 
-        <!-- Buttons: Start, Stop, Lap, Reset with Futuristic Action SVGs -->
+        <!-- Buttons: Start, Stop, Lap/Marker, Reset with Futuristic Action SVGs -->
         <div class="controls-row">
           <button type="button" class="btn-luxury btn-primary-gold" id="btnSwStart">
             <svg class="cyber-btn-svg-action" viewBox="0 0 24 24" fill="currentColor">
@@ -849,11 +979,17 @@
             </svg>
             <span id="btnSwStopText">Stop</span>
           </button>
+          <!-- Split Lap Button (Precision Chrono) -->
           <button type="button" class="btn-luxury btn-lap" id="btnSwLap">
             <svg class="cyber-btn-svg-action" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polygon points="4 3 19 8 4 13 4 21" fill="currentColor" fill-opacity="0.25"/>
             </svg>
             <span>Lap</span>
+          </button>
+          <!-- Drop Flow Marker Button (Quantum Flow) -->
+          <button type="button" class="btn-luxury btn-flow-marker" id="btnSwFlowMarker" style="display:none;">
+            <span class="flow-marker-sparkle">✨</span>
+            <span id="btnSwFlowMarkerText">Drop Flow Marker</span>
           </button>
           <button type="button" class="btn-luxury btn-ghost-silver" id="btnSwReset">
             <svg class="cyber-btn-svg-action" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -864,14 +1000,41 @@
           </button>
         </div>
 
-        <!-- Flow State Journey Deck (Active in Quantum Flow Mode) -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- SUB-DECK: QUANTUM FLOW STATE ENGINE (Active in Flow Mode)      -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
         <div class="flow-journey-deck" id="flowJourneyDeck" style="display:none;">
+          <!-- Flow Deck Header -->
           <div class="flow-deck-header">
             <div class="flow-deck-title-row">
               <span class="flow-pulse-dot"></span>
               <span class="flow-stage-title" id="flowStageTitle">Grounding Focus · Session Ready</span>
             </div>
             <span class="flow-total-badge" id="flowTotalBadge">0m in Flow</span>
+          </div>
+
+          <!-- Biomimetic Flow Depth Gauge -->
+          <div class="flow-depth-gauge">
+            <div class="flow-depth-header">
+              <span class="flow-depth-lvl" id="flowDepthLvl">LEVEL 1 · GROUNDING &amp; ACTIVATION</span>
+              <span class="flow-depth-pct" id="flowDepthPct">Friction Dissolving</span>
+            </div>
+            <div class="flow-depth-bar-track">
+              <div class="flow-depth-bar-fill" id="flowDepthBarFill" style="width: 15%"></div>
+            </div>
+          </div>
+
+          <!-- Target Flow Horizon Selector -->
+          <div class="flow-horizon-row">
+            <span class="horizon-label">Flow Horizon:</span>
+            <div class="horizon-pills" id="horizonPills">
+              <button type="button" class="horizon-pill active" data-horizon="0">Free Flow ∞</button>
+              <button type="button" class="horizon-pill" data-horizon="30">30 min</button>
+              <button type="button" class="horizon-pill" data-horizon="45">45 min</button>
+              <button type="button" class="horizon-pill" data-horizon="60">60 min</button>
+              <button type="button" class="horizon-pill" data-horizon="90">90 min</button>
+            </div>
+            <span class="flow-horizon-status" id="flowHorizonStatus">Free Flow</span>
           </div>
           
           <!-- Flow Milestones Progress Horizon -->
@@ -896,7 +1059,28 @@
               <span class="flow-m-label">90m Ultra</span>
             </div>
           </div>
-          <p class="flow-deck-hint">Open-ended creative immersion. No deadline anxiety. Time counts up gently.</p>
+
+          <!-- Flow Journey Log (Captured Milestones & Wins) -->
+          <div class="flow-markers-container" id="flowMarkersContainer">
+            <div class="flow-markers-header">
+              <div class="fm-header-left">
+                <span class="fm-icon">✨</span>
+                <strong>Flow Journey Log</strong>
+              </div>
+              <span class="fm-count-badge" id="flowMarkerCount">0 Moments Logged</span>
+            </div>
+            <!-- Quick Tag Bar for Dropping Markers -->
+            <div class="flow-quick-tag-bar">
+              <span class="quick-tag-hint">Quick Tag:</span>
+              <button type="button" class="flow-tag-btn" data-tag="💡 Insight">💡 Insight</button>
+              <button type="button" class="flow-tag-btn" data-tag="🚀 Milestone">🚀 Milestone</button>
+              <button type="button" class="flow-tag-btn" data-tag="🎯 Solved">🎯 Solved</button>
+              <button type="button" class="flow-tag-btn" data-tag="📝 Note">📝 Note</button>
+            </div>
+            <ul class="flow-markers-list" id="flowMarkersList">
+              <li class="flow-marker-empty">Click "✨ Drop Flow Marker" during your session to log breakthroughs and insights without breaking flow.</li>
+            </ul>
+          </div>
         </div>
 
         <!-- Lap List Below (Active in Precision Chrono Mode) -->
@@ -1115,6 +1299,46 @@
   <audio id="alarmAudioElement" preload="auto" src="sounds/piano.mp3"></audio>
 
   <!-- Relative JavaScript (with cache-bust versioning) -->
-  <script src="app.js?v=23.0"></script>
+  <script src="app.js?v=24.0"></script>
+
+  <!-- Executive Flow State Debrief / Session Summary Modal -->
+  <div class="flow-summary-modal" id="flowSummaryModal" role="dialog" aria-modal="true" aria-labelledby="flowSummaryTitle" aria-hidden="true">
+    <div class="flow-summary-backdrop" id="flowSummaryBackdrop"></div>
+    <div class="flow-summary-card">
+      <div class="flow-summary-header">
+        <div class="flow-summary-badge">👑 EXECUTIVE FLOW DEBRIEF</div>
+        <h2 id="flowSummaryTitle">Flow Session Completed</h2>
+        <p class="flow-summary-subtitle" id="flowSummarySubtitle">Deep uninterrupted focus achieved</p>
+      </div>
+
+      <div class="flow-summary-stats-grid">
+        <div class="flow-stat-tile">
+          <span class="flow-stat-label">TOTAL IMMERSION</span>
+          <strong class="flow-stat-val" id="summaryTotalTime">00:00:00</strong>
+        </div>
+        <div class="flow-stat-tile">
+          <span class="flow-stat-label">PEAK FLOW LEVEL</span>
+          <strong class="flow-stat-val" id="summaryPeakLevel">Level 1</strong>
+        </div>
+        <div class="flow-stat-tile">
+          <span class="flow-stat-label">MARKERS LOGGED</span>
+          <strong class="flow-stat-val" id="summaryMarkersCount">0 Wins</strong>
+        </div>
+      </div>
+
+      <div class="flow-summary-log-preview" id="summaryLogPreview">
+        <!-- Log moments -->
+      </div>
+
+      <div class="flow-summary-actions">
+        <button type="button" class="btn-summary-copy" id="btnSummaryCopy">
+          <span>📋 Copy Debrief to Clipboard</span>
+        </button>
+        <button type="button" class="btn-summary-close" id="btnSummaryClose">
+          <span>Continue ✦</span>
+        </button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
