@@ -1725,10 +1725,14 @@ body.zen-mode .timer-inputs-wrapper,
 body.zen-mode .presets-section,
 body.zen-mode .pomodoro-cycle-strip,
 body.zen-mode .controls-row,
+body.zen-mode .focus-protocol-deck,
+body.zen-mode .deep-work-deck,
+body.zen-mode .timer-mode-header-badge,
+body.zen-mode .presets-section,
 body.zen-mode .footer {
+  display: none !important;
   opacity: 0 !important;
   pointer-events: none !important;
-  transform: translate3d(0, -10px, 0) !important;
   visibility: hidden !important;
 }
 
@@ -5874,15 +5878,15 @@ input:checked + .slider:before {
   display: none;
   position: fixed;
   left: 50%;
-  bottom: 12%;
+  bottom: 8%;
   transform: translateX(-50%);
   z-index: 10000;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
   pointer-events: auto;
   opacity: 0;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.4s ease;
 }
 
 body.zen-mode .zen-sanctuary-stage {

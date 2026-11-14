@@ -2864,7 +2864,8 @@
   let toastTimeout = null;
 
     // ── ZEN IMMERSION SANCTUARY: GUIDED BREATHING RHYTHMS & MANTRAS ──
-  let zenBreathingRhythm = safeGetItem('orlando-zen-breathing', '4-7-8'); // '4-7-8' | 'box' | 'coherent' | 'off'
+  // Default to 'off' so Zen Mode is purely a distraction-free Focus Timer first!
+  let zenBreathingRhythm = safeGetItem('orlando-zen-breathing', 'off'); // 'off' | '4-7-8' | 'box' | 'coherent'
   let zenBreathingTimer = null;
 
   const ZEN_MANTRAS = [
@@ -2892,17 +2893,26 @@
   function updateZenBreathingButtonText() {
     const textEl = document.getElementById('zenBreathingText');
     if (!textEl) return;
-    if (zenBreathingRhythm === '4-7-8') textEl.textContent = 'Breath: 4-7-8';
+    if (zenBreathingRhythm === '4-7-8') textEl.textContent = 'Breath: 4-7-8 Relax';
     else if (zenBreathingRhythm === 'box') textEl.textContent = 'Breath: Box 4s';
-    else if (zenBreathingRhythm === 'coherent') textEl.textContent = 'Breath: 5.5s';
-    else textEl.textContent = 'Breath: Off';
+    else if (zenBreathingRhythm === 'coherent') textEl.textContent = 'Breath: Coherent 5.5s';
+    else textEl.textContent = 'Breath: Off (Focus Timer)';
   }
 
   function cycleZenBreathing() {
-    if (zenBreathingRhythm === '4-7-8') zenBreathingRhythm = 'box';
-    else if (zenBreathingRhythm === 'box') zenBreathingRhythm = 'coherent';
-    else if (zenBreathingRhythm === 'coherent') zenBreathingRhythm = 'off';
-    else zenBreathingRhythm = '4-7-8';
+    if (zenBreathingRhythm === 'off') {
+      zenBreathingRhythm = '4-7-8';
+      showQuantumTelemetryToast("🧘 BREATHING GUIDE ON", "Follow the breathing halo ring for relaxation.");
+    } else if (zenBreathingRhythm === '4-7-8') {
+      zenBreathingRhythm = 'box';
+      showQuantumTelemetryToast("🔲 BOX BREATHING (4-4-4-4)", "Inhale 4s · Hold 4s · Exhale 4s · Hold 4s.");
+    } else if (zenBreathingRhythm === 'box') {
+      zenBreathingRhythm = 'coherent';
+      showQuantumTelemetryToast("💓 COHERENT BREATHING (5.5s)", "Smooth equal inhalation and exhalation.");
+    } else {
+      zenBreathingRhythm = 'off';
+      showQuantumTelemetryToast("⏳ PURE FOCUS TIMER", "Breathing guide off. Focusing purely on countdown.");
+    }
 
     safeSetItem('orlando-zen-breathing', zenBreathingRhythm);
     updateZenBreathingButtonText();
