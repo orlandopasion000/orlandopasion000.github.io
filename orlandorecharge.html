@@ -9208,37 +9208,12 @@ try { checkUrlHashRoutine(); } catch(e){}
             var norm = Math.max(0, 1 - dist / INFLUENCE_RADIUS);
             var isMouseStationary = (now - mouse.lastActiveTime > 200);
             var evadeMultiplier = isMouseStationary ? 2.2 : 1.0;
-            var evadeForce = Math.pow(norm, 1.4) * 1.0 * evadeMultiplier;
+            var evadeForce = Math.pow(norm, 1.4) * 3.8 * evadeMultiplier;
             var angle = Math.atan2(dy, dx);
-            var radX = Math.cos(angle);
-            var radY = Math.sin(angle);
-            var tanX = -radY;
-            var tanY = radX;
-
-            // Subtle 0.5px corner margin: gently steer tangent inward only right at the 0.5px edge
-            var nearEdge = (p.x < MIN_X + 0.5 || p.x > MAX_X - 0.5 || p.y < MIN_Y + 0.5 || p.y > MAX_Y - 0.5);
-            if (nearEdge) {
-              var toCenterX = (width * 0.5) - p.x;
-              var toCenterY = (height * 0.5) - p.y;
-              if ((tanX * toCenterX + tanY * toCenterY) < 0) {
-                tanX = -tanX;
-                tanY = -tanY;
-              }
-            }
-
-            p.vx += (radX * 1.7 + tanX * 1.25) * evadeForce * 0.38;
-            p.vy += (radY * 1.7 + tanY * 1.25) * evadeForce * 0.38;
-
-            // Intelligently cap maximum flee speed so open-space pursuit is exciting yet humanly winnable!
-            if (!isMouseStationary) {
-              var maxTrackableSpeed = 5.4;
-              var spd = Math.hypot(p.vx, p.vy);
-              if (spd > maxTrackableSpeed) {
-                p.vx = (p.vx / spd) * maxTrackableSpeed;
-                p.vy = (p.vy / spd) * maxTrackableSpeed;
-              }
-            }
-
+            var tanX = -Math.sin(angle);
+            var tanY = Math.cos(angle);
+            p.vx += (Math.cos(angle) * 1.8 + tanX * 1.3) * evadeForce * 0.42;
+            p.vy += (Math.sin(angle) * 1.8 + tanY * 1.3) * evadeForce * 0.42;
             p.turnFlex = Math.sign(tanY || 1) * 0.65;
             if (isHighSpeedCursor && p.isRadiant) {
               p.trail.push({ x: p.x, y: p.y, alpha: p.isFront ? 0.85 : 0.65 });
@@ -9403,38 +9378,37 @@ try { checkUrlHashRoutine(); } catch(e){}
       var TURN_BUFFER = 75;
       if (p.x < MIN_X + TURN_BUFFER) {
         var f = (MIN_X + TURN_BUFFER - p.x) / TURN_BUFFER;
-        p.vx += f * f * 0.38;
-        p.vy += (p.vy >= 0 ? 0.18 : -0.18) * f;
+        p.vx += f * f * 0.35;
+        p.vy += (p.vy >= 0 ? 0.16 : -0.16) * f;
       } else if (p.x > MAX_X - TURN_BUFFER) {
         var f = (p.x - (MAX_X - TURN_BUFFER)) / TURN_BUFFER;
-        p.vx -= f * f * 0.38;
-        p.vy += (p.vy >= 0 ? 0.18 : -0.18) * f;
+        p.vx -= f * f * 0.35;
+        p.vy += (p.vy >= 0 ? 0.16 : -0.16) * f;
       }
       if (p.y < MIN_Y + TURN_BUFFER) {
         var f = (MIN_Y + TURN_BUFFER - p.y) / TURN_BUFFER;
-        p.vy += f * f * 0.38;
-        p.vx += (p.vx >= 0 ? 0.18 : -0.18) * f;
+        p.vy += f * f * 0.35;
+        p.vx += (p.vx >= 0 ? 0.16 : -0.16) * f;
       } else if (p.y > MAX_Y - TURN_BUFFER) {
         var f = (p.y - (MAX_Y - TURN_BUFFER)) / TURN_BUFFER;
-        p.vy -= f * f * 0.38;
-        p.vx += (p.vx >= 0 ? 0.18 : -0.18) * f;
+        p.vy -= f * f * 0.35;
+        p.vx += (p.vx >= 0 ? 0.16 : -0.16) * f;
       }
 
-      // Soft perimeter containment (smooth damping turnaround)
-      var bounceKeep = 0.45;
+      // Soft perimeter containment (smooth damping turnaround, never an instantaneous 180° hard stick snap!)
       if (p.x < MIN_X) {
         p.x = MIN_X;
-        if (p.vx < 0) p.vx = -p.vx * bounceKeep;
+        if (p.vx < 0) p.vx = -p.vx * 0.45;
       } else if (p.x > MAX_X) {
         p.x = MAX_X;
-        if (p.vx > 0) p.vx = -p.vx * bounceKeep;
+        if (p.vx > 0) p.vx = -p.vx * 0.45;
       }
       if (p.y < MIN_Y) {
         p.y = MIN_Y;
-        if (p.vy < 0) p.vy = -p.vy * bounceKeep;
+        if (p.vy < 0) p.vy = -p.vy * 0.45;
       } else if (p.y > MAX_Y) {
         p.y = MAX_Y;
-        if (p.vy > 0) p.vy = -p.vy * bounceKeep;
+        if (p.vy > 0) p.vy = -p.vy * 0.45;
       }
 
       if (!p.isFront && p.isRadiant) radiantBackNodes.push(p);
@@ -10802,7 +10776,7 @@ try { checkUrlHashRoutine(); } catch(e){}
               triggerVictory(lockedParticle);
             }
           } else {
-            // Particle actively evades: 180ms chase grace window so active human pursuit is smoothly winnable!
+            // Particle actively evades fast: allow 180ms chase grace window so high-speed pursuit accumulates count!
             if (now - lastTouchContactTime > 180) {
               lockedParticle.isLocked = false;
               contactDuration = 0.0;
@@ -10810,7 +10784,7 @@ try { checkUrlHashRoutine(); } catch(e){}
               stopLockAudio();
               missionText.textContent = "TARGET: TOUCH ANY PARTICLE · MAINTAIN CONTACT FOR 2.0s";
             } else {
-              contactDuration = Math.max(0, contactDuration - dt * 0.10);
+              // Still actively pursuing during grace window
               var progress = Math.min(1.0, contactDuration / REQUIRED_CONTACT);
               drawLockReticle(lockedParticle.x, lockedParticle.y, progress, dist);
             }
