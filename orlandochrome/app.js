@@ -2668,6 +2668,31 @@ const Icons = {
       } catch (e) {}
     }
 
+    // Clean Slate Synchronization: Remote broadcast of complete reset
+    if (packet.isCleanSlate) {
+      const freshSlateAt = parseInt(localStorage.getItem('orlandochrome_fresh_slate_at') || '0', 10);
+      if (packet.ts >= freshSlateAt) {
+        state.profiles.forEach(p => {
+          p.timerUntil = null;
+          p.timerDurationMs = null;
+          p.isReset = false;
+          p.isUnread = false;
+          p.stickyNote = '';
+          p.statusNote = null;
+          p.notes = [];
+        });
+        state.trash = [];
+        try { localStorage.removeItem('orlandochrome_trash'); } catch (e) {}
+        safeSetLocalStorage(STORAGE_KEY, JSON.stringify(state.profiles));
+        safeSetLocalStorage('orlandochrome_trash', JSON.stringify([]));
+        renderSidebar();
+        renderMainChat();
+        updateTrashBadge();
+        renderClockBox();
+        return;
+      }
+    }
+
     // Tombstone Synchronization: Process remote deletions so deleted notes stay deleted
     if (Array.isArray(packet.del) && packet.del.length > 0) {
       const delSet = new Set(packet.del);
@@ -3060,7 +3085,8 @@ const Icons = {
       const cloudHasActivity = latestPacket.p && latestPacket.p.length > 0;
       const forceFromQr = Boolean(state.forceCloudPullOnBoot);
 
-      if (showFeedback || forceFromQr || cloudTs > localTs || (!localHasActivity && cloudHasActivity)) {
+      const freshSlateAt = parseInt(localStorage.getItem('orlandochrome_fresh_slate_at') || '0', 10);
+      if (showFeedback || forceFromQr || (cloudTs > localTs && cloudTs > freshSlateAt) || (!localHasActivity && cloudHasActivity && cloudTs > freshSlateAt)) {
         state.forceCloudPullOnBoot = false;
         if (latestPacket.cid !== CLIENT_ID || showFeedback || forceFromQr || !localHasActivity) {
           applySyncPacket(latestPacket, 'Cloud Sync');
@@ -3222,12 +3248,7 @@ const Icons = {
   // Load state and clean sample notes
   function loadState() {
     loadWisprPrefs();
-    // Auto-trigger fresh slate requested by user (v101)
-    const FRESH_KEY_V101 = 'orlandochrome_fresh_v101_applied';
-    if (!localStorage.getItem(FRESH_KEY_V101)) {
-      startFreshCleanSlate(false);
-      safeSetLocalStorage(FRESH_KEY_V101, 'true');
-    }
+    
 
     loadTemplates();
 
@@ -3410,14 +3431,7 @@ const Icons = {
 
     state.profiles.sort((a, b) => a.taskbarSlot - b.taskbarSlot);
 
-    // Auto-restore recovered cloud data on initial boot of v95
-    try {
-      const alreadyRestored = localStorage.getItem('orlandochrome_recovered_auto_restored_v1');
-      if (!alreadyRestored) {
-        restoreRecoveredHistoricalData(false);
-        localStorage.setItem('orlandochrome_recovered_auto_restored_v1', 'true');
-      }
-    } catch (e) {}
+    // Historical cloud data safely preserved in RECOVERED_HISTORICAL_RECORDS & Recovery Vault (on-demand restore only)
 
     // Take startup checkpoint snapshot
     takeBackupSnapshot('App Startup Checkpoint');
@@ -3475,6 +3489,13 @@ const Icons = {
     }
 
     persistLocalOnly();
+
+    // Auto-trigger fresh slate requested by user (v101)
+    const FRESH_KEY_V101 = 'orlandochrome_fresh_v101_applied';
+    if (!localStorage.getItem(FRESH_KEY_V101)) {
+      startFreshCleanSlate(false);
+      safeSetLocalStorage(FRESH_KEY_V101, 'true');
+    }
   }
 
   function persistLocalOnly() {
@@ -8900,16 +8921,57 @@ ${jsRes}
       p.notes = [];
     });
 
-    // 3. Empty the trash
+    // 3. Empty the trash completely
     state.trash = [];
     try { localStorage.removeItem('orlandochrome_trash'); } catch (e) {}
 
-    // 4. Save and broadcast to cloud sync
-    saveState(false);
+    // 4. Mark clean slate timestamp to ignore older cloud sync packets
+    const freshTs = now();
+    state.lastModified = freshTs;
+    try {
+      localStorage.setItem('orlandochrome_fresh_slate_at', String(freshTs));
+      localStorage.setItem(LAST_MOD_KEY, String(freshTs));
+      localStorage.setItem('orlandochrome_fresh_v101_applied', 'true');
+      localStorage.setItem('orlandochrome_recovered_auto_restored_v1', 'true');
+    } catch (e) {}
+
+    // 5. Save local storage & IndexedDB Master Mirror immediately
+    try {
+      safeSetLocalStorage(STORAGE_KEY, JSON.stringify(state.profiles));
+      safeSetLocalStorage('orlandochrome_trash', JSON.stringify([]));
+      idbSaveMasterState({
+        profiles: JSON.parse(JSON.stringify(state.profiles || [])),
+        trash: [],
+        draSched: localStorage.getItem('dra-schedule')
+      });
+    } catch (e) {}
+
+    // 6. Broadcast clean slate packet to cloud sync
+    try {
+      if (!isTestEnvironment()) {
+        const cleanPacket = {
+          v: 2,
+          cid: CLIENT_ID,
+          ts: freshTs,
+          isCleanSlate: true,
+          p: []
+        };
+        fetch(`https://ntfy.sh/${CLOUD_SYNC_TOPIC}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(cleanPacket)
+        }).catch(() => {});
+      }
+    } catch (e) {}
+
     renderSidebar();
     renderMainChat();
     updateTrashBadge();
     renderClockBox();
+
+    // Close Trash Vault modal if currently open
+    const trashBackdrop = $('#trashVaultBackdrop');
+    if (trashBackdrop) trashBackdrop.remove();
 
     showToast('✨ Clean slate active: 0 notifications, 0 pendings, 0 timers, empty trash.');
   }
