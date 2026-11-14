@@ -8934,6 +8934,14 @@ try { checkUrlHashRoutine(); } catch(e){}
   var prevBassEnergy = 0;
   var beatKickImpulse = 0;
 
+  // Pre-allocated typed buffers for zero-GC 60fps wavepacket spine & contour rendering
+  var _ptsX = new Float32Array(12);
+  var _ptsY = new Float32Array(12);
+  var _leftX = new Float32Array(12);
+  var _leftY = new Float32Array(12);
+  var _rightX = new Float32Array(12);
+  var _rightY = new Float32Array(12);
+
   document.addEventListener("visibilitychange", function() {
     if (document.hidden) {
       isTabActive = false;
@@ -9049,15 +9057,11 @@ try { checkUrlHashRoutine(); } catch(e){}
       sw.speed *= 0.982;
       sw.alpha *= 0.962;
 
-      backCtx.save();
       backCtx.beginPath();
       backCtx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
-      backCtx.strokeStyle = "hsla(" + sw.hue + ", 95%, 72%, " + (sw.alpha * 0.45).toFixed(2) + ")";
-      backCtx.lineWidth = 1.6;
-      backCtx.shadowColor = "hsla(" + sw.hue + ", 95%, 65%, " + (sw.alpha * 0.70).toFixed(2) + ")";
-      backCtx.shadowBlur = 12;
+      backCtx.strokeStyle = "hsla(" + sw.hue + ", 95%, 72%, " + (sw.alpha * 0.55).toFixed(2) + ")";
+      backCtx.lineWidth = 1.8;
       backCtx.stroke();
-      backCtx.restore();
 
       if (sw.alpha < 0.02 || sw.radius > sw.maxRadius) {
         shockwaves.splice(sIdx, 1);
@@ -9071,15 +9075,11 @@ try { checkUrlHashRoutine(); } catch(e){}
       sh.alpha *= 0.87;
       if (sh.alpha > 0.04 && sh.radius < sh.maxRadius) {
         var sTargetCtx = frontCtx || backCtx;
-        sTargetCtx.save();
         sTargetCtx.beginPath();
         sTargetCtx.arc(sh.x, sh.y, sh.radius, 0, Math.PI * 2);
         sTargetCtx.strokeStyle = "hsla(" + Math.round(sh.hue) + ", 96%, 74%, " + sh.alpha.toFixed(2) + ")";
-        sTargetCtx.lineWidth = 1.0;
-        sTargetCtx.shadowColor = "hsla(" + Math.round(sh.hue) + ", 100%, 70%, " + (sh.alpha * 0.85).toFixed(2) + ")";
-        sTargetCtx.shadowBlur = 7;
+        sTargetCtx.lineWidth = 1.2;
         sTargetCtx.stroke();
-        sTargetCtx.restore();
       } else {
         sonicHalos.splice(shIdx, 1);
       }
@@ -9208,15 +9208,15 @@ try { checkUrlHashRoutine(); } catch(e){}
             var norm = Math.max(0, 1 - dist / INFLUENCE_RADIUS);
             var isMouseStationary = (now - mouse.lastActiveTime > 200);
             var evadeMultiplier = isMouseStationary ? 2.2 : 1.0;
-            var evadeForce = Math.pow(norm, 1.4) * 3.6 * evadeMultiplier;
+            var evadeForce = Math.pow(norm, 1.4) * 1.0 * evadeMultiplier;
             var angle = Math.atan2(dy, dx);
             var radX = Math.cos(angle);
             var radY = Math.sin(angle);
             var tanX = -radY;
             var tanY = radX;
 
-            // Subtle 7px corner margin: gently steer tangent inward only right at the 7px edge
-            var nearEdge = (p.x < MIN_X + 7 || p.x > MAX_X - 7 || p.y < MIN_Y + 7 || p.y > MAX_Y - 7);
+            // Subtle 0.5px corner margin: gently steer tangent inward only right at the 0.5px edge
+            var nearEdge = (p.x < MIN_X + 0.5 || p.x > MAX_X - 0.5 || p.y < MIN_Y + 0.5 || p.y > MAX_Y - 0.5);
             if (nearEdge) {
               var toCenterX = (width * 0.5) - p.x;
               var toCenterY = (height * 0.5) - p.y;
@@ -9231,7 +9231,7 @@ try { checkUrlHashRoutine(); } catch(e){}
 
             // Intelligently cap maximum flee speed so open-space pursuit is exciting yet humanly winnable!
             if (!isMouseStationary) {
-              var maxTrackableSpeed = 6.2;
+              var maxTrackableSpeed = 5.4;
               var spd = Math.hypot(p.vx, p.vy);
               if (spd > maxTrackableSpeed) {
                 p.vx = (p.vx / spd) * maxTrackableSpeed;
@@ -9420,8 +9420,8 @@ try { checkUrlHashRoutine(); } catch(e){}
         p.vx += (p.vx >= 0 ? 0.18 : -0.18) * f;
       }
 
-      // Soft perimeter containment (smooth damping turnaround, with slight 0.55 rebound in game mode)
-      var bounceKeep = isGameMode ? 0.55 : 0.45;
+      // Soft perimeter containment (smooth damping turnaround)
+      var bounceKeep = 0.45;
       if (p.x < MIN_X) {
         p.x = MIN_X;
         if (p.vx < 0) p.vx = -p.vx * bounceKeep;
@@ -9487,6 +9487,8 @@ try { checkUrlHashRoutine(); } catch(e){}
 
       var curSpacing = (p.segmentSpacing || 3.2) * curGrowth;
       var K = p.spine.length;
+      var cosH = Math.cos(p.heading);
+      var sinH = Math.sin(p.heading);
       for (var sj = 1; sj < K; sj++) {
         var leader = p.spine[sj - 1];
         var follower = p.spine[sj];
@@ -9494,37 +9496,34 @@ try { checkUrlHashRoutine(); } catch(e){}
         var sdy = follower.y - leader.y;
         var sDist = Math.hypot(sdx, sdy);
         if (sDist > 0.001) {
-          follower.x = leader.x + (sdx / sDist) * curSpacing;
-          follower.y = leader.y + (sdy / sDist) * curSpacing;
+          var invD = curSpacing / sDist;
+          follower.x = leader.x + sdx * invD;
+          follower.y = leader.y + sdy * invD;
         } else {
-          follower.x = leader.x - Math.cos(p.heading) * curSpacing;
-          follower.y = leader.y - Math.sin(p.heading) * curSpacing;
+          follower.x = leader.x - cosH * curSpacing;
+          follower.y = leader.y - sinH * curSpacing;
         }
       }
 
-      // Compute display points with subtle transverse de Broglie wave undulation
-      var pts = [];
-      for (var sj = 0; sj < K; sj++) {
-        if (sj === 0) {
-          pts.push({ x: p.spine[0].x, y: p.spine[0].y });
-        } else {
-          var pPrev = p.spine[sj - 1];
-          var pCurr = p.spine[sj];
-          var segAngle = Math.atan2(pPrev.y - pCurr.y, pPrev.x - pCurr.x);
-          var waveAmp = curSize * 0.20;
-          var wave = Math.sin(p.wavePhase - sj * 0.65) * waveAmp * (sj / K);
-          pts.push({
-            x: pCurr.x - Math.sin(segAngle) * wave,
-            y: pCurr.y + Math.cos(segAngle) * wave
-          });
-        }
+      // Compute display points into pre-allocated typed arrays (zero per-frame heap allocations)
+      _ptsX[0] = p.spine[0].x;
+      _ptsY[0] = p.spine[0].y;
+      var waveAmp = curSize * 0.20;
+      var invK = 1 / K;
+      for (var sj = 1; sj < K; sj++) {
+        var pPrev = p.spine[sj - 1];
+        var pCurr = p.spine[sj];
+        var segDx = pPrev.x - pCurr.x;
+        var segDy = pPrev.y - pCurr.y;
+        var segLen = Math.hypot(segDx, segDy) || 1;
+        var wave = Math.sin(p.wavePhase - sj * 0.65) * waveAmp * (sj * invK);
+        _ptsX[sj] = pCurr.x - (segDy / segLen) * wave;
+        _ptsY[sj] = pCurr.y + (segDx / segLen) * wave;
       }
 
-      var pTier = p.lumiTier || 0;
       var headR = curSize * 0.54;
       p.curSize = curSize;
       p.currentAngle = p.heading;
-      var currentAngle = p.heading;
 
       // ── FEATURE 1: RELATIVISTIC SPEED-DILATION (Micro Doppler Shift on Acceleration) ──
       var speedRatio = Math.max(0, (currentSpeed - p.baseSpeed) / (p.baseSpeed * 2.2));
@@ -9541,77 +9540,85 @@ try { checkUrlHashRoutine(); } catch(e){}
       var fLitBoost = isAudioHot ? (liveBass * 14 + beatKickImpulse * 8) : 0;
       var fHeadLit = Math.min(84, (tier === 2 ? 78 : (tier === 1 ? 75 : 72)) + fLitBoost + dopplerBoost * 8 + gameLitBoost);
       var fTailLit = Math.min(72, Math.max(50, p.lit + fLitBoost * 0.4 - dopplerBoost * 4));
-      var fHeadHue = (dopplerBoost > 0.12) ? Math.round(p.hue2 * (1 - dopplerBoost * 0.5) + 198 * (dopplerBoost * 0.5)) : p.hue2;
-      var fTailHue = (dopplerBoost > 0.12) ? Math.round(p.hue * (1 - dopplerBoost * 0.4) + 22 * (dopplerBoost * 0.4)) : p.hue;
+      var fHeadHue = (dopplerBoost > 0.12) ? Math.round(p.hue2 * (1 - dopplerBoost * 0.5) + 198 * (dopplerBoost * 0.5)) : (p.hue2 | 0);
+      var fTailHue = (dopplerBoost > 0.12) ? Math.round(p.hue * (1 - dopplerBoost * 0.4) + 22 * (dopplerBoost * 0.4)) : (p.hue | 0);
       var renderAlpha = Math.min(0.92, currentAlpha * (1.0 + gameAlphaBoost) + (gameGlowProgress * 0.14));
 
-      // ── 2. Render Seamless Smooth Tapered Quantum Wavepacket Body (Zero Joint Banding) ──
+      // ── 2. Render Seamless Smooth Tapered Quantum Wavepacket Body (Zero Joint Banding, Zero GC Churn) ──
       if (K >= 2) {
-        var leftPts = [];
-        var rightPts = [];
+        var invKm1 = 1 / (K - 1);
         for (var sj = 0; sj < K; sj++) {
-          var tNorm = 1 - (sj / (K - 1)); // 1.0 at head (sj=0), 0.0 at tail tip (sj=K-1)
-          var rj = Math.max(0.35, headR * (0.10 + 0.90 * Math.pow(tNorm, 0.85)));
+          var tNorm = 1 - sj * invKm1; // 1.0 at head (sj=0), 0.0 at tail tip (sj=K-1)
+          var taper = tNorm * (0.15 + 0.85 * tNorm);
+          var rj = Math.max(0.35, headR * (0.10 + 0.90 * taper));
           var dxT, dyT;
           if (sj === 0) {
-            dxT = pts[0].x - pts[1].x;
-            dyT = pts[0].y - pts[1].y;
+            dxT = _ptsX[0] - _ptsX[1];
+            dyT = _ptsY[0] - _ptsY[1];
           } else if (sj === K - 1) {
-            dxT = pts[K - 2].x - pts[K - 1].x;
-            dyT = pts[K - 2].y - pts[K - 1].y;
+            dxT = _ptsX[K - 2] - _ptsX[K - 1];
+            dyT = _ptsY[K - 2] - _ptsY[K - 1];
           } else {
-            dxT = pts[sj - 1].x - pts[sj + 1].x;
-            dyT = pts[sj - 1].y - pts[sj + 1].y;
+            dxT = _ptsX[sj - 1] - _ptsX[sj + 1];
+            dyT = _ptsY[sj - 1] - _ptsY[sj + 1];
           }
           var dLen = Math.hypot(dxT, dyT) || 1;
-          var nx = -dyT / dLen;
-          var ny = dxT / dLen;
-          leftPts.push({ x: pts[sj].x + nx * rj, y: pts[sj].y + ny * rj });
-          rightPts.push({ x: pts[sj].x - nx * rj, y: pts[sj].y - ny * rj });
+          var nx = (-dyT / dLen) * rj;
+          var ny = (dxT / dLen) * rj;
+          _leftX[sj] = _ptsX[sj] + nx;
+          _leftY[sj] = _ptsY[sj] + ny;
+          _rightX[sj] = _ptsX[sj] - nx;
+          _rightY[sj] = _ptsY[sj] - ny;
         }
 
-        var tailTip = pts[K - 1];
-        var headPt = pts[0];
-        var bodyGrad = targetCtx.createLinearGradient(tailTip.x, tailTip.y, headPt.x, headPt.y);
-        var midHue = Math.round((fTailHue + fHeadHue) * 0.5);
-        bodyGrad.addColorStop(0.0, "hsla(" + Math.round(fTailHue) + ", " + p.sat + "%, " + fTailLit.toFixed(1) + "%, " + (renderAlpha * 0.08).toFixed(2) + ")");
-        bodyGrad.addColorStop(0.45, "hsla(" + midHue + ", " + p.sat + "%, " + ((fTailLit + fHeadLit) * 0.5).toFixed(1) + "%, " + (renderAlpha * 0.52).toFixed(2) + ")");
-        bodyGrad.addColorStop(1.0, "hsla(" + Math.round(fHeadHue) + ", 98%, " + Math.min(84, fHeadLit).toFixed(1) + "%, " + (renderAlpha * 0.92).toFixed(2) + ")");
+        var tailTipX = _ptsX[K - 1];
+        var tailTipY = _ptsY[K - 1];
+        var headPtX = _ptsX[0];
+        var headPtY = _ptsY[0];
+        var midHue = (fTailHue + fHeadHue) >> 1;
+
+        if (tier === 2) {
+          var bodyGrad = targetCtx.createLinearGradient(tailTipX, tailTipY, headPtX, headPtY);
+          bodyGrad.addColorStop(0.0, "hsla(" + fTailHue + ", " + p.sat + "%, " + fTailLit.toFixed(1) + "%, " + (renderAlpha * 0.08).toFixed(2) + ")");
+          bodyGrad.addColorStop(0.45, "hsla(" + midHue + ", " + p.sat + "%, " + ((fTailLit + fHeadLit) * 0.5).toFixed(1) + "%, " + (renderAlpha * 0.52).toFixed(2) + ")");
+          bodyGrad.addColorStop(1.0, "hsla(" + fHeadHue + ", 98%, " + fHeadLit.toFixed(1) + "%, " + (renderAlpha * 0.92).toFixed(2) + ")");
+          targetCtx.fillStyle = bodyGrad;
+        } else {
+          targetCtx.fillStyle = "hsla(" + midHue + ", " + p.sat + "%, " + ((fTailLit + fHeadLit) * 0.5).toFixed(1) + "%, " + (renderAlpha * 0.54).toFixed(2) + ")";
+        }
 
         targetCtx.beginPath();
-        targetCtx.moveTo(leftPts[0].x, leftPts[0].y);
+        targetCtx.moveTo(_leftX[0], _leftY[0]);
         for (var sj = 0; sj < K - 1; sj++) {
-          var mxL = (leftPts[sj].x + leftPts[sj + 1].x) * 0.5;
-          var myL = (leftPts[sj].y + leftPts[sj + 1].y) * 0.5;
-          targetCtx.quadraticCurveTo(leftPts[sj].x, leftPts[sj].y, mxL, myL);
+          var mxL = (_leftX[sj] + _leftX[sj + 1]) * 0.5;
+          var myL = (_leftY[sj] + _leftY[sj + 1]) * 0.5;
+          targetCtx.quadraticCurveTo(_leftX[sj], _leftY[sj], mxL, myL);
         }
-        targetCtx.lineTo(tailTip.x, tailTip.y);
-        targetCtx.lineTo(rightPts[K - 1].x, rightPts[K - 1].y);
+        targetCtx.lineTo(tailTipX, tailTipY);
+        targetCtx.lineTo(_rightX[K - 1], _rightY[K - 1]);
         for (var sj = K - 1; sj > 0; sj--) {
-          var mxR = (rightPts[sj].x + rightPts[sj - 1].x) * 0.5;
-          var myR = (rightPts[sj].y + rightPts[sj - 1].y) * 0.5;
-          targetCtx.quadraticCurveTo(rightPts[sj].x, rightPts[sj].y, mxR, myR);
+          var mxR = (_rightX[sj] + _rightX[sj - 1]) * 0.5;
+          var myR = (_rightY[sj] + _rightY[sj - 1]) * 0.5;
+          targetCtx.quadraticCurveTo(_rightX[sj], _rightY[sj], mxR, myR);
         }
-        targetCtx.lineTo(rightPts[0].x, rightPts[0].y);
+        targetCtx.lineTo(_rightX[0], _rightY[0]);
         targetCtx.closePath();
-        targetCtx.fillStyle = bodyGrad;
         targetCtx.fill();
       }
 
-      // ── 3. Render Radiant Leading Quantum Head (at pts[0]) ──
-      targetCtx.save();
-      targetCtx.translate(pts[0].x, pts[0].y);
-      targetCtx.rotate(p.heading);
+      // ── 3. Render Radiant Leading Quantum Head (Direct World Coordinates - Zero save/restore Overhead) ──
+      var px0 = _ptsX[0];
+      var py0 = _ptsY[0];
 
       // Glowing quantum head droplet
       targetCtx.beginPath();
-      targetCtx.arc(0, 0, headR, 0, Math.PI * 2);
-      targetCtx.fillStyle = "hsla(" + Math.round(fHeadHue) + ", 98%, " + fHeadLit.toFixed(1) + "%, " + renderAlpha.toFixed(2) + ")";
+      targetCtx.arc(px0, py0, headR, 0, Math.PI * 2);
+      targetCtx.fillStyle = "hsla(" + fHeadHue + ", 98%, " + fHeadLit.toFixed(1) + "%, " + renderAlpha.toFixed(2) + ")";
       targetCtx.fill();
 
       // Pure white quantum singularity center
       targetCtx.beginPath();
-      targetCtx.arc(headR * 0.25, 0, headR * 0.45, 0, Math.PI * 2);
+      targetCtx.arc(px0 + cosH * (headR * 0.25), py0 + sinH * (headR * 0.25), headR * 0.45, 0, Math.PI * 2);
       targetCtx.fillStyle = "rgba(255, 255, 255, " + (renderAlpha * 0.95).toFixed(2) + ")";
       targetCtx.fill();
 
@@ -9619,27 +9626,26 @@ try { checkUrlHashRoutine(); } catch(e){}
       if (renderAsBrightest) {
         var morphEase = p.isFront ? Math.max(0.35, gameGlowProgress) : gameGlowProgress;
         var orbBaseR = headR * (tier === 2 ? 2.4 : (tier === 1 ? 1.9 : 1.5)) * (0.75 + 0.25 * morphEase);
-        var spinRate = 0.0032;
-        var spinAngle = now * spinRate + p.pulsePhase;
+        var spinAngle = now * 0.0032 + p.pulsePhase;
         var ringAlpha = renderAlpha * morphEase;
 
-        targetCtx.save();
         if (tier === 2) {
           // Tier 2: Dual Concentric Quantum Orbitals with Counter-Rotating Phase Node
           targetCtx.beginPath();
-          targetCtx.arc(0, 0, orbBaseR * 0.85, 0, Math.PI * 2);
+          targetCtx.arc(px0, py0, orbBaseR * 0.85, 0, Math.PI * 2);
           targetCtx.strokeStyle = "hsla(" + fHeadHue + ", 92%, 72%, " + (ringAlpha * 0.35).toFixed(2) + ")";
           targetCtx.lineWidth = 1.0;
           targetCtx.stroke();
 
+          var worldSpin2 = p.heading + spinAngle;
           targetCtx.beginPath();
-          targetCtx.ellipse(0, 0, orbBaseR * 1.35, orbBaseR * 0.75, spinAngle, 0, Math.PI * 2);
+          targetCtx.ellipse(px0, py0, orbBaseR * 1.35, orbBaseR * 0.75, worldSpin2, 0, Math.PI * 2);
           targetCtx.strokeStyle = "hsla(" + fHeadHue + ", 98%, 78%, " + (ringAlpha * 0.28).toFixed(2) + ")";
           targetCtx.lineWidth = 0.9;
           targetCtx.stroke();
 
-          var qNodeX = Math.cos(spinAngle) * orbBaseR * 1.35;
-          var qNodeY = Math.sin(spinAngle) * orbBaseR * 0.75;
+          var qNodeX = px0 + Math.cos(worldSpin2) * orbBaseR * 1.35;
+          var qNodeY = py0 + Math.sin(worldSpin2) * orbBaseR * 1.35;
           targetCtx.beginPath();
           targetCtx.arc(qNodeX, qNodeY, 1.3, 0, Math.PI * 2);
           targetCtx.fillStyle = "rgba(255, 255, 255, " + (ringAlpha * 0.95).toFixed(2) + ")";
@@ -9647,37 +9653,32 @@ try { checkUrlHashRoutine(); } catch(e){}
 
         } else if (tier === 1) {
           targetCtx.beginPath();
-          targetCtx.ellipse(0, 0, orbBaseR * 1.15, orbBaseR * 0.75, -spinAngle * 0.85, 0, Math.PI * 2);
+          targetCtx.ellipse(px0, py0, orbBaseR * 1.15, orbBaseR * 0.75, p.heading - spinAngle * 0.85, 0, Math.PI * 2);
           targetCtx.strokeStyle = "hsla(" + fHeadHue + ", 95%, 74%, " + (ringAlpha * 0.28).toFixed(2) + ")";
           targetCtx.lineWidth = 0.95;
           targetCtx.stroke();
         } else {
           targetCtx.beginPath();
-          targetCtx.arc(0, 0, orbBaseR, 0, Math.PI * 2);
+          targetCtx.arc(px0, py0, orbBaseR, 0, Math.PI * 2);
           targetCtx.strokeStyle = "hsla(" + fHeadHue + ", 90%, 70%, " + (ringAlpha * 0.20).toFixed(2) + ")";
           targetCtx.lineWidth = 0.85;
           targetCtx.stroke();
         }
-        targetCtx.restore();
       }
-      targetCtx.restore();
 
       // Micro-Stardust Quantum Sparks (Tier 2 Beacons Only - Emitted from Tail)
       if (tier === 2 && Math.random() < 0.25) {
         if (!p.stardust) p.stardust = [];
         if (p.stardust.length < 3) {
-          var tailPt = pts[K - 1];
           p.stardust.push({
-            x: tailPt.x + (Math.random() - 0.5) * 2.0,
-            y: tailPt.y + (Math.random() - 0.5) * 2.0,
+            x: _ptsX[K - 1] + (Math.random() - 0.5) * 2.0,
+            y: _ptsY[K - 1] + (Math.random() - 0.5) * 2.0,
             alpha: 0.80,
             r: 0.65 + Math.random() * 0.35,
-            hue: fHeadHue | 0
+            hue: fHeadHue
           });
         }
       }
-
-      targetCtx.restore();
 
       // Render Micro-Stardust Quantum Sparks in World Coordinates
       if (p.stardust && p.stardust.length > 0) {
@@ -10174,7 +10175,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   var contactDuration = 0.0;
   var lastTouchContactTime = 0;
   var REQUIRED_CONTACT = 2.0; // 2 seconds continuous
-  var STRICT_HIT_RADIUS = 13.5; // Balanced physical contact radius (desktop: 13.5px, tablet: 17.5px, mobile: 21.5px)
+  var STRICT_HIT_RADIUS = 14; // Smooth physical contact radius (desktop: 14px, tablet: 18px, mobile: 22px)
 
   // Exact point-to-particle physical touch detection (measures against living multi-joint quantum spine)
   function getParticleTouchDistance(cx, cy, p) {
@@ -10437,7 +10438,7 @@ try { checkUrlHashRoutine(); } catch(e){}
     canvas.width = Math.floor(width * dpr);
     canvas.height = Math.floor(height * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    STRICT_HIT_RADIUS = (width < 600) ? 21.5 : ((width < 1024) ? 17.5 : 13.5);
+    STRICT_HIT_RADIUS = (width < 600) ? 22 : ((width < 1024) ? 18 : 14);
   }
 
   // Cross-device capability check (e.g. iOS Safari does not support DOM Fullscreen API)
@@ -10801,15 +10802,15 @@ try { checkUrlHashRoutine(); } catch(e){}
               triggerVictory(lockedParticle);
             }
           } else {
-            // Particle actively evades: 175ms chase grace window so active human pursuit is smoothly winnable!
-            if (now - lastTouchContactTime > 175) {
+            // Particle actively evades: 180ms chase grace window so active human pursuit is smoothly winnable!
+            if (now - lastTouchContactTime > 180) {
               lockedParticle.isLocked = false;
               contactDuration = 0.0;
               lockedParticle = null;
               stopLockAudio();
               missionText.textContent = "TARGET: TOUCH ANY PARTICLE · MAINTAIN CONTACT FOR 2.0s";
             } else {
-              contactDuration = Math.max(0, contactDuration - dt * 0.15);
+              contactDuration = Math.max(0, contactDuration - dt * 0.10);
               var progress = Math.min(1.0, contactDuration / REQUIRED_CONTACT);
               drawLockReticle(lockedParticle.x, lockedParticle.y, progress, dist);
             }
@@ -10982,19 +10983,21 @@ try { checkUrlHashRoutine(); } catch(e){}
       ctx.ellipse(0, 0, majorA, curB, 0, 0, Math.PI * 2);
       ctx.stroke();
 
-      // Circulating electron quantum wavepacket spark
+      // Circulating electron quantum wavepacket spark (fast dual-circle glow without GPU shadowBlur stalls)
       var eSpeed = 0.0032 * spinMult;
       var u = (now * eSpeed + ring.phaseOffset) % (Math.PI * 2);
       var ex = majorA * Math.cos(u);
       var ey = curB * Math.sin(u);
 
       ctx.beginPath();
+      ctx.arc(ex, ey, 4.2, 0, Math.PI * 2);
+      ctx.fillStyle = "hsla(" + h1 + ", 100%, 70%, 0.28)";
+      ctx.fill();
+
+      ctx.beginPath();
       ctx.arc(ex, ey, 2.0, 0, Math.PI * 2);
       ctx.fillStyle = "#ffffff";
-      ctx.shadowColor = "hsla(" + h1 + ", 100%, 70%, 1.0)";
-      ctx.shadowBlur = 6;
       ctx.fill();
-      ctx.shadowBlur = 0;
 
       // Apex flares at ring tips
       ctx.beginPath();
@@ -11038,8 +11041,6 @@ try { checkUrlHashRoutine(); } catch(e){}
     ctx.translate(px, py);
     ctx.rotate(rot);
     ctx.strokeStyle = progress > 0.85 ? "#ffd700" : "#38bdf8";
-    ctx.shadowColor = progress > 0.85 ? "rgba(255, 215, 0, 0.75)" : "rgba(56, 189, 248, 0.75)";
-    ctx.shadowBlur = 6;
     ctx.lineWidth = 1.8;
 
     var bSize = 5;
