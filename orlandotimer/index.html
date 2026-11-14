@@ -40,7 +40,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&family=Orbitron:wght@600;700;800;900&family=Outfit:wght@600;700;800;900&family=Space+Grotesk:wght@600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
   <!-- Relative Stylesheet (with cache-bust versioning) -->
-  <link rel="stylesheet" href="style.css?v=22.0">
+  <link rel="stylesheet" href="style.css?v=23.0">
 </head>
 <body data-app-theme="pure-black" data-clock-style="pure-black">
   <!-- Accessibility Live Region for Screen Readers -->
@@ -177,9 +177,9 @@
                 <div class="mode-opt-text">
                   <div class="mode-opt-title-row">
                     <strong>Quantum Flow</strong>
-                    <span class="mode-badge">Stopwatch</span>
+                    <span class="mode-badge">Flow State</span>
                   </div>
-                  <small>Open-ended count-up timer to track creative flow with zero pressure</small>
+                  <small>Serene HH:MM:SS count-up with unbroken Flow Milestones. Zero deadline anxiety.</small>
                 </div>
               </button>
 
@@ -197,7 +197,7 @@
                     <strong>Precision Chrono</strong>
                     <span class="mode-badge">Split Laps</span>
                   </div>
-                  <small>Swiss chronometer with millisecond precision &amp; lap telemetry</small>
+                  <small>Swiss chronometer with 100fps milliseconds &amp; split-lap telemetry table.</small>
                 </div>
               </button>
             </div>
@@ -817,11 +817,17 @@
       </section>
 
       <!-- ========================================== -->
-      <!-- TAB 2: STOPWATCH                           -->
+      <!-- TAB 2: STOPWATCH (QUANTUM FLOW & PRECISION CHRONO) -->
       <!-- ========================================== -->
-      <section class="tab-panel" id="panel-stopwatch" role="tabpanel" aria-labelledby="tab-stopwatch">
-        <!-- Display Stage with HUGE Digits MM:SS.ms -->
+      <section class="tab-panel" id="panel-stopwatch" role="tabpanel" aria-labelledby="tab-stopwatch" data-chrono-mode="precision">
+        <!-- Display Stage with HUGE Digits -->
         <div class="display-stage">
+          <!-- Distinct Chrono Sub-Mode Badge -->
+          <div class="chrono-mode-header-badge" id="chronoModeHeaderBadge">
+            <span class="chrono-badge-icon" id="chronoBadgeIcon">⏱️</span>
+            <span class="chrono-badge-title" id="chronoBadgeTitle">PRECISION CHRONOMETER · SPLIT LAPS</span>
+          </div>
+
           <div class="chrome stopwatch-digits-huge" id="swDigits">
             <!-- Formatted via chromeHTML() in JS -->
           </div>
@@ -834,14 +840,14 @@
               <polygon points="6 4 20 12 6 20"/>
               <circle cx="10" cy="12" r="2" fill="var(--theme-bg)"/>
             </svg>
-            <span>Start</span>
+            <span id="btnSwStartText">Start</span>
           </button>
           <button type="button" class="btn-luxury btn-stop-rose" id="btnSwStop" style="display:none">
             <svg class="cyber-btn-svg-action" viewBox="0 0 24 24" fill="currentColor">
               <rect x="6" y="4" width="4.5" height="16" rx="1.5"/>
               <rect x="13.5" y="4" width="4.5" height="16" rx="1.5"/>
             </svg>
-            <span>Stop</span>
+            <span id="btnSwStopText">Stop</span>
           </button>
           <button type="button" class="btn-luxury btn-lap" id="btnSwLap">
             <svg class="cyber-btn-svg-action" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -854,12 +860,47 @@
               <path d="M3 12a9 9 0 1 0 2.6-6.4L2 9"/>
               <polyline points="2 3 2 9 8 9"/>
             </svg>
-            <span>Reset</span>
+            <span id="btnSwResetText">Reset</span>
           </button>
         </div>
 
-        <!-- Lap List Below -->
-        <div class="laps-wrapper">
+        <!-- Flow State Journey Deck (Active in Quantum Flow Mode) -->
+        <div class="flow-journey-deck" id="flowJourneyDeck" style="display:none;">
+          <div class="flow-deck-header">
+            <div class="flow-deck-title-row">
+              <span class="flow-pulse-dot"></span>
+              <span class="flow-stage-title" id="flowStageTitle">Grounding Focus · Session Ready</span>
+            </div>
+            <span class="flow-total-badge" id="flowTotalBadge">0m in Flow</span>
+          </div>
+          
+          <!-- Flow Milestones Progress Horizon -->
+          <div class="flow-milestones-track">
+            <div class="flow-milestone" data-min="15">
+              <span class="flow-m-dot"></span>
+              <span class="flow-m-label">15m Spark</span>
+            </div>
+            <div class="flow-milestone-line"></div>
+            <div class="flow-milestone" data-min="30">
+              <span class="flow-m-dot"></span>
+              <span class="flow-m-label">30m Flow</span>
+            </div>
+            <div class="flow-milestone-line"></div>
+            <div class="flow-milestone" data-min="60">
+              <span class="flow-m-dot"></span>
+              <span class="flow-m-label">60m Deep</span>
+            </div>
+            <div class="flow-milestone-line"></div>
+            <div class="flow-milestone" data-min="90">
+              <span class="flow-m-dot"></span>
+              <span class="flow-m-label">90m Ultra</span>
+            </div>
+          </div>
+          <p class="flow-deck-hint">Open-ended creative immersion. No deadline anxiety. Time counts up gently.</p>
+        </div>
+
+        <!-- Lap List Below (Active in Precision Chrono Mode) -->
+        <div class="laps-wrapper" id="lapsWrapper">
           <div class="laps-header">
             <span>Lap #</span>
             <span>Split Time</span>
@@ -1074,6 +1115,6 @@
   <audio id="alarmAudioElement" preload="auto" src="sounds/piano.mp3"></audio>
 
   <!-- Relative JavaScript (with cache-bust versioning) -->
-  <script src="app.js?v=22.0"></script>
+  <script src="app.js?v=23.0"></script>
 </body>
 </html>

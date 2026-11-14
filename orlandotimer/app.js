@@ -1221,6 +1221,16 @@
       btn.setAttribute('aria-selected', 'true');
       const panel = document.getElementById(`panel-${tabTarget}`);
       if (panel) panel.classList.add('active');
+
+      if (tabTarget === 'stopwatch') {
+        if (typeof setChronoMode === 'function') {
+          if (currentProductivityMode === 'quantum-flow') {
+            setChronoMode('flow');
+          } else {
+            setChronoMode('precision');
+          }
+        }
+      }
     });
   });
 
@@ -1748,6 +1758,88 @@
   const btnSwReset = document.getElementById('btnSwReset');
   const lapsListEl = document.getElementById('lapsList');
 
+  let currentChronoMode = 'precision'; // 'precision' | 'flow'
+
+  function setChronoMode(mode) {
+    currentChronoMode = mode;
+    const panelSw = document.getElementById('panel-stopwatch');
+    const badgeIcon = document.getElementById('chronoBadgeIcon');
+    const badgeTitle = document.getElementById('chronoBadgeTitle');
+    const btnLap = document.getElementById('btnSwLap');
+    const btnStartText = document.getElementById('btnSwStartText');
+    const btnStopText = document.getElementById('btnSwStopText');
+    const btnResetText = document.getElementById('btnSwResetText');
+    const lapsWrapper = document.getElementById('lapsWrapper');
+    const flowDeck = document.getElementById('flowJourneyDeck');
+
+    if (panelSw) panelSw.setAttribute('data-chrono-mode', mode);
+
+    if (mode === 'flow') {
+      if (badgeIcon) badgeIcon.textContent = '🌌';
+      if (badgeTitle) badgeTitle.textContent = 'QUANTUM FLOW · CREATIVE FOCUS';
+      if (btnLap) btnLap.style.display = 'none';
+      if (btnStartText) btnStartText.textContent = 'Enter Flow';
+      if (btnStopText) btnStopText.textContent = 'Pause Flow';
+      if (btnResetText) btnResetText.textContent = 'End Session';
+      if (lapsWrapper) lapsWrapper.style.display = 'none';
+      if (flowDeck) flowDeck.style.display = 'flex';
+      updateFlowJourneyUI(swElapsedTime);
+    } else {
+      if (badgeIcon) badgeIcon.textContent = '⏱️';
+      if (badgeTitle) badgeTitle.textContent = 'PRECISION CHRONOMETER · SPLIT LAPS';
+      if (btnLap) btnLap.style.display = 'inline-flex';
+      if (btnStartText) btnStartText.textContent = 'Start';
+      if (btnStopText) btnStopText.textContent = 'Stop';
+      if (btnResetText) btnResetText.textContent = 'Reset';
+      if (lapsWrapper) lapsWrapper.style.display = 'block';
+      if (flowDeck) flowDeck.style.display = 'none';
+    }
+    updateStopwatchDisplay();
+  }
+
+  function updateFlowJourneyUI(elapsedMs) {
+    const totalSecs = Math.floor(elapsedMs / 1000);
+    const totalMins = Math.floor(totalSecs / 60);
+    const stageTitle = document.getElementById('flowStageTitle');
+    const totalBadge = document.getElementById('flowTotalBadge');
+
+    if (totalBadge) {
+      if (totalMins >= 60) {
+        const hrs = (totalMins / 60).toFixed(1);
+        totalBadge.textContent = `${hrs}h in Flow`;
+      } else {
+        totalBadge.textContent = `${totalMins}m in Flow`;
+      }
+    }
+
+    if (stageTitle) {
+      if (totalMins >= 90) {
+        stageTitle.textContent = '✦ Transcendent Flow Mastery (90m+)';
+      } else if (totalMins >= 60) {
+        stageTitle.textContent = '🌌 Hyper-Flow Deep Immersion (60m+)';
+      } else if (totalMins >= 30) {
+        stageTitle.textContent = '⚡ Sustained Creative Current (30m+)';
+      } else if (totalMins >= 15) {
+        stageTitle.textContent = '🌊 Entering Flow Channel (15m+)';
+      } else {
+        stageTitle.textContent = '🌱 Grounding Focus · Building Momentum';
+      }
+    }
+
+    // Update milestone dots & connecting lines
+    const milestones = document.querySelectorAll('.flow-milestone');
+    milestones.forEach((m) => {
+      const targetMin = parseInt(m.getAttribute('data-min'), 10);
+      m.classList.toggle('achieved', totalMins >= targetMin);
+    });
+
+    const lines = document.querySelectorAll('.flow-milestone-line');
+    const thresholds = [15, 30, 60];
+    lines.forEach((line, idx) => {
+      line.classList.toggle('achieved', totalMins >= thresholds[idx]);
+    });
+  }
+
   function formatStopwatchTime(totalMs) {
     const totalSec = Math.floor(totalMs / 1000);
     const ms = Math.floor((totalMs % 1000) / 10);
@@ -1755,12 +1847,18 @@
     const minutes = Math.floor((totalSec % 3600) / 60);
     const seconds = totalSec % 60;
 
+    const hh = String(hours).padStart(2, '0');
     const mm = String(minutes).padStart(2, '0');
     const ss = String(seconds).padStart(2, '0');
     const msStr = String(ms).padStart(2, '0');
 
+    // Quantum Flow uses serene HH:MM:SS count-up without frantic millisecond blur
+    if (currentChronoMode === 'flow') {
+      return `${hh}:${mm}:${ss}`;
+    }
+
+    // Precision Chrono uses high-speed millisecond precision MM:SS.ms (or HH:MM:SS.ms)
     if (hours > 0) {
-      const hh = String(hours).padStart(2, '0');
       return `${hh}:${mm}:${ss}.${msStr}`;
     }
     return `${mm}:${ss}.${msStr}`;
@@ -1787,6 +1885,9 @@
     swInterval = setInterval(() => {
       swElapsedTime = performance.now() - swStartTime;
       updateStopwatchDisplay();
+      if (currentChronoMode === 'flow') {
+        updateFlowJourneyUI(swElapsedTime);
+      }
     }, 25);
   }
 
@@ -1807,6 +1908,7 @@
     laps = [];
     updateStopwatchDisplay();
     renderLaps();
+    updateFlowJourneyUI(0);
   }
 
   function recordLap() {
@@ -2542,16 +2644,16 @@
     },
     'quantum-flow': {
       title: 'Quantum Flow',
-      badge: 'Stopwatch',
+      badge: 'Flow State',
       toastTitle: '🌌 QUANTUM FLOW ACTIVE',
-      toastDesc: 'Open-ended count-up stopwatch to track flow state with zero pressure.',
-      srText: 'Quantum Flow activated: Stopwatch flow tracking.'
+      toastDesc: 'Serene HH:MM:SS count-up with unbroken Flow Milestones. Zero deadline anxiety.',
+      srText: 'Quantum Flow activated: Serene count-up flow state.'
     },
     'precision-chrono': {
       title: 'Precision Chrono',
       badge: 'Split Laps',
-      toastTitle: '⏱️ PRECISION CHRONO ACTIVE',
-      toastDesc: 'High-precision Swiss chronometer with millisecond precision & split laps.',
+      toastTitle: '⏱️ PRECISION CHRONOMETER ACTIVE',
+      toastDesc: 'High-precision Swiss chronometer with 100fps milliseconds & split-lap telemetry table.',
       srText: 'Precision Chrono activated: Millisecond chronometer with split laps.'
     }
   };
@@ -2611,11 +2713,13 @@
     } else if (modeKey === 'quantum-flow') {
       switchAppTab('stopwatch');
       toggleZenMode(false);
+      setChronoMode('flow');
     } else if (modeKey === 'precision-chrono') {
       switchAppTab('stopwatch');
       toggleZenMode(false);
+      setChronoMode('precision');
       const laps = document.getElementById('lapsWrapper');
-      if (laps) laps.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      if (laps && userAction) laps.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
     if (userAction) {
