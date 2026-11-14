@@ -29,6 +29,9 @@
     }
   }
 
+  // Global Productivity Mode State (Hoisted to prevent TDZ)
+  let currentProductivityMode = safeGetItem('orlando-productivity-mode', 'focus-protocol');
+
   // ── ACCESSIBILITY: SCREEN READER LIVE REGION ANNOUNCER ──
   function announceSR(message) {
     const sr = document.getElementById('srAnnouncements');
@@ -3334,7 +3337,7 @@
     }
   };
 
-  let currentProductivityMode = safeGetItem('orlando-productivity-mode', 'focus-protocol');
+  // currentProductivityMode declared at top of module
 
   function toggleModeDropdown(force) {
     const menu = document.getElementById('modeDropdownMenu');
