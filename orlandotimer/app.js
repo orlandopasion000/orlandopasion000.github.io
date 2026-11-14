@@ -1162,7 +1162,14 @@
 
   function updateFullscreenUI() {
     const isFs = Boolean(document.fullscreenElement || document.webkitFullscreenElement);
-    if (fsLabel) fsLabel.textContent = isFs ? 'Exit Fullscreen' : 'Fullscreen';
+    const enterText = 'Enter Full Screen';
+    const exitText = 'Exit Full Screen';
+    if (fsLabel) fsLabel.textContent = isFs ? exitText : enterText;
+    if (btnFullscreen) btnFullscreen.title = isFs ? `${exitText} (F)` : `${enterText} (F)`;
+    const zenFsSpan = document.querySelector('#btnZenFullscreen span');
+    if (zenFsSpan) zenFsSpan.textContent = isFs ? exitText : enterText;
+    const zenFsBtn = document.getElementById('btnZenFullscreen');
+    if (zenFsBtn) zenFsBtn.title = isFs ? `${exitText} (F)` : `${enterText} (F)`;
   }
 
   if (btnFullscreen) {

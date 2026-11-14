@@ -40,7 +40,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&family=Orbitron:wght@600;700;800;900&family=Outfit:wght@600;700;800;900&family=Space+Grotesk:wght@600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
   <!-- Relative Stylesheet (with cache-bust versioning) -->
-  <link rel="stylesheet" href="style.css?v=20.0">
+  <link rel="stylesheet" href="style.css?v=21.0">
 </head>
 <body data-app-theme="pure-black" data-clock-style="pure-black">
   <!-- Accessibility Live Region for Screen Readers -->
@@ -64,11 +64,11 @@
       </svg>
       <span id="zenSoundText">Singing Bowl</span>
     </button>
-    <button type="button" class="btn-zen-hud" id="btnZenFullscreen" title="Toggle Fullscreen (F)">
+    <button type="button" class="btn-zen-hud" id="btnZenFullscreen" title="Enter Full Screen (F)">
       <svg class="zen-hud-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
       </svg>
-      <span>Fullscreen</span>
+      <span>Enter Full Screen</span>
     </button>
     <button type="button" class="btn-zen-hud btn-zen-exit" id="btnExitZenHUD" title="Exit Zen Mode (Esc or Z)">
       <svg class="zen-hud-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -591,13 +591,13 @@
           <span id="wakeLockText">Awake ON</span>
         </button>
 
-        <!-- Fullscreen Button with Futuristic HUD Telemetry SVG -->
-        <button type="button" class="btn-topbar-desktop" id="btnFullscreen" title="Toggle Fullscreen Telemetry View">
+        <!-- Fullscreen Button with Futuristic HUD Telemetry SVG (Apple 2-Word Style) -->
+        <button type="button" class="btn-topbar-desktop" id="btnFullscreen" title="Enter Full Screen (F)">
           <svg class="cyber-topbar-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
             <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>
             <circle cx="12" cy="12" r="1.5" fill="currentColor" opacity="0.8"/>
           </svg>
-          <span id="fsLabel">Fullscreen</span>
+          <span id="fsLabel">Enter Full Screen</span>
         </button>
       </div>
     </header>
@@ -1074,6 +1074,6 @@
   <audio id="alarmAudioElement" preload="auto" src="sounds/piano.mp3"></audio>
 
   <!-- Relative JavaScript (with cache-bust versioning) -->
-  <script src="app.js?v=20.0"></script>
+  <script src="app.js?v=21.0"></script>
 </body>
 </html>
