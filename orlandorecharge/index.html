@@ -9209,13 +9209,12 @@ try { checkUrlHashRoutine(); } catch(e){}
             isChasedInGame = true;
             var norm = Math.max(0, 1 - dist / INFLUENCE_RADIUS);
 
-            // Strict 58px Corner Pocket + Diagonal Precision Requirement:
-            // Particles stay fast & slippery everywhere along flat walls and escape sloppy corner approaches,
-            // ONLY yielding when herded into the tight 58px corner apex along an accurate ~45° diagonal angle!
+            // Ultra-Strict 28px Corner Pocket + 8th-Power Diagonal Precision Requirement (2x Harder):
+            // Particles stay fast & elusive everywhere and fight hard in corners, yielding ONLY to razor-sharp ~45° precision!
             var distWallX = Math.min(p.x - MIN_X, MAX_X - p.x);
             var distWallY = Math.min(p.y - MIN_Y, MAX_Y - p.y);
-            var nearWallX = Math.max(0, Math.min(1, 1 - distWallX / 58));
-            var nearWallY = Math.max(0, Math.min(1, 1 - distWallY / 58));
+            var nearWallX = Math.max(0, Math.min(1, 1 - distWallX / 28));
+            var nearWallY = Math.max(0, Math.min(1, 1 - distWallY / 28));
             var inCornerPocket = nearWallX * nearWallY;
 
             var angle = Math.atan2(dy, dx);
@@ -9225,22 +9224,22 @@ try { checkUrlHashRoutine(); } catch(e){}
               var cornerDirX = (p.x < width * 0.5) ? -0.7071 : 0.7071;
               var cornerDirY = (p.y < height * 0.5) ? -0.7071 : 0.7071;
               var diagAlign = Math.max(0, radX * cornerDirX + radY * cornerDirY);
-              precisionPin = inCornerPocket * Math.pow(diagAlign, 4);
+              precisionPin = inCornerPocket * Math.pow(diagAlign, 8);
             }
 
-            var isMouseStationary = !p.isLocked && (precisionPin < 0.35) && (now - mouse.lastActiveTime > 220);
-            var evadeMultiplier = isMouseStationary ? 2.15 : 1.0;
-            var evadeForce = Math.pow(norm, 1.4) * 3.45 * evadeMultiplier * (1 - precisionPin * 0.32);
-            var tanScale = 1.0 - precisionPin * 0.68; // 100% slippery along flat walls; reduces only under accurate diagonal corner pin
+            var isMouseStationary = !p.isLocked && (precisionPin < 0.50) && (now - mouse.lastActiveTime > 200);
+            var evadeMultiplier = isMouseStationary ? 2.2 : 1.0;
+            var evadeForce = Math.pow(norm, 1.4) * 3.75 * evadeMultiplier * (1 - precisionPin * 0.16);
+            var tanScale = 1.0 - precisionPin * 0.34; // Retains 66%+ sideways slip even under dead-on corner pin
             var tanX = -radY * tanScale;
             var tanY = radX * tanScale;
 
-            p.vx += (radX * 1.75 + tanX * 1.25) * evadeForce * 0.41;
-            p.vy += (radY * 1.75 + tanY * 1.25) * evadeForce * 0.41;
+            p.vx += (radX * 1.80 + tanX * 1.30) * evadeForce * 0.42;
+            p.vy += (radY * 1.80 + tanY * 1.30) * evadeForce * 0.42;
 
-            // Only dampen when accurately pinned along the 45° corner bisector
-            if (precisionPin > 0.25) {
-              var cornerDamp = 1 - precisionPin * 0.16;
+            // Minimal 8% damping only at razor-sharp 45° corner apex
+            if (precisionPin > 0.45) {
+              var cornerDamp = 1 - precisionPin * 0.08;
               p.vx *= cornerDamp;
               p.vy *= cornerDamp;
             }
@@ -9406,8 +9405,8 @@ try { checkUrlHashRoutine(); } catch(e){}
       p.y += p.vy;
 
       // ── LINE-OF-SIGHT SCREEN CONTAINMENT (Aerodynamic / Hydrodynamic Curving Perimeter - Zero Hard Bounces) ──
-      // Full perimeter cushion along walls; yields only under accurate diagonal corner pinning (precisionPin)
-      var turnScale = isChasedInGame ? (1.0 - precisionPin * 0.58) : 1.0;
+      // Full perimeter cushion along walls; yields only slightly (28% max) under razor-sharp diagonal corner pin
+      var turnScale = isChasedInGame ? (1.0 - precisionPin * 0.28) : 1.0;
       var TURN_BUFFER = 75;
       if (p.x < MIN_X + TURN_BUFFER) {
         var f = ((MIN_X + TURN_BUFFER - p.x) / TURN_BUFFER) * turnScale;
@@ -9428,9 +9427,9 @@ try { checkUrlHashRoutine(); } catch(e){}
         p.vx += (p.vx >= 0 ? 0.16 : -0.16) * f;
       }
 
-      // Soft perimeter containment (zero wall slow-down along flat walls; dampens only under precision corner pin)
-      var wallBounce = isChasedInGame ? (0.35 - precisionPin * 0.18) : 0.45;
-      var wallGlide = isChasedInGame ? (1.0 - precisionPin * 0.12) : 1.0;
+      // Soft perimeter containment (lively 0.40 rebound; slight 6% max glide damping under precision corner pin)
+      var wallBounce = isChasedInGame ? (0.40 - precisionPin * 0.10) : 0.45;
+      var wallGlide = isChasedInGame ? (1.0 - precisionPin * 0.06) : 1.0;
       if (p.x < MIN_X) {
         p.x = MIN_X;
         if (p.vx < 0) p.vx = -p.vx * wallBounce;
@@ -10188,7 +10187,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   var contactDuration = 0.0;
   var lastTouchContactTime = 0;
   var REQUIRED_CONTACT = 2.0; // 2 seconds continuous
-  var STRICT_HIT_RADIUS = 13.5; // Precision physical contact radius (desktop: 13.5px, tablet: 17.5px, mobile: 21.5px)
+  var STRICT_HIT_RADIUS = 12; // Strict precision contact radius (desktop: 12px, tablet: 15.5px, mobile: 19px)
 
   // Exact point-to-particle physical touch detection (measures against living multi-joint quantum spine)
   function getParticleTouchDistance(cx, cy, p) {
@@ -10451,7 +10450,7 @@ try { checkUrlHashRoutine(); } catch(e){}
     canvas.width = Math.floor(width * dpr);
     canvas.height = Math.floor(height * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    STRICT_HIT_RADIUS = (width < 600) ? 21.5 : ((width < 1024) ? 17.5 : 13.5);
+    STRICT_HIT_RADIUS = (width < 600) ? 19 : ((width < 1024) ? 15.5 : 12);
   }
 
   // Cross-device capability check (e.g. iOS Safari does not support DOM Fullscreen API)
@@ -10783,9 +10782,9 @@ try { checkUrlHashRoutine(); } catch(e){}
     // ── Particle Interaction & 2-Second Active Contact Detection ──
     var particles = (window.antigravityFX && typeof window.antigravityFX.getParticles === "function") ? window.antigravityFX.getParticles() : [];
 
-    // Active pursuit for lock ACQUISITION: requires recent cursor movement (tight 65px corner apex window)
-    var cursorNearCorner = (cursor.x < 65 || cursor.x > width - 65) && (cursor.y < 65 || cursor.y > height - 65);
-    var canAcquireNewLock = hasDeliberateMove && ((now - lastCursorMoveTime < 280) || (cursorNearCorner && (now - lastCursorMoveTime < 550)));
+    // Active pursuit for lock ACQUISITION: requires recent cursor movement (tight 34px corner apex window)
+    var cursorNearCorner = (cursor.x < 34 || cursor.x > width - 34) && (cursor.y < 34 || cursor.y > height - 34);
+    var canAcquireNewLock = hasDeliberateMove && ((now - lastCursorMoveTime < 240) || (cursorNearCorner && (now - lastCursorMoveTime < 360)));
 
     if (!isWon && !isGameOver && !isWarmingUp && remainingTime > 0 && cursor.active && hasDeliberateMove) {
       if (lockedParticle) {
@@ -10815,15 +10814,15 @@ try { checkUrlHashRoutine(); } catch(e){}
               triggerVictory(lockedParticle);
             }
           } else {
-            // Particle actively evades: 175ms chase grace window with subtle off-target decay requiring accurate precision!
-            if (now - lastTouchContactTime > 175) {
+            // Particle actively evades: 135ms chase grace window with 0.50x off-target decay (2x stricter precision!)
+            if (now - lastTouchContactTime > 135) {
               lockedParticle.isLocked = false;
               contactDuration = 0.0;
               lockedParticle = null;
               stopLockAudio();
               missionText.textContent = "TARGET: TOUCH ANY PARTICLE · MAINTAIN CONTACT FOR 2.0s";
             } else {
-              contactDuration = Math.max(0, contactDuration - dt * 0.25);
+              contactDuration = Math.max(0, contactDuration - dt * 0.50);
               var progress = Math.min(1.0, contactDuration / REQUIRED_CONTACT);
               drawLockReticle(lockedParticle.x, lockedParticle.y, progress, dist);
             }
