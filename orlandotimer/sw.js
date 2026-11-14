@@ -3,7 +3,7 @@
  * Enables ultra-fast offline caching & PWA installation
  */
 
-const CACHE_NAME = 'orlandotimer-v30';
+const CACHE_NAME = 'orlandotimer-v31';
 const ASSETS_TO_CACHE = [
   './',
   'index.html',

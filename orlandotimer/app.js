@@ -956,223 +956,6 @@
   }
 
   
-  // ── ENHANCEMENT 3: TIBETAN SINGING BOWL, 432Hz DRONE, BROWN NOISE & CELESTIAL RAIN ──
-  let zenSoundMode = safeGetItem('orlando-zen-sound-mode', 'bowl'); // 'bowl' | 'rain' | 'drone' | 'silent'
-  let cognitiveShieldMode = safeGetItem('orlando-cognitive-shield', 'drone'); // 'drone' | 'brown' | 'silent'
-  let zenDroneOsc1 = null;
-  let zenDroneOsc2 = null;
-  let zenDroneGain = null;
-  let brownNoiseNode = null;
-  let brownNoiseGain = null;
-  let rainNoiseNode = null;
-  let rainNoiseGain = null;
-
-  function playTibetanSingingBowl(volume = currentAlarmVolume) {
-    const ctx = getAudioContext();
-    if (!ctx) return;
-    const now = ctx.currentTime;
-    const v = Math.max(0.01, Math.min(1, volume));
-
-    // Authentic 5-Harmonic Tibetan Singing Bowl Overtones
-    const partials = [
-      { freq: 130.81, gain: 0.38, decay: 5.2 }, // C3 deep singing bowl fundamental
-      { freq: 196.00, gain: 0.28, decay: 4.6 }, // G3 fifth overtone
-      { freq: 261.63, gain: 0.22, decay: 4.0 }, // C4 octave
-      { freq: 392.00, gain: 0.15, decay: 3.4 }, // G4 harmonic shimmer
-      { freq: 523.25, gain: 0.09, decay: 2.8 }  // C5 crystalline halo
-    ];
-
-    partials.forEach((p, idx) => {
-      try {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-
-        osc.type = 'sine';
-        const detune = idx === 1 ? 1.6 : (idx === 2 ? -1.4 : 0);
-        osc.frequency.setValueAtTime(p.freq + detune, now);
-        osc.frequency.exponentialRampToValueAtTime(p.freq * 0.998, now + p.decay);
-
-        gain.gain.setValueAtTime(0.0001, now);
-        gain.gain.linearRampToValueAtTime(p.gain * v, now + 0.04);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + p.decay);
-
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-
-        osc.start(now);
-        osc.stop(now + p.decay + 0.15);
-      } catch(e) {}
-    });
-  }
-
-  function startZenDrone(force = false) {
-    if (!force && zenSoundMode !== 'drone' && cognitiveShieldMode !== 'drone') return;
-    stopZenDrone();
-    const ctx = getAudioContext();
-    if (!ctx) return;
-
-    try {
-      zenDroneGain = ctx.createGain();
-      zenDroneGain.gain.setValueAtTime(0.0001, ctx.currentTime);
-      zenDroneGain.gain.linearRampToValueAtTime(0.035 * currentAlarmVolume, ctx.currentTime + 2.5);
-      zenDroneGain.connect(ctx.destination);
-
-      // 432 Hz Harmonic Meditation Octaves
-      zenDroneOsc1 = ctx.createOscillator();
-      zenDroneOsc1.type = 'sine';
-      zenDroneOsc1.frequency.setValueAtTime(108.0, ctx.currentTime);
-
-      zenDroneOsc2 = ctx.createOscillator();
-      zenDroneOsc2.type = 'sine';
-      zenDroneOsc2.frequency.setValueAtTime(216.0, ctx.currentTime);
-
-      zenDroneOsc1.connect(zenDroneGain);
-      zenDroneOsc2.connect(zenDroneGain);
-
-      zenDroneOsc1.start();
-      zenDroneOsc2.start();
-    } catch(e) {}
-  }
-
-  function stopZenDrone() {
-    if (zenDroneGain) {
-      try {
-        const ctx = getAudioContext();
-        if (ctx) {
-          zenDroneGain.gain.linearRampToValueAtTime(0.0001, ctx.currentTime + 0.8);
-          setTimeout(() => {
-            if (zenDroneOsc1) { try { zenDroneOsc1.stop(); zenDroneOsc1.disconnect(); } catch(e){} zenDroneOsc1 = null; }
-            if (zenDroneOsc2) { try { zenDroneOsc2.stop(); zenDroneOsc2.disconnect(); } catch(e){} zenDroneOsc2 = null; }
-            if (zenDroneGain) { try { zenDroneGain.disconnect(); } catch(e){} zenDroneGain = null; }
-          }, 900);
-        }
-      } catch(e) {}
-    }
-  }
-
-  // Pure Synthetic Deep Brown Noise (for Deep Work Cognitive Shield)
-  function startBrownNoise() {
-    stopBrownNoise();
-    const ctx = getAudioContext();
-    if (!ctx) return;
-
-    try {
-      const bufferSize = 5 * ctx.sampleRate;
-      const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-      const output = noiseBuffer.getChannelData(0);
-      let lastOut = 0.0;
-      for (let i = 0; i < bufferSize; i++) {
-        const white = Math.random() * 2 - 1;
-        output[i] = (lastOut + (0.02 * white)) / 1.02;
-        lastOut = output[i];
-        output[i] *= 3.5; // Gain compensation
-      }
-
-      brownNoiseNode = ctx.createBufferSource();
-      brownNoiseNode.buffer = noiseBuffer;
-      brownNoiseNode.loop = true;
-
-      brownNoiseGain = ctx.createGain();
-      brownNoiseGain.gain.setValueAtTime(0.0001, ctx.currentTime);
-      brownNoiseGain.gain.linearRampToValueAtTime(0.045 * currentAlarmVolume, ctx.currentTime + 2.0);
-
-      brownNoiseNode.connect(brownNoiseGain);
-      brownNoiseGain.connect(ctx.destination);
-      brownNoiseNode.start();
-    } catch(e) {}
-  }
-
-  function stopBrownNoise() {
-    if (brownNoiseGain) {
-      try {
-        const ctx = getAudioContext();
-        if (ctx) {
-          brownNoiseGain.gain.linearRampToValueAtTime(0.0001, ctx.currentTime + 0.6);
-          setTimeout(() => {
-            if (brownNoiseNode) { try { brownNoiseNode.stop(); brownNoiseNode.disconnect(); } catch(e){} brownNoiseNode = null; }
-            if (brownNoiseGain) { try { brownNoiseGain.disconnect(); } catch(e){} brownNoiseGain = null; }
-          }, 700);
-        }
-      } catch(e) {}
-    }
-  }
-
-  // Generative Celestial Rain Soundscape (for Zen Immersion)
-  function startCelestialRain() {
-    stopCelestialRain();
-    const ctx = getAudioContext();
-    if (!ctx) return;
-
-    try {
-      const bufferSize = 4 * ctx.sampleRate;
-      const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-      const output = noiseBuffer.getChannelData(0);
-      let b0 = 0, b1 = 0, b2 = 0;
-      for (let i = 0; i < bufferSize; i++) {
-        const white = Math.random() * 2 - 1;
-        b0 = 0.99886 * b0 + white * 0.0555179;
-        b1 = 0.99332 * b1 + white * 0.0750759;
-        b2 = 0.96900 * b2 + white * 0.1538520;
-        output[i] = (b0 + b1 + b2) * 0.18;
-      }
-
-      rainNoiseNode = ctx.createBufferSource();
-      rainNoiseNode.buffer = noiseBuffer;
-      rainNoiseNode.loop = true;
-
-      const filter = ctx.createBiquadFilter();
-      filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(1400, ctx.currentTime);
-
-      rainNoiseGain = ctx.createGain();
-      rainNoiseGain.gain.setValueAtTime(0.0001, ctx.currentTime);
-      rainNoiseGain.gain.linearRampToValueAtTime(0.04 * currentAlarmVolume, ctx.currentTime + 2.0);
-
-      rainNoiseNode.connect(filter);
-      filter.connect(rainNoiseGain);
-      rainNoiseGain.connect(ctx.destination);
-      rainNoiseNode.start();
-    } catch(e) {}
-  }
-
-  function stopCelestialRain() {
-    if (rainNoiseGain) {
-      try {
-        const ctx = getAudioContext();
-        if (ctx) {
-          rainNoiseGain.gain.linearRampToValueAtTime(0.0001, ctx.currentTime + 0.6);
-          setTimeout(() => {
-            if (rainNoiseNode) { try { rainNoiseNode.stop(); rainNoiseNode.disconnect(); } catch(e){} rainNoiseNode = null; }
-            if (rainNoiseGain) { try { rainNoiseGain.disconnect(); } catch(e){} rainNoiseGain = null; }
-          }, 700);
-        }
-      } catch(e) {}
-    }
-  }
-
-  function stopAllShieldAudio() {
-    stopZenDrone();
-    stopBrownNoise();
-    stopCelestialRain();
-  }
-
-  function setCognitiveShield(shieldType) {
-    cognitiveShieldMode = shieldType;
-    safeSetItem('orlando-cognitive-shield', shieldType);
-
-    const shieldBtns = document.querySelectorAll('.shield-btn');
-    shieldBtns.forEach(btn => {
-      btn.classList.toggle('active', btn.getAttribute('data-shield') === shieldType);
-    });
-
-    stopAllShieldAudio();
-    if (shieldType === 'drone') {
-      startZenDrone(true);
-    } else if (shieldType === 'brown') {
-      startBrownNoise();
-    }
-  }
-
   function playLuxuryChime() {
     const ctx = getAudioContext();
     if (!ctx) return;
@@ -1448,7 +1231,7 @@
     }
 
     if (currentProductivityMode === 'deep-work' && timerTotalDuration > 0) {
-      updateUltradianCurve(Math.max(0, timerTotalDuration - timerRemaining));
+      updateDeepWorkStripUI(timerTotalDuration, timerRemaining);
     }
   }
 
@@ -1496,9 +1279,7 @@
           void timerDigitsEl.offsetWidth;
           timerDigitsEl.classList.add('zen-shimmer-active');
         }
-        if (zenSoundMode === 'bowl') {
-          AudioHUD.tick(1760); // Gentle crystal harmonic ping
-        }
+        AudioHUD.tick(1200);
         announceSR(`Zen flow checkpoint: ${m} percent completed.`);
       }
     });
@@ -1647,143 +1428,60 @@
     AudioHUD.tick(900);
   }
 
-  // ── TIMER SUB-MODES: FOCUS PROTOCOL vs DEEP WORK vs PRESETS ──
+  // ── TIMER SUB-MODES: FOCUS PROTOCOL vs DEEP WORK SINGLE-STRIP ENGINE ──
   function setTimerSubMode(subMode) {
     const panelTimer = document.getElementById('panel-timer');
-    const badgeIcon = document.getElementById('timerBadgeIcon');
-    const badgeTitle = document.getElementById('timerBadgeTitle');
-    const focusDeck = document.getElementById('focusProtocolDeck');
-    const deepDeck = document.getElementById('deepWorkDeck');
+    const pomoStrip = document.getElementById('pomodoroCycleStrip');
+    const dwStrip = document.getElementById('deepWorkCycleStrip');
     const presetsSec = document.getElementById('timerPresetsSection');
 
     if (panelTimer) panelTimer.setAttribute('data-timer-mode', subMode);
+    if (presetsSec) presetsSec.style.display = 'flex';
 
-    if (subMode === 'focus-protocol') {
-      if (badgeIcon) badgeIcon.textContent = '🎯';
-      if (badgeTitle) badgeTitle.textContent = 'FOCUS PROTOCOL · TACTICAL SPRINT ENGINE';
-      if (focusDeck) focusDeck.style.display = 'flex';
-      if (deepDeck) deepDeck.style.display = 'none';
-      if (presetsSec) presetsSec.style.display = 'block';
+    if (subMode === 'deep-work') {
+      if (pomoStrip) pomoStrip.style.display = 'none';
+      if (dwStrip) dwStrip.style.display = 'flex';
+      updateDeepWorkStripUI(timerTotalDuration, timerRemaining);
+    } else {
+      if (pomoStrip) pomoStrip.style.display = 'flex';
+      if (dwStrip) dwStrip.style.display = 'none';
       updatePomoUI();
-    } else if (subMode === 'deep-work') {
-      if (badgeIcon) badgeIcon.textContent = '⚡';
-      if (badgeTitle) badgeTitle.textContent = 'DEEP WORK · COGNITIVE FORTRESS (90M ULTRADIAN)';
-      if (focusDeck) focusDeck.style.display = 'none';
-      if (deepDeck) deepDeck.style.display = 'flex';
-      if (presetsSec) presetsSec.style.display = 'none';
-      updateUltradianCurve(Math.max(0, timerTotalDuration - timerRemaining));
-      renderDistractionItems();
-    } else {
-      if (badgeIcon) badgeIcon.textContent = '⏳';
-      if (badgeTitle) badgeTitle.textContent = 'CUSTOM TIMER · PRECISION COUNTDOWN';
-      if (focusDeck) focusDeck.style.display = 'none';
-      if (deepDeck) deepDeck.style.display = 'none';
-      if (presetsSec) presetsSec.style.display = 'block';
     }
   }
 
-  // 3-Phase Ultradian Progression Curve Calculation (0–15m Priming, 15–75m Peak, 75–90m Synthesis)
-  function updateUltradianCurve(elapsedSecs) {
-    const elapsedMins = elapsedSecs / 60;
-    const p1 = document.getElementById('dwPhase1');
-    const p2 = document.getElementById('dwPhase2');
-    const p3 = document.getElementById('dwPhase3');
-    const f1 = document.getElementById('dwPhase1Fill');
-    const f2 = document.getElementById('dwPhase2Fill');
-    const f3 = document.getElementById('dwPhase3Fill');
-    const statusText = document.getElementById('dwActivePhaseStatus');
+  function updateDeepWorkStripUI(totalSec, remainingSec) {
+    const dwStageTitle = document.getElementById('dwStageTitle');
+    const dwPhaseBadge = document.getElementById('dwPhaseBadge');
+    const totalMins = Math.round((totalSec || 5400) / 60);
+    const elapsedMins = Math.max(0, ((totalSec || 5400) - (remainingSec || 0)) / 60);
+    const remMins = Math.max(0, (remainingSec || 0) / 60);
 
-    // Phase 1: 0 to 15m (900s)
-    const p1Pct = Math.min(100, Math.max(0, (elapsedMins / 15) * 100));
-    if (f1) f1.style.width = `${p1Pct}%`;
-
-    // Phase 2: 15m to 75m (60m duration)
-    const p2Pct = Math.min(100, Math.max(0, ((elapsedMins - 15) / 60) * 100));
-    if (f2) f2.style.width = `${p2Pct}%`;
-
-    // Phase 3: 75m to 90m (15m duration)
-    const p3Pct = Math.min(100, Math.max(0, ((elapsedMins - 75) / 15) * 100));
-    if (f3) f3.style.width = `${p3Pct}%`;
-
-    if (elapsedMins < 15) {
-      if (p1) p1.classList.add('active');
-      if (p2) p2.classList.remove('active');
-      if (p3) p3.classList.remove('active');
-      if (statusText) statusText.textContent = `Phase 1: Priming & Warm-Up (${Math.round(p1Pct)}%)`;
-    } else if (elapsedMins < 75) {
-      if (p1) p1.classList.remove('active');
-      if (p2) p2.classList.add('active');
-      if (p3) p3.classList.remove('active');
-      if (statusText) statusText.textContent = `Phase 2: Peak Immersion (${Math.round(p2Pct)}%)`;
-    } else {
-      if (p1) p1.classList.remove('active');
-      if (p2) p2.classList.remove('active');
-      if (p3) p3.classList.add('active');
-      if (statusText) statusText.textContent = `Phase 3: Synthesis & Review (${Math.round(p3Pct)}%)`;
-    }
-  }
-
-  // Distraction Interceptor Quick Scratchpad
-  function getDistractionItems() {
-    try {
-      const raw = safeGetItem('orlando-distraction-log', '[]');
-      return JSON.parse(raw) || [];
-    } catch(e) {
-      return [];
-    }
-  }
-
-  function saveDistractionItems(items) {
-    safeSetItem('orlando-distraction-log', JSON.stringify(items));
-    renderDistractionItems();
-  }
-
-  function addDistractionItem(text) {
-    if (!text || !text.trim()) return;
-    const items = getDistractionItems();
-    const now = new Date();
-    const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    items.unshift({ id: 'dist_' + Date.now(), text: text.trim(), time: timeStr });
-    saveDistractionItems(items);
-    AudioHUD.tick(880);
-  }
-
-  function deleteDistractionItem(id) {
-    let items = getDistractionItems();
-    items = items.filter(it => it.id !== id);
-    saveDistractionItems(items);
-    AudioHUD.tick(500);
-  }
-
-  function renderDistractionItems() {
-    const listEl = document.getElementById('distractionList');
-    const badgeEl = document.getElementById('distractionCountBadge');
-    if (!listEl) return;
-
-    const items = getDistractionItems();
-    if (badgeEl) {
-      badgeEl.textContent = `${items.length} Thought${items.length === 1 ? '' : 's'} Parked`;
+    if (dwStageTitle) {
+      if (totalMins === 20) {
+        dwStageTitle.textContent = 'Restorative Recharge (20m)';
+      } else {
+        dwStageTitle.textContent = `Ultradian Deep Work (${totalMins}m)`;
+      }
     }
 
-    if (items.length === 0) {
-      listEl.innerHTML = '<li style="font-size:11px;color:rgba(255,255,255,0.35);padding:6px;font-style:italic;">No thoughts parked. Clean mind, unbroken flow.</li>';
-      return;
+    if (dwPhaseBadge) {
+      if (totalMins <= 20) {
+        dwPhaseBadge.textContent = 'Neural Recharge';
+      } else if (elapsedMins < 15) {
+        dwPhaseBadge.textContent = 'Phase 1 · Warm-Up';
+      } else if (remMins <= 15 && remMins > 0) {
+        dwPhaseBadge.textContent = 'Phase 3 · Review';
+      } else {
+        dwPhaseBadge.textContent = 'Phase 2 · Peak Flow';
+      }
     }
 
-    listEl.innerHTML = items.map(it => `
-      <li class="distraction-item">
-        <div>
-          <span class="distraction-item-time">[${it.time}]</span>
-          <span>${escapeHtml(it.text)}</span>
-        </div>
-        <button type="button" class="btn-dismiss-thought" onclick="window.dismissDistraction('${it.id}')" title="Dismiss Thought">✕</button>
-      </li>
-    `).join('');
+    const dwBtns = document.querySelectorAll('[data-dw-mins]');
+    dwBtns.forEach((btn) => {
+      const m = parseInt(btn.getAttribute('data-dw-mins'), 10);
+      btn.classList.toggle('active', m === totalMins);
+    });
   }
-
-  window.dismissDistraction = function(id) {
-    deleteDistractionItem(id);
-  };
 
   function startTimer() {
     if (timerIsRunning) return;
@@ -1912,7 +1610,7 @@
     }
 
     if (document.body.classList.contains('zen-mode')) {
-      playTibetanSingingBowl();
+      synthesizeAlertSound(currentAlarmSound, currentAlarmVolume);
       if (timerDigitsEl) {
         timerDigitsEl.classList.remove('zen-shimmer-active');
         void timerDigitsEl.offsetWidth;
@@ -1950,13 +1648,12 @@
   function renderPresets() {
     const presetsRow = document.getElementById('presetsRow');
     if (!presetsRow) return;
-    const defaultMins = [5, 10, 15, 25, 45];
+    const defaultMins = [5, 10, 15, 25, 45, 90];
     const customMins = loadCustomPresets();
 
     let html = '';
     defaultMins.forEach(mins => {
-      const label = mins === 25 ? '25 min (Pomodoro)' : `${mins} min`;
-      html += `<button type="button" class="preset-pill" data-minutes="${mins}">${label}</button>`;
+      html += `<button type="button" class="preset-pill" data-minutes="${mins}">${mins} min</button>`;
     });
 
     customMins.forEach(mins => {
@@ -2044,6 +1741,19 @@
     });
   }
 
+  // Wire Deep Work Strip Duration Buttons (60m, 90m, 120m, 20m Recharge)
+  document.querySelectorAll('[data-dw-mins]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const mins = parseInt(btn.getAttribute('data-dw-mins'), 10);
+      if (!isNaN(mins) && mins > 0) {
+        pauseTimer();
+        setTimerDuration(mins * 60);
+        updateDeepWorkStripUI(mins * 60, mins * 60);
+        AudioHUD.confirm();
+      }
+    });
+  });
+
   // Initialize presets and Pomodoro on load
   renderPresets();
   updatePomoUI();
@@ -2100,111 +1810,34 @@
 
   let currentChronoMode = 'precision'; // 'precision' | 'flow'
 
-  // ── QUANTUM FLOW STATE ENGINE (Levels 1-5, Horizons, Marker Logger & Debrief) ──
-  let currentFlowHorizon = parseInt(safeGetItem('orlando-flow-horizon', '0'), 10) || 0; // 0 (free), 30, 45, 60, 90
-  let flowMarkers = [];
-  let peakFlowLevel = 1;
-
+  // ── QUANTUM FLOW vs PRECISION CHRONO SINGLE-STRIP ENGINE ──
   function setChronoMode(mode) {
     currentChronoMode = mode;
     const panelSw = document.getElementById('panel-stopwatch');
-    const badgeIcon = document.getElementById('chronoBadgeIcon');
-    const badgeTitle = document.getElementById('chronoBadgeTitle');
-    const btnLap = document.getElementById('btnSwLap');
-    const btnFlowMarker = document.getElementById('btnSwFlowMarker');
+    const flowStrip = document.getElementById('flowCycleStrip');
     const btnStartText = document.getElementById('btnSwStartText');
     const btnStopText = document.getElementById('btnSwStopText');
-    const btnResetText = document.getElementById('btnSwResetText');
-    const lapsWrapper = document.getElementById('lapsWrapper');
-    const flowDeck = document.getElementById('flowJourneyDeck');
+    const btnLapText = document.getElementById('btnSwLapText');
+    const lapsCol1 = document.getElementById('lapsCol1');
 
     if (panelSw) panelSw.setAttribute('data-chrono-mode', mode);
 
     if (mode === 'flow') {
-      if (badgeIcon) badgeIcon.textContent = '🌌';
-      if (badgeTitle) badgeTitle.textContent = 'QUANTUM FLOW · FLOW STATE ENGINE';
-      if (btnLap) btnLap.style.display = 'none';
-      if (btnFlowMarker) btnFlowMarker.style.display = 'inline-flex';
-      if (btnStartText) btnStartText.textContent = 'Enter Flow';
+      if (flowStrip) flowStrip.style.display = 'flex';
+      if (btnStartText) btnStartText.textContent = 'Start Flow';
       if (btnStopText) btnStopText.textContent = 'Pause Flow';
-      if (btnResetText) btnResetText.textContent = 'End Session';
-      if (lapsWrapper) lapsWrapper.style.display = 'none';
-      if (flowDeck) flowDeck.style.display = 'flex';
+      if (btnLapText) btnLapText.textContent = 'Checkpoint';
+      if (lapsCol1) lapsCol1.textContent = 'Checkpoint #';
       updateFlowJourneyUI(swElapsedTime);
-      updateHorizonPillUI();
-      renderFlowMarkers();
     } else {
-      if (badgeIcon) badgeIcon.textContent = '⏱️';
-      if (badgeTitle) badgeTitle.textContent = 'PRECISION CHRONOMETER · SPLIT LAPS';
-      if (btnLap) btnLap.style.display = 'inline-flex';
-      if (btnFlowMarker) btnFlowMarker.style.display = 'none';
+      if (flowStrip) flowStrip.style.display = 'none';
       if (btnStartText) btnStartText.textContent = 'Start';
       if (btnStopText) btnStopText.textContent = 'Stop';
-      if (btnResetText) btnResetText.textContent = 'Reset';
-      if (lapsWrapper) lapsWrapper.style.display = 'block';
-      if (flowDeck) flowDeck.style.display = 'none';
+      if (btnLapText) btnLapText.textContent = 'Lap';
+      if (lapsCol1) lapsCol1.textContent = 'Lap #';
     }
     updateStopwatchDisplay();
-  }
-
-  function setFlowHorizon(targetMin) {
-    currentFlowHorizon = targetMin;
-    safeSetItem('orlando-flow-horizon', String(targetMin));
-    updateHorizonPillUI();
-    updateFlowJourneyUI(swElapsedTime);
-    AudioHUD.tick(750);
-  }
-
-  function updateHorizonPillUI() {
-    const pills = document.querySelectorAll('.horizon-pill');
-    pills.forEach(p => {
-      const min = parseInt(p.getAttribute('data-horizon'), 10);
-      p.classList.toggle('active', min === currentFlowHorizon);
-    });
-  }
-
-  function dropFlowMarker(customTag = '✨ Milestone') {
-    if (!swIsRunning && swElapsedTime <= 0) return;
-    const timeFormatted = formatStopwatchTime(swElapsedTime);
-    const marker = {
-      id: 'fm_' + Date.now(),
-      timeStr: timeFormatted,
-      tag: customTag
-    };
-    flowMarkers.unshift(marker);
-    renderFlowMarkers();
-    AudioHUD.confirm();
-
-    if (window.spawnSupernovaBurst) {
-      window.spawnSupernovaBurst(window.innerWidth / 2, window.innerHeight * 0.45, {
-        tier: 1,
-        showToast: false
-      });
-    }
-    showQuantumTelemetryToast("✨ FLOW MARKER DROPPED", `Moment captured at ${timeFormatted}: ${customTag}`);
-  }
-
-  function renderFlowMarkers() {
-    const listEl = document.getElementById('flowMarkersList');
-    const countEl = document.getElementById('flowMarkerCount');
-    if (!listEl) return;
-
-    if (countEl) countEl.textContent = `${flowMarkers.length} Moment${flowMarkers.length === 1 ? '' : 's'} Logged`;
-
-    if (flowMarkers.length === 0) {
-      listEl.innerHTML = '<li class="flow-marker-empty">Click "✨ Drop Flow Marker" during your session to log breakthroughs and insights without breaking flow.</li>';
-      return;
-    }
-
-    listEl.innerHTML = flowMarkers.map(m => `
-      <li class="flow-marker-entry">
-        <div>
-          <span class="fme-time">${m.timeStr}</span>
-          <span class="fme-tag">${escapeHtml(m.tag)}</span>
-        </div>
-        <span style="font-size:10px;color:rgba(255,255,255,0.4);font-family:var(--mono);">Saved</span>
-      </li>
-    `).join('');
+    renderLaps();
   }
 
   function updateFlowJourneyUI(elapsedMs) {
@@ -2212,171 +1845,37 @@
     const totalMins = Math.floor(totalSecs / 60);
     const stageTitle = document.getElementById('flowStageTitle');
     const totalBadge = document.getElementById('flowTotalBadge');
-    const depthLvl = document.getElementById('flowDepthLvl');
-    const depthPct = document.getElementById('flowDepthPct');
-    const depthBar = document.getElementById('flowDepthBarFill');
-    const horizonStatus = document.getElementById('flowHorizonStatus');
 
     if (totalBadge) {
       if (totalMins >= 60) {
-        const hrs = (totalMins / 60).toFixed(1);
-        totalBadge.textContent = `${hrs}h in Flow`;
+        totalBadge.textContent = `${(totalMins / 60).toFixed(1)}h Elapsed`;
       } else {
-        totalBadge.textContent = `${totalMins}m in Flow`;
-      }
-    }
-
-    // Dynamic Flow Depth Meter Calculation (Levels 1 to 5)
-    let currentLvl = 1;
-    let lvlLabel = 'LEVEL 1 · GROUNDING & ACTIVATION';
-    let progressInLvl = 0;
-
-    if (totalMins < 15) {
-      currentLvl = 1;
-      lvlLabel = 'LEVEL 1 · GROUNDING & ACTIVATION';
-      progressInLvl = (totalMins / 15) * 100;
-    } else if (totalMins < 30) {
-      currentLvl = 2;
-      lvlLabel = 'LEVEL 2 · FRICTION DISSOLUTION';
-      progressInLvl = ((totalMins - 15) / 15) * 100;
-    } else if (totalMins < 60) {
-      currentLvl = 3;
-      lvlLabel = 'LEVEL 3 · DEEP ALPHA CURRENT';
-      progressInLvl = ((totalMins - 30) / 30) * 100;
-    } else if (totalMins < 90) {
-      currentLvl = 4;
-      lvlLabel = 'LEVEL 4 · HYPER-FOCUS SINGULARITY';
-      progressInLvl = ((totalMins - 60) / 30) * 100;
-    } else {
-      currentLvl = 5;
-      lvlLabel = 'LEVEL 5 · QUANTUM MASTERY (TRANSCENDENT)';
-      progressInLvl = 100;
-    }
-
-    if (currentLvl > peakFlowLevel) peakFlowLevel = currentLvl;
-
-    if (depthLvl) depthLvl.textContent = lvlLabel;
-    if (depthPct) depthPct.textContent = `Flow Velocity: ${Math.round(progressInLvl)}%`;
-    if (depthBar) depthBar.style.width = `${Math.min(100, Math.max(8, progressInLvl))}%`;
-
-    // Flow Horizon Status
-    if (horizonStatus) {
-      if (currentFlowHorizon === 0) {
-        horizonStatus.textContent = 'Free Flow ∞';
-      } else {
-        const remainingMin = currentFlowHorizon - totalMins;
-        if (remainingMin > 0) {
-          horizonStatus.textContent = `${remainingMin}m to Horizon (${currentFlowHorizon}m)`;
-        } else {
-          horizonStatus.textContent = `🎯 Horizon Crossed (+${Math.abs(remainingMin)}m)`;
-        }
+        totalBadge.textContent = `${totalMins}m Elapsed`;
       }
     }
 
     if (stageTitle) {
       if (totalMins >= 90) {
-        stageTitle.textContent = '✦ Transcendent Flow Mastery (90m+)';
+        stageTitle.textContent = 'Flow State · Ultra Mastery (90m+)';
       } else if (totalMins >= 60) {
-        stageTitle.textContent = '🌌 Hyper-Flow Deep Immersion (60m+)';
+        stageTitle.textContent = 'Flow State · Deep Immersion (60m+)';
       } else if (totalMins >= 30) {
-        stageTitle.textContent = '⚡ Sustained Creative Current (30m+)';
+        stageTitle.textContent = 'Flow State · Creative Current (30m+)';
       } else if (totalMins >= 15) {
-        stageTitle.textContent = '🌊 Entering Flow Channel (15m+)';
+        stageTitle.textContent = 'Flow State · Spark Ignited (15m+)';
       } else {
-        stageTitle.textContent = '🌱 Grounding Focus · Building Momentum';
+        stageTitle.textContent = 'Flow State · Grounding Focus';
       }
     }
 
-    // Update milestone dots & connecting lines
-    const milestones = document.querySelectorAll('.flow-milestone');
-    milestones.forEach((m) => {
-      const targetMin = parseInt(m.getAttribute('data-min'), 10);
-      m.classList.toggle('achieved', totalMins >= targetMin);
-    });
-
-    const lines = document.querySelectorAll('.flow-milestone-line');
-    const thresholds = [15, 30, 60];
-    lines.forEach((line, idx) => {
-      line.classList.toggle('achieved', totalMins >= thresholds[idx]);
-    });
-  }
-
-  // Executive Flow Debrief Summary Modal
-  function openFlowSummaryModal() {
-    const modal = document.getElementById('flowSummaryModal');
-    if (!modal) return;
-
-    const timeFormatted = formatStopwatchTime(swElapsedTime);
-    const sumTime = document.getElementById('summaryTotalTime');
-    const sumLvl = document.getElementById('summaryPeakLevel');
-    const sumCount = document.getElementById('summaryMarkersCount');
-    const sumLog = document.getElementById('summaryLogPreview');
-
-    if (sumTime) sumTime.textContent = timeFormatted;
-    if (sumLvl) sumLvl.textContent = `Level ${peakFlowLevel}`;
-    if (sumCount) sumCount.textContent = `${flowMarkers.length} Moments`;
-
-    if (sumLog) {
-      if (flowMarkers.length === 0) {
-        sumLog.innerHTML = '<span style="font-size:11px;color:rgba(255,255,255,0.4);font-style:italic;">No discrete markers dropped. Continuous unbroken immersion.</span>';
-      } else {
-        sumLog.innerHTML = flowMarkers.map(m => `
-          <div style="font-size:11px;display:flex;justify-content:space-between;color:rgba(255,255,255,0.85);">
-            <strong style="color:#38BDF8;font-family:var(--mono);">${m.timeStr}</strong>
-            <span>${escapeHtml(m.tag)}</span>
-          </div>
-        `).join('');
-      }
-    }
-
-    modal.classList.add('open');
-    modal.setAttribute('aria-hidden', 'false');
-    AudioHUD.confirm();
-
-    if (window.spawnSupernovaBurst) {
-      window.spawnSupernovaBurst(window.innerWidth / 2, window.innerHeight * 0.4, {
-        tier: Math.min(5, peakFlowLevel),
-        showToast: false,
-        celebration: true
-      });
-    }
-  }
-
-  function closeFlowSummaryModal() {
-    const modal = document.getElementById('flowSummaryModal');
-    if (modal) {
-      modal.classList.remove('open');
-      modal.setAttribute('aria-hidden', 'true');
-    }
-    // Now fully reset stopwatch
-    swElapsedTime = 0;
-    lastLapTotalTime = 0;
-    flowMarkers = [];
-    peakFlowLevel = 1;
-    renderFlowMarkers();
-    updateStopwatchDisplay();
-    updateFlowJourneyUI(0);
-  }
-
-  function copyFlowSummary() {
-    const timeFormatted = formatStopwatchTime(swElapsedTime);
-    let text = `👑 ORLANDO TIMER — EXECUTIVE FLOW DEBRIEF\n`;
-    text += `Duration: ${timeFormatted}\n`;
-    text += `Peak Flow: Level ${peakFlowLevel}\n`;
-    text += `Markers Logged: ${flowMarkers.length}\n`;
-    if (flowMarkers.length > 0) {
-      text += `Journey Milestones:\n`;
-      flowMarkers.forEach(m => {
-        text += `  • [${m.timeStr}] ${m.tag}\n`;
-      });
-    }
-    text += `Generated with Orlando Timer`;
-
-    navigator.clipboard.writeText(text).then(() => {
-      showQuantumTelemetryToast("📋 COPIED TO CLIPBOARD", "Flow session debrief copied.");
-      AudioHUD.confirm();
-    }).catch(() => {
-      showQuantumTelemetryToast("📋 COPIED", text);
+    const pills = document.querySelectorAll('.flow-milestone-pill');
+    let activeTarget = 15;
+    if (totalMins >= 90) activeTarget = 90;
+    else if (totalMins >= 60) activeTarget = 60;
+    else if (totalMins >= 30) activeTarget = 30;
+    pills.forEach((pill) => {
+      const m = parseInt(pill.getAttribute('data-flow-min'), 10);
+      pill.classList.toggle('active', m === activeTarget || totalMins >= m);
     });
   }
 
@@ -2501,7 +2000,7 @@
 
         return `
         <div class="lap-item">
-          <span class="lap-num">Lap ${String(lap.lapNumber).padStart(2, '0')}${badgeHtml}</span>
+          <span class="lap-num">${currentChronoMode === 'flow' ? 'Checkpoint' : 'Lap'} ${String(lap.lapNumber).padStart(2, '0')}${badgeHtml}</span>
           <span class="lap-split chrome">+${chromeHTML(splitFmt)}</span>
           <span class="lap-total chrome">${chromeHTML(totalFmt)}</span>
         </div>
@@ -2857,164 +2356,9 @@
   // Zen Immersion HUD Elements & Variables
   const btnExitZenHUD = document.getElementById('btnExitZenHUD');
   const btnZenPlayPause = document.getElementById('btnZenPlayPause');
-  const btnZenSoundToggle = document.getElementById('btnZenSoundToggle');
   const btnZenFullscreen = document.getElementById('btnZenFullscreen');
-  const zenSoundText = document.getElementById('zenSoundText');
   let zenIdleTimeout = null;
   let toastTimeout = null;
-
-    // ── ZEN IMMERSION SANCTUARY: GUIDED BREATHING RHYTHMS & MANTRAS ──
-  // Default to 'off' so Zen Mode is purely a distraction-free Focus Timer first!
-  let zenBreathingRhythm = safeGetItem('orlando-zen-breathing', 'off'); // 'off' | '4-7-8' | 'box' | 'coherent'
-  let zenBreathingTimer = null;
-
-  const ZEN_MANTRAS = [
-    "Stillness in Motion · Unshakable Clarity",
-    "Present in this breath · Calm mind",
-    "Release resistance · Infinite quietness",
-    "Deep focus flowing effortlessly",
-    "Pure awareness · Centered strength"
-  ];
-  let zenMantraIdx = 0;
-
-  function cycleZenMantra() {
-    zenMantraIdx = (zenMantraIdx + 1) % ZEN_MANTRAS.length;
-    const textEl = document.getElementById('zenMantraText');
-    if (textEl) {
-      textEl.style.opacity = '0';
-      setTimeout(() => {
-        textEl.textContent = ZEN_MANTRAS[zenMantraIdx];
-        textEl.style.opacity = '1';
-      }, 200);
-    }
-    AudioHUD.tick(1200);
-  }
-
-  function updateZenBreathingButtonText() {
-    const textEl = document.getElementById('zenBreathingText');
-    if (!textEl) return;
-    if (zenBreathingRhythm === '4-7-8') textEl.textContent = 'Breath: 4-7-8 Relax';
-    else if (zenBreathingRhythm === 'box') textEl.textContent = 'Breath: Box 4s';
-    else if (zenBreathingRhythm === 'coherent') textEl.textContent = 'Breath: Coherent 5.5s';
-    else textEl.textContent = 'Breath: Off (Focus Timer)';
-  }
-
-  function cycleZenBreathing() {
-    if (zenBreathingRhythm === 'off') {
-      zenBreathingRhythm = '4-7-8';
-      showQuantumTelemetryToast("🧘 BREATHING GUIDE ON", "Follow the breathing halo ring for relaxation.");
-    } else if (zenBreathingRhythm === '4-7-8') {
-      zenBreathingRhythm = 'box';
-      showQuantumTelemetryToast("🔲 BOX BREATHING (4-4-4-4)", "Inhale 4s · Hold 4s · Exhale 4s · Hold 4s.");
-    } else if (zenBreathingRhythm === 'box') {
-      zenBreathingRhythm = 'coherent';
-      showQuantumTelemetryToast("💓 COHERENT BREATHING (5.5s)", "Smooth equal inhalation and exhalation.");
-    } else {
-      zenBreathingRhythm = 'off';
-      showQuantumTelemetryToast("⏳ PURE FOCUS TIMER", "Breathing guide off. Focusing purely on countdown.");
-    }
-
-    safeSetItem('orlando-zen-breathing', zenBreathingRhythm);
-    updateZenBreathingButtonText();
-    restartGuidedBreathing();
-    AudioHUD.tick(950);
-  }
-
-  function restartGuidedBreathing() {
-    stopGuidedBreathing();
-    const guide = document.getElementById('zenBreathingGuide');
-    if (!document.body.classList.contains('zen-mode') || zenBreathingRhythm === 'off') {
-      if (guide) guide.style.display = 'none';
-      return;
-    }
-
-    if (guide) guide.style.display = 'flex';
-    runBreathingCycleStep();
-  }
-
-  function stopGuidedBreathing() {
-    if (zenBreathingTimer) {
-      clearTimeout(zenBreathingTimer);
-      zenBreathingTimer = null;
-    }
-  }
-
-  function runBreathingCycleStep() {
-    const ring = document.getElementById('zenBreathingRing');
-    const prompt = document.getElementById('zenBreathPrompt');
-    if (!ring || !prompt || !document.body.classList.contains('zen-mode') || zenBreathingRhythm === 'off') return;
-
-    if (zenBreathingRhythm === '4-7-8') {
-      // 4-7-8: Inhale 4s -> Hold 7s -> Exhale 8s
-      ring.className = 'zen-breathing-ring inhale';
-      prompt.textContent = 'Inhale slowly (4s)...';
-      zenBreathingTimer = setTimeout(() => {
-        ring.className = 'zen-breathing-ring hold';
-        prompt.textContent = 'Hold gently (7s)...';
-        zenBreathingTimer = setTimeout(() => {
-          ring.className = 'zen-breathing-ring exhale';
-          prompt.textContent = 'Exhale completely (8s)...';
-          zenBreathingTimer = setTimeout(() => {
-            runBreathingCycleStep();
-          }, 8000);
-        }, 7000);
-      }, 4000);
-    } else if (zenBreathingRhythm === 'box') {
-      // Box: Inhale 4s -> Hold 4s -> Exhale 4s -> Hold 4s
-      ring.className = 'zen-breathing-ring inhale';
-      prompt.textContent = 'Inhale (4s)...';
-      zenBreathingTimer = setTimeout(() => {
-        ring.className = 'zen-breathing-ring hold';
-        prompt.textContent = 'Hold (4s)...';
-        zenBreathingTimer = setTimeout(() => {
-          ring.className = 'zen-breathing-ring exhale';
-          prompt.textContent = 'Exhale (4s)...';
-          zenBreathingTimer = setTimeout(() => {
-            ring.className = 'zen-breathing-ring hold';
-            prompt.textContent = 'Hold empty (4s)...';
-            zenBreathingTimer = setTimeout(() => {
-              runBreathingCycleStep();
-            }, 4000);
-          }, 4000);
-        }, 4000);
-      }, 4000);
-    } else if (zenBreathingRhythm === 'coherent') {
-      // Coherent: Inhale 5.5s -> Exhale 5.5s
-      ring.className = 'zen-breathing-ring inhale';
-      prompt.textContent = 'Inhale smoothly (5.5s)...';
-      zenBreathingTimer = setTimeout(() => {
-        ring.className = 'zen-breathing-ring exhale';
-        prompt.textContent = 'Exhale softly (5.5s)...';
-        zenBreathingTimer = setTimeout(() => {
-          runBreathingCycleStep();
-        }, 5500);
-      }, 5500);
-    }
-  }
-
-  function strikeZenBowl() {
-    playTibetanSingingBowl(1.0);
-    if (window.spawnSupernovaBurst) {
-      window.spawnSupernovaBurst(window.innerWidth / 2, window.innerHeight * 0.45, {
-        tier: 1,
-        showToast: false
-      });
-    }
-    showQuantumTelemetryToast("🔔 TIBETAN SINGING BOWL", "Harmonic meditation resonant struck.");
-  }
-
-  function updateZenSoundButtonText() {
-    if (!zenSoundText) return;
-    if (zenSoundMode === 'bowl') {
-      zenSoundText.textContent = 'Singing Bowl';
-    } else if (zenSoundMode === 'rain') {
-      zenSoundText.textContent = 'Celestial Rain';
-    } else if (zenSoundMode === 'drone') {
-      zenSoundText.textContent = '432Hz Drone';
-    } else {
-      zenSoundText.textContent = 'Silent Zen';
-    }
-  }
 
   function resetZenIdleTimer() {
     if (!document.body.classList.contains('zen-mode')) return;
@@ -3032,27 +2376,22 @@
     document.body.classList.toggle('zen-mode', isZen);
     document.body.classList.remove('zen-idle');
     if (zenModeLabel) zenModeLabel.textContent = isZen ? 'Exit Zen Mode' : 'Zen Immersion Mode';
-    
+
     if (isZen) {
       toggleFunCockpit(false);
       toggleModeDropdown(false);
       announceSR("Zen Immersion Mode activated. Press Escape or Z to exit.");
       AudioHUD.confirm();
       resetZenIdleTimer();
-      updateZenSoundButtonText();
-      updateZenBreathingButtonText();
-      restartGuidedBreathing();
-
-      if (zenSoundMode === 'drone') {
-        startZenDrone(true);
-      } else if (zenSoundMode === 'rain') {
-        startCelestialRain();
-      } else if (zenSoundMode === 'bowl') {
-        playTibetanSingingBowl(0.6);
-      }
     } else {
-      stopAllShieldAudio();
-      stopGuidedBreathing();
+      if (currentProductivityMode === 'zen-immersion') {
+        currentProductivityMode = 'focus-protocol';
+        safeSetItem('orlando-productivity-mode', 'focus-protocol');
+        if (funTagLabel) funTagLabel.textContent = 'Focus Protocol';
+        document.querySelectorAll('.mode-option-btn').forEach((btn) => {
+          btn.classList.toggle('active', btn.getAttribute('data-mode') === 'focus-protocol');
+        });
+      }
       announceSR("Zen Immersion Mode exited.");
       AudioHUD.tick(600);
       if (zenIdleTimeout) clearTimeout(zenIdleTimeout);
@@ -3321,33 +2660,31 @@
       title: 'Zen Immersion',
       badge: 'Void',
       toastTitle: '🧘 ZEN IMMERSION ACTIVE',
-      toastDesc: 'Tranquil floating void with 4-7-8 breathing halo & singing bowl.',
+      toastDesc: 'Pure distraction-free void with colossal floating horology digits.',
       srText: 'Zen Immersion activated: Minimalist focus void.'
     },
     'deep-work': {
       title: 'Deep Work',
       badge: '90m Ultra',
       toastTitle: '⚡ DEEP WORK ACTIVE',
-      toastDesc: '90-minute human ultradian cycle with 432 Hz Solfeggio drone.',
-      srText: 'Deep Work activated: 90-minute ultradian rhythm with 432 Hz focus drone.'
+      toastDesc: '90-minute human ultradian cycle (Warm-Up · Peak Flow · Review).',
+      srText: 'Deep Work activated: 90-minute ultradian cycle.'
     },
     'quantum-flow': {
       title: 'Quantum Flow',
       badge: 'Flow State',
       toastTitle: '🌌 QUANTUM FLOW ACTIVE',
-      toastDesc: 'Serene HH:MM:SS count-up with unbroken Flow Milestones. Zero deadline anxiety.',
+      toastDesc: 'Serene HH:MM:SS count-up with unbroken Flow Milestones.',
       srText: 'Quantum Flow activated: Serene count-up flow state.'
     },
     'precision-chrono': {
       title: 'Precision Chrono',
       badge: 'Split Laps',
       toastTitle: '⏱️ PRECISION CHRONOMETER ACTIVE',
-      toastDesc: 'High-precision Swiss chronometer with 100fps milliseconds & split-lap telemetry table.',
+      toastDesc: 'Swiss chronometer with 100fps milliseconds & split-lap telemetry.',
       srText: 'Precision Chrono activated: Millisecond chronometer with split laps.'
     }
   };
-
-  // currentProductivityMode declared at top of module
 
   function toggleModeDropdown(force) {
     const menu = document.getElementById('modeDropdownMenu');
@@ -3388,6 +2725,7 @@
       setPomoMode('focus');
     } else if (modeKey === 'zen-immersion') {
       switchAppTab('timer');
+      setTimerSubMode('focus-protocol');
       if (userAction) {
         toggleZenMode(true);
       } else {
@@ -3396,9 +2734,8 @@
     } else if (modeKey === 'deep-work') {
       switchAppTab('timer');
       toggleZenMode(false);
-      setTimerSubMode('deep-work');
       setTimerDuration(90 * 60); // 90 min ultradian
-      setCognitiveShield('drone');
+      setTimerSubMode('deep-work');
     } else if (modeKey === 'quantum-flow') {
       switchAppTab('stopwatch');
       toggleZenMode(false);
@@ -3407,8 +2744,6 @@
       switchAppTab('stopwatch');
       toggleZenMode(false);
       setChronoMode('precision');
-      const laps = document.getElementById('lapsWrapper');
-      if (laps && userAction) laps.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
     if (userAction) {
@@ -3525,203 +2860,6 @@
       }
     });
   }
-
-  if (btnZenSoundToggle) {
-    btnZenSoundToggle.addEventListener('click', (e) => {
-      e.stopPropagation();
-      stopAllShieldAudio();
-      if (zenSoundMode === 'bowl') {
-        zenSoundMode = 'rain';
-        startCelestialRain();
-      } else if (zenSoundMode === 'rain') {
-        zenSoundMode = 'drone';
-        startZenDrone(true);
-      } else if (zenSoundMode === 'drone') {
-        zenSoundMode = 'silent';
-      } else {
-        zenSoundMode = 'bowl';
-        playTibetanSingingBowl(0.6);
-      }
-      safeSetItem('orlando-zen-sound-mode', zenSoundMode);
-      updateZenSoundButtonText();
-      AudioHUD.tick(1100);
-    });
-  }
-
-  // Zen Breathing Button
-  const btnZenBreathing = document.getElementById('btnZenBreathing');
-  if (btnZenBreathing) {
-    btnZenBreathing.addEventListener('click', (e) => {
-      e.stopPropagation();
-      cycleZenBreathing();
-    });
-  }
-
-  // Zen Strike Bowl Button
-  const btnZenStrikeBowl = document.getElementById('btnZenStrikeBowl');
-  if (btnZenStrikeBowl) {
-    btnZenStrikeBowl.addEventListener('click', (e) => {
-      e.stopPropagation();
-      strikeZenBowl();
-    });
-  }
-
-  // Zen Mantra Capsule click
-  const zenMantraCapsule = document.getElementById('zenMantraCapsule');
-  if (zenMantraCapsule) {
-    zenMantraCapsule.addEventListener('click', (e) => {
-      e.stopPropagation();
-      cycleZenMantra();
-    });
-  }
-
-  // Focus Protocol: Micro-Goal Auto-Save
-  const focusGoalInput = document.getElementById('focusGoalInput');
-  const focusGoalSaved = document.getElementById('focusGoalSaved');
-  if (focusGoalInput) {
-    focusGoalInput.value = safeGetItem('orlando-focus-goal', '');
-    focusGoalInput.addEventListener('input', () => {
-      safeSetItem('orlando-focus-goal', focusGoalInput.value);
-      if (focusGoalSaved) {
-        focusGoalSaved.classList.add('visible');
-        clearTimeout(focusGoalSaved._timer);
-        focusGoalSaved._timer = setTimeout(() => focusGoalSaved.classList.remove('visible'), 1200);
-      }
-    });
-  }
-
-  // Focus Protocol: Skip Phase Button
-  const btnPomoSkip = document.getElementById('btnPomoSkip');
-  if (btnPomoSkip) {
-    btnPomoSkip.addEventListener('click', (e) => {
-      e.stopPropagation();
-      skipPomoPhase();
-    });
-  }
-
-  // Focus Protocol: Auto-Advance Toggle on deck
-  const btnSprintAutoToggle = document.getElementById('btnSprintAutoToggle');
-  if (btnSprintAutoToggle) {
-    btnSprintAutoToggle.addEventListener('click', (e) => {
-      e.stopPropagation();
-      pomoAutoNext = !pomoAutoNext;
-      safeSetItem('orlando-pomo-autonext', String(pomoAutoNext));
-      updatePomoUI();
-      AudioHUD.tick(pomoAutoNext ? 1200 : 600);
-    });
-  }
-
-  // Focus Protocol: Reset Daily Sprint Tally
-  const btnResetSprintTally = document.getElementById('btnResetSprintTally');
-  if (btnResetSprintTally) {
-    btnResetSprintTally.addEventListener('click', (e) => {
-      e.stopPropagation();
-      resetDailySprintCount();
-    });
-  }
-
-  // Deep Work: Mission Auto-Save
-  const deepWorkMissionInput = document.getElementById('deepWorkMissionInput');
-  const deepWorkMissionSaved = document.getElementById('deepWorkMissionSaved');
-  if (deepWorkMissionInput) {
-    deepWorkMissionInput.value = safeGetItem('orlando-deepwork-mission', '');
-    deepWorkMissionInput.addEventListener('input', () => {
-      safeSetItem('orlando-deepwork-mission', deepWorkMissionInput.value);
-      if (deepWorkMissionSaved) {
-        deepWorkMissionSaved.classList.add('visible');
-        clearTimeout(deepWorkMissionSaved._timer);
-        deepWorkMissionSaved._timer = setTimeout(() => deepWorkMissionSaved.classList.remove('visible'), 1200);
-      }
-    });
-  }
-
-  // Deep Work: Cognitive Shield Sound Buttons
-  const shieldBtns = document.querySelectorAll('.shield-btn');
-  shieldBtns.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const shieldType = btn.getAttribute('data-shield');
-      setCognitiveShield(shieldType);
-      AudioHUD.tick(1000);
-    });
-  });
-
-  // Deep Work: Distraction Interceptor Scratchpad
-  const btnAddDistraction = document.getElementById('btnAddDistraction');
-  const distractionInput = document.getElementById('distractionInput');
-  if (btnAddDistraction && distractionInput) {
-    const handleAddThought = () => {
-      const val = distractionInput.value;
-      if (val && val.trim()) {
-        addDistractionItem(val);
-        distractionInput.value = '';
-      }
-    };
-    btnAddDistraction.addEventListener('click', handleAddThought);
-    distractionInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        handleAddThought();
-      }
-    });
-  }
-
-  // Quantum Flow: Drop Flow Marker Button
-  const btnSwFlowMarker = document.getElementById('btnSwFlowMarker');
-  if (btnSwFlowMarker) {
-    btnSwFlowMarker.addEventListener('click', (e) => {
-      e.stopPropagation();
-      dropFlowMarker('✨ Milestone');
-    });
-  }
-
-  // Quantum Flow: Quick Tag Buttons
-  const flowTagBtns = document.querySelectorAll('.flow-tag-btn');
-  flowTagBtns.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const tag = btn.getAttribute('data-tag');
-      dropFlowMarker(tag);
-    });
-  });
-
-  // Quantum Flow: Horizon Pills
-  const horizonPills = document.querySelectorAll('.horizon-pill');
-  horizonPills.forEach(pill => {
-    pill.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const horizon = parseInt(pill.getAttribute('data-horizon'), 10);
-      setFlowHorizon(horizon);
-    });
-  });
-
-  // Flow Summary Modal Buttons
-  const btnSummaryClose = document.getElementById('btnSummaryClose');
-  const btnSummaryCopy = document.getElementById('btnSummaryCopy');
-  const flowSummaryBackdrop = document.getElementById('flowSummaryBackdrop');
-  if (btnSummaryClose) btnSummaryClose.addEventListener('click', closeFlowSummaryModal);
-  if (flowSummaryBackdrop) flowSummaryBackdrop.addEventListener('click', closeFlowSummaryModal);
-  if (btnSummaryCopy) btnSummaryCopy.addEventListener('click', copyFlowSummary);
-
-  // Hook into Stopwatch Reset button for Quantum Flow Debrief Modal
-  if (btnSwReset) {
-    btnSwReset.addEventListener('click', (e) => {
-      if (currentChronoMode === 'flow' && swElapsedTime > 20000) {
-        e.stopImmediatePropagation();
-        openFlowSummaryModal();
-      }
-    }, true);
-  }
-
-  // Global Keydown Shortcut: B strikes Tibetan Singing Bowl in Zen Mode
-  window.addEventListener('keydown', (e) => {
-    if ((e.key === 'b' || e.key === 'B') && document.body.classList.contains('zen-mode')) {
-      const activeTag = document.activeElement ? document.activeElement.tagName : '';
-      if (activeTag !== 'INPUT' && activeTag !== 'TEXTAREA') {
-        strikeZenBowl();
-      }
-    }
-  });
 
   if (btnZenFullscreen) {
     btnZenFullscreen.addEventListener('click', (e) => {
