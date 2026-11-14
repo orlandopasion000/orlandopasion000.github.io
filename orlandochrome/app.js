@@ -4959,10 +4959,6 @@ const Icons = {
         <button type="button" class="btn-thumb-action ${historyMgr.canUndo() ? '' : 'disabled'}" id="btnThumbUndo" title="Undo last action" ${historyMgr.canUndo() ? '' : 'disabled'}>
           ${Icons.undo(12)} <span>Undo</span>
         </button>
-        <button type="button" class="btn-thumb-action" id="btnThumbTrash" title="Recently Deleted Vault (30-day restore)">
-          ${Icons.trashVault(13)} <span>Trash</span>
-          ${(state.trash || []).length > 0 ? `<span class="thumb-badge">${(state.trash || []).length}</span>` : ''}
-        </button>
         <button type="button" class="btn-thumb-action ${p.stickyNote ? 'active' : ''}" id="btnThumbSticky" title="Sticky note for ${esc(p.name)}">
           ${Icons.important(12)} <span>${p.stickyNote ? 'Sticky' : '+ Sticky'}</span>
         </button>

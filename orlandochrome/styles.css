@@ -10531,4 +10531,22 @@ body.mobile-typing-mode .chat-header-avatar-wrap {
     width: 100% !important;
     justify-content: center !important;
   }
+
+  /* Mobile Toast: Float above bottom composer bar */
+  #toast {
+    bottom: calc(75px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* Mobile Header Avatar Upload Badge: Subtle corner placement */
+  .header-avatar-upload-badge {
+    width: 18px !important;
+    height: 18px !important;
+    bottom: -2px !important;
+    right: -2px !important;
+  }
+
+  .header-avatar-upload-badge svg {
+    width: 10px !important;
+    height: 10px !important;
+  }
 }
