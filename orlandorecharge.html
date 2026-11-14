@@ -9208,46 +9208,37 @@ try { checkUrlHashRoutine(); } catch(e){}
             var norm = Math.max(0, 1 - dist / INFLUENCE_RADIUS);
             var isMouseStationary = (now - mouse.lastActiveTime > 200);
             var evadeMultiplier = isMouseStationary ? 2.2 : 1.0;
-            var evadeForce = Math.pow(norm, 1.35) * 4.2 * evadeMultiplier;
+            var evadeForce = Math.pow(norm, 1.4) * 3.6 * evadeMultiplier;
             var angle = Math.atan2(dy, dx);
             var radX = Math.cos(angle);
             var radY = Math.sin(angle);
             var tanX = -radY;
             var tanY = radX;
 
-            // Smart Corner & Edge Slip-Stream: never bank into a wall or get pinned in a corner!
-            var toCenterX = (width * 0.5) - p.x;
-            var toCenterY = (height * 0.5) - p.y;
-            var nearEdge = (p.x < MIN_X + 145 || p.x > MAX_X - 145 || p.y < MIN_Y + 145 || p.y > MAX_Y - 145);
+            // Subtle 7px corner margin: gently steer tangent inward only right at the 7px edge
+            var nearEdge = (p.x < MIN_X + 7 || p.x > MAX_X - 7 || p.y < MIN_Y + 7 || p.y > MAX_Y - 7);
             if (nearEdge) {
-              // Steer tangent toward the open center of the arena
+              var toCenterX = (width * 0.5) - p.x;
+              var toCenterY = (height * 0.5) - p.y;
               if ((tanX * toCenterX + tanY * toCenterY) < 0) {
                 tanX = -tanX;
                 tanY = -tanY;
               }
-              // Prevent radial repulsion from pinning particle into walls; convert into lateral slip-stream
-              var nearLeft = (p.x < MIN_X + 115 && radX < 0);
-              var nearRight = (p.x > MAX_X - 115 && radX > 0);
-              var nearTop = (p.y < MIN_Y + 115 && radY < 0);
-              var nearBottom = (p.y > MAX_Y - 115 && radY > 0);
-              if (nearLeft || nearRight) {
-                radX = (toCenterX > 0 ? 0.45 : -0.45);
-                tanY *= 1.45;
-              }
-              if (nearTop || nearBottom) {
-                radY = (toCenterY > 0 ? 0.45 : -0.45);
-                tanX *= 1.45;
-              }
-              // Extra corner burst when near two walls simultaneously
-              if ((nearLeft || nearRight) && (nearTop || nearBottom)) {
-                var cLen = Math.hypot(toCenterX, toCenterY) || 1;
-                p.vx += (toCenterX / cLen) * evadeForce * 0.65;
-                p.vy += (toCenterY / cLen) * evadeForce * 0.65;
+            }
+
+            p.vx += (radX * 1.7 + tanX * 1.25) * evadeForce * 0.38;
+            p.vy += (radY * 1.7 + tanY * 1.25) * evadeForce * 0.38;
+
+            // Intelligently cap maximum flee speed so open-space pursuit is exciting yet humanly winnable!
+            if (!isMouseStationary) {
+              var maxTrackableSpeed = 6.2;
+              var spd = Math.hypot(p.vx, p.vy);
+              if (spd > maxTrackableSpeed) {
+                p.vx = (p.vx / spd) * maxTrackableSpeed;
+                p.vy = (p.vy / spd) * maxTrackableSpeed;
               }
             }
 
-            p.vx += (radX * 1.85 + tanX * 1.4) * evadeForce * 0.44;
-            p.vy += (radY * 1.85 + tanY * 1.4) * evadeForce * 0.44;
             p.turnFlex = Math.sign(tanY || 1) * 0.65;
             if (isHighSpeedCursor && p.isRadiant) {
               p.trail.push({ x: p.x, y: p.y, alpha: p.isFront ? 0.85 : 0.65 });
@@ -9408,44 +9399,42 @@ try { checkUrlHashRoutine(); } catch(e){}
       p.x += p.vx;
       p.y += p.vy;
 
-      // ── LINE-OF-SIGHT SCREEN CONTAINMENT (Aerodynamic / Hydrodynamic Curving Perimeter - Zero Corner Trapping) ──
-      var TURN_BUFFER = isGameMode ? 105 : 75;
-      var turnStrength = isGameMode ? 0.56 : 0.35;
-      var slipStrength = isGameMode ? 0.28 : 0.16;
+      // ── LINE-OF-SIGHT SCREEN CONTAINMENT (Aerodynamic / Hydrodynamic Curving Perimeter - Zero Hard Bounces) ──
+      var TURN_BUFFER = 75;
       if (p.x < MIN_X + TURN_BUFFER) {
         var f = (MIN_X + TURN_BUFFER - p.x) / TURN_BUFFER;
-        p.vx += f * f * turnStrength;
-        p.vy += ((p.y < height * 0.5) ? slipStrength : -slipStrength) * f;
+        p.vx += f * f * 0.38;
+        p.vy += (p.vy >= 0 ? 0.18 : -0.18) * f;
       } else if (p.x > MAX_X - TURN_BUFFER) {
         var f = (p.x - (MAX_X - TURN_BUFFER)) / TURN_BUFFER;
-        p.vx -= f * f * turnStrength;
-        p.vy += ((p.y < height * 0.5) ? slipStrength : -slipStrength) * f;
+        p.vx -= f * f * 0.38;
+        p.vy += (p.vy >= 0 ? 0.18 : -0.18) * f;
       }
       if (p.y < MIN_Y + TURN_BUFFER) {
         var f = (MIN_Y + TURN_BUFFER - p.y) / TURN_BUFFER;
-        p.vy += f * f * turnStrength;
-        p.vx += ((p.x < width * 0.5) ? slipStrength : -slipStrength) * f;
+        p.vy += f * f * 0.38;
+        p.vx += (p.vx >= 0 ? 0.18 : -0.18) * f;
       } else if (p.y > MAX_Y - TURN_BUFFER) {
         var f = (p.y - (MAX_Y - TURN_BUFFER)) / TURN_BUFFER;
-        p.vy -= f * f * turnStrength;
-        p.vx += ((p.x < width * 0.5) ? slipStrength : -slipStrength) * f;
+        p.vy -= f * f * 0.38;
+        p.vx += (p.vx >= 0 ? 0.18 : -0.18) * f;
       }
 
-      // Soft perimeter containment (elastic rebound + interior slip so particles never stall in corners)
-      var bounceKeep = isGameMode ? 0.78 : 0.45;
+      // Soft perimeter containment (smooth damping turnaround, with slight 0.55 rebound in game mode)
+      var bounceKeep = isGameMode ? 0.55 : 0.45;
       if (p.x < MIN_X) {
         p.x = MIN_X;
-        if (p.vx < 0) p.vx = -p.vx * bounceKeep + (isGameMode ? 1.2 : 0);
+        if (p.vx < 0) p.vx = -p.vx * bounceKeep;
       } else if (p.x > MAX_X) {
         p.x = MAX_X;
-        if (p.vx > 0) p.vx = -p.vx * bounceKeep - (isGameMode ? 1.2 : 0);
+        if (p.vx > 0) p.vx = -p.vx * bounceKeep;
       }
       if (p.y < MIN_Y) {
         p.y = MIN_Y;
-        if (p.vy < 0) p.vy = -p.vy * bounceKeep + (isGameMode ? 1.2 : 0);
+        if (p.vy < 0) p.vy = -p.vy * bounceKeep;
       } else if (p.y > MAX_Y) {
         p.y = MAX_Y;
-        if (p.vy > 0) p.vy = -p.vy * bounceKeep - (isGameMode ? 1.2 : 0);
+        if (p.vy > 0) p.vy = -p.vy * bounceKeep;
       }
 
       if (!p.isFront && p.isRadiant) radiantBackNodes.push(p);
@@ -10185,15 +10174,14 @@ try { checkUrlHashRoutine(); } catch(e){}
   var contactDuration = 0.0;
   var lastTouchContactTime = 0;
   var REQUIRED_CONTACT = 2.0; // 2 seconds continuous
-  var STRICT_HIT_RADIUS = 12; // Slightly tighter physical contact radius (desktop: 12px, tablet: 15.5px, mobile: 19px)
+  var STRICT_HIT_RADIUS = 13.5; // Balanced physical contact radius (desktop: 13.5px, tablet: 17.5px, mobile: 21.5px)
 
-  // Exact point-to-particle physical touch detection (measures against head & upper body of quantum spine)
+  // Exact point-to-particle physical touch detection (measures against living multi-joint quantum spine)
   function getParticleTouchDistance(cx, cy, p) {
     if (!p) return 999999;
     if (p.spine && p.spine.length > 1) {
       var minDist = 999999;
-      var activeSegments = Math.max(1, Math.ceil((p.spine.length - 1) * 0.6));
-      for (var si = 0; si < activeSegments; si++) {
+      for (var si = 0; si < p.spine.length - 1; si++) {
         var p0 = p.spine[si];
         var p1 = p.spine[si + 1];
         var dx = p1.x - p0.x;
@@ -10449,7 +10437,7 @@ try { checkUrlHashRoutine(); } catch(e){}
     canvas.width = Math.floor(width * dpr);
     canvas.height = Math.floor(height * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    STRICT_HIT_RADIUS = (width < 600) ? 19 : ((width < 1024) ? 15.5 : 12);
+    STRICT_HIT_RADIUS = (width < 600) ? 21.5 : ((width < 1024) ? 17.5 : 13.5);
   }
 
   // Cross-device capability check (e.g. iOS Safari does not support DOM Fullscreen API)
@@ -10813,15 +10801,15 @@ try { checkUrlHashRoutine(); } catch(e){}
               triggerVictory(lockedParticle);
             }
           } else {
-            // Particle actively evades fast: tighter 105ms chase grace window with subtle decay when off-target
-            if (now - lastTouchContactTime > 105) {
+            // Particle actively evades: 175ms chase grace window so active human pursuit is smoothly winnable!
+            if (now - lastTouchContactTime > 175) {
               lockedParticle.isLocked = false;
               contactDuration = 0.0;
               lockedParticle = null;
               stopLockAudio();
               missionText.textContent = "TARGET: TOUCH ANY PARTICLE · MAINTAIN CONTACT FOR 2.0s";
             } else {
-              contactDuration = Math.max(0, contactDuration - dt * 0.55);
+              contactDuration = Math.max(0, contactDuration - dt * 0.15);
               var progress = Math.min(1.0, contactDuration / REQUIRED_CONTACT);
               drawLockReticle(lockedParticle.x, lockedParticle.y, progress, dist);
             }
