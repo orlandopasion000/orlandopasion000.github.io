@@ -1990,11 +1990,11 @@ body.universe-game-active {
   overflow: hidden !important;
 }
 
-/* Custom hardware-composited target icon cursor (0ms latency, 100% synchronized at all times) */
+/* Alive Quantum Atomic Reticle: Canvas rendered with 0ms latency, OS cursor hidden over game zone */
 body.universe-game-active,
 body.universe-game-active .quantum-game-overlay,
 body.universe-game-active .quantum-game-canvas {
-  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='6' fill='none' stroke='%230284c7' stroke-width='2.5' opacity='0.45'/%3E%3Ccircle cx='16' cy='16' r='6' fill='none' stroke='%2338bdf8' stroke-width='1.5'/%3E%3Cline x1='4' y1='16' x2='9' y2='16' stroke='%2338bdf8' stroke-width='1.5' stroke-linecap='round'/%3E%3Cline x1='23' y1='16' x2='28' y2='16' stroke='%2338bdf8' stroke-width='1.5' stroke-linecap='round'/%3E%3Cline x1='16' y1='4' x2='16' y2='9' stroke='%2338bdf8' stroke-width='1.5' stroke-linecap='round'/%3E%3Cline x1='16' y1='23' x2='16' y2='28' stroke='%2338bdf8' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E") 16 16, crosshair !important;
+  cursor: none !important;
 }
 
 /* Ensure all HUD buttons and interactive elements retain clean pointer cursor */
@@ -8845,6 +8845,20 @@ try { checkUrlHashRoutine(); } catch(e){}
       emergeBloom: 0.0,
       growthMultiplier: 1.0,
       lumiTier: 0, // 0 = baseline, 1 = grow 2x + brighter, 2 = grow 3x + most bright
+      numJoints: isFront ? 6 : 5,
+      segmentSpacing: 3.2,
+      wavePhase: Math.random() * Math.PI * 2,
+      spine: (function() {
+        var sp = [];
+        var num = isFront ? 6 : 5;
+        for (var si = 0; si < num; si++) {
+          sp.push({
+            x: x - Math.cos(driftAngle) * si * 3.2,
+            y: y - Math.sin(driftAngle) * si * 3.2
+          });
+        }
+        return sp;
+      })(),
       stardust: [],
       trail: []
     };
@@ -8872,6 +8886,15 @@ try { checkUrlHashRoutine(); } catch(e){}
       particles[pi].growthMultiplier = 2.85;
       particles[pi].lumiTier = 2;
       particles[pi].isTitan = true;
+      particles[pi].numJoints = 7;
+      particles[pi].segmentSpacing = 4.2;
+      particles[pi].spine = [];
+      for (var sj = 0; sj < 7; sj++) {
+        particles[pi].spine.push({
+          x: particles[pi].x - Math.cos(particles[pi].heading) * sj * 4.2,
+          y: particles[pi].y - Math.sin(particles[pi].heading) * sj * 4.2
+        });
+      }
     } else if (pi < 14) {
       // 8 medium particles (Tier 1)
       particles[pi].growthMultiplier = 1.65;
@@ -9406,7 +9429,7 @@ try { checkUrlHashRoutine(); } catch(e){}
         }
       }
 
-      // ── CONTINUOUS ANGULAR SLERP (Smooth Banking & Real Flight Mechanics - Zero "Hard Stick" Snapping) ──
+      // ── LIVING QUANTUM PARTICLE KINEMATICS (Snake-like Head-Leading Turns, Straight-Ahead Inertia) ──
       var currentSpeed = Math.hypot(p.vx, p.vy);
       var targetAngle = (currentSpeed > 0.05) ? Math.atan2(p.vy, p.vx) : (p.heading || 0);
 
@@ -9416,42 +9439,66 @@ try { checkUrlHashRoutine(); } catch(e){}
       while (angleDiff > Math.PI) angleDiff -= Math.PI * 2;
       while (angleDiff < -Math.PI) angleDiff += Math.PI * 2;
 
-      // Smooth angular interpolation: banks like a real aerodynamic/quantum entity (max ~8.6 deg/frame)
-      var maxTurnRate = 0.15;
-      var turnStep = Math.max(-maxTurnRate, Math.min(maxTurnRate, angleDiff * 0.20));
+      // Smooth banking turn: head leads the turn dynamically (max ~9.2 deg/frame)
+      var maxTurnRate = 0.16;
+      var turnStep = Math.max(-maxTurnRate, Math.min(maxTurnRate, angleDiff * 0.22));
       p.heading += turnStep;
       while (p.heading > Math.PI) p.heading -= Math.PI * 2;
       while (p.heading < -Math.PI) p.heading += Math.PI * 2;
 
-      // Dynamic organic wavepacket flex along the turning arc (tail gracefully bends into turn)
-      p.turnFlex = Math.max(-1.0, Math.min(1.0, (p.turnFlex || 0) * 0.76 + angleDiff * 0.70));
-      if (Math.abs(p.turnFlex) < 0.02) p.turnFlex = 0;
+      // ── 1. Inverse Kinematics Spine Tracking: Head curves first, tail follows curve, goes straight immediately ──
+      if (!p.spine || p.spine.length === 0) {
+        var num = p.numJoints || 5;
+        var spc = p.segmentSpacing || 3.2;
+        p.spine = [];
+        for (var sj = 0; sj < num; sj++) {
+          p.spine.push({ x: p.x - Math.cos(p.heading) * sj * spc, y: p.y - Math.sin(p.heading) * sj * spc });
+        }
+      }
+      p.spine[0].x = p.x;
+      p.spine[0].y = p.y;
+      p.wavePhase = (p.wavePhase || 0) + 0.16;
 
-      // Bow offset curves dynamically into turns (max 2.0px flex, 0 when cruising straight)
-      var bowOffset = p.turnFlex * 2.0;
-      var isCurved = Math.abs(bowOffset) > 0.10;
+      var curSpacing = (p.segmentSpacing || 3.2) * curGrowth;
+      var K = p.spine.length;
+      for (var sj = 1; sj < K; sj++) {
+        var leader = p.spine[sj - 1];
+        var follower = p.spine[sj];
+        var sdx = follower.x - leader.x;
+        var sdy = follower.y - leader.y;
+        var sDist = Math.hypot(sdx, sdy);
+        if (sDist > 0.001) {
+          follower.x = leader.x + (sdx / sDist) * curSpacing;
+          follower.y = leader.y + (sdy / sDist) * curSpacing;
+        } else {
+          follower.x = leader.x - Math.cos(p.heading) * curSpacing;
+          follower.y = leader.y - Math.sin(p.heading) * curSpacing;
+        }
+      }
+
+      // Compute display points with subtle transverse de Broglie wave undulation
+      var pts = [];
+      for (var sj = 0; sj < K; sj++) {
+        if (sj === 0) {
+          pts.push({ x: p.spine[0].x, y: p.spine[0].y });
+        } else {
+          var pPrev = p.spine[sj - 1];
+          var pCurr = p.spine[sj];
+          var segAngle = Math.atan2(pPrev.y - pCurr.y, pPrev.x - pCurr.x);
+          var waveAmp = curSize * 0.20;
+          var wave = Math.sin(p.wavePhase - sj * 0.65) * waveAmp * (sj / K);
+          pts.push({
+            x: pCurr.x - Math.sin(segAngle) * wave,
+            y: pCurr.y + Math.cos(segAngle) * wave
+          });
+        }
+      }
 
       var pTier = p.lumiTier || 0;
-      var tierLenBoost = (pTier === 2) ? 6.0 : ((pTier === 1) ? 3.0 : 0);
-      var maxLen = (renderAsBrightest ? 26 : 18) * curGrowth + (gameGlowProgress * tierLenBoost);
-      var dynamicLength = Math.max(baseLength, Math.min(maxLen, baseLength + currentSpeed * 2.2 * curGrowth));
-
-      // Expose current real-time geometry for strict physical touch detection
+      var headR = curSize * 0.54;
       p.curSize = curSize;
-      p.dynamicLength = dynamicLength;
       p.currentAngle = p.heading;
       var currentAngle = p.heading;
-
-      // 100% Engraved Beat Length Elasticity
-      if (isAudioHot) {
-        var elas = curChoreo ? curChoreo.elasticity : 1.40;
-        if (p.isFront) elas *= 1.25;
-        var primaryInstEnergy = (curChoreo && curChoreo.focus === "strum") ? (liveStrum * 1.5 + liveBass * 0.8) :
-                                (curChoreo && curChoreo.focus === "piano-sub") ? (livePiano * 1.4 + liveSub * 1.2) :
-                                (liveBass * 1.65 + liveMid * 0.65 + beatKickImpulse * 0.45);
-        dynamicLength *= (1 + primaryInstEnergy * elas);
-        p.dynamicLength = dynamicLength;
-      }
 
       // ── FEATURE 1: RELATIVISTIC SPEED-DILATION (Micro Doppler Shift on Acceleration) ──
       var speedRatio = Math.max(0, (currentSpeed - p.baseSpeed) / (p.baseSpeed * 2.2));
@@ -9462,208 +9509,111 @@ try { checkUrlHashRoutine(); } catch(e){}
         currentAlpha = Math.min(1.0, currentAlpha + liveBass * 0.25);
       }
 
-      targetCtx.save();
-      targetCtx.translate(p.x, p.y);
-      targetCtx.rotate(p.heading);
+      var tier = p.lumiTier || 0;
+      var gameLitBoost = (tier === 2) ? (gameGlowProgress * 6) : ((tier === 1) ? (gameGlowProgress * 4) : (gameGlowProgress * 2));
+      var gameAlphaBoost = (tier === 2) ? (gameGlowProgress * 0.35) : ((tier === 1) ? (gameGlowProgress * 0.25) : (gameGlowProgress * 0.15));
+      var fLitBoost = isAudioHot ? (liveBass * 14 + beatKickImpulse * 8) : 0;
+      var fHeadLit = Math.min(84, (tier === 2 ? 78 : (tier === 1 ? 75 : 72)) + fLitBoost + dopplerBoost * 8 + gameLitBoost);
+      var fTailLit = Math.min(72, Math.max(50, p.lit + fLitBoost * 0.4 - dopplerBoost * 4));
+      var fHeadHue = (dopplerBoost > 0.12) ? Math.round(p.hue2 * (1 - dopplerBoost * 0.5) + 198 * (dopplerBoost * 0.5)) : p.hue2;
+      var fTailHue = (dopplerBoost > 0.12) ? Math.round(p.hue * (1 - dopplerBoost * 0.4) + 22 * (dopplerBoost * 0.4)) : p.hue;
+      var renderAlpha = Math.min(0.92, currentAlpha * (1.0 + gameAlphaBoost) + (gameGlowProgress * 0.14));
 
-      var halfL = dynamicLength / 2;
-      var headR = curSize * 0.52;
-      var tailR = Math.max(0.65, curSize * 0.22);
-      var focalX = halfL - headR;
+      // ── 2. Render Living Tapered Organic Wavepacket Body (Tail to Neck) ──
+      for (var sj = K - 1; sj >= 1; sj--) {
+        var pt1 = pts[sj];
+        var pt0 = pts[sj - 1];
+        var tNorm = 1 - (sj / K); // 0 at tail tip, 1 at neck
+        var segW = Math.max(1.0, curSize * (0.24 + 0.76 * tNorm));
+        var segAlpha = Math.min(1.0, renderAlpha * (0.35 + 0.65 * tNorm));
 
-      if (renderAsBrightest) {
-        // ── REFINED QUANTUM WAVE-PARTICLE (Less Glow, Crisp Futuristic Orbital Mechanics) ──
-        var tier = p.lumiTier || 0;
-        // Refined lightness: keeps rich, deep quantum colors without blinding white blowout
-        var gameLitBoost = (tier === 2) ? (gameGlowProgress * 6) : ((tier === 1) ? (gameGlowProgress * 4) : (gameGlowProgress * 2));
-        var gameAlphaBoost = (tier === 2) ? (gameGlowProgress * 0.35) : ((tier === 1) ? (gameGlowProgress * 0.25) : (gameGlowProgress * 0.15));
+        var segGrad = targetCtx.createLinearGradient(pt1.x, pt1.y, pt0.x, pt0.y);
+        var curHue = Math.round(fTailHue * (1 - tNorm) + fHeadHue * tNorm);
+        segGrad.addColorStop(0.0, "hsla(" + curHue + ", " + p.sat + "%, " + fTailLit.toFixed(1) + "%, " + (segAlpha * 0.65).toFixed(2) + ")");
+        segGrad.addColorStop(1.0, "hsla(" + curHue + ", 98%, " + Math.min(84, fHeadLit) + "%, " + segAlpha.toFixed(2) + ")");
 
-        var fLitBoost = isAudioHot ? (liveBass * 14 + beatKickImpulse * 8) : 0;
-        var fHeadLit = Math.min(84, (tier === 2 ? 78 : (tier === 1 ? 75 : 72)) + fLitBoost + dopplerBoost * 8 + gameLitBoost);
-        var fTailLit = Math.min(72, Math.max(50, p.lit + fLitBoost * 0.4 - dopplerBoost * 4));
-        var fHeadHue = (dopplerBoost > 0.12) ? Math.round(p.hue2 * (1 - dopplerBoost * 0.5) + 198 * (dopplerBoost * 0.5)) : p.hue2;
-        var fTailHue = (dopplerBoost > 0.12) ? Math.round(p.hue * (1 - dopplerBoost * 0.4) + 22 * (dopplerBoost * 0.4)) : p.hue;
-
-        var renderAlpha = Math.min(0.92, currentAlpha * (1.0 + gameAlphaBoost) + (gameGlowProgress * 0.14));
-
-        // ── 1. Futuristic Quantum Orbital Probability Rings (Replaces heavy blurry glow) ──
-        var spinRate = 0.0032;
-        var spinAngle = now * spinRate + p.pulsePhase;
-        var orbBaseR = headR * (tier === 2 ? 2.4 : (tier === 1 ? 1.9 : 1.5));
-
-        if (renderAlpha > 0.18) {
-          targetCtx.save();
-          targetCtx.translate(focalX, 0);
-
-          if (tier === 2) {
-            // Tier 2: Dual Concentric Quantum Orbitals with Counter-Rotating Phase Node
-            targetCtx.beginPath();
-            targetCtx.arc(0, 0, orbBaseR * 0.85, 0, Math.PI * 2);
-            targetCtx.strokeStyle = "hsla(" + fHeadHue + ", 92%, 72%, " + (renderAlpha * 0.28).toFixed(2) + ")";
-            targetCtx.lineWidth = 1.0;
-            targetCtx.stroke();
-
-            // Outer Precessing Quantum Shell
-            targetCtx.beginPath();
-            targetCtx.ellipse(0, 0, orbBaseR * 1.35, orbBaseR * 0.75, spinAngle, 0, Math.PI * 2);
-            targetCtx.strokeStyle = "hsla(" + fHeadHue + ", 98%, 78%, " + (renderAlpha * 0.22).toFixed(2) + ")";
-            targetCtx.lineWidth = 0.9;
-            targetCtx.stroke();
-
-            // Orbiting Quantum Flux Node
-            var qNodeX = Math.cos(spinAngle) * orbBaseR * 1.35;
-            var qNodeY = Math.sin(spinAngle) * orbBaseR * 0.75;
-            targetCtx.beginPath();
-            targetCtx.arc(qNodeX, qNodeY, 1.2, 0, Math.PI * 2);
-            targetCtx.fillStyle = "rgba(255, 255, 255, " + (renderAlpha * 0.90).toFixed(2) + ")";
-            targetCtx.fill();
-
-          } else if (tier === 1) {
-            // Tier 1: Single Harmonic Probability Ellipse with Precession
-            targetCtx.beginPath();
-            targetCtx.ellipse(0, 0, orbBaseR * 1.15, orbBaseR * 0.75, -spinAngle * 0.85, 0, Math.PI * 2);
-            targetCtx.strokeStyle = "hsla(" + fHeadHue + ", 95%, 74%, " + (renderAlpha * 0.24).toFixed(2) + ")";
-            targetCtx.lineWidth = 0.95;
-            targetCtx.stroke();
-
-            // Orbiting Micro Phase Dot
-            var pNodeX = Math.cos(-spinAngle * 0.85) * orbBaseR * 1.15;
-            var pNodeY = Math.sin(-spinAngle * 0.85) * orbBaseR * 0.75;
-            targetCtx.beginPath();
-            targetCtx.arc(pNodeX, pNodeY, 1.0, 0, Math.PI * 2);
-            targetCtx.fillStyle = "rgba(255, 255, 255, " + (renderAlpha * 0.80).toFixed(2) + ")";
-            targetCtx.fill();
-
-          } else {
-            // Tier 0: Subtle Minimal Quantum Shell
-            targetCtx.beginPath();
-            targetCtx.arc(0, 0, orbBaseR, 0, Math.PI * 2);
-            targetCtx.strokeStyle = "hsla(" + fHeadHue + ", 90%, 70%, " + (renderAlpha * 0.16).toFixed(2) + ")";
-            targetCtx.lineWidth = 0.85;
-            targetCtx.stroke();
-          }
-
-          targetCtx.restore();
-        }
-
-        // ── 2. Sculpted Quantum Wavepacket Body (Smooth De Broglie Interference Wave) ──
         targetCtx.beginPath();
-        if (isCurved) {
-          targetCtx.moveTo(-halfL, 0);
-          targetCtx.quadraticCurveTo(0, bowOffset, halfL, 0);
-          targetCtx.lineWidth = curSize * 0.85;
-          targetCtx.lineCap = "round";
-        } else {
-          // Streamlined quantum projectile: slim de Broglie tail -> sculpted wavepacket head
-          targetCtx.moveTo(-halfL + tailR, -tailR);
-          targetCtx.lineTo(halfL - headR, -headR);
-          targetCtx.arc(halfL - headR, 0, headR, -Math.PI / 2, Math.PI / 2);
-          targetCtx.lineTo(-halfL + tailR, tailR);
-          targetCtx.arc(-halfL + tailR, 0, tailR, Math.PI / 2, 3 * Math.PI / 2);
-          targetCtx.closePath();
-        }
-
-        var fGrad = targetCtx.createLinearGradient(-halfL, 0, halfL, 0);
-        fGrad.addColorStop(0.0, "hsla(" + Math.round(fTailHue) + ",92%," + fTailLit.toFixed(1) + "%,0)");
-        fGrad.addColorStop(0.25, "hsla(" + Math.round(fTailHue) + ",94%," + fTailLit.toFixed(1) + "%," + (renderAlpha * 0.45).toFixed(2) + ")");
-        fGrad.addColorStop(0.70, "hsla(" + Math.round(fHeadHue) + ",96%," + fHeadLit.toFixed(1) + "%," + (renderAlpha * 0.85).toFixed(2) + ")");
-        fGrad.addColorStop(1.0, "hsla(" + Math.round(fHeadHue) + ",100%,94%," + (renderAlpha * 0.95).toFixed(2) + ")");
-
-        if (isCurved) {
-          targetCtx.strokeStyle = fGrad;
-          targetCtx.stroke();
-        } else {
-          targetCtx.fillStyle = fGrad;
-          targetCtx.fill();
-        }
-
-        // ── 3. High-Density Quantum Singularity Nucleus (Pinpoint Diamond Core) ──
-        targetCtx.beginPath();
-        targetCtx.arc(focalX, 0, headR * 0.48, 0, Math.PI * 2);
-        targetCtx.fillStyle = "rgba(255, 255, 255, " + (renderAlpha * 0.95).toFixed(2) + ")";
-        targetCtx.fill();
-
-        // ── 4. Axial Momentum Eigenvector (Razor-thin photonic laser line) ──
-        var laserSpan = dynamicLength * 0.65;
-        targetCtx.beginPath();
-        targetCtx.moveTo(focalX - laserSpan, 0);
-        targetCtx.lineTo(focalX + headR * 0.8, 0);
-        targetCtx.strokeStyle = "rgba(255, 255, 255, " + (renderAlpha * 0.58).toFixed(2) + ")";
-        targetCtx.lineWidth = 1.0;
+        targetCtx.moveTo(pt1.x, pt1.y);
+        targetCtx.lineTo(pt0.x, pt0.y);
+        targetCtx.strokeStyle = segGrad;
+        targetCtx.lineWidth = segW;
         targetCtx.lineCap = "round";
         targetCtx.stroke();
+      }
 
-        // ── 4. Micro-Stardust Quantum Sparks (Tier 2 Beacons Only) ──
-        if (tier === 2 && Math.random() < 0.25) {
-          if (!p.stardust) p.stardust = [];
-          if (p.stardust.length < 3) {
-            p.stardust.push({
-              x: p.x - Math.cos(currentAngle) * (halfL * 0.75) + (Math.random() - 0.5) * 1.5,
-              y: p.y - Math.sin(currentAngle) * (halfL * 0.75) + (Math.random() - 0.5) * 1.5,
-              alpha: 0.80,
-              r: 0.65 + Math.random() * 0.35,
-              hue: fHeadHue | 0
-            });
-          }
-        }
+      // ── 3. Render Radiant Leading Quantum Head (at pts[0]) ──
+      targetCtx.save();
+      targetCtx.translate(pts[0].x, pts[0].y);
+      targetCtx.rotate(p.heading);
 
-      } else if (p.isRadiant) {
-        // Radiant Background Node: Sleek Tapered Starlight Filament
-        var grad = targetCtx.createLinearGradient(-halfL, 0, halfL, 0);
-        var litBoost = isAudioHot ? (liveBass * 20 + beatKickImpulse * 12) : 0;
-        var satBoost = isAudioHot ? 98 : p.sat;
-        var headLit = Math.min(98, 75 + litBoost + dopplerBoost * 10);
-        var tailLit = Math.min(88, p.lit + litBoost * 0.6);
-        var rHeadHue = (dopplerBoost > 0.14) ? Math.round(p.hue2 * (1 - dopplerBoost * 0.45) + 196 * (dopplerBoost * 0.45)) : p.hue2;
+      // Glowing quantum head droplet
+      targetCtx.beginPath();
+      targetCtx.arc(0, 0, headR, 0, Math.PI * 2);
+      targetCtx.fillStyle = "hsla(" + Math.round(fHeadHue) + ", 98%, " + fHeadLit.toFixed(1) + "%, " + renderAlpha.toFixed(2) + ")";
+      targetCtx.fill();
 
-        grad.addColorStop(0.0, "hsla(" + Math.round(p.hue) + "," + satBoost + "%," + tailLit + "%,0)"); // Tail tip dissolves into black
-        grad.addColorStop(0.35, "hsla(" + Math.round(p.hue) + "," + satBoost + "%," + tailLit + "%," + (currentAlpha * 0.65).toFixed(2) + ")");
-        grad.addColorStop(0.85, "hsla(" + Math.round(rHeadHue) + ",98%," + headLit + "%," + Math.min(1, currentAlpha * 1.15).toFixed(2) + ")");
-        grad.addColorStop(1.0, "rgba(255,255,255," + Math.min(1, currentAlpha * 1.25).toFixed(2) + ")"); // White tip
+      // Pure white quantum singularity center
+      targetCtx.beginPath();
+      targetCtx.arc(headR * 0.25, 0, headR * 0.45, 0, Math.PI * 2);
+      targetCtx.fillStyle = "rgba(255, 255, 255, " + (renderAlpha * 0.95).toFixed(2) + ")";
+      targetCtx.fill();
 
-        targetCtx.beginPath();
-        if (isCurved) {
-          targetCtx.moveTo(-halfL, 0);
-          targetCtx.quadraticCurveTo(0, bowOffset, halfL, 0);
-          targetCtx.lineWidth = curSize;
-          targetCtx.lineCap = "round";
-          targetCtx.strokeStyle = grad;
+      // Miniature Bohr probability orbital rings for game mode
+      if (renderAsBrightest) {
+        var orbBaseR = headR * (tier === 2 ? 2.4 : (tier === 1 ? 1.9 : 1.5));
+        var spinRate = 0.0032;
+        var spinAngle = now * spinRate + p.pulsePhase;
+
+        targetCtx.save();
+        if (tier === 2) {
+          // Tier 2: Dual Concentric Quantum Orbitals with Counter-Rotating Phase Node
+          targetCtx.beginPath();
+          targetCtx.arc(0, 0, orbBaseR * 0.85, 0, Math.PI * 2);
+          targetCtx.strokeStyle = "hsla(" + fHeadHue + ", 92%, 72%, " + (renderAlpha * 0.35).toFixed(2) + ")";
+          targetCtx.lineWidth = 1.0;
+          targetCtx.stroke();
+
+          targetCtx.beginPath();
+          targetCtx.ellipse(0, 0, orbBaseR * 1.35, orbBaseR * 0.75, spinAngle, 0, Math.PI * 2);
+          targetCtx.strokeStyle = "hsla(" + fHeadHue + ", 98%, 78%, " + (renderAlpha * 0.28).toFixed(2) + ")";
+          targetCtx.lineWidth = 0.9;
+          targetCtx.stroke();
+
+          var qNodeX = Math.cos(spinAngle) * orbBaseR * 1.35;
+          var qNodeY = Math.sin(spinAngle) * orbBaseR * 0.75;
+          targetCtx.beginPath();
+          targetCtx.arc(qNodeX, qNodeY, 1.3, 0, Math.PI * 2);
+          targetCtx.fillStyle = "rgba(255, 255, 255, " + (renderAlpha * 0.95).toFixed(2) + ")";
+          targetCtx.fill();
+
+        } else if (tier === 1) {
+          targetCtx.beginPath();
+          targetCtx.ellipse(0, 0, orbBaseR * 1.15, orbBaseR * 0.75, -spinAngle * 0.85, 0, Math.PI * 2);
+          targetCtx.strokeStyle = "hsla(" + fHeadHue + ", 95%, 74%, " + (renderAlpha * 0.28).toFixed(2) + ")";
+          targetCtx.lineWidth = 0.95;
           targetCtx.stroke();
         } else {
-          targetCtx.moveTo(-halfL + tailR, -tailR);
-          targetCtx.lineTo(halfL - headR, -headR);
-          targetCtx.arc(halfL - headR, 0, headR, -Math.PI / 2, Math.PI / 2);
-          targetCtx.lineTo(-halfL + tailR, tailR);
-          targetCtx.arc(-halfL + tailR, 0, tailR, Math.PI / 2, 3 * Math.PI / 2);
-          targetCtx.closePath();
-          targetCtx.fillStyle = grad;
-          targetCtx.fill();
-        }
-
-      } else {
-        // Ambient Micro-Dash (Clean starlight streak)
-        var ambLit = (isAudioHot && (liveBass > 0.20 || beatKickImpulse > 0.20)) ? Math.min(88, p.lit + 14) : p.lit;
-        var aGrad = targetCtx.createLinearGradient(-halfL, 0, halfL, 0);
-        aGrad.addColorStop(0.0, "hsla(" + Math.round(p.hue) + "," + p.sat + "%," + ambLit + "%,0)");
-        aGrad.addColorStop(0.35, "hsla(" + Math.round(p.hue) + "," + p.sat + "%," + ambLit + "%," + (currentAlpha * 0.55).toFixed(2) + ")");
-        aGrad.addColorStop(1.0, "hsla(" + Math.round(p.hue) + "," + p.sat + "%," + Math.min(100, ambLit + 12) + "%," + currentAlpha.toFixed(2) + ")");
-
-        targetCtx.beginPath();
-        if (isCurved) {
-          targetCtx.moveTo(-halfL, 0);
-          targetCtx.quadraticCurveTo(0, bowOffset, halfL, 0);
-          targetCtx.lineWidth = curSize;
-          targetCtx.lineCap = "round";
-          targetCtx.strokeStyle = aGrad;
+          targetCtx.beginPath();
+          targetCtx.arc(0, 0, orbBaseR, 0, Math.PI * 2);
+          targetCtx.strokeStyle = "hsla(" + fHeadHue + ", 90%, 70%, " + (renderAlpha * 0.20).toFixed(2) + ")";
+          targetCtx.lineWidth = 0.85;
           targetCtx.stroke();
-        } else {
-          if (typeof targetCtx.roundRect === "function") {
-            targetCtx.roundRect(-halfL, -curSize / 2, dynamicLength, curSize, curSize / 2);
-          } else {
-            targetCtx.rect(-halfL, -curSize / 2, dynamicLength, curSize);
-          }
-          targetCtx.fillStyle = aGrad;
-          targetCtx.fill();
+        }
+        targetCtx.restore();
+      }
+
+      // Micro-Stardust Quantum Sparks (Tier 2 Beacons Only - Emitted from Tail)
+      if (tier === 2 && Math.random() < 0.25) {
+        if (!p.stardust) p.stardust = [];
+        if (p.stardust.length < 3) {
+          var tailPt = pts[K - 1];
+          p.stardust.push({
+            x: tailPt.x + (Math.random() - 0.5) * 2.0,
+            y: tailPt.y + (Math.random() - 0.5) * 2.0,
+            alpha: 0.80,
+            r: 0.65 + Math.random() * 0.35,
+            hue: fHeadHue | 0
+          });
         }
       }
 
@@ -10165,9 +10115,30 @@ try { checkUrlHashRoutine(); } catch(e){}
   var REQUIRED_CONTACT = 2.0; // 2 seconds continuous
   var STRICT_HIT_RADIUS = 14; // Strict physical contact radius (desktop: 14px, tablet: 18px, mobile: 22px)
 
-  // Exact point-to-particle physical touch detection
+  // Exact point-to-particle physical touch detection (measures against living multi-joint quantum spine)
   function getParticleTouchDistance(cx, cy, p) {
     if (!p) return 999999;
+    if (p.spine && p.spine.length > 1) {
+      var minDist = 999999;
+      for (var si = 0; si < p.spine.length - 1; si++) {
+        var p0 = p.spine[si];
+        var p1 = p.spine[si + 1];
+        var dx = p1.x - p0.x;
+        var dy = p1.y - p0.y;
+        var lenSq = dx * dx + dy * dy;
+        if (lenSq === 0) {
+          var d = Math.hypot(cx - p0.x, cy - p0.y);
+          if (d < minDist) minDist = d;
+        } else {
+          var t = Math.max(0, Math.min(1, ((cx - p0.x) * dx + (cy - p0.y) * dy) / lenSq));
+          var projX = p0.x + t * dx;
+          var projY = p0.y + t * dy;
+          var d = Math.hypot(cx - projX, cy - projY);
+          if (d < minDist) minDist = d;
+        }
+      }
+      return minDist;
+    }
     var ang = (p.currentAngle !== undefined) ? p.currentAngle : Math.atan2(p.vy, p.vx);
     var halfL = ((p.dynamicLength || 18) * 0.5);
     var headR = ((p.curSize || 3.5) * 0.52);
@@ -10801,9 +10772,10 @@ try { checkUrlHashRoutine(); } catch(e){}
       }
     }
 
-    // ── Render Cursor Crosshair Guide on Canvas for Touch Devices (Mouse uses hardware SVG cursor for 0ms latency) ──
-    if (!isWon && !isGameOver && cursor.active && hasDeliberateMove && cursor.isTouch) {
-      drawCursorGuide(cursor.x, cursor.y);
+    // ── Render Alive Quantum Atomic Cursor (Exact Replica of Uploaded Image with Precessing Rings & Radiant Colors) ──
+    if (!isWon && !isGameOver && cursor.active && hasDeliberateMove) {
+      var lockProgress = (lockedParticle && contactDuration > 0) ? (contactDuration / REQUIRED_CONTACT) : 0;
+      drawQuantumAtomicCursor(cursor.x, cursor.y, now, lockProgress);
     }
 
     // ── Render Active Explosion & Spark Fragments ──
@@ -10812,22 +10784,160 @@ try { checkUrlHashRoutine(); } catch(e){}
     }
   }
 
-  function drawCursorGuide(cx, cy) {
+  function drawQuantumAtomicCursor(cx, cy, now, progress) {
     ctx.save();
-    ctx.strokeStyle = "#38bdf8";
-    ctx.shadowColor = "rgba(56, 189, 248, 0.65)";
-    ctx.shadowBlur = 6;
-    ctx.lineWidth = 1.5;
+    ctx.translate(cx, cy);
+
+    var t = now * 0.0016;
+    var rotBase = now * 0.0004;
+    var colorShift = (now * 0.04) % 360;
+
+    // Contact resonance: when locking onto a particle, cursor pulses with excitation
+    var exc = (progress > 0) ? (progress * 0.35) : 0;
+    var spinMult = 1.0 + exc * 2.5;
+
+    // ── 1. Diffracted Horizontal & Diagonal Photonic Lens Flares ──
+    var flareLen = 44 + exc * 12;
+    var flareW = 2.8 + exc * 1.0;
+
+    // Horizontal primary flare beam (cyan to purple to violet)
+    var hGrad = ctx.createLinearGradient(-flareLen, 0, flareLen, 0);
+    hGrad.addColorStop(0.0, "rgba(168, 85, 247, 0)");
+    hGrad.addColorStop(0.2, "rgba(192, 132, 252, 0.40)");
+    hGrad.addColorStop(0.38, "rgba(56, 189, 248, 0.75)");
+    hGrad.addColorStop(0.5, "rgba(255, 255, 255, 0.95)");
+    hGrad.addColorStop(0.62, "rgba(56, 189, 248, 0.75)");
+    hGrad.addColorStop(0.8, "rgba(192, 132, 252, 0.40)");
+    hGrad.addColorStop(1.0, "rgba(168, 85, 247, 0)");
+
+    ctx.fillStyle = hGrad;
     ctx.beginPath();
-    ctx.arc(cx, cy, 6, 0, Math.PI * 2);
+    ctx.moveTo(-flareLen, 0);
+    ctx.lineTo(0, -flareW);
+    ctx.lineTo(flareLen, 0);
+    ctx.lineTo(0, flareW);
+    ctx.closePath();
+    ctx.fill();
+
+    // Diagonal flares (golden amber along 60 deg and 120 deg axes)
+    for (var d = 0; d < 2; d++) {
+      var dAngle = d === 0 ? (Math.PI / 3) : (-Math.PI / 3);
+      ctx.save();
+      ctx.rotate(dAngle);
+      var dGrad = ctx.createLinearGradient(-flareLen * 0.75, 0, flareLen * 0.75, 0);
+      dGrad.addColorStop(0.0, "rgba(245, 158, 11, 0)");
+      dGrad.addColorStop(0.3, "rgba(251, 191, 36, 0.40)");
+      dGrad.addColorStop(0.5, "rgba(255, 255, 255, 0.85)");
+      dGrad.addColorStop(0.7, "rgba(251, 191, 36, 0.40)");
+      dGrad.addColorStop(1.0, "rgba(245, 158, 11, 0)");
+      ctx.fillStyle = dGrad;
+      ctx.beginPath();
+      ctx.moveTo(-flareLen * 0.75, 0);
+      ctx.lineTo(0, -1.8);
+      ctx.lineTo(flareLen * 0.75, 0);
+      ctx.lineTo(0, 1.8);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // ── 2. Central Quantum Nucleus (Sphere with deep iridescent shading) ──
+    var rCore = 14.5 + exc * 2.0;
+
+    // Outer ambient core halo (controlled, crisp, not too much glow!)
+    var haloGrad = ctx.createRadialGradient(0, 0, rCore * 0.7, 0, 0, rCore * 1.55);
+    haloGrad.addColorStop(0.0, "rgba(168, 85, 247, 0.40)");
+    haloGrad.addColorStop(0.5, "rgba(56, 189, 248, 0.20)");
+    haloGrad.addColorStop(1.0, "rgba(0, 0, 0, 0)");
+    ctx.fillStyle = haloGrad;
+    ctx.beginPath();
+    ctx.arc(0, 0, rCore * 1.55, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 3D Spherical plasma body
+    var sphereGrad = ctx.createRadialGradient(-2, -3, 1, 0, 0, rCore);
+    sphereGrad.addColorStop(0.0, "rgba(233, 213, 255, 0.98)");
+    sphereGrad.addColorStop(0.25, "rgba(168, 85, 247, 0.95)");
+    sphereGrad.addColorStop(0.55, "rgba(67, 20, 103, 0.95)");
+    var hueRim1 = (colorShift + 30) % 360;
+    var hueRim2 = (colorShift + 180) % 360;
+    sphereGrad.addColorStop(0.80, "hsla(" + hueRim1 + ", 90%, 55%, 0.85)");
+    sphereGrad.addColorStop(0.95, "hsla(" + hueRim2 + ", 95%, 65%, 0.92)");
+    sphereGrad.addColorStop(1.0, progress > 0.8 ? "rgba(255, 215, 0, 0.98)" : "rgba(254, 240, 138, 0.95)");
+
+    ctx.fillStyle = sphereGrad;
+    ctx.beginPath();
+    ctx.arc(0, 0, rCore, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.65)";
+    ctx.lineWidth = 0.9;
     ctx.stroke();
 
+    // ── 3. Three 3D Precessing Orbital Rings with Radiant Shifting Colors ──
+    var majorA = 26 + exc * 4;
+    var minorB = 9.8 + exc * 1.5;
+
+    var rings = [
+      { baseAngle: 0, phaseOffset: 0, hueBase: colorShift },
+      { baseAngle: Math.PI / 3, phaseOffset: 2.094, hueBase: (colorShift + 120) % 360 },
+      { baseAngle: 2 * Math.PI / 3, phaseOffset: 4.188, hueBase: (colorShift + 240) % 360 }
+    ];
+
+    for (var ri = 0; ri < 3; ri++) {
+      var ring = rings[ri];
+      ctx.save();
+      var wobble = Math.sin(t * 1.4 * spinMult + ring.phaseOffset) * 0.08;
+      var curAngle = ring.baseAngle + wobble + rotBase * spinMult;
+      ctx.rotate(curAngle);
+
+      var curB = minorB * (1.0 + 0.12 * Math.cos(t * 1.6 * spinMult + ring.phaseOffset));
+
+      var rGrad = ctx.createLinearGradient(-majorA, 0, majorA, 0);
+      var h1 = Math.round(ring.hueBase);
+      var h2 = Math.round((ring.hueBase + 60) % 360);
+      rGrad.addColorStop(0.0, "hsla(" + h1 + ", 95%, 68%, 0.95)");
+      rGrad.addColorStop(0.3, "rgba(255, 255, 255, 0.95)");
+      rGrad.addColorStop(0.5, "hsla(" + h2 + ", 100%, 72%, 0.90)");
+      rGrad.addColorStop(0.7, "rgba(255, 255, 255, 0.95)");
+      rGrad.addColorStop(1.0, "hsla(" + h1 + ", 95%, 68%, 0.95)");
+
+      ctx.strokeStyle = rGrad;
+      ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, majorA, curB, 0, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Circulating electron quantum wavepacket spark
+      var eSpeed = 0.0032 * spinMult;
+      var u = (now * eSpeed + ring.phaseOffset) % (Math.PI * 2);
+      var ex = majorA * Math.cos(u);
+      var ey = curB * Math.sin(u);
+
+      ctx.beginPath();
+      ctx.arc(ex, ey, 2.0, 0, Math.PI * 2);
+      ctx.fillStyle = "#ffffff";
+      ctx.shadowColor = "hsla(" + h1 + ", 100%, 70%, 1.0)";
+      ctx.shadowBlur = 6;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      // Apex flares at ring tips
+      ctx.beginPath();
+      ctx.arc(majorA, 0, 1.4, 0, Math.PI * 2);
+      ctx.arc(-majorA, 0, 1.4, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(255, 255, 255, 0.90)";
+      ctx.fill();
+
+      ctx.restore();
+    }
+
+    // ── 4. Precision Micro-Singularity Center Reticle ──
     ctx.beginPath();
-    ctx.moveTo(cx - 12, cy); ctx.lineTo(cx - 7, cy);
-    ctx.moveTo(cx + 7, cy); ctx.lineTo(cx + 12, cy);
-    ctx.moveTo(cx, cy - 12); ctx.lineTo(cx, cy - 7);
-    ctx.moveTo(cx, cy + 7); ctx.lineTo(cx, cy + 12);
-    ctx.stroke();
+    ctx.arc(0, 0, 1.5, 0, Math.PI * 2);
+    ctx.fillStyle = "#ffffff";
+    ctx.fill();
+
     ctx.restore();
   }
 
