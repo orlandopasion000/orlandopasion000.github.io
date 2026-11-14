@@ -9830,7 +9830,10 @@ try { checkUrlHashRoutine(); } catch(e){}
 
     // 1. Instant Universe Transition (1.35s cinematic ease-in-out S-curve fade of surroundings)
     var onb = document.getElementById("onboardingModal");
-    if (onb) onb.classList.remove("open");
+    if (onb) {
+      onb.classList.remove("open");
+      onb.style.display = "none";
+    }
     document.body.classList.add("universe-game-active");
     overlay.setAttribute("aria-hidden", "false");
     victoryModal.style.display = "none";
@@ -9876,6 +9879,8 @@ try { checkUrlHashRoutine(); } catch(e){}
     }
 
     // 8. Seamless Return Experience (1.35s cinematic ease-in-out S-curve emergence)
+    var onb = document.getElementById("onboardingModal");
+    if (onb) onb.style.display = "";
     document.body.classList.remove("universe-game-active");
     overlay.setAttribute("aria-hidden", "true");
     victoryModal.style.display = "none";
