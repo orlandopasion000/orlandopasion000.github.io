@@ -2239,32 +2239,35 @@ body.universe-game-active .qgame-left-hud {
   transition: width 0.1s linear;
 }
 
-/* Center Top: Mission Telemetry Pill (Smooth Staggered Entrance) */
+/* Center-Left Space: Mission Telemetry Pill (Balanced Staggered Entrance) */
 .qgame-mission-hud {
+  position: absolute;
+  left: 36%;
+  top: 19px;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 18px;
+  padding: 7px 16px;
   background: rgba(14, 20, 36, 0.28);
   border: 1px solid rgba(56, 189, 248, 0.32);
   border-radius: 9999px;
   color: rgba(241, 245, 249, 0.90);
   font-family: 'Lexend', var(--sans);
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 600;
   letter-spacing: 0.05em;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.30), 0 0 14px rgba(56, 189, 248, 0.12);
   pointer-events: auto;
-  margin-top: 3px;
   opacity: 0;
-  transform: translateY(-10px);
+  transform: translateX(-50%) translateY(-10px);
   transition: opacity 1.1s cubic-bezier(0.4, 0, 0.2, 1) 0.35s, transform 1.1s cubic-bezier(0.4, 0, 0.2, 1) 0.35s;
+  white-space: nowrap;
 }
 body.universe-game-active .qgame-mission-hud {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateX(-50%) translateY(0);
 }
 .qgame-mission-icon {
   color: #ffd700;
@@ -2283,7 +2286,7 @@ body.universe-game-active .qgame-mission-hud {
   justify-content: flex-end;
   gap: 12px;
   pointer-events: auto;
-  margin: 0;
+  margin: 3px 0 0 0;
   padding: 0;
 }
 
@@ -6406,7 +6409,7 @@ document.addEventListener("webkitfullscreenchange",function(){if(!document.webki
   }
 
   function syncAllButtons() {
-    var isFs = isFullscreen();
+    var isFs = (window.orlandoFullscreen && typeof window.orlandoFullscreen.isFullscreen === "function") ? window.orlandoFullscreen.isFullscreen() : isFullscreen();
     updateBtn(btnNormal, isFs);
     updateBtn(btnGame, isFs);
   }
