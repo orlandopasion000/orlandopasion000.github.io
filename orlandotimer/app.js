@@ -577,11 +577,25 @@
   const holoVaultSubtitle = document.getElementById('holoVaultSubtitle');
   const holoStatusText = document.getElementById('holoStatusText');
   const filterPills = document.querySelectorAll('.holo-filter-pill');
+  const btnVaultSwitchTheme = document.getElementById('btnVaultSwitchTheme');
+  const btnVaultSwitchClock = document.getElementById('btnVaultSwitchClock');
+  const btnVaultResetDefault = document.getElementById('btnVaultResetDefault');
 
   function openHoloVault(target) {
+    // Before switching target in-place, ensure any uncommitted hover preview is reverted to saved state
+    document.body.setAttribute('data-app-theme', currentAppTheme);
+    document.body.setAttribute('data-clock-style', currentClockStyle);
+
     activeVaultTarget = target;
     savedActiveTheme = currentAppTheme;
     savedActiveClock = currentClockStyle;
+
+    if (btnVaultSwitchTheme && btnVaultSwitchClock) {
+      btnVaultSwitchTheme.classList.toggle('active', target === 'theme');
+      btnVaultSwitchTheme.setAttribute('aria-selected', target === 'theme' ? 'true' : 'false');
+      btnVaultSwitchClock.classList.toggle('active', target === 'clock');
+      btnVaultSwitchClock.setAttribute('aria-selected', target === 'clock' ? 'true' : 'false');
+    }
 
     if (target === 'theme') {
       if (holoVaultKicker) holoVaultKicker.textContent = 'GLOBAL APPLICATION ENVIRONMENT · LIVE HOLO-SCRUB';
@@ -597,13 +611,20 @@
       holoStatusText.textContent = `Awaiting selection · Active: ${target === 'theme' ? THEME_NAMES[currentAppTheme] : THEME_NAMES[currentClockStyle]}`;
     }
 
-    renderHoloCards(currentFilter);
+    renderHoloCards(currentFilter, holoSearchQuery);
 
     if (holoVaultModal) {
       holoVaultModal.classList.add('open');
       holoVaultModal.setAttribute('aria-hidden', 'false');
     }
     AudioHUD.tick(1200);
+  }
+
+  if (btnVaultSwitchTheme) {
+    btnVaultSwitchTheme.addEventListener('click', () => openHoloVault('theme'));
+  }
+  if (btnVaultSwitchClock) {
+    btnVaultSwitchClock.addEventListener('click', () => openHoloVault('clock'));
   }
 
   function closeHoloVault(commit = false) {
@@ -673,7 +694,10 @@
             <span class="card-orb"></span>
             <span class="card-meta-name">${data.name}</span>
           </div>
-          <span class="card-active-led">Active</span>
+          <div class="card-right-badges">
+            <span class="card-mini-digits" title="Digit Finish Preview">25</span>
+            <span class="card-active-led">Active</span>
+          </div>
         </div>
         <p class="card-meta-desc">${data.desc}</p>
       `;
@@ -738,6 +762,21 @@
       holoSearchQuery = '';
       btnClearSearch.style.display = 'none';
       renderHoloCards(currentFilter, '');
+    });
+  }
+
+  // Pure Black Default Reset
+  if (btnVaultResetDefault) {
+    btnVaultResetDefault.addEventListener('click', () => {
+      applyAppTheme('pure-black');
+      applyClockStyle('pure-black');
+      savedActiveTheme = 'pure-black';
+      savedActiveClock = 'pure-black';
+      AudioHUD.confirm();
+      if (holoStatusText) {
+        holoStatusText.textContent = '◐ Restored Pure Black Default (App Theme + Digit Style)';
+      }
+      renderHoloCards(currentFilter, holoSearchQuery);
     });
   }
 

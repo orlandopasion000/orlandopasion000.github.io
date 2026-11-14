@@ -40,7 +40,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&family=Orbitron:wght@600;700;800;900&family=Outfit:wght@600;700;800;900&family=Space+Grotesk:wght@600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
   <!-- Relative Stylesheet (with cache-bust versioning) -->
-  <link rel="stylesheet" href="style.css?v=27.0">
+  <link rel="stylesheet" href="style.css?v=28.0">
 </head>
 <body data-app-theme="pure-black" data-clock-style="pure-black">
   <!-- Accessibility Live Region for Screen Readers -->
@@ -958,13 +958,19 @@
           <h2 class="holo-vault-title" id="holoVaultTitle">HOLOGRAPHIC THEME VAULT</h2>
           <p class="holo-vault-subtitle" id="holoVaultSubtitle">Hover over any luxury card for instant live preview. Click to lock in selection.</p>
         </div>
-        <button type="button" class="holo-vault-close-btn" id="btnHoloVaultClose" aria-label="Close Vault (Esc)">
-          <svg class="cyber-close-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
-            <line x1="18" y1="6" x2="6" y2="18"/>
-            <line x1="6" y1="6" x2="18" y2="18"/>
-          </svg>
-          <span class="esc-badge">ESC</span>
-        </button>
+        <div class="holo-header-actions">
+          <div class="holo-mode-switcher" role="tablist" aria-label="Vault Target Switcher">
+            <button type="button" class="holo-switch-tab active" id="btnVaultSwitchTheme" data-vault-target="theme" role="tab" aria-selected="true">App Theme</button>
+            <button type="button" class="holo-switch-tab" id="btnVaultSwitchClock" data-vault-target="clock" role="tab" aria-selected="false">Digit Style</button>
+          </div>
+          <button type="button" class="holo-vault-close-btn" id="btnHoloVaultClose" aria-label="Close Vault (Esc)">
+            <svg class="cyber-close-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+            <span class="esc-badge">ESC</span>
+          </button>
+        </div>
       </div>
 
       <!-- Search & Quantum Shuffle Toolbar with Futuristic SVGs -->
@@ -986,28 +992,33 @@
             <svg class="cyber-mini-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </button>
         </div>
-        <button type="button" class="btn-quantum-shuffle" id="btnQuantumShuffle" title="Harmonize random Theme + Digit Style">
-          <svg class="cyber-shuffle-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <rect x="3" y="3" width="18" height="18" rx="4"/>
-            <circle cx="8" cy="8" r="1.5" fill="currentColor"/>
-            <circle cx="16" cy="16" r="1.5" fill="currentColor"/>
-            <circle cx="12" cy="12" r="2" fill="currentColor"/>
-            <circle cx="16" cy="8" r="1.5" fill="currentColor"/>
-            <circle cx="8" cy="16" r="1.5" fill="currentColor"/>
-          </svg>
-          <span>Quantum Shuffle</span>
-        </button>
+        <div class="holo-toolbar-btns">
+          <button type="button" class="btn-vault-reset" id="btnVaultResetDefault" title="Restore Pure Black OLED Default">
+            <span>Pure Black Default</span>
+          </button>
+          <button type="button" class="btn-quantum-shuffle" id="btnQuantumShuffle" title="Harmonize random Theme + Digit Style">
+            <svg class="cyber-shuffle-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="3" y="3" width="18" height="18" rx="4"/>
+              <circle cx="8" cy="8" r="1.5" fill="currentColor"/>
+              <circle cx="16" cy="16" r="1.5" fill="currentColor"/>
+              <circle cx="12" cy="12" r="2" fill="currentColor"/>
+              <circle cx="16" cy="8" r="1.5" fill="currentColor"/>
+              <circle cx="8" cy="16" r="1.5" fill="currentColor"/>
+            </svg>
+            <span>Quantum Shuffle</span>
+          </button>
+        </div>
       </div>
 
-      <!-- Category Filter Pills (7 Curated Categories for 30 Themes) -->
+      <!-- Category Filter Pills (7 Curated Categories for 30 Themes — Single-Row Fit) -->
       <div class="holo-filter-bar">
         <button type="button" class="holo-filter-pill active" data-category="all">All (30)</button>
-        <button type="button" class="holo-filter-pill" data-category="metals">Precious Metals & Luxury (7)</button>
-        <button type="button" class="holo-filter-pill" data-category="cyber">Cyberpunk & Synthwave (6)</button>
-        <button type="button" class="holo-filter-pill" data-category="chrono">Horology & Grand Prix (4)</button>
-        <button type="button" class="holo-filter-pill" data-category="cosmic">Deep Space & Cosmic (5)</button>
-        <button type="button" class="holo-filter-pill" data-category="minimal">Minimalist & Monolith (3)</button>
-        <button type="button" class="holo-filter-pill" data-category="nature">Organic & Nature (5)</button>
+        <button type="button" class="holo-filter-pill" data-category="metals">Precious Metals (7)</button>
+        <button type="button" class="holo-filter-pill" data-category="cyber">Cyberpunk (6)</button>
+        <button type="button" class="holo-filter-pill" data-category="chrono">Horology &amp; Racing (4)</button>
+        <button type="button" class="holo-filter-pill" data-category="cosmic">Deep Space (5)</button>
+        <button type="button" class="holo-filter-pill" data-category="minimal">Minimalist (3)</button>
+        <button type="button" class="holo-filter-pill" data-category="nature">Nature &amp; Organic (5)</button>
       </div>
 
       <!-- Holographic Grid of 17 Bespoke Cards -->
@@ -1098,7 +1109,7 @@
   <audio id="alarmAudioElement" preload="auto" src="sounds/piano.mp3"></audio>
 
   <!-- Relative JavaScript (with cache-bust versioning) -->
-  <script src="app.js?v=27.0"></script>
+  <script src="app.js?v=28.0"></script>
 
 </body>
 </html>
