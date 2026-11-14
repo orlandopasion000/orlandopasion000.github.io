@@ -1909,6 +1909,12 @@ body.universe-game-active main {
   transition: opacity 1.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
+body.universe-game-active .modal-wrap:not(#qGameVictoryModal) {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
 /* Existing particles remain 100% visible, fully illuminated and razor sharp */
 body.universe-game-active .antigravity-fx-canvas,
 body.universe-game-active .antigravity-front-canvas {
@@ -7588,6 +7594,7 @@ applyThemeMode(currentThemeMode);
    FIRST-RUN ONBOARDING TOUR
    ══════════════════════════════════════════════════════════════ */
 function openOnboardingModal() {
+  if (document.body.classList.contains("universe-game-active")) return;
   var m = $("onboardingModal");
   if (m) m.classList.add("open");
 }
@@ -9135,6 +9142,12 @@ try { checkUrlHashRoutine(); } catch(e){}
     },
     getParticles: function() {
       return particles;
+    },
+    getGameGlowProgress: function() {
+      return gameGlowProgress;
+    },
+    setGameGlowProgress: function(v) {
+      gameGlowProgress = Math.max(0, Math.min(1, v));
     },
     setGameMode: function(active) {
       isGameMode = !!active;
