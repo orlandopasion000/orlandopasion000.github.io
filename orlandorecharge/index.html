@@ -9183,7 +9183,9 @@ try { checkUrlHashRoutine(); } catch(e){}
         if (isGameMode) {
           if (dist < INFLUENCE_RADIUS) {
             var norm = Math.max(0, 1 - dist / INFLUENCE_RADIUS);
-            var evadeForce = Math.pow(norm, 1.4) * 3.8;
+            var isMouseStationary = (now - mouse.lastActiveTime > 200);
+            var evadeMultiplier = isMouseStationary ? 2.2 : 1.0;
+            var evadeForce = Math.pow(norm, 1.4) * 3.8 * evadeMultiplier;
             var angle = Math.atan2(dy, dx);
             var tanX = -Math.sin(angle);
             var tanY = Math.cos(angle);
@@ -9454,49 +9456,89 @@ try { checkUrlHashRoutine(); } catch(e){}
       var focalX = halfL - headR;
 
       if (renderAsBrightest) {
-        // ── FOREGROUND & GAME RADIANT DANCER: HAUTE HORLOGERIE PHOTONIC COMET ──
+        // ── REFINED QUANTUM WAVE-PARTICLE (Less Glow, Crisp Futuristic Orbital Mechanics) ──
         var tier = p.lumiTier || 0;
-        var gameLitBoost = (tier === 2) ? (gameGlowProgress * 30) : ((tier === 1) ? (gameGlowProgress * 22) : (gameGlowProgress * 15));
-        var gameAlphaBoost = (tier === 2) ? (gameGlowProgress * 0.65) : ((tier === 1) ? (gameGlowProgress * 0.48) : (gameGlowProgress * 0.32));
+        // Refined lightness: keeps rich, deep quantum colors without blinding white blowout
+        var gameLitBoost = (tier === 2) ? (gameGlowProgress * 6) : ((tier === 1) ? (gameGlowProgress * 4) : (gameGlowProgress * 2));
+        var gameAlphaBoost = (tier === 2) ? (gameGlowProgress * 0.35) : ((tier === 1) ? (gameGlowProgress * 0.25) : (gameGlowProgress * 0.15));
 
-        var fLitBoost = isAudioHot ? (liveBass * 22 + beatKickImpulse * 14) : 0;
-        var fHeadLit = Math.min(100, (tier === 2 ? 88 : (tier === 1 ? 84 : 80)) + fLitBoost + dopplerBoost * 12 + gameLitBoost);
-        var fTailLit = Math.min(96, Math.max(58, p.lit + fLitBoost * 0.6 - dopplerBoost * 6 + gameLitBoost * 0.85));
+        var fLitBoost = isAudioHot ? (liveBass * 14 + beatKickImpulse * 8) : 0;
+        var fHeadLit = Math.min(84, (tier === 2 ? 78 : (tier === 1 ? 75 : 72)) + fLitBoost + dopplerBoost * 8 + gameLitBoost);
+        var fTailLit = Math.min(72, Math.max(50, p.lit + fLitBoost * 0.4 - dopplerBoost * 4));
         var fHeadHue = (dopplerBoost > 0.12) ? Math.round(p.hue2 * (1 - dopplerBoost * 0.5) + 198 * (dopplerBoost * 0.5)) : p.hue2;
         var fTailHue = (dopplerBoost > 0.12) ? Math.round(p.hue * (1 - dopplerBoost * 0.4) + 22 * (dopplerBoost * 0.4)) : p.hue;
 
-        var renderAlpha = Math.min(1.0, currentAlpha * (1.0 + gameAlphaBoost) + (gameGlowProgress * 0.28));
+        var renderAlpha = Math.min(0.92, currentAlpha * (1.0 + gameAlphaBoost) + (gameGlowProgress * 0.14));
 
-        // ── 1. Anamorphic Optical Laser Envelope & Multi-Stage Radiant Aura ──
-        // Only Tier 2 (3x) and Tier 1 (2x) allocate auras; baseline particles remain crisp and sleek
-        var auraRadius = curSize * (tier === 2 ? 7.5 : (tier === 1 ? 5.8 : 4.2));
-        var auraAlphaBase = renderAlpha * (tier === 2 ? 0.46 : (tier === 1 ? 0.34 : (gameGlowProgress * 0.24)));
+        // ── 1. Futuristic Quantum Orbital Probability Rings (Replaces heavy blurry glow) ──
+        var spinRate = 0.0032;
+        var spinAngle = now * spinRate + p.pulsePhase;
+        var orbBaseR = headR * (tier === 2 ? 2.4 : (tier === 1 ? 1.9 : 1.5));
 
-        if (auraAlphaBase > 0.05 && tier >= 1) {
+        if (renderAlpha > 0.18) {
           targetCtx.save();
           targetCtx.translate(focalX, 0);
-          targetCtx.scale(1.75, 0.82); // Anamorphic 2:1 horizontal stretch along flight vector
-          var auraHueInt = fHeadHue | 0;
-          var auraGrad = targetCtx.createRadialGradient(0, 0, 0, 0, 0, auraRadius);
-          auraGrad.addColorStop(0.0, "rgba(255, 255, 255, " + (auraAlphaBase * 0.90).toFixed(2) + ")");
-          auraGrad.addColorStop(0.35, "hsla(" + auraHueInt + ", 100%, 75%, " + (auraAlphaBase * 0.40).toFixed(2) + ")");
-          auraGrad.addColorStop(1.0, "hsla(" + auraHueInt + ", 100%, 50%, 0)"); // 100% transparent at perimeter!
-          targetCtx.fillStyle = auraGrad;
-          targetCtx.beginPath();
-          targetCtx.arc(0, 0, auraRadius, 0, Math.PI * 2);
-          targetCtx.fill();
+
+          if (tier === 2) {
+            // Tier 2: Dual Concentric Quantum Orbitals with Counter-Rotating Phase Node
+            targetCtx.beginPath();
+            targetCtx.arc(0, 0, orbBaseR * 0.85, 0, Math.PI * 2);
+            targetCtx.strokeStyle = "hsla(" + fHeadHue + ", 92%, 72%, " + (renderAlpha * 0.28).toFixed(2) + ")";
+            targetCtx.lineWidth = 1.0;
+            targetCtx.stroke();
+
+            // Outer Precessing Quantum Shell
+            targetCtx.beginPath();
+            targetCtx.ellipse(0, 0, orbBaseR * 1.35, orbBaseR * 0.75, spinAngle, 0, Math.PI * 2);
+            targetCtx.strokeStyle = "hsla(" + fHeadHue + ", 98%, 78%, " + (renderAlpha * 0.22).toFixed(2) + ")";
+            targetCtx.lineWidth = 0.9;
+            targetCtx.stroke();
+
+            // Orbiting Quantum Flux Node
+            var qNodeX = Math.cos(spinAngle) * orbBaseR * 1.35;
+            var qNodeY = Math.sin(spinAngle) * orbBaseR * 0.75;
+            targetCtx.beginPath();
+            targetCtx.arc(qNodeX, qNodeY, 1.2, 0, Math.PI * 2);
+            targetCtx.fillStyle = "rgba(255, 255, 255, " + (renderAlpha * 0.90).toFixed(2) + ")";
+            targetCtx.fill();
+
+          } else if (tier === 1) {
+            // Tier 1: Single Harmonic Probability Ellipse with Precession
+            targetCtx.beginPath();
+            targetCtx.ellipse(0, 0, orbBaseR * 1.15, orbBaseR * 0.75, -spinAngle * 0.85, 0, Math.PI * 2);
+            targetCtx.strokeStyle = "hsla(" + fHeadHue + ", 95%, 74%, " + (renderAlpha * 0.24).toFixed(2) + ")";
+            targetCtx.lineWidth = 0.95;
+            targetCtx.stroke();
+
+            // Orbiting Micro Phase Dot
+            var pNodeX = Math.cos(-spinAngle * 0.85) * orbBaseR * 1.15;
+            var pNodeY = Math.sin(-spinAngle * 0.85) * orbBaseR * 0.75;
+            targetCtx.beginPath();
+            targetCtx.arc(pNodeX, pNodeY, 1.0, 0, Math.PI * 2);
+            targetCtx.fillStyle = "rgba(255, 255, 255, " + (renderAlpha * 0.80).toFixed(2) + ")";
+            targetCtx.fill();
+
+          } else {
+            // Tier 0: Subtle Minimal Quantum Shell
+            targetCtx.beginPath();
+            targetCtx.arc(0, 0, orbBaseR, 0, Math.PI * 2);
+            targetCtx.strokeStyle = "hsla(" + fHeadHue + ", 90%, 70%, " + (renderAlpha * 0.16).toFixed(2) + ")";
+            targetCtx.lineWidth = 0.85;
+            targetCtx.stroke();
+          }
+
           targetCtx.restore();
         }
 
-        // ── 2. Streamlined Aerodynamic Tapered Photonic Needle Body (Seamless Single Form) ──
+        // ── 2. Sculpted Quantum Wavepacket Body (Smooth De Broglie Interference Wave) ──
         targetCtx.beginPath();
         if (isCurved) {
           targetCtx.moveTo(-halfL, 0);
           targetCtx.quadraticCurveTo(0, bowOffset, halfL, 0);
-          targetCtx.lineWidth = curSize;
+          targetCtx.lineWidth = curSize * 0.85;
           targetCtx.lineCap = "round";
         } else {
-          // Tapered aerodynamic projectile: slim needle tail -> sculpted luminous head
+          // Streamlined quantum projectile: slim de Broglie tail -> sculpted wavepacket head
           targetCtx.moveTo(-halfL + tailR, -tailR);
           targetCtx.lineTo(halfL - headR, -headR);
           targetCtx.arc(halfL - headR, 0, headR, -Math.PI / 2, Math.PI / 2);
@@ -9506,11 +9548,10 @@ try { checkUrlHashRoutine(); } catch(e){}
         }
 
         var fGrad = targetCtx.createLinearGradient(-halfL, 0, halfL, 0);
-        fGrad.addColorStop(0.0, "hsla(" + Math.round(fTailHue) + ",95%," + fTailLit.toFixed(1) + "%,0)"); // Tail tip seamlessly dissolves into black
-        fGrad.addColorStop(0.18, "hsla(" + Math.round(fTailHue) + ",98%," + fTailLit.toFixed(1) + "%," + (renderAlpha * 0.55).toFixed(2) + ")");
-        fGrad.addColorStop(0.65, "hsla(" + Math.round(fHeadHue) + ",100%," + fHeadLit.toFixed(1) + "%," + (renderAlpha * 0.92).toFixed(2) + ")");
-        fGrad.addColorStop(0.90, "hsla(" + Math.round(fHeadHue) + ",100%,96%," + (renderAlpha * 0.99).toFixed(2) + ")");
-        fGrad.addColorStop(1.0, "rgba(255,255,255," + (renderAlpha * 1.0).toFixed(2) + ")"); // Pure diamond white-hot crest
+        fGrad.addColorStop(0.0, "hsla(" + Math.round(fTailHue) + ",92%," + fTailLit.toFixed(1) + "%,0)");
+        fGrad.addColorStop(0.25, "hsla(" + Math.round(fTailHue) + ",94%," + fTailLit.toFixed(1) + "%," + (renderAlpha * 0.45).toFixed(2) + ")");
+        fGrad.addColorStop(0.70, "hsla(" + Math.round(fHeadHue) + ",96%," + fHeadLit.toFixed(1) + "%," + (renderAlpha * 0.85).toFixed(2) + ")");
+        fGrad.addColorStop(1.0, "hsla(" + Math.round(fHeadHue) + ",100%,94%," + (renderAlpha * 0.95).toFixed(2) + ")");
 
         if (isCurved) {
           targetCtx.strokeStyle = fGrad;
@@ -9520,43 +9561,21 @@ try { checkUrlHashRoutine(); } catch(e){}
           targetCtx.fill();
         }
 
-        // ── 3. Haute Horlogerie Diamond Anamorphic Star Glint (✦) for Tier 2 and Tier 1 in Game Mode ──
-        var showStarGlint = (tier === 2 && renderAlpha > 0.25) || (tier === 1 && gameGlowProgress > 0.20 && renderAlpha > 0.35);
-        if (showStarGlint) {
-          // 1. Axial Laser Core Streak (razor-thin horizontal photonic filament - zero gradient allocation)
-          var laserSpan = dynamicLength * (tier === 2 ? 0.95 : 0.80);
-          var laserAlpha = renderAlpha * (tier === 2 ? 0.96 : 0.82);
-          targetCtx.beginPath();
-          targetCtx.moveTo(focalX - laserSpan * 0.55, 0);
-          targetCtx.lineTo(focalX + laserSpan * 0.45, 0);
-          targetCtx.strokeStyle = "rgba(255, 255, 255, " + laserAlpha.toFixed(2) + ")";
-          targetCtx.lineWidth = tier === 2 ? 1.4 : 1.1;
-          targetCtx.lineCap = "round";
-          targetCtx.stroke();
+        // ── 3. High-Density Quantum Singularity Nucleus (Pinpoint Diamond Core) ──
+        targetCtx.beginPath();
+        targetCtx.arc(focalX, 0, headR * 0.48, 0, Math.PI * 2);
+        targetCtx.fillStyle = "rgba(255, 255, 255, " + (renderAlpha * 0.95).toFixed(2) + ")";
+        targetCtx.fill();
 
-          // 2. Transverse Micro-Diffraction Spike (Swiss Diamond Cross-Glint)
-          var spikeSpan = curSize * (tier === 2 ? 3.8 : 2.6);
-          var spikeAlpha = renderAlpha * (tier === 2 ? 0.88 : 0.72);
-          targetCtx.beginPath();
-          targetCtx.moveTo(focalX, -spikeSpan * 0.75);
-          targetCtx.lineTo(focalX, spikeSpan * 0.75);
-          targetCtx.strokeStyle = "rgba(255, 255, 255, " + (spikeAlpha * 0.85).toFixed(2) + ")";
-          targetCtx.lineWidth = tier === 2 ? 1.1 : 0.9;
-          targetCtx.stroke();
-
-          // 3. For Tier 2 (3x Supernovas): 8-Facet Gemstone Micro-Diagonals
-          if (tier === 2) {
-            var diagSpan = spikeSpan * 0.38;
-            targetCtx.beginPath();
-            targetCtx.moveTo(focalX - diagSpan, -diagSpan);
-            targetCtx.lineTo(focalX + diagSpan, diagSpan);
-            targetCtx.moveTo(focalX - diagSpan, diagSpan);
-            targetCtx.lineTo(focalX + diagSpan, -diagSpan);
-            targetCtx.strokeStyle = "rgba(255, 255, 255, " + (spikeAlpha * 0.55).toFixed(2) + ")";
-            targetCtx.lineWidth = 0.8;
-            targetCtx.stroke();
-          }
-        }
+        // ── 4. Axial Momentum Eigenvector (Razor-thin photonic laser line) ──
+        var laserSpan = dynamicLength * 0.65;
+        targetCtx.beginPath();
+        targetCtx.moveTo(focalX - laserSpan, 0);
+        targetCtx.lineTo(focalX + headR * 0.8, 0);
+        targetCtx.strokeStyle = "rgba(255, 255, 255, " + (renderAlpha * 0.58).toFixed(2) + ")";
+        targetCtx.lineWidth = 1.0;
+        targetCtx.lineCap = "round";
+        targetCtx.stroke();
 
         // ── 4. Micro-Stardust Quantum Sparks (Tier 2 Beacons Only) ──
         if (tier === 2 && Math.random() < 0.25) {
@@ -10384,13 +10403,28 @@ try { checkUrlHashRoutine(); } catch(e){}
     if (isActive) resize();
   });
 
+  var lastCursorMoveTime = 0;
+  var lastSampleCursorX = -9999;
+  var lastSampleCursorY = -9999;
+
   function onPointer(e) {
     if (!isActive) return;
     cursor.x = e.clientX;
     cursor.y = e.clientY;
     cursor.active = true;
-    hasDeliberateMove = true;
     cursor.isTouch = (e.pointerType === "touch");
+
+    var dx = cursor.x - lastSampleCursorX;
+    var dy = cursor.y - lastSampleCursorY;
+    var distMoved = Math.hypot(dx, dy);
+
+    // Only deliberate movement updates the active pursuit timer
+    if (distMoved >= 1.5) {
+      lastCursorMoveTime = performance.now();
+      lastSampleCursorX = cursor.x;
+      lastSampleCursorY = cursor.y;
+      hasDeliberateMove = true;
+    }
   }
 
   window.addEventListener("pointermove", onPointer, { passive: true });
@@ -10422,6 +10456,9 @@ try { checkUrlHashRoutine(); } catch(e){}
     cursor.y = -9999;
     cursor.active = false;
     hasDeliberateMove = false;
+    lastCursorMoveTime = 0;
+    lastSampleCursorX = -9999;
+    lastSampleCursorY = -9999;
 
     victoryModal.style.display = "none";
     if (resultCard) resultCard.classList.remove("is-defeat");
@@ -10461,6 +10498,9 @@ try { checkUrlHashRoutine(); } catch(e){}
     cursor.y = -9999;
     cursor.active = false;
     hasDeliberateMove = false;
+    lastCursorMoveTime = 0;
+    lastSampleCursorX = -9999;
+    lastSampleCursorY = -9999;
 
     resize();
     initAudioCtx();
@@ -10675,10 +10715,13 @@ try { checkUrlHashRoutine(); } catch(e){}
       }
     }
 
-    // ── Particle Interaction & 2-Second Contact Detection ──
+    // ── Particle Interaction & 2-Second Active Contact Detection ──
     var particles = (window.antigravityFX && typeof window.antigravityFX.getParticles === "function") ? window.antigravityFX.getParticles() : [];
 
-    // Strictly enforce: no locking during transition warmup, and requires active deliberate cursor move!
+    // Active intentional pursuit: cursor must have moved within the last 300ms!
+    // If the player parks the cursor and waits idle, the cursor becomes inert and CANNOT lock or hold progress!
+    var isCursorActivelyMoving = hasDeliberateMove && (now - lastCursorMoveTime < 300);
+
     if (!isWon && !isGameOver && !isWarmingUp && remainingTime > 0 && cursor.active && hasDeliberateMove) {
       if (lockedParticle) {
         if (lockedParticle.exploded) {
@@ -10687,7 +10730,9 @@ try { checkUrlHashRoutine(); } catch(e){}
           stopLockAudio();
         } else {
           var dist = getParticleTouchDistance(cursor.x, cursor.y, lockedParticle);
-          if (dist <= STRICT_HIT_RADIUS) {
+
+          // Both physical touch AND active deliberate tracking are required to maintain contact
+          if (dist <= STRICT_HIT_RADIUS && isCursorActivelyMoving) {
             contactDuration += dt;
             var progress = Math.min(1.0, contactDuration / REQUIRED_CONTACT);
             startLockAudio();
@@ -10699,15 +10744,22 @@ try { checkUrlHashRoutine(); } catch(e){}
               triggerVictory(lockedParticle);
             }
           } else {
-            // Strict physical touch lost: immediate reset
+            // Contact lost OR cursor went stationary (AFK cheat prevention) -> immediate reset
             contactDuration = 0.0;
             lockedParticle = null;
             stopLockAudio();
+
+            // Guidance when parked over a particle without active movement
+            if (dist <= STRICT_HIT_RADIUS && !isCursorActivelyMoving) {
+              missionText.textContent = "TARGET: MAINTAIN ACTIVE PURSUIT · DO NOT IDLE RETICLE";
+            }
           }
         }
       }
 
-      if (!lockedParticle) {
+      // To initiate a lock onto a candidate particle, the cursor MUST be in active deliberate pursuit!
+      // A stationary/parked cursor CANNOT lock onto any drifting particle!
+      if (!lockedParticle && isCursorActivelyMoving) {
         var closestDist = 999999;
         var candidate = null;
         for (var pi = 0; pi < particles.length; pi++) {
@@ -10726,7 +10778,7 @@ try { checkUrlHashRoutine(); } catch(e){}
         }
       }
     } else {
-      if (isWarmingUp || !hasDeliberateMove || isGameOver) {
+      if (isWarmingUp || !hasDeliberateMove || isGameOver || !isCursorActivelyMoving) {
         lockedParticle = null;
         contactDuration = 0.0;
         stopLockAudio();
@@ -10922,7 +10974,11 @@ try { checkUrlHashRoutine(); } catch(e){}
     restart: restartGame,
     triggerGameOver: triggerGameOver,
     triggerVictory: triggerVictory,
-    isActive: function() { return isActive; }
+    isActive: function() { return isActive; },
+    isWon: function() { return isWon; },
+    isGameOver: function() { return isGameOver; },
+    getContactDuration: function() { return contactDuration; },
+    isCursorActivelyMoving: function() { return hasDeliberateMove && (performance.now() - lastCursorMoveTime < 300); }
   };
 })();
 
