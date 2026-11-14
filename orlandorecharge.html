@@ -1897,6 +1897,12 @@ body.light-theme .qgame-btn-launch:hover {
 }
 
 /* ───────── IMMERSIVE UNIVERSE GAME ENVIRONMENT (#quantumGameOverlay) ───────── */
+body.universe-game-active {
+  background: #000000 !important;
+  background-color: #000000 !important;
+  overflow: hidden !important;
+}
+
 body.universe-game-active main {
   opacity: 0 !important;
   pointer-events: none !important;
@@ -1921,7 +1927,7 @@ body.universe-game-active .antigravity-front-canvas {
   opacity: 0;
   visibility: hidden;
   transition: opacity 1.35s cubic-bezier(0.4, 0, 0.2, 1), visibility 1.35s cubic-bezier(0.4, 0, 0.2, 1);
-  background: radial-gradient(ellipse at 50% 45%, rgba(7, 13, 29, 0.40) 0%, rgba(2, 6, 16, 0.65) 60%, rgba(0, 0, 0, 0.88) 100%);
+  background: transparent !important;
   user-select: none;
   will-change: opacity;
 }
@@ -1930,6 +1936,7 @@ body.universe-game-active .quantum-game-overlay {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
+  background: transparent !important;
 }
 
 .quantum-game-canvas {
