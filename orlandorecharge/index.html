@@ -4971,6 +4971,29 @@ var off={},days={1:1,2:1,3:1,4:1,5:1},armed=true,fired={};
 var volume=.7,muted=false,clockTheme="platinum";
 var activeFilter="all",isEditing=false,editingBackup=null;
 
+function loadFired(){
+  try{
+    var raw=localStorage.getItem("dra-fired-alarms");
+    if(raw) fired=JSON.parse(raw)||{};
+  }catch(e){fired={};}
+}
+function saveFired(){
+  try{
+    var now=new Date(),todayStr=now.toDateString();
+    var yesterday=new Date(now.getTime()-86400000).toDateString();
+    var cleaned={};
+    if(fired&&typeof fired==="object"){
+      Object.keys(fired).forEach(function(k){
+        if(k.indexOf(todayStr)===0||k.indexOf(yesterday)===0){
+          cleaned[k]=fired[k];
+        }
+      });
+    }
+    fired=cleaned;
+    localStorage.setItem("dra-fired-alarms",JSON.stringify(fired));
+  }catch(e){}
+}
+
 try{
   off=JSON.parse(localStorage.getItem("dra-off")||"{}");
   var d=localStorage.getItem("dra-days");if(d)days=JSON.parse(d);
@@ -4978,6 +5001,18 @@ try{
   muted=localStorage.getItem("dra-mute")==="1";
   var ct=localStorage.getItem("dra-clock-theme");if(ct)clockTheme=ct;
   armed=true; // Always default to true every time site is opened
+  loadFired();
+  // Startup Shield: mark all alarms scheduled prior to current boot time as already elapsed for today
+  // to permanently eliminate the bug where opening/refreshing on iPhone immediately rings past alarms
+  var bootTime=new Date(),bootDateKey=bootTime.toDateString();
+  var bootSec=bootTime.getHours()*3600+bootTime.getMinutes()*60+bootTime.getSeconds();
+  S.forEach(function(s,idx){
+    var t=s[0]*3600+s[1]*60;
+    if(t<=bootSec){
+      fired[bootDateKey+idx]=1;
+    }
+  });
+  saveFired();
 }catch(e){}
 
 function save(){try{
@@ -5394,10 +5429,93 @@ $("audioBadge").onclick=function(){
 // Initialize audio immediately so Sound Ready is permanently on by default
 initAudio();
 
-function stopAllSounds(){}
+/* ───────── CENTRAL AUDIO MASTER CONTROLLER ───────── */
+var audioPlayToken = 0;
+var chimeTimer = null;
+var alarmWatchdogTimer = null;
+var songAudioCache = {};
+
+function stopSyntheticChime(){
+  if(chimeTimer){
+    clearInterval(chimeTimer);
+    chimeTimer = null;
+  }
+}
+
+function stopAllAudio(){
+  // Increment token so any pending asynchronous decode/play operations are cancelled
+  audioPlayToken++;
+
+  // 1. Cancel watchdog timer and synthetic chime
+  if(alarmWatchdogTimer){
+    clearTimeout(alarmWatchdogTimer);
+    alarmWatchdogTimer = null;
+  }
+  stopSyntheticChime();
+
+  // 2. Stop Web Audio buffer source node cleanly
+  if(curSrc){
+    try {
+      var sr = curSrc, g = curFade, t = ac ? ac.currentTime : 0;
+      sr.onended = null;
+      if(g && ac){
+        g.gain.cancelScheduledValues(t);
+        g.gain.setValueAtTime(g.gain.value, t);
+        g.gain.linearRampToValueAtTime(0, t + 0.04);
+      }
+      sr.stop(t + 0.05);
+    } catch(e){}
+    curSrc = null;
+    curFade = null;
+  }
+
+  // 3. Stop fallback HTML5 audio element
+  if(fallback){
+    try {
+      fallback.onended = null;
+      fallback.onplaying = null;
+      fallback.pause();
+      fallback.currentTime = 0;
+    } catch(e){}
+    fallback = null;
+  }
+
+  // 4. Force-pause and rewind ALL cached audio elements to eliminate orphaned background streams
+  if(typeof songAudioCache === "object" && songAudioCache){
+    Object.keys(songAudioCache).forEach(function(k){
+      try {
+        var el = songAudioCache[k];
+        if(el){
+          el.onended = null;
+          el.onplaying = null;
+          el.pause();
+          el.currentTime = 0;
+        }
+      } catch(e){}
+    });
+  }
+
+  // 5. Stop Quantum Realm game lock audio and synthesizer
+  if(typeof stopLockAudio === "function"){
+    try { stopLockAudio(); } catch(e){}
+  }
+
+  current = null;
+  onDone = null;
+  mode = null;
+  showSong();
+  if(typeof syncGameMusicBtn === "function") syncGameMusicBtn();
+}
+
+function stopAllSounds(){
+  stopAllAudio();
+}
+
+function stopSong(){
+  stopAllAudio();
+}
 
 /* ───────── SONG PLAYER ENGINE (Song Clip Only) ───────── */
-var songAudioCache = {};
 function getSongAudioElement(song){
   if(!songAudioCache[song.file]){
     var el = new Audio(song.file);
@@ -5425,7 +5543,6 @@ function decode(i){
   return pr;
 }
 function prepare(){
-  // Permanently pre-decode all alarm songs so they remain ready in RAM with zero latency
   SONGS.forEach(function(_, i){
     if(!ready[i] && !bufs[i]){
       decode(i).catch(function(){});
@@ -5433,6 +5550,13 @@ function prepare(){
   });
 }
 function startBuf(buf){
+  if(alarmWatchdogTimer){
+    clearTimeout(alarmWatchdogTimer);
+    alarmWatchdogTimer = null;
+  }
+  stopSyntheticChime();
+  hideOvUnmuteBanner();
+
   var src=ac.createBufferSource(),g=ac.createGain(),t=ac.currentTime+.005,d=buf.duration;
   src.buffer=buf;src.connect(g);g.connect(master);
   g.gain.setValueAtTime(0,t);
@@ -5442,61 +5566,88 @@ function startBuf(buf){
   src.onended=function(){if(src===curSrc)finished()};
   src.start(t);curSrc=src;curFade=g;
 }
-function startFallback(song){
+function startFallback(song, playToken){
   var el=getSongAudioElement(song);
   el.currentTime=0;
   el.volume=Math.max(0.1, target() || 0.85);
   fallback=el;
-  el.onended=function(){if(fallback===el){fallback=null;finished()}};
+  el.onended=function(){
+    if(fallback===el && audioPlayToken===playToken){
+      fallback=null;
+      finished();
+    }
+  };
+  el.onplaying=function(){
+    if(audioPlayToken !== playToken){
+      try { el.pause(); } catch(e){}
+      return;
+    }
+    // As soon as fallback audio begins producing audible sound, cancel watchdog & chimes immediately
+    if(alarmWatchdogTimer){
+      clearTimeout(alarmWatchdogTimer);
+      alarmWatchdogTimer = null;
+    }
+    stopSyntheticChime();
+    hideOvUnmuteBanner();
+  };
   var p=el.play();
   if(p&&p.catch){
     p.catch(function(err){
-      console.warn("[OrlandoRecharge] Audio element play blocked, attempting Web Audio buffer:", err);
+      if(audioPlayToken !== playToken) return;
+      console.warn("[OrlandoRecharge] Audio element play blocked by browser, attempting Web Audio buffer:", err);
       if(ac){
         ac.resume().then(function(){
+          if(audioPlayToken !== playToken) return;
           var i=idx(song);
           if(ready[i]) {
             startBuf(ready[i]);
           } else {
             decode(i).then(function(buf){
-              if(current===song) startBuf(buf);
+              if(current===song && audioPlayToken === playToken) startBuf(buf);
             }).catch(function(){
-              if(mode === "alarm") playSyntheticChime();
+              if(mode === "alarm" && audioPlayToken === playToken) playSyntheticChime();
             });
           }
         }).catch(function(){
-          if(mode === "alarm") playSyntheticChime();
+          if(mode === "alarm" && audioPlayToken === playToken) playSyntheticChime();
         });
       } else {
-        if(mode === "alarm") playSyntheticChime();
+        if(mode === "alarm" && audioPlayToken === playToken) playSyntheticChime();
       }
     });
   }
 }
 function playSong(song,done,m){
-  stopSong();
+  stopAllAudio();
+  var token = ++audioPlayToken;
   current=song;onDone=done||null;mode=m||"test";
   unlock();
   if(ac&&ac.state==="suspended"){
     ac.resume().catch(function(){});
   }
+  // Temporarily mute keep-alive audio while music is playing to prevent iOS thread congestion
+  if(keepAliveAudio){
+    try { keepAliveAudio.pause(); } catch(e){}
+  }
   var i=idx(song);
   if(ac&&ac.state==="running"&&ready[i]){
     startBuf(ready[i]);
   } else {
-    startFallback(song);
-    if(ac&&!ready[i]){
-      decode(i).then(function(buf){
-        if(current===song&&(!fallback||fallback.paused))startBuf(buf);
-      }).catch(function(){});
-    }
+    startFallback(song, token);
   }
   showSong();
 }
 function finished(){
-  var cb=onDone;curSrc=curFade=null;current=null;onDone=null;mode=null;showSong();cb&&cb();
+  var cb=onDone;curSrc=curFade=null;current=null;onDone=null;mode=null;showSong();
+  if(armed && !fallback && !curSrc){
+    try {
+      if(keepAliveAudio && keepAliveAudio.paused){
+        keepAliveAudio.play().catch(function(){});
+      }
+    } catch(e){}
+  }
+  cb&&cb();
 }
-var chimeTimer = null;
 function playSyntheticChime(){
   stopSyntheticChime();
   if(!ac && (window.AudioContext || window.webkitAudioContext)){
@@ -5508,7 +5659,8 @@ function playSyntheticChime(){
   var notes = [523.25, 659.25, 783.99, 1046.50, 783.99, 659.25, 1046.50];
   var noteIdx = 0;
   function step(){
-    if($("ov").className !== "show" && mode !== "test") {
+    // Stop immediately if overlay is dismissed or if real audio has started outputting sound
+    if(($("ov").className !== "show" && mode !== "test") || curSrc !== null || (fallback !== null && !fallback.paused)) {
       stopSyntheticChime();
       return;
     }
@@ -5530,24 +5682,6 @@ function playSyntheticChime(){
   }
   step();
   chimeTimer = setInterval(step, 380);
-}
-function stopSyntheticChime(){
-  if(chimeTimer){
-    clearInterval(chimeTimer);
-    chimeTimer = null;
-  }
-}
-
-function stopSong(){
-  stopSyntheticChime();
-  if(curSrc){
-    var sr=curSrc,g=curFade,t=ac.currentTime;sr.onended=null;
-    g.gain.cancelScheduledValues(t);g.gain.setValueAtTime(g.gain.value,t);g.gain.linearRampToValueAtTime(0,t+.06);
-    try{sr.stop(t+.08)}catch(e){}
-  }
-  if(fallback){fallback.onended=null;fallback.pause();fallback=null}
-  curSrc=curFade=null;current=null;onDone=null;mode=null;
-  showSong();
 }
 function showSong(){
   var s=current||queued;
@@ -6227,17 +6361,28 @@ function hideOvUnmuteBanner(){
   if(b) b.style.display="none";
 }
 
+var activeAlarmLoop = null;
+
 function handleOvUnmute(){
   unlock();
   if(ac && ac.state === "suspended") ac.resume().catch(function(){});
   hideOvUnmuteBanner();
-  if(!curSrc && (!fallback || fallback.paused)){
-    var s = current || queued || SONGS[0];
-    playSong(s, function(){ if(++plays < 4 && $("ov").className === "show") go(); }, "alarm");
+  var isWebAudioPlaying = curSrc !== null && ac && ac.state === "running";
+  var isFallbackPlaying = fallback !== null && !fallback.paused && fallback.currentTime > 0;
+  if(!isWebAudioPlaying && !isFallbackPlaying){
+    if (typeof activeAlarmLoop === "function") {
+      activeAlarmLoop();
+    } else {
+      var s = current || queued || SONGS[0];
+      playSong(s, null, "alarm");
+    }
   }
 }
 
 function ring(i,snoozed){
+  // Prevent duplicate concurrent ringing
+  if($("ov").className === "show" && ringing !== -1 && ringing !== i) return;
+
   var s=S[i],plays=0;ringing=i;
 
   // Guarantee audible volume whenever an alarm fires
@@ -6265,15 +6410,17 @@ function ring(i,snoozed){
     window.antigravityFX.triggerShockwave(window.innerWidth / 2, window.innerHeight * 0.28, 42);
   }
 
-  function go(){
+  function nextAlarmCycle(){
+    if($("ov").className !== "show") return;
     var song=queued;queued=nextSong();
     $("ovSongName").textContent=song.title+" — "+song.artist;
-    playSong(song,function(){if(++plays<4&&$("ov").className==="show")go()},"alarm");
+    playSong(song,function(){if(++plays<4&&$("ov").className==="show")nextAlarmCycle()},"alarm");
     if(navigator.vibrate)navigator.vibrate([500,250,500,250,500]);
   }
-  go();
+  activeAlarmLoop = nextAlarmCycle;
+  nextAlarmCycle();
 
-  // Active Alarm Audio Watchdog (Ensures sound is progressing; triggers backup chime if browser throttled)
+  // Active Alarm Audio Watchdog (1200ms allows mobile Safari time to negotiate audio session without false triggers)
   clearTimeout(alarmWatchdogTimer);
   alarmWatchdogTimer = setTimeout(function(){
     if ($("ov").className !== "show") return;
@@ -6284,7 +6431,7 @@ function ring(i,snoozed){
       playSyntheticChime();
       showOvUnmuteBanner();
     }
-  }, 450);
+  }, 1200);
 
   setTimeout(function(){if($("ov").className==="show")$("ovB").focus()},50);
   notify(s[3],fmt(s[0],s[1])+" — tap Snooze or Dismiss");
@@ -6340,13 +6487,17 @@ function dismiss(){
   if($("ov").className!=="show")return;
   $("ov").className="";
   ringing=-1;
-  clearTimeout(alarmWatchdogTimer);
+  activeAlarmLoop = null;
+  if(alarmWatchdogTimer){
+    clearTimeout(alarmWatchdogTimer);
+    alarmWatchdogTimer = null;
+  }
   hideOvUnmuteBanner();
   if (window.ovAlarmFX && typeof window.ovAlarmFX.stop === "function") {
     window.ovAlarmFX.stop();
   }
   clearInterval(ringTitleTimer);
-  stopSong();
+  stopAllAudio();
   clearNotes();
   if(navigator.vibrate)navigator.vibrate(0);
 }
@@ -6428,9 +6579,12 @@ $("skip").onclick=function(){
 };
 
 /* ───────── CLOCK LOOP ───────── */
-var lastT="";
+var lastT="", lastTickSec = -1;
 function tick(){
   var n=new Date(),sec=n.getHours()*3600+n.getMinutes()*60+n.getSeconds(),on=!!days[n.getDay()];
+  if(sec === lastTickSec) return;
+  lastTickSec = sec;
+
   var tstr=p2(n.getHours()%12||12)+":"+p2(n.getMinutes())+":"+p2(n.getSeconds()),ap=n.getHours()>=12?"PM":"AM";
   if(tstr!==lastT){lastT=tstr;var html=chromeHTML(tstr);$("clock").innerHTML=html;if(restOn)$("restClock").innerHTML=html}
   $("ampm").textContent=ap;$("restAmpm").textContent=ap;
@@ -6442,13 +6596,28 @@ function tick(){
     if(on&&t<=sec)cur=i;
     var el=$("r"+i);
     if(el)el.classList.toggle("past",on&&t<=sec);
-    if(armed&&on&&!off[i]){var k=n.toDateString()+i;if(!fired[k]&&sec>=t&&sec-t<600){fired[k]=1;ring(i)}}
+    if(armed&&on&&!off[i]){
+      var k=n.toDateString()+i;
+      // Active window: within 45s of scheduled time, not yet fired, and no alarm currently ringing
+      if(!fired[k]&&sec>=t&&sec-t<45){
+        if(ringing===-1&&$("ov").className!=="show"){
+          fired[k]=1;
+          saveFired();
+          ring(i);
+        }
+      }
+    }
   });
   S.forEach(function(s,i){var el=$("r"+i);if(el)el.classList.toggle("cur",i===cur)});
 
   /* Process snoozes */
   for(var z=snoozes.length-1;z>=0;z--){
-    if(n.getTime()>=snoozes[z].at){var zi=snoozes[z].i;snoozes.splice(z,1);saveSnoozes();if(armed)ring(zi,true)}
+    if(n.getTime()>=snoozes[z].at){
+      var zi=snoozes[z].i;
+      snoozes.splice(z,1);
+      saveSnoozes();
+      if(armed&&ringing===-1&&$("ov").className!=="show") ring(zi,true);
+    }
   }
 
   /* Next alarm countdown */
@@ -7464,6 +7633,9 @@ var keepAliveGain = null;
 var keepAliveAudio = null;
 function startAudioKeepAlive() {
   try {
+    // If a song or alarm is actively playing, keep-alive is not needed and would compete for iOS audio session
+    if (current || ringing !== -1) return;
+
     // 1. Web Audio Engine Keep-Alive with continuous non-zero sub-audible oscillator (15 Hz)
     if (!ac && (window.AudioContext || window.webkitAudioContext)) {
       var AC = window.AudioContext || window.webkitAudioContext;
