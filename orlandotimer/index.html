@@ -40,7 +40,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&family=Orbitron:wght@600;700;800;900&family=Outfit:wght@600;700;800;900&family=Space+Grotesk:wght@600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
   <!-- Relative Stylesheet (with cache-bust versioning) -->
-  <link rel="stylesheet" href="style.css?v=28.0">
+  <link rel="stylesheet" href="style.css?v=29.0">
 </head>
 <body data-app-theme="pure-black" data-clock-style="pure-black">
   <!-- Accessibility Live Region for Screen Readers -->
@@ -97,7 +97,6 @@
           <!-- Real Productivity Mode Selector Dropdown -->
           <div class="mode-dropdown-wrapper" id="modeDropdownWrapper">
             <button type="button" class="or-brand-fun-tag" id="brandFunTag" aria-haspopup="true" aria-expanded="false" title="Switch Productivity Workflow Mode">
-              <span class="fun-sparkle-dot"></span>
               <span class="fun-tag-label" id="funTagLabel">Focus Protocol</span>
               <svg class="cyber-chevron-svg" viewBox="0 0 12 12" fill="none">
                 <path d="M2.5 4.5L6 8l3.5-3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
@@ -391,12 +390,10 @@
         <!-- Atmosphere & Particle Field Controller (Ambient Glow & Floating Particles) -->
         <div class="atmo-dropdown-container">
           <button type="button" class="btn-topbar-desktop btn-atmosphere" id="btnAtmosphere" title="Control Ambient Glow & Floating Particles" aria-expanded="false" aria-controls="atmospherePopup">
-            <svg class="cyber-topbar-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="3" fill="currentColor"/>
-              <circle cx="12" cy="12" r="7" stroke-dasharray="2 3"/>
-              <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke-linecap="round"/>
+            <svg class="cyber-topbar-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <circle cx="12" cy="12" r="4"/>
+              <path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.64 5.64l1.41 1.41M16.95 16.95l1.41 1.41M5.64 18.36l1.41-1.41M16.95 7.05l1.41-1.41" stroke-linecap="round"/>
             </svg>
-            <span class="status-dot-atmo" id="atmoDot"></span>
             <span id="atmoLabel">Atmosphere</span>
           </button>
 
@@ -563,32 +560,22 @@
           </div>
         </div>
 
-        <!-- Mechanical Quartz / Acoustic Tick Toggle with Futuristic Resonator SVG -->
-        <button type="button" class="btn-topbar-desktop" id="btnAcousticTick" title="Toggle Mechanical Escapement / Acoustic Resonator">
-          <svg class="cyber-topbar-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M3 12h3l2-6 4 12 4-12 2 6h3" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
-          </svg>
+        <!-- Mechanical Watch Tick & UI Sound Toggle -->
+        <button type="button" class="btn-topbar-desktop" id="btnAcousticTick" title="Toggle 1-Second Mechanical Watch Tick & UI Click Audio">
           <span class="status-dot-audio" id="acousticDot"></span>
-          <span id="acousticTickText">Tick: OFF</span>
+          <span id="acousticTickText">Watch Tick</span>
         </button>
 
-        <!-- Keep Screen Awake status button with Futuristic Reactor SVG -->
-        <button type="button" class="btn-topbar-desktop" id="btnWakeLock" title="Screen Wake Lock (Toggle Perpetual Display)">
-          <svg class="cyber-topbar-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="8"/>
-            <path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke-linecap="round"/>
-            <circle cx="12" cy="12" r="3" fill="currentColor"/>
-          </svg>
+        <!-- Keep Screen Awake Toggle (Native W3C Screen Wake Lock API) -->
+        <button type="button" class="btn-topbar-desktop" id="btnWakeLock" title="Keep Screen Awake (Prevents your display from dimming or sleeping)">
           <span class="status-dot-wake"></span>
-          <span id="wakeLockText">Awake ON</span>
+          <span id="wakeLockText">Keep Awake</span>
         </button>
 
-        <!-- Fullscreen Button with Futuristic HUD Telemetry SVG (Apple 2-Word Style) -->
+        <!-- Fullscreen Button (Apple 2-Word Style) -->
         <button type="button" class="btn-topbar-desktop" id="btnFullscreen" title="Enter Full Screen (F)">
-          <svg class="cyber-topbar-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <svg class="cyber-topbar-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>
-            <circle cx="12" cy="12" r="1.5" fill="currentColor" opacity="0.8"/>
           </svg>
           <span id="fsLabel">Enter Full Screen</span>
         </button>
@@ -599,26 +586,16 @@
     <main class="timer-main">
 
       <!-- ════════════════════════════════════════════════════════════════════
-           DUAL HOLOGRAPHIC COCKPIT (FUTURISTIC INDEPENDENT TRIGGERS)
+           DUAL HOLOGRAPHIC COCKPIT (CLEAN STUDIO PILL)
            LEFT: App Theme (Global environment, canvas & surfaces)
-           RIGHT: Clock Style (Typography finish & specular horizon)
+           RIGHT: Digit Style (Typography finish & specular horizon)
            ════════════════════════════════════════════════════════════════════ -->
       <section class="customization-cockpit" aria-label="Visual Appearance Customization">
         <!-- Trigger 1 (Left): Global Application Theme -->
         <div class="customizer-box customizer-theme">
           <button type="button" class="holo-trigger-btn" id="btnOpenThemeVault" aria-haspopup="dialog" aria-expanded="false" title="Open Holographic Theme Vault (Hotkey: T)">
-            <span class="customizer-badge-icon">
-              <!-- Futuristic Cyber Chromatic Prism SVG -->
-              <svg class="cyber-badge-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5" stroke-linejoin="round"/>
-                <circle cx="12" cy="12" r="3.5" fill="currentColor" opacity="0.3"/>
-                <line x1="12" y1="2" x2="12" y2="8.5"/>
-                <line x1="22" y1="15.5" x2="17" y2="12"/>
-                <line x1="2" y1="15.5" x2="7" y2="12"/>
-              </svg>
-            </span>
-            <span class="customizer-badge-text">App Theme</span>
             <span class="theme-color-preview" id="appThemeSwatch"></span>
+            <span class="customizer-badge-text">App Theme</span>
             <span class="holo-current-label" id="appThemeLabel">Pure Black</span>
             <svg class="holo-chevron-svg" viewBox="0 0 12 12" fill="none">
               <path d="M2.5 4.5L6 8l3.5-3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
@@ -632,18 +609,8 @@
         <!-- Trigger 2 (Right): Digit Style Only -->
         <div class="customizer-box customizer-clock">
           <button type="button" class="holo-trigger-btn" id="btnOpenClockVault" aria-haspopup="dialog" aria-expanded="false" title="Open Digit Style Vault (Hotkey: D or C)">
-            <span class="customizer-badge-icon">
-              <!-- Futuristic Atomic Tourbillon Horology SVG -->
-              <svg class="cyber-badge-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="9"/>
-                <circle cx="12" cy="12" r="4.5" stroke-dasharray="2 2"/>
-                <line x1="12" y1="12" x2="16" y2="8" stroke-linecap="round"/>
-                <circle cx="12" cy="12" r="1.8" fill="currentColor"/>
-                <path d="M12 3v2M12 19v2M3 12h2M19 12h2" stroke-linecap="round"/>
-              </svg>
-            </span>
-            <span class="customizer-badge-text">Digit Style</span>
             <span class="theme-color-preview" id="clockStyleSwatch"></span>
+            <span class="customizer-badge-text">Digit Style</span>
             <span class="holo-current-label" id="clockStyleLabel">Pure Black</span>
             <svg class="holo-chevron-svg" viewBox="0 0 12 12" fill="none">
               <path d="M2.5 4.5L6 8l3.5-3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1109,7 +1076,7 @@
   <audio id="alarmAudioElement" preload="auto" src="sounds/piano.mp3"></audio>
 
   <!-- Relative JavaScript (with cache-bust versioning) -->
-  <script src="app.js?v=28.0"></script>
+  <script src="app.js?v=29.0"></script>
 
 </body>
 </html>

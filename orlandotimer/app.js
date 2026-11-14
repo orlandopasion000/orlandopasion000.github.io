@@ -383,7 +383,8 @@
     }
 
     return {
-      tick: function (freq = 880) {
+      tick: function (freq = 880, force = false) {
+        if (!acousticTickEnabled && !force) return;
         try {
           const c = getCtx();
           if (!c) return;
@@ -401,6 +402,7 @@
         } catch (e) {}
       },
       escapementTick: function () {
+        if (!acousticTickEnabled) return;
         try {
           const c = getCtx();
           if (!c) return;
@@ -421,6 +423,7 @@
         } catch (e) {}
       },
       confirm: function () {
+        if (!acousticTickEnabled) return;
         try {
           const c = getCtx();
           if (!c) return;
@@ -799,18 +802,22 @@
     });
   }
 
-  // Acoustic Tick button binding
+  // Acoustic Tick button binding (Watch Tick: 1s mechanical escapement & UI clicks)
   const btnAcousticTick = document.getElementById('btnAcousticTick');
   const acousticDot = document.getElementById('acousticDot');
   const acousticTickText = document.getElementById('acousticTickText');
 
   function updateAcousticTickUI() {
     if (acousticDot) {
-      if (acousticTickEnabled) acousticDot.classList.add('active');
-      else acousticDot.classList.remove('active');
+      acousticDot.classList.toggle('active', acousticTickEnabled);
     }
     if (acousticTickText) {
-      acousticTickText.textContent = acousticTickEnabled ? 'Tick: ON' : 'Tick: OFF';
+      acousticTickText.textContent = 'Watch Tick';
+    }
+    if (btnAcousticTick) {
+      btnAcousticTick.title = acousticTickEnabled
+        ? 'Watch Tick: ON (Plays 1-second mechanical watch tick & UI click audio)'
+        : 'Watch Tick: OFF (Silent operation — only completion alarms ring)';
     }
     try {
       localStorage.setItem('orlando-acoustic-tick', acousticTickEnabled ? 'true' : 'false');
@@ -821,7 +828,15 @@
     btnAcousticTick.addEventListener('click', () => {
       acousticTickEnabled = !acousticTickEnabled;
       updateAcousticTickUI();
-      AudioHUD.tick(acousticTickEnabled ? 1200 : 600);
+      AudioHUD.tick(acousticTickEnabled ? 1200 : 600, true);
+      if (typeof showQuantumTelemetryToast === 'function') {
+        showQuantumTelemetryToast(
+          acousticTickEnabled ? '⌚ WATCH TICK: ON' : '🔇 WATCH TICK: OFF',
+          acousticTickEnabled
+            ? '1-second Swiss mechanical tick & UI click audio enabled.'
+            : 'Silent mode enabled. Only completion alarms will ring.'
+        );
+      }
     });
   }
 
@@ -1052,10 +1067,17 @@
   // 4. SCREEN WAKE LOCK API (Keep Screen Awake while Running)
   // ══════════════════════════════════════════════════════════════════════════
   let wakeLockSentinel = null;
-  let isWakeLockRequested = true;
+  let isWakeLockRequested = safeGetItem('orlando-wake-lock', 'true') !== 'false';
 
   async function requestWakeLock() {
-    if (!('wakeLock' in navigator)) return;
+    if (!isWakeLockRequested) {
+      updateWakeLockUI(false);
+      return false;
+    }
+    if (!('wakeLock' in navigator)) {
+      updateWakeLockUI(false);
+      return false;
+    }
     try {
       if (!wakeLockSentinel || wakeLockSentinel.released) {
         wakeLockSentinel = await navigator.wakeLock.request('screen');
@@ -1063,9 +1085,13 @@
         wakeLockSentinel.addEventListener('release', () => {
           updateWakeLockUI(false);
         });
+      } else {
+        updateWakeLockUI(true);
       }
+      return true;
     } catch (err) {
       updateWakeLockUI(false);
+      return false;
     }
   }
 
@@ -1073,17 +1099,22 @@
     if (wakeLockSentinel) {
       wakeLockSentinel.release().catch(() => {});
       wakeLockSentinel = null;
-      updateWakeLockUI(false);
     }
+    updateWakeLockUI(false);
   }
 
   function updateWakeLockUI(active) {
     const textEl = document.getElementById('wakeLockText');
     const dotEl = document.querySelector('.status-dot-wake');
-    if (textEl) textEl.textContent = active ? 'Awake ON' : 'Awake OFF';
+    const btnEl = document.getElementById('btnWakeLock');
+    if (textEl) textEl.textContent = 'Keep Awake';
     if (dotEl) {
-      dotEl.style.background = active ? 'var(--emerald)' : 'var(--theme-text-mute)';
-      dotEl.style.boxShadow = active ? '0 0 8px var(--emerald)' : 'none';
+      dotEl.classList.toggle('active', Boolean(active));
+    }
+    if (btnEl) {
+      btnEl.title = active
+        ? 'Keep Screen Awake: ACTIVE (Browser Screen Wake Lock prevents display sleep)'
+        : 'Keep Screen Awake: OFF (Click to prevent display from dimming or sleeping)';
     }
   }
 
@@ -1093,15 +1124,40 @@
     }
   });
 
+  // Re-ensure Wake Lock on first user gesture if requested
+  window.addEventListener('pointerdown', () => {
+    if (isWakeLockRequested && (!wakeLockSentinel || wakeLockSentinel.released)) {
+      requestWakeLock();
+    }
+  }, { passive: true });
+
   const btnWakeLock = document.getElementById('btnWakeLock');
   if (btnWakeLock) {
-    btnWakeLock.addEventListener('click', () => {
+    btnWakeLock.addEventListener('click', async () => {
       if (wakeLockSentinel && !wakeLockSentinel.released) {
         isWakeLockRequested = false;
+        safeSetItem('orlando-wake-lock', 'false');
         releaseWakeLock();
+        AudioHUD.tick(600);
+        if (typeof showQuantumTelemetryToast === 'function') {
+          showQuantumTelemetryToast(
+            '🌙 KEEP SCREEN AWAKE: OFF',
+            'Standard OS display sleep timer restored.'
+          );
+        }
       } else {
         isWakeLockRequested = true;
-        requestWakeLock();
+        safeSetItem('orlando-wake-lock', 'true');
+        const granted = await requestWakeLock();
+        AudioHUD.tick(1100);
+        if (typeof showQuantumTelemetryToast === 'function') {
+          showQuantumTelemetryToast(
+            granted ? '☀️ KEEP SCREEN AWAKE: ON' : '⚠️ WAKE LOCK UNAVAILABLE',
+            granted
+              ? 'Screen Wake Lock active — display will not sleep while this tab is visible.'
+              : 'Your browser or Battery Saver blocked Screen Wake Lock.'
+          );
+        }
       }
     });
   }
@@ -1960,8 +2016,16 @@
 
     requestWakeLock();
 
+    let lastSwTickSec = Math.floor(swElapsedTime / 1000);
     swInterval = setInterval(() => {
       swElapsedTime = performance.now() - swStartTime;
+      const currentSwSec = Math.floor(swElapsedTime / 1000);
+      if (currentSwSec !== lastSwTickSec) {
+        lastSwTickSec = currentSwSec;
+        if (acousticTickEnabled && currentSwSec > 0) {
+          AudioHUD.escapementTick();
+        }
+      }
       updateStopwatchDisplay();
       if (currentChronoMode === 'flow') {
         updateFlowJourneyUI(swElapsedTime);
