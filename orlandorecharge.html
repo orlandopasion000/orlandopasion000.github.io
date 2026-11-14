@@ -9204,20 +9204,16 @@ try { checkUrlHashRoutine(); } catch(e){}
         var dist = Math.hypot(dx, dy);
 
         if (isGameMode) {
-          if (p.isLocked) {
-            // Quantum Harmonic Resonance: particle is captured in the lock beam!
-            p.vx *= 0.86;
-            p.vy *= 0.86;
-            p.vx += (mx - p.x) * 0.06;
-            p.vy += (my - p.y) * 0.06;
-          } else if (dist < INFLUENCE_RADIUS) {
+          if (dist < INFLUENCE_RADIUS) {
             var norm = Math.max(0, 1 - dist / INFLUENCE_RADIUS);
-            var evadeForce = Math.pow(norm, 1.4) * 2.2;
+            var isMouseStationary = (now - mouse.lastActiveTime > 200);
+            var evadeMultiplier = isMouseStationary ? 2.2 : 1.0;
+            var evadeForce = Math.pow(norm, 1.4) * 3.8 * evadeMultiplier;
             var angle = Math.atan2(dy, dx);
             var tanX = -Math.sin(angle);
             var tanY = Math.cos(angle);
-            p.vx += (Math.cos(angle) * 1.4 + tanX * 1.1) * evadeForce * 0.35;
-            p.vy += (Math.sin(angle) * 1.4 + tanY * 1.1) * evadeForce * 0.35;
+            p.vx += (Math.cos(angle) * 1.8 + tanX * 1.3) * evadeForce * 0.42;
+            p.vy += (Math.sin(angle) * 1.8 + tanY * 1.3) * evadeForce * 0.42;
             p.turnFlex = Math.sign(tanY || 1) * 0.65;
             if (isHighSpeedCursor && p.isRadiant) {
               p.trail.push({ x: p.x, y: p.y, alpha: p.isFront ? 0.85 : 0.65 });
@@ -9523,12 +9519,76 @@ try { checkUrlHashRoutine(); } catch(e){}
       var fTailHue = (dopplerBoost > 0.12) ? Math.round(p.hue * (1 - dopplerBoost * 0.4) + 22 * (dopplerBoost * 0.4)) : p.hue;
       var renderAlpha = Math.min(0.92, currentAlpha * (1.0 + gameAlphaBoost) + (gameGlowProgress * 0.14));
 
-      // ── 2. Render Living Tapered Organic Wavepacket Body (Tail to Neck) ──
+      // ── 2. Render Living Organic Quantum Tail (Smoothly morphs to ethereal plume in game mode) ──
+      var tailTip = pts[K - 1];
+      var headPt = pts[0];
+
+      // Ethereal Flowing Plume / Ribbon Tail (Active in game mode, scaling with gameGlowProgress)
+      if (gameGlowProgress > 0.04) {
+        targetCtx.save();
+        // A. Soft Translucent Aurora Wash
+        var auroraGrad = targetCtx.createLinearGradient(tailTip.x, tailTip.y, headPt.x, headPt.y);
+        auroraGrad.addColorStop(0.0, "rgba(147, 51, 234, 0)");
+        auroraGrad.addColorStop(0.4, "rgba(168, 85, 247, " + (0.18 * gameGlowProgress).toFixed(2) + ")");
+        auroraGrad.addColorStop(0.8, "rgba(245, 158, 11, " + (0.24 * gameGlowProgress).toFixed(2) + ")");
+        auroraGrad.addColorStop(1.0, "rgba(251, 191, 36, " + (0.35 * gameGlowProgress).toFixed(2) + ")");
+
+        targetCtx.beginPath();
+        for (var aj = K - 1; aj >= 0; aj--) {
+          var apt = pts[aj];
+          if (aj === K - 1) targetCtx.moveTo(apt.x, apt.y);
+          else targetCtx.lineTo(apt.x, apt.y);
+        }
+        targetCtx.strokeStyle = auroraGrad;
+        targetCtx.lineWidth = Math.max(1.4, headR * 1.8 * gameGlowProgress);
+        targetCtx.lineCap = "round";
+        targetCtx.stroke();
+
+        // B. Fine Wispy Sinuous Wave Tendrils (Amber & Violet filaments matching uploaded screenshot)
+        var numTendrils = tier === 2 ? 3 : 2;
+        for (var tIdx = 0; tIdx < numTendrils; tIdx++) {
+          var isAmber = (tIdx === 0);
+          var phaseOff = tIdx * 1.6 + p.pulsePhase;
+          var waveAmp = headR * (isAmber ? 1.1 : 0.8) * gameGlowProgress;
+
+          targetCtx.beginPath();
+          for (var wj = K - 1; wj >= 0; wj--) {
+            var wpt = pts[wj];
+            var wtNorm = 1 - (wj / K); // 0 at tail tip, 1 at neck
+            var wave = Math.sin(now * 0.0055 + wj * 0.85 + phaseOff) * waveAmp * (1 - wtNorm * 0.55);
+            var wnx = -Math.sin(p.heading) * wave;
+            var wny = Math.cos(p.heading) * wave;
+            if (wj === K - 1) targetCtx.moveTo(wpt.x + wnx, wpt.y + wny);
+            else targetCtx.lineTo(wpt.x + wnx, wpt.y + wny);
+          }
+
+          var strandGrad = targetCtx.createLinearGradient(tailTip.x, tailTip.y, headPt.x, headPt.y);
+          if (isAmber) {
+            strandGrad.addColorStop(0.0, "rgba(245, 158, 11, 0)");
+            strandGrad.addColorStop(0.35, "rgba(245, 158, 11, " + (0.45 * gameGlowProgress).toFixed(2) + ")");
+            strandGrad.addColorStop(0.75, "rgba(251, 191, 36, " + (0.75 * gameGlowProgress).toFixed(2) + ")");
+            strandGrad.addColorStop(1.0, "rgba(254, 240, 138, " + (0.90 * gameGlowProgress).toFixed(2) + ")");
+          } else {
+            strandGrad.addColorStop(0.0, "rgba(168, 85, 247, 0)");
+            strandGrad.addColorStop(0.3, "rgba(147, 51, 234, " + (0.40 * gameGlowProgress).toFixed(2) + ")");
+            strandGrad.addColorStop(0.7, "rgba(192, 132, 252, " + (0.70 * gameGlowProgress).toFixed(2) + ")");
+            strandGrad.addColorStop(1.0, "rgba(243, 232, 255, " + (0.90 * gameGlowProgress).toFixed(2) + ")");
+          }
+
+          targetCtx.strokeStyle = strandGrad;
+          targetCtx.lineWidth = Math.max(0.65, headR * (isAmber ? 0.32 : 0.22) * gameGlowProgress);
+          targetCtx.lineCap = "round";
+          targetCtx.stroke();
+        }
+        targetCtx.restore();
+      }
+
+      // Tapered Organic Spine Body Stroke
       for (var sj = K - 1; sj >= 1; sj--) {
         var pt1 = pts[sj];
         var pt0 = pts[sj - 1];
         var tNorm = 1 - (sj / K); // 0 at tail tip, 1 at neck
-        var segW = Math.max(1.0, curSize * (0.24 + 0.76 * tNorm));
+        var segW = Math.max(0.7, curSize * (0.24 + 0.76 * tNorm));
         var segAlpha = Math.min(1.0, renderAlpha * (0.35 + 0.65 * tNorm));
 
         var segGrad = targetCtx.createLinearGradient(pt1.x, pt1.y, pt0.x, pt0.y);
@@ -9548,63 +9608,84 @@ try { checkUrlHashRoutine(); } catch(e){}
       // ── 3. Render Radiant Leading Quantum Head (at pts[0]) ──
       targetCtx.save();
       targetCtx.translate(pts[0].x, pts[0].y);
-      targetCtx.rotate(p.heading);
 
-      // Glowing quantum head droplet
+      // 3D Spherical Quantum Core (Smoothly blossoms in game mode)
+      var sphereGrad = targetCtx.createRadialGradient(-headR * 0.25, -headR * 0.25, 0.3, 0, 0, headR);
+      sphereGrad.addColorStop(0.0, "rgba(243, 232, 255, 0.98)");
+      sphereGrad.addColorStop(0.28, "rgba(192, 132, 252, 0.92)");
+      sphereGrad.addColorStop(0.60, "rgba(88, 28, 135, 0.95)");
+      sphereGrad.addColorStop(0.88, "rgba(46, 16, 101, 0.98)");
+      sphereGrad.addColorStop(1.0, "rgba(245, 158, 11, " + (0.85 * gameGlowProgress).toFixed(2) + ")");
+
+      targetCtx.fillStyle = sphereGrad;
       targetCtx.beginPath();
       targetCtx.arc(0, 0, headR, 0, Math.PI * 2);
-      targetCtx.fillStyle = "hsla(" + Math.round(fHeadHue) + ", 98%, " + fHeadLit.toFixed(1) + "%, " + renderAlpha.toFixed(2) + ")";
       targetCtx.fill();
 
-      // Pure white quantum singularity center
-      targetCtx.beginPath();
-      targetCtx.arc(headR * 0.25, 0, headR * 0.45, 0, Math.PI * 2);
-      targetCtx.fillStyle = "rgba(255, 255, 255, " + (renderAlpha * 0.95).toFixed(2) + ")";
-      targetCtx.fill();
+      // Golden Iridescent Rim in Game Mode
+      if (gameGlowProgress > 0.08) {
+        targetCtx.strokeStyle = "rgba(251, 191, 36, " + (0.88 * gameGlowProgress).toFixed(2) + ")";
+        targetCtx.lineWidth = Math.max(0.6, headR * 0.22);
+        targetCtx.stroke();
+      }
 
-      // Miniature Bohr probability orbital rings for game mode
-      if (renderAsBrightest) {
-        var orbBaseR = headR * (tier === 2 ? 2.4 : (tier === 1 ? 1.9 : 1.5));
-        var spinRate = 0.0032;
+      // Miniature Glowing Golden Bohr Orbital Rings (Smoothly transforms in game mode)
+      if (gameGlowProgress > 0.04) {
+        var ringScale = gameGlowProgress;
+        var spinRate = 0.0024;
         var spinAngle = now * spinRate + p.pulsePhase;
+        var numRings = tier === 2 ? 3 : (tier === 1 ? 2 : 1);
+        var ringMajor = headR * (tier === 2 ? 2.25 : (tier === 1 ? 1.85 : 1.55)) * ringScale;
+        var ringMinor = headR * (tier === 2 ? 0.90 : (tier === 1 ? 0.76 : 0.62)) * ringScale;
 
-        targetCtx.save();
-        if (tier === 2) {
-          // Tier 2: Dual Concentric Quantum Orbitals with Counter-Rotating Phase Node
+        var angles = tier === 2 ? [0, Math.PI / 3, 2 * Math.PI / 3] : (tier === 1 ? [Math.PI / 4, -Math.PI / 4] : [0]);
+
+        for (var ri = 0; ri < numRings; ri++) {
+          targetCtx.save();
+          targetCtx.rotate(angles[ri] + spinAngle * (ri % 2 === 0 ? 1 : -0.85));
+
+          // Golden outer neon glow
+          targetCtx.strokeStyle = "rgba(245, 158, 11, " + (0.40 * gameGlowProgress).toFixed(2) + ")";
+          targetCtx.lineWidth = Math.max(0.8, headR * 0.38);
           targetCtx.beginPath();
-          targetCtx.arc(0, 0, orbBaseR * 0.85, 0, Math.PI * 2);
-          targetCtx.strokeStyle = "hsla(" + fHeadHue + ", 92%, 72%, " + (renderAlpha * 0.35).toFixed(2) + ")";
-          targetCtx.lineWidth = 1.0;
+          targetCtx.ellipse(0, 0, ringMajor, ringMinor, 0, 0, Math.PI * 2);
           targetCtx.stroke();
 
-          targetCtx.beginPath();
-          targetCtx.ellipse(0, 0, orbBaseR * 1.35, orbBaseR * 0.75, spinAngle, 0, Math.PI * 2);
-          targetCtx.strokeStyle = "hsla(" + fHeadHue + ", 98%, 78%, " + (renderAlpha * 0.28).toFixed(2) + ")";
-          targetCtx.lineWidth = 0.9;
+          // Golden body stroke
+          targetCtx.strokeStyle = "rgba(251, 191, 36, " + (0.92 * gameGlowProgress).toFixed(2) + ")";
+          targetCtx.lineWidth = Math.max(0.7, headR * 0.20);
           targetCtx.stroke();
 
-          var qNodeX = Math.cos(spinAngle) * orbBaseR * 1.35;
-          var qNodeY = Math.sin(spinAngle) * orbBaseR * 0.75;
-          targetCtx.beginPath();
-          targetCtx.arc(qNodeX, qNodeY, 1.3, 0, Math.PI * 2);
-          targetCtx.fillStyle = "rgba(255, 255, 255, " + (renderAlpha * 0.95).toFixed(2) + ")";
-          targetCtx.fill();
-
-        } else if (tier === 1) {
-          targetCtx.beginPath();
-          targetCtx.ellipse(0, 0, orbBaseR * 1.15, orbBaseR * 0.75, -spinAngle * 0.85, 0, Math.PI * 2);
-          targetCtx.strokeStyle = "hsla(" + fHeadHue + ", 95%, 74%, " + (renderAlpha * 0.28).toFixed(2) + ")";
-          targetCtx.lineWidth = 0.95;
+          // Inner white incandescent line
+          targetCtx.strokeStyle = "rgba(255, 255, 255, " + (0.85 * gameGlowProgress).toFixed(2) + ")";
+          targetCtx.lineWidth = Math.max(0.35, headR * 0.09);
           targetCtx.stroke();
-        } else {
+
+          // Apex starburst glints for macro & mid particles
+          if (tier >= 1) {
+            targetCtx.beginPath();
+            targetCtx.arc(ringMajor, 0, Math.max(0.7, headR * 0.25 * gameGlowProgress), 0, Math.PI * 2);
+            targetCtx.arc(-ringMajor, 0, Math.max(0.7, headR * 0.25 * gameGlowProgress), 0, Math.PI * 2);
+            targetCtx.fillStyle = "#ffffff";
+            targetCtx.fill();
+          }
+
+          targetCtx.restore();
+        }
+
+        // Micro starburst cross spark for standard particles (tier 0)
+        if (tier === 0) {
+          var sparkLen = headR * 1.8 * gameGlowProgress;
+          targetCtx.strokeStyle = "rgba(255, 255, 255, " + (0.90 * gameGlowProgress).toFixed(2) + ")";
+          targetCtx.lineWidth = 0.6;
           targetCtx.beginPath();
-          targetCtx.arc(0, 0, orbBaseR, 0, Math.PI * 2);
-          targetCtx.strokeStyle = "hsla(" + fHeadHue + ", 90%, 70%, " + (renderAlpha * 0.20).toFixed(2) + ")";
-          targetCtx.lineWidth = 0.85;
+          targetCtx.moveTo(-sparkLen, 0); targetCtx.lineTo(sparkLen, 0);
+          targetCtx.moveTo(0, -sparkLen); targetCtx.lineTo(0, sparkLen);
           targetCtx.stroke();
         }
-        targetCtx.restore();
       }
+
+      targetCtx.restore();
 
       // Micro-Stardust Quantum Sparks (Tier 2 Beacons Only - Emitted from Tail)
       if (tier === 2 && Math.random() < 0.25) {
@@ -10116,6 +10197,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   var cursor = { x: -9999, y: -9999, active: false };
   var lockedParticle = null;
   var contactDuration = 0.0;
+  var lastTouchContactTime = 0;
   var REQUIRED_CONTACT = 2.0; // 2 seconds continuous
   var STRICT_HIT_RADIUS = 14; // Strict physical contact radius (desktop: 14px, tablet: 18px, mobile: 22px)
 
@@ -10729,6 +10811,7 @@ try { checkUrlHashRoutine(); } catch(e){}
           // NUANCE: Once locked, as long as the particle remains physically touched (dist <= STRICT_HIT_RADIUS),
           // contact progress accumulates continuously! The player is touching it!
           if (dist <= STRICT_HIT_RADIUS) {
+            lastTouchContactTime = now;
             contactDuration += dt;
             var progress = Math.min(1.0, contactDuration / REQUIRED_CONTACT);
             startLockAudio();
@@ -10743,12 +10826,18 @@ try { checkUrlHashRoutine(); } catch(e){}
               triggerVictory(lockedParticle);
             }
           } else {
-            // Target moved outside contact radius -> lock lost
-            lockedParticle.isLocked = false;
-            contactDuration = 0.0;
-            lockedParticle = null;
-            stopLockAudio();
-            missionText.textContent = "TARGET: TOUCH ANY PARTICLE · MAINTAIN CONTACT FOR 2.0s";
+            // Particle actively evades fast: allow 180ms chase grace window so high-speed pursuit accumulates count!
+            if (now - lastTouchContactTime > 180) {
+              lockedParticle.isLocked = false;
+              contactDuration = 0.0;
+              lockedParticle = null;
+              stopLockAudio();
+              missionText.textContent = "TARGET: TOUCH ANY PARTICLE · MAINTAIN CONTACT FOR 2.0s";
+            } else {
+              // Still actively pursuing during grace window
+              var progress = Math.min(1.0, contactDuration / REQUIRED_CONTACT);
+              drawLockReticle(lockedParticle.x, lockedParticle.y, progress, dist);
+            }
           }
         }
       }
