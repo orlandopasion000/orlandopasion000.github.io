@@ -2191,7 +2191,7 @@
   });
 
   // ══════════════════════════════════════════════════════════════════════════
-  // ── 10B. QUANTUM TIME COMMAND & FOCUS PROTOCOL ──
+  // ── 10B. QUANTUM TIME COMMAND & PRODUCTIVITY PROTOCOL MODES ──
   const btnLogoEasterEgg = document.getElementById('btnLogoEasterEgg');
   const brandFunTag = document.getElementById('brandFunTag');
   const funTagLabel = document.getElementById('funTagLabel');
@@ -2203,8 +2203,314 @@
   const dayProgressVal = document.getElementById('dayProgressVal');
   const dayProgressBar = document.getElementById('dayProgressBar');
   const dayCountdownSub = document.getElementById('dayCountdownSub');
+  const drawerBackdropEl = document.getElementById('quantumDrawerBackdrop');
 
-  // ── REAL PRODUCTIVITY PROTOCOL MODES CONTROLLER ──
+  // Zen Immersion HUD Elements & Variables
+  const btnExitZenHUD = document.getElementById('btnExitZenHUD');
+  const btnZenPlayPause = document.getElementById('btnZenPlayPause');
+  const btnZenSoundToggle = document.getElementById('btnZenSoundToggle');
+  const btnZenFullscreen = document.getElementById('btnZenFullscreen');
+  const zenSoundText = document.getElementById('zenSoundText');
+  let zenIdleTimeout = null;
+  let toastTimeout = null;
+
+  // ── ZEN IMMERSION HELPER FUNCTIONS ──
+  function updateZenSoundButtonText() {
+    if (!zenSoundText) return;
+    if (zenSoundMode === 'bowl') {
+      zenSoundText.textContent = 'Singing Bowl';
+    } else if (zenSoundMode === 'drone') {
+      zenSoundText.textContent = '432Hz Drone';
+    } else {
+      zenSoundText.textContent = 'Silent Zen';
+    }
+  }
+
+  function resetZenIdleTimer() {
+    if (!document.body.classList.contains('zen-mode')) return;
+    document.body.classList.remove('zen-idle');
+    if (zenIdleTimeout) clearTimeout(zenIdleTimeout);
+    zenIdleTimeout = setTimeout(() => {
+      if (document.body.classList.contains('zen-mode')) {
+        document.body.classList.add('zen-idle');
+      }
+    }, 2500);
+  }
+
+  function toggleZenMode(force) {
+    const isZen = force !== undefined ? force : !document.body.classList.contains('zen-mode');
+    document.body.classList.toggle('zen-mode', isZen);
+    document.body.classList.remove('zen-idle');
+    if (zenModeLabel) zenModeLabel.textContent = isZen ? 'Exit Zen Mode' : 'Zen Immersion Mode';
+    
+    if (isZen) {
+      toggleFunCockpit(false);
+      toggleModeDropdown(false);
+      announceSR("Zen Immersion Mode activated. Press Escape or Z to exit.");
+      AudioHUD.confirm();
+      resetZenIdleTimer();
+      updateZenSoundButtonText();
+      if (zenSoundMode === 'drone') {
+        startZenDrone();
+      }
+    } else {
+      stopZenDrone();
+      announceSR("Zen Immersion Mode exited.");
+      AudioHUD.tick(600);
+      if (zenIdleTimeout) clearTimeout(zenIdleTimeout);
+    }
+  }
+
+  // ── QUANTUM TIME COMMAND HUB CONTROLLER ──
+  function toggleFunCockpit(show) {
+    if (!funMicroCockpit) return;
+    const isOpen = funMicroCockpit.classList.contains('open');
+    const shouldOpen = show !== undefined ? show : !isOpen;
+    if (shouldOpen) {
+      funMicroCockpit.classList.add('open');
+      if (drawerBackdropEl) drawerBackdropEl.classList.add('open');
+      document.body.classList.add('drawer-open');
+      updateFocusTelemetryUI();
+      renderWeeklyFocusChart();
+      updateEarthDayProgress();
+      AudioHUD.confirm();
+    } else {
+      funMicroCockpit.classList.remove('open');
+      if (drawerBackdropEl) drawerBackdropEl.classList.remove('open');
+      document.body.classList.remove('drawer-open');
+      AudioHUD.tick(500);
+    }
+  }
+
+  function updateEarthDayProgress() {
+    const now = new Date();
+    const totalSecsInDay = 86400;
+    const currentSecs = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+    const pct = ((currentSecs / totalSecsInDay) * 100).toFixed(1);
+    const secsLeft = totalSecsInDay - currentSecs;
+    const hrsLeft = Math.floor(secsLeft / 3600);
+    const minsLeft = Math.floor((secsLeft % 3600) / 60);
+
+    if (dayProgressVal) dayProgressVal.textContent = `${pct}%`;
+    if (dayProgressBar) dayProgressBar.style.width = `${pct}%`;
+    if (dayCountdownSub) dayCountdownSub.textContent = `${hrsLeft}h ${minsLeft}m left`;
+  }
+
+  // ── 10C. QUANTUM FOCUS TELEMETRY & MILESTONE ENGINE ──
+  function getTodayDateString() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  }
+
+  function getFocusTelemetry() {
+    const today = getTodayDateString();
+    const savedDate = localStorage.getItem('ot_focus_date');
+    if (savedDate !== today) {
+      localStorage.setItem('ot_focus_date', today);
+      localStorage.setItem('ot_focus_mins', '0');
+      return { date: today, mins: 0 };
+    }
+    const mins = parseInt(localStorage.getItem('ot_focus_mins') || '0', 10);
+    return { date: today, mins };
+  }
+
+  // ── WEEKLY FOCUS HISTORY CHART ENGINE ──
+  function getIsoWeekNumber(date) {
+    const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+    const dayNum = d.getUTCDay() || 7;
+    d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+    const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+  }
+
+  function getWeekKey() {
+    const d = new Date();
+    return `${d.getFullYear()}-W${getIsoWeekNumber(d)}`;
+  }
+
+  function getWeeklyFocusData() {
+    const currentKey = getWeekKey();
+    let data = { weekKey: currentKey, days: [0, 0, 0, 0, 0, 0, 0] };
+    try {
+      const raw = localStorage.getItem('orlando-weekly-focus');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && parsed.weekKey === currentKey && Array.isArray(parsed.days) && parsed.days.length === 7) {
+          data = parsed;
+        }
+      }
+    } catch (e) {}
+    return data;
+  }
+
+  function recordWeeklyFocus(mins) {
+    if (mins <= 0) return;
+    const data = getWeeklyFocusData();
+    const dayIndex = (new Date().getDay() + 6) % 7; // Mon=0, Sun=6
+    data.days[dayIndex] = (data.days[dayIndex] || 0) + Math.round(mins);
+    try {
+      localStorage.setItem('orlando-weekly-focus', JSON.stringify(data));
+    } catch (e) {}
+    renderWeeklyFocusChart();
+  }
+
+  function renderWeeklyFocusChart() {
+    const chartBars = document.getElementById('weeklyChartBars');
+    const totalBadge = document.getElementById('weeklyTotalBadge');
+    if (!chartBars) return;
+    const data = getWeeklyFocusData();
+    const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const todayIndex = (new Date().getDay() + 6) % 7;
+
+    const totalMins = data.days.reduce((a, b) => a + b, 0);
+    const totalHours = (totalMins / 60).toFixed(1);
+    if (totalBadge) {
+      totalBadge.textContent = `${totalHours}h this week`;
+    }
+
+    const maxMins = Math.max(60, ...data.days);
+    chartBars.innerHTML = '';
+    data.days.forEach((mins, idx) => {
+      const isToday = idx === todayIndex;
+      const pct = Math.max(8, Math.min(100, Math.round((mins / maxMins) * 100)));
+      const col = document.createElement('div');
+      col.className = `weekly-chart-col${isToday ? ' today' : ''}`;
+      col.innerHTML = `
+        <div class="weekly-bar-track">
+          <div class="weekly-bar-fill" style="height: ${pct}%;" title="${mins} mins"></div>
+        </div>
+        <span class="weekly-bar-day">${dayNames[idx]}</span>
+        <span class="weekly-bar-val">${mins > 0 ? (mins >= 60 ? (mins/60).toFixed(1) + 'h' : mins + 'm') : '0'}</span>
+      `;
+      chartBars.appendChild(col);
+    });
+  }
+
+  function addFocusMinutes(mins) {
+    if (mins <= 0) return;
+    const current = getFocusTelemetry();
+    const newMins = current.mins + Math.round(mins);
+    localStorage.setItem('ot_focus_mins', String(newMins));
+    recordWeeklyFocus(mins);
+    updateFocusTelemetryUI();
+  }
+
+  function getSupernovaTier(mins) {
+    if (mins >= 120) return { tier: 3, label: 'Tier III · Hypernova', minMins: 120, nextMins: 120, nextLabel: 'MAX TIER' };
+    if (mins >= 60) return { tier: 2, label: 'Tier II · Supernova', minMins: 60, nextMins: 120, nextLabel: 'Tier III (120m)' };
+    if (mins >= 25) return { tier: 1, label: 'Tier I · Nova', minMins: 25, nextMins: 60, nextLabel: 'Tier II (60m)' };
+    return { tier: 0, label: 'Dormant Nebula', minMins: 0, nextMins: 25, nextLabel: 'Tier I (25m)' };
+  }
+
+  function updateFocusTelemetryUI() {
+    const tele = getFocusTelemetry();
+    const tierInfo = getSupernovaTier(tele.mins);
+    const tierBadge = document.getElementById('supernovaTierBadge');
+    const focusMinsEl = document.getElementById('telemetryFocusMins');
+    const nextTierEl = document.getElementById('telemetryNextTier');
+    const progressFill = document.getElementById('telemetryProgressFill');
+
+    if (tierBadge) tierBadge.textContent = tierInfo.label;
+    if (focusMinsEl) focusMinsEl.textContent = `${tele.mins}m`;
+    if (nextTierEl) nextTierEl.textContent = tierInfo.nextLabel;
+    if (progressFill) {
+      if (tierInfo.tier === 3) {
+        progressFill.style.width = '100%';
+      } else {
+        const span = tierInfo.nextMins - tierInfo.minMins;
+        const current = tele.mins - tierInfo.minMins;
+        const pct = Math.min(100, Math.max(0, (current / span) * 100));
+        progressFill.style.width = `${pct}%`;
+      }
+    }
+  }
+
+  function showQuantumTelemetryToast(title, message) {
+    const allowToast = safeGetItem('orlando-milestone-toast', 'true') === 'true';
+    if (!allowToast) return;
+
+    const toast = document.getElementById('quantumTelemetryToast');
+    const tTitle = document.getElementById('toastTitle');
+    const tMsg = document.getElementById('toastMessage');
+    if (!toast || !tTitle || !tMsg) return;
+
+    tTitle.textContent = title;
+    tMsg.textContent = message;
+    toast.classList.add('visible');
+
+    if (toastTimeout) clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => {
+      toast.classList.remove('visible');
+    }, 4500);
+  }
+
+  // ── 10D. QUANTUM RESONANCE BREATHING CALIBRATION (4-4-4-4) ──
+  let breathingInterval = null;
+  let breathingPhase = 0; // 0: inhale, 1: hold1, 2: exhale, 3: hold2
+  let breathingSecLeft = 4;
+  const breathingPhases = [
+    { title: 'Inhale Prana', sub: 'Fill diaphragm with starlight', state: 'inhale' },
+    { title: 'Hold Steady', sub: 'Retain cosmic resonance', state: 'hold-in' },
+    { title: 'Exhale Void', sub: 'Release all cognitive tension', state: 'exhale' },
+    { title: 'Hold Stillness', sub: 'Rest in pure stillness', state: 'hold-out' }
+  ];
+
+  function startBreathingSession() {
+    const overlay = document.getElementById('quantumBreathingOverlay');
+    if (!overlay) return;
+    overlay.classList.add('active');
+    breathingPhase = 0;
+    breathingSecLeft = 4;
+    updateBreathingUI();
+    AudioHUD.confirm();
+
+    if (breathingInterval) clearInterval(breathingInterval);
+    breathingInterval = setInterval(() => {
+      breathingSecLeft--;
+      if (breathingSecLeft <= 0) {
+        breathingPhase = (breathingPhase + 1) % 4;
+        breathingSecLeft = 4;
+        AudioHUD.tick(800 + breathingPhase * 100);
+      } else {
+        AudioHUD.tick(440);
+      }
+      updateBreathingUI();
+    }, 1000);
+  }
+
+  function stopBreathingSession() {
+    const overlay = document.getElementById('quantumBreathingOverlay');
+    if (overlay) overlay.classList.remove('active');
+    if (breathingInterval) {
+      clearInterval(breathingInterval);
+      breathingInterval = null;
+    }
+  }
+
+  function updateBreathingUI() {
+    const counter = document.getElementById('breathingCounter');
+    const title = document.getElementById('breathingStateTitle');
+    const subtext = document.getElementById('breathingSubtext');
+    const orbOuter = document.getElementById('breathingOrbOuter');
+    const orbCore = document.getElementById('breathingOrbCore');
+    const dots = document.querySelectorAll('.b-cycle-dot');
+
+    if (counter) counter.textContent = breathingSecLeft;
+    const curr = breathingPhases[breathingPhase];
+    if (title) title.textContent = curr.title;
+    if (subtext) subtext.textContent = curr.sub;
+
+    if (orbOuter && orbCore) {
+      orbOuter.className = `breathing-orb-outer state-${curr.state}`;
+      orbCore.className = `breathing-orb-core state-${curr.state}`;
+    }
+
+    dots.forEach((dot, idx) => {
+      dot.classList.toggle('active', idx === breathingPhase);
+    });
+  }
+
+  // ── 10E. REAL PRODUCTIVITY PROTOCOL MODES CONTROLLER ──
   const MODE_METADATA = {
     'focus-protocol': {
       title: 'Focus Protocol',
@@ -2244,6 +2550,24 @@
   };
 
   let currentProductivityMode = safeGetItem('orlando-productivity-mode', 'focus-protocol');
+
+  function toggleModeDropdown(force) {
+    const menu = document.getElementById('modeDropdownMenu');
+    const tag = document.getElementById('brandFunTag');
+    if (!menu || !tag) return;
+
+    const isOpen = force !== undefined ? force : !menu.classList.contains('open');
+    if (isOpen) {
+      menu.classList.add('open');
+      tag.classList.add('open');
+      tag.setAttribute('aria-expanded', 'true');
+      AudioHUD.tick(880);
+    } else {
+      menu.classList.remove('open');
+      tag.classList.remove('open');
+      tag.setAttribute('aria-expanded', 'false');
+    }
+  }
 
   function applyProductivityMode(modeKey, userAction = true) {
     if (!MODE_METADATA[modeKey]) modeKey = 'focus-protocol';
@@ -2290,320 +2614,55 @@
     }
   }
 
-  function toggleModeDropdown(force) {
-    const menu = document.getElementById('modeDropdownMenu');
-    const tag = document.getElementById('brandFunTag');
-    if (!menu || !tag) return;
+  // ── ATTACH ALL EVENT LISTENERS ──
 
-    const isOpen = force !== undefined ? force : !menu.classList.contains('open');
-    if (isOpen) {
-      menu.classList.add('open');
-      tag.classList.add('open');
-      tag.setAttribute('aria-expanded', 'true');
-      AudioHUD.tick(880);
-    } else {
-      menu.classList.remove('open');
-      tag.classList.remove('open');
-      tag.setAttribute('aria-expanded', 'false');
-    }
-  }
-
-  function updateEarthDayProgress() {
-    const now = new Date();
-    const totalSecsInDay = 86400;
-    const currentSecs = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
-    const pct = ((currentSecs / totalSecsInDay) * 100).toFixed(1);
-    const secsLeft = totalSecsInDay - currentSecs;
-    const hrsLeft = Math.floor(secsLeft / 3600);
-    const minsLeft = Math.floor((secsLeft % 3600) / 60);
-
-    if (dayProgressVal) dayProgressVal.textContent = `${pct}%`;
-    if (dayProgressBar) dayProgressBar.style.width = `${pct}%`;
-    if (dayCountdownSub) dayCountdownSub.textContent = `${hrsLeft}h ${minsLeft}m until midnight`;
-  }
-
-  // ══════════════════════════════════════════════════════════════════════════
-  // ── 10C. QUANTUM FOCUS TELEMETRY & MILESTONE ENGINE ──
-  function getTodayDateString() {
-    const d = new Date();
-    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-  }
-
-  function getFocusTelemetry() {
-    const today = getTodayDateString();
-    const savedDate = localStorage.getItem('ot_focus_date');
-    if (savedDate !== today) {
-      localStorage.setItem('ot_focus_date', today);
-      localStorage.setItem('ot_focus_mins', '0');
-      return { date: today, mins: 0 };
-    }
-    const mins = parseInt(localStorage.getItem('ot_focus_mins') || '0', 10);
-    return { date: today, mins: isNaN(mins) ? 0 : mins };
-  }
-
-  
-  // ── WEEKLY FOCUS HISTORY CHART ENGINE ──
-  function getIsoWeekNumber(date) {
-    const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-    const dayNum = d.getUTCDay() || 7;
-    d.setUTCDate(d.getUTCDate() + 4 - dayNum);
-    const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-    return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
-  }
-
-  function getWeekKey() {
-    const d = new Date();
-    return `${d.getFullYear()}-W${getIsoWeekNumber(d)}`;
-  }
-
-  function getWeeklyFocusData() {
-    const currentKey = getWeekKey();
-    let data = { weekKey: currentKey, days: [0, 0, 0, 0, 0, 0, 0] };
-    try {
-      const raw = localStorage.getItem('orlando-weekly-focus');
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        if (parsed && parsed.weekKey === currentKey && Array.isArray(parsed.days)) {
-          data = parsed;
-        }
-      }
-    } catch(e) {}
-    return data;
-  }
-
-  function recordWeeklyFocus(mins) {
-    if (!mins || mins <= 0) return;
-    const data = getWeeklyFocusData();
-    const dayIndex = (new Date().getDay() + 6) % 7; // Mon=0, Sun=6
-    data.days[dayIndex] = (data.days[dayIndex] || 0) + Math.round(mins);
-    try {
-      localStorage.setItem('orlando-weekly-focus', JSON.stringify(data));
-    } catch(e) {}
-    renderWeeklyFocusChart();
-  }
-
-  function renderWeeklyFocusChart() {
-    const chartBars = document.getElementById('weeklyChartBars');
-    const totalBadge = document.getElementById('weeklyTotalBadge');
-    const data = getWeeklyFocusData();
-    const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    const todayIndex = (new Date().getDay() + 6) % 7;
-
-    const totalMins = data.days.reduce((a, b) => a + b, 0);
-    if (totalBadge) {
-      totalBadge.textContent = `${totalMins}m this week`;
-    }
-
-    if (!chartBars) return;
-    const maxMins = Math.max(60, ...data.days);
-
-    chartBars.innerHTML = data.days.map((mins, idx) => {
-      const isToday = idx === todayIndex;
-      const pct = Math.max(8, Math.min(100, Math.round((mins / maxMins) * 100)));
-      return `
-        <div class="weekly-chart-col ${isToday ? 'is-today' : ''}">
-          <span class="weekly-bar-val">${mins > 0 ? mins + 'm' : ''}</span>
-          <div class="weekly-bar-track">
-            <div class="weekly-bar-fill" style="height: ${pct}%;"></div>
-          </div>
-          <span class="weekly-bar-day">${dayNames[idx]}</span>
-        </div>
-      `;
-    }).join('');
-  }
-
-  function addFocusMinutes(mins) {
-    if (!mins || mins <= 0) return getFocusTelemetry();
-    const current = getFocusTelemetry();
-    const newMins = current.mins + Math.round(mins);
-    localStorage.setItem('ot_focus_mins', String(newMins));
-    updateFocusTelemetryUI();
-    recordWeeklyFocus(mins);
-    return { date: current.date, mins: newMins };
-  }
-
-  function getSupernovaTier(mins) {
-    if (mins >= 180) return { tier: 3, name: 'TIER III · HYPERNOVA', target: 'Max Level Active ✨', pct: 100 };
-    if (mins >= 60) return { tier: 2, name: 'TIER II · STELLAR NOVA', target: 'Next: 180m (Tier III)', pct: Math.round(((mins - 60) / 120) * 100) };
-    return { tier: 1, name: 'TIER I · NOVA', target: 'Next: 60m (Tier II)', pct: Math.round((mins / 60) * 100) };
-  }
-
-  function updateFocusTelemetryUI() {
-    const tele = getFocusTelemetry();
-    const tierInfo = getSupernovaTier(tele.mins);
-    const tierBadge = document.getElementById('supernovaTierBadge');
-    const focusMinsEl = document.getElementById('telemetryFocusMins');
-    const nextTierEl = document.getElementById('telemetryNextTier');
-    const progressFill = document.getElementById('telemetryProgressFill');
-
-    if (tierBadge) tierBadge.textContent = tierInfo.name;
-    if (focusMinsEl) focusMinsEl.textContent = `${tele.mins} min`;
-    if (nextTierEl) nextTierEl.textContent = tierInfo.target;
-    if (progressFill) progressFill.style.width = `${Math.min(100, Math.max(0, tierInfo.pct))}%`;
-  }
-
-  let toastTimeout = null;
-  function showQuantumTelemetryToast(title, message) {
-    // Respect user setting to prevent unwanted interruptions
-    const allowToast = safeGetItem('orlando-milestone-toast', 'true') === 'true';
-    if (!allowToast) return;
-
-    const toast = document.getElementById('quantumTelemetryToast');
-    const tTitle = document.getElementById('toastTitle');
-    const tMsg = document.getElementById('toastMessage');
-    if (!toast || !tTitle || !tMsg) return;
-
-    tTitle.textContent = title;
-    tMsg.textContent = message;
-    toast.style.display = 'flex';
-
-    if (toastTimeout) clearTimeout(toastTimeout);
-    toastTimeout = setTimeout(() => {
-      toast.style.display = 'none';
-    }, 4500);
-  }
-
-  // ══════════════════════════════════════════════════════════════════════════
-  // ── 10D. QUANTUM RESONANCE BREATHING CALIBRATION (4-4-4-4) ──
-  let breathingInterval = null;
-  let breathingPhase = 0; // 0: inhale, 1: hold1, 2: exhale, 3: hold2
-  let breathingSecLeft = 4;
-  const breathingPhases = [
-    { name: 'IN-BREATH · GRAVITATIONAL GATHER', sub: 'Inhale slowly through nose as particles coalesce inward', scale: 1.45 },
-    { name: 'HOLD · QUANTUM SINGULARITY', sub: 'Retain breath and hold mental stillness at the core', scale: 1.45 },
-    { name: 'OUT-BREATH · STELLAR EXPANSION', sub: 'Exhale smoothly through mouth as radiant waves release', scale: 0.8 },
-    { name: 'HOLD · ZERO-GRAVITY VOID', sub: 'Rest comfortably empty in pure effortless clarity', scale: 0.8 }
-  ];
-
-  function startBreathingSession() {
-    const overlay = document.getElementById('quantumBreathingOverlay');
-    if (!overlay) return;
-    overlay.style.display = 'flex';
-    AudioHUD.confirm();
-    toggleFunCockpit(false);
-
-    breathingPhase = 0;
-    breathingSecLeft = 4;
-    updateBreathingUI();
-
-    if (breathingInterval) clearInterval(breathingInterval);
-    breathingInterval = setInterval(() => {
-      breathingSecLeft--;
-      if (breathingSecLeft <= 0) {
-        breathingPhase = (breathingPhase + 1) % 4;
-        breathingSecLeft = 4;
-        AudioHUD.tick(breathingPhase % 2 === 0 ? 880 : 1200);
-        if (breathingPhase === 2 && window.spawnSupernovaBurst) {
-          window.spawnSupernovaBurst(window.innerWidth / 2, window.innerHeight / 2, {
-            tier: 1,
-            showToast: false
-          });
-        }
-      }
-      updateBreathingUI();
-    }, 1000);
-  }
-
-  function stopBreathingSession() {
-    const overlay = document.getElementById('quantumBreathingOverlay');
-    if (overlay) overlay.style.display = 'none';
-    if (breathingInterval) {
-      clearInterval(breathingInterval);
-      breathingInterval = null;
-    }
-  }
-
-  function updateBreathingUI() {
-    const counter = document.getElementById('breathingCounter');
-    const title = document.getElementById('breathingStateTitle');
-    const subtext = document.getElementById('breathingSubtext');
-    const orbOuter = document.getElementById('breathingOrbOuter');
-    const orbCore = document.getElementById('breathingOrbCore');
-    const dots = document.querySelectorAll('.b-cycle-dot');
-
-    if (counter) counter.textContent = breathingSecLeft;
-    const curr = breathingPhases[breathingPhase];
-    if (title) title.textContent = curr.name;
-    if (subtext) subtext.textContent = curr.sub;
-
-    if (orbOuter) orbOuter.style.transform = `scale(${curr.scale})`;
-    if (orbCore) orbCore.style.transform = `scale(${curr.scale * 0.9})`;
-
-    dots.forEach((dot, idx) => {
-      dot.classList.toggle('active', idx === breathingPhase);
-    });
-  }
-
-  const btnStartBreathing = document.getElementById('btnStartBreathing');
-  const btnCloseBreathing = document.getElementById('btnCloseBreathing');
-  const btnStopBreathing = document.getElementById('btnStopBreathing');
-
-  if (btnStartBreathing) {
-    btnStartBreathing.addEventListener('click', (e) => {
+  // Logo opens Quantum Time Command Hub drawer
+  if (btnLogoEasterEgg) {
+    btnLogoEasterEgg.addEventListener('click', (e) => {
       e.stopPropagation();
-      startBreathingSession();
+      const rect = btnLogoEasterEgg.getBoundingClientRect();
+      if (window.spawnSupernovaBurst) {
+        window.spawnSupernovaBurst(rect.left + rect.width / 2, rect.top + rect.height / 2, {
+          tier: 1,
+          showToast: false
+        });
+      }
+      toggleFunCockpit();
     });
   }
-  if (btnCloseBreathing) {
-    btnCloseBreathing.addEventListener('click', stopBreathingSession);
-  }
-  if (btnStopBreathing) {
-    btnStopBreathing.addEventListener('click', stopBreathingSession);
-  }
 
-  // Initialize telemetry UI
-  updateFocusTelemetryUI();
-
-  function toggleFunCockpit(show) {
-    if (!funMicroCockpit) return;
-    const isOpen = funMicroCockpit.classList.contains('open');
-    const shouldOpen = show !== undefined ? show : !isOpen;
-    const backdrop = document.getElementById('quantumDrawerBackdrop');
-
-    if (shouldOpen) {
-      updateEarthDayProgress();
-      updateFocusTelemetryUI();
-      renderWeeklyFocusChart();
-      funMicroCockpit.classList.add('open');
-      funMicroCockpit.setAttribute('aria-hidden', 'false');
-      document.body.classList.add('quantum-panel-open');
-      if (backdrop) backdrop.classList.add('open');
-      if (btnLogoEasterEgg) btnLogoEasterEgg.classList.add('open');
-      AudioHUD.tick(1000);
-    } else {
-      funMicroCockpit.classList.remove('open');
-      funMicroCockpit.setAttribute('aria-hidden', 'true');
-      document.body.classList.remove('quantum-panel-open');
-      if (backdrop) backdrop.classList.remove('open');
-      if (btnLogoEasterEgg) btnLogoEasterEgg.classList.remove('open');
-    }
+  // Close drawer button
+  if (btnCloseFunCockpit) {
+    btnCloseFunCockpit.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleFunCockpit(false);
+      AudioHUD.tick(500);
+    });
   }
 
-  const drawerBackdropEl = document.getElementById('quantumDrawerBackdrop');
+  // Fire Supernova button in drawer
+  if (btnFireSupernova) {
+    btnFireSupernova.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const tele = getFocusTelemetry();
+      const tierInfo = getSupernovaTier(tele.mins);
+      if (window.spawnSupernovaBurst) {
+        window.spawnSupernovaBurst(window.innerWidth / 2, window.innerHeight / 2, {
+          tier: tierInfo.tier,
+          showToast: true
+        });
+      }
+    });
+  }
+
+  // Drawer backdrop click closes drawer
   if (drawerBackdropEl) {
     drawerBackdropEl.addEventListener('click', () => {
       toggleFunCockpit(false);
     });
   }
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && funMicroCockpit && funMicroCockpit.classList.contains('open')) {
-      toggleFunCockpit(false);
-    }
-  });
 
-  if (btnLogoEasterEgg) {
-    btnLogoEasterEgg.addEventListener('click', (e) => {
-      // Trigger instant Supernova particle burst at click position!
-      if (window.spawnSupernovaBurst) {
-        window.spawnSupernovaBurst(e.clientX, e.clientY);
-      }
-      AudioHUD.confirm();
-      // Open Quantum Time Command Hub drawer!
-      toggleFunCockpit();
-    });
-  }
-
-  // Brand Fun Tag Dropdown Listener
+  // Mode Pill Dropdown toggle (ONLY toggles dropdown, not Zen mode)
   if (brandFunTag) {
     brandFunTag.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -2622,102 +2681,27 @@
     });
   });
 
-  // Close mode dropdown on outside click or Escape
-  document.addEventListener('click', (e) => {
-    const wrapper = document.getElementById('modeDropdownWrapper');
-    if (wrapper && !wrapper.contains(e.target)) {
-      toggleModeDropdown(false);
-    }
-  });
+  // Breathing session controls in drawer
+  const btnStartBreathing = document.getElementById('btnStartBreathing');
+  const btnCloseBreathing = document.getElementById('btnCloseBreathing');
+  const btnStopBreathing = document.getElementById('btnStopBreathing');
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      toggleModeDropdown(false);
-    }
-  });
-
-  // Initialize saved productivity mode on load
-  applyProductivityMode(currentProductivityMode, false);
-
-  if (btnCloseFunCockpit) {
-    btnCloseFunCockpit.addEventListener('click', (e) => {
+  if (btnStartBreathing) {
+    btnStartBreathing.addEventListener('click', (e) => {
       e.stopPropagation();
       toggleFunCockpit(false);
-      AudioHUD.tick(500);
+      startBreathingSession();
     });
   }
 
-  if (btnFireSupernova) {
-    btnFireSupernova.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const tele = getFocusTelemetry();
-      const tierInfo = getSupernovaTier(tele.mins);
-      if (window.spawnSupernovaBurst) {
-        window.spawnSupernovaBurst(window.innerWidth / 2, window.innerHeight / 2, {
-          tier: tierInfo.tier,
-          showToast: true
-        });
-      }
-    });
+  if (btnCloseBreathing) {
+    btnCloseBreathing.addEventListener('click', stopBreathingSession);
+  }
+  if (btnStopBreathing) {
+    btnStopBreathing.addEventListener('click', stopBreathingSession);
   }
 
-  // ── ENHANCED ZEN IMMERSION CONTROLLER (HARDWARE-ACCELERATED ZERO-LAG) ──
-  const btnExitZenHUD = document.getElementById('btnExitZenHUD');
-  const btnZenPlayPause = document.getElementById('btnZenPlayPause');
-  const btnZenSoundToggle = document.getElementById('btnZenSoundToggle');
-  const btnZenFullscreen = document.getElementById('btnZenFullscreen');
-  const zenSoundText = document.getElementById('zenSoundText');
-  let zenIdleTimeout = null;
-
-  function updateZenSoundButtonText() {
-    if (!zenSoundText) return;
-    if (zenSoundMode === 'bowl') {
-      zenSoundText.textContent = 'Singing Bowl';
-    } else if (zenSoundMode === 'drone') {
-      zenSoundText.textContent = '432Hz Drone';
-    } else {
-      zenSoundText.textContent = 'Silent Zen';
-    }
-  }
-
-  function toggleZenMode(force) {
-    const isZen = force !== undefined ? force : !document.body.classList.contains('zen-mode');
-    document.body.classList.toggle('zen-mode', isZen);
-    document.body.classList.remove('zen-idle');
-    if (zenModeLabel) zenModeLabel.textContent = isZen ? 'Exit Zen Mode' : 'Zen Immersion Mode';
-    
-    if (isZen) {
-      toggleFunCockpit(false);
-      announceSR("Zen Immersion Mode activated. Press Escape or Z to exit.");
-      AudioHUD.confirm();
-      resetZenIdleTimer();
-      updateZenSoundButtonText();
-      if (zenSoundMode === 'drone') {
-        startZenDrone();
-      }
-    } else {
-      stopZenDrone();
-      announceSR("Zen Immersion Mode exited.");
-      AudioHUD.tick(600);
-      if (zenIdleTimeout) clearTimeout(zenIdleTimeout);
-    }
-  }
-
-  function resetZenIdleTimer() {
-    if (!document.body.classList.contains('zen-mode')) return;
-    document.body.classList.remove('zen-idle');
-    if (zenIdleTimeout) clearTimeout(zenIdleTimeout);
-    zenIdleTimeout = setTimeout(() => {
-      if (document.body.classList.contains('zen-mode')) {
-        document.body.classList.add('zen-idle');
-      }
-    }, 2500);
-  }
-
-  window.addEventListener('mousemove', resetZenIdleTimer, { passive: true });
-  window.addEventListener('touchstart', resetZenIdleTimer, { passive: true });
-
-  // Floating HUD Button Listeners
+  // Zen Immersion HUD Buttons
   if (btnExitZenHUD) {
     btnExitZenHUD.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -2772,13 +2756,9 @@
     });
   }
 
-  // Brand Header Zen Tag click directly toggles Zen Mode
-  if (brandFunTag) {
-    brandFunTag.addEventListener('click', (e) => {
-      e.stopPropagation();
-      toggleZenMode();
-    });
-  }
+  // Zen idle listeners
+  window.addEventListener('mousemove', resetZenIdleTimer, { passive: true });
+  window.addEventListener('touchstart', resetZenIdleTimer, { passive: true });
 
   // Keyboard hotkeys: Z toggles Zen Mode, Spacebar toggles Play/Pause, Escape exits
   document.addEventListener('keydown', (e) => {
@@ -2787,6 +2767,7 @@
     if (e.key === 'z' || e.key === 'Z') {
       toggleZenMode();
     } else if (e.key === 'Escape') {
+      toggleModeDropdown(false);
       if (document.body.classList.contains('zen-mode')) {
         toggleZenMode(false);
       }
@@ -2818,6 +2799,19 @@
     });
   }
 
+  // Click outside Mode Dropdown closes it
+  document.addEventListener('click', (e) => {
+    const wrapper = document.getElementById('modeDropdownWrapper');
+    if (wrapper && !wrapper.contains(e.target)) {
+      toggleModeDropdown(false);
+    }
+  });
+
+  // Initialize saved productivity mode on load (without triggering user action toast)
+  applyProductivityMode(currentProductivityMode, false);
+  updateEarthDayProgress();
+  setInterval(updateEarthDayProgress, 30000);
+  
   // Click outside Command Hub closes drawer
   document.addEventListener('click', (e) => {
     if (funMicroCockpit && funMicroCockpit.classList.contains('open')) {
