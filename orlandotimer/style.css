@@ -2694,7 +2694,7 @@ body[data-app-theme="pure-black"] .atmo-popup-panel {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
   padding: 14px 28px 18px 28px;
   background: rgba(8, 12, 20, 0.45);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -2710,12 +2710,12 @@ body[data-app-theme="pure-black"] .atmo-popup-panel {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: var(--theme-text-dim);
-  padding: 7px 14px;
+  padding: 6px 11px;
   border-radius: 9999px;
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 700;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.35px;
   line-height: 1.2;
   cursor: pointer;
   white-space: nowrap;
