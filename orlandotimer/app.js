@@ -3894,10 +3894,12 @@
   // Initialize Atmosphere & Particle Field Lab
   initAtmosphereLab();
 
-  // Service Worker Registration
+  // Service Worker Registration (scoped strictly to /orlandotimer/ so root index.html is never affected)
   if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js').catch(() => {});
+      const swPath = location.pathname.includes('/orlandotimer') ? '/orlandotimer/sw.js' : 'sw.js';
+      const swOpts = location.pathname.includes('/orlandotimer') ? { scope: '/orlandotimer/' } : {};
+      navigator.serviceWorker.register(swPath, swOpts).catch(() => {});
     });
   }
 })();
