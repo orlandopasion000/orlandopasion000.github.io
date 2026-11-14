@@ -8838,6 +8838,7 @@ try { checkUrlHashRoutine(); } catch(e){}
       dancePhase: Math.random() * Math.PI * 2,
       turnFlex: 0, // Subtle momentary flex strictly during turns/reversals; 0 = perfectly straight
       prevAngle: driftAngle,
+      heading: driftAngle,
       fadeMode: "normal", // "normal", "fading", "emerging"
       fadeProgress: 1.0,
       fadeSpeed: 0.08,
@@ -8861,24 +8862,23 @@ try { checkUrlHashRoutine(); } catch(e){}
   }
 
   // 3. Exact Deterministic Tiers & Growth Multipliers for Game Mode
-  // User Requirement: "some particles must grow twice, some grows thrice"
-  // User Requirement: "Make the particles glow more brighter"
-  // Exactly 20% grow 3.0x (thrice) and shine with Tier 2 super-radiance (lumiTier = 2)
-  // Exactly 40% grow 2.0x (twice) and shine with Tier 1 enhanced radiance (lumiTier = 1)
-  // Exactly 40% grow 1.25x (baseline) and shine with Tier 0 refined radiance (lumiTier = 0)
+  // User Requirement: "Additionally, make some (reminder, just some such as 3 or 4 or 5 or 6 or 7) of the particles are little more larger during the game"
+  // Exactly 6 particles across the entire swarm are designated as Tier 2 "Macro Quantum Singularities" (grow noticeably larger during game)
+  // Exactly 8 particles are designated as Tier 1 "Quantum Comets" (grow 1.65x)
+  // All remaining particles are Tier 0 "Quantum Quarks" (subtle baseline size, grow 1.15x)
   for (var pi = 0; pi < particles.length; pi++) {
-    var mod = pi % 10;
-    if (mod === 0 || mod === 5) {
-      // 2 out of 10 = 20%: Grow THRICE (3.0x), Tier 2 Beacon
-      particles[pi].growthMultiplier = 3.0;
+    if (pi < 6) {
+      // Exactly 6 particles across the screen: "a little more larger during the game" (Tier 2 Macro Singularities)
+      particles[pi].growthMultiplier = 2.85;
       particles[pi].lumiTier = 2;
-    } else if (mod === 1 || mod === 3 || mod === 7 || mod === 9) {
-      // 4 out of 10 = 40%: Grow TWICE (2.0x), Tier 1 Comet
-      particles[pi].growthMultiplier = 2.0;
+      particles[pi].isTitan = true;
+    } else if (pi < 14) {
+      // 8 medium particles (Tier 1)
+      particles[pi].growthMultiplier = 1.65;
       particles[pi].lumiTier = 1;
     } else {
-      // 4 out of 10 = 40%: Baseline (1.25x), Tier 0
-      particles[pi].growthMultiplier = 1.25;
+      // All other particles: sleek, compact, normal quantum baseline (Tier 0)
+      particles[pi].growthMultiplier = 1.15;
       particles[pi].lumiTier = 0;
     }
   }
@@ -9351,29 +9351,41 @@ try { checkUrlHashRoutine(); } catch(e){}
       p.x += p.vx;
       p.y += p.vy;
 
-      // ── LINE-OF-SIGHT SCREEN CONTAINMENT (Subtle flex strictly when bouncing to opposite side) ──
-      if (p.x < MIN_X + 60) p.vx += (MIN_X + 60 - p.x) * 0.014;
-      else if (p.x > MAX_X - 60) p.vx -= (p.x - (MAX_X - 60)) * 0.014;
-      if (p.y < MIN_Y + 60) p.vy += (MIN_Y + 60 - p.y) * 0.014;
-      else if (p.y > MAX_Y - 60) p.vy -= (p.y - (MAX_Y - 60)) * 0.014;
+      // ── LINE-OF-SIGHT SCREEN CONTAINMENT (Aerodynamic / Hydrodynamic Curving Perimeter - Zero Hard Bounces) ──
+      var TURN_BUFFER = 75;
+      if (p.x < MIN_X + TURN_BUFFER) {
+        var f = (MIN_X + TURN_BUFFER - p.x) / TURN_BUFFER;
+        p.vx += f * f * 0.35;
+        p.vy += (p.vy >= 0 ? 0.16 : -0.16) * f;
+      } else if (p.x > MAX_X - TURN_BUFFER) {
+        var f = (p.x - (MAX_X - TURN_BUFFER)) / TURN_BUFFER;
+        p.vx -= f * f * 0.35;
+        p.vy += (p.vy >= 0 ? 0.16 : -0.16) * f;
+      }
+      if (p.y < MIN_Y + TURN_BUFFER) {
+        var f = (MIN_Y + TURN_BUFFER - p.y) / TURN_BUFFER;
+        p.vy += f * f * 0.35;
+        p.vx += (p.vx >= 0 ? 0.16 : -0.16) * f;
+      } else if (p.y > MAX_Y - TURN_BUFFER) {
+        var f = (p.y - (MAX_Y - TURN_BUFFER)) / TURN_BUFFER;
+        p.vy -= f * f * 0.35;
+        p.vx += (p.vx >= 0 ? 0.16 : -0.16) * f;
+      }
 
+      // Soft perimeter containment (smooth damping turnaround, never an instantaneous 180° hard stick snap!)
       if (p.x < MIN_X) {
         p.x = MIN_X;
-        p.vx = Math.abs(p.vx) * 0.75 + 0.25;
-        p.turnFlex = 0.85;
+        if (p.vx < 0) p.vx = -p.vx * 0.45;
       } else if (p.x > MAX_X) {
         p.x = MAX_X;
-        p.vx = -Math.abs(p.vx) * 0.75 - 0.25;
-        p.turnFlex = -0.85;
+        if (p.vx > 0) p.vx = -p.vx * 0.45;
       }
       if (p.y < MIN_Y) {
         p.y = MIN_Y;
-        p.vy = Math.abs(p.vy) * 0.75 + 0.25;
-        p.turnFlex = 0.85;
+        if (p.vy < 0) p.vy = -p.vy * 0.45;
       } else if (p.y > MAX_Y) {
         p.y = MAX_Y;
-        p.vy = -Math.abs(p.vy) * 0.75 - 0.25;
-        p.turnFlex = -0.85;
+        if (p.vy > 0) p.vy = -p.vy * 0.45;
       }
 
       if (!p.isFront && p.isRadiant) radiantBackNodes.push(p);
@@ -9394,27 +9406,30 @@ try { checkUrlHashRoutine(); } catch(e){}
         }
       }
 
-      // ── SLEEK STRAIGHT CAPSULES WITH SUBTLE TURN-FLEX ──
+      // ── CONTINUOUS ANGULAR SLERP (Smooth Banking & Real Flight Mechanics - Zero "Hard Stick" Snapping) ──
       var currentSpeed = Math.hypot(p.vx, p.vy);
-      var currentAngle = Math.atan2(p.vy, p.vx);
+      var targetAngle = (currentSpeed > 0.05) ? Math.atan2(p.vy, p.vx) : (p.heading || 0);
 
-      if (p.prevAngle !== undefined) {
-        var angleDelta = currentAngle - p.prevAngle;
-        while (angleDelta > Math.PI) angleDelta -= Math.PI * 2;
-        while (angleDelta < -Math.PI) angleDelta += Math.PI * 2;
-        if (Math.abs(angleDelta) > 0.35) {
-          p.turnFlex = Math.max(-1.0, Math.min(1.0, (p.turnFlex || 0) + angleDelta * 0.7));
-        }
-      }
-      p.prevAngle = currentAngle;
+      if (p.heading === undefined) p.heading = targetAngle;
 
-      // Fast elastic relaxation: immediately snaps back to a straight line!
-      p.turnFlex = (p.turnFlex || 0) * 0.68;
-      if (Math.abs(p.turnFlex) < 0.04) p.turnFlex = 0;
+      var angleDiff = targetAngle - p.heading;
+      while (angleDiff > Math.PI) angleDiff -= Math.PI * 2;
+      while (angleDiff < -Math.PI) angleDiff += Math.PI * 2;
 
-      // Bow offset is strictly clamped to a tiny subtle flex (max 1.5px), 0 when moving straight
-      var bowOffset = p.turnFlex * 1.5;
-      var isCurved = Math.abs(bowOffset) > 0.12;
+      // Smooth angular interpolation: banks like a real aerodynamic/quantum entity (max ~8.6 deg/frame)
+      var maxTurnRate = 0.15;
+      var turnStep = Math.max(-maxTurnRate, Math.min(maxTurnRate, angleDiff * 0.20));
+      p.heading += turnStep;
+      while (p.heading > Math.PI) p.heading -= Math.PI * 2;
+      while (p.heading < -Math.PI) p.heading += Math.PI * 2;
+
+      // Dynamic organic wavepacket flex along the turning arc (tail gracefully bends into turn)
+      p.turnFlex = Math.max(-1.0, Math.min(1.0, (p.turnFlex || 0) * 0.76 + angleDiff * 0.70));
+      if (Math.abs(p.turnFlex) < 0.02) p.turnFlex = 0;
+
+      // Bow offset curves dynamically into turns (max 2.0px flex, 0 when cruising straight)
+      var bowOffset = p.turnFlex * 2.0;
+      var isCurved = Math.abs(bowOffset) > 0.10;
 
       var pTier = p.lumiTier || 0;
       var tierLenBoost = (pTier === 2) ? 6.0 : ((pTier === 1) ? 3.0 : 0);
@@ -9424,7 +9439,8 @@ try { checkUrlHashRoutine(); } catch(e){}
       // Expose current real-time geometry for strict physical touch detection
       p.curSize = curSize;
       p.dynamicLength = dynamicLength;
-      p.currentAngle = currentAngle;
+      p.currentAngle = p.heading;
+      var currentAngle = p.heading;
 
       // 100% Engraved Beat Length Elasticity
       if (isAudioHot) {
@@ -9448,7 +9464,7 @@ try { checkUrlHashRoutine(); } catch(e){}
 
       targetCtx.save();
       targetCtx.translate(p.x, p.y);
-      targetCtx.rotate(currentAngle);
+      targetCtx.rotate(p.heading);
 
       var halfL = dynamicLength / 2;
       var headR = curSize * 0.52;
