@@ -8990,8 +8990,9 @@ try { checkUrlHashRoutine(); } catch(e){}
         mouse.x = mouse.targetX;
         mouse.y = mouse.targetY;
       } else {
-        mouse.x += (mouse.targetX - mouse.x) * 0.35;
-        mouse.y += (mouse.targetY - mouse.y) * 0.35;
+        var mLerp = isGameMode ? 0.68 : 0.35;
+        mouse.x += (mouse.targetX - mouse.x) * mLerp;
+        mouse.y += (mouse.targetY - mouse.y) * mLerp;
       }
     }
 
@@ -9205,16 +9206,17 @@ try { checkUrlHashRoutine(); } catch(e){}
         var dist = Math.hypot(dx, dy);
 
         if (isGameMode) {
-          if (dist < INFLUENCE_RADIUS) {
+          var gameInfluenceRadius = 195;
+          if (dist < gameInfluenceRadius) {
             isChasedInGame = true;
-            var norm = Math.max(0, 1 - dist / INFLUENCE_RADIUS);
+            var norm = Math.max(0, 1 - dist / gameInfluenceRadius);
 
-            // Ultra-Strict 28px Corner Pocket + 8th-Power Diagonal Precision Requirement (2x Harder):
-            // Particles stay fast & elusive everywhere and fight hard in corners, yielding ONLY to razor-sharp ~45° precision!
+            // Ultra-Strict 24px Corner Pocket + 10th-Power Diagonal Precision + Faster Evasion:
+            // Particles sense cursor earlier (195px) and accelerate faster with higher top speed!
             var distWallX = Math.min(p.x - MIN_X, MAX_X - p.x);
             var distWallY = Math.min(p.y - MIN_Y, MAX_Y - p.y);
-            var nearWallX = Math.max(0, Math.min(1, 1 - distWallX / 28));
-            var nearWallY = Math.max(0, Math.min(1, 1 - distWallY / 28));
+            var nearWallX = Math.max(0, Math.min(1, 1 - distWallX / 24));
+            var nearWallY = Math.max(0, Math.min(1, 1 - distWallY / 24));
             var inCornerPocket = nearWallX * nearWallY;
 
             var angle = Math.atan2(dy, dx);
@@ -9224,22 +9226,22 @@ try { checkUrlHashRoutine(); } catch(e){}
               var cornerDirX = (p.x < width * 0.5) ? -0.7071 : 0.7071;
               var cornerDirY = (p.y < height * 0.5) ? -0.7071 : 0.7071;
               var diagAlign = Math.max(0, radX * cornerDirX + radY * cornerDirY);
-              precisionPin = inCornerPocket * Math.pow(diagAlign, 8);
+              precisionPin = inCornerPocket * Math.pow(diagAlign, 10);
             }
 
-            var isMouseStationary = !p.isLocked && (precisionPin < 0.50) && (now - mouse.lastActiveTime > 200);
-            var evadeMultiplier = isMouseStationary ? 2.2 : 1.0;
-            var evadeForce = Math.pow(norm, 1.4) * 3.75 * evadeMultiplier * (1 - precisionPin * 0.16);
-            var tanScale = 1.0 - precisionPin * 0.34; // Retains 66%+ sideways slip even under dead-on corner pin
+            var isMouseStationary = !p.isLocked && (precisionPin < 0.55) && (now - mouse.lastActiveTime > 190);
+            var evadeMultiplier = isMouseStationary ? 2.3 : 1.0;
+            var evadeForce = Math.pow(norm, 1.25) * 4.35 * evadeMultiplier * (1 - precisionPin * 0.14);
+            var tanScale = 1.0 - precisionPin * 0.28; // Retains 72%+ sideways slip even under dead-on corner pin
             var tanX = -radY * tanScale;
             var tanY = radX * tanScale;
 
-            p.vx += (radX * 1.80 + tanX * 1.30) * evadeForce * 0.42;
-            p.vy += (radY * 1.80 + tanY * 1.30) * evadeForce * 0.42;
+            p.vx += (radX * 1.92 + tanX * 1.42) * evadeForce * 0.44;
+            p.vy += (radY * 1.92 + tanY * 1.42) * evadeForce * 0.44;
 
-            // Minimal 8% damping only at razor-sharp 45° corner apex
-            if (precisionPin > 0.45) {
-              var cornerDamp = 1 - precisionPin * 0.08;
+            // Minimal 6% damping only at razor-sharp 45° corner apex
+            if (precisionPin > 0.50) {
+              var cornerDamp = 1 - precisionPin * 0.06;
               p.vx *= cornerDamp;
               p.vy *= cornerDamp;
             }
@@ -9394,8 +9396,8 @@ try { checkUrlHashRoutine(); } catch(e){}
         }
       }
 
-      // Natural damping & restoration (calm cruising during idle breath)
-      var dampRate = isIdle ? 0.978 : 0.965;
+      // Natural damping & restoration (less drag in game mode so evading particles sustain higher speed)
+      var dampRate = isGameMode ? 0.974 : (isIdle ? 0.978 : 0.965);
       p.vx *= dampRate;
       p.vy *= dampRate;
       p.vx += (p.baseVx - p.vx) * (isIdle ? 0.012 : 0.022);
@@ -10187,7 +10189,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   var contactDuration = 0.0;
   var lastTouchContactTime = 0;
   var REQUIRED_CONTACT = 2.0; // 2 seconds continuous
-  var STRICT_HIT_RADIUS = 12; // Strict precision contact radius (desktop: 12px, tablet: 15.5px, mobile: 19px)
+  var STRICT_HIT_RADIUS = 11.5; // High-precision contact radius (desktop: 11.5px, tablet: 15px, mobile: 18.5px)
 
   // Exact point-to-particle physical touch detection (measures against living multi-joint quantum spine)
   function getParticleTouchDistance(cx, cy, p) {
@@ -10450,7 +10452,7 @@ try { checkUrlHashRoutine(); } catch(e){}
     canvas.width = Math.floor(width * dpr);
     canvas.height = Math.floor(height * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    STRICT_HIT_RADIUS = (width < 600) ? 19 : ((width < 1024) ? 15.5 : 12);
+    STRICT_HIT_RADIUS = (width < 600) ? 18.5 : ((width < 1024) ? 15 : 11.5);
   }
 
   // Cross-device capability check (e.g. iOS Safari does not support DOM Fullscreen API)
@@ -10814,15 +10816,15 @@ try { checkUrlHashRoutine(); } catch(e){}
               triggerVictory(lockedParticle);
             }
           } else {
-            // Particle actively evades: 135ms chase grace window with 0.50x off-target decay (2x stricter precision!)
-            if (now - lastTouchContactTime > 135) {
+            // Particle actively evades: 120ms chase grace window with 0.60x off-target decay!
+            if (now - lastTouchContactTime > 120) {
               lockedParticle.isLocked = false;
               contactDuration = 0.0;
               lockedParticle = null;
               stopLockAudio();
               missionText.textContent = "TARGET: TOUCH ANY PARTICLE · MAINTAIN CONTACT FOR 2.0s";
             } else {
-              contactDuration = Math.max(0, contactDuration - dt * 0.50);
+              contactDuration = Math.max(0, contactDuration - dt * 0.60);
               var progress = Math.min(1.0, contactDuration / REQUIRED_CONTACT);
               drawLockReticle(lockedParticle.x, lockedParticle.y, progress, dist);
             }
