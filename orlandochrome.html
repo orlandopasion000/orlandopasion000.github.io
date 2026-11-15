@@ -1,24 +1,28 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
   <base href="/orlandochrome/">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content">
   <title id="pageTitle">OrlandoChrome (Main Version)</title>
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=pure79">
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png?v=pure79">
-  <link rel="icon" type="image/x-icon" href="favicon.ico?v=pure79">
-  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=pure79">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=pure108">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png?v=pure108">
+  <link rel="icon" type="image/x-icon" href="favicon.ico?v=pure108">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=pure108">
 
   <meta name="theme-color" content="#000000">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="OrlandoChrome (Main Version)">
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="description" content="OrlandoChrome · Taskbar Chrome Profile Messenger, AI Cooldown Timers & Wispr Flow Pro Dictation Suite.">
-  <link rel="manifest" id="manifestLink" href="manifest.json?v=pure79">
-  <link rel="apple-touch-icon" href="apple-touch-icon.png?v=pure79">
-  <link rel="stylesheet" href="styles.css?v=pure79">
+  <meta name="description" content="OrlandoChrome Â· Taskbar Chrome Profile Messenger, AI Cooldown Timers & Wispr Flow Pro Dictation Suite.">
+  <link rel="manifest" id="manifestLink" href="manifest.json?v=pure108">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png?v=pure108">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-180x180.png?v=pure108">
+  <link rel="apple-touch-icon" sizes="167x167" href="apple-touch-icon-167x167.png?v=pure108">
+  <link rel="apple-touch-icon" sizes="152x152" href="apple-touch-icon-152x152.png?v=pure108">
+  <link rel="apple-touch-icon" sizes="120x120" href="apple-touch-icon-120x120.png?v=pure108">
+  <link rel="stylesheet" href="styles.css?v=pure108">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -36,22 +40,111 @@
     </div>
 
     <div class="topbar-right">
-      <!-- Jump to Next Pending / Reset Profile (Alt+N) -->
+      <!-- Jump to Next Ready Profile (Alt+N) -->
+            <!-- Real-Time Cross-Device Sync Pill (Desktop & iPhone) -->
+      <button type="button" class="btn-topbar-quick btn-topbar-sync" id="btnTopbarSyncNow" title="Tap to sync instantly between Laptop & iPhone">
+        <svg class="modern-icon" viewBox="0 0 24 24" fill="none" width="13" height="13">
+          <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3L21.5 8M22 12.5a10 10 0 0 1-18.8 4.2L2.5 16" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span id="topbarSyncQuickLabel">Sync</span>
+      </button>
+
       <button type="button" class="btn-topbar-quick" id="btnNextReady" title="Jump to next profile with Pending Note or Limit Reset (Alt + N)">
-        <svg class="modern-icon modern-icon-gold" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg> <span>Next Ready</span>
+        <svg class="modern-icon modern-icon-gold" viewBox="0 0 24 24" fill="none"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="rgba(245,158,11,0.25)"/><circle cx="12" cy="12" r="1.5" fill="#ffffff"/></svg> <span>Next Ready</span>
       </button>
 
-      <!-- Open Main Web App Window / PWA Button -->
-      <button type="button" class="btn-topbar-desktop" id="btnTopbarLaunchApp" title="Open OrlandoChrome (Main Web App)">
-        <span class="desktop-btn-icon" id="topbarLaunchIcon"><svg class="modern-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></span>
-        <span class="desktop-btn-label" id="topbarLaunchLabel">Open Main Web App</span>
+      <!-- Voice Commands & Instructions Manual Button (Always Visible) -->
+      <button type="button" class="btn-topbar-quick btn-topbar-voice-btn" id="btnTopbarVoiceManual" title="Voice Commands Manual & Hands-Free Instructions (Alt + V)">
+        <span style="font-size:12px;">🎙️</span> <span>Voice Commands</span>
       </button>
 
-      <!-- App Distribution, Live QR & Command Suite Trigger -->
-      <button type="button" class="btn-topbar-suite" id="btnOpenAppSuite" title="Open App Distribution, Live QR Scanner &amp; Cross-Device Cloud Sync Suite">
-        <span><svg class="modern-icon modern-icon-cyan" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg> App Suite</span>
-        <span class="pwa-ready-mini-badge"><span class="sync-status-dot synced" id="topbarSyncDot"></span> <span id="topbarSyncLabel">Synced</span></span>
-      </button>
+      <!-- Compressed Single "System" Command Button & Floating Futuristic Dropdown -->
+      <div class="system-menu-wrapper" id="systemMenuWrapper">
+        <button type="button" class="btn-topbar-system" id="btnSystemMenu" aria-haspopup="true" aria-expanded="false" title="System Menu (Recovery, Centennial Recovery, Open main web app, Holographic QR)">
+          <svg class="modern-icon modern-icon-cyan" viewBox="0 0 24 24" fill="none" style="width:13px;height:13px;"><circle cx="12" cy="12" r="3" stroke="#38bdf8" stroke-width="2"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="#38bdf8" stroke-width="1.8"/></svg>
+          <span class="system-btn-text">System</span>
+          <span class="sync-status-dot synced" id="topbarSyncDot" title="Cloud Synchronized"></span>
+          <svg class="system-caret" viewBox="0 0 24 24" width="9" height="9" fill="none"><path d="M6 9l6 6 6-6" stroke="rgba(255,255,255,0.7)" stroke-width="2.5" stroke-linecap="round"/></svg>
+        </button>
+
+        <!-- Floating Dropdown Menu -->
+        <div class="system-dropdown-menu" id="systemDropdownMenu" role="menu" aria-label="System Menu">
+          <!-- 1. Recovery (renamed from Recovery Vault) -->
+          <button type="button" class="system-menu-item" id="btnOpenVault" role="menuitem" title="Recovery: Enterprise Data Recovery Vault & Rollback Checkpoints">
+            <div class="menu-item-icon menu-icon-emerald">
+              <svg class="modern-icon modern-icon-emerald" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#10b981" stroke-width="1.8" fill="rgba(16,185,129,0.2)"/><path d="M9 12l2 2 4-4" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="menu-item-text">
+              <div class="menu-item-title">Recovery</div>
+              <div class="menu-item-desc">Multi-tier vault & rollback checkpoints</div>
+            </div>
+          </button>
+
+          <!-- 2. Centennial Recovery (renamed from v100 Centennial) -->
+          <button type="button" class="system-menu-item" id="btnOpenCentennial" role="menuitem" title="Centennial Recovery: Merkle Cryptographic Integrity & Forensic Console">
+            <div class="menu-item-icon menu-icon-cyan">
+              <svg class="modern-icon modern-icon-cyan" viewBox="0 0 24 24" fill="none"><polygon points="12 2 21 8.5 17 21 7 21 3 8.5 12 2" stroke="#38bdf8" stroke-width="1.8" fill="rgba(56,189,248,0.2)"/><polyline points="3 8.5 12 12.5 21 8.5" stroke="#38bdf8" stroke-width="1.8"/><line x1="12" y1="12.5" x2="12" y2="21" stroke="#38bdf8" stroke-width="1.8"/><line x1="12" y1="2" x2="12" y2="12.5" stroke="#38bdf8" stroke-width="1.8"/></svg>
+            </div>
+            <div class="menu-item-text">
+              <div class="menu-item-title">Centennial Recovery</div>
+              <div class="menu-item-desc">Merkle cryptographic integrity & self-heal</div>
+            </div>
+          </button>
+
+          <!-- 3. Open main web app -->
+          <button type="button" class="system-menu-item" id="btnTopbarLaunchApp" role="menuitem" title="Open main web app: Standalone Window">
+            <div class="menu-item-icon menu-icon-red">
+              <span class="desktop-btn-icon" id="topbarLaunchIcon"><svg class="modern-icon" viewBox="0 0 24 24" fill="none"><polygon points="12 2 21 7 21 17 12 22 3 17 3 7" stroke="#ff4d58" stroke-width="1.8" fill="rgba(229,9,20,0.2)" stroke-linejoin="round"/><polyline points="7 12 12 7 17 12" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="7" x2="12" y2="17" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/></svg></span>
+            </div>
+            <div class="menu-item-text">
+              <div class="menu-item-title" id="topbarLaunchLabel">Open main web app</div>
+              <div class="menu-item-desc">Launch standalone desktop window</div>
+            </div>
+          </button>
+
+          <!-- 4. Holographic QR (renamed from App Suite) -->
+          <button type="button" class="system-menu-item" id="btnOpenAppSuite" role="menuitem" title="Holographic QR: Live Phone Scanner & Cross-Device Cloud Sync Suite">
+            <div class="menu-item-icon menu-icon-blue">
+              <svg class="modern-icon modern-icon-blue" viewBox="0 0 24 24" fill="none"><polygon points="12 2 22 7.5 22 16.5 12 22 2 16.5 2 7.5" stroke="#60a5fa" stroke-width="1.8" fill="rgba(96,165,250,0.2)" stroke-linejoin="round"/><line x1="12" y1="22" x2="12" y2="12" stroke="#60a5fa" stroke-width="1.6"/><line x1="22" y1="7.5" x2="12" y2="12" stroke="#60a5fa" stroke-width="1.6"/><line x1="2" y1="7.5" x2="12" y2="12" stroke="#60a5fa" stroke-width="1.6"/><circle cx="12" cy="12" r="2" fill="#ffffff"/></svg>
+            </div>
+            <div class="menu-item-text">
+              <div class="menu-item-title-row">
+                <span class="menu-item-title">Holographic QR</span>
+                <span class="pwa-ready-mini-badge" style="font-size:10px;padding:2px 6px;border-radius:4px;background:rgba(16,185,129,0.15);color:#34d399;font-weight:700;"><span id="topbarSyncLabel">Synced</span></span>
+              </div>
+              <div class="menu-item-desc">Live phone scanner & cloud sync bridge</div>
+            </div>
+          </button>
+
+          <!-- 5. Trash (Recently Deleted Vault) -->
+          <button type="button" class="system-menu-item" id="btnSystemTrash" role="menuitem" title="Trash: 30-Day Recently Deleted Vault & Restoration">
+            <div class="menu-item-icon menu-icon-orange">
+              <svg class="modern-icon" viewBox="0 0 24 24" fill="none" style="width:14px;height:14px;"><polyline points="3 6 5 6 21 6" stroke="#fb923c" stroke-width="2" stroke-linecap="round"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="#fb923c" stroke-width="2" stroke-linecap="round"/><line x1="10" y1="11" x2="10" y2="17" stroke="#fb923c" stroke-width="1.8"/><line x1="14" y1="11" x2="14" y2="17" stroke="#fb923c" stroke-width="1.8"/></svg>
+            </div>
+            <div class="menu-item-text">
+              <div class="menu-item-title-row">
+                <span class="menu-item-title">Trash</span>
+                <span class="system-trash-badge" id="systemTrashCount" style="font-size:10px;padding:2px 6px;border-radius:4px;background:rgba(251,146,60,0.18);color:#fb923c;font-weight:700;">0 items</span>
+              </div>
+              <div class="menu-item-desc">30-day soft-delete safety vault</div>
+            </div>
+          </button>
+
+          <!-- 6. Voice Commands Manual & Hands-Free Instructions -->
+          <button type="button" class="system-menu-item" id="btnSystemVoiceManual" role="menuitem" title="Voice Commands: 10 Superpowers & Hands-Free Instructions Manual">
+            <div class="menu-item-icon" style="background:rgba(255,82,99,0.15);border:1px solid rgba(255,82,99,0.3);">
+              <span style="font-size:14px;">🎙️</span>
+            </div>
+            <div class="menu-item-text">
+              <div class="menu-item-title-row">
+                <span class="menu-item-title">Voice Commands</span>
+                <span style="font-size:10px;padding:2px 6px;border-radius:4px;background:rgba(255,82,99,0.18);color:#ff8591;font-weight:700;">10 Active</span>
+              </div>
+              <div class="menu-item-desc">10 Superpowers & hands-free instructions</div>
+            </div>
+          </button>
+          </div>
+      </div>
 
       <!-- Live Clock & Daily Recharge Alarm Widget -->
       <div class="nav-clock-box" id="navClockBox">
@@ -66,14 +159,15 @@
     <aside class="sidebar" id="appSidebar">
       <div class="sidebar-header">
         <div class="search-box-wrap">
-          <span class="search-icon">🔍</span>
+          <span class="search-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#38bdf8" stroke-width="1.8"/><line x1="16.5" y1="16.5" x2="22" y2="22" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round"/><circle cx="11" cy="11" r="2" fill="rgba(56,189,248,0.5)"/></svg></span>
           <input type="text" id="profileSearch" class="search-input" placeholder="Search profiles or notes... (Alt+↑/↓)">
         </div>
 
         <div class="filter-tabs-row">
           <button class="filter-tab active" data-filter="all" id="tabAll">All (<span id="countAll">22</span>)</button>
+          <button class="filter-tab" data-filter="unread" id="tabUnread"><span class="tab-blue-messenger-dot"></span> Unread (<span id="countUnread">0</span>)</button>
           <button class="filter-tab" data-filter="pending" id="tabPending"><span class="tab-red-radiant-dot"></span> Pending (<span id="countPending">0</span>)</button>
-          <button class="filter-tab" data-filter="timers" id="tabTimers"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="vertical-align:middle; margin-right:4px;"><path d="M6 3h12M6 21h12" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round"/><path d="M7 4c0 4.5 3.5 6.5 5 8-1.5 1.5-5 3.5-5 8h10c0-4.5-3.5-6.5-5-8 1.5-1.5 5-3.5 5-8H7z" stroke="#38bdf8" stroke-width="1.8" stroke-linejoin="round" fill="rgba(56, 189, 248, 0.15)"/><circle cx="12" cy="12" r="1.5" fill="#f59e0b"/></svg>Timers (<span id="countTimers">0</span>)</button>
+          <button class="filter-tab" data-filter="timers" id="tabTimers"><span class="tab-cyber-clock-wrap"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#ffffff" stroke-width="1.8"/><path d="M12 7v5l3 2" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="1.5" fill="#ffffff"/></svg></span> Timers (<span id="countTimers">0</span>)</button>
         </div>
       </div>
 
@@ -84,8 +178,8 @@
     </aside>
 
     <!-- Draggable Width Resizer Line Between Profiles & Messages -->
-    <div class="workspace-resizer" id="workspaceResizer" title="Drag to adjust width · Double-click to reset">
-      <span class="resizer-grip" aria-hidden="true">⋮</span>
+    <div class="workspace-resizer" id="workspaceResizer" title="Drag to adjust width Â· Double-click to reset">
+      <span class="resizer-grip" aria-hidden="true">â‹®</span>
     </div>
 
     <!-- Right Column: Active Chrome Profile Notes & Timers -->
@@ -104,15 +198,15 @@
         <div class="dist-header-text">
           <div class="dist-title" id="distTitle">
             <span class="dist-title-name">App Distribution &amp; Live Sync Suite</span>
-            <span class="dist-badge">● PWA READY</span>
-            <span class="dist-collapse-hint" id="distCollapseHint">· 4 Command Tools · Tap to Expand</span>
+            <span class="dist-badge">â— PWA READY</span>
+            <span class="dist-collapse-hint" id="distCollapseHint">Â· 4 Command Tools Â· Tap to Expand</span>
           </div>
           <div class="dist-subtitle" id="distSubtitle">Installed, offline-cached, zero-warning install &amp; holographic device sync</div>
         </div>
       </div>
       <div class="dist-head-actions">
         <button type="button" class="dist-toggle-btn" id="distMinimizeBtn" title="Toggle Minimized View" aria-expanded="false">
-            <span id="distMinIcon" class="dist-min-icon">▸</span> <span id="distMinText">Expand</span>
+            <span id="distMinIcon" class="dist-min-icon">â–¸</span> <span id="distMinText">Expand</span>
           </button>
       </div>
     </div>
@@ -185,6 +279,7 @@
                 <span>Import</span>
               </button>
             </div>
+            <button type="button" class="primary dist-btn dist-btn-vault" id="openVaultBtnDrawer" style="margin-top:8px;width:100%;" title="Open Multi-Tier Data Recovery Vault & Rollback Checkpoints"><svg class="modern-icon modern-icon-gold" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></svg> <span>âš¡ Data Recovery Vault</span></button>
             <input type="file" id="importBackupFile" accept=".json,application/json" style="display:none">
           </div>
         </div>
@@ -215,6 +310,7 @@
   <input type="file" id="globalPhotoInput" accept="image/*" style="display:none;">
   <!-- Hidden Screenshot / Media Attachment Input (Chat Notes) -->
   <input type="file" id="noteImageInput" accept="image/*" style="display:none;">
+  <input type="file" id="importNotesFileInput" accept=".json,.txt,.md" style="display:none;">
   <!-- Hidden JSON Backup Restore Input -->
   <input type="file" id="backupJsonInput" accept=".json,application/json" style="display:none;">
   <!-- Hidden Chrome Local State / Taskbar Scanner File Input (For Blank Edition Laptop Sync) -->
@@ -224,8 +320,8 @@
   <div id="toast"></div>
 
   <!-- Scripts -->
-  <script src="sound.js?v=pure79"></script>
+  <script src="sound.js?v=pure108"></script>
   <script src="qrcode.min.js"></script>
-  <script src="app.js?v=pure79"></script>
+  <script src="app.js?v=pure108"></script>
 </body>
 </html>
