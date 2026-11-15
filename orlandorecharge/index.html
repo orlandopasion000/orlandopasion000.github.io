@@ -10123,7 +10123,7 @@ try { checkUrlHashRoutine(); } catch(e){}
       if (isHelix) {
         targetSpineK = isGameMode ? (p.isFront ? 14 : 11) : (p.isFront ? 10 : 8);
       } else if (isMeteor) {
-        targetSpineK = isGameMode ? (p.isFront ? 13 : 10) : (p.isFront ? 9 : 7);
+        targetSpineK = isGameMode ? (p.isFront ? 9 : 7) : (p.isFront ? 7 : 5);
       } else {
         targetSpineK = isGameMode ? (p.isFront ? 9 : 7) : (p.isFront ? 7 : 5);
       }
@@ -10313,13 +10313,14 @@ try { checkUrlHashRoutine(); } catch(e){}
               targetCtx.restore();
             }
 
-            // B. Quantum Realm Silky-Smooth Aerodynamic Taper Envelope filled with Solar Prominence Gradient
+            // B. Quantum Realm Silky-Smooth Aerodynamic Taper Envelope filled with Real Fire Combustion Gradient
             var meteorBodyGrad = targetCtx.createLinearGradient(tailTipX, tailTipY, headPtX, headPtY);
-            meteorBodyGrad.addColorStop(0.0, "rgba(220, 38, 38, 0.0)");
-            meteorBodyGrad.addColorStop(0.35, "rgba(220, 38, 38, " + (renderAlpha * 0.45).toFixed(2) + ")");
-            meteorBodyGrad.addColorStop(0.65, "rgba(245, 158, 11, " + (renderAlpha * 0.82).toFixed(2) + ")");
-            meteorBodyGrad.addColorStop(0.88, "rgba(254, 240, 138, " + (renderAlpha * 0.95).toFixed(2) + ")");
-            meteorBodyGrad.addColorStop(1.0, "rgba(255, 255, 245, " + (renderAlpha * 0.98).toFixed(2) + ")");
+            meteorBodyGrad.addColorStop(0.0, "rgba(185, 28, 28, 0.0)");
+            meteorBodyGrad.addColorStop(0.28, "rgba(220, 38, 38, " + (renderAlpha * 0.40).toFixed(2) + ")");
+            meteorBodyGrad.addColorStop(0.58, "rgba(234, 88, 12, " + (renderAlpha * 0.75).toFixed(2) + ")");
+            meteorBodyGrad.addColorStop(0.80, "rgba(251, 146, 60, " + (renderAlpha * 0.90).toFixed(2) + ")");
+            meteorBodyGrad.addColorStop(0.94, "rgba(254, 240, 138, " + (renderAlpha * 0.96).toFixed(2) + ")");
+            meteorBodyGrad.addColorStop(1.0, "rgba(255, 255, 255, " + (renderAlpha * 0.98).toFixed(2) + ")");
             targetCtx.fillStyle = meteorBodyGrad;
 
             targetCtx.beginPath();
@@ -10340,53 +10341,53 @@ try { checkUrlHashRoutine(); } catch(e){}
             targetCtx.closePath();
             targetCtx.fill();
 
-            // C. Twin Intertwined Solar Magnetic Prominence Ribbons (Smooth, Silky Aerodynamic Contour)
-            // Strand 1: Solar Gold Ribbon
-            targetCtx.beginPath();
-            targetCtx.moveTo(_ptsX[0], _ptsY[0]);
-            for (var rj = 1; rj < K; rj++) {
-              var wave1 = Math.sin(now * 0.008 + rj * 0.65 + (p.pulsePhase || 0) * 1.8) * (headR * 0.32 * (1 - rj / K));
-              targetCtx.lineTo(_ptsX[rj] + (-sinH) * wave1, _ptsY[rj] + cosH * wave1);
-            }
-            targetCtx.strokeStyle = "rgba(251, 191, 36, " + (renderAlpha * 0.85).toFixed(2) + ")";
-            targetCtx.lineWidth = Math.max(0.75, headR * 0.22);
-            targetCtx.stroke();
-
-            // Strand 2: Crimson Coral Prominence Ribbon
-            targetCtx.beginPath();
-            targetCtx.moveTo(_ptsX[0], _ptsY[0]);
-            for (var rj = 1; rj < K; rj++) {
-              var wave2 = -Math.sin(now * 0.008 + rj * 0.65 + (p.pulsePhase || 0) * 1.8) * (headR * 0.32 * (1 - rj / K));
-              targetCtx.lineTo(_ptsX[rj] + (-sinH) * wave2, _ptsY[rj] + cosH * wave2);
-            }
-            targetCtx.strokeStyle = "rgba(244, 63, 94, " + (renderAlpha * 0.80).toFixed(2) + ")";
-            targetCtx.lineWidth = Math.max(0.75, headR * 0.22);
-            targetCtx.stroke();
-
-            // D. Central Supersonic Solar Plasma Streamer (3800K Incandescent Core)
+            // C. Silky Smooth Real Fire Inner Core Tongue (Continuous Quadratic Curve, Zero Zigzag)
             var flameEndIdx = Math.min(K - 1, Math.max(2, (K * 0.65) | 0));
-            targetCtx.beginPath();
-            targetCtx.moveTo(_ptsX[0], _ptsY[0]);
-            for (var sj = 1; sj <= flameEndIdx; sj++) {
-              targetCtx.lineTo(_ptsX[sj], _ptsY[sj]);
+            if (flameEndIdx >= 2) {
+              var innerFlameGrad = targetCtx.createLinearGradient(_ptsX[flameEndIdx], _ptsY[flameEndIdx], headPtX, headPtY);
+              innerFlameGrad.addColorStop(0.0, "rgba(234, 88, 12, 0.0)");
+              innerFlameGrad.addColorStop(0.35, "rgba(249, 115, 22, " + (renderAlpha * 0.65).toFixed(2) + ")");
+              innerFlameGrad.addColorStop(0.70, "rgba(254, 240, 138, " + (renderAlpha * 0.92).toFixed(2) + ")");
+              innerFlameGrad.addColorStop(1.0, "rgba(255, 255, 255, " + (renderAlpha * 0.98).toFixed(2) + ")");
+
+              targetCtx.strokeStyle = innerFlameGrad;
+              targetCtx.lineWidth = Math.max(1.2, headR * 0.52);
+              targetCtx.lineCap = "round";
+              targetCtx.lineJoin = "round";
+              targetCtx.beginPath();
+              targetCtx.moveTo(_ptsX[0], _ptsY[0]);
+              for (var sj = 0; sj < flameEndIdx - 1; sj++) {
+                var mxc = (_ptsX[sj] + _ptsX[sj + 1]) * 0.5;
+                var myc = (_ptsY[sj] + _ptsY[sj + 1]) * 0.5;
+                targetCtx.quadraticCurveTo(_ptsX[sj], _ptsY[sj], mxc, myc);
+              }
+              targetCtx.lineTo(_ptsX[flameEndIdx], _ptsY[flameEndIdx]);
+              targetCtx.stroke();
             }
-            targetCtx.strokeStyle = "rgba(255, 255, 245, " + (renderAlpha * 0.96).toFixed(2) + ")";
-            targetCtx.lineWidth = Math.max(1.2, headR * 0.65);
-            targetCtx.lineCap = "round";
-            targetCtx.stroke();
+
+            // D. Real Fire Soft Combustion Billow along slipstream
+            var flamePuffSprite = MeteorVFXEngine.getFlamePuff();
+            if (flamePuffSprite && K >= 3) {
+              var puffPosIdx = Math.min(K - 1, 1);
+              var pfR = headR * 1.15;
+              targetCtx.save();
+              targetCtx.globalAlpha = renderAlpha * 0.40;
+              targetCtx.drawImage(flamePuffSprite, _ptsX[puffPosIdx] - pfR, _ptsY[puffPosIdx] - pfR, pfR * 2, pfR * 2);
+              targetCtx.restore();
+            }
 
             // E. Sparkling Solar Micro-Ember Shower (Incandescent Cinders)
             var emberCanvas = MeteorVFXEngine.getEmber();
             if (emberCanvas) {
               var emIdx1 = Math.min(K - 1, 2);
-              var emIdx2 = Math.min(K - 1, 4);
-              var emLat1 = Math.sin(now * 0.019 + (p.pulsePhase || 0) * 2.5) * (headR * 0.7);
-              var emLat2 = Math.cos(now * 0.023 + (p.pulsePhase || 0) * 3.1) * (headR * 0.7);
-              var emR = Math.max(2.0, headR * 0.40);
+              var emLat1 = Math.sin(now * 0.019 + (p.pulsePhase || 0) * 2.5) * (headR * 0.45);
+              var emR = Math.max(2.0, headR * 0.38);
               targetCtx.save();
               targetCtx.globalAlpha = renderAlpha * 0.92;
               targetCtx.drawImage(emberCanvas, _ptsX[emIdx1] + (-sinH) * emLat1 - emR * 0.5, _ptsY[emIdx1] + cosH * emLat1 - emR * 0.5, emR, emR);
-              if (tier === 2) {
+              if (tier === 2 && K >= 5) {
+                var emIdx2 = Math.min(K - 1, 4);
+                var emLat2 = Math.cos(now * 0.023 + (p.pulsePhase || 0) * 3.1) * (headR * 0.45);
                 targetCtx.drawImage(emberCanvas, _ptsX[emIdx2] + (-sinH) * emLat2 - emR * 0.5, _ptsY[emIdx2] + cosH * emLat2 - emR * 0.5, emR, emR);
               }
               targetCtx.restore();
@@ -10518,12 +10519,13 @@ try { checkUrlHashRoutine(); } catch(e){}
       var py0 = _ptsY[0];
 
       if (isMeteor) {
-        // ── 3A. SPECTACULAR REALISTIC METEOR HEAD (Procedural 3D Asteroid Rock, Molten Magma Fissures & Bow-Shock) ──
+        // ── 3A. SPECTACULAR REALISTIC METEOR HEAD (Procedural 3D Asteroid Rock, Molten Magma Fissures & Real Fire Aura) ──
         if (tier >= 1) {
           var rockR = headR * (tier === 2 ? 1.70 : 1.45);
           var astIndex = Math.abs(((p.pulsePhase || 0) * 100) | 0) % 6;
           var astCanvas = MeteorVFXEngine.getAsteroid(astIndex);
           var plasmaCanvas = MeteorVFXEngine.getPlasma();
+          var flamePuffCanvas = MeteorVFXEngine.getFlamePuff();
 
           // 1. Incandescent Molten Magma Corona / Plasma Aura
           if (plasmaCanvas) {
@@ -10534,7 +10536,16 @@ try { checkUrlHashRoutine(); } catch(e){}
             targetCtx.restore();
           }
 
-          // 2. 3D Procedural Basalt Asteroid Rock Sprite (Spherical Normal Shaded with Planck Fissures)
+          // 2. Soft Volumetric Real Fire Combustion Glow
+          if (flamePuffCanvas) {
+            targetCtx.save();
+            targetCtx.globalAlpha = renderAlpha * (tier === 2 ? 0.55 : 0.40);
+            var pfHeadR = rockR * 1.30;
+            targetCtx.drawImage(flamePuffCanvas, px0 - pfHeadR, py0 - pfHeadR, pfHeadR * 2, pfHeadR * 2);
+            targetCtx.restore();
+          }
+
+          // 3. 3D Procedural Basalt Asteroid Rock Sprite (Spherical Normal Shaded with Planck Fissures)
           if (astCanvas) {
             targetCtx.save();
             targetCtx.translate(px0, py0);
@@ -10543,17 +10554,6 @@ try { checkUrlHashRoutine(); } catch(e){}
             targetCtx.drawImage(astCanvas, -rockR, -rockR, rockR * 2, rockR * 2);
             targetCtx.restore();
           }
-
-          // 3. Supersonic Leading Atmospheric Bow-Shock Wave (Compressed Ionization Wave Front)
-          targetCtx.save();
-          targetCtx.translate(px0, py0);
-          targetCtx.rotate(p.heading);
-          targetCtx.beginPath();
-          targetCtx.arc(rockR * 0.30, 0, rockR * 0.88, -Math.PI * 0.38, Math.PI * 0.38);
-          targetCtx.strokeStyle = "rgba(255, 255, 245, " + (renderAlpha * 0.95).toFixed(2) + ")";
-          targetCtx.lineWidth = tier === 2 ? 2.4 : 1.8;
-          targetCtx.stroke();
-          targetCtx.restore();
 
           // 4. Precessing Fiery Molten Ember Orbits (swirling cinders around the fiery meteor)
           if (renderAsBrightest) {
@@ -12242,35 +12242,68 @@ try { checkUrlHashRoutine(); } catch(e){}
     }
     ctx.restore();
 
-    // ── 2. SIGNIFICANTLY SHORT & COMPACT SOLAR PROMINENCE FLAME PLUME (Tight Aerodynamic Mantle) ──
+    // ── 2. REAL FIRE VOLUMETRIC FLAME PLUME & FLICKERING LICKING FLAME WISPS ──
     // Strictly clamped so it stays compact and never stretches across the screen!
-    var speedBonus = (cursor.speed > 25) ? Math.min(8.0, cursor.speed * 0.012) : 0;
-    var flameLen = coreR * 1.30 + speedBonus; // Compact: only ~20-25px, hugging the core!
+    var speedBonus = (cursor.speed > 25) ? Math.min(6.0, cursor.speed * 0.010) : 0;
+    var flameLen = coreR * 1.35 + speedBonus; // Compact: only ~22-26px, hugging the core!
     var tipX = cx + cosT * flameLen;
     var tipY = cy + sinT * flameLen;
 
-    var cFlameGrad = ctx.createLinearGradient(tipX, tipY, cx, cy);
-    cFlameGrad.addColorStop(0.0, "rgba(220, 38, 38, 0.0)");
-    cFlameGrad.addColorStop(0.35, "rgba(220, 38, 38, 0.45)");
-    cFlameGrad.addColorStop(0.65, "rgba(245, 158, 11, 0.85)");
-    cFlameGrad.addColorStop(0.88, "rgba(254, 240, 138, 0.95)");
-    cFlameGrad.addColorStop(1.0, "rgba(255, 255, 250, 0.98)");
-    ctx.fillStyle = cFlameGrad;
+    // A. Soft Volumetric Real Fire Combustion Flame Puff (Organic thermal billow)
+    var flamePuff = MeteorVFXEngine.getFlamePuff();
+    if (flamePuff) {
+      ctx.save();
+      ctx.globalAlpha = 0.68 + exc * 0.20;
+      var puffR = coreR * 1.45;
+      ctx.drawImage(flamePuff, cx + cosT * (coreR * 0.25) - puffR, cy + sinT * (coreR * 0.25) - puffR, puffR * 2, puffR * 2);
+      ctx.restore();
+    }
 
-    ctx.beginPath();
-    ctx.moveTo(cx + perpX * (coreR * 0.90), cy + perpY * (coreR * 0.90));
-    ctx.quadraticCurveTo(cx + cosT * (flameLen * 0.45) + perpX * (coreR * 0.55), cy + sinT * (flameLen * 0.45) + perpY * (coreR * 0.55), tipX, tipY);
-    ctx.quadraticCurveTo(cx + cosT * (flameLen * 0.45) - perpX * (coreR * 0.55), cy + sinT * (flameLen * 0.45) - perpY * (coreR * 0.55), cx - perpX * (coreR * 0.90), cy - perpY * (coreR * 0.90));
-    ctx.closePath();
-    ctx.fill();
+    // B. Real Licking Flame Wisps Dancing in Wake (Fluid fluttering fire)
+    var flameWisp = MeteorVFXEngine.getFlameWisp();
+    if (flameWisp) {
+      var wispRot = trailAngle + Math.PI * 0.5;
+      // Central licking flame tongue
+      var wisp1Flicker = Math.sin(t * 6.5) * 0.08;
+      var wisp1Len = flameLen * 1.15;
+      var wisp1W = coreR * 0.95;
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(wispRot + wisp1Flicker);
+      ctx.globalAlpha = 0.88;
+      ctx.drawImage(flameWisp, -wisp1W * 0.5, -wisp1Len, wisp1W, wisp1Len);
+      ctx.restore();
 
-    // Compact Central Streamer (Tight within the short plume)
-    var coreTongueLen = flameLen * 0.60;
+      // Left fluttering flame tongue
+      var wisp2Flicker = Math.sin(t * 7.8 + 1.6) * 0.12;
+      var wisp2Len = flameLen * 0.85;
+      var wisp2W = coreR * 0.72;
+      ctx.save();
+      ctx.translate(cx + perpX * (coreR * 0.35), cy + perpY * (coreR * 0.35));
+      ctx.rotate(wispRot - 0.18 + wisp2Flicker);
+      ctx.globalAlpha = 0.72;
+      ctx.drawImage(flameWisp, -wisp2W * 0.5, -wisp2Len, wisp2W, wisp2Len);
+      ctx.restore();
+
+      // Right fluttering flame tongue
+      var wisp3Flicker = Math.cos(t * 7.2 + 2.8) * 0.12;
+      var wisp3Len = flameLen * 0.80;
+      var wisp3W = coreR * 0.70;
+      ctx.save();
+      ctx.translate(cx - perpX * (coreR * 0.35), cy - perpY * (coreR * 0.35));
+      ctx.rotate(wispRot + 0.18 + wisp3Flicker);
+      ctx.globalAlpha = 0.72;
+      ctx.drawImage(flameWisp, -wisp3W * 0.5, -wisp3Len, wisp3W, wisp3Len);
+      ctx.restore();
+    }
+
+    // C. Compact Smooth Central Streamer Tongue
+    var coreTongueLen = flameLen * 0.55;
     ctx.beginPath();
     ctx.moveTo(cx, cy);
     ctx.lineTo(cx + cosT * coreTongueLen, cy + sinT * coreTongueLen);
     ctx.strokeStyle = "rgba(255, 255, 250, 0.98)";
-    ctx.lineWidth = Math.max(2.0, coreR * 0.38);
+    ctx.lineWidth = Math.max(1.8, coreR * 0.32);
     ctx.lineCap = "round";
     ctx.stroke();
 
@@ -12369,6 +12402,15 @@ try { checkUrlHashRoutine(); } catch(e){}
       ctx.rotate(renderHeading);
       var cRockR = coreR * 1.30;
 
+      // Soft Combustion Aura Behind Rock
+      if (flamePuff) {
+        ctx.save();
+        ctx.globalAlpha = 0.65;
+        var rkPuffR = cRockR * 1.25;
+        ctx.drawImage(flamePuff, -rkPuffR, -rkPuffR, rkPuffR * 2, rkPuffR * 2);
+        ctx.restore();
+      }
+
       // 3D Asteroid Rock
       ctx.drawImage(cursorAsteroid, -cRockR, -cRockR, cRockR * 2, cRockR * 2);
 
@@ -12382,13 +12424,6 @@ try { checkUrlHashRoutine(); } catch(e){}
       ctx.beginPath();
       ctx.arc(0, 0, cRockR * 0.95, 0, Math.PI * 2);
       ctx.fill();
-
-      // Supersonic Leading Atmospheric Bow-Shock Wave
-      ctx.beginPath();
-      ctx.arc(cRockR * 0.30, 0, cRockR * 0.88, -Math.PI * 0.38, Math.PI * 0.38);
-      ctx.strokeStyle = progress > 0.85 ? "rgba(255, 255, 255, 0.98)" : "rgba(254, 240, 138, 0.95)";
-      ctx.lineWidth = 2.2;
-      ctx.stroke();
 
       ctx.restore();
     }
