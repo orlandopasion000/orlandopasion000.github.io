@@ -10340,27 +10340,27 @@ try { checkUrlHashRoutine(); } catch(e){}
             targetCtx.closePath();
             targetCtx.fill();
 
-            // C. Twin Intertwined Solar Magnetic Prominence Ribbons (Counter-Phase Golden Amber & Crimson Coral)
+            // C. Twin Intertwined Solar Magnetic Prominence Ribbons (Smooth, Silky Aerodynamic Contour)
             // Strand 1: Solar Gold Ribbon
             targetCtx.beginPath();
             targetCtx.moveTo(_ptsX[0], _ptsY[0]);
             for (var rj = 1; rj < K; rj++) {
-              var wave1 = Math.sin(now * 0.015 + rj * 1.25 + (p.pulsePhase || 0) * 2.8) * (headR * (0.85 + 0.55 * (1 - rj / K)));
+              var wave1 = Math.sin(now * 0.008 + rj * 0.65 + (p.pulsePhase || 0) * 1.8) * (headR * 0.32 * (1 - rj / K));
               targetCtx.lineTo(_ptsX[rj] + (-sinH) * wave1, _ptsY[rj] + cosH * wave1);
             }
-            targetCtx.strokeStyle = "rgba(251, 191, 36, " + (renderAlpha * 0.88).toFixed(2) + ")";
-            targetCtx.lineWidth = Math.max(0.85, headR * 0.30);
+            targetCtx.strokeStyle = "rgba(251, 191, 36, " + (renderAlpha * 0.85).toFixed(2) + ")";
+            targetCtx.lineWidth = Math.max(0.75, headR * 0.22);
             targetCtx.stroke();
 
             // Strand 2: Crimson Coral Prominence Ribbon
             targetCtx.beginPath();
             targetCtx.moveTo(_ptsX[0], _ptsY[0]);
             for (var rj = 1; rj < K; rj++) {
-              var wave2 = -Math.sin(now * 0.015 + rj * 1.25 + (p.pulsePhase || 0) * 2.8) * (headR * (0.85 + 0.55 * (1 - rj / K)));
+              var wave2 = -Math.sin(now * 0.008 + rj * 0.65 + (p.pulsePhase || 0) * 1.8) * (headR * 0.32 * (1 - rj / K));
               targetCtx.lineTo(_ptsX[rj] + (-sinH) * wave2, _ptsY[rj] + cosH * wave2);
             }
-            targetCtx.strokeStyle = "rgba(244, 63, 94, " + (renderAlpha * 0.82).toFixed(2) + ")";
-            targetCtx.lineWidth = Math.max(0.85, headR * 0.30);
+            targetCtx.strokeStyle = "rgba(244, 63, 94, " + (renderAlpha * 0.80).toFixed(2) + ")";
+            targetCtx.lineWidth = Math.max(0.75, headR * 0.22);
             targetCtx.stroke();
 
             // D. Central Supersonic Solar Plasma Streamer (3800K Incandescent Core)
@@ -12165,7 +12165,7 @@ try { checkUrlHashRoutine(); } catch(e){}
     ctx.restore();
   }
 
-  // ── Render Spectacular Quantum Meteor Flagship Cursor: All-Burning Solar Prominence Meteor (Everything Burning) ──
+  // ── Render Spectacular Quantum Meteor Flagship Cursor: All-Burning Solar Prominence Meteor (Ultra-Smooth & Compact) ──
   function drawMeteorCursor(cx, cy, now, progress) {
     ctx.save();
 
@@ -12174,18 +12174,29 @@ try { checkUrlHashRoutine(); } catch(e){}
     var rotBase = now * 0.0006;
     var spinMult = 1.0 + exc * 2.5;
 
-    // Movement slipstream angle (opposite to cursor heading)
-    var trailAngle = cursor.heading + Math.PI;
+    // Buttery smooth angular damping to avoid sudden rotational snapping during fast mouse/touch sweeps
+    if (cursor.speed > 10) {
+      var targetAngle = Math.atan2(cursor.vy, cursor.vx);
+      if (typeof cursor.smoothAngle !== "number") cursor.smoothAngle = targetAngle;
+      var diff = targetAngle - cursor.smoothAngle;
+      while (diff < -Math.PI) diff += Math.PI * 2;
+      while (diff > Math.PI) diff -= Math.PI * 2;
+      cursor.smoothAngle += diff * 0.25;
+    }
+    var renderHeading = (typeof cursor.smoothAngle === "number") ? cursor.smoothAngle : cursor.heading;
+
+    // Movement slipstream angle (opposite to cursor movement heading)
+    var trailAngle = renderHeading + Math.PI;
     var cosT = Math.cos(trailAngle);
     var sinT = Math.sin(trailAngle);
     var perpX = -sinT;
     var perpY = cosT;
 
-    var coreR = 14.5 + exc * 2.8;
+    var coreR = 14.0 + exc * 2.5;
 
-    // ── 1. Burning Solar Prominence Lens Flares (Cross & Diagonal Beams - Matching Quantum Realm's Dynamic Structure) ──
-    var flareLen = 42 + exc * 14;
-    var flareW = 2.6 + exc * 1.0;
+    // ── 1. Burning Solar Prominence Lens Flares (Cross & Diagonal Beams - Matching Quantum Realm's Structure) ──
+    var flareLen = 38 + exc * 10;
+    var flareW = 2.4 + exc * 0.8;
 
     // Primary Horizontal Solar Flare Beam (Molten White-Gold into Crimson Fire)
     ctx.save();
@@ -12231,8 +12242,10 @@ try { checkUrlHashRoutine(); } catch(e){}
     }
     ctx.restore();
 
-    // ── 2. Sleek Aerodynamic Solar Prominence Flame Plume (Trailing Behind) ──
-    var flameLen = coreR * (4.5 + (cursor.speed > 30 ? (cursor.speed * 0.028) : 0) + exc * 1.8);
+    // ── 2. SIGNIFICANTLY SHORT & COMPACT SOLAR PROMINENCE FLAME PLUME (Tight Aerodynamic Mantle) ──
+    // Strictly clamped so it stays compact and never stretches across the screen!
+    var speedBonus = (cursor.speed > 25) ? Math.min(8.0, cursor.speed * 0.012) : 0;
+    var flameLen = coreR * 1.30 + speedBonus; // Compact: only ~20-25px, hugging the core!
     var tipX = cx + cosT * flameLen;
     var tipY = cy + sinT * flameLen;
 
@@ -12245,62 +12258,32 @@ try { checkUrlHashRoutine(); } catch(e){}
     ctx.fillStyle = cFlameGrad;
 
     ctx.beginPath();
-    ctx.moveTo(cx + perpX * (coreR * 0.95), cy + perpY * (coreR * 0.95));
-    ctx.quadraticCurveTo(cx + cosT * (flameLen * 0.42) + perpX * (coreR * 0.65), cy + sinT * (flameLen * 0.42) + perpY * (coreR * 0.65), tipX, tipY);
-    ctx.quadraticCurveTo(cx + cosT * (flameLen * 0.42) - perpX * (coreR * 0.65), cy + sinT * (flameLen * 0.42) - perpY * (coreR * 0.65), cx - perpX * (coreR * 0.95), cy - perpY * (coreR * 0.95));
+    ctx.moveTo(cx + perpX * (coreR * 0.90), cy + perpY * (coreR * 0.90));
+    ctx.quadraticCurveTo(cx + cosT * (flameLen * 0.45) + perpX * (coreR * 0.55), cy + sinT * (flameLen * 0.45) + perpY * (coreR * 0.55), tipX, tipY);
+    ctx.quadraticCurveTo(cx + cosT * (flameLen * 0.45) - perpX * (coreR * 0.55), cy + sinT * (flameLen * 0.45) - perpY * (coreR * 0.55), cx - perpX * (coreR * 0.90), cy - perpY * (coreR * 0.90));
     ctx.closePath();
     ctx.fill();
 
-    // Twin Counter-Phase Magnetic Ribbons on Cursor Plume
-    var numRibbonPts = 12;
-    // Ribbon 1: Amber Gold
-    ctx.beginPath();
-    ctx.moveTo(cx, cy);
-    for (var rj = 1; rj < numRibbonPts; rj++) {
-      var rFrac = rj / numRibbonPts;
-      var rWave = Math.sin(t * 5.0 + rj * 0.8) * (coreR * 0.55 * (1 - rFrac));
-      var rx = cx + cosT * (flameLen * rFrac) + perpX * rWave;
-      var ry = cy + sinT * (flameLen * rFrac) + perpY * rWave;
-      ctx.lineTo(rx, ry);
-    }
-    ctx.strokeStyle = "rgba(251, 191, 36, 0.85)";
-    ctx.lineWidth = 1.4;
-    ctx.stroke();
-
-    // Ribbon 2: Crimson Coral
-    ctx.beginPath();
-    ctx.moveTo(cx, cy);
-    for (var rj = 1; rj < numRibbonPts; rj++) {
-      var rFrac = rj / numRibbonPts;
-      var rWave = -Math.sin(t * 5.0 + rj * 0.8) * (coreR * 0.55 * (1 - rFrac));
-      var rx = cx + cosT * (flameLen * rFrac) + perpX * rWave;
-      var ry = cy + sinT * (flameLen * rFrac) + perpY * rWave;
-      ctx.lineTo(rx, ry);
-    }
-    ctx.strokeStyle = "rgba(244, 63, 94, 0.80)";
-    ctx.lineWidth = 1.4;
-    ctx.stroke();
-
-    // Inner Supersonic Solar Plasma Streamer
-    var coreTongueLen = flameLen * 0.58;
+    // Compact Central Streamer (Tight within the short plume)
+    var coreTongueLen = flameLen * 0.60;
     ctx.beginPath();
     ctx.moveTo(cx, cy);
     ctx.lineTo(cx + cosT * coreTongueLen, cy + sinT * coreTongueLen);
     ctx.strokeStyle = "rgba(255, 255, 250, 0.98)";
-    ctx.lineWidth = Math.max(2.4, coreR * 0.45);
+    ctx.lineWidth = Math.max(2.0, coreR * 0.38);
     ctx.lineCap = "round";
     ctx.stroke();
 
-    // Trailing Solar Cinder Embers
+    // Subtle Compact Cinder Sparks (Hugging the rear core, strictly no long trails!)
     var emberCanvas = MeteorVFXEngine.getEmber();
     if (emberCanvas) {
-      for (var em = 0; em < 8; em++) {
-        var eDist = coreR * (1.2 + (em * 0.8) % 4.5) + (cursor.speed > 40 ? ((em * 5.0) % 25) : 0);
-        var eLat = Math.sin(t * 4.5 + em * 2.3) * (coreR * (0.4 + (em * 0.15) % 0.8));
+      for (var em = 0; em < 5; em++) {
+        var eDist = coreR * (0.65 + (em * 0.25) % 0.8);
+        var eLat = Math.sin(t * 3.5 + em * 2.1) * (coreR * 0.35);
         var ex = cx + cosT * eDist + perpX * eLat;
         var ey = cy + sinT * eDist + perpY * eLat;
-        var eSize = Math.max(2.5, coreR * (0.18 + (em * 0.04) % 0.22));
-        var eAlpha = 0.55 + 0.45 * Math.sin(t * 6.0 + em * 1.7);
+        var eSize = Math.max(2.2, coreR * 0.16);
+        var eAlpha = 0.50 + 0.45 * Math.sin(t * 5.0 + em * 1.5);
         ctx.save();
         ctx.globalAlpha = eAlpha;
         ctx.drawImage(emberCanvas, ex - eSize * 0.5, ey - eSize * 0.5, eSize, eSize);
@@ -12308,12 +12291,12 @@ try { checkUrlHashRoutine(); } catch(e){}
       }
     }
 
-    // ── 3. High-Intensity Solar Plasma Aura (Radiant Glow Behind Impactor) ──
+    // ── 3. High-Intensity Solar Plasma Corona Aura ──
     var plasmaCanvas = MeteorVFXEngine.getPlasma();
     if (plasmaCanvas) {
       ctx.save();
       ctx.globalAlpha = 0.85 + exc * 0.15;
-      var pR = coreR * 2.1;
+      var pR = coreR * 1.85;
       ctx.drawImage(plasmaCanvas, cx - pR, cy - pR, pR * 2, pR * 2);
       ctx.restore();
     }
@@ -12359,37 +12342,37 @@ try { checkUrlHashRoutine(); } catch(e){}
       var ey = curB * Math.sin(u);
 
       ctx.beginPath();
-      ctx.arc(ex, ey, 4.5, 0, Math.PI * 2);
+      ctx.arc(ex, ey, 4.2, 0, Math.PI * 2);
       ctx.fillStyle = "rgba(251, 146, 60, 0.35)";
       ctx.fill();
 
       ctx.beginPath();
-      ctx.arc(ex, ey, 2.2, 0, Math.PI * 2);
+      ctx.arc(ex, ey, 2.0, 0, Math.PI * 2);
       ctx.fillStyle = "#ffffff";
       ctx.fill();
 
       // Apex Solar Prominence Flares at ring tips
       ctx.beginPath();
-      ctx.arc(majorA, 0, 1.6, 0, Math.PI * 2);
-      ctx.arc(-majorA, 0, 1.6, 0, Math.PI * 2);
+      ctx.arc(majorA, 0, 1.5, 0, Math.PI * 2);
+      ctx.arc(-majorA, 0, 1.5, 0, Math.PI * 2);
       ctx.fillStyle = "rgba(255, 255, 245, 0.95)";
       ctx.fill();
 
       ctx.restore();
     }
 
-    // ── 5. ALL-BURNING 3D BASALT ASTEROID IMPACTOR NUCLEUS (Nothing is Plain - Entire Rock is Burning!) ──
+    // ── 5. ALL-BURNING 3D BASALT ASTEROID IMPACTOR NUCLEUS ──
     var cursorAsteroid = MeteorVFXEngine.getCursorAsteroid();
     if (cursorAsteroid) {
       ctx.save();
       ctx.translate(cx, cy);
-      ctx.rotate(cursor.heading);
-      var cRockR = coreR * 1.35;
+      ctx.rotate(renderHeading);
+      var cRockR = coreR * 1.30;
 
       // 3D Asteroid Rock
       ctx.drawImage(cursorAsteroid, -cRockR, -cRockR, cRockR * 2, cRockR * 2);
 
-      // Blazing Molten Vein Layer Over Rock (Makes entire rock actively burning and glowing!)
+      // Blazing Molten Vein Layer Over Rock
       var rockBurnGrad = ctx.createRadialGradient(0, 0, cRockR * 0.1, 0, 0, cRockR * 1.05);
       rockBurnGrad.addColorStop(0.0, "rgba(255, 255, 250, 0.85)");
       rockBurnGrad.addColorStop(0.35, "rgba(254, 240, 138, 0.70)");
@@ -12402,9 +12385,9 @@ try { checkUrlHashRoutine(); } catch(e){}
 
       // Supersonic Leading Atmospheric Bow-Shock Wave
       ctx.beginPath();
-      ctx.arc(cRockR * 0.32, 0, cRockR * 0.90, -Math.PI * 0.38, Math.PI * 0.38);
+      ctx.arc(cRockR * 0.30, 0, cRockR * 0.88, -Math.PI * 0.38, Math.PI * 0.38);
       ctx.strokeStyle = progress > 0.85 ? "rgba(255, 255, 255, 0.98)" : "rgba(254, 240, 138, 0.95)";
-      ctx.lineWidth = 2.4;
+      ctx.lineWidth = 2.2;
       ctx.stroke();
 
       ctx.restore();
@@ -12412,7 +12395,7 @@ try { checkUrlHashRoutine(); } catch(e){}
 
     // ── 6. Burning Micro-Singularity Solar Reticle Core ──
     ctx.beginPath();
-    ctx.arc(cx, cy, 1.8, 0, Math.PI * 2);
+    ctx.arc(cx, cy, 1.6, 0, Math.PI * 2);
     ctx.fillStyle = "#ffffff";
     ctx.fill();
 
