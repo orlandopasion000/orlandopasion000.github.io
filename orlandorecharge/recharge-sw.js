@@ -1,5 +1,5 @@
 /* OrlandoRecharge · Offline-First Service Worker (PWA Ready) */
-var CACHE_NAME = 'recharge-v53';
+var CACHE_NAME = 'recharge-v54';
 var ASSETS = [
   './',
   './index.html',
@@ -46,12 +46,21 @@ self.addEventListener('activate', function (event) {
 
 self.addEventListener('fetch', function (event) {
   if (event.request.method !== 'GET') return;
+  var url = event.request.url || '';
+  
+  // 1. Never cache non-HTTP schemes (e.g. chrome-extension://, devtools://, data:, blob:)
+  if (!url.startsWith('http://') && !url.startsWith('https://')) return;
+
   event.respondWith(
     fetch(event.request)
       .then(function (res) {
+        // 2. Never cache Partial Content (HTTP 206) or non-200 responses
+        if (!res || !res.ok || res.status !== 200 || res.type === 'opaque') {
+          return res;
+        }
         var copy = res.clone();
         caches.open(CACHE_NAME).then(function (cache) {
-          cache.put(event.request, copy);
+          cache.put(event.request, copy).catch(function () {});
         }).catch(function () {});
         return res;
       })

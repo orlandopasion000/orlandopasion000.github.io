@@ -80,11 +80,11 @@ body{color:var(--text);font-family:var(--sans);font-size:19.5px;line-height:1.5;
   width: 100vw;
   height: 100vh;
   pointer-events: none;
-  z-index: 3; /* Floating right in front of text, clock and cards */
-  opacity: 0.96;
+  z-index: 1; /* Anchored in ambient background layer, keeping clock and typography 100% crisp & unblocked */
+  opacity: 0.88;
   transition: opacity 0.4s ease;
 }
-main{position:relative;z-index:2;width:100%;max-width:none !important;margin:0 !important;padding:clamp(14px,2.8vw,28px) clamp(16px,3vw,64px) 80px;box-sizing:border-box;transition:opacity 1.35s cubic-bezier(0.4,0,0.2,1);will-change:opacity}
+main{position:relative;z-index:4;width:100%;max-width:none !important;margin:0 !important;padding:clamp(14px,2.8vw,28px) clamp(16px,3vw,64px) 80px;box-sizing:border-box;transition:opacity 1.35s cubic-bezier(0.4,0,0.2,1);will-change:opacity}
 
 /* ===== HERO CLOCK (Very Big Clock with Date, Next Alarm, Countdown) ===== */
 .hero{position:relative;padding:clamp(16px,2.5vw,28px) clamp(16px,2.8vw,32px) clamp(14px,2vw,22px);border:1px solid var(--line);border-radius:26px;background:#000;margin-bottom:14px;overflow:hidden}
@@ -4049,10 +4049,12 @@ body.light-theme .highlight-card .dist-icon{
 @media (max-width: 768px) {
   .or-brand-header {
     padding: max(12px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) 8px max(14px, env(safe-area-inset-left));
-    flex-wrap: wrap;
-    gap: 8px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
   }
   .or-brand-badge {
+    align-self: flex-start;
     gap: 10px;
   }
   .or-brand-logo-img {
@@ -4064,8 +4066,33 @@ body.light-theme .highlight-card .dist-icon{
     letter-spacing: 1px;
   }
   .or-header-right {
-    gap: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 6px;
+    flex-wrap: nowrap;
+  }
+  .or-header-right .fs-toggle-btn {
     flex-shrink: 0;
+    width: 36px !important;
+    min-width: 36px !important;
+    height: 34px !important;
+    padding: 0 !important;
+    border-radius: 9999px !important;
+    justify-content: center !important;
+  }
+  .or-header-right .qgame-btn-launch {
+    flex: 1;
+    height: 34px !important;
+    min-width: 0 !important;
+    padding: 0 8px !important;
+    font-size: 0.68rem !important;
+    justify-content: center !important;
+    gap: 4px !important;
+  }
+  .qg-word-quantum {
+    display: none !important;
   }
 }
 
@@ -4333,7 +4360,7 @@ body.light-theme .highlight-card .dist-icon{
       <!-- Enter Quantum Realm Game Mode (Game 1: Classic Streamlined Wavepackets) -->
       <button type="button" class="qgame-btn-launch qgame-btn-realm" id="btnLaunchGame" title="Enter Quantum Realm Game (Classic Particles)" aria-label="Launch Quantum Realm Game">
         <span class="game-btn-glyph" aria-hidden="true">◈</span>
-        <span class="game-btn-label">QUANTUM REALM</span>
+        <span class="game-btn-label"><span class="qg-word-quantum">QUANTUM </span>REALM</span>
       </button>
 
       <!-- Enter Quantum Helix Game Mode (Game 2: Cyan & Violet Intertwined Double-Helix) -->
@@ -4344,7 +4371,7 @@ body.light-theme .highlight-card .dist-icon{
             <path d="M4 18c4 0 6-12 10-12s6 12 10 12" stroke="#c084fc" stroke-dasharray="2 2" opacity="0.92"/>
           </svg>
         </span>
-        <span class="game-btn-label">QUANTUM HELIX</span>
+        <span class="game-btn-label"><span class="qg-word-quantum">QUANTUM </span>HELIX</span>
       </button>
 
       <!-- Enter Quantum Meteor Game Mode (Game 3: Fiery Meteors & Molten Asteroids) -->
@@ -4356,7 +4383,7 @@ body.light-theme .highlight-card .dist-icon{
             <circle cx="6" cy="18" r="1.5" fill="#fef08a"/>
           </svg>
         </span>
-        <span class="game-btn-label">QUANTUM METEOR</span>
+        <span class="game-btn-label"><span class="qg-word-quantum">QUANTUM </span>METEOR</span>
       </button>
     </div>
   </header>
@@ -13268,7 +13295,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   <script>
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v44').catch(function() {});
+        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v54', { scope: './' }).catch(function() {});
       });
     }
   </script>
