@@ -11805,7 +11805,6 @@ try { checkUrlHashRoutine(); } catch(e){}
     cursor.targetY = -9999;
     cursor.active = false;
     isTouchDown = false;
-    finger.active = false;
     hasDeliberateMove = false;
     lastCursorMoveTime = 0;
     lastSampleCursorX = -9999;
@@ -11859,7 +11858,6 @@ try { checkUrlHashRoutine(); } catch(e){}
     cursor.targetY = -9999;
     cursor.active = false;
     isTouchDown = false;
-    finger.active = false;
     hasDeliberateMove = false;
     lastCursorMoveTime = 0;
     lastSampleCursorX = -9999;
@@ -11918,7 +11916,6 @@ try { checkUrlHashRoutine(); } catch(e){}
     cursor.targetY = -9999;
     cursor.active = false;
     isTouchDown = false;
-    finger.active = false;
     hasDeliberateMove = false;
     if (lockedParticle) lockedParticle.isLocked = false;
     lockedParticle = null;
@@ -13169,7 +13166,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   <script>
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v55', { scope: './' }).catch(function() {});
+        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v56', { scope: './' }).catch(function() {});
       });
     }
   </script>
