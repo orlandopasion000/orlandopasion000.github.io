@@ -9772,7 +9772,8 @@ try { checkUrlHashRoutine(); } catch(e){}
       var depthScale = p.isWeaver ? (0.86 + Math.max(0, p.z) * 0.44) : 1.0;
       var mult = p.growthMultiplier || 1.25;
       var curGrowth = 1.0 + (mult - 1.0) * gameGlowProgress;
-      var curSize = (p.baseSize * depthScale) * curGrowth;
+      var isHelix = (gameParticleStyle === "helix");
+      var curSize = (p.baseSize * depthScale) * curGrowth * (isHelix ? 1.45 : 1.0);
       var lenGrowth = 1.0 + (mult - 1.0) * gameGlowProgress * 0.85;
       var baseLength = (p.baseLength * (p.isWeaver ? (0.90 + Math.max(0, p.z) * 0.38) : 1.0)) * lenGrowth;
 
@@ -10169,7 +10170,7 @@ try { checkUrlHashRoutine(); } catch(e){}
       if (isHelix) {
         // High-frequency, tight double-helix DNA braid (matching user reference image)
         // ~2 to 3 full twisting cycles along the spine
-        var waveAmp = curSize * 0.28;
+        var waveAmp = curSize * 0.32;
 
         for (var sj = 1; sj < K; sj++) {
           var pPrev = p.spine[sj - 1];
@@ -10416,14 +10417,14 @@ try { checkUrlHashRoutine(); } catch(e){}
           }
 
         } else if (isHelix) {
-          // ── 2B. ULTRA-FAST & SILKY QUANTUM HELIX DOUBLE-STRAND DNA BRAID ──
+          // ── 2B. ULTRA-FAST & SILKY QUANTUM HELIX DOUBLE-STRAND DNA BRAID (ENLARGED & BOLD) ──
           // Zero runtime gradient allocations for 120 FPS buttery smoothness
           var hAlpha = renderAlpha.toFixed(2);
-          var strandWidth = Math.max(1.1, headR * (tier === 2 ? 0.32 : 0.22));
+          var strandWidth = Math.max(1.8, headR * (tier === 2 ? 0.44 : 0.32));
 
           // 1. Delicate Base-Pair Cross Rungs connecting both strands at twist intervals
-          targetCtx.strokeStyle = "rgba(224, 231, 255, " + (renderAlpha * 0.35).toFixed(2) + ")";
-          targetCtx.lineWidth = 0.8;
+          targetCtx.strokeStyle = "rgba(224, 231, 255, " + (renderAlpha * 0.45).toFixed(2) + ")";
+          targetCtx.lineWidth = 1.0;
           targetCtx.beginPath();
           for (var rk = 1; rk < K - 1; rk++) {
             targetCtx.moveTo(_ribbon1X[rk], _ribbon1Y[rk]);
@@ -10432,7 +10433,7 @@ try { checkUrlHashRoutine(); } catch(e){}
           targetCtx.stroke();
 
           // 2. Strand A: Luminous Electric Cyan Ribbon
-          targetCtx.strokeStyle = "rgba(34, 211, 238, " + (renderAlpha * 0.92).toFixed(2) + ")";
+          targetCtx.strokeStyle = "rgba(34, 211, 238, " + (renderAlpha * 0.95).toFixed(2) + ")";
           targetCtx.lineWidth = strandWidth;
           targetCtx.beginPath();
           targetCtx.moveTo(_ribbon1X[0], _ribbon1Y[0]);
@@ -10445,7 +10446,7 @@ try { checkUrlHashRoutine(); } catch(e){}
           targetCtx.stroke();
 
           // 3. Strand B: Luminous Royal Magenta / Violet Ribbon
-          targetCtx.strokeStyle = "rgba(217, 70, 239, " + (renderAlpha * 0.90).toFixed(2) + ")";
+          targetCtx.strokeStyle = "rgba(217, 70, 239, " + (renderAlpha * 0.95).toFixed(2) + ")";
           targetCtx.lineWidth = strandWidth;
           targetCtx.beginPath();
           targetCtx.moveTo(_ribbon2X[0], _ribbon2Y[0]);
@@ -10620,14 +10621,22 @@ try { checkUrlHashRoutine(); } catch(e){}
       } else {
         // ── 3B. CLASSIC QUANTUM REALM & QUANTUM HELIX HEAD RENDERING ──
         // Glowing quantum head droplet
-        targetCtx.beginPath();
-        targetCtx.arc(px0, py0, headR, 0, Math.PI * 2);
         if (isHelix) {
-          targetCtx.fillStyle = "hsla(188, 98%, 70%, " + renderAlpha.toFixed(2) + ")";
+          targetCtx.beginPath();
+          targetCtx.arc(px0, py0, headR * 1.5, 0, Math.PI * 2);
+          targetCtx.fillStyle = "rgba(34, 211, 238, " + (renderAlpha * 0.28).toFixed(2) + ")";
+          targetCtx.fill();
+
+          targetCtx.beginPath();
+          targetCtx.arc(px0, py0, headR * 1.15, 0, Math.PI * 2);
+          targetCtx.fillStyle = "hsla(188, 98%, 74%, " + renderAlpha.toFixed(2) + ")";
+          targetCtx.fill();
         } else {
+          targetCtx.beginPath();
+          targetCtx.arc(px0, py0, headR, 0, Math.PI * 2);
           targetCtx.fillStyle = "hsla(" + fHeadHue + ", " + (isPrismaticQuark ? 100 : 98) + "%, " + fHeadLit.toFixed(1) + "%, " + renderAlpha.toFixed(2) + ")";
+          targetCtx.fill();
         }
-        targetCtx.fill();
 
         // Pure white / iridescent quantum singularity center
         targetCtx.beginPath();
@@ -12187,7 +12196,7 @@ try { checkUrlHashRoutine(); } catch(e){}
     ctx.restore();
   }
 
-  // ── Render Dedicated Quantum Helix Flagship Cursor: Luminous Quantum Sphere with DNA Double-Helix Emblem & Resonance Orbitals ──
+  // ── Render Dedicated Quantum Helix Flagship Cursor: Luminous Quantum Sphere with Inscribed DNA Helix & 3D Orbital Resonance ──
   function drawHelixCursor(cx, cy, now, progress) {
     ctx.save();
     ctx.translate(cx, cy);
@@ -12197,15 +12206,15 @@ try { checkUrlHashRoutine(); } catch(e){}
     var rotBase = now * 0.0006;
     var spinMult = 1.0 + exc * 2.5;
 
-    // ── 1. Bi-Chromatic Lens Flare (Electric Cyan to Royal Magenta with Crystalline Core) ──
-    var flareLen = 42 + exc * 12;
-    var flareW = 2.6 + exc * 0.8;
+    // ── 1. Compact Specular Bi-Chromatic Lens Flare Glint (Preserves Sphere Dominance) ──
+    var flareLen = 28 + exc * 8;
+    var flareW = 2.0 + exc * 0.5;
 
     var hGrad = ctx.createLinearGradient(-flareLen, 0, flareLen, 0);
     hGrad.addColorStop(0.0, "rgba(6, 182, 212, 0)");
-    hGrad.addColorStop(0.25, "rgba(34, 211, 238, 0.40)");
+    hGrad.addColorStop(0.30, "rgba(34, 211, 238, 0.40)");
     hGrad.addColorStop(0.50, "rgba(255, 255, 255, 0.95)");
-    hGrad.addColorStop(0.75, "rgba(217, 70, 239, 0.40)");
+    hGrad.addColorStop(0.70, "rgba(217, 70, 239, 0.40)");
     hGrad.addColorStop(1.0, "rgba(168, 85, 247, 0)");
 
     ctx.fillStyle = hGrad;
@@ -12217,25 +12226,25 @@ try { checkUrlHashRoutine(); } catch(e){}
     ctx.closePath();
     ctx.fill();
 
-    // ── 2. Central Quantum Helix Sphere (Iridescent Cyan & Magenta 3D Volumetric Shading) ──
-    var rCore = 14.5 + exc * 2.0;
+    // ── 2. Prominent 3D Quantum Helix Sphere (Rich Volumetric Specular Body) ──
+    var rCore = 16.0 + exc * 2.5;
 
-    // Ambient Halo
-    var haloGrad = ctx.createRadialGradient(0, 0, rCore * 0.7, 0, 0, rCore * 1.55);
-    haloGrad.addColorStop(0.0, "rgba(34, 211, 238, 0.35)");
-    haloGrad.addColorStop(0.5, "rgba(217, 70, 239, 0.20)");
+    // Ambient Luminous Halo
+    var haloGrad = ctx.createRadialGradient(0, 0, rCore * 0.65, 0, 0, rCore * 1.55);
+    haloGrad.addColorStop(0.0, "rgba(34, 211, 238, 0.38)");
+    haloGrad.addColorStop(0.5, "rgba(217, 70, 239, 0.22)");
     haloGrad.addColorStop(1.0, "rgba(0, 0, 0, 0)");
     ctx.fillStyle = haloGrad;
     ctx.beginPath();
     ctx.arc(0, 0, rCore * 1.55, 0, Math.PI * 2);
     ctx.fill();
 
-    // 3D Sphere Body
-    var sphereGrad = ctx.createRadialGradient(-2, -3, 1, 0, 0, rCore);
+    // Solid 3D Spherical Core Shading
+    var sphereGrad = ctx.createRadialGradient(-3, -4, 1, 0, 0, rCore);
     sphereGrad.addColorStop(0.0, "rgba(255, 255, 255, 0.98)");
-    sphereGrad.addColorStop(0.30, "rgba(34, 211, 238, 0.92)");
-    sphereGrad.addColorStop(0.65, "rgba(147, 51, 234, 0.92)");
-    sphereGrad.addColorStop(0.90, "rgba(59, 7, 100, 0.95)");
+    sphereGrad.addColorStop(0.28, "rgba(56, 189, 248, 0.95)");
+    sphereGrad.addColorStop(0.62, "rgba(147, 51, 234, 0.92)");
+    sphereGrad.addColorStop(0.88, "rgba(59, 7, 100, 0.95)");
     sphereGrad.addColorStop(1.0, progress > 0.8 ? "rgba(255, 215, 0, 0.98)" : "rgba(34, 211, 238, 0.95)");
 
     ctx.fillStyle = sphereGrad;
@@ -12243,25 +12252,29 @@ try { checkUrlHashRoutine(); } catch(e){}
     ctx.arc(0, 0, rCore, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.70)";
-    ctx.lineWidth = 0.9;
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.75)";
+    ctx.lineWidth = 1.0;
     ctx.stroke();
 
-    // ── 3. DNA Double-Helix Emblem on the Sphere (Iconic Twisting Strands & Base Pairs) ──
+    // ── 3. DNA Double-Helix Emblem Inscribed & Clipped Strictly Inside the Sphere ──
     ctx.save();
-    var dnaAngle = -0.55 + Math.sin(t * 0.8) * 0.10;
+    ctx.beginPath();
+    ctx.arc(0, 0, rCore - 0.8, 0, Math.PI * 2);
+    ctx.clip(); // Keeps the outer silhouette 100% perfectly spherical
+
+    var dnaAngle = -0.45 + Math.sin(t * 0.7) * 0.08;
     ctx.rotate(dnaAngle);
 
-    var dnaLen = rCore * 1.45;
-    var dnaAmp = rCore * 0.42;
+    var dnaLen = rCore * 1.85;
+    var dnaAmp = rCore * 0.38;
     var dnaSteps = 16;
     var dnaPhase = t * spinMult * 2.2;
 
     // Draw base-pair connecting rungs across the DNA helix
-    ctx.lineWidth = 0.9;
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.75)";
+    ctx.lineWidth = 1.0;
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.80)";
     for (var bi = -4; bi <= 4; bi++) {
-      var bx = (bi / 4.5) * (dnaLen * 0.5);
+      var bx = (bi / 4.5) * (dnaLen * 0.45);
       var bPhase = dnaPhase + (bx / dnaLen) * Math.PI * 3.5;
       var by1 = Math.sin(bPhase) * dnaAmp;
       var by2 = -by1;
@@ -12273,7 +12286,7 @@ try { checkUrlHashRoutine(); } catch(e){}
 
     // Strand 1: Electric Cyan DNA Helix Strand
     ctx.strokeStyle = "#38bdf8";
-    ctx.lineWidth = 1.6;
+    ctx.lineWidth = 1.8;
     ctx.beginPath();
     for (var i = 0; i <= dnaSteps; i++) {
       var ix = -dnaLen * 0.5 + (i / dnaSteps) * dnaLen;
@@ -12286,7 +12299,7 @@ try { checkUrlHashRoutine(); } catch(e){}
 
     // Strand 2: Royal Magenta DNA Helix Strand
     ctx.strokeStyle = "#f472b6";
-    ctx.lineWidth = 1.6;
+    ctx.lineWidth = 1.8;
     ctx.beginPath();
     for (var i = 0; i <= dnaSteps; i++) {
       var ix = -dnaLen * 0.5 + (i / dnaSteps) * dnaLen;
@@ -12298,21 +12311,20 @@ try { checkUrlHashRoutine(); } catch(e){}
     ctx.stroke();
     ctx.restore();
 
-    // ── 4. Dual Counter-Rotating Orbital Resonance Rings (Precessing Ellipses) ──
-    var majorA = 26 + exc * 4;
-    var minorB = 9.8 + exc * 1.5;
+    // ── 4. Three 3D Precessing Orbital Resonance Rings (Spherical Gyroscope Symmetry) ──
+    var majorA = 27 + exc * 4;
+    var minorB = 10.2 + exc * 1.5;
 
-    // Ring 1: Electric Cyan Orbital Ring
+    // Ring 1: Electric Cyan (+45 deg)
     ctx.save();
     var curAngle1 = (Math.PI / 4) + rotBase * spinMult;
     ctx.rotate(curAngle1);
     ctx.beginPath();
     ctx.ellipse(0, 0, majorA, minorB, 0, 0, Math.PI * 2);
-    ctx.strokeStyle = "rgba(34, 211, 238, 0.70)";
+    ctx.strokeStyle = "rgba(34, 211, 238, 0.75)";
     ctx.lineWidth = 1.1;
     ctx.stroke();
 
-    // Orbiting Cyan Node
     var nodeAngle1 = t * 2.0 * spinMult;
     var nodeX1 = Math.cos(nodeAngle1) * majorA;
     var nodeY1 = Math.sin(nodeAngle1) * minorB;
@@ -12322,17 +12334,16 @@ try { checkUrlHashRoutine(); } catch(e){}
     ctx.fill();
     ctx.restore();
 
-    // Ring 2: Royal Magenta Orbital Ring
+    // Ring 2: Royal Magenta (-45 deg)
     ctx.save();
     var curAngle2 = (-Math.PI / 4) - rotBase * spinMult;
     ctx.rotate(curAngle2);
     ctx.beginPath();
     ctx.ellipse(0, 0, majorA, minorB, 0, 0, Math.PI * 2);
-    ctx.strokeStyle = "rgba(217, 70, 239, 0.70)";
+    ctx.strokeStyle = "rgba(217, 70, 239, 0.75)";
     ctx.lineWidth = 1.1;
     ctx.stroke();
 
-    // Orbiting Magenta Node
     var nodeAngle2 = -t * 2.0 * spinMult;
     var nodeX2 = Math.cos(nodeAngle2) * majorA;
     var nodeY2 = Math.sin(nodeAngle2) * minorB;
@@ -12340,6 +12351,17 @@ try { checkUrlHashRoutine(); } catch(e){}
     ctx.arc(nodeX2, nodeY2, 1.8, 0, Math.PI * 2);
     ctx.fillStyle = "#f472b6";
     ctx.fill();
+    ctx.restore();
+
+    // Ring 3: Equatorial Iridescent Violet (0 deg)
+    ctx.save();
+    var curAngle3 = rotBase * spinMult * 0.5;
+    ctx.rotate(curAngle3);
+    ctx.beginPath();
+    ctx.ellipse(0, 0, majorA * 1.08, minorB * 0.85, 0, 0, Math.PI * 2);
+    ctx.strokeStyle = "rgba(192, 132, 252, 0.55)";
+    ctx.lineWidth = 0.95;
+    ctx.stroke();
     ctx.restore();
 
     // ── 5. Precision Singularity Center Reticle ──
