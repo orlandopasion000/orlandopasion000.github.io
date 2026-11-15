@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>OrlandoVault · Personal Jarvis Security Engine</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="apple-touch-icon" href="assets/vault-icon-192.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#000000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="Personal Jarvis Security Engine for Sir Orlando V. Pasion, Jr. - 1-Click Instant Password Access, Quantum Search, and Real-Time Cryptographic History.">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --black: #000000;
+      --bg-dark: #050608;
+      --surface-1: #0a0c10;
+      --surface-2: #10141d;
+      --surface-3: #161b26;
+      --hud-border: rgba(56, 189, 248, 0.25);
+      --hud-border-glow: rgba(56, 189, 248, 0.6);
+      --gold: #D9B95C;
+      --gold-soft: rgba(217, 185, 92, 0.55);
+      --gold-glow: rgba(217, 185, 92, 0.25);
+      --cyan: #38bdf8;
+      --cyan-bright: #00f0ff;
+      --cyan-glow: rgba(0, 240, 255, 0.35);
+      --arc-blue: #0284c7;
+      --emerald: #10b981;
+      --emerald-glow: rgba(16, 185, 129, 0.35);
+      --crimson: #ef4444;
+      --text-main: #f1f5f9;
+      --text-dim: #94a3b8;
+      --text-mute: #64748b;
+      --font-hud: 'Orbitron', -apple-system, sans-serif;
+      --font-tech: 'Rajdhani', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --font-ui: 'Inter', sans-serif;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--black);
+      color: var(--text-main);
+      font-family: var(--font-ui);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(2, 132, 199, 0.12) 0%, transparent 65%),
+        radial-gradient(circle at 10% 40%, rgba(217, 185, 92, 0.05) 0%, transparent 40%),
+        linear-gradient(rgba(10, 14, 23, 0.6) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(10, 14, 23, 0.6) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+    }
+
+    .scanline {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      z-index: 9999;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+      background-size: 100% 4px;
+      opacity: 0.35;
+    }
+
+    .vault-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(5, 6, 8, 0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+      padding: calc(12px + var(--safe-top)) 20px 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand-cluster {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .arc-reactor {
+      position: relative;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 2px solid var(--cyan-bright);
+      box-shadow: 0 0 15px var(--cyan-glow), inset 0 0 10px var(--cyan-glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: reactorPulse 3s infinite ease-in-out;
+    }
+
+    .arc-inner-ring {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1.5px dashed var(--gold);
+      animation: rotateClockwise 12s linear infinite;
+    }
+
+    .arc-core-dot {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 0 12px #ffffff, 0 0 20px var(--cyan-bright);
+    }
+
+    @keyframes reactorPulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 12px var(--cyan-glow), inset 0 0 8px var(--cyan-glow); }
+      50% { transform: scale(1.04); box-shadow: 0 0 24px rgba(0, 240, 255, 0.7), inset 0 0 14px rgba(0, 240, 255, 0.7); }
+    }
+
+    @keyframes rotateClockwise {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .brand-meta h1 {
+      font-family: var(--font-hud);
+      font-size: 17px;
+      letter-spacing: 2.5px;
+      font-weight: 800;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-meta h1 .gold-mark {
+      color: var(--gold);
+      text-shadow: 0 0 12px var(--gold-glow);
+    }
+
+    .brand-meta .jarvis-status {
+      font-family: var(--font-tech);
+      font-size: 11px;
+      color: var(--cyan);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 2px;
+    }
+
+    .live-pulse-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--emerald);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--emerald);
+      animation: blinkDot 1.4s infinite;
+    }
+
+    @keyframes blinkDot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-topbar-desktop {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 18px;
+      border-radius: 9999px;
+      background: rgba(217, 185, 92, 0.08);
+      border: 1.5px solid rgba(217, 185, 92, 0.45);
+      color: #ffffff;
+      font-family: var(--font-tech);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 0 15px rgba(217, 185, 92, 0.18);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .btn-topbar-desktop:hover {
+      background: linear-gradient(135deg, rgba(217, 185, 92, 0.25) 0%, rgba(56, 189, 248, 0.15) 100%);
+      border-color: var(--gold);
+      box-shadow: 0 0 25px rgba(217, 185, 92, 0.45);
+      transform: translateY(-2px);
+      color: #ffffff;
+    }
+
+    .btn-topbar-desktop.btn-app-active {
+      border-color: rgba(16, 185, 129, 0.7);
+      background: rgba(16, 185, 129, 0.12);
+      box-shadow: 0 0 20px var(--emerald-glow);
+    }
+
+    .desktop-btn-icon svg {
+      width: 17px;
+      height: 17px;
+      display: block;
+    }
+
+    .hud-btn {
+      background: var(--surface-2);
+      border: 1px solid var(--hud-border);
+      color: var(--text-main);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-family: var(--font-tech);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: all 0.2s ease;
+    }
+
+    .hud-btn:hover {
+      border-color: var(--cyan);
+      box-shadow: 0 0 14px var(--cyan-glow);
+      transform: translateY(-1px);
+    }
+
+    .hud-btn svg {
+      width: 15px;
+      height: 15px;
+      stroke: var(--cyan);
+    }
+
+    .vault-layout {
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px 20px 80px 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .jarvis-hud-banner {
+      background: linear-gradient(135deg, rgba(10, 16, 26, 0.95) 0%, rgba(5, 7, 12, 0.95) 100%);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 14px;
+      padding: 22px 26px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7), inset 0 0 30px rgba(2, 132, 199, 0.08);
+    }
+
+    .jarvis-hud-banner::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 4px; height: 100%;
+      background: linear-gradient(to bottom, var(--gold), var(--cyan-bright));
+    }
+
+    .hud-corner-accent {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border-top: 2px solid var(--cyan-bright);
+      border-right: 2px solid var(--cyan-bright);
+      top: 8px;
+      right: 8px;
+      opacity: 0.7;
+    }
+
+    .banner-grid {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .jarvis-voice-log {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .jarvis-title {
+      font-family: var(--font-hud);
+      font-size: 13px;
+      letter-spacing: 2px;
+      color: var(--cyan);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .jarvis-dialogue {
+      font-family: var(--font-tech);
+      font-size: 19px;
+      font-weight: 500;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+      line-height: 1.4;
+    }
+
+    .jarvis-subtext {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--gold-soft);
+      letter-spacing: 0.5px;
+    }
+
+    .hud-metrics-row {
+      display: flex;
+      gap: 16px;
+    }
+
+    .hud-metric-box {
+      background: rgba(16, 20, 29, 0.8);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 10px;
+      padding: 12px 18px;
+      text-align: center;
+      min-width: 110px;
+    }
+
+    .metric-num {
+      font-family: var(--font-hud);
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--cyan-bright);
+      text-shadow: 0 0 12px var(--cyan-glow);
+    }
+
+    .metric-label {
+      font-family: var(--font-tech);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-dim);
+      margin-top: 4px;
+    }
+
+    .controls-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .search-quantum-box {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-input-field {
+      width: 100%;
+      background: rgba(16, 20, 29, 0.85);
+      border: 1.5px solid rgba(56, 189, 248, 0.3);
+      border-radius: 12px;
+      padding: 16px 54px 16px 54px;
+      font-family: var(--font-ui);
+      font-size: 15px;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      transition: all 0.25s ease;
+    }
+
+    .search-input-field:focus {
+      outline: none;
+      border-color: var(--cyan-bright);
+      box-shadow: 0 0 25px var(--cyan-glow), inset 0 0 10px rgba(0, 240, 255, 0.1);
+    }
+
+    .search-icon-left {
+      position: absolute;
+      left: 20px;
+      pointer-events: none;
+      color: var(--cyan);
+    }
+
+    .search-clear-btn {
+      position: absolute;
+      right: 18px;
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      display: none;
+      padding: 4px;
+    }
+
+    .search-clear-btn:hover {
+      color: #ffffff;
+    }
+
+    .filter-pills-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .filter-pill {
+      background: rgba(16, 20, 29, 0.6);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 20px;
+      padding: 8px 18px;
+      font-family: var(--font-tech);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      color: var(--text-dim);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .filter-pill:hover {
+      border-color: var(--cyan);
+      color: #ffffff;
+    }
+
+    .filter-pill.active {
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.3) 0%, rgba(217, 185, 92, 0.2) 100%);
+      border-color: var(--cyan-bright);
+      color: #ffffff;
+      box-shadow: 0 0 15px var(--cyan-glow);
+    }
+
+    .vault-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 20px;
+    }
+
+    .vault-card {
+      background: linear-gradient(135deg, rgba(16, 20, 29, 0.9) 0%, rgba(10, 12, 18, 0.95) 100%);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 14px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+
+    .vault-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(56, 189, 248, 0.6);
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(2, 132, 199, 0.2);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .card-title-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .card-badge {
+      font-family: var(--font-tech);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(2, 132, 199, 0.2);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: var(--cyan);
+      display: inline-block;
+      width: fit-content;
+    }
+
+    .card-badge.critical {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: rgba(239, 68, 68, 0.5);
+      color: #fca5a5;
+    }
+
+    .card-account-title {
+      font-family: var(--font-hud);
+      font-size: 15px;
+      font-weight: 700;
+      color: #ffffff;
+      word-break: break-all;
+    }
+
+    .card-username-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text-dim);
+    }
+
+    .btn-copy-user {
+      background: none;
+      border: none;
+      color: var(--cyan);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-tech);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 6px;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+
+    .btn-copy-user:hover {
+      background: rgba(56, 189, 248, 0.15);
+      color: #ffffff;
+    }
+
+    .password-quantum-deck {
+      background: rgba(5, 7, 10, 0.95);
+      border: 1.5px solid rgba(217, 185, 92, 0.35);
+      border-radius: 10px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8);
+    }
+
+    .pwd-display-box {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      letter-spacing: 2px;
+      color: var(--gold);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      user-select: all;
+    }
+
+    .pwd-display-box.masked {
+      letter-spacing: 4px;
+      color: var(--text-mute);
+    }
+
+    .pwd-action-cluster {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-pwd-action {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 6px;
+      padding: 6px 10px;
+      color: var(--text-main);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .btn-pwd-action:hover {
+      border-color: var(--cyan-bright);
+      color: var(--cyan-bright);
+    }
+
+    .btn-copy-instant {
+      background: linear-gradient(135deg, rgba(217, 185, 92, 0.2) 0%, rgba(2, 132, 199, 0.25) 100%);
+      border: 1.5px solid var(--gold);
+      border-radius: 8px;
+      padding: 8px 14px;
+      color: #ffffff;
+      font-family: var(--font-tech);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 0 12px var(--gold-glow);
+      transition: all 0.2s ease;
+    }
+
+    .btn-copy-instant:hover {
+      background: linear-gradient(135deg, var(--gold) 0%, #f59e0b 100%);
+      color: #000000;
+      box-shadow: 0 0 20px var(--gold-glow);
+      transform: scale(1.02);
+    }
+
+    .btn-copy-instant.copied {
+      background: var(--emerald);
+      border-color: #34d399;
+      color: #000000;
+      box-shadow: 0 0 18px var(--emerald-glow);
+    }
+
+    .card-notes {
+      font-size: 12px;
+      color: var(--text-dim);
+      line-height: 1.5;
+      background: rgba(255, 255, 255, 0.02);
+      padding: 8px 10px;
+      border-radius: 6px;
+      border-left: 2px solid var(--cyan);
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-mute);
+      margin-top: auto;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-backdrop.active {
+      display: flex;
+    }
+
+    .modal-window {
+      background: var(--surface-1);
+      border: 1.5px solid var(--cyan);
+      border-radius: 16px;
+      max-width: 720px;
+      width: 100%;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 0 50px rgba(0, 240, 255, 0.25);
+      overflow: hidden;
+      animation: modalSlide 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes modalSlide {
+      from { transform: scale(0.95) translateY(20px); opacity: 0; }
+      to { transform: scale(1) translateY(0); opacity: 1; }
+    }
+
+    .modal-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(16, 20, 29, 0.9);
+    }
+
+    .modal-header h2 {
+      font-family: var(--font-hud);
+      font-size: 16px;
+      letter-spacing: 2px;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .modal-close-btn {
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    .modal-body {
+      padding: 20px 24px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .history-timeline-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 12px 14px;
+      background: var(--surface-2);
+      border: 1px solid rgba(56, 189, 248, 0.15);
+      border-radius: 8px;
+    }
+
+    .history-time-meta {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--cyan);
+    }
+
+    .history-event-desc {
+      font-size: 13px;
+      color: #ffffff;
+    }
+
+    .hud-toast-banner {
+      position: fixed;
+      bottom: calc(24px + var(--safe-bottom));
+      right: 24px;
+      background: rgba(10, 14, 23, 0.95);
+      border: 1.5px solid var(--cyan-bright);
+      box-shadow: 0 0 30px var(--cyan-glow);
+      border-radius: 10px;
+      padding: 14px 22px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 10000;
+      transform: translateY(120px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .hud-toast-banner.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--emerald);
+    }
+
+    .toast-text {
+      font-family: var(--font-tech);
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      color: #ffffff;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-dim);
+      font-family: var(--font-tech);
+      font-size: 18px;
+      letter-spacing: 1px;
+      grid-column: 1 / -1;
+    }
+
+    @media (max-width: 768px) {
+      .vault-topbar {
+        padding: calc(10px + var(--safe-top)) 14px 10px 14px;
+      }
+      .brand-meta h1 {
+        font-size: 14px;
+        letter-spacing: 1.5px;
+      }
+      .btn-topbar-desktop {
+        padding: 7px 12px;
+        font-size: 11px;
+      }
+      .banner-grid {
+        grid-template-columns: 1fr;
+      }
+      .hud-metrics-row {
+        justify-content: space-between;
+      }
+      .hud-metric-box {
+        min-width: 0;
+        flex: 1;
+        padding: 10px;
+      }
+      .vault-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="scanline"></div>
+
+  <header class="vault-topbar">
+    <div class="brand-cluster">
+      <div class="arc-reactor" title="Jarvis Core Security Matrix">
+        <div class="arc-inner-ring"></div>
+        <div class="arc-core-dot"></div>
+      </div>
+      <div class="brand-meta">
+        <h1>ORLANDO<span class="gold-mark">VAULT</span></h1>
+        <div class="jarvis-status">
+          <span class="live-pulse-dot"></span>
+          <span>JARVIS AI · ACTIVE & GUARDING</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="topbar-actions">
+      <button type="button" class="btn-topbar-desktop" id="btnTopbarLaunchApp" title="Open OrlandoVault in Dedicated Standalone Desktop Window" aria-label="Open Main Web App">
+        <span class="desktop-btn-icon" id="topbarLaunchIcon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2.5L20.5 7.4V16.6L12 21.5L3.5 16.6V7.4L12 2.5Z" stroke="#D9B95C"/>
+            <path d="M12 7V17M12 17L8 13M12 17L16 13" stroke="#ffffff"/>
+            <line x1="7" y1="19.5" x2="17" y2="19.5" stroke="#38bdf8"/>
+          </svg>
+        </span>
+        <span class="desktop-btn-label" id="topbarLaunchLabel">Open Main Web App</span>
+      </button>
+
+      <button type="button" class="hud-btn" id="btnOpenHistory" title="Audit Log & History">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>Audit</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="vault-layout">
+    <section class="jarvis-hud-banner">
+      <div class="hud-corner-accent"></div>
+      <div class="banner-grid">
+        <div class="jarvis-voice-log">
+          <div class="jarvis-title">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+            <span>Sir Orlando V. Pasion, Jr. · Personal Cryptographic Console</span>
+          </div>
+          <p class="jarvis-dialogue" id="jarvisGreeting">
+            "Good day, Sir. All cryptographic keys and security parameters are armed and ready for your command."
+          </p>
+          <p class="jarvis-subtext" id="jarvisClock">
+            SYSTEM CLOCK: INITIALIZING...
+          </p>
+        </div>
+
+        <div class="hud-metrics-row">
+          <div class="hud-metric-box">
+            <div class="metric-num" id="totalVaultAccounts">0</div>
+            <div class="metric-label">Secured Accounts</div>
+          </div>
+          <div class="hud-metric-box">
+            <div class="metric-num" id="totalCopiesMade">0</div>
+            <div class="metric-label">Total Copies</div>
+          </div>
+          <div class="hud-metric-box">
+            <div class="metric-num" style="color:var(--gold);" id="totalSecuredRating">100%</div>
+            <div class="metric-label">Security Index</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="controls-panel">
+      <div class="search-quantum-box">
+        <svg class="search-icon-left" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input type="text" id="vaultSearchInput" class="search-input-field" placeholder="Jarvis, locate credentials... (Type email, service, note, or username)" autocomplete="off" spellcheck="false">
+        <button type="button" id="searchClearBtn" class="search-clear-btn" title="Clear Search">✕</button>
+      </div>
+
+      <div class="filter-pills-row" id="filterPillsRow">
+        <button type="button" class="filter-pill active" data-cat="all">ALL CREDENTIALS</button>
+        <button type="button" class="filter-pill" data-cat="Gmail">GMAIL ECOSYSTEM</button>
+        <button type="button" class="filter-pill" data-cat="Solutions">SOLUTIONS SUITE</button>
+        <button type="button" class="filter-pill" data-cat="Critical">CRITICAL ONLY</button>
+      </div>
+    </section>
+
+    <section class="vault-grid" id="vaultGridContainer">
+    </section>
+  </main>
+
+  <div class="modal-backdrop" id="historyModal">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h2>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>JARVIS ACCESS & AUDIT LOG</span>
+        </h2>
+        <button type="button" class="modal-close-btn" id="btnCloseHistory">&times;</button>
+      </div>
+      <div class="modal-body" id="historyTimelineContainer">
+      </div>
+    </div>
+  </div>
+
+  <div class="hud-toast-banner" id="hudToast">
+    <div class="toast-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <div class="toast-text" id="toastMessage">Password copied to clipboard</div>
+  </div>
+
+  <script>
+    const SEED_VAULT = [{"id": "vault-gmail-1", "category": "Gmail", "title": "orlandopasion1994@gmail.com", "username": "orlandopasion1994@gmail.com", "password": "J#Y9rtWd-6N*DeU5iV6d", "old_password": "qwerty.17@7", "notes": "Primary Gmail. Microsoft account, Apple ID login, X @orlando_pasion, Facebook primary, banking and many apps.", "importance": "Critical", "status": "\u2714 Secured", "badge": "Google Ecosystem", "updated_at": "2026-11-12T04:01:00Z"}, {"id": "vault-gmail-2", "category": "Gmail", "title": "orlandopasion000@gmail.com", "username": "orlandopasion000@gmail.com", "password": "n5gQ-6q?Wpmv8eVhK2U-", "old_password": "qwerty.17", "notes": "Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907.", "importance": "Critical", "status": "\u2714 Secured", "badge": "Google Ecosystem", "updated_at": "2026-11-12T04:01:00Z"}, {"id": "vault-gmail-3", "category": "Gmail", "title": "btaborda07@gmail.com", "username": "btaborda07@gmail.com", "password": "Blanca070796@", "old_password": "Blanca070796@", "notes": "Wife's Gmail: Facebook, PRC online, Pulse and BDO logins.", "importance": "High", "status": "Pending", "badge": "Google Ecosystem", "updated_at": "2026-11-12T04:01:00Z"}, {"id": "vault-gmail-4", "category": "Gmail", "title": "plukorlandopasion@gmail.com", "username": "plukorlandopasion@gmail.com", "password": "@1Ncorrect@1", "old_password": "@1Ncorrect@1", "notes": "Pru Life UK, PRUForce and LMS login.", "importance": "High", "status": "Pending", "badge": "Google Ecosystem", "updated_at": "2026-11-12T04:01:00Z"}, {"id": "vault-gmail-5", "category": "Gmail", "title": "bepasion07@gmail.com", "username": "bepasion07@gmail.com", "password": "qwerty.17", "old_password": "qwerty.17", "notes": "Wife's second Gmail: LEIRS and CPDAS.", "importance": "High", "status": "Pending", "badge": "Google Ecosystem", "updated_at": "2026-11-12T04:01:00Z"}, {"id": "vault-gmail-6", "category": "Gmail", "title": "orlandopasion0817@gmail.com", "username": "orlandopasion0817@gmail.com", "password": "s86NFd&y_j6n3fJRd$2t", "old_password": "qwerty.17", "notes": "Secondary Gmail. Facebook secondary, Disney+, Google Play Games for \"MrBeast\", X @orlandopasion07.", "importance": "High", "status": "\u2714 Secured", "badge": "Google Ecosystem", "updated_at": "2026-11-12T04:01:00Z"}, {"id": "vault-gmail-7", "category": "Gmail", "title": "revnash0@gmail.com", "username": "revnash0@gmail.com", "password": "nashreviewer", "old_password": "nashreviewer", "notes": "NASH reviewer materials.", "importance": "Medium", "status": "Pending", "badge": "Google Ecosystem", "updated_at": "2026-11-12T04:01:00Z"}, {"id": "vault-gmail-8", "category": "Gmail", "title": "pogiorlandopasion@gmail.com", "username": "pogiorlandopasion@gmail.com", "password": "qwerty.17", "old_password": "qwerty.17", "notes": "Facebook business profile \"Orlando Pasion (Bus.)\".", "importance": "Medium", "status": "Pending", "badge": "Google Ecosystem", "updated_at": "2026-11-12T04:01:00Z"}, {"id": "vault-gmail-9", "category": "Gmail", "title": "brigidapasion21560@gmail.com", "username": "brigidapasion21560@gmail.com", "password": "brigida123@1", "old_password": "brigida123@1", "notes": "Mom's Gmail.", "importance": "Medium", "status": "Pending", "badge": "Google Ecosystem", "updated_at": "2026-11-12T04:01:00Z"}, {"id": "vault-gmail-10", "category": "Gmail", "title": "orlandopasion001@gmail.com", "username": "orlandopasion001@gmail.com", "password": "qwerty.17@1", "old_password": "qwerty.17@1", "notes": "Honor of Kings (001) and Scite trial sign-ups. 16 dotted look-alike addresses reach this same inbox (see Dot Aliases).", "importance": "Low", "status": "Pending", "badge": "Google Ecosystem", "updated_at": "2026-11-12T04:01:00Z"}, {"id": "vault-gmail-11", "category": "Gmail", "title": "orlandopasion002@gmail.com", "username": "orlandopasion002@gmail.com", "password": "qwerty.17", "old_password": "qwerty.17", "notes": "Honor of Kings (002).", "importance": "Low", "status": "Pending", "badge": "Google Ecosystem", "updated_at": "2026-11-12T04:01:00Z"}, {"id": "vault-gmail-12", "category": "Gmail", "title": "orlandopasion003@gmail.com", "username": "orlandopasion003@gmail.com", "password": "qwerty.17", "old_password": "qwerty.17", "notes": "Honor of Kings (003).", "importance": "Low", "status": "Pending", "badge": "Google Ecosystem", "updated_at": "2026-11-12T04:01:00Z"}, {"id": "vault-gmail-13", "category": "Gmail", "title": "orlandopasion004@gmail.com", "username": "orlandopasion004@gmail.com", "password": "qwerty.17", "old_password": "qwerty.17", "notes": "Honor of Kings (004).", "importance": "Low", "status": "Pending", "badge": "Google Ecosystem", "updated_at": "2026-11-12T04:01:00Z"}, {"id": "vault-gmail-14", "category": "Gmail", "title": "orlandopasion005@gmail.com", "username": "orlandopasion005@gmail.com", "password": "(not recorded)", "old_password": "(not recorded)", "notes": "Honor of Kings (005).", "importance": "Low", "status": "Pending", "badge": "Google Ecosystem", "updated_at": "2026-11-12T04:01:00Z"}, {"id": "vault-gmail-15", "category": "Gmail", "title": "watchonlineapple@gmail.com", "username": "watchonlineapple@gmail.com", "password": "6#$cmeB9Tx9!fj9-yaYD", "old_password": "(not recorded)", "notes": "VM streaming and one Scite trial.", "importance": "Low", "status": "\u2714 Secured", "badge": "Google Ecosystem", "updated_at": "2026-11-12T04:01:00Z"}, {"id": "vault-gmail-16", "category": "Gmail", "title": "grammarlyquillbot001@gmail.com", "username": "grammarlyquillbot001@gmail.com", "password": "(not recorded)", "old_password": "(not recorded)", "notes": "ChatGPT, Grammarly/Quillbot and a Scite trial.", "importance": "Low", "status": "Pending", "badge": "Google Ecosystem", "updated_at": "2026-11-12T04:01:00Z"}, {"id": "vault-gmail-17", "category": "Gmail", "title": "yifyyts7@gmail.com", "username": "yifyyts7@gmail.com", "password": "qwerty_177.", "old_password": "qwerty_177.", "notes": "Mobile Legends \"MrBeast\" account (created Mar 9, 2017).", "importance": "Low", "status": "Pending", "badge": "Google Ecosystem", "updated_at": "2026-11-12T04:01:00Z"}, {"id": "vault-gmail-18", "category": "Gmail", "title": "orlandopasion006@gmail.com", "username": "orlandopasion006@gmail.com", "password": "(not recorded)", "old_password": "(not recorded)", "notes": "No use recorded.", "importance": "Low", "status": "Pending", "badge": "Google Ecosystem", "updated_at": "2026-11-12T04:01:00Z"}, {"id": "vault-gmail-19", "category": "Gmail", "title": "scite.orlandopasion001@gmail.com", "username": "scite.orlandopasion001@gmail.com", "password": "scite001", "old_password": "scite001", "notes": "Scite trial/plan account.", "importance": "Low", "status": "Pending", "badge": "Google Ecosystem", "updated_at": "2026-11-12T04:01:00Z"}, {"id": "vault-gmail-20", "category": "Gmail", "title": "scite.orlandopasion002@gmail.com", "username": "scite.orlandopasion002@gmail.com", "password": "scite002", "old_password": "scite002", "notes": "Scite trial/plan account (Basic plan trial Oct 14, 2026).", "importance": "Low", "status": "Pending", "badge": "Google Ecosystem", "updated_at": "2026-11-12T04:01:00Z"}, {"id": "vault-gmail-21", "category": "Gmail", "title": "scite.orlandopasion003@gmail.com", "username": "scite.orlandopasion003@gmail.com", "password": "scite003", "old_password": "scite003", "notes": "Scite sign-up that did not complete.", "importance": "Low", "status": "Pending", "badge": "Google Ecosystem", "updated_at": "2026-11-12T04:01:00Z"}, {"id": "vault-gmail-22", "category": "Gmail", "title": "prunancalo2223@gmail.com", "username": "prunancalo2223@gmail.com", "password": "Orlando@123", "old_password": "Orlando@123", "notes": "Pulse app login.", "importance": "Low", "status": "Pending", "badge": "Google Ecosystem", "updated_at": "2026-11-12T04:01:00Z"}, {"id": "vault-gmail-23", "category": "Gmail", "title": "netflixpasion1994@gmail.com", "username": "netflixpasion1994@gmail.com", "password": "orlandopasion1994", "old_password": "orlandopasion1994", "notes": "Second Netflix account.", "importance": "Low", "status": "Pending", "badge": "Google Ecosystem", "updated_at": "2026-11-12T04:01:00Z"}, {"id": "vault-gmail-24", "category": "Gmail", "title": "crowe.altius07@gmail.com", "username": "crowe.altius07@gmail.com", "password": "(not recorded)", "old_password": "(not recorded)", "notes": "Scite trial account.", "importance": "Low", "status": "Pending", "badge": "Google Ecosystem", "updated_at": "2026-11-12T04:01:00Z"}, {"id": "vault-gmail-25", "category": "Gmail", "title": "goldcloudblack@gmail.com", "username": "goldcloudblack@gmail.com", "password": "qwerty.17", "old_password": "qwerty.17", "notes": "Facebook (gold cloud); linked to \"MrBeast\" Mobile Legends.", "importance": "Low", "status": "Pending", "badge": "Google Ecosystem", "updated_at": "2026-11-12T04:01:00Z"}, {"id": "vault-gmail-26", "category": "Gmail", "title": "gwapocpogi@gmail.com", "username": "gwapocpogi@gmail.com", "password": "qwerty.17", "old_password": "qwerty.17", "notes": "Facebook account.", "importance": "Low", "status": "Pending", "badge": "Google Ecosystem", "updated_at": "2026-11-12T04:01:00Z"}, {"id": "vault-gmail-27", "category": "Gmail", "title": "qwertybns001@gmail.com", "username": "qwertybns001@gmail.com", "password": "qwertybns001.1", "old_password": "qwertybns001.1", "notes": "Mobile Legends \"Aspirant Fanny\"; Google Play and Facebook use the same password.", "importance": "Low", "status": "Pending", "badge": "Google Ecosystem", "updated_at": "2026-11-12T04:01:00Z"}, {"id": "vault-gmail-28", "category": "Gmail", "title": "laylamiyakagura@gmail.com", "username": "laylamiyakagura@gmail.com", "password": "qwerty.17.1@", "old_password": "qwerty.17.1@", "notes": "Mobile Legends \"Aspirant Layla\"; Facebook uses the same password.", "importance": "Low", "status": "Pending", "badge": "Google Ecosystem", "updated_at": "2026-11-12T04:01:00Z"}, {"id": "vault-gmail-29", "category": "Gmail", "title": "kaguraxlunox1992@gmail.com", "username": "kaguraxlunox1992@gmail.com", "password": "qwerty.17.1@", "old_password": "qwerty.17.1@", "notes": "Mobile Legends kaguraxlunox account.", "importance": "Low", "status": "Pending", "badge": "Google Ecosystem", "updated_at": "2026-11-12T04:01:00Z"}, {"id": "vault-sol-30", "category": "Solutions", "title": "Email Services", "username": "Qwerty.123@", "password": "until oct 24", "old_password": "", "notes": "Email Services account.", "importance": "Normal", "status": "Secured", "badge": "Solutions Core", "updated_at": "2026-11-12T04:01:00Z"}, {"id": "vault-sol-31", "category": "Solutions", "title": "Gmail", "username": "", "password": "Google Map", "old_password": "", "notes": "Gmail account. 15.9944, 120.5873", "importance": "High", "status": "Secured", "badge": "Solutions Core", "updated_at": "2026-11-12T04:01:00Z"}, {"id": "vault-sol-32", "category": "Solutions", "title": "DepEd Microsoft 365 Account", "username": "orlando.pasion001@r1.deped.gov.ph", "password": "Qwerty.17.1@", "old_password": "", "notes": "DepEd Microsoft 365 Account account. Qwerty.17@7", "importance": "Normal", "status": "Secured", "badge": "Solutions Core", "updated_at": "2026-11-12T04:01:00Z"}, {"id": "vault-sol-33", "category": "Solutions", "title": "DepEd Microsoft 365 Account", "username": "orlando.pasion001@deped.gov.ph", "password": "Qwerty.17@7", "old_password": "", "notes": "DepEd Microsoft 365 Account account.", "importance": "Normal", "status": "Secured", "badge": "Solutions Core", "updated_at": "2026-11-12T04:01:00Z"}];
+    
+    let vaultItems = [];
+    let auditHistory = [];
+    let activeCategory = 'all';
+    let searchQuery = '';
+    let deferredInstallPrompt = null;
+    let copyCount = 0;
+
+    const LS_VAULT_KEY = 'orlandovault_credentials_v1';
+    const LS_AUDIT_KEY = 'orlandovault_audit_history_v1';
+    const LS_COPY_KEY = 'orlandovault_copy_count_v1';
+
+    let syncBridge = null;
+    try {
+      if (typeof BroadcastChannel !== 'undefined') {
+        syncBridge = new BroadcastChannel('orlandovault_quantum_bridge');
+        syncBridge.onmessage = (e) => {
+          if (e.data && e.data.type === 'VAULT_UPDATED') {
+            initData();
+            renderVault();
+            renderMetrics();
+          }
+        };
+      }
+    } catch(e) {}
+
+    function initData() {
+      try {
+        const stored = localStorage.getItem(LS_VAULT_KEY);
+        if (stored) {
+          vaultItems = JSON.parse(stored);
+        } else {
+          vaultItems = SEED_VAULT;
+          localStorage.setItem(LS_VAULT_KEY, JSON.stringify(vaultItems));
+        }
+
+        const storedAudit = localStorage.getItem(LS_AUDIT_KEY);
+        auditHistory = storedAudit ? JSON.parse(storedAudit) : [];
+
+        copyCount = parseInt(localStorage.getItem(LS_COPY_KEY) || '0', 10);
+      } catch (err) {
+        vaultItems = SEED_VAULT;
+      }
+    }
+
+    function logAudit(action, details) {
+      const entry = {
+        id: 'log-' + Date.now(),
+        timestamp: new Date().toISOString(),
+        timeFormatted: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+        dateFormatted: new Date().toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' }),
+        action: action,
+        details: details
+      };
+      auditHistory.unshift(entry);
+      if (auditHistory.length > 100) auditHistory.pop();
+      try {
+        localStorage.setItem(LS_AUDIT_KEY, JSON.stringify(auditHistory));
+      } catch (e) {}
+    }
+
+    function isStandaloneMode() {
+      return (
+        window.matchMedia('(display-mode: standalone)').matches ||
+        window.navigator.standalone === true ||
+        (window.location.search && window.location.search.indexOf('standalone=true') !== -1)
+      );
+    }
+
+    function updateLaunchButtonState() {
+      const btn = document.getElementById('btnTopbarLaunchApp');
+      if (!btn) return;
+      const label = document.getElementById('topbarLaunchLabel');
+      const icon = document.getElementById('topbarLaunchIcon');
+
+      if (isStandaloneMode()) {
+        btn.classList.add('btn-app-active');
+        btn.title = 'OrlandoVault (Main Web App) is Active';
+        if (label) label.textContent = 'App Active';
+        if (icon) {
+          icon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>';
+        }
+      } else {
+        btn.classList.remove('btn-app-active');
+        btn.title = 'Open OrlandoVault in Dedicated Standalone Desktop Window';
+        if (label) label.textContent = 'Open Main Web App';
+        if (icon) {
+          icon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.5L20.5 7.4V16.6L12 21.5L3.5 16.6V7.4L12 2.5Z" stroke="#D9B95C"/><path d="M12 7V17M12 17L8 13M12 17L16 13" stroke="#ffffff"/><line x1="7" y1="19.5" x2="17" y2="19.5" stroke="#38bdf8"/></svg>';
+        }
+      }
+    }
+
+    async function handleLaunchStandaloneApp() {
+      if (isStandaloneMode()) {
+        showToast('✨ OrlandoVault is already running as Main Web App!');
+        return;
+      }
+
+      if (deferredInstallPrompt) {
+        deferredInstallPrompt.prompt();
+        try {
+          const choice = await deferredInstallPrompt.userChoice;
+          if (choice && choice.outcome === 'accepted') {
+            deferredInstallPrompt = null;
+            updateLaunchButtonState();
+            showToast('🚀 OrlandoVault PWA Installed! Launching...');
+            return;
+          }
+        } catch (e) {}
+      }
+
+      const targetUrl = 'https://orlandopasion000.github.io/orlandovault/?standalone=true';
+      const windowFeatures = 'popup=yes,menubar=no,toolbar=no,location=no,status=no,personalbar=no,scrollbars=yes,resizable=yes,width=1280,height=850,left=100,top=60';
+      const appWin = window.open(targetUrl, 'OrlandoVaultStandaloneWindow', windowFeatures);
+
+      if (appWin) {
+        showToast('🚀 Launching OrlandoVault Desktop Window...');
+        try { appWin.focus(); } catch (err) {}
+      } else {
+        window.location.href = targetUrl;
+      }
+    }
+
+    let toastTimeout = null;
+    function showToast(message) {
+      const toast = document.getElementById('hudToast');
+      const text = document.getElementById('toastMessage');
+      if (!toast || !text) return;
+      text.textContent = message;
+      toast.classList.add('show');
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3500);
+    }
+
+    async function copyToClipboard(text, accountTitle, btnElement) {
+      if (!text) {
+        showToast('⚠️ No password stored for this account');
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(text);
+        copyCount++;
+        localStorage.setItem(LS_COPY_KEY, copyCount.toString());
+        renderMetrics();
+        logAudit('COPIED_PASSWORD', 'Copied password for: ' + accountTitle);
+
+        if (btnElement) {
+          const originalText = btnElement.innerHTML;
+          btnElement.classList.add('copied');
+          btnElement.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> COPIED!';
+          setTimeout(() => {
+            btnElement.classList.remove('copied');
+            btnElement.innerHTML = originalText;
+          }, 2000);
+        }
+
+        showToast('✨ Copied password for ' + accountTitle + '!');
+      } catch (err) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast('✨ Copied password for ' + accountTitle + '!');
+      }
+    }
+
+    async function copyUsername(text, btnElement) {
+      if (!text) return;
+      try {
+        await navigator.clipboard.writeText(text);
+        logAudit('COPIED_USERNAME', 'Copied username: ' + text);
+        showToast('Copied username: ' + text);
+      } catch (e) {}
+    }
+
+    function renderVault() {
+      const container = document.getElementById('vaultGridContainer');
+      if (!container) return;
+
+      const q = searchQuery.toLowerCase().trim();
+      const filtered = vaultItems.filter(item => {
+        if (activeCategory === 'Critical' && (item.importance || '').toLowerCase() !== 'critical') {
+          return false;
+        } else if (activeCategory !== 'all' && activeCategory !== 'Critical' && item.category !== activeCategory) {
+          return false;
+        }
+
+        if (!q) return true;
+        const searchStr = (item.title + ' ' + item.username + ' ' + (item.notes || '') + ' ' + item.category + ' ' + (item.importance || '')).toLowerCase();
+        return searchStr.includes(q);
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="empty-state">No credentials found matching "' + q + '". Jarvis is standing by.</div>';
+        return;
+      }
+
+      container.innerHTML = filtered.map(item => {
+        const isCritical = (item.importance || '').toLowerCase() === 'critical';
+        const maskedPwd = '•'.repeat(Math.min(12, (item.password || '').length || 10));
+        const safeTitle = escapeHtml(item.title);
+        const safeUser = escapeHtml(item.username);
+        const safeNotes = escapeHtml(item.notes || 'Secure credentials managed by Jarvis.');
+        const safePwd = escapeHtml(item.password);
+
+        return `
+          <article class="vault-card" id="card-${item.id}">
+            <div class="card-header">
+              <div class="card-title-group">
+                <span class="card-badge ${isCritical ? 'critical' : ''}">${isCritical ? '⚡ CRITICAL ACCOUNT' : item.category}</span>
+                <h3 class="card-account-title">${safeTitle}</h3>
+              </div>
+            </div>
+
+            <div class="card-username-row">
+              <span title="${safeUser}">${safeUser}</span>
+              <button type="button" class="btn-copy-user" onclick="copyUsername('${safeUser}', this)" title="Copy Username / Email">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                Copy
+              </button>
+            </div>
+
+            <div class="password-quantum-deck">
+              <div class="pwd-display-box masked" id="pwdBox-${item.id}" data-raw="${safePwd}" data-masked="${maskedPwd}">
+                ${maskedPwd}
+              </div>
+              <div class="pwd-action-cluster">
+                <button type="button" class="btn-pwd-action" onclick="toggleReveal('${item.id}')" title="Toggle Show/Hide Password">
+                  <svg width="15" height="15" id="eyeIcon-${item.id}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+                <button type="button" class="btn-copy-instant" onclick="copyToClipboard('${safePwd}', '${safeTitle}', this)" title="1-Click Copy Password">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  COPY
+                </button>
+              </div>
+            </div>
+
+            <div class="card-notes">
+              ${safeNotes}
+            </div>
+
+            <div class="card-footer">
+              <span>STATUS: ${item.status || 'SECURED'}</span>
+              <span>JARVIS PROTECTION</span>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function toggleReveal(id) {
+      const box = document.getElementById('pwdBox-' + id);
+      const icon = document.getElementById('eyeIcon-' + id);
+      if (!box) return;
+
+      const isMasked = box.classList.contains('masked');
+      if (isMasked) {
+        box.classList.remove('masked');
+        box.textContent = box.getAttribute('data-raw');
+        if (icon) {
+          icon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
+        }
+        logAudit('REVEALED_PASSWORD', 'Revealed password for card ' + id);
+      } else {
+        box.classList.add('masked');
+        box.textContent = box.getAttribute('data-masked');
+        if (icon) {
+          icon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+        }
+      }
+    }
+
+    function renderMetrics() {
+      const accountsEl = document.getElementById('totalVaultAccounts');
+      const copiesEl = document.getElementById('totalCopiesMade');
+      if (accountsEl) accountsEl.textContent = vaultItems.length;
+      if (copiesEl) copiesEl.textContent = copyCount;
+    }
+
+    function renderHistory() {
+      const container = document.getElementById('historyTimelineContainer');
+      if (!container) return;
+      if (auditHistory.length === 0) {
+        container.innerHTML = '<div style="color:var(--text-dim);text-align:center;padding:30px;">No audit actions recorded yet. All activity is logged here.</div>';
+        return;
+      }
+
+      container.innerHTML = auditHistory.map(item => `
+        <div class="history-timeline-item">
+          <div class="history-time-meta">
+            <span>${item.action}</span>
+            <span>${item.dateFormatted} · ${item.timeFormatted}</span>
+          </div>
+          <div class="history-event-desc">${escapeHtml(item.details)}</div>
+        </div>
+      `).join('');
+    }
+
+    function updateJarvisClock() {
+      const clockEl = document.getElementById('jarvisClock');
+      if (!clockEl) return;
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      const dateStr = now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+      clockEl.textContent = `JARVIS HUD CLOCK: ${dateStr.toUpperCase()} · ${timeStr}`;
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initData();
+      renderVault();
+      renderMetrics();
+      updateLaunchButtonState();
+      updateJarvisClock();
+      setInterval(updateJarvisClock, 1000);
+
+      const searchInput = document.getElementById('vaultSearchInput');
+      const clearBtn = document.getElementById('searchClearBtn');
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          searchQuery = e.target.value;
+          if (clearBtn) clearBtn.style.display = searchQuery ? 'block' : 'none';
+          renderVault();
+        });
+      }
+
+      if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+          if (searchInput) {
+            searchInput.value = '';
+            searchQuery = '';
+            clearBtn.style.display = 'none';
+            searchInput.focus();
+            renderVault();
+          }
+        });
+      }
+
+      const pillContainer = document.getElementById('filterPillsRow');
+      if (pillContainer) {
+        pillContainer.addEventListener('click', (e) => {
+          const pill = e.target.closest('.filter-pill');
+          if (!pill) return;
+          pillContainer.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+          pill.classList.add('active');
+          activeCategory = pill.getAttribute('data-cat');
+          renderVault();
+        });
+      }
+
+      const launchBtn = document.getElementById('btnTopbarLaunchApp');
+      if (launchBtn) {
+        launchBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          handleLaunchStandaloneApp();
+        });
+      }
+
+      const btnOpenHistory = document.getElementById('btnOpenHistory');
+      const historyModal = document.getElementById('historyModal');
+      const btnCloseHistory = document.getElementById('btnCloseHistory');
+
+      if (btnOpenHistory && historyModal) {
+        btnOpenHistory.addEventListener('click', () => {
+          renderHistory();
+          historyModal.classList.add('active');
+        });
+      }
+
+      if (btnCloseHistory && historyModal) {
+        btnCloseHistory.addEventListener('click', () => {
+          historyModal.classList.remove('active');
+        });
+      }
+
+      if (historyModal) {
+        historyModal.addEventListener('click', (e) => {
+          if (e.target === historyModal) historyModal.classList.remove('active');
+        });
+      }
+
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('vault-sw.js', { scope: '/orlandovault/' }).catch(err => {
+          console.warn('Vault SW registration error:', err);
+        });
+      }
+
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredInstallPrompt = e;
+        updateLaunchButtonState();
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === '/' && document.activeElement !== searchInput) {
+          e.preventDefault();
+          if (searchInput) {
+            searchInput.focus();
+            searchInput.select();
+          }
+        } else if (e.key === 'Escape') {
+          if (historyModal && historyModal.classList.contains('active')) {
+            historyModal.classList.remove('active');
+          } else if (searchInput && searchInput.value) {
+            searchInput.value = '';
+            searchQuery = '';
+            if (clearBtn) clearBtn.style.display = 'none';
+            renderVault();
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

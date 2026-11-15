@@ -1,0 +1,55 @@
+{
+  "name": "OrlandoVault · Personal Jarvis Security Engine",
+  "short_name": "OrlandoVault",
+  "description": "Executive Personal Password & Credentials Vault with Jarvis HUD, 1-Click Instant Copy, Quantum Search, and Real-Time Cryptographic History.",
+  "id": "orlandovault-jarvis-suite",
+  "start_url": "https://orlandopasion000.github.io/orlandovault/",
+  "scope": "https://orlandopasion000.github.io/orlandovault/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "categories": [
+    "productivity",
+    "utilities",
+    "security"
+  ],
+  "icons": [
+    {
+      "src": "assets/vault-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/vault-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/vault-icon-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Search Vault",
+      "short_name": "Search",
+      "url": "https://orlandopasion000.github.io/orlandovault/?action=search",
+      "icons": [{ "src": "assets/vault-icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Audit History",
+      "short_name": "Audit Log",
+      "url": "https://orlandopasion000.github.io/orlandovault/?tab=history",
+      "icons": [{ "src": "assets/vault-icon-192.png", "sizes": "192x192" }]
+    }
+  ],
+  "display_override": [
+    "window-controls-overlay",
+    "standalone"
+  ]
+}

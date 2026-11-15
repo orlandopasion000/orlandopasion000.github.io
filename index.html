@@ -484,6 +484,36 @@
       text-shadow: 0 0 8px rgba(229, 9, 20, 0.6);
     }
 
+    /* ORLANDOVAULT JARVIS FLAGSHIP INTEGRATION */
+    .hub-card.is-orlandovault {
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.18) 0%, var(--surface-2) 42%, rgba(217, 185, 92, 0.12) 100%) !important;
+      border: 1.5px solid rgba(56, 189, 248, 0.45) !important;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.6), 0 0 18px rgba(0, 240, 255, 0.2) !important;
+    }
+    .hub-card.is-orlandovault:hover {
+      border-color: #00f0ff !important;
+      box-shadow: 0 16px 45px rgba(0, 240, 255, 0.35), 0 0 25px rgba(217, 185, 92, 0.25) !important;
+      transform: translateY(-4px);
+    }
+    .hub-card.is-orlandovault .hub-card-icon {
+      background: rgba(2, 132, 199, 0.15) !important;
+      border-color: rgba(56, 189, 248, 0.4) !important;
+    }
+    .hub-card.is-orlandovault .hub-card-badge {
+      border-color: rgba(56, 189, 248, 0.6) !important;
+      color: #38bdf8 !important;
+      background: rgba(2, 132, 199, 0.15) !important;
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.3) !important;
+    }
+    .hub-card.is-orlandovault .hub-card-open {
+      color: #38bdf8 !important;
+      font-weight: 700;
+    }
+    .hub-card.is-orlandovault:hover .hub-card-open {
+      color: #00f0ff !important;
+      text-shadow: 0 0 8px rgba(0, 240, 255, 0.7);
+    }
+
     /* OVPJ OFFICIAL MASTERPIECE EMBLEM STYLES */
     .nav-brand {
       display: inline-flex !important;
@@ -857,7 +887,7 @@
     };
 
     // Files to EXCLUDE from the resource listing
-    var EXCLUDE_FILES = ['index.html', 'daily-recharge-alarm.html', 'orlandorecharge.html', 'orlandorecharge', 'orlandochrome.html', 'orlandochrome', 'orlandotimer.html', 'orlandotimer'];
+    var EXCLUDE_FILES = ['index.html', 'daily-recharge-alarm.html', 'orlandorecharge.html', 'orlandorecharge', 'orlandochrome.html', 'orlandochrome', 'orlandotimer.html', 'orlandotimer', 'orlandovault.html', 'orlandovault'];
 
     // Auto-icons for unknown files (cycles through these)
     var AUTO_ICONS = ['📄', '📋', '📊', '🔖', '📐', '🧮', '📑', '🗂️'];
@@ -882,7 +912,7 @@
       var a = document.createElement('a');
       a.href = config.href;
       a.target = '_blank';
-      a.className = 'hub-card' + (config.featured ? ' is-featured' : '') + (config.isOrlandoChrome ? ' is-orlandochrome' : '') + (config.isOrlandoRecharge ? ' is-orlandorecharge' : '');
+      a.className = 'hub-card' + (config.featured ? ' is-featured' : '') + (config.isOrlandoChrome ? ' is-orlandochrome' : '') + (config.isOrlandoRecharge ? ' is-orlandorecharge' : '') + (config.isOrlandoVault ? ' is-orlandovault' : '');
       a.setAttribute('data-questions', config.questions || 0);
       a.setAttribute('data-search', (config.search || config.title + ' ' + config.desc + ' ' + (config.tags || []).join(' ')).toLowerCase());
 
@@ -913,6 +943,19 @@
 
     
     var FLAGSHIP_APPS = [
+      {
+        href: 'https://orlandopasion000.github.io/orlandovault/',
+        icon: '<div style="width:34px;height:34px;border-radius:50%;background:#050608;border:1.5px solid #00f0ff;display:flex;align-items:center;justify-content:center;box-shadow:0 0 10px rgba(0,240,255,0.5);"><div style=\"width:10px;height:10px;border-radius:50%;background:#fff;box-shadow:0 0 8px #00f0ff;\"></div></div>',
+        badge: '★ JARVIS SECURITY · PWA READY',
+        featured: true,
+        isOrlandoVault: true,
+        order: -3,
+        title: 'OrlandoVault — Jarvis Security Engine',
+        desc: 'Personal Jarvis Security Console: 1-Click Instant Password Access, Quantum Real-Time Search, Arc Reactor HUD, and Cryptographic Audit History.',
+        tags: ['Jarvis AI', 'Instant Copy', 'Security Vault', 'PWA Ready'],
+        questions: 0,
+        search: 'orlandovault jarvis personal password vault security credentials 1-click copy instant'
+      },
       {
         href: 'https://orlandopasion000.github.io/orlandorecharge/',
         icon: '<img src="assets/orlandorecharge-master-photoshop-hd.png" alt="OrlandoRecharge" style="width:34px;height:34px;border-radius:8px;object-fit:cover;box-shadow:0 0 10px rgba(56,189,248,0.55);border:1px solid rgba(56,189,248,0.4);filter:drop-shadow(0 0 6px rgba(56,189,248,0.5));">',
