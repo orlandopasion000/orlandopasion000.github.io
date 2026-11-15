@@ -1999,42 +1999,37 @@ body.light-theme .qgame-btn-meteor:hover {
   color: #9a3412 !important;
 }
 
-/* Quantum Helix Button Special Styling (Intertwined Ribbon Violet/Amber Aura) */
+/* Quantum Helix Button Special Styling (Cyan and Violet Double-Helix Aura) */
 .qgame-btn-helix {
-  background: linear-gradient(135deg, rgba(88, 28, 135, 0.16) 0%, rgba(30, 27, 75, 0.12) 100%) !important;
-  border: 1px solid rgba(192, 132, 252, 0.28) !important;
-  color: rgba(243, 232, 255, 0.62) !important;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18), 0 0 8px rgba(168, 85, 247, 0.10) !important;
+  background: linear-gradient(135deg, rgba(88, 28, 135, 0.20) 0%, rgba(6, 182, 212, 0.14) 100%) !important;
+  border: 1px solid rgba(34, 211, 238, 0.32) !important;
+  color: rgba(224, 242, 254, 0.75) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18), 0 0 10px rgba(34, 211, 238, 0.14) !important;
 }
 
 .qgame-btn-helix:hover {
-  background: linear-gradient(135deg, rgba(107, 33, 168, 0.35) 0%, rgba(88, 28, 135, 0.25) 100%) !important;
-  border-color: rgba(216, 180, 254, 0.65) !important;
-  color: #faf5ff !important;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.32), 0 0 16px rgba(192, 132, 252, 0.30) !important;
+  background: linear-gradient(135deg, rgba(126, 34, 206, 0.32) 0%, rgba(8, 145, 178, 0.26) 100%) !important;
+  border-color: rgba(103, 232, 249, 0.70) !important;
+  color: #f0fdf4 !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.32), 0 0 16px rgba(34, 211, 238, 0.35) !important;
   transform: translateY(-1px);
 }
 
 .qgame-btn-helix .game-btn-glyph {
-  color: rgba(192, 132, 252, 0.85) !important;
-  filter: drop-shadow(0 0 4px rgba(192, 132, 252, 0.4)) !important;
+  color: rgba(34, 211, 238, 0.90) !important;
+  filter: drop-shadow(0 0 5px rgba(34, 211, 238, 0.45)) !important;
 }
 
 .qgame-btn-helix:hover .game-btn-glyph {
-  color: #fbcfe8 !important;
+  color: #e0e7ff !important;
   transform: rotate(180deg) scale(1.20) !important;
 }
 
 .qgame-btn-helix .game-btn-glyph-helix svg {
   width: 13px;
   height: 13px;
-  stroke: rgba(192, 132, 252, 0.85);
   display: block;
-  transition: transform 0.3s ease, stroke 0.3s ease;
-}
-
-.qgame-btn-helix:hover .game-btn-glyph-helix svg {
-  stroke: #ffd700;
+  transition: transform 0.3s ease;
 }
 
 body.light-theme .qgame-btn-helix {
@@ -4275,12 +4270,12 @@ body.light-theme .highlight-card .dist-icon{
         <span class="game-btn-label">QUANTUM REALM</span>
       </button>
 
-      <!-- Enter Quantum Helix Game Mode (Game 2: Intertwined Double-Helix Ribbons) -->
-      <button type="button" class="qgame-btn-launch qgame-btn-helix" id="btnLaunchHelixGame" title="Enter Quantum Helix Game (Intertwined Ribbon Particles)" aria-label="Launch Quantum Helix Game">
+      <!-- Enter Quantum Helix Game Mode (Game 2: Cyan & Violet Intertwined Double-Helix) -->
+      <button type="button" class="qgame-btn-launch qgame-btn-helix" id="btnLaunchHelixGame" title="Enter Quantum Helix Game (Cyan and violet strands twist around each other along the original sweeping paths)" aria-label="Launch Quantum Helix Game">
         <span class="game-btn-glyph game-btn-glyph-helix" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 6c4 0 6 12 10 12s6-12 10-12"/>
-            <path d="M4 18c4 0 6-12 10-12s6 12 10 12" stroke-dasharray="2 2" opacity="0.85"/>
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 6c4 0 6 12 10 12s6-12 10-12" stroke="#22d3ee"/>
+            <path d="M4 18c4 0 6-12 10-12s6 12 10 12" stroke="#c084fc" stroke-dasharray="2 2" opacity="0.92"/>
           </svg>
         </span>
         <span class="game-btn-label">QUANTUM HELIX</span>
@@ -10121,7 +10116,7 @@ try { checkUrlHashRoutine(); } catch(e){}
       var isMeteor = (gameParticleStyle === "meteor");
       var targetSpineK;
       if (isHelix) {
-        targetSpineK = isGameMode ? (p.isFront ? 14 : 11) : (p.isFront ? 10 : 8);
+        targetSpineK = isGameMode ? (p.isFront ? 10 : 8) : (p.isFront ? 8 : 6);
       } else if (isMeteor) {
         targetSpineK = isGameMode ? (p.isFront ? 9 : 7) : (p.isFront ? 7 : 5);
       } else {
@@ -10172,9 +10167,8 @@ try { checkUrlHashRoutine(); } catch(e){}
 
       var invK = 1 / K;
       if (isHelix) {
-        // Double-helix intertwined wave amplitude (expands significantly during high-speed evasion in game mode)
-        var helixWaveFactor = isGameMode ? (1.0 + Math.min(2.2, speedRatio * 1.5)) : 1.0;
-        var waveAmp = curSize * 0.28 * helixWaveFactor;
+        // Double-helix intertwined wave amplitude (smooth, elegant, and controlled along sweeping paths)
+        var waveAmp = curSize * 0.22;
 
         for (var sj = 1; sj < K; sj++) {
           var pPrev = p.spine[sj - 1];
@@ -10185,12 +10179,12 @@ try { checkUrlHashRoutine(); } catch(e){}
           var perpX = -segDy / segLen;
           var perpY = segDx / segLen;
 
-          var env = Math.sin((sj * invK) * Math.PI); // Envelope: 0 at head, maximum at mid-body, tapering at tail
-          var wave1 = Math.sin(p.wavePhase - sj * 0.72) * waveAmp * (0.35 + 0.65 * env);
+          var env = Math.sin((sj * invK) * Math.PI); // Envelope: 0 at head, peaks at mid-body, 0 at tail
+          var wave1 = Math.sin(p.wavePhase - sj * 0.70) * waveAmp * env;
           var wave2 = -wave1; // Counter-phase intertwined strand
 
-          _ptsX[sj] = pCurr.x + perpX * (wave1 * 0.4);
-          _ptsY[sj] = pCurr.y + perpY * (wave1 * 0.4);
+          _ptsX[sj] = pCurr.x;
+          _ptsY[sj] = pCurr.y;
 
           _ribbon1X[sj] = pCurr.x + perpX * wave1;
           _ribbon1Y[sj] = pCurr.y + perpY * wave1;
@@ -10420,6 +10414,73 @@ try { checkUrlHashRoutine(); } catch(e){}
             targetCtx.fill();
           }
 
+        } else if (isHelix) {
+          // ── 2B. DEDICATED QUANTUM HELIX DOUBLE-STRAND SWEEPING TRAILS ──
+          // Cyan and violet strands twist around each other along the original sweeping paths
+          var hAlpha = renderAlpha;
+          var strandWidth = Math.max(1.1, headR * (tier === 2 ? 0.32 : 0.24));
+
+          // Ethereal translucent central slipstream core
+          var coreGrad = targetCtx.createLinearGradient(tailTipX, tailTipY, headPtX, headPtY);
+          coreGrad.addColorStop(0.0, "rgba(99, 102, 241, 0.0)");
+          coreGrad.addColorStop(0.5, "rgba(56, 189, 248, " + (hAlpha * 0.15).toFixed(2) + ")");
+          coreGrad.addColorStop(1.0, "rgba(168, 85, 247, " + (hAlpha * 0.28).toFixed(2) + ")");
+          targetCtx.strokeStyle = coreGrad;
+          targetCtx.lineWidth = Math.max(0.8, headR * 0.45);
+          targetCtx.beginPath();
+          targetCtx.moveTo(_ptsX[0], _ptsY[0]);
+          for (var sj = 0; sj < K - 1; sj++) {
+            var mxC = (_ptsX[sj] + _ptsX[sj + 1]) * 0.5;
+            var myC = (_ptsY[sj] + _ptsY[sj + 1]) * 0.5;
+            targetCtx.quadraticCurveTo(_ptsX[sj], _ptsY[sj], mxC, myC);
+          }
+          targetCtx.lineTo(tailTipX, tailTipY);
+          targetCtx.stroke();
+
+          // Delicate Base-Pair Cross Rungs connecting the two strands
+          targetCtx.lineWidth = 0.8;
+          targetCtx.strokeStyle = "rgba(224, 231, 255, " + (hAlpha * 0.30).toFixed(2) + ")";
+          for (var rk = 1; rk < K - 1; rk += 2) {
+            targetCtx.beginPath();
+            targetCtx.moveTo(_ribbon1X[rk], _ribbon1Y[rk]);
+            targetCtx.lineTo(_ribbon2X[rk], _ribbon2Y[rk]);
+            targetCtx.stroke();
+          }
+
+          // Strand A: Luminous Electric Cyan Ribbon
+          var gradA = targetCtx.createLinearGradient(tailTipX, tailTipY, headPtX, headPtY);
+          gradA.addColorStop(0.0, "rgba(6, 182, 212, 0.0)");
+          gradA.addColorStop(0.4, "rgba(6, 182, 212, " + (hAlpha * 0.65).toFixed(2) + ")");
+          gradA.addColorStop(1.0, "rgba(34, 211, 238, " + (hAlpha * 0.95).toFixed(2) + ")");
+          targetCtx.strokeStyle = gradA;
+          targetCtx.lineWidth = strandWidth;
+          targetCtx.beginPath();
+          targetCtx.moveTo(_ribbon1X[0], _ribbon1Y[0]);
+          for (var sj = 0; sj < K - 1; sj++) {
+            var mx1 = (_ribbon1X[sj] + _ribbon1X[sj + 1]) * 0.5;
+            var my1 = (_ribbon1Y[sj] + _ribbon1Y[sj + 1]) * 0.5;
+            targetCtx.quadraticCurveTo(_ribbon1X[sj], _ribbon1Y[sj], mx1, my1);
+          }
+          targetCtx.lineTo(tailTipX, tailTipY);
+          targetCtx.stroke();
+
+          // Strand B: Luminous Royal Violet Ribbon
+          var gradB = targetCtx.createLinearGradient(tailTipX, tailTipY, headPtX, headPtY);
+          gradB.addColorStop(0.0, "rgba(147, 51, 234, 0.0)");
+          gradB.addColorStop(0.4, "rgba(168, 85, 247, " + (hAlpha * 0.65).toFixed(2) + ")");
+          gradB.addColorStop(1.0, "rgba(192, 132, 252, " + (hAlpha * 0.95).toFixed(2) + ")");
+          targetCtx.strokeStyle = gradB;
+          targetCtx.lineWidth = strandWidth;
+          targetCtx.beginPath();
+          targetCtx.moveTo(_ribbon2X[0], _ribbon2Y[0]);
+          for (var sj = 0; sj < K - 1; sj++) {
+            var mx2 = (_ribbon2X[sj] + _ribbon2X[sj + 1]) * 0.5;
+            var my2 = (_ribbon2Y[sj] + _ribbon2Y[sj + 1]) * 0.5;
+            targetCtx.quadraticCurveTo(_ribbon2X[sj], _ribbon2Y[sj], mx2, my2);
+          }
+          targetCtx.lineTo(tailTipX, tailTipY);
+          targetCtx.stroke();
+
         } else if (tier === 2 || isPrismaticQuark) {
           var bodySat = isPrismaticQuark ? 100 : p.sat;
           var bodyGrad = targetCtx.createLinearGradient(tailTipX, tailTipY, headPtX, headPtY);
@@ -10466,51 +10527,6 @@ try { checkUrlHashRoutine(); } catch(e){}
           targetCtx.lineTo(_rightX[0], _rightY[0]);
           targetCtx.closePath();
           targetCtx.fill();
-        }
-
-        // ── 2B. INTERTWINED LUMINOUS DOUBLE-HELIX RIBBONS (Exact Match to User Reference) ──
-        // Rendered exclusively in Quantum Helix mode!
-        if (isHelix && (isGameMode || speedRatio > 0.15)) {
-          var ribbonProminence = Math.min(1.0, 0.40 + speedRatio * 0.85) * renderAlpha;
-          var rLineWidth = Math.max(0.7, headR * (0.16 + speedRatio * 0.12));
-
-          // Strand A: Luminous Royal Violet / Amethyst Ribbon
-          var strandAHue = isPrismaticQuark ? ((fHeadHue + 210) % 360) : 278;
-          var rGradA = targetCtx.createLinearGradient(headPtX, headPtY, _ribbon1X[K - 1], _ribbon1Y[K - 1]);
-          rGradA.addColorStop(0.0, "hsla(" + strandAHue + ", 95%, 74%, " + (ribbonProminence * 0.90).toFixed(2) + ")");
-          rGradA.addColorStop(0.5, "hsla(" + strandAHue + ", 90%, 65%, " + (ribbonProminence * 0.65).toFixed(2) + ")");
-          rGradA.addColorStop(1.0, "hsla(" + strandAHue + ", 85%, 55%, 0.0)");
-
-          targetCtx.beginPath();
-          targetCtx.moveTo(_ribbon1X[0], _ribbon1Y[0]);
-          for (var rj = 0; rj < K - 1; rj++) {
-            var mrx1 = (_ribbon1X[rj] + _ribbon1X[rj + 1]) * 0.5;
-            var mry1 = (_ribbon1Y[rj] + _ribbon1Y[rj + 1]) * 0.5;
-            targetCtx.quadraticCurveTo(_ribbon1X[rj], _ribbon1Y[rj], mrx1, mry1);
-          }
-          targetCtx.lineTo(_ribbon1X[K - 1], _ribbon1Y[K - 1]);
-          targetCtx.strokeStyle = rGradA;
-          targetCtx.lineWidth = rLineWidth;
-          targetCtx.stroke();
-
-          // Strand B: Luminous Golden Amber / Peach Ribbon (Intertwined Counter-phase)
-          var strandBHue = isPrismaticQuark ? ((fHeadHue + 45) % 360) : 42;
-          var rGradB = targetCtx.createLinearGradient(headPtX, headPtY, _ribbon2X[K - 1], _ribbon2Y[K - 1]);
-          rGradB.addColorStop(0.0, "hsla(" + strandBHue + ", 100%, 75%, " + (ribbonProminence * 0.90).toFixed(2) + ")");
-          rGradB.addColorStop(0.5, "hsla(" + strandBHue + ", 95%, 66%, " + (ribbonProminence * 0.65).toFixed(2) + ")");
-          rGradB.addColorStop(1.0, "hsla(" + strandBHue + ", 90%, 55%, 0.0)");
-
-          targetCtx.beginPath();
-          targetCtx.moveTo(_ribbon2X[0], _ribbon2Y[0]);
-          for (var rj = 0; rj < K - 1; rj++) {
-            var mrx2 = (_ribbon2X[rj] + _ribbon2X[rj + 1]) * 0.5;
-            var mry2 = (_ribbon2Y[rj] + _ribbon2Y[rj + 1]) * 0.5;
-            targetCtx.quadraticCurveTo(_ribbon2X[rj], _ribbon2Y[rj], mrx2, mry2);
-          }
-          targetCtx.lineTo(_ribbon2X[K - 1], _ribbon2Y[K - 1]);
-          targetCtx.strokeStyle = rGradB;
-          targetCtx.lineWidth = rLineWidth;
-          targetCtx.stroke();
         }
       }
 
@@ -10630,7 +10646,11 @@ try { checkUrlHashRoutine(); } catch(e){}
         // Glowing quantum head droplet
         targetCtx.beginPath();
         targetCtx.arc(px0, py0, headR, 0, Math.PI * 2);
-        targetCtx.fillStyle = "hsla(" + fHeadHue + ", " + (isPrismaticQuark ? 100 : 98) + "%, " + fHeadLit.toFixed(1) + "%, " + renderAlpha.toFixed(2) + ")";
+        if (isHelix) {
+          targetCtx.fillStyle = "hsla(188, 98%, 70%, " + renderAlpha.toFixed(2) + ")";
+        } else {
+          targetCtx.fillStyle = "hsla(" + fHeadHue + ", " + (isPrismaticQuark ? 100 : 98) + "%, " + fHeadLit.toFixed(1) + "%, " + renderAlpha.toFixed(2) + ")";
+        }
         targetCtx.fill();
 
         // Pure white / iridescent quantum singularity center
@@ -10649,26 +10669,50 @@ try { checkUrlHashRoutine(); } catch(e){}
           var ringAlpha = renderAlpha * morphEase;
 
           if (tier === 2) {
-            // Tier 2: Dual Concentric Quantum Orbitals with Counter-Rotating Phase Node
-            targetCtx.beginPath();
-            targetCtx.arc(px0, py0, orbBaseR * 0.85, 0, Math.PI * 2);
-            targetCtx.strokeStyle = "hsla(" + fHeadHue + ", 92%, 72%, " + (ringAlpha * 0.35).toFixed(2) + ")";
-            targetCtx.lineWidth = 1.0;
-            targetCtx.stroke();
+            if (isHelix) {
+              // Quantum Helix: Dual Counter-Phase Cyan & Violet Orbital Resonance Rings
+              targetCtx.beginPath();
+              targetCtx.arc(px0, py0, orbBaseR * 0.85, 0, Math.PI * 2);
+              targetCtx.strokeStyle = "rgba(34, 211, 238, " + (ringAlpha * 0.40).toFixed(2) + ")";
+              targetCtx.lineWidth = 1.0;
+              targetCtx.stroke();
 
-            var worldSpin2 = p.heading + spinAngle;
-            targetCtx.beginPath();
-            targetCtx.ellipse(px0, py0, orbBaseR * 1.35, orbBaseR * 0.75, worldSpin2, 0, Math.PI * 2);
-            targetCtx.strokeStyle = "hsla(" + fHeadHue + ", 98%, 78%, " + (ringAlpha * 0.28).toFixed(2) + ")";
-            targetCtx.lineWidth = 0.9;
-            targetCtx.stroke();
+              var worldSpin2 = p.heading + spinAngle;
+              targetCtx.beginPath();
+              targetCtx.ellipse(px0, py0, orbBaseR * 1.35, orbBaseR * 0.75, worldSpin2, 0, Math.PI * 2);
+              targetCtx.strokeStyle = "rgba(192, 132, 252, " + (ringAlpha * 0.38).toFixed(2) + ")";
+              targetCtx.lineWidth = 0.9;
+              targetCtx.stroke();
 
-            var qNodeX = px0 + Math.cos(worldSpin2) * orbBaseR * 1.35;
-            var qNodeY = py0 + Math.sin(worldSpin2) * orbBaseR * 1.35;
-            targetCtx.beginPath();
-            targetCtx.arc(qNodeX, qNodeY, 1.3, 0, Math.PI * 2);
-            targetCtx.fillStyle = "rgba(255, 255, 255, " + (ringAlpha * 0.95).toFixed(2) + ")";
-            targetCtx.fill();
+              var qNodeX = px0 + Math.cos(worldSpin2) * orbBaseR * 1.35;
+              var qNodeY = py0 + Math.sin(worldSpin2) * orbBaseR * 1.35;
+              targetCtx.beginPath();
+              targetCtx.arc(qNodeX, qNodeY, 1.3, 0, Math.PI * 2);
+              targetCtx.fillStyle = "rgba(34, 211, 238, " + (ringAlpha * 0.95).toFixed(2) + ")";
+              targetCtx.fill();
+
+            } else {
+              // Classic Quantum Realm: Dual Concentric Quantum Orbitals with Counter-Rotating Phase Node
+              targetCtx.beginPath();
+              targetCtx.arc(px0, py0, orbBaseR * 0.85, 0, Math.PI * 2);
+              targetCtx.strokeStyle = "hsla(" + fHeadHue + ", 92%, 72%, " + (ringAlpha * 0.35).toFixed(2) + ")";
+              targetCtx.lineWidth = 1.0;
+              targetCtx.stroke();
+
+              var worldSpin2 = p.heading + spinAngle;
+              targetCtx.beginPath();
+              targetCtx.ellipse(px0, py0, orbBaseR * 1.35, orbBaseR * 0.75, worldSpin2, 0, Math.PI * 2);
+              targetCtx.strokeStyle = "hsla(" + fHeadHue + ", 98%, 78%, " + (ringAlpha * 0.28).toFixed(2) + ")";
+              targetCtx.lineWidth = 0.9;
+              targetCtx.stroke();
+
+              var qNodeX = px0 + Math.cos(worldSpin2) * orbBaseR * 1.35;
+              var qNodeY = py0 + Math.sin(worldSpin2) * orbBaseR * 1.35;
+              targetCtx.beginPath();
+              targetCtx.arc(qNodeX, qNodeY, 1.3, 0, Math.PI * 2);
+              targetCtx.fillStyle = "rgba(255, 255, 255, " + (ringAlpha * 0.95).toFixed(2) + ")";
+              targetCtx.fill();
+            }
 
           } else if (tier === 1) {
             targetCtx.beginPath();
@@ -11977,11 +12021,13 @@ try { checkUrlHashRoutine(); } catch(e){}
       }
     }
 
-    // ── Render Alive Cursor (Atomic for Realm/Helix, Fiery Meteor for Meteor Mode) ──
+    // ── Render Alive Cursor (Atomic for Realm, Double-Helix for Helix, Fiery Meteor for Meteor Mode) ──
     if (!isWon && !isGameOver && cursor.active && hasDeliberateMove) {
       var lockProgress = (lockedParticle && isPhysicallyTouching && contactDuration > 0) ? (contactDuration / REQUIRED_CONTACT) : 0;
       if (currentGameVariant === "meteor") {
         drawMeteorCursor(cursor.x, cursor.y, now, lockProgress);
+      } else if (currentGameVariant === "helix") {
+        drawHelixCursor(cursor.x, cursor.y, now, lockProgress);
       } else {
         drawQuantumAtomicCursor(cursor.x, cursor.y, now, lockProgress);
       }
@@ -12158,6 +12204,160 @@ try { checkUrlHashRoutine(); } catch(e){}
       ctx.strokeStyle = progress > 0.85 ? "rgba(255, 215, 0, 0.65)" : "rgba(56, 189, 248, 0.55)";
       ctx.lineWidth = 1.2;
       ctx.setLineDash([3, 4]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    ctx.restore();
+  }
+
+  // ── Render Dedicated Quantum Helix Flagship Cursor: 3D Intertwined Cyan & Violet Double-Helix Gyroscope ──
+  function drawHelixCursor(cx, cy, now, progress) {
+    ctx.save();
+    ctx.translate(cx, cy);
+
+    var exc = (progress > 0) ? (progress * 0.40) : 0;
+    var t = now * 0.0018;
+    var rotBase = now * 0.0008;
+    var spinMult = 1.0 + exc * 2.2;
+
+    // ── 1. Bi-Chromatic Lens Flare (Cyan to Royal Violet with Pure White Optical Center) ──
+    var flareLen = 44 + exc * 14;
+    var flareW = 2.4 + exc * 0.8;
+
+    var hGrad = ctx.createLinearGradient(-flareLen, 0, flareLen, 0);
+    hGrad.addColorStop(0.0, "rgba(6, 182, 212, 0)");
+    hGrad.addColorStop(0.25, "rgba(34, 211, 238, 0.45)");
+    hGrad.addColorStop(0.50, "rgba(255, 255, 255, 0.95)");
+    hGrad.addColorStop(0.75, "rgba(192, 132, 252, 0.45)");
+    hGrad.addColorStop(1.0, "rgba(168, 85, 247, 0)");
+
+    ctx.fillStyle = hGrad;
+    ctx.beginPath();
+    ctx.moveTo(-flareLen, 0);
+    ctx.lineTo(0, -flareW);
+    ctx.lineTo(flareLen, 0);
+    ctx.lineTo(0, flareW);
+    ctx.closePath();
+    ctx.fill();
+
+    // ── 2. Quantum Resonator Core: Dual Frequency Cyan & Violet Nucleus ──
+    var rCore = 8.5 + exc * 2.5;
+    var coreGrad = ctx.createRadialGradient(0, 0, 0, 0, 0, rCore * 1.8);
+    coreGrad.addColorStop(0.0, "rgba(255, 255, 255, 0.98)");
+    coreGrad.addColorStop(0.35, "rgba(34, 211, 238, 0.80)");
+    coreGrad.addColorStop(0.70, "rgba(147, 51, 234, 0.45)");
+    coreGrad.addColorStop(1.0, "rgba(88, 28, 135, 0)");
+
+    ctx.beginPath();
+    ctx.arc(0, 0, rCore * 1.8, 0, Math.PI * 2);
+    ctx.fillStyle = coreGrad;
+    ctx.fill();
+
+    // ── 3. 3D Intertwined Double-Helix Gyroscope Cage (Cyan & Violet Counter-Phase Strands) ──
+    var cageR = 19 + exc * 5;
+    var cageH = 12 + exc * 3;
+    var helixSteps = 36;
+    var strand1Pts = [];
+    var strand2Pts = [];
+    var angleOffset = rotBase * 1.5;
+
+    for (var i = 0; i <= helixSteps; i++) {
+      var theta = (i / helixSteps) * Math.PI * 2 + angleOffset;
+      var z = Math.cos(theta);
+      var scale = 0.85 + z * 0.15;
+      var x1 = Math.sin(theta) * cageR;
+      var y1 = Math.cos(theta * 2 + t * spinMult) * (cageH * 0.5) * scale;
+
+      var x2 = Math.sin(theta + Math.PI) * cageR;
+      var y2 = Math.cos((theta + Math.PI) * 2 + t * spinMult) * (cageH * 0.5) * scale;
+
+      strand1Pts.push({ x: x1, y: y1, z: z });
+      strand2Pts.push({ x: x2, y: y2, z: -z });
+    }
+
+    // Connect Base-Pair Cross-Rungs between the two strands
+    ctx.lineWidth = 0.8;
+    for (var bi = 3; bi < helixSteps; bi += 6) {
+      var p1 = strand1Pts[bi];
+      var p2 = strand2Pts[bi];
+      var rungAlpha = Math.max(0.12, (p1.z + 1.0) * 0.25);
+      ctx.strokeStyle = "rgba(224, 231, 255, " + rungAlpha.toFixed(2) + ")";
+      ctx.beginPath();
+      ctx.moveTo(p1.x, p1.y);
+      ctx.lineTo(p2.x, p2.y);
+      ctx.stroke();
+    }
+
+    // Draw Strand 1: Electric Cyan Helical Strand
+    ctx.beginPath();
+    ctx.moveTo(strand1Pts[0].x, strand1Pts[0].y);
+    for (var s1 = 1; s1 <= helixSteps; s1++) {
+      ctx.lineTo(strand1Pts[s1].x, strand1Pts[s1].y);
+    }
+    ctx.strokeStyle = "rgba(34, 211, 238, 0.85)";
+    ctx.lineWidth = 1.6;
+    ctx.stroke();
+
+    // Draw Strand 2: Royal Violet Helical Strand
+    ctx.beginPath();
+    ctx.moveTo(strand2Pts[0].x, strand2Pts[0].y);
+    for (var s2 = 1; s2 <= helixSteps; s2++) {
+      ctx.lineTo(strand2Pts[s2].x, strand2Pts[s2].y);
+    }
+    ctx.strokeStyle = "rgba(192, 132, 252, 0.85)";
+    ctx.lineWidth = 1.6;
+    ctx.stroke();
+
+    // Orbiting Base-Pair Quantum Nodal Sparks
+    var nodePhase1 = t * spinMult * 1.8;
+    var nodePhase2 = nodePhase1 + Math.PI;
+    var nx1 = Math.sin(nodePhase1) * cageR;
+    var ny1 = Math.cos(nodePhase1 * 2 + t * spinMult) * (cageH * 0.5);
+    var nx2 = Math.sin(nodePhase2) * cageR;
+    var ny2 = Math.cos(nodePhase2 * 2 + t * spinMult) * (cageH * 0.5);
+
+    // Cyan Node on Strand 1
+    ctx.beginPath();
+    ctx.arc(nx1, ny1, 2.0, 0, Math.PI * 2);
+    ctx.fillStyle = "#67e8f9";
+    ctx.shadowColor = "#06b6d4";
+    ctx.shadowBlur = 6;
+    ctx.fill();
+    ctx.shadowBlur = 0;
+
+    // Violet Node on Strand 2
+    ctx.beginPath();
+    ctx.arc(nx2, ny2, 2.0, 0, Math.PI * 2);
+    ctx.fillStyle = "#e9d5ff";
+    ctx.shadowColor = "#a855f7";
+    ctx.shadowBlur = 6;
+    ctx.fill();
+    ctx.shadowBlur = 0;
+
+    // ── 4. Precision Micro-Singularity Center Reticle ──
+    ctx.beginPath();
+    ctx.arc(0, 0, 1.6, 0, Math.PI * 2);
+    ctx.fillStyle = "#ffffff";
+    ctx.fill();
+
+    // ── 5. Target Synchronization Radiance: Bi-Chromatic Harmonic Resonance Wavefront ──
+    if (progress > 0) {
+      var syncPulse = Math.sin(now * 0.012) * 0.5 + 0.5;
+      var syncR = rCore * (1.2 + progress * 0.60 + syncPulse * 0.18);
+      ctx.beginPath();
+      ctx.arc(0, 0, syncR, 0, Math.PI * 2);
+      ctx.strokeStyle = progress > 0.85 ? "rgba(255, 215, 0, 0.75)" : "rgba(34, 211, 238, 0.65)";
+      ctx.lineWidth = 1.3;
+      ctx.setLineDash([3, 4]);
+      ctx.stroke();
+
+      // Counter-rotating dashed violet outer resonance ring
+      ctx.beginPath();
+      ctx.arc(0, 0, syncR * 1.25, 0, Math.PI * 2);
+      ctx.strokeStyle = "rgba(192, 132, 252, 0.55)";
+      ctx.lineWidth = 1.0;
+      ctx.setLineDash([2, 5]);
       ctx.stroke();
       ctx.setLineDash([]);
     }
