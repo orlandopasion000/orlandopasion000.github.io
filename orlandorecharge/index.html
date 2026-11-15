@@ -9625,7 +9625,7 @@ try { checkUrlHashRoutine(); } catch(e){}
 
       var tier = p.lumiTier || 0;
       var isPrismaticQuark = (tier === 0 && gameGlowProgress > 0.02);
-      var isTargetLocked = (p.isLocked || (p === lockedParticle));
+      var isTargetLocked = !!p.isLocked;
       var gameLitBoost = (tier === 2) ? (gameGlowProgress * 6) : ((tier === 1) ? (gameGlowProgress * 4) : (gameGlowProgress * 9));
       var gameAlphaBoost = (tier === 2) ? (gameGlowProgress * 0.35) : ((tier === 1) ? (gameGlowProgress * 0.25) : (gameGlowProgress * 0.32));
       var fLitBoost = isAudioHot ? (liveBass * 14 + beatKickImpulse * 8) : 0;
