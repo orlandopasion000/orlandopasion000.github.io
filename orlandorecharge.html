@@ -1866,11 +1866,13 @@ body.light-theme .rest-mode-btn:hover {
 
 @media (min-width: 821px) {
   .fs-toggle-btn {
-    width: 168px;
+    width: auto;
+    min-width: 148px;
   }
   .qgame-btn-launch,
   .qgame-btn-exit {
-    width: 196px;
+    width: auto;
+    min-width: 146px;
   }
 }
 
@@ -1885,7 +1887,9 @@ body.light-theme .rest-mode-btn:hover {
   }
   .qgame-btn-launch,
   .qgame-btn-exit {
-    width: 164px !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
     height: 30px !important;
     padding: 0 10px !important;
     font-size: 0.62rem !important;
@@ -1896,7 +1900,21 @@ body.light-theme .rest-mode-btn:hover {
   }
 }
 
-@media (max-width: 540px) {
+@media (max-width: 640px) {
+  .or-header-right .fs-toggle-btn .fs-btn-label {
+    display: none !important;
+  }
+  .or-header-right .fs-toggle-btn {
+    width: 30px !important;
+    min-width: 30px !important;
+    height: 30px !important;
+    padding: 0 !important;
+    justify-content: center !important;
+    border-radius: 50% !important;
+  }
+}
+
+@media (max-width: 500px) {
   .fs-toggle-btn {
     height: 28px !important;
     padding: 0 8px !important;
@@ -1905,12 +1923,61 @@ body.light-theme .rest-mode-btn:hover {
   }
   .qgame-btn-launch,
   .qgame-btn-exit {
-    width: 148px !important;
     height: 28px !important;
     padding: 0 8px !important;
     font-size: 0.58rem !important;
     gap: 4px !important;
   }
+}
+
+/* Quantum Helix Button Special Styling (Intertwined Ribbon Violet/Amber Aura) */
+.qgame-btn-helix {
+  background: linear-gradient(135deg, rgba(88, 28, 135, 0.16) 0%, rgba(30, 27, 75, 0.12) 100%) !important;
+  border: 1px solid rgba(192, 132, 252, 0.28) !important;
+  color: rgba(243, 232, 255, 0.62) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18), 0 0 8px rgba(168, 85, 247, 0.10) !important;
+}
+
+.qgame-btn-helix:hover {
+  background: linear-gradient(135deg, rgba(107, 33, 168, 0.35) 0%, rgba(88, 28, 135, 0.25) 100%) !important;
+  border-color: rgba(216, 180, 254, 0.65) !important;
+  color: #faf5ff !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.32), 0 0 16px rgba(192, 132, 252, 0.30) !important;
+  transform: translateY(-1px);
+}
+
+.qgame-btn-helix .game-btn-glyph {
+  color: rgba(192, 132, 252, 0.85) !important;
+  filter: drop-shadow(0 0 4px rgba(192, 132, 252, 0.4)) !important;
+}
+
+.qgame-btn-helix:hover .game-btn-glyph {
+  color: #fbcfe8 !important;
+  transform: rotate(180deg) scale(1.20) !important;
+}
+
+.qgame-btn-helix .game-btn-glyph-helix svg {
+  width: 13px;
+  height: 13px;
+  stroke: rgba(192, 132, 252, 0.85);
+  display: block;
+  transition: transform 0.3s ease, stroke 0.3s ease;
+}
+
+.qgame-btn-helix:hover .game-btn-glyph-helix svg {
+  stroke: #ffd700;
+}
+
+body.light-theme .qgame-btn-helix {
+  background: linear-gradient(135deg, rgba(245, 243, 255, 0.65) 0%, rgba(237, 233, 254, 0.50) 100%) !important;
+  border-color: rgba(147, 51, 234, 0.35) !important;
+  color: #7e22ce !important;
+  box-shadow: 0 4px 14px rgba(147, 51, 234, 0.12) !important;
+}
+
+body.light-theme .qgame-btn-helix:hover {
+  border-color: rgba(147, 51, 234, 0.75) !important;
+  color: #6b21a8 !important;
 }
 
 .qgame-btn-launch:hover,
@@ -4123,7 +4190,7 @@ body.light-theme .highlight-card .dist-icon{
       </div>
     </a>
     <div class="or-header-right">
-      <!-- Enter / Exit Full Screen Mode (Beside Quantum Realm) -->
+      <!-- Enter / Exit Full Screen Mode (Beside Quantum Games) -->
       <button type="button" class="fs-toggle-btn" id="btnToggleFullscreen" title="Enter Full Screen (Click)" aria-label="Enter Full Screen">
         <span class="fs-btn-glyph" aria-hidden="true">
           <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -4133,10 +4200,21 @@ body.light-theme .highlight-card .dist-icon{
         <span class="fs-btn-label">ENTER FULL SCREEN</span>
       </button>
 
-      <!-- Enter Quantum Universe Game Mode -->
-      <button type="button" class="qgame-btn-launch" id="btnLaunchGame" title="Enter Quantum Realm Game Mode" aria-label="Launch Quantum Realm Game">
+      <!-- Enter Quantum Realm Game Mode (Game 1: Classic Streamlined Wavepackets) -->
+      <button type="button" class="qgame-btn-launch qgame-btn-realm" id="btnLaunchGame" title="Enter Quantum Realm Game (Classic Particles)" aria-label="Launch Quantum Realm Game">
         <span class="game-btn-glyph" aria-hidden="true">◈</span>
         <span class="game-btn-label">QUANTUM REALM</span>
+      </button>
+
+      <!-- Enter Quantum Helix Game Mode (Game 2: Intertwined Double-Helix Ribbons) -->
+      <button type="button" class="qgame-btn-launch qgame-btn-helix" id="btnLaunchHelixGame" title="Enter Quantum Helix Game (Intertwined Ribbon Particles)" aria-label="Launch Quantum Helix Game">
+        <span class="game-btn-glyph game-btn-glyph-helix" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 6c4 0 6 12 10 12s6-12 10-12"/>
+            <path d="M4 18c4 0 6-12 10-12s6 12 10 12" stroke-dasharray="2 2" opacity="0.85"/>
+          </svg>
+        </span>
+        <span class="game-btn-label">QUANTUM HELIX</span>
       </button>
     </div>
   </header>
@@ -8728,6 +8806,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   var INFLUENCE_RADIUS = 168;
 
   var isGameMode = false;
+  var gameParticleStyle = "helix"; // "classic" | "helix"
   var gameGlowProgress = 0.0;
   var isVictoryDancing = false;
   var victoryDanceStartTime = 0;
@@ -9539,7 +9618,13 @@ try { checkUrlHashRoutine(); } catch(e){}
       while (p.heading < -Math.PI) p.heading += Math.PI * 2;
 
       // ── 1. Inverse Kinematics Spine Tracking: Head curves first, tail follows curve, goes straight immediately ──
-      var targetSpineK = (isGameMode ? (p.isFront ? 14 : 11) : (p.isFront ? 8 : 6));
+      var isHelix = (gameParticleStyle === "helix");
+      var targetSpineK;
+      if (isHelix) {
+        targetSpineK = isGameMode ? (p.isFront ? 14 : 11) : (p.isFront ? 10 : 8);
+      } else {
+        targetSpineK = isGameMode ? (p.isFront ? 9 : 7) : (p.isFront ? 7 : 5);
+      }
       if (!p.spine || p.spine.length !== targetSpineK) {
         var spc = p.segmentSpacing || 3.2;
         p.spine = [];
@@ -9583,32 +9668,47 @@ try { checkUrlHashRoutine(); } catch(e){}
       _ribbon2X[0] = p.spine[0].x;
       _ribbon2Y[0] = p.spine[0].y;
 
-      // Double-helix intertwined wave amplitude (expands significantly during high-speed evasion in game mode)
-      var helixWaveFactor = isGameMode ? (1.0 + Math.min(2.2, speedRatio * 1.5)) : 1.0;
-      var waveAmp = curSize * 0.28 * helixWaveFactor;
       var invK = 1 / K;
+      if (isHelix) {
+        // Double-helix intertwined wave amplitude (expands significantly during high-speed evasion in game mode)
+        var helixWaveFactor = isGameMode ? (1.0 + Math.min(2.2, speedRatio * 1.5)) : 1.0;
+        var waveAmp = curSize * 0.28 * helixWaveFactor;
 
-      for (var sj = 1; sj < K; sj++) {
-        var pPrev = p.spine[sj - 1];
-        var pCurr = p.spine[sj];
-        var segDx = pPrev.x - pCurr.x;
-        var segDy = pPrev.y - pCurr.y;
-        var segLen = Math.hypot(segDx, segDy) || 1;
-        var perpX = -segDy / segLen;
-        var perpY = segDx / segLen;
+        for (var sj = 1; sj < K; sj++) {
+          var pPrev = p.spine[sj - 1];
+          var pCurr = p.spine[sj];
+          var segDx = pPrev.x - pCurr.x;
+          var segDy = pPrev.y - pCurr.y;
+          var segLen = Math.hypot(segDx, segDy) || 1;
+          var perpX = -segDy / segLen;
+          var perpY = segDx / segLen;
 
-        var env = Math.sin((sj * invK) * Math.PI); // Envelope: 0 at head, maximum at mid-body, tapering at tail
-        var wave1 = Math.sin(p.wavePhase - sj * 0.72) * waveAmp * (0.35 + 0.65 * env);
-        var wave2 = -wave1; // Counter-phase intertwined strand
+          var env = Math.sin((sj * invK) * Math.PI); // Envelope: 0 at head, maximum at mid-body, tapering at tail
+          var wave1 = Math.sin(p.wavePhase - sj * 0.72) * waveAmp * (0.35 + 0.65 * env);
+          var wave2 = -wave1; // Counter-phase intertwined strand
 
-        _ptsX[sj] = pCurr.x + perpX * (wave1 * 0.4);
-        _ptsY[sj] = pCurr.y + perpY * (wave1 * 0.4);
+          _ptsX[sj] = pCurr.x + perpX * (wave1 * 0.4);
+          _ptsY[sj] = pCurr.y + perpY * (wave1 * 0.4);
 
-        _ribbon1X[sj] = pCurr.x + perpX * wave1;
-        _ribbon1Y[sj] = pCurr.y + perpY * wave1;
+          _ribbon1X[sj] = pCurr.x + perpX * wave1;
+          _ribbon1Y[sj] = pCurr.y + perpY * wave1;
 
-        _ribbon2X[sj] = pCurr.x + perpX * wave2;
-        _ribbon2Y[sj] = pCurr.y + perpY * wave2;
+          _ribbon2X[sj] = pCurr.x + perpX * wave2;
+          _ribbon2Y[sj] = pCurr.y + perpY * wave2;
+        }
+      } else {
+        // Classic streamlined single-contour quantum wavepacket (Pure, sleek wave)
+        var waveAmp = curSize * 0.20;
+        for (var sj = 1; sj < K; sj++) {
+          var pPrev = p.spine[sj - 1];
+          var pCurr = p.spine[sj];
+          var segDx = pPrev.x - pCurr.x;
+          var segDy = pPrev.y - pCurr.y;
+          var segLen = Math.hypot(segDx, segDy) || 1;
+          var wave = Math.sin(p.wavePhase - sj * 0.65) * waveAmp * (sj * invK);
+          _ptsX[sj] = pCurr.x - (segDy / segLen) * wave;
+          _ptsY[sj] = pCurr.y + (segDx / segLen) * wave;
+        }
       }
 
       var headR = curSize * 0.54;
@@ -9726,8 +9826,8 @@ try { checkUrlHashRoutine(); } catch(e){}
         targetCtx.fill();
 
         // ── 2B. INTERTWINED LUMINOUS DOUBLE-HELIX RIBBONS (Exact Match to User Reference) ──
-        // More evident and extended when quantum particles are moving fast in Game Mode!
-        if (isGameMode || speedRatio > 0.15) {
+        // Rendered exclusively in Quantum Helix mode!
+        if (isHelix && (isGameMode || speedRatio > 0.15)) {
           var ribbonProminence = Math.min(1.0, 0.40 + speedRatio * 0.85) * renderAlpha;
           var rLineWidth = Math.max(0.7, headR * (0.16 + speedRatio * 0.12));
 
@@ -9966,11 +10066,20 @@ try { checkUrlHashRoutine(); } catch(e){}
     setGameGlowProgress: function(v) {
       gameGlowProgress = Math.max(0, Math.min(1, v));
     },
-    setGameMode: function(active) {
+    setGameMode: function(active, style) {
       isGameMode = !!active;
+      if (style) {
+        gameParticleStyle = (style === "helix") ? "helix" : "classic";
+      }
     },
     isGameMode: function() {
       return isGameMode;
+    },
+    setGameParticleStyle: function(style) {
+      gameParticleStyle = (style === "helix") ? "helix" : "classic";
+    },
+    getGameParticleStyle: function() {
+      return gameParticleStyle;
     },
     startVictoryDance: function(targetParticle, hitX, hitY) {
       isVictoryDancing = true;
@@ -10311,6 +10420,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   var overlay = document.getElementById("quantumGameOverlay");
   var canvas = document.getElementById("quantumGameCanvas");
   var btnLaunch = document.getElementById("btnLaunchGame");
+  var btnLaunchHelix = document.getElementById("btnLaunchHelixGame");
   var btnExit = document.getElementById("btnExitGame");
   var btnPlayAgain = document.getElementById("btnGamePlayAgain");
   var btnReturn = document.getElementById("btnGameReturn");
@@ -10321,6 +10431,8 @@ try { checkUrlHashRoutine(); } catch(e){}
   var fillEl = document.getElementById("qGameTimerFill");
   var missionText = document.getElementById("qGameMissionText");
   var victoryModal = document.getElementById("qGameVictoryModal");
+
+  var currentGameVariant = "classic"; // "classic" | "helix"
 
   // Dynamic Result Elements (Shared Zero-Shift Card for Victory & Game Over)
   var resultCard = document.getElementById("qGameResultCard");
@@ -10565,10 +10677,18 @@ try { checkUrlHashRoutine(); } catch(e){}
       if (actionLabel) actionLabel.textContent = "Try Again";
     } else {
       resultCard.classList.remove("is-defeat");
-      if (resultTitle) resultTitle.textContent = "QUANTUM RESONANCE COMPLETE";
-      if (resultSubtitle) resultSubtitle.textContent = "TARGET SYNCHRONIZED · HARMONIC DANCE ACTIVE";
-      if (resultIcon) {
-        resultIcon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" class="qgame-victory-svg"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="url(#vicGoldGrad)" stroke="#ffffff" stroke-width="1.2"/><defs><linearGradient id="vicGoldGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#ffd700"/><stop offset="50%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#f59e0b"/></linearGradient></defs></svg>';
+      if (currentGameVariant === "helix") {
+        if (resultTitle) resultTitle.textContent = "QUANTUM HELIX COMPLETE";
+        if (resultSubtitle) resultSubtitle.textContent = "HELIX SYNCHRONIZED · HARMONIC DANCE ACTIVE";
+        if (resultIcon) {
+          resultIcon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" class="qgame-victory-svg"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="url(#vicHelixGrad)" stroke="#ffffff" stroke-width="1.2"/><defs><linearGradient id="vicHelixGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#c084fc"/><stop offset="50%" stop-color="#ffd700"/><stop offset="100%" stop-color="#f43f5e"/></linearGradient></defs></svg>';
+        }
+      } else {
+        if (resultTitle) resultTitle.textContent = "QUANTUM RESONANCE COMPLETE";
+        if (resultSubtitle) resultSubtitle.textContent = "TARGET SYNCHRONIZED · HARMONIC DANCE ACTIVE";
+        if (resultIcon) {
+          resultIcon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" class="qgame-victory-svg"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="url(#vicGoldGrad)" stroke="#ffffff" stroke-width="1.2"/><defs><linearGradient id="vicGoldGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#ffd700"/><stop offset="50%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#f59e0b"/></linearGradient></defs></svg>';
+        }
       }
       if (statLabel1) statLabel1.textContent = "FINAL TIME PRESERVED";
       if (preservedTimeEl) {
@@ -10671,12 +10791,14 @@ try { checkUrlHashRoutine(); } catch(e){}
     digitsEl.textContent = TOTAL_TIME.toFixed(2);
     digitsEl.classList.remove("victory-frozen", "defeat-frozen");
     fillEl.style.width = "100%";
-    missionText.textContent = "INITIALIZING QUANTUM REALM · PREPARE RETICLE";
+    missionText.textContent = (currentGameVariant === "helix")
+      ? "INITIALIZING QUANTUM HELIX · PREPARE RETICLE"
+      : "INITIALIZING QUANTUM REALM · PREPARE RETICLE";
     syncGameMusicBtn();
 
     if (window.antigravityFX) {
       if (typeof window.antigravityFX.setGameMode === "function") {
-        window.antigravityFX.setGameMode(true);
+        window.antigravityFX.setGameMode(true, currentGameVariant);
       }
       if (typeof window.antigravityFX.stopVictoryDance === "function") {
         window.antigravityFX.stopVictoryDance();
@@ -10684,8 +10806,11 @@ try { checkUrlHashRoutine(); } catch(e){}
     }
   }
 
-  function launchGame() {
+  function launchGame(variant) {
     if (isActive) return;
+    if (variant) {
+      currentGameVariant = (variant === "helix") ? "helix" : "classic";
+    }
     isActive = true;
     isWon = false;
     isGameOver = false;
@@ -10722,7 +10847,9 @@ try { checkUrlHashRoutine(); } catch(e){}
     overlay.setAttribute("aria-hidden", "false");
     victoryModal.style.display = "none";
     if (resultCard) resultCard.classList.remove("is-defeat");
-    missionText.textContent = "INITIALIZING QUANTUM REALM · PREPARE RETICLE";
+    missionText.textContent = (currentGameVariant === "helix")
+      ? "INITIALIZING QUANTUM HELIX · PREPARE RETICLE"
+      : "INITIALIZING QUANTUM REALM · PREPARE RETICLE";
     digitsEl.textContent = TOTAL_TIME.toFixed(2);
     digitsEl.classList.remove("victory-frozen", "defeat-frozen");
     fillEl.style.width = "100%";
@@ -10730,7 +10857,7 @@ try { checkUrlHashRoutine(); } catch(e){}
 
     // 2. Prepare Game Mode (particles retain their full avoidance behavior!)
     if (window.antigravityFX && typeof window.antigravityFX.setGameMode === "function") {
-      window.antigravityFX.setGameMode(true);
+      window.antigravityFX.setGameMode(true, currentGameVariant);
       window.antigravityFX.stopVictoryDance();
     }
 
@@ -10864,7 +10991,9 @@ try { checkUrlHashRoutine(); } catch(e){}
 
     // 5. Setup Victory Hologram Readouts
     showResultScreen("victory");
-    missionText.textContent = "◈ QUANTUM RESONANCE ACHIEVED · CELEBRATION DANCE ACTIVE ◈";
+    missionText.textContent = (currentGameVariant === "helix")
+      ? "☍ QUANTUM HELIX ACHIEVED · CELEBRATION DANCE ACTIVE ☍"
+      : "◈ QUANTUM RESONANCE ACHIEVED · CELEBRATION DANCE ACTIVE ◈";
 
     // 6. Reveal Victory Hologram Card
     setTimeout(function() {
@@ -10897,7 +11026,9 @@ try { checkUrlHashRoutine(); } catch(e){}
         fillEl.style.width = "100%";
       } else {
         if (missionText.textContent.indexOf("INITIALIZING") !== -1) {
-          missionText.textContent = "TARGET: TOUCH ANY PARTICLE · MAINTAIN CONTACT FOR 2.0s";
+          missionText.textContent = (currentGameVariant === "helix")
+            ? "TARGET: TOUCH ANY HELIX PARTICLE · MAINTAIN CONTACT FOR 2.0s"
+            : "TARGET: TOUCH ANY PARTICLE · MAINTAIN CONTACT FOR 2.0s";
         }
         remainingTime -= dt;
         if (remainingTime <= 0) {
@@ -10953,7 +11084,8 @@ try { checkUrlHashRoutine(); } catch(e){}
 
             drawLockReticle(lockedParticle.x, lockedParticle.y, progress);
 
-            missionText.textContent = "◈ QUANTUM LOCK ACTIVE: " + (progress * 100).toFixed(0) + "% · MAINTAIN CONTACT ◈";
+            var glyph = (currentGameVariant === "helix") ? "☍" : "◈";
+            missionText.textContent = glyph + " QUANTUM LOCK ACTIVE: " + (progress * 100).toFixed(0) + "% · MAINTAIN CONTACT " + glyph;
 
             if (contactDuration >= REQUIRED_CONTACT) {
               lockedParticle.isLocked = false;
@@ -10966,7 +11098,9 @@ try { checkUrlHashRoutine(); } catch(e){}
               contactDuration = 0.0;
               lockedParticle = null;
               stopLockAudio();
-              missionText.textContent = "TARGET: TOUCH ANY PARTICLE · MAINTAIN CONTACT FOR 2.0s";
+              missionText.textContent = (currentGameVariant === "helix")
+                ? "TARGET: TOUCH ANY HELIX PARTICLE · MAINTAIN CONTACT FOR 2.0s"
+                : "TARGET: TOUCH ANY PARTICLE · MAINTAIN CONTACT FOR 2.0s";
             } else {
               contactDuration = Math.max(0, contactDuration - dt * 0.85);
             }
@@ -11331,7 +11465,16 @@ try { checkUrlHashRoutine(); } catch(e){}
   }
 
   // Hook UI Click Handlers
-  btnLaunch.onclick = launchGame;
+  if (btnLaunch) {
+    btnLaunch.onclick = function() {
+      launchGame("classic");
+    };
+  }
+  if (btnLaunchHelix) {
+    btnLaunchHelix.onclick = function() {
+      launchGame("helix");
+    };
+  }
   btnExit.onclick = exitGame;
   if (btnReturn) btnReturn.onclick = exitGame;
   if (btnPlayAgain) {
@@ -11361,6 +11504,7 @@ try { checkUrlHashRoutine(); } catch(e){}
     restart: restartGame,
     triggerGameOver: triggerGameOver,
     triggerVictory: triggerVictory,
+    getCurrentVariant: function() { return currentGameVariant; },
     isActive: function() { return isActive; },
     isWon: function() { return isWon; },
     isGameOver: function() { return isGameOver; },
