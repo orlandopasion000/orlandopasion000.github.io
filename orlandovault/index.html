@@ -988,7 +988,67 @@
         grid-template-columns: 1fr;
       }
     }
-  </style>
+  
+    /* EXECUTIVE TACTICAL COMMAND DOCK AT BOTTOM */
+    .vault-bottom-dock {
+      margin-top: 40px;
+      padding: 18px 0;
+      border-top: 1px solid rgba(56, 189, 248, 0.25);
+      background: radial-gradient(circle at 50% 0%, rgba(2, 132, 199, 0.15) 0%, transparent 70%),
+                  linear-gradient(180deg, rgba(10, 14, 23, 0.8) 0%, rgba(5, 7, 12, 0.95) 100%);
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+    }
+
+    .dock-inner-frame {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding: 0 16px;
+    }
+
+    .dock-btn {
+      background: linear-gradient(135deg, rgba(16, 21, 32, 0.9) 0%, rgba(10, 13, 20, 0.95) 100%);
+      border: 1.5px solid rgba(56, 189, 248, 0.3);
+      border-radius: 12px;
+      padding: 12px 22px;
+      color: #ffffff;
+      font-family: var(--font-tech), sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .dock-btn:hover {
+      border-color: var(--cyan-bright);
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.25) 0%, rgba(217, 185, 92, 0.2) 100%);
+      box-shadow: 0 8px 30px rgba(0, 240, 255, 0.35), 0 0 15px rgba(217, 185, 92, 0.25);
+      transform: translateY(-3px);
+    }
+
+    .dock-btn-icon svg {
+      width: 17px;
+      height: 17px;
+      stroke: var(--cyan);
+      display: block;
+      transition: transform 0.25s ease;
+    }
+
+    .dock-btn:hover .dock-btn-icon svg {
+      transform: scale(1.15);
+      stroke: var(--cyan-bright);
+    }
+
+</style>
 </head>
 <body>
   <div class="scanline"></div>
@@ -1008,24 +1068,7 @@
     </a>
 
     <div class="topbar-actions">
-      <!-- 1. Password Generator Trigger -->
-      <button type="button" class="hud-btn" id="btnOpenGenerator" title="Generate Quantum Uncrackable Password">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-6 6l-3-3m5 5l-2 2m-6 6l-3-3m5 5l-2 2m-7 1l4-4 4 4-4 4-4-4z"/><circle cx="7.5" cy="7.5" r="3.5"/></svg>
-        <span>Generator</span>
-      </button>
-
-      <!-- 2. Security Audit / Watchtower -->
-      <button type="button" class="hud-btn" id="btnOpenAudit" title="Jarvis Security Health Audit & Weak Password Watchtower">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="11" r="3"/></svg>
-        <span>Security Health</span>
-      </button>
-
-      <!-- 3. Encrypted Zero-Knowledge Backup & QR Sync -->
-      <button type="button" class="hud-btn" id="btnOpenBackup" title="Encrypted Zero-Knowledge Backup & Mobile QR Sync">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-        <span>Backup & Sync</span>
-      </button>
-      <!-- Open Main Web App Window / PWA Button -->
+      <!-- 24K Swiss Gold Quantum Pill Launcher -->
       <button type="button" class="btn-topbar-desktop" id="btnTopbarLaunchApp" title="Open OrlandoVault (Main Web App)" aria-label="Open Main Web App">
         <span class="desktop-btn-icon" id="topbarLaunchIcon">
           <svg class="futuristic-launch-svg" viewBox="0 0 24 24" fill="none">
@@ -1049,11 +1092,6 @@
         </span>
         <span class="desktop-btn-label" id="topbarLaunchLabel">Open Main Web App</span>
         <span class="btn-portal-dot" aria-hidden="true"></span>
-      </button>
-
-      <button type="button" class="hud-btn" id="btnOpenHistory" title="Audit Log & History">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        <span>Audit</span>
       </button>
 
       <a href="assets/orlandovault-master-photoshop-4k.png" download="OrlandoVault-4K-Masterpiece-Logo.png" class="hud-btn" id="btnDownload4kLogo" title="Download Official 4K Masterpiece Logo">
@@ -1119,6 +1157,31 @@
 
     <section class="vault-grid" id="vaultGridContainer">
     </section>
+
+    <!-- EXECUTIVE TACTICAL COMMAND DOCK (AT THE BOTTOM) -->
+    <footer class="vault-bottom-dock">
+      <div class="dock-inner-frame">
+        <button type="button" class="dock-btn" id="btnOpenGenerator" title="Generate Quantum Uncrackable Password">
+          <span class="dock-btn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-6 6l-3-3m5 5l-2 2m-6 6l-3-3m5 5l-2 2m-7 1l4-4 4 4-4 4-4-4z"/><circle cx="7.5" cy="7.5" r="3.5"/></svg></span>
+          <span class="dock-btn-label">Generator</span>
+        </button>
+
+        <button type="button" class="dock-btn" id="btnOpenAudit" title="Jarvis Security Health Audit & Weak Password Watchtower">
+          <span class="dock-btn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="11" r="3"/></svg></span>
+          <span class="dock-btn-label">Security Health</span>
+        </button>
+
+        <button type="button" class="dock-btn" id="btnOpenBackup" title="Encrypted Zero-Knowledge Backup & Mobile QR Sync">
+          <span class="dock-btn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>
+          <span class="dock-btn-label">Backup & Sync</span>
+        </button>
+
+        <button type="button" class="dock-btn" id="btnOpenHistory" title="Jarvis Activity & Cryptographic Audit Log">
+          <span class="dock-btn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+          <span class="dock-btn-label">Audit Log</span>
+        </button>
+      </div>
+    </footer>
   </main>
 
   <div class="modal-backdrop" id="historyModal">
