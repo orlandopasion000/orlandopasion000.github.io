@@ -10299,89 +10299,69 @@ try { checkUrlHashRoutine(); } catch(e){}
         var midHue = isPrismaticQuark ? prismMidHue : ((fTailHue + fHeadHue) >> 1);
 
         if (isMeteor) {
-          // ── METEOR MODE: ULTRA-REALISTIC VOLUMETRIC COMBUSTION FIRE & TURBULENT WAKE (Images 1 & 2) ──
+          // ── METEOR MODE: SLEEK AERODYNAMIC PLANCK BLACKBODY COMBUSTION (Direct Quantum Realm Smoothness) ──
           if (tier >= 1) {
-            // A. Volumetric Expanding Smoke Plumes (Soft Gaussian Billows along rear spine)
+            // A. Distal Atmospheric Smoke Plume (Subtle Dissipation strictly at Tail Tip, non-exaggerated)
             var smokeSprite = MeteorVFXEngine.getSmoke();
-            var startSmokeIdx = Math.max(1, (K * 0.42) | 0);
-            if (smokeSprite) {
-              for (var smj = K - 1; smj >= startSmokeIdx; smj--) {
-                var sFrac = (smj - startSmokeIdx) / Math.max(1, K - 1 - startSmokeIdx);
-                var puffR = headR * (1.20 + sFrac * 2.95);
-                var smokeAlpha = renderAlpha * (0.34 - sFrac * 0.20);
-                if (smokeAlpha > 0.02) {
-                  targetCtx.save();
-                  targetCtx.globalAlpha = smokeAlpha;
-                  targetCtx.drawImage(smokeSprite, _ptsX[smj] - puffR, _ptsY[smj] - puffR, puffR * 2, puffR * 2);
-                  targetCtx.restore();
-                }
-              }
-            }
-
-            // B. Volumetric Combustion Flame Billows (Zero Vector Outlines - Soft Gaseous Fire)
-            var flamePuff = MeteorVFXEngine.getFlamePuff();
-            var flameExpansion = [1.1, 1.85, 2.15, 1.80, 1.45, 1.15, 0.85, 0.60, 0.38, 0.22, 0.12, 0.06, 0.03, 0.01];
-            if (flamePuff) {
-              for (var sj = K - 1; sj >= 0; sj--) {
-                var expF = flameExpansion[sj] !== undefined ? flameExpansion[sj] : (1.0 - sj * invKm1);
-                var flR = headR * expF * (tier === 2 ? 1.55 : 1.30);
-                var wL = Math.sin(now * 0.018 + sj * 1.5 + (p.pulsePhase || 0) * 3.7) * (flR * 0.28);
-                var fNx = (_leftX[sj] - _ptsX[sj]) * (expF * (tier === 2 ? 1.35 : 1.15)) + (-sinH) * wL;
-                var fNy = (_leftY[sj] - _ptsY[sj]) * (expF * (tier === 2 ? 1.35 : 1.15)) + cosH * wL;
-                var puffAlpha = renderAlpha * (0.85 - (sj / K) * 0.45);
-                if (puffAlpha > 0.03) {
-                  targetCtx.save();
-                  targetCtx.globalAlpha = puffAlpha;
-                  targetCtx.drawImage(flamePuff, _ptsX[sj] + fNx * 0.35 - flR, _ptsY[sj] + fNy * 0.35 - flR, flR * 2, flR * 2);
-                  targetCtx.restore();
-                }
-              }
-            }
-
-            // C. Dynamic Curling Flame Licks (Image 2 Navier-Stokes Vorticity)
-            var flameWisp = MeteorVFXEngine.getFlameWisp();
-            if (flameWisp && K >= 3) {
-              var wispR = headR * (tier === 2 ? 1.8 : 1.5);
-              var wispOscL = Math.sin(now * 0.022 + (p.pulsePhase || 0) * 4.1);
+            if (smokeSprite && K >= 4) {
+              var lastSmokeIdx = K - 1;
+              var puffR = headR * 1.35;
+              var smokeAlpha = renderAlpha * 0.22;
               targetCtx.save();
-              targetCtx.translate(_ptsX[1], _ptsY[1]);
-              targetCtx.rotate(p.heading + Math.PI + 0.35 + wispOscL * 0.25);
-              targetCtx.globalAlpha = renderAlpha * 0.82;
-              targetCtx.drawImage(flameWisp, -wispR * 0.5, 0, wispR, wispR * 1.6);
-              targetCtx.restore();
-
-              var wispOscR = Math.cos(now * 0.025 + (p.pulsePhase || 0) * 3.3);
-              targetCtx.save();
-              targetCtx.translate(_ptsX[2], _ptsY[2]);
-              targetCtx.rotate(p.heading + Math.PI - 0.35 - wispOscR * 0.25);
-              targetCtx.scale(1, -1);
-              targetCtx.globalAlpha = renderAlpha * 0.78;
-              targetCtx.drawImage(flameWisp, -wispR * 0.5, 0, wispR, wispR * 1.6);
+              targetCtx.globalAlpha = smokeAlpha;
+              targetCtx.drawImage(smokeSprite, _ptsX[lastSmokeIdx] - puffR, _ptsY[lastSmokeIdx] - puffR, puffR * 2, puffR * 2);
               targetCtx.restore();
             }
 
-            // D. Central Solar Plasma Streamer (3200K Incandescent Core)
+            // B. Quantum Realm Silky-Smooth Aerodynamic Taper Envelope filled with Planck Blackbody Gradient
+            var meteorBodyGrad = targetCtx.createLinearGradient(tailTipX, tailTipY, headPtX, headPtY);
+            meteorBodyGrad.addColorStop(0.0, 'rgba(220, 38, 38, 0.0)');
+            meteorBodyGrad.addColorStop(0.35, 'rgba(220, 38, 38, ' + (renderAlpha * 0.45).toFixed(2) + ')');
+            meteorBodyGrad.addColorStop(0.65, 'rgba(249, 115, 22, ' + (renderAlpha * 0.85).toFixed(2) + ')');
+            meteorBodyGrad.addColorStop(0.88, 'rgba(250, 204, 21, ' + (renderAlpha * 0.95).toFixed(2) + ')');
+            meteorBodyGrad.addColorStop(1.0, 'rgba(255, 255, 250, ' + (renderAlpha * 0.98).toFixed(2) + ')');
+            targetCtx.fillStyle = meteorBodyGrad;
+
+            targetCtx.beginPath();
+            targetCtx.moveTo(_leftX[0], _leftY[0]);
+            for (var sj = 0; sj < K - 1; sj++) {
+              var mxL = (_leftX[sj] + _leftX[sj + 1]) * 0.5;
+              var myL = (_leftY[sj] + _leftY[sj + 1]) * 0.5;
+              targetCtx.quadraticCurveTo(_leftX[sj], _leftY[sj], mxL, myL);
+            }
+            targetCtx.lineTo(tailTipX, tailTipY);
+            targetCtx.lineTo(_rightX[K - 1], _rightY[K - 1]);
+            for (var sj = K - 1; sj > 0; sj--) {
+              var mxR = (_rightX[sj] + _rightX[sj - 1]) * 0.5;
+              var myR = (_rightY[sj] + _rightY[sj - 1]) * 0.5;
+              targetCtx.quadraticCurveTo(_rightX[sj], _rightY[sj], mxR, myR);
+            }
+            targetCtx.lineTo(_rightX[0], _rightY[0]);
+            targetCtx.closePath();
+            targetCtx.fill();
+
+            // C. Central Solar Plasma Streamer (3200K Incandescent Core)
             var flameEndIdx = Math.min(K - 1, Math.max(2, (K * 0.65) | 0));
             targetCtx.beginPath();
             targetCtx.moveTo(_ptsX[0], _ptsY[0]);
             for (var sj = 1; sj <= flameEndIdx; sj++) {
               targetCtx.lineTo(_ptsX[sj], _ptsY[sj]);
             }
-            targetCtx.strokeStyle = "rgba(255, 255, 245, " + (renderAlpha * 0.98).toFixed(2) + ")";
-            targetCtx.lineWidth = Math.max(1.4, headR * 0.75);
-            targetCtx.lineCap = "round";
+            targetCtx.strokeStyle = 'rgba(255, 255, 245, ' + (renderAlpha * 0.96).toFixed(2) + ')';
+            targetCtx.lineWidth = Math.max(1.2, headR * 0.65);
+            targetCtx.lineCap = 'round';
             targetCtx.stroke();
 
-            // E. Sparkling Micro-Ember Shower (Image 1)
+            // D. Sparkling Micro-Ember Shower (Fine, non-exaggerated Cinder Sparks)
             var emberCanvas = MeteorVFXEngine.getEmber();
             if (emberCanvas) {
               var emIdx1 = Math.min(K - 1, 2);
               var emIdx2 = Math.min(K - 1, 4);
-              var emLat1 = Math.sin(now * 0.019 + (p.pulsePhase || 0) * 2.5) * (headR * 1.2);
-              var emLat2 = Math.cos(now * 0.023 + (p.pulsePhase || 0) * 3.1) * (headR * 1.2);
-              var emR = Math.max(2.4, headR * 0.45);
+              var emLat1 = Math.sin(now * 0.019 + (p.pulsePhase || 0) * 2.5) * (headR * 0.7);
+              var emLat2 = Math.cos(now * 0.023 + (p.pulsePhase || 0) * 3.1) * (headR * 0.7);
+              var emR = Math.max(2.0, headR * 0.40);
               targetCtx.save();
-              targetCtx.globalAlpha = renderAlpha * 0.95;
+              targetCtx.globalAlpha = renderAlpha * 0.92;
               targetCtx.drawImage(emberCanvas, _ptsX[emIdx1] + (-sinH) * emLat1 - emR * 0.5, _ptsY[emIdx1] + cosH * emLat1 - emR * 0.5, emR, emR);
               if (tier === 2) {
                 targetCtx.drawImage(emberCanvas, _ptsX[emIdx2] + (-sinH) * emLat2 - emR * 0.5, _ptsY[emIdx2] + cosH * emLat2 - emR * 0.5, emR, emR);
@@ -10390,25 +10370,30 @@ try { checkUrlHashRoutine(); } catch(e){}
             }
 
           } else {
-            // Tier 0 Smallest Particles: High-Velocity Incandescent Debris & Micrometeorite Streaks
-            var flamePuff0 = MeteorVFXEngine.getFlamePuff();
-            if (flamePuff0) {
-              for (var sj = K - 1; sj >= 0; sj--) {
-                var pR0 = headR * (0.8 + (1.0 - sj * invKm1) * 1.2);
-                var pAlpha0 = renderAlpha * (0.80 - (sj / K) * 0.50);
-                targetCtx.save();
-                targetCtx.globalAlpha = pAlpha0;
-                targetCtx.drawImage(flamePuff0, _ptsX[sj] - pR0, _ptsY[sj] - pR0, pR0 * 2, pR0 * 2);
-                targetCtx.restore();
-              }
-            } else {
-              targetCtx.beginPath();
-              targetCtx.moveTo(headPtX, headPtY);
-              targetCtx.lineTo(tailTipX, tailTipY);
-              targetCtx.strokeStyle = "rgba(254, 240, 138, " + (renderAlpha * 0.85).toFixed(2) + ")";
-              targetCtx.lineWidth = headR * 1.5;
-              targetCtx.stroke();
+            // Tier 0 Smallest Particles: Sleek Micro-Debris Streamer
+            var t0Grad = targetCtx.createLinearGradient(tailTipX, tailTipY, headPtX, headPtY);
+            t0Grad.addColorStop(0.0, 'rgba(220, 38, 38, 0.0)');
+            t0Grad.addColorStop(0.5, 'rgba(249, 115, 22, ' + (renderAlpha * 0.65).toFixed(2) + ')');
+            t0Grad.addColorStop(1.0, 'rgba(254, 240, 138, ' + (renderAlpha * 0.95).toFixed(2) + ')');
+            targetCtx.fillStyle = t0Grad;
+
+            targetCtx.beginPath();
+            targetCtx.moveTo(_leftX[0], _leftY[0]);
+            for (var sj = 0; sj < K - 1; sj++) {
+              var mxL0 = (_leftX[sj] + _leftX[sj + 1]) * 0.5;
+              var myL0 = (_leftY[sj] + _leftY[sj + 1]) * 0.5;
+              targetCtx.quadraticCurveTo(_leftX[sj], _leftY[sj], mxL0, myL0);
             }
+            targetCtx.lineTo(tailTipX, tailTipY);
+            targetCtx.lineTo(_rightX[K - 1], _rightY[K - 1]);
+            for (var sj = K - 1; sj > 0; sj--) {
+              var mxR0 = (_rightX[sj] + _rightX[sj - 1]) * 0.5;
+              var myR0 = (_rightY[sj] + _rightY[sj - 1]) * 0.5;
+              targetCtx.quadraticCurveTo(_rightX[sj], _rightY[sj], mxR0, myR0);
+            }
+            targetCtx.lineTo(_rightX[0], _rightY[0]);
+            targetCtx.closePath();
+            targetCtx.fill();
           }
 
         } else if (tier === 2 || isPrismaticQuark) {
@@ -12193,93 +12178,37 @@ try { checkUrlHashRoutine(); } catch(e){}
       }
     }
 
-    // ── 2. REALISTIC VOLUMETRIC ADDITIVE FIRE PLUME (Zero Vector Outlines - Modeled on Image 2) ──
-    var flameLen = coreR * (4.2 + (cursor.speed > 30 ? (cursor.speed * 0.028) : 0) + exc * 1.8);
+    // ── 2. SLEEK AERODYNAMIC COMBUSTION FLAME SHEATH (Direct Streamlined Profile) ──
+    var flameLen = coreR * (4.4 + (cursor.speed > 30 ? (cursor.speed * 0.028) : 0) + exc * 1.8);
     var tipX = cx + cosT * flameLen;
     var tipY = cy + sinT * flameLen;
 
-    var flamePuff = MeteorVFXEngine.getFlamePuff();
-    if (flamePuff) {
-      // A. Overlapping Volumetric Combustion Puffs along the central slipstream
-      var numCorePuffs = 10;
-      for (var cp = numCorePuffs - 1; cp >= 0; cp--) {
-        var cpRatio = cp / numCorePuffs;
-        var pDist = coreR * (0.6 + cpRatio * 3.8) + (cursor.speed > 40 ? (cpRatio * 25) : 0);
-        var pWobble = Math.sin(t * 4.2 + cp * 1.2) * (coreR * (0.15 + cpRatio * 0.35));
-        var pX = cx + cosT * pDist + perpX * pWobble;
-        var pY = cy + sinT * pDist + perpY * pWobble;
-        var pR = coreR * (1.15 + (1.0 - cpRatio) * 0.90);
-        var pAlpha = 0.95 - cpRatio * 0.55;
+    // A. Quantum-Smooth Aerodynamic Flame Boundary Envelope
+    var cFlameGrad = ctx.createLinearGradient(tipX, tipY, cx, cy);
+    cFlameGrad.addColorStop(0.0, 'rgba(220, 38, 38, 0.0)');
+    cFlameGrad.addColorStop(0.35, 'rgba(220, 38, 38, 0.45)');
+    cFlameGrad.addColorStop(0.65, 'rgba(249, 115, 22, 0.85)');
+    cFlameGrad.addColorStop(0.88, 'rgba(250, 204, 21, 0.95)');
+    cFlameGrad.addColorStop(1.0, 'rgba(255, 255, 250, 0.98)');
+    ctx.fillStyle = cFlameGrad;
 
-        ctx.save();
-        ctx.globalAlpha = pAlpha;
-        ctx.drawImage(flamePuff, pX - pR, pY - pR, pR * 2, pR * 2);
-        ctx.restore();
-      }
+    ctx.beginPath();
+    ctx.moveTo(cx + perpX * (coreR * 0.95), cy + perpY * (coreR * 0.95));
+    ctx.quadraticCurveTo(cx + cosT * (flameLen * 0.42) + perpX * (coreR * 0.65), cy + sinT * (flameLen * 0.42) + perpY * (coreR * 0.65), tipX, tipY);
+    ctx.quadraticCurveTo(cx + cosT * (flameLen * 0.42) - perpX * (coreR * 0.65), cy + sinT * (flameLen * 0.42) - perpY * (coreR * 0.65), cx - perpX * (coreR * 0.95), cy - perpY * (coreR * 0.95));
+    ctx.closePath();
+    ctx.fill();
 
-      // B. Left Curling Flame Wing Puffs (Image 2 Vorticity)
-      var wingWaveL = Math.sin(t * 4.8) * (coreR * 0.40);
-      var wPuffsL = 5;
-      for (var wp = 0; wp < wPuffsL; wp++) {
-        var wFrac = wp / wPuffsL;
-        var wDist = coreR * (0.8 + wFrac * 2.2);
-        var wLat = coreR * (1.2 + Math.sin(wFrac * Math.PI) * 1.4 + wingWaveL * (1 - wFrac));
-        var wpX = cx + cosT * wDist + perpX * wLat;
-        var wpY = cy + sinT * wDist + perpY * wLat;
-        var wpR = coreR * (0.85 + (1 - wFrac) * 0.55);
-        ctx.save();
-        ctx.globalAlpha = 0.85 - wFrac * 0.40;
-        ctx.drawImage(flamePuff, wpX - wpR, wpY - wpR, wpR * 2, wpR * 2);
-        ctx.restore();
-      }
-
-      // C. Right Curling Flame Wing Puffs (Image 2 Counter-Phase Vorticity)
-      var wingWaveR = Math.cos(t * 4.4 + 1.2) * (coreR * 0.40);
-      var wPuffsR = 5;
-      for (var wp = 0; wp < wPuffsR; wp++) {
-        var wFrac = wp / wPuffsR;
-        var wDist = coreR * (0.8 + wFrac * 2.2);
-        var wLat = -coreR * (1.2 + Math.sin(wFrac * Math.PI) * 1.4 + wingWaveR * (1 - wFrac));
-        var wpX = cx + cosT * wDist + perpX * wLat;
-        var wpY = cy + sinT * wDist + perpY * wLat;
-        var wpR = coreR * (0.85 + (1 - wFrac) * 0.55);
-        ctx.save();
-        ctx.globalAlpha = 0.85 - wFrac * 0.40;
-        ctx.drawImage(flamePuff, wpX - wpR, wpY - wpR, wpR * 2, wpR * 2);
-        ctx.restore();
-      }
-    }
-
-    // D. Dynamic Curling Flame Wisps (Delicate wispy tips from Image 2)
-    var flameWisp = MeteorVFXEngine.getFlameWisp();
-    if (flameWisp) {
-      var wispSize = coreR * 1.6;
-      ctx.save();
-      ctx.translate(cx + cosT * (coreR * 1.1) + perpX * (coreR * 1.4), cy + sinT * (coreR * 1.1) + perpY * (coreR * 1.4));
-      ctx.rotate(trailAngle + 0.25 + Math.sin(t * 5.2) * 0.2);
-      ctx.globalAlpha = 0.80;
-      ctx.drawImage(flameWisp, -wispSize * 0.5, 0, wispSize, wispSize * 1.7);
-      ctx.restore();
-
-      ctx.save();
-      ctx.translate(cx + cosT * (coreR * 1.1) - perpX * (coreR * 1.4), cy + sinT * (coreR * 1.1) - perpY * (coreR * 1.4));
-      ctx.rotate(trailAngle - 0.25 - Math.cos(t * 4.9) * 0.2);
-      ctx.scale(1, -1);
-      ctx.globalAlpha = 0.75;
-      ctx.drawImage(flameWisp, -wispSize * 0.5, 0, wispSize, wispSize * 1.7);
-      ctx.restore();
-    }
-
-    // E. Inner Solar Plasma Combustion Streamer (3200K White-Gold Central Core)
+    // B. Inner Solar Plasma Combustion Streamer (3200K White-Gold Central Core)
     var coreTongueLen = flameLen * 0.58;
     var cTipX = cx + cosT * coreTongueLen;
     var cTipY = cy + sinT * coreTongueLen;
     ctx.beginPath();
     ctx.moveTo(cx, cy);
     ctx.lineTo(cTipX, cTipY);
-    ctx.strokeStyle = "rgba(255, 255, 250, 0.98)";
-    ctx.lineWidth = Math.max(2.4, coreR * 0.55);
-    ctx.lineCap = "round";
+    ctx.strokeStyle = 'rgba(255, 255, 250, 0.98)';
+    ctx.lineWidth = Math.max(2.4, coreR * 0.45);
+    ctx.lineCap = 'round';
     ctx.stroke();
 
     // ── 3. Sparkling Micro-Ember Shower (Image 1 Incandescent Sparks) ──
