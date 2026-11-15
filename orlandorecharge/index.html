@@ -9091,10 +9091,12 @@ try { checkUrlHashRoutine(); } catch(e){}
     var radiantBackNodes = [];
 
     // Line-of-sight bounds: particles are kept 100% inside visible screen!
+    // Solution 4: In Game Mode, MIN_Y sits below the top HUD bar (78px) so particles never hide behind Play Music / Exit buttons
     var MARGIN_X = Math.max(18, Math.min(48, width * 0.03));
     var MARGIN_Y = Math.max(18, Math.min(45, height * 0.03));
     var MIN_X = MARGIN_X, MAX_X = width - MARGIN_X;
-    var MIN_Y = MARGIN_Y, MAX_Y = height - MARGIN_Y;
+    var MIN_Y = isGameMode ? Math.max(78, MARGIN_Y) : MARGIN_Y;
+    var MAX_Y = height - MARGIN_Y;
 
     // ── SPONTANEOUS QUANTUM FLASH-FADE & IMMEDIATE EMERGENCE CONTROLLER ──
     var activeFadingCount = 0;
@@ -10204,50 +10206,18 @@ try { checkUrlHashRoutine(); } catch(e){}
   var contactDuration = 0.0;
   var lastTouchContactTime = 0;
   var REQUIRED_CONTACT = 2.0; // 2 seconds continuous
-  var STRICT_HIT_RADIUS = 11; // Razor-sharp precision contact radius (desktop: 11px, tablet: 14.5px, mobile: 18px)
+  var STRICT_HIT_RADIUS = 13.0; // Base cursor central nucleus radius (desktop: 13.0px, tablet: 14.5px, mobile: 16.5px)
 
-  // Exact point-to-particle physical touch detection (measures against living multi-joint quantum spine)
+  // Solution 1: Head-Core-Only Hit Detection (measures strictly to the particle's glowing head nucleus, never the tail!)
   function getParticleTouchDistance(cx, cy, p) {
     if (!p) return 999999;
-    if (p.spine && p.spine.length > 1) {
-      var minDist = 999999;
-      for (var si = 0; si < p.spine.length - 1; si++) {
-        var p0 = p.spine[si];
-        var p1 = p.spine[si + 1];
-        var dx = p1.x - p0.x;
-        var dy = p1.y - p0.y;
-        var lenSq = dx * dx + dy * dy;
-        if (lenSq === 0) {
-          var d = Math.hypot(cx - p0.x, cy - p0.y);
-          if (d < minDist) minDist = d;
-        } else {
-          var t = Math.max(0, Math.min(1, ((cx - p0.x) * dx + (cy - p0.y) * dy) / lenSq));
-          var projX = p0.x + t * dx;
-          var projY = p0.y + t * dy;
-          var d = Math.hypot(cx - projX, cy - projY);
-          if (d < minDist) minDist = d;
-        }
-      }
-      return minDist;
-    }
-    var ang = (p.currentAngle !== undefined) ? p.currentAngle : Math.atan2(p.vy, p.vx);
-    var halfL = ((p.dynamicLength || 18) * 0.5);
-    var headR = ((p.curSize || 3.5) * 0.52);
+    return Math.hypot(cx - p.x, cy - p.y);
+  }
 
-    var tx = p.x - Math.cos(ang) * (halfL - headR);
-    var ty = p.y - Math.sin(ang) * (halfL - headR);
-    var hx = p.x + Math.cos(ang) * (halfL - headR);
-    var hy = p.y + Math.sin(ang) * (halfL - headR);
-
-    var dx = hx - tx;
-    var dy = hy - ty;
-    var lenSq = dx * dx + dy * dy;
-    if (lenSq === 0) return Math.hypot(cx - p.x, cy - p.y);
-
-    var t = Math.max(0, Math.min(1, ((cx - tx) * dx + (cy - ty) * dy) / lenSq));
-    var projX = tx + t * dx;
-    var projY = ty + t * dy;
-    return Math.hypot(cx - projX, cy - projY);
+  // Solution 2: True Visual Circle-to-Circle Overlap (cursor central nucleus radius + particle's actual rendered head radius)
+  function getParticleExactTouchRadius(p) {
+    var particleHeadR = ((p && p.curSize) ? p.curSize : 3.0) * 0.54;
+    return STRICT_HIT_RADIUS + particleHeadR;
   }
 
   var audioCtx = null;
@@ -10467,7 +10437,7 @@ try { checkUrlHashRoutine(); } catch(e){}
     canvas.width = Math.floor(width * dpr);
     canvas.height = Math.floor(height * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    STRICT_HIT_RADIUS = (width < 600) ? 18 : ((width < 1024) ? 14.5 : 11);
+    STRICT_HIT_RADIUS = (width < 600) ? 16.5 : ((width < 1024) ? 14.5 : 13.0);
   }
 
   // Cross-device capability check (e.g. iOS Safari does not support DOM Fullscreen API)
@@ -10799,9 +10769,10 @@ try { checkUrlHashRoutine(); } catch(e){}
     // ── Particle Interaction & 2-Second Active Contact Detection ──
     var particles = (window.antigravityFX && typeof window.antigravityFX.getParticles === "function") ? window.antigravityFX.getParticles() : [];
 
-    // Active pursuit for lock ACQUISITION: requires recent cursor movement (tight 34px corner apex window)
-    var cursorNearCorner = (cursor.x < 34 || cursor.x > width - 34) && (cursor.y < 34 || cursor.y > height - 34);
+    // Active pursuit for lock ACQUISITION: requires recent cursor movement (respecting 78px top HUD safe-zone margin)
+    var cursorNearCorner = (cursor.x < 68 || cursor.x > width - 68) && (cursor.y < 112 || cursor.y > height - 68);
     var canAcquireNewLock = hasDeliberateMove && ((now - lastCursorMoveTime < 240) || (cursorNearCorner && (now - lastCursorMoveTime < 360)));
+    var isPhysicallyTouching = false;
 
     if (!isWon && !isGameOver && !isWarmingUp && remainingTime > 0 && cursor.active && hasDeliberateMove) {
       if (lockedParticle) {
@@ -10812,17 +10783,18 @@ try { checkUrlHashRoutine(); } catch(e){}
           stopLockAudio();
         } else {
           var dist = getParticleTouchDistance(cursor.x, cursor.y, lockedParticle);
+          var exactTouchR = getParticleExactTouchRadius(lockedParticle);
 
-          // NUANCE: Once locked, as long as the particle remains physically touched (dist <= STRICT_HIT_RADIUS),
-          // contact progress accumulates continuously! The player is touching it!
-          if (dist <= STRICT_HIT_RADIUS) {
+          // Solutions 1, 2, 3 & 5: Timer and lock ring ONLY activate when particle head physically touches cursor core!
+          if (dist <= exactTouchR) {
+            isPhysicallyTouching = true;
             lastTouchContactTime = now;
             contactDuration += dt;
             var progress = Math.min(1.0, contactDuration / REQUIRED_CONTACT);
             startLockAudio();
             updateLockAudio(progress);
 
-            drawLockReticle(lockedParticle.x, lockedParticle.y, progress, dist);
+            drawLockReticle(lockedParticle.x, lockedParticle.y, progress);
 
             missionText.textContent = "◈ QUANTUM LOCK ACTIVE: " + (progress * 100).toFixed(0) + "% · MAINTAIN CONTACT ◈";
 
@@ -10831,23 +10803,21 @@ try { checkUrlHashRoutine(); } catch(e){}
               triggerVictory(lockedParticle);
             }
           } else {
-            // Particle actively evades: 105ms chase grace window with 0.75x off-target decay!
-            if (now - lastTouchContactTime > 105) {
+            // Solution 3 & 5: Separated from physical touch -> immediately stop counting & hide remote lock ring!
+            if (now - lastTouchContactTime > 95) {
               lockedParticle.isLocked = false;
               contactDuration = 0.0;
               lockedParticle = null;
               stopLockAudio();
               missionText.textContent = "TARGET: TOUCH ANY PARTICLE · MAINTAIN CONTACT FOR 2.0s";
             } else {
-              contactDuration = Math.max(0, contactDuration - dt * 0.75);
-              var progress = Math.min(1.0, contactDuration / REQUIRED_CONTACT);
-              drawLockReticle(lockedParticle.x, lockedParticle.y, progress, dist);
+              contactDuration = Math.max(0, contactDuration - dt * 0.85);
             }
           }
         }
       }
 
-      // To initiate a lock onto a new candidate particle, the cursor must be actively pursuing (not parked AFK)
+      // To initiate a lock onto a new candidate particle, the cursor core must physically touch the particle's head!
       if (!lockedParticle && canAcquireNewLock) {
         var closestDist = 999999;
         var candidate = null;
@@ -10855,7 +10825,8 @@ try { checkUrlHashRoutine(); } catch(e){}
           var p = particles[pi];
           if (p.exploded || p.fadeProgress < 0.3) continue;
           var pDist = getParticleTouchDistance(cursor.x, cursor.y, p);
-          if (pDist <= STRICT_HIT_RADIUS && pDist < closestDist) {
+          var pTouchR = getParticleExactTouchRadius(p);
+          if (pDist <= pTouchR && pDist < closestDist) {
             closestDist = pDist;
             candidate = p;
           }
@@ -10863,6 +10834,8 @@ try { checkUrlHashRoutine(); } catch(e){}
         if (candidate) {
           lockedParticle = candidate;
           lockedParticle.isLocked = true;
+          isPhysicallyTouching = true;
+          lastTouchContactTime = now;
           contactDuration = 0.0;
           startLockAudio();
         }
@@ -10878,7 +10851,7 @@ try { checkUrlHashRoutine(); } catch(e){}
 
     // ── Render Alive Quantum Atomic Cursor (Exact Replica of Uploaded Image with Precessing Rings & Radiant Colors) ──
     if (!isWon && !isGameOver && cursor.active && hasDeliberateMove) {
-      var lockProgress = (lockedParticle && contactDuration > 0) ? (contactDuration / REQUIRED_CONTACT) : 0;
+      var lockProgress = (lockedParticle && isPhysicallyTouching && contactDuration > 0) ? (contactDuration / REQUIRED_CONTACT) : 0;
       drawQuantumAtomicCursor(cursor.x, cursor.y, now, lockProgress);
     }
 
@@ -11047,26 +11020,25 @@ try { checkUrlHashRoutine(); } catch(e){}
     ctx.restore();
   }
 
-  function drawLockReticle(px, py, progress, dist) {
+  function drawLockReticle(px, py, progress) {
     ctx.save();
     var r = 14;
     var nowMs = performance.now();
     var rot = nowMs * 0.0035;
 
-    // Glowing Holographic Beam between cursor & particle (tight quantum tether)
-    if (dist > 2) {
-      ctx.beginPath();
-      ctx.moveTo(cursor.x, cursor.y);
-      ctx.lineTo(px, py);
-      ctx.strokeStyle = "rgba(56, 189, 248, " + (0.45 + progress * 0.45).toFixed(2) + ")";
-      ctx.lineWidth = 1.4;
-      ctx.setLineDash([3, 3]);
-      ctx.lineDashOffset = -nowMs * 0.02;
-      ctx.stroke();
-      ctx.setLineDash([]);
-    }
+    // Solution 3 & 5: No remote dashed tether! Instead, render a crisp Direct-Touch Contact Spark at the intersection point
+    var touchX = (cursor.x + px) * 0.5;
+    var touchY = (cursor.y + py) * 0.5;
+    ctx.beginPath();
+    ctx.arc(touchX, touchY, 3.2 + progress * 2.0, 0, Math.PI * 2);
+    ctx.fillStyle = progress > 0.85 ? "rgba(255, 215, 0, 0.45)" : "rgba(56, 189, 248, 0.45)";
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(touchX, touchY, 1.5, 0, Math.PI * 2);
+    ctx.fillStyle = "#ffffff";
+    ctx.fill();
 
-    // 4 Corner Precision Brackets hugging particle
+    // 4 Corner Precision Brackets hugging the physically touched particle head
     ctx.translate(px, py);
     ctx.rotate(rot);
     ctx.strokeStyle = progress > 0.85 ? "#ffd700" : "#38bdf8";
