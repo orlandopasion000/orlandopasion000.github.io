@@ -994,7 +994,7 @@
   <div class="scanline"></div>
 
   <header class="vault-topbar">
-    <div class="brand-cluster">
+    <a href="https://orlandopasion000.github.io/" class="brand-cluster" title="Sir Orlando V. Pasion, Jr. — Return to Master Portfolio Hub">
       <div class="vault-brand-logo-frame" title="OrlandoVault Masterpiece Insignia">
         <img src="assets/vault-icon-128.png" alt="OrlandoVault Insignia" class="vault-topbar-emblem">
       </div>
@@ -1005,9 +1005,26 @@
           <span>JARVIS AI · ACTIVE & GUARDING</span>
         </div>
       </div>
-    </div>
+    </a>
 
     <div class="topbar-actions">
+      <!-- 1. Password Generator Trigger -->
+      <button type="button" class="hud-btn" id="btnOpenGenerator" title="Generate Quantum Uncrackable Password">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-6 6l-3-3m5 5l-2 2m-6 6l-3-3m5 5l-2 2m-7 1l4-4 4 4-4 4-4-4z"/><circle cx="7.5" cy="7.5" r="3.5"/></svg>
+        <span>Generator</span>
+      </button>
+
+      <!-- 2. Security Audit / Watchtower -->
+      <button type="button" class="hud-btn" id="btnOpenAudit" title="Jarvis Security Health Audit & Weak Password Watchtower">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="11" r="3"/></svg>
+        <span>Security Health</span>
+      </button>
+
+      <!-- 3. Encrypted Zero-Knowledge Backup & QR Sync -->
+      <button type="button" class="hud-btn" id="btnOpenBackup" title="Encrypted Zero-Knowledge Backup & Mobile QR Sync">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        <span>Backup & Sync</span>
+      </button>
       <!-- Open Main Web App Window / PWA Button -->
       <button type="button" class="btn-topbar-desktop" id="btnTopbarLaunchApp" title="Open OrlandoVault (Main Web App)" aria-label="Open Main Web App">
         <span class="desktop-btn-icon" id="topbarLaunchIcon">
@@ -1285,7 +1302,8 @@
           }, 2000);
         }
 
-        showToast('✨ Copied password for ' + accountTitle + '!');
+        startClipboardAutoWipe(text, accountTitle, btnElement);
+        showToast('✨ Copied! Auto-wiping clipboard in 20s');
       } catch (err) {
         const ta = document.createElement('textarea');
         ta.value = text;
