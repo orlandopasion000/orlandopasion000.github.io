@@ -12077,6 +12077,11 @@ try { checkUrlHashRoutine(); } catch(e){}
       launchGame("helix");
     };
   }
+  if (btnLaunchMeteor) {
+    btnLaunchMeteor.onclick = function() {
+      launchGame("meteor");
+    };
+  }
   btnExit.onclick = exitGame;
   if (btnReturn) btnReturn.onclick = exitGame;
   if (btnPlayAgain) {
@@ -12122,7 +12127,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   <script>
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v40').catch(function() {});
+        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v41').catch(function() {});
       });
     }
   </script>
