@@ -1048,10 +1048,187 @@
       stroke: var(--cyan-bright);
     }
 
+
+    /* UPGRADE 2: TACTICAL HOLOGRAPHIC HUD FRAMING & CORNER NOTCHES */
+    .vault-card {
+      background: radial-gradient(circle at 100% 0%, rgba(0, 240, 255, 0.08) 0%, transparent 55%),
+                  radial-gradient(circle at 0% 100%, rgba(217, 185, 92, 0.08) 0%, transparent 55%),
+                  linear-gradient(135deg, rgba(16, 21, 32, 0.94) 0%, rgba(8, 11, 17, 0.98) 100%);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-radius: 14px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+      overflow: hidden;
+      clip-path: polygon(
+        0 14px, 14px 0,
+        calc(100% - 14px) 0, 100% 14px,
+        100% calc(100% - 14px), calc(100% - 14px) 100%,
+        14px 100%, 0 calc(100% - 14px)
+      );
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.08);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 2;
+    }
+
+    /* Precision crosshairs at top-right corner */
+    .vault-card::after {
+      content: '+';
+      position: absolute;
+      top: 6px;
+      right: 12px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: rgba(56, 189, 248, 0.4);
+      pointer-events: none;
+    }
+
+    /* UPGRADE 4: CATEGORY DYNAMIC NEON GLOWS & BORDERS */
+    .vault-card.cat-deped {
+      border-color: rgba(16, 185, 129, 0.35);
+    }
+    .vault-card.cat-deped .card-badge {
+      background: rgba(16, 185, 129, 0.15) !important;
+      border-color: rgba(16, 185, 129, 0.5) !important;
+      color: #34d399 !important;
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.25);
+    }
+    .vault-card.cat-deped:hover {
+      border-color: #10b981;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.85), 0 0 25px rgba(16, 185, 129, 0.3);
+    }
+
+    .vault-card.cat-microsoft {
+      border-color: rgba(0, 120, 212, 0.4);
+    }
+    .vault-card.cat-microsoft .card-badge {
+      background: rgba(0, 120, 212, 0.18) !important;
+      border-color: rgba(0, 120, 212, 0.6) !important;
+      color: #60a5fa !important;
+      box-shadow: 0 0 12px rgba(0, 120, 212, 0.25);
+    }
+    .vault-card.cat-microsoft:hover {
+      border-color: #38bdf8;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.85), 0 0 25px rgba(2, 132, 199, 0.35);
+    }
+
+    .vault-card.cat-ai {
+      border-color: rgba(168, 85, 247, 0.4);
+    }
+    .vault-card.cat-ai .card-badge {
+      background: rgba(168, 85, 247, 0.18) !important;
+      border-color: rgba(168, 85, 247, 0.6) !important;
+      color: #c084fc !important;
+      box-shadow: 0 0 12px rgba(168, 85, 247, 0.3);
+    }
+    .vault-card.cat-ai:hover {
+      border-color: #c084fc;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.85), 0 0 25px rgba(168, 85, 247, 0.35);
+    }
+
+    .vault-card.cat-gmail {
+      border-color: rgba(217, 185, 92, 0.35);
+    }
+    .vault-card.cat-gmail .card-badge {
+      background: rgba(217, 185, 92, 0.15) !important;
+      border-color: rgba(217, 185, 92, 0.5) !important;
+      color: #fef08a !important;
+      box-shadow: 0 0 12px rgba(217, 185, 92, 0.25);
+    }
+    .vault-card.cat-gmail:hover {
+      border-color: var(--gold);
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.85), 0 0 25px rgba(217, 185, 92, 0.3);
+    }
+
+    /* UPGRADE 5: ROTATION REMINDER BADGES */
+    .btn-rotate-mark {
+      background: none;
+      border: 1px solid rgba(217, 185, 92, 0.35);
+      border-radius: 4px;
+      color: var(--gold);
+      font-family: var(--font-tech);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 7px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s ease;
+    }
+    .btn-rotate-mark:hover {
+      background: rgba(217, 185, 92, 0.2);
+      border-color: var(--gold);
+      color: #ffffff;
+    }
+
+
+    /* ==========================================================================
+       SOLID 24K SWISS GOLD 'OPEN MAIN WEB APP' PILL (IMAGE 3 SPEC)
+       ========================================================================== */
+    .btn-topbar-desktop {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 22px;
+      background: linear-gradient(180deg, #e5c158 0%, #caa437 50%, #b89738 100%);
+      border: 1px solid rgba(255, 255, 255, 0.45);
+      border-radius: 9999px;
+      color: #000000 !important;
+      font-family: var(--font-tech), sans-serif;
+      font-size: 14.5px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 20px rgba(212, 175, 55, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.55);
+      text-decoration: none !important;
+      z-index: 1;
+    }
+
+    .btn-topbar-desktop:hover {
+      background: linear-gradient(180deg, #f5d77f 0%, #d4af37 50%, #c49d2e 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(212, 175, 55, 0.7), 0 0 25px rgba(255, 215, 0, 0.5), inset 0 1px 1px #ffffff;
+      color: #000000 !important;
+    }
+
+    .btn-topbar-desktop .desktop-btn-label {
+      color: #000000 !important;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+    }
+
+    .btn-topbar-desktop .desktop-btn-icon svg {
+      width: 17px;
+      height: 17px;
+      stroke: #000000 !important;
+      fill: none;
+      display: block;
+    }
+
+    .btn-topbar-desktop.app-active {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(6, 78, 59, 0.45) 100%) !important;
+      border-color: #10b981 !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 18px rgba(16, 185, 129, 0.35) !important;
+    }
+    .btn-topbar-desktop.app-active .desktop-btn-label {
+      color: #34d399 !important;
+    }
+    .btn-topbar-desktop.app-active .desktop-btn-icon svg {
+      stroke: #34d399 !important;
+    }
+
 </style>
 </head>
 <body>
   <div class="scanline"></div>
+  <canvas id="vaultParticleCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;opacity:0.65;"></canvas>
 
   <header class="vault-topbar">
     <a href="https://orlandopasion000.github.io/" class="brand-cluster" title="Sir Orlando V. Pasion, Jr. — Return to Master Portfolio Hub">
@@ -1071,27 +1248,13 @@
       <!-- 24K Swiss Gold Quantum Pill Launcher -->
       <button type="button" class="btn-topbar-desktop" id="btnTopbarLaunchApp" title="Open OrlandoVault (Main Web App)" aria-label="Open Main Web App">
         <span class="desktop-btn-icon" id="topbarLaunchIcon">
-          <svg class="futuristic-launch-svg" viewBox="0 0 24 24" fill="none">
-            <defs>
-              <linearGradient id="flHexGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#ffd700"/>
-                <stop offset="50%" stop-color="#38bdf8"/>
-                <stop offset="100%" stop-color="#f59e0b"/>
-              </linearGradient>
-              <linearGradient id="flArrowGrad" x1="12" y1="5" x2="12" y2="19" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#ffffff"/>
-                <stop offset="60%" stop-color="#fef08a"/>
-                <stop offset="100%" stop-color="#d9b95c"/>
-              </linearGradient>
-            </defs>
-            <path class="fl-hex-orbit" d="M12 2.5L20.5 7.4V16.6L12 21.5L3.5 16.6V7.4L12 2.5Z" stroke="url(#flHexGrad)" stroke-width="1.6" stroke-linejoin="round"/>
-            <circle class="fl-pulse-core" cx="12" cy="12" r="3.2" fill="url(#flHexGrad)" opacity="0.45"/>
-            <path class="fl-arrow" d="M12 7V17M12 17L8 13M12 17L16 13" stroke="url(#flArrowGrad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <line class="fl-base-line" x1="7" y1="19.5" x2="17" y2="19.5" stroke="#38bdf8" stroke-width="1.8" stroke-linecap="round" opacity="0.85"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2.5 20.5 7.4 20.5 16.6 12 21.5 3.5 16.6 3.5 7.4 12 2.5"></polygon>
+            <polyline points="8 12 12 16 16 12"></polyline>
+            <line x1="12" y1="7" x2="12" y2="16"></line>
           </svg>
         </span>
         <span class="desktop-btn-label" id="topbarLaunchLabel">Open Main Web App</span>
-        <span class="btn-portal-dot" aria-hidden="true"></span>
       </button>
 
       <a href="assets/orlandovault-master-photoshop-4k.png" download="OrlandoVault-4K-Masterpiece-Logo.png" class="hud-btn" id="btnDownload4kLogo" title="Download Official 4K Masterpiece Logo">
@@ -1161,6 +1324,10 @@
     <!-- EXECUTIVE TACTICAL COMMAND DOCK (AT THE BOTTOM) -->
     <footer class="vault-bottom-dock">
       <div class="dock-inner-frame">
+        <button type="button" class="dock-btn" id="btnToggleSound" title="Toggle Jarvis Audio Feedback">
+          <span class="dock-btn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="soundIconSvg"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></span>
+          <span class="dock-btn-label" id="soundLabel">Audio FX: ON</span>
+        </button>
         <button type="button" class="dock-btn" id="btnOpenGenerator" title="Generate Quantum Uncrackable Password">
           <span class="dock-btn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-6 6l-3-3m5 5l-2 2m-6 6l-3-3m5 5l-2 2m-7 1l4-4 4 4-4 4-4-4z"/><circle cx="7.5" cy="7.5" r="3.5"/></svg></span>
           <span class="dock-btn-label">Generator</span>
@@ -1215,7 +1382,7 @@
     let deferredInstallPrompt = null;
     let copyCount = 0;
 
-    const LS_VAULT_KEY = 'orlandovault_credentials_v3';
+    const LS_VAULT_KEY = 'orlandovault_credentials_v4';
     const LS_AUDIT_KEY = 'orlandovault_audit_history_v1';
     const LS_COPY_KEY = 'orlandovault_copy_count_v1';
 
@@ -1365,6 +1532,7 @@
           }, 2000);
         }
 
+        playJarvisSound("copy");
         startClipboardAutoWipe(text, accountTitle, btnElement);
         showToast('✨ Copied! Auto-wiping clipboard in 20s');
       } catch (err) {
@@ -1419,11 +1587,22 @@
         const safeNotes = escapeHtml(item.notes || 'Secure credentials managed by Jarvis.');
         const safePwd = escapeHtml(item.password);
 
+        let catClass = 'cat-solutions';
+        if (item.category === 'DepEd') catClass = 'cat-deped';
+        else if (item.category === 'Microsoft') catClass = 'cat-microsoft';
+        else if (item.category === 'AI & Dev') catClass = 'cat-ai';
+        else if (item.category === 'Gmail') catClass = 'cat-gmail';
+
+        // Calculate rotation recency
+        const updatedDate = item.updated_at ? new Date(item.updated_at) : new Date();
+        const daysAgo = Math.floor((Date.now() - updatedDate.getTime()) / (1000 * 60 * 60 * 24));
+        const rotationLabel = daysAgo <= 0 ? 'Today' : `${daysAgo}d ago`;
+
         return `
-          <article class="vault-card" id="card-${item.id}">
+          <article class="vault-card ${catClass}" id="card-${item.id}">
             <div class="card-header">
               <div class="card-title-group">
-                <span class="card-badge ${isCritical ? 'critical' : ''}">${isCritical ? '⚡ CRITICAL ACCOUNT' : item.category}</span>
+                <span class="card-badge ${isCritical ? 'critical' : ''}">${isCritical ? '⚡ CRITICAL ACCOUNT' : item.badge || item.category}</span>
                 <h3 class="card-account-title">${safeTitle}</h3>
               </div>
             </div>
@@ -1457,7 +1636,9 @@
 
             <div class="card-footer">
               <span>STATUS: ${item.status || 'SECURED'}</span>
-              <span>JARVIS PROTECTION</span>
+              <button type="button" class="btn-rotate-mark" onclick="markPasswordRotated('${item.id}')" title="Click to update password rotation date">
+                ↺ Rotated ${rotationLabel}
+              </button>
             </div>
           </article>
         `;
@@ -1476,6 +1657,7 @@
         if (icon) {
           icon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
         }
+        playJarvisSound("reveal");
         logAudit('REVEALED_PASSWORD', 'Revealed password for card ' + id);
       } else {
         box.classList.add('masked');
@@ -1635,6 +1817,165 @@
         }
       });
     });
+  
+    /* ==========================================================================
+       TOP-TIER 1: KINETIC ARC REACTOR AMBIENT PARTICLE FIELD
+       ========================================================================== */
+    function initVaultParticles() {
+      const canvas = document.getElementById('vaultParticleCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let width = canvas.width = window.innerWidth;
+      let height = canvas.height = window.innerHeight;
+
+      window.addEventListener('resize', () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      });
+
+      const particleCount = 45;
+      const particles = [];
+      for (let i = 0; i < particleCount; i++) {
+        particles.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          radius: Math.random() * 1.8 + 0.6,
+          vx: (Math.random() - 0.5) * 0.35,
+          vy: (Math.random() - 0.5) * 0.35,
+          color: i % 2 === 0 ? 'rgba(0, 240, 255, ' : 'rgba(217, 185, 92, ',
+          alpha: Math.random() * 0.6 + 0.2
+        });
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, width, height);
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.x < 0) p.x = width;
+          if (p.x > width) p.x = 0;
+          if (p.y < 0) p.y = height;
+          if (p.y > height) p.y = 0;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fillStyle = p.color + p.alpha + ')';
+          ctx.shadowBlur = 8;
+          ctx.shadowColor = p.color + '0.8)';
+          ctx.fill();
+        });
+        requestAnimationFrame(draw);
+      }
+      draw();
+    }
+
+    /* ==========================================================================
+       TOP-TIER 3: HAPTIC WEB AUDIO SYNTHESIZER ENGINE
+       ========================================================================== */
+    let soundEnabled = true;
+    let audioCtx = null;
+
+    function playJarvisSound(type) {
+      if (!soundEnabled) return;
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        if (type === 'copy') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(880, now);
+          osc.frequency.exponentialRampToValueAtTime(1760, now + 0.15);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+          osc.start(now);
+          osc.stop(now + 0.22);
+        } else if (type === 'reveal') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(540, now);
+          osc.frequency.exponentialRampToValueAtTime(720, now + 0.08);
+          gain.gain.setValueAtTime(0.06, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+          osc.start(now);
+          osc.stop(now + 0.1);
+        } else if (type === 'click') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(600, now);
+          gain.gain.setValueAtTime(0.04, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+          osc.start(now);
+          osc.stop(now + 0.04);
+        }
+      } catch (e) {}
+    }
+
+    /* ==========================================================================
+       TOP-TIER 5: 1-TAP RESCHEDULE & ROTATION MARKER
+       ========================================================================== */
+    function markPasswordRotated(itemId) {
+      const item = vaultItems.find(x => x.id === itemId);
+      if (!item) return;
+      item.updated_at = new Date().toISOString();
+      try {
+        localStorage.setItem(LS_VAULT_KEY, JSON.stringify(vaultItems));
+      } catch(e){}
+      renderVault();
+      logAudit('PASSWORD_ROTATED', 'Marked rotation completed for: ' + item.title);
+      playJarvisSound('copy');
+      showToast('🛡️ Rotation timestamp updated for ' + item.title + '!');
+    }
+
+    /* ==========================================================================
+       STANDALONE PWA & APPLICATION WINDOW ENGINE
+       ========================================================================== */
+    function launchStandaloneAppWindow(targetUrl, windowTitle) {
+      var popupFeatures = "popup=yes,menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes,width=1380,height=880";
+      try {
+        var spawned = window.open(targetUrl, windowTitle, popupFeatures);
+        if (spawned && !spawned.closed) {
+          try { spawned.focus(); } catch(err){}
+          return true;
+        }
+      } catch(e){}
+      try {
+        var blankWin = window.open(targetUrl, "_blank");
+        if (blankWin) {
+          try { blankWin.focus(); } catch(err){}
+          return true;
+        }
+      } catch(e){}
+      window.location.href = targetUrl;
+      return false;
+    }
+
+    async function handleLaunchStandaloneApp() {
+      if (isStandaloneMode()) {
+        showToast('✨ OrlandoVault is currently running in Standalone App Mode!', '🛡️');
+        return;
+      }
+
+      if (deferredInstallPrompt) {
+        deferredInstallPrompt.prompt();
+        try {
+          var choice = await deferredInstallPrompt.userChoice;
+          if (choice && choice.outcome === 'accepted') {
+            deferredInstallPrompt = null;
+            updateLaunchButtonState();
+            showToast('🎉 OrlandoVault Windows App Installed! Launching...', '🚀');
+            return;
+          }
+        } catch (err) {}
+      }
+
+      var appUrl = 'https://orlandopasion000.github.io/orlandovault/';
+      launchStandaloneAppWindow(appUrl, 'OrlandoVaultMainAppWindow');
+    }
+
   </script>
 </body>
 </html>
