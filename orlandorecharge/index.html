@@ -9366,22 +9366,40 @@ try { checkUrlHashRoutine(); } catch(e){}
       // ── Engraved Song Choreography Physics + CELEBRATION DANCE ──
       if (isVictoryDancing) {
         var elapsed = (now - victoryDanceStartTime) * 0.001;
-        var danceFreq = 2.4; // Silky smooth celebratory waltz tempo
-        var danceDist = 6.5; // Shorter movement paths & smaller displacement distances than usual
-        var phaseOffset = i * 0.35;
+        var danceFreq = 5.2; // Fast, lively celebratory waltz tempo (increased from 2.4)
+        var danceDist = 18.0; // Dynamic lively trajectory excursion (increased from 6.5)
+        var phaseOffset = i * 0.42;
 
-        // Controlled harmonic oscillation around anchor
-        var desiredX = (p.victoryAnchorX || p.x) + Math.sin(elapsed * danceFreq + phaseOffset) * danceDist;
-        var desiredY = (p.victoryAnchorY || p.y) + Math.cos(elapsed * danceFreq * 1.4 + phaseOffset) * (danceDist * 0.55);
+        var desiredX, desiredY;
 
-        // Smooth spring force into velocity (zero jitter, perfectly fluid)
-        p.vx += (desiredX - p.x) * 0.08 - p.vx * 0.14;
-        p.vy += (desiredY - p.y) * 0.08 - p.vy * 0.14;
+        // Swirling Celebration Dance: Particles within ~360px swirl energetically around the cursor
+        if (mActive && mouse.x > 0 && mouse.y > 0) {
+          var cdx = (p.victoryAnchorX || p.x) - mouse.x;
+          var cdy = (p.victoryAnchorY || p.y) - mouse.y;
+          var cDist = Math.hypot(cdx, cdy) || 1;
+          if (cDist < 380) {
+            var swirlOrbitR = Math.max(48, Math.min(260, cDist * 0.75 + Math.sin(elapsed * 3.5 + phaseOffset) * 16));
+            var baseAng = Math.atan2(cdy, cdx);
+            var swirlAng = baseAng + elapsed * (cDist < 140 ? 5.8 : 4.2) + (i % 3) * 0.25;
+            desiredX = mouse.x + Math.cos(swirlAng) * swirlOrbitR;
+            desiredY = mouse.y + Math.sin(swirlAng) * swirlOrbitR;
+          } else {
+            desiredX = (p.victoryAnchorX || p.x) + Math.sin(elapsed * danceFreq + phaseOffset) * danceDist;
+            desiredY = (p.victoryAnchorY || p.y) + Math.cos(elapsed * (danceFreq * 1.35) + phaseOffset) * (danceDist * 0.85);
+          }
+        } else {
+          desiredX = (p.victoryAnchorX || p.x) + Math.sin(elapsed * danceFreq + phaseOffset) * danceDist;
+          desiredY = (p.victoryAnchorY || p.y) + Math.cos(elapsed * (danceFreq * 1.35) + phaseOffset) * (danceDist * 0.85);
+        }
 
-        // Controlled synchronized celebratory pulsation
-        p.alpha = Math.min(1.0, 0.72 + Math.sin(elapsed * danceFreq * 2 + phaseOffset) * 0.28);
-        var targetHue = (i % 2 === 0) ? 45 : 195; // Alternating 24K Swiss Gold and Cyber Cyan
-        p.hue += (targetHue - p.hue) * 0.05;
+        // Fast responsive critically-damped spring force into velocity (100% smooth, zero jitter or overshoot)
+        p.vx += (desiredX - p.x) * 0.16 - p.vx * 0.20;
+        p.vy += (desiredY - p.y) * 0.16 - p.vy * 0.20;
+
+        // Synchronized celebratory pulsation with harmonic color cycling
+        p.alpha = Math.min(1.0, 0.78 + Math.sin(elapsed * (danceFreq * 1.5) + phaseOffset) * 0.22);
+        var targetHue = (i % 3 === 0) ? 48 : ((i % 3 === 1) ? 198 : 285); // 24K Gold, Cyber Cyan & Royal Violet
+        p.hue += (targetHue - p.hue) * 0.08;
       } else if (isAudioHot) {
         var mType = curChoreo ? curChoreo.motionType : "generic";
         var dForce = curChoreo ? curChoreo.danceForce : 0.65;
@@ -9580,15 +9598,23 @@ try { checkUrlHashRoutine(); } catch(e){}
 
       var tier = p.lumiTier || 0;
       var isPrismaticQuark = (tier === 0 && gameGlowProgress > 0.02);
+      var isTargetLocked = (p.isLocked || (p === lockedParticle));
       var gameLitBoost = (tier === 2) ? (gameGlowProgress * 6) : ((tier === 1) ? (gameGlowProgress * 4) : (gameGlowProgress * 9));
       var gameAlphaBoost = (tier === 2) ? (gameGlowProgress * 0.35) : ((tier === 1) ? (gameGlowProgress * 0.25) : (gameGlowProgress * 0.32));
       var fLitBoost = isAudioHot ? (liveBass * 14 + beatKickImpulse * 8) : 0;
-      var fHeadLit = Math.min(86, (tier === 2 ? 78 : (tier === 1 ? 75 : 74)) + fLitBoost + dopplerBoost * 8 + gameLitBoost);
-      var fTailLit = Math.min(74, Math.max(52, p.lit + fLitBoost * 0.4 - dopplerBoost * 4 + (isPrismaticQuark ? gameGlowProgress * 6 : 0)));
+      var fHeadLit = Math.min(88, (tier === 2 ? 78 : (tier === 1 ? 75 : 74)) + fLitBoost + dopplerBoost * 8 + gameLitBoost + (isTargetLocked ? 10 : 0));
+      var fTailLit = Math.min(76, Math.max(52, p.lit + fLitBoost * 0.4 - dopplerBoost * 4 + (isPrismaticQuark ? gameGlowProgress * 6 : 0) + (isTargetLocked ? 8 : 0)));
       var fHeadHue = (dopplerBoost > 0.12) ? Math.round(p.hue2 * (1 - dopplerBoost * 0.5) + 198 * (dopplerBoost * 0.5)) : (p.hue2 | 0);
       var fTailHue = (dopplerBoost > 0.12) ? Math.round(p.hue * (1 - dopplerBoost * 0.4) + 22 * (dopplerBoost * 0.4)) : (p.hue | 0);
       var prismMidHue = (fTailHue + fHeadHue) >> 1;
       var prismRingHue = fHeadHue;
+
+      // When Target is physically locked & synchronizing: particle head radiates high-energy resonant gold & cyan
+      if (isTargetLocked) {
+        var lockRatio = (typeof contactDuration === "number") ? Math.min(1.0, contactDuration / 2.0) : 0.5;
+        fHeadHue = Math.round(48 * lockRatio + fHeadHue * (1 - lockRatio));
+        prismMidHue = Math.round(195 * lockRatio + prismMidHue * (1 - lockRatio));
+      }
 
       // Prismatic Rainbow Spectral Dispersion for Smallest Quantum Quarks (tier === 0) while playing
       if (isPrismaticQuark) {
@@ -9733,6 +9759,16 @@ try { checkUrlHashRoutine(); } catch(e){}
           targetCtx.lineWidth = 0.90;
           targetCtx.stroke();
         }
+
+        // Target Synchronized Aura: Extra resonant dual-harmonic orbital rings around locked particle
+        if (isTargetLocked) {
+          var syncRatio = (typeof contactDuration === "number") ? Math.min(1.0, contactDuration / 2.0) : 0.6;
+          targetCtx.beginPath();
+          targetCtx.arc(px0, py0, orbBaseR * (1.3 + syncRatio * 0.4), 0, Math.PI * 2);
+          targetCtx.strokeStyle = "rgba(255, 215, 0, " + (syncRatio * 0.70).toFixed(2) + ")";
+          targetCtx.lineWidth = 1.2;
+          targetCtx.stroke();
+        }
       }
 
       // Micro-Stardust Quantum Sparks (Tier 2 Beacons Only - Emitted from Tail)
@@ -9770,14 +9806,16 @@ try { checkUrlHashRoutine(); } catch(e){}
     if (radiantBackNodes.length > 1) {
       backCtx.beginPath();
       var filamentsDrawn = 0;
-      var rLimit = Math.min(radiantBackNodes.length, 16);
-      for (var r1 = 0; r1 < rLimit && filamentsDrawn < 20; r1++) {
+      var rLimit = Math.min(radiantBackNodes.length, isVictoryDancing ? 24 : 16);
+      var maxFila = isVictoryDancing ? 36 : 20;
+      var distThresh = isVictoryDancing ? 5625 : 3364; // Longer harmonic resonance filaments during victory dance (75px vs 58px)
+      for (var r1 = 0; r1 < rLimit && filamentsDrawn < maxFila; r1++) {
         var pA = radiantBackNodes[r1];
-        for (var r2 = r1 + 1; r2 < rLimit && filamentsDrawn < 20; r2++) {
+        for (var r2 = r1 + 1; r2 < rLimit && filamentsDrawn < maxFila; r2++) {
           var pB = radiantBackNodes[r2];
           var fdx = pA.x - pB.x;
           var fdy = pA.y - pB.y;
-          if (fdx * fdx + fdy * fdy < 3364) {
+          if (fdx * fdx + fdy * fdy < distThresh) {
             backCtx.moveTo(pA.x, pA.y);
             backCtx.lineTo(pB.x, pB.y);
             filamentsDrawn++;
@@ -9785,8 +9823,8 @@ try { checkUrlHashRoutine(); } catch(e){}
         }
       }
       if (filamentsDrawn > 0) {
-        backCtx.strokeStyle = "rgba(56, 189, 248, 0.16)";
-        backCtx.lineWidth = 0.75;
+        backCtx.strokeStyle = isVictoryDancing ? "rgba(255, 215, 0, 0.28)" : "rgba(56, 189, 248, 0.16)";
+        backCtx.lineWidth = isVictoryDancing ? 1.0 : 0.75;
         backCtx.stroke();
       }
     }
@@ -9862,9 +9900,18 @@ try { checkUrlHashRoutine(); } catch(e){}
     isGameMode: function() {
       return isGameMode;
     },
-    startVictoryDance: function(targetParticle) {
+    startVictoryDance: function(targetParticle, hitX, hitY) {
       isVictoryDancing = true;
       victoryDanceStartTime = Date.now();
+      var centerX = (typeof hitX === "number" && hitX > 0) ? hitX : (width * 0.5);
+      var centerY = (typeof hitY === "number" && hitY > 0) ? hitY : (height * 0.5);
+      if (mouse.x <= 0) {
+        mouse.x = centerX;
+        mouse.y = centerY;
+        mouse.targetX = centerX;
+        mouse.targetY = centerY;
+        mouse.active = true;
+      }
       for (var vi = 0; vi < particles.length; vi++) {
         var pt = particles[vi];
         pt.victoryAnchorX = pt.x;
@@ -10735,9 +10782,9 @@ try { checkUrlHashRoutine(); } catch(e){}
       });
     }
 
-    // 3. Make all remaining particles dance (shorter movement paths, controlled rhythmic harmony!)
+    // 3. Make all remaining particles dance (faster energetic swirl around cursor, harmonic constellation filaments!)
     if (window.antigravityFX && typeof window.antigravityFX.startVictoryDance === "function") {
-      window.antigravityFX.startVictoryDance(targetParticle);
+      window.antigravityFX.startVictoryDance(targetParticle, expX, expY);
     }
 
     // 4. Play celebratory music and fanfare immediately
@@ -11055,6 +11102,19 @@ try { checkUrlHashRoutine(); } catch(e){}
     ctx.fillStyle = "#ffffff";
     ctx.fill();
 
+    // ── 5. Target Synchronization Radiance: Harmonic Resonance Wavefront ──
+    if (progress > 0) {
+      var syncPulse = Math.sin(now * 0.012) * 0.5 + 0.5;
+      var syncR = rCore * (1.1 + progress * 0.55 + syncPulse * 0.15);
+      ctx.beginPath();
+      ctx.arc(0, 0, syncR, 0, Math.PI * 2);
+      ctx.strokeStyle = progress > 0.85 ? "rgba(255, 215, 0, 0.65)" : "rgba(56, 189, 248, 0.55)";
+      ctx.lineWidth = 1.2;
+      ctx.setLineDash([3, 4]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
     ctx.restore();
   }
 
@@ -11075,6 +11135,21 @@ try { checkUrlHashRoutine(); } catch(e){}
     ctx.arc(touchX, touchY, 1.5, 0, Math.PI * 2);
     ctx.fillStyle = "#ffffff";
     ctx.fill();
+
+    // Target Synchronization Visual: Quantum Entanglement Concentric Rings & Energy Bridges
+    if (progress > 0.15) {
+      var syncRings = 2;
+      var ringPulse = (nowMs * 0.008) % 1;
+      for (var srg = 0; srg < syncRings; srg++) {
+        var waveR = r * (0.8 + (ringPulse + srg * 0.5) % 1 * 1.1) * (0.85 + progress * 0.35);
+        ctx.beginPath();
+        ctx.arc(px, py, waveR, 0, Math.PI * 2);
+        var ringAlpha = (1 - ((ringPulse + srg * 0.5) % 1)) * (progress * 0.45);
+        ctx.strokeStyle = progress > 0.85 ? ("rgba(255, 215, 0, " + ringAlpha.toFixed(2) + ")") : ("rgba(56, 189, 248, " + ringAlpha.toFixed(2) + ")");
+        ctx.lineWidth = 1.0;
+        ctx.stroke();
+      }
+    }
 
     // 4 Corner Precision Brackets hugging the physically touched particle head
     ctx.translate(px, py);
