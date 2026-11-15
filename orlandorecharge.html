@@ -1864,26 +1864,50 @@ body.light-theme .rest-mode-btn:hover {
   white-space: nowrap;
 }
 
-@media (min-width: 821px) {
+@media (min-width: 1181px) {
   .fs-toggle-btn {
     width: auto;
-    min-width: 148px;
+    min-width: 140px;
   }
   .qgame-btn-launch,
   .qgame-btn-exit {
     width: auto;
-    min-width: 146px;
+    min-width: 136px;
+  }
+}
+
+@media (min-width: 821px) and (max-width: 1180px) {
+  .or-header-right {
+    gap: 8px !important;
+  }
+  .fs-toggle-btn {
+    width: auto !important;
+    min-width: 116px !important;
+    height: 30px !important;
+    padding: 0 9px !important;
+    font-size: 0.60rem !important;
+  }
+  .qgame-btn-launch,
+  .qgame-btn-exit {
+    width: auto !important;
+    min-width: 114px !important;
+    height: 30px !important;
+    padding: 0 9px !important;
+    font-size: 0.60rem !important;
   }
 }
 
 @media (max-width: 820px) {
+  .or-header-right {
+    gap: 6px !important;
+  }
   .fs-toggle-btn {
     width: auto !important;
     min-width: 0 !important;
     max-width: 100% !important;
     height: 30px !important;
-    padding: 0 10px !important;
-    font-size: 0.62rem !important;
+    padding: 0 8px !important;
+    font-size: 0.58rem !important;
   }
   .qgame-btn-launch,
   .qgame-btn-exit {
@@ -1891,8 +1915,8 @@ body.light-theme .rest-mode-btn:hover {
     min-width: 0 !important;
     max-width: 100% !important;
     height: 30px !important;
-    padding: 0 10px !important;
-    font-size: 0.62rem !important;
+    padding: 0 8px !important;
+    font-size: 0.58rem !important;
   }
   .fs-btn-key,
   .qgame-exit-key {
@@ -1917,17 +1941,62 @@ body.light-theme .rest-mode-btn:hover {
 @media (max-width: 500px) {
   .fs-toggle-btn {
     height: 28px !important;
-    padding: 0 8px !important;
-    font-size: 0.58rem !important;
+    padding: 0 6px !important;
+    font-size: 0.55rem !important;
     gap: 4px !important;
   }
   .qgame-btn-launch,
   .qgame-btn-exit {
     height: 28px !important;
-    padding: 0 8px !important;
-    font-size: 0.58rem !important;
+    padding: 0 6px !important;
+    font-size: 0.55rem !important;
     gap: 4px !important;
   }
+}
+
+/* Quantum Meteor Button Special Styling (Fiery Molten Asteroid & Blazing Flame Aura) */
+.qgame-btn-meteor {
+  background: linear-gradient(135deg, rgba(124, 45, 18, 0.22) 0%, rgba(67, 20, 7, 0.16) 100%) !important;
+  border: 1px solid rgba(249, 115, 22, 0.35) !important;
+  color: rgba(254, 215, 170, 0.72) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.22), 0 0 10px rgba(249, 115, 22, 0.14) !important;
+}
+
+.qgame-btn-meteor:hover {
+  background: linear-gradient(135deg, rgba(194, 65, 12, 0.45) 0%, rgba(154, 52, 18, 0.32) 100%) !important;
+  border-color: rgba(251, 146, 60, 0.80) !important;
+  color: #fff7ed !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.38), 0 0 18px rgba(249, 115, 22, 0.45) !important;
+  transform: translateY(-1px);
+}
+
+.qgame-btn-meteor .game-btn-glyph {
+  color: rgba(251, 146, 60, 0.95) !important;
+  filter: drop-shadow(0 0 5px rgba(249, 115, 22, 0.65)) !important;
+}
+
+.qgame-btn-meteor:hover .game-btn-glyph {
+  color: #fed7aa !important;
+  transform: scale(1.22) rotate(-10deg) !important;
+}
+
+.qgame-btn-meteor .game-btn-glyph-meteor svg {
+  width: 14px;
+  height: 14px;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+body.light-theme .qgame-btn-meteor {
+  background: linear-gradient(135deg, rgba(255, 247, 237, 0.75) 0%, rgba(254, 237, 213, 0.55) 100%) !important;
+  border-color: rgba(234, 88, 12, 0.40) !important;
+  color: #c2410c !important;
+  box-shadow: 0 4px 14px rgba(234, 88, 12, 0.14) !important;
+}
+
+body.light-theme .qgame-btn-meteor:hover {
+  border-color: rgba(234, 88, 12, 0.80) !important;
+  color: #9a3412 !important;
 }
 
 /* Quantum Helix Button Special Styling (Intertwined Ribbon Violet/Amber Aura) */
@@ -4215,6 +4284,18 @@ body.light-theme .highlight-card .dist-icon{
           </svg>
         </span>
         <span class="game-btn-label">QUANTUM HELIX</span>
+      </button>
+
+      <!-- Enter Quantum Meteor Game Mode (Game 3: Fiery Meteors & Molten Asteroids) -->
+      <button type="button" class="qgame-btn-launch qgame-btn-meteor" id="btnLaunchMeteorGame" title="Enter Quantum Meteor Game (Fiery Meteors & Molten Asteroids)" aria-label="Launch Quantum Meteor Game">
+        <span class="game-btn-glyph game-btn-glyph-meteor" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 3L13.5 10.5M19 7L14 12M17 3L11.5 8.5" stroke="#f97316" stroke-width="1.8" opacity="0.95"/>
+            <path d="M5.5 12.5L3 15c-1.3 1.3-1.3 3.5 0 4.8 1.3 1.3 3.5 1.3 4.8 0l2.5-2.5-1.2-3.6-3.6-1.2z" fill="rgba(234, 88, 12, 0.55)" stroke="#fb923c" stroke-width="1.8"/>
+            <circle cx="6" cy="18" r="1.5" fill="#fef08a"/>
+          </svg>
+        </span>
+        <span class="game-btn-label">QUANTUM METEOR</span>
       </button>
     </div>
   </header>
@@ -8806,7 +8887,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   var INFLUENCE_RADIUS = 168;
 
   var isGameMode = false;
-  var gameParticleStyle = "helix"; // "classic" | "helix"
+  var gameParticleStyle = "helix"; // "classic" | "helix" | "meteor"
   var gameGlowProgress = 0.0;
   var isVictoryDancing = false;
   var victoryDanceStartTime = 0;
@@ -9627,9 +9708,12 @@ try { checkUrlHashRoutine(); } catch(e){}
 
       // ── 1. Inverse Kinematics Spine Tracking: Head curves first, tail follows curve, goes straight immediately ──
       var isHelix = (gameParticleStyle === "helix");
+      var isMeteor = (gameParticleStyle === "meteor");
       var targetSpineK;
       if (isHelix) {
         targetSpineK = isGameMode ? (p.isFront ? 14 : 11) : (p.isFront ? 10 : 8);
+      } else if (isMeteor) {
+        targetSpineK = isGameMode ? (p.isFront ? 13 : 10) : (p.isFront ? 9 : 7);
       } else {
         targetSpineK = isGameMode ? (p.isFront ? 9 : 7) : (p.isFront ? 7 : 5);
       }
@@ -9804,34 +9888,124 @@ try { checkUrlHashRoutine(); } catch(e){}
         var headPtY = _ptsY[0];
         var midHue = isPrismaticQuark ? prismMidHue : ((fTailHue + fHeadHue) >> 1);
 
-        if (tier === 2 || isPrismaticQuark) {
+        if (isMeteor) {
+          // ── METEOR MODE: VOLUMETRIC EXPANDING SMOKE PUFFS & AERODYNAMIC FIRE SHEATH ──
+          if (tier >= 1) {
+            // A. Volumetric Expanding Smoke Trail (Rear Spine: sj from K-1 down to K*0.45)
+            var startSmokeIdx = Math.max(1, (K * 0.45) | 0);
+            for (var smj = K - 1; smj >= startSmokeIdx; smj--) {
+              var sFrac = (smj - startSmokeIdx) / Math.max(1, K - 1 - startSmokeIdx);
+              var puffR = headR * (0.75 + sFrac * 1.55);
+              var smokeAlpha = renderAlpha * (0.24 - sFrac * 0.14);
+              if (smokeAlpha > 0.02) {
+                targetCtx.beginPath();
+                targetCtx.arc(_ptsX[smj], _ptsY[smj], puffR, 0, Math.PI * 2);
+                targetCtx.fillStyle = "rgba(42, 38, 36, " + smokeAlpha.toFixed(2) + ")";
+                targetCtx.fill();
+              }
+            }
+
+            // B. Aerodynamic Blazing Fire Sheath (Front & Mid Spine)
+            targetCtx.beginPath();
+            targetCtx.moveTo(_leftX[0], _leftY[0]);
+            for (var sj = 0; sj < K - 1; sj++) {
+              var mxL = (_leftX[sj] + _leftX[sj + 1]) * 0.5;
+              var myL = (_leftY[sj] + _leftY[sj + 1]) * 0.5;
+              targetCtx.quadraticCurveTo(_leftX[sj], _leftY[sj], mxL, myL);
+            }
+            targetCtx.lineTo(tailTipX, tailTipY);
+            targetCtx.lineTo(_rightX[K - 1], _rightY[K - 1]);
+            for (var sj = K - 1; sj > 0; sj--) {
+              var mxR = (_rightX[sj] + _rightX[sj - 1]) * 0.5;
+              var myR = (_rightY[sj] + _rightY[sj - 1]) * 0.5;
+              targetCtx.quadraticCurveTo(_rightX[sj], _rightY[sj], mxR, myR);
+            }
+            targetCtx.lineTo(_rightX[0], _rightY[0]);
+            targetCtx.closePath();
+            targetCtx.fillStyle = "rgba(234, 88, 12, " + (renderAlpha * 0.85).toFixed(2) + ")";
+            targetCtx.fill();
+
+            // C. Intense Inner Solar Core Flame Tongue
+            var flameEndIdx = Math.min(K - 1, Math.max(2, (K * 0.6) | 0));
+            targetCtx.beginPath();
+            targetCtx.moveTo(_ptsX[0], _ptsY[0]);
+            for (var sj = 1; sj <= flameEndIdx; sj++) {
+              targetCtx.lineTo(_ptsX[sj], _ptsY[sj]);
+            }
+            targetCtx.strokeStyle = "rgba(254, 240, 138, " + (renderAlpha * 0.92).toFixed(2) + ")";
+            targetCtx.lineWidth = Math.max(1.0, headR * 0.65);
+            targetCtx.lineCap = "round";
+            targetCtx.stroke();
+
+          } else {
+            // Tier 0 Smallest Particles: Burning Ember Streaks across Cosmic Playfield
+            targetCtx.beginPath();
+            targetCtx.moveTo(_leftX[0], _leftY[0]);
+            for (var sj = 0; sj < K - 1; sj++) {
+              var mxL = (_leftX[sj] + _leftX[sj + 1]) * 0.5;
+              var myL = (_leftY[sj] + _leftY[sj + 1]) * 0.5;
+              targetCtx.quadraticCurveTo(_leftX[sj], _leftY[sj], mxL, myL);
+            }
+            targetCtx.lineTo(tailTipX, tailTipY);
+            targetCtx.lineTo(_rightX[K - 1], _rightY[K - 1]);
+            for (var sj = K - 1; sj > 0; sj--) {
+              var mxR = (_rightX[sj] + _rightX[sj - 1]) * 0.5;
+              var myR = (_rightY[sj] + _rightY[sj - 1]) * 0.5;
+              targetCtx.quadraticCurveTo(_rightX[sj], _rightY[sj], mxR, myR);
+            }
+            targetCtx.lineTo(_rightX[0], _rightY[0]);
+            targetCtx.closePath();
+            targetCtx.fillStyle = "rgba(249, 115, 22, " + (renderAlpha * 0.65).toFixed(2) + ")";
+            targetCtx.fill();
+          }
+
+        } else if (tier === 2 || isPrismaticQuark) {
           var bodySat = isPrismaticQuark ? 100 : p.sat;
           var bodyGrad = targetCtx.createLinearGradient(tailTipX, tailTipY, headPtX, headPtY);
           bodyGrad.addColorStop(0.0, "hsla(" + fTailHue + ", " + bodySat + "%, " + fTailLit.toFixed(1) + "%, " + (renderAlpha * (isPrismaticQuark ? 0.18 : 0.08)).toFixed(2) + ")");
           bodyGrad.addColorStop(0.48, "hsla(" + midHue + ", " + bodySat + "%, " + ((fTailLit + fHeadLit) * 0.5).toFixed(1) + "%, " + (renderAlpha * (isPrismaticQuark ? 0.68 : 0.52)).toFixed(2) + ")");
           bodyGrad.addColorStop(1.0, "hsla(" + fHeadHue + ", 100%, " + fHeadLit.toFixed(1) + "%, " + (renderAlpha * 0.94).toFixed(2) + ")");
           targetCtx.fillStyle = bodyGrad;
+
+          targetCtx.beginPath();
+          targetCtx.moveTo(_leftX[0], _leftY[0]);
+          for (var sj = 0; sj < K - 1; sj++) {
+            var mxL = (_leftX[sj] + _leftX[sj + 1]) * 0.5;
+            var myL = (_leftY[sj] + _leftY[sj + 1]) * 0.5;
+            targetCtx.quadraticCurveTo(_leftX[sj], _leftY[sj], mxL, myL);
+          }
+          targetCtx.lineTo(tailTipX, tailTipY);
+          targetCtx.lineTo(_rightX[K - 1], _rightY[K - 1]);
+          for (var sj = K - 1; sj > 0; sj--) {
+            var mxR = (_rightX[sj] + _rightX[sj - 1]) * 0.5;
+            var myR = (_rightY[sj] + _rightY[sj - 1]) * 0.5;
+            targetCtx.quadraticCurveTo(_rightX[sj], _rightY[sj], mxR, myR);
+          }
+          targetCtx.lineTo(_rightX[0], _rightY[0]);
+          targetCtx.closePath();
+          targetCtx.fill();
+
         } else {
           targetCtx.fillStyle = "hsla(" + midHue + ", " + p.sat + "%, " + ((fTailLit + fHeadLit) * 0.5).toFixed(1) + "%, " + (renderAlpha * 0.54).toFixed(2) + ")";
-        }
 
-        targetCtx.beginPath();
-        targetCtx.moveTo(_leftX[0], _leftY[0]);
-        for (var sj = 0; sj < K - 1; sj++) {
-          var mxL = (_leftX[sj] + _leftX[sj + 1]) * 0.5;
-          var myL = (_leftY[sj] + _leftY[sj + 1]) * 0.5;
-          targetCtx.quadraticCurveTo(_leftX[sj], _leftY[sj], mxL, myL);
+          targetCtx.beginPath();
+          targetCtx.moveTo(_leftX[0], _leftY[0]);
+          for (var sj = 0; sj < K - 1; sj++) {
+            var mxL = (_leftX[sj] + _leftX[sj + 1]) * 0.5;
+            var myL = (_leftY[sj] + _leftY[sj + 1]) * 0.5;
+            targetCtx.quadraticCurveTo(_leftX[sj], _leftY[sj], mxL, myL);
+          }
+          targetCtx.lineTo(tailTipX, tailTipY);
+          targetCtx.lineTo(_rightX[K - 1], _rightY[K - 1]);
+          for (var sj = K - 1; sj > 0; sj--) {
+            var mxR = (_rightX[sj] + _rightX[sj - 1]) * 0.5;
+            var myR = (_rightY[sj] + _rightY[sj - 1]) * 0.5;
+            targetCtx.quadraticCurveTo(_rightX[sj], _rightY[sj], mxR, myR);
+          }
+          targetCtx.lineTo(_rightX[0], _rightY[0]);
+          targetCtx.closePath();
+          targetCtx.fill();
         }
-        targetCtx.lineTo(tailTipX, tailTipY);
-        targetCtx.lineTo(_rightX[K - 1], _rightY[K - 1]);
-        for (var sj = K - 1; sj > 0; sj--) {
-          var mxR = (_rightX[sj] + _rightX[sj - 1]) * 0.5;
-          var myR = (_rightY[sj] + _rightY[sj - 1]) * 0.5;
-          targetCtx.quadraticCurveTo(_rightX[sj], _rightY[sj], mxR, myR);
-        }
-        targetCtx.lineTo(_rightX[0], _rightY[0]);
-        targetCtx.closePath();
-        targetCtx.fill();
 
         // ── 2B. INTERTWINED LUMINOUS DOUBLE-HELIX RIBBONS (Exact Match to User Reference) ──
         // Rendered exclusively in Quantum Helix mode!
@@ -9883,85 +10057,201 @@ try { checkUrlHashRoutine(); } catch(e){}
       var px0 = _ptsX[0];
       var py0 = _ptsY[0];
 
-      // Glowing quantum head droplet
-      targetCtx.beginPath();
-      targetCtx.arc(px0, py0, headR, 0, Math.PI * 2);
-      targetCtx.fillStyle = "hsla(" + fHeadHue + ", " + (isPrismaticQuark ? 100 : 98) + "%, " + fHeadLit.toFixed(1) + "%, " + renderAlpha.toFixed(2) + ")";
-      targetCtx.fill();
+      if (isMeteor) {
+        // ── 3A. SPECTACULAR REALISTIC METEOR HEAD (Fractured Basalt Rock, Molten Magma Surface & Bow-Shock) ──
+        if (tier >= 1) {
+          var rockR = headR * (tier === 2 ? 1.45 : 1.25);
+          var rockVertices = 7;
+          var angleStep = (Math.PI * 2) / rockVertices;
+          var pSeed = p.pulsePhase || 1.0;
 
-      // Pure white / iridescent quantum singularity center
-      targetCtx.beginPath();
-      targetCtx.arc(px0 + cosH * (headR * 0.25), py0 + sinH * (headR * 0.25), headR * 0.45, 0, Math.PI * 2);
-      targetCtx.fillStyle = isPrismaticQuark
-        ? ("hsla(" + prismMidHue + ", 100%, 94%, " + (renderAlpha * 0.96).toFixed(2) + ")")
-        : ("rgba(255, 255, 255, " + (renderAlpha * 0.95).toFixed(2) + ")");
-      targetCtx.fill();
-
-      // Miniature Bohr probability orbital rings (smoothly transitioning with gameGlowProgress)
-      if (renderAsBrightest) {
-        var morphEase = p.isFront ? Math.max(0.35, gameGlowProgress) : gameGlowProgress;
-        var orbBaseR = headR * (tier === 2 ? 2.4 : (tier === 1 ? 1.9 : 1.5)) * (0.75 + 0.25 * morphEase);
-        var spinAngle = now * 0.0032 + p.pulsePhase;
-        var ringAlpha = renderAlpha * morphEase;
-
-        if (tier === 2) {
-          // Tier 2: Dual Concentric Quantum Orbitals with Counter-Rotating Phase Node
+          // 1. Incandescent Molten Magma Corona Halo
           targetCtx.beginPath();
-          targetCtx.arc(px0, py0, orbBaseR * 0.85, 0, Math.PI * 2);
-          targetCtx.strokeStyle = "hsla(" + fHeadHue + ", 92%, 72%, " + (ringAlpha * 0.35).toFixed(2) + ")";
+          targetCtx.arc(px0, py0, rockR * 1.65, 0, Math.PI * 2);
+          targetCtx.fillStyle = "rgba(249, 115, 22, " + (renderAlpha * 0.28).toFixed(2) + ")";
+          targetCtx.fill();
+
+          // 2. Jagged Cracked Charcoal / Basalt Rock Core Polygon
+          targetCtx.beginPath();
+          for (var v = 0; v < rockVertices; v++) {
+            var vAng = v * angleStep + p.heading;
+            var jag = 0.82 + 0.26 * Math.sin(pSeed + v * 2.3);
+            var vx = px0 + Math.cos(vAng) * (rockR * jag);
+            var vy = py0 + Math.sin(vAng) * (rockR * jag);
+            if (v === 0) targetCtx.moveTo(vx, vy);
+            else targetCtx.lineTo(vx, vy);
+          }
+          targetCtx.closePath();
+          targetCtx.fillStyle = "#1c1412"; // Deep charred basalt rock core
+          targetCtx.fill();
+          targetCtx.strokeStyle = "rgba(251, 146, 60, " + (renderAlpha * 0.92).toFixed(2) + ")";
+          targetCtx.lineWidth = 1.2;
+          targetCtx.stroke();
+
+          // 3. Radiant Molten Magma Fissures / Surface Veins
+          targetCtx.beginPath();
+          for (var f = 0; f < 3; f++) {
+            var fAng = p.heading + (f * 1.9) + 0.35;
+            var crackLen = rockR * (0.65 + 0.25 * Math.sin(pSeed + f * 1.7));
+            targetCtx.moveTo(px0, py0);
+            targetCtx.lineTo(px0 + Math.cos(fAng) * crackLen, py0 + Math.sin(fAng) * crackLen);
+          }
+          targetCtx.strokeStyle = "rgba(254, 240, 138, " + (renderAlpha * 0.95).toFixed(2) + ")";
           targetCtx.lineWidth = 1.0;
           targetCtx.stroke();
 
-          var worldSpin2 = p.heading + spinAngle;
+          // 4. White-Hot Atmospheric Compression Bow-Shock Wave Front (ahead in travel direction)
           targetCtx.beginPath();
-          targetCtx.ellipse(px0, py0, orbBaseR * 1.35, orbBaseR * 0.75, worldSpin2, 0, Math.PI * 2);
-          targetCtx.strokeStyle = "hsla(" + fHeadHue + ", 98%, 78%, " + (ringAlpha * 0.28).toFixed(2) + ")";
-          targetCtx.lineWidth = 0.9;
-          targetCtx.stroke();
-
-          var qNodeX = px0 + Math.cos(worldSpin2) * orbBaseR * 1.35;
-          var qNodeY = py0 + Math.sin(worldSpin2) * orbBaseR * 1.35;
-          targetCtx.beginPath();
-          targetCtx.arc(qNodeX, qNodeY, 1.3, 0, Math.PI * 2);
-          targetCtx.fillStyle = "rgba(255, 255, 255, " + (ringAlpha * 0.95).toFixed(2) + ")";
+          targetCtx.arc(px0 + cosH * (rockR * 0.35), py0 + sinH * (rockR * 0.35), rockR * 0.45, 0, Math.PI * 2);
+          targetCtx.fillStyle = "rgba(255, 255, 245, " + (renderAlpha * 0.96).toFixed(2) + ")";
           targetCtx.fill();
 
-        } else if (tier === 1) {
-          targetCtx.beginPath();
-          targetCtx.ellipse(px0, py0, orbBaseR * 1.15, orbBaseR * 0.75, p.heading - spinAngle * 0.85, 0, Math.PI * 2);
-          targetCtx.strokeStyle = "hsla(" + fHeadHue + ", 95%, 74%, " + (ringAlpha * 0.28).toFixed(2) + ")";
-          targetCtx.lineWidth = 0.95;
-          targetCtx.stroke();
+          // 5. Precessing Fiery Molten Ember Orbits (swirling cinders around the fiery meteor)
+          if (renderAsBrightest) {
+            var morphEaseM = p.isFront ? Math.max(0.35, gameGlowProgress) : gameGlowProgress;
+            var orbBaseRM = rockR * 1.85 * (0.8 + 0.2 * morphEaseM);
+            var spinM = now * 0.0035 + p.pulsePhase;
+            var mAlpha = renderAlpha * morphEaseM;
+
+            targetCtx.beginPath();
+            targetCtx.ellipse(px0, py0, orbBaseRM * 1.2, orbBaseRM * 0.7, p.heading + spinM, 0, Math.PI * 2);
+            targetCtx.strokeStyle = "rgba(251, 146, 60, " + (mAlpha * 0.40).toFixed(2) + ")";
+            targetCtx.lineWidth = 1.0;
+            targetCtx.stroke();
+
+            // Orbiting blazing ember spark
+            var eAng = p.heading + spinM;
+            var eNodeX = px0 + Math.cos(eAng) * (orbBaseRM * 1.2);
+            var eNodeY = py0 + Math.sin(eAng) * (orbBaseRM * 0.7);
+            targetCtx.beginPath();
+            targetCtx.arc(eNodeX, eNodeY, 1.4, 0, Math.PI * 2);
+            targetCtx.fillStyle = "rgba(255, 240, 138, " + (mAlpha * 0.95).toFixed(2) + ")";
+            targetCtx.fill();
+
+            // Target Synchronized Aura: Resonant molten plasma shock rings
+            if (isTargetLocked) {
+              var syncRatioM = (typeof contactDuration === "number") ? Math.min(1.0, contactDuration / 2.0) : 0.6;
+              targetCtx.beginPath();
+              targetCtx.arc(px0, py0, orbBaseRM * (1.3 + syncRatioM * 0.4), 0, Math.PI * 2);
+              targetCtx.strokeStyle = "rgba(255, 140, 0, " + (syncRatioM * 0.85).toFixed(2) + ")";
+              targetCtx.lineWidth = 1.4;
+              targetCtx.stroke();
+            }
+          }
         } else {
+          // ── TIER 0 EMBER: Streaking Cosmic Ember Head ──
           targetCtx.beginPath();
-          targetCtx.arc(px0, py0, orbBaseR, 0, Math.PI * 2);
-          targetCtx.strokeStyle = "hsla(" + prismRingHue + ", 100%, 74%, " + (ringAlpha * 0.34).toFixed(2) + ")";
-          targetCtx.lineWidth = 0.90;
-          targetCtx.stroke();
+          targetCtx.arc(px0, py0, headR * 1.35, 0, Math.PI * 2);
+          targetCtx.fillStyle = "rgba(249, 115, 22, " + (renderAlpha * 0.40).toFixed(2) + ")";
+          targetCtx.fill();
+
+          targetCtx.beginPath();
+          targetCtx.arc(px0, py0, headR * 0.75, 0, Math.PI * 2);
+          targetCtx.fillStyle = "rgba(254, 240, 138, " + (renderAlpha * 0.95).toFixed(2) + ")";
+          targetCtx.fill();
+
+          targetCtx.beginPath();
+          targetCtx.arc(px0 + cosH * (headR * 0.2), py0 + sinH * (headR * 0.2), headR * 0.35, 0, Math.PI * 2);
+          targetCtx.fillStyle = "rgba(255, 255, 255, " + (renderAlpha * 0.98).toFixed(2) + ")";
+          targetCtx.fill();
         }
 
-        // Target Synchronized Aura: Extra resonant dual-harmonic orbital rings around locked particle
-        if (isTargetLocked) {
-          var syncRatio = (typeof contactDuration === "number") ? Math.min(1.0, contactDuration / 2.0) : 0.6;
-          targetCtx.beginPath();
-          targetCtx.arc(px0, py0, orbBaseR * (1.3 + syncRatio * 0.4), 0, Math.PI * 2);
-          targetCtx.strokeStyle = "rgba(255, 215, 0, " + (syncRatio * 0.70).toFixed(2) + ")";
-          targetCtx.lineWidth = 1.2;
-          targetCtx.stroke();
+        // Fiery Cinder Sparks into p.stardust
+        if (tier >= 1 && Math.random() < 0.28) {
+          if (!p.stardust) p.stardust = [];
+          if (p.stardust.length < 4) {
+            p.stardust.push({
+              x: _ptsX[K - 1] + (Math.random() - 0.5) * 3.0,
+              y: _ptsY[K - 1] + (Math.random() - 0.5) * 3.0,
+              alpha: 0.90,
+              r: 0.8 + Math.random() * 0.6,
+              hue: 24 + Math.random() * 22 // Fiery orange to golden amber
+            });
+          }
         }
-      }
 
-      // Micro-Stardust Quantum Sparks (Tier 2 Beacons Only - Emitted from Tail)
-      if (tier === 2 && Math.random() < 0.25) {
-        if (!p.stardust) p.stardust = [];
-        if (p.stardust.length < 3) {
-          p.stardust.push({
-            x: _ptsX[K - 1] + (Math.random() - 0.5) * 2.0,
-            y: _ptsY[K - 1] + (Math.random() - 0.5) * 2.0,
-            alpha: 0.80,
-            r: 0.65 + Math.random() * 0.35,
-            hue: fHeadHue
-          });
+      } else {
+        // ── 3B. CLASSIC QUANTUM REALM & QUANTUM HELIX HEAD RENDERING ──
+        // Glowing quantum head droplet
+        targetCtx.beginPath();
+        targetCtx.arc(px0, py0, headR, 0, Math.PI * 2);
+        targetCtx.fillStyle = "hsla(" + fHeadHue + ", " + (isPrismaticQuark ? 100 : 98) + "%, " + fHeadLit.toFixed(1) + "%, " + renderAlpha.toFixed(2) + ")";
+        targetCtx.fill();
+
+        // Pure white / iridescent quantum singularity center
+        targetCtx.beginPath();
+        targetCtx.arc(px0 + cosH * (headR * 0.25), py0 + sinH * (headR * 0.25), headR * 0.45, 0, Math.PI * 2);
+        targetCtx.fillStyle = isPrismaticQuark
+          ? ("hsla(" + prismMidHue + ", 100%, 94%, " + (renderAlpha * 0.96).toFixed(2) + ")")
+          : ("rgba(255, 255, 255, " + (renderAlpha * 0.95).toFixed(2) + ")");
+        targetCtx.fill();
+
+        // Miniature Bohr probability orbital rings (smoothly transitioning with gameGlowProgress)
+        if (renderAsBrightest) {
+          var morphEase = p.isFront ? Math.max(0.35, gameGlowProgress) : gameGlowProgress;
+          var orbBaseR = headR * (tier === 2 ? 2.4 : (tier === 1 ? 1.9 : 1.5)) * (0.75 + 0.25 * morphEase);
+          var spinAngle = now * 0.0032 + p.pulsePhase;
+          var ringAlpha = renderAlpha * morphEase;
+
+          if (tier === 2) {
+            // Tier 2: Dual Concentric Quantum Orbitals with Counter-Rotating Phase Node
+            targetCtx.beginPath();
+            targetCtx.arc(px0, py0, orbBaseR * 0.85, 0, Math.PI * 2);
+            targetCtx.strokeStyle = "hsla(" + fHeadHue + ", 92%, 72%, " + (ringAlpha * 0.35).toFixed(2) + ")";
+            targetCtx.lineWidth = 1.0;
+            targetCtx.stroke();
+
+            var worldSpin2 = p.heading + spinAngle;
+            targetCtx.beginPath();
+            targetCtx.ellipse(px0, py0, orbBaseR * 1.35, orbBaseR * 0.75, worldSpin2, 0, Math.PI * 2);
+            targetCtx.strokeStyle = "hsla(" + fHeadHue + ", 98%, 78%, " + (ringAlpha * 0.28).toFixed(2) + ")";
+            targetCtx.lineWidth = 0.9;
+            targetCtx.stroke();
+
+            var qNodeX = px0 + Math.cos(worldSpin2) * orbBaseR * 1.35;
+            var qNodeY = py0 + Math.sin(worldSpin2) * orbBaseR * 1.35;
+            targetCtx.beginPath();
+            targetCtx.arc(qNodeX, qNodeY, 1.3, 0, Math.PI * 2);
+            targetCtx.fillStyle = "rgba(255, 255, 255, " + (ringAlpha * 0.95).toFixed(2) + ")";
+            targetCtx.fill();
+
+          } else if (tier === 1) {
+            targetCtx.beginPath();
+            targetCtx.ellipse(px0, py0, orbBaseR * 1.15, orbBaseR * 0.75, p.heading - spinAngle * 0.85, 0, Math.PI * 2);
+            targetCtx.strokeStyle = "hsla(" + fHeadHue + ", 95%, 74%, " + (ringAlpha * 0.28).toFixed(2) + ")";
+            targetCtx.lineWidth = 0.95;
+            targetCtx.stroke();
+          } else {
+            targetCtx.beginPath();
+            targetCtx.arc(px0, py0, orbBaseR, 0, Math.PI * 2);
+            targetCtx.strokeStyle = "hsla(" + prismRingHue + ", 100%, 74%, " + (ringAlpha * 0.34).toFixed(2) + ")";
+            targetCtx.lineWidth = 0.90;
+            targetCtx.stroke();
+          }
+
+          // Target Synchronized Aura: Extra resonant dual-harmonic orbital rings around locked particle
+          if (isTargetLocked) {
+            var syncRatio = (typeof contactDuration === "number") ? Math.min(1.0, contactDuration / 2.0) : 0.6;
+            targetCtx.beginPath();
+            targetCtx.arc(px0, py0, orbBaseR * (1.3 + syncRatio * 0.4), 0, Math.PI * 2);
+            targetCtx.strokeStyle = "rgba(255, 215, 0, " + (syncRatio * 0.70).toFixed(2) + ")";
+            targetCtx.lineWidth = 1.2;
+            targetCtx.stroke();
+          }
+        }
+
+        // Micro-Stardust Quantum Sparks (Tier 2 Beacons Only - Emitted from Tail)
+        if (tier === 2 && Math.random() < 0.25) {
+          if (!p.stardust) p.stardust = [];
+          if (p.stardust.length < 3) {
+            p.stardust.push({
+              x: _ptsX[K - 1] + (Math.random() - 0.5) * 2.0,
+              y: _ptsY[K - 1] + (Math.random() - 0.5) * 2.0,
+              alpha: 0.80,
+              r: 0.65 + Math.random() * 0.35,
+              hue: fHeadHue
+            });
+          }
         }
       }
 
@@ -10003,7 +10293,9 @@ try { checkUrlHashRoutine(); } catch(e){}
         }
       }
       if (filamentsDrawn > 0) {
-        backCtx.strokeStyle = isVictoryDancing ? "rgba(255, 215, 0, 0.28)" : "rgba(56, 189, 248, 0.16)";
+        backCtx.strokeStyle = isVictoryDancing
+          ? (isMeteor ? "rgba(249, 115, 22, 0.32)" : "rgba(255, 215, 0, 0.28)")
+          : "rgba(56, 189, 248, 0.16)";
         backCtx.lineWidth = isVictoryDancing ? 1.0 : 0.75;
         backCtx.stroke();
       }
@@ -10084,14 +10376,14 @@ try { checkUrlHashRoutine(); } catch(e){}
     setGameMode: function(active, style) {
       isGameMode = !!active;
       if (style) {
-        gameParticleStyle = (style === "helix") ? "helix" : "classic";
+        gameParticleStyle = (style === "helix") ? "helix" : ((style === "meteor") ? "meteor" : "classic");
       }
     },
     isGameMode: function() {
       return isGameMode;
     },
     setGameParticleStyle: function(style) {
-      gameParticleStyle = (style === "helix") ? "helix" : "classic";
+      gameParticleStyle = (style === "helix") ? "helix" : ((style === "meteor") ? "meteor" : "classic");
     },
     getGameParticleStyle: function() {
       return gameParticleStyle;
@@ -10439,6 +10731,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   var canvas = document.getElementById("quantumGameCanvas");
   var btnLaunch = document.getElementById("btnLaunchGame");
   var btnLaunchHelix = document.getElementById("btnLaunchHelixGame");
+  var btnLaunchMeteor = document.getElementById("btnLaunchMeteorGame");
   var btnExit = document.getElementById("btnExitGame");
   var btnPlayAgain = document.getElementById("btnGamePlayAgain");
   var btnReturn = document.getElementById("btnGameReturn");
@@ -10450,7 +10743,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   var missionText = document.getElementById("qGameMissionText");
   var victoryModal = document.getElementById("qGameVictoryModal");
 
-  var currentGameVariant = "classic"; // "classic" | "helix"
+  var currentGameVariant = "classic"; // "classic" | "helix" | "meteor"
 
   // Dynamic Result Elements (Shared Zero-Shift Card for Victory & Game Over)
   var resultCard = document.getElementById("qGameResultCard");
@@ -10488,7 +10781,17 @@ try { checkUrlHashRoutine(); } catch(e){}
   var WARMUP_MS = 1400; // 1.4s smooth entrance grace period matching 1.35s fade: prevents false locks or instant wins on start
   var hasDeliberateMove = false;
 
-  var cursor = { x: -9999, y: -9999, active: false };
+  var cursor = {
+    x: -9999,
+    y: -9999,
+    active: false,
+    vx: 0,
+    vy: 0,
+    speed: 0,
+    heading: -Math.PI * 0.25 // Default celestial atmospheric entry angle
+  };
+  var cursorTrail = [];
+  var lastPointerTime = 0;
   var lockedParticle = null;
   var contactDuration = 0.0;
   var lastTouchContactTime = 0;
@@ -10701,6 +11004,12 @@ try { checkUrlHashRoutine(); } catch(e){}
         if (resultIcon) {
           resultIcon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" class="qgame-victory-svg"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="url(#vicHelixGrad)" stroke="#ffffff" stroke-width="1.2"/><defs><linearGradient id="vicHelixGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#c084fc"/><stop offset="50%" stop-color="#ffd700"/><stop offset="100%" stop-color="#f43f5e"/></linearGradient></defs></svg>';
         }
+      } else if (currentGameVariant === "meteor") {
+        if (resultTitle) resultTitle.textContent = "QUANTUM METEOR COMPLETE";
+        if (resultSubtitle) resultSubtitle.textContent = "METEOR SYNCHRONIZED · HARMONIC DANCE ACTIVE";
+        if (resultIcon) {
+          resultIcon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" class="qgame-victory-svg"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="url(#vicMeteorGrad)" stroke="#ffffff" stroke-width="1.2"/><defs><linearGradient id="vicMeteorGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#fef08a"/><stop offset="45%" stop-color="#f97316"/><stop offset="100%" stop-color="#b91c1c"/></linearGradient></defs></svg>';
+        }
       } else {
         if (resultTitle) resultTitle.textContent = "QUANTUM RESONANCE COMPLETE";
         if (resultSubtitle) resultSubtitle.textContent = "TARGET SYNCHRONIZED · HARMONIC DANCE ACTIVE";
@@ -10757,16 +11066,30 @@ try { checkUrlHashRoutine(); } catch(e){}
     cursor.active = true;
     cursor.isTouch = (e.pointerType === "touch");
 
+    var nowMs = performance.now();
+    var dtPointer = (lastPointerTime > 0) ? Math.max(0.008, (nowMs - lastPointerTime) * 0.001) : 0.016;
+    lastPointerTime = nowMs;
+
     var dx = cursor.x - lastSampleCursorX;
     var dy = cursor.y - lastSampleCursorY;
     var distMoved = Math.hypot(dx, dy);
 
     // Only deliberate movement updates the active pursuit timer
     if (distMoved >= 1.5) {
-      lastCursorMoveTime = performance.now();
+      lastCursorMoveTime = nowMs;
       lastSampleCursorX = cursor.x;
       lastSampleCursorY = cursor.y;
       hasDeliberateMove = true;
+
+      // Smooth velocity & heading estimation for realistic cursor meteor flame trails
+      var instVx = dx / dtPointer;
+      var instVy = dy / dtPointer;
+      cursor.vx = cursor.vx * 0.55 + instVx * 0.45;
+      cursor.vy = cursor.vy * 0.55 + instVy * 0.45;
+      cursor.speed = Math.hypot(cursor.vx, cursor.vy);
+      if (cursor.speed > 25) {
+        cursor.heading = Math.atan2(cursor.vy, cursor.vx);
+      }
     }
   }
 
@@ -10811,7 +11134,9 @@ try { checkUrlHashRoutine(); } catch(e){}
     fillEl.style.width = "100%";
     missionText.textContent = (currentGameVariant === "helix")
       ? "INITIALIZING QUANTUM HELIX · PREPARE RETICLE"
-      : "INITIALIZING QUANTUM REALM · PREPARE RETICLE";
+      : ((currentGameVariant === "meteor")
+        ? "INITIALIZING QUANTUM METEOR · PREPARE RETICLE"
+        : "INITIALIZING QUANTUM REALM · PREPARE RETICLE");
     syncGameMusicBtn();
 
     if (window.antigravityFX) {
@@ -10827,7 +11152,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   function launchGame(variant) {
     if (isActive) return;
     if (variant) {
-      currentGameVariant = (variant === "helix") ? "helix" : "classic";
+      currentGameVariant = (variant === "helix") ? "helix" : ((variant === "meteor") ? "meteor" : "classic");
     }
     isActive = true;
     isWon = false;
@@ -10867,7 +11192,9 @@ try { checkUrlHashRoutine(); } catch(e){}
     if (resultCard) resultCard.classList.remove("is-defeat");
     missionText.textContent = (currentGameVariant === "helix")
       ? "INITIALIZING QUANTUM HELIX · PREPARE RETICLE"
-      : "INITIALIZING QUANTUM REALM · PREPARE RETICLE";
+      : ((currentGameVariant === "meteor")
+        ? "INITIALIZING QUANTUM METEOR · PREPARE RETICLE"
+        : "INITIALIZING QUANTUM REALM · PREPARE RETICLE");
     digitsEl.textContent = TOTAL_TIME.toFixed(2);
     digitsEl.classList.remove("victory-frozen", "defeat-frozen");
     fillEl.style.width = "100%";
@@ -10966,7 +11293,8 @@ try { checkUrlHashRoutine(); } catch(e){}
 
     var expX = targetParticle ? targetParticle.x : (width * 0.5);
     var expY = targetParticle ? targetParticle.y : (height * 0.5);
-    var expHue = (targetParticle && targetParticle.hue !== undefined) ? targetParticle.hue : 45;
+    var isMeteorMode = (currentGameVariant === "meteor");
+    var expHue = isMeteorMode ? (28 + Math.random() * 20) : ((targetParticle && targetParticle.hue !== undefined) ? targetParticle.hue : 45);
 
     // 2. Make touched particle explode
     activeExplosion = {
@@ -10975,7 +11303,11 @@ try { checkUrlHashRoutine(); } catch(e){}
       hue: expHue,
       startTime: performance.now(),
       duration: 2200,
-      shockwaves: [
+      shockwaves: isMeteorMode ? [
+        { r: 0, maxR: Math.max(width, height) * 0.45, speed: 18, alpha: 1.0, color: "#ffffff", lw: 3.5 },
+        { r: 0, maxR: Math.max(width, height) * 0.55, speed: 13, alpha: 0.9, color: "#f97316", lw: 2.5 },
+        { r: 0, maxR: Math.max(width, height) * 0.65, speed: 9,  alpha: 0.8, color: "#fef08a", lw: 2.0 }
+      ] : [
         { r: 0, maxR: Math.max(width, height) * 0.45, speed: 18, alpha: 1.0, color: "#ffffff", lw: 3.5 },
         { r: 0, maxR: Math.max(width, height) * 0.55, speed: 13, alpha: 0.9, color: "#38bdf8", lw: 2.5 },
         { r: 0, maxR: Math.max(width, height) * 0.65, speed: 9,  alpha: 0.8, color: "#ffd700", lw: 2.0 }
@@ -10993,7 +11325,7 @@ try { checkUrlHashRoutine(); } catch(e){}
         vy: Math.sin(ang) * spd,
         r: 2.0 + Math.random() * 3.2,
         alpha: 1.0,
-        hue: (Math.random() < 0.5 ? 45 : 195) + (Math.random() * 30 - 15),
+        hue: isMeteorMode ? (22 + Math.random() * 24) : ((Math.random() < 0.5 ? 45 : 195) + (Math.random() * 30 - 15)),
         decay: 0.012 + Math.random() * 0.016,
         tail: []
       });
@@ -11011,7 +11343,9 @@ try { checkUrlHashRoutine(); } catch(e){}
     showResultScreen("victory");
     missionText.textContent = (currentGameVariant === "helix")
       ? "☍ QUANTUM HELIX ACHIEVED · CELEBRATION DANCE ACTIVE ☍"
-      : "◈ QUANTUM RESONANCE ACHIEVED · CELEBRATION DANCE ACTIVE ◈";
+      : ((currentGameVariant === "meteor")
+        ? "☄ METEOR RESONANCE ACHIEVED · CELEBRATION DANCE ACTIVE ☄"
+        : "◈ QUANTUM RESONANCE ACHIEVED · CELEBRATION DANCE ACTIVE ◈");
 
     // 6. Reveal Victory Hologram Card
     setTimeout(function() {
@@ -11031,6 +11365,19 @@ try { checkUrlHashRoutine(); } catch(e){}
 
     ctx.clearRect(0, 0, width, height);
 
+    // Damp cursor velocity when idle
+    cursor.vx *= 0.92;
+    cursor.vy *= 0.92;
+    cursor.speed = Math.hypot(cursor.vx, cursor.vy);
+
+    // Update cursor trail history (for cursor meteor flame and smoke rendering)
+    if (cursor.active && hasDeliberateMove) {
+      cursorTrail.unshift({ x: cursor.x, y: cursor.y, time: now });
+      if (cursorTrail.length > 14) cursorTrail.pop();
+    } else {
+      if (cursorTrail.length > 0) cursorTrail.pop();
+    }
+
     var isWarmingUp = (now - gameStartTime < WARMUP_MS);
 
     // ── Update Countdown Timer & Mission Telemetry ──
@@ -11046,7 +11393,9 @@ try { checkUrlHashRoutine(); } catch(e){}
         if (missionText.textContent.indexOf("INITIALIZING") !== -1) {
           missionText.textContent = (currentGameVariant === "helix")
             ? "TARGET: TOUCH ANY HELIX PARTICLE · MAINTAIN CONTACT FOR 2.0s"
-            : "TARGET: TOUCH ANY PARTICLE · MAINTAIN CONTACT FOR 2.0s";
+            : ((currentGameVariant === "meteor")
+              ? "TARGET: TOUCH ANY METEOR · MAINTAIN CONTACT FOR 2.0s"
+              : "TARGET: TOUCH ANY PARTICLE · MAINTAIN CONTACT FOR 2.0s");
         }
         remainingTime -= dt;
         if (remainingTime <= 0) {
@@ -11100,10 +11449,15 @@ try { checkUrlHashRoutine(); } catch(e){}
             startLockAudio();
             updateLockAudio(progress);
 
-            drawLockReticle(lockedParticle.x, lockedParticle.y, progress);
+            if (currentGameVariant === "meteor") {
+              drawMeteorLockReticle(lockedParticle.x, lockedParticle.y, progress);
+            } else {
+              drawLockReticle(lockedParticle.x, lockedParticle.y, progress);
+            }
 
-            var glyph = (currentGameVariant === "helix") ? "☍" : "◈";
-            missionText.textContent = glyph + " QUANTUM LOCK ACTIVE: " + (progress * 100).toFixed(0) + "% · MAINTAIN CONTACT " + glyph;
+            var glyph = (currentGameVariant === "helix") ? "☍" : ((currentGameVariant === "meteor") ? "☄" : "◈");
+            var lockLabel = (currentGameVariant === "meteor") ? "METEOR" : "QUANTUM";
+            missionText.textContent = glyph + " " + lockLabel + " LOCK ACTIVE: " + (progress * 100).toFixed(0) + "% · MAINTAIN CONTACT " + glyph;
 
             if (contactDuration >= REQUIRED_CONTACT) {
               lockedParticle.isLocked = false;
@@ -11118,7 +11472,9 @@ try { checkUrlHashRoutine(); } catch(e){}
               stopLockAudio();
               missionText.textContent = (currentGameVariant === "helix")
                 ? "TARGET: TOUCH ANY HELIX PARTICLE · MAINTAIN CONTACT FOR 2.0s"
-                : "TARGET: TOUCH ANY PARTICLE · MAINTAIN CONTACT FOR 2.0s";
+                : ((currentGameVariant === "meteor")
+                  ? "TARGET: TOUCH ANY METEOR · MAINTAIN CONTACT FOR 2.0s"
+                  : "TARGET: TOUCH ANY PARTICLE · MAINTAIN CONTACT FOR 2.0s");
             } else {
               contactDuration = Math.max(0, contactDuration - dt * 0.85);
             }
@@ -11158,10 +11514,14 @@ try { checkUrlHashRoutine(); } catch(e){}
       }
     }
 
-    // ── Render Alive Quantum Atomic Cursor (Exact Replica of Uploaded Image with Precessing Rings & Radiant Colors) ──
+    // ── Render Alive Cursor (Atomic for Realm/Helix, Fiery Meteor for Meteor Mode) ──
     if (!isWon && !isGameOver && cursor.active && hasDeliberateMove) {
       var lockProgress = (lockedParticle && isPhysicallyTouching && contactDuration > 0) ? (contactDuration / REQUIRED_CONTACT) : 0;
-      drawQuantumAtomicCursor(cursor.x, cursor.y, now, lockProgress);
+      if (currentGameVariant === "meteor") {
+        drawMeteorCursor(cursor.x, cursor.y, now, lockProgress);
+      } else {
+        drawQuantumAtomicCursor(cursor.x, cursor.y, now, lockProgress);
+      }
     }
 
     // ── Render Active Explosion & Spark Fragments ──
@@ -11338,6 +11698,230 @@ try { checkUrlHashRoutine(); } catch(e){}
       ctx.stroke();
       ctx.setLineDash([]);
     }
+
+    ctx.restore();
+  }
+
+  // ── Render Spectacular Quantum Meteor Cursor (Fractured Basalt Rock, Molten Magma Surface & Blazing Flame/Smoke Trail) ──
+  function drawMeteorCursor(cx, cy, now, progress) {
+    ctx.save();
+
+    var exc = (progress > 0) ? (progress * 0.35) : 0;
+    var t = now * 0.0018;
+
+    // Trail angle: directly opposite to cursor movement heading (or default atmospheric entry angle if stationary)
+    var trailAngle = cursor.heading + Math.PI;
+    var cosT = Math.cos(trailAngle);
+    var sinT = Math.sin(trailAngle);
+    var perpX = -sinT;
+    var perpY = cosT;
+
+    var coreR = 15.0 + exc * 2.5;
+
+    // ── 1. Volumetric Expanding Smoke Puffs (Distal Slipstream) ──
+    var numPuffs = 9;
+    for (var sm = numPuffs - 1; sm >= 3; sm--) {
+      var sRatio = sm / numPuffs;
+      var puffDist = coreR * (1.8 + sRatio * 5.2) + (cursor.speed > 80 ? (sRatio * 35) : 0);
+      var lateralWobble = Math.sin(t * 3.5 + sm * 1.8) * (sm * 2.2);
+      var smX = cx + cosT * puffDist + perpX * lateralWobble;
+      var smY = cy + sinT * puffDist + perpY * lateralWobble;
+      var puffR = coreR * (0.55 + sRatio * 1.25);
+      var puffAlpha = (1.0 - sRatio) * 0.28;
+
+      ctx.beginPath();
+      ctx.arc(smX, smY, puffR, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(42, 36, 34, " + puffAlpha.toFixed(3) + ")";
+      ctx.fill();
+    }
+
+    // ── 2. Aerodynamic Blazing Outer Flame Sheath & Inner Solar Tongue ──
+    var flameLen = coreR * (3.8 + (cursor.speed > 40 ? 2.5 : 0) + exc * 1.5);
+    var tipX = cx + cosT * flameLen;
+    var tipY = cy + sinT * flameLen;
+
+    // Outer Orange Flame Sheath
+    ctx.beginPath();
+    ctx.moveTo(cx + perpX * (coreR * 1.15), cy + perpY * (coreR * 1.15));
+    ctx.quadraticCurveTo(cx + cosT * (flameLen * 0.45) + perpX * (coreR * 1.4), cy + sinT * (flameLen * 0.45) + perpY * (coreR * 1.4), tipX, tipY);
+    ctx.quadraticCurveTo(cx + cosT * (flameLen * 0.45) - perpX * (coreR * 1.4), cy + sinT * (flameLen * 0.45) - perpY * (coreR * 1.4), cx - perpX * (coreR * 1.15), cy - perpY * (coreR * 1.15));
+    ctx.closePath();
+    var flameGrad = ctx.createLinearGradient(cx, cy, tipX, tipY);
+    flameGrad.addColorStop(0.0, "rgba(251, 146, 60, 0.90)");
+    flameGrad.addColorStop(0.35, "rgba(249, 115, 22, 0.75)");
+    flameGrad.addColorStop(0.70, "rgba(194, 65, 12, 0.40)");
+    flameGrad.addColorStop(1.0, "rgba(124, 45, 18, 0.0)");
+    ctx.fillStyle = flameGrad;
+    ctx.fill();
+
+    // Inner White-Hot Magma Core Tongue
+    var coreTongueLen = flameLen * 0.58;
+    var cTipX = cx + cosT * coreTongueLen;
+    var cTipY = cy + sinT * coreTongueLen;
+    ctx.beginPath();
+    ctx.moveTo(cx + perpX * (coreR * 0.70), cy + perpY * (coreR * 0.70));
+    ctx.quadraticCurveTo(cx + cosT * (coreTongueLen * 0.5) + perpX * (coreR * 0.8), cy + sinT * (coreTongueLen * 0.5) + perpY * (coreR * 0.8), cTipX, cTipY);
+    ctx.quadraticCurveTo(cx + cosT * (coreTongueLen * 0.5) - perpX * (coreR * 0.8), cy + sinT * (coreTongueLen * 0.5) - perpY * (coreR * 0.8), cx - perpX * (coreR * 0.70), cy - perpY * (coreR * 0.70));
+    ctx.closePath();
+    var innerGrad = ctx.createLinearGradient(cx, cy, cTipX, cTipY);
+    innerGrad.addColorStop(0.0, "rgba(255, 255, 255, 0.98)");
+    innerGrad.addColorStop(0.40, "rgba(254, 240, 138, 0.92)");
+    innerGrad.addColorStop(0.85, "rgba(251, 146, 60, 0.50)");
+    innerGrad.addColorStop(1.0, "rgba(249, 115, 22, 0.0)");
+    ctx.fillStyle = innerGrad;
+    ctx.fill();
+
+    // ── 3. Precessing Molten Ember Orbits (Fiery Cosmic Rings) ──
+    for (var r = 0; r < 2; r++) {
+      var rAngle = cursor.heading + (r === 0 ? (t * 2.2) : (-t * 1.8 + 1.2));
+      var rMajor = coreR * (1.75 + r * 0.35 + exc * 0.3);
+      var rMinor = rMajor * 0.48;
+
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(rAngle);
+      ctx.beginPath();
+      ctx.ellipse(0, 0, rMajor, rMinor, 0, 0, Math.PI * 2);
+      ctx.strokeStyle = r === 0 ? "rgba(251, 146, 60, 0.55)" : "rgba(254, 240, 138, 0.45)";
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+
+      // Orbiting Ember Cinder
+      var embAng = (t * 3.5 * (r === 0 ? 1 : -1)) % (Math.PI * 2);
+      var embX = Math.cos(embAng) * rMajor;
+      var embY = Math.sin(embAng) * rMinor;
+      ctx.beginPath();
+      ctx.arc(embX, embY, 2.0, 0, Math.PI * 2);
+      ctx.fillStyle = "#ffffff";
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // ── 4. Colossal Fractured Basalt Asteroid Core (9 Jagged Vertices) ──
+    var numVerts = 9;
+    var rockStep = (Math.PI * 2) / numVerts;
+    ctx.beginPath();
+    for (var v = 0; v < numVerts; v++) {
+      var vAng = v * rockStep + cursor.heading * 0.35;
+      var jagM = 0.84 + 0.24 * Math.sin(v * 2.4 + 1.1);
+      var vx = cx + Math.cos(vAng) * (coreR * jagM);
+      var vy = cy + Math.sin(vAng) * (coreR * jagM);
+      if (v === 0) ctx.moveTo(vx, vy);
+      else ctx.lineTo(vx, vy);
+    }
+    ctx.closePath();
+    ctx.fillStyle = "#18100e"; // Deep charred volcanic basalt
+    ctx.fill();
+    ctx.strokeStyle = "rgba(251, 146, 60, 0.95)";
+    ctx.lineWidth = 1.6;
+    ctx.stroke();
+
+    // ── 5. Radiant Molten Magma Fissures / Surface Veins ──
+    ctx.beginPath();
+    for (var f = 0; f < 4; f++) {
+      var fAng = cursor.heading + f * 1.5 + 0.3;
+      var fLen = coreR * (0.70 + 0.22 * Math.sin(f * 1.9));
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cx + Math.cos(fAng) * fLen, cy + Math.sin(fAng) * fLen);
+    }
+    ctx.strokeStyle = progress > 0.85 ? "rgba(255, 255, 255, 0.98)" : "rgba(254, 240, 138, 0.95)";
+    ctx.lineWidth = 1.4;
+    ctx.stroke();
+
+    // ── 6. White-Hot Atmospheric Compression Bow-Shock Front ──
+    var bowCos = Math.cos(cursor.heading);
+    var bowSin = Math.sin(cursor.heading);
+    ctx.beginPath();
+    ctx.arc(cx + bowCos * (coreR * 0.45), cy + bowSin * (coreR * 0.45), coreR * 0.50, 0, Math.PI * 2);
+    ctx.fillStyle = "rgba(255, 255, 245, 0.98)";
+    ctx.fill();
+
+    // ── 7. Target Synchronization Resonance Wavefront ──
+    if (progress > 0) {
+      var syncPulse = Math.sin(now * 0.014) * 0.5 + 0.5;
+      var syncR = coreR * (1.2 + progress * 0.65 + syncPulse * 0.2);
+      ctx.beginPath();
+      ctx.arc(cx, cy, syncR, 0, Math.PI * 2);
+      ctx.strokeStyle = progress > 0.85 ? "rgba(255, 255, 240, 0.90)" : "rgba(249, 115, 22, 0.75)";
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([4, 4]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    ctx.restore();
+  }
+
+  // ── Render Quantum Meteor Lock Reticle (Fiery Magma Corner Brackets & Molten Radial Progress) ──
+  function drawMeteorLockReticle(px, py, progress) {
+    ctx.save();
+    var r = 15;
+    var nowMs = performance.now();
+    var rot = nowMs * 0.0035;
+
+    // Direct-Touch Contact Spark at intersection point
+    var touchX = (cursor.x + px) * 0.5;
+    var touchY = (cursor.y + py) * 0.5;
+    ctx.beginPath();
+    ctx.arc(touchX, touchY, 3.5 + progress * 2.5, 0, Math.PI * 2);
+    ctx.fillStyle = progress > 0.85 ? "rgba(255, 240, 138, 0.75)" : "rgba(249, 115, 22, 0.65)";
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(touchX, touchY, 1.6, 0, Math.PI * 2);
+    ctx.fillStyle = "#ffffff";
+    ctx.fill();
+
+    // Concentric Magma Resonance Rings
+    if (progress > 0.15) {
+      var syncRings = 2;
+      var ringPulse = (nowMs * 0.008) % 1;
+      for (var srg = 0; srg < syncRings; srg++) {
+        var waveR = r * (0.8 + (ringPulse + srg * 0.5) % 1 * 1.1) * (0.85 + progress * 0.35);
+        ctx.beginPath();
+        ctx.arc(px, py, waveR, 0, Math.PI * 2);
+        var ringAlpha = (1 - ((ringPulse + srg * 0.5) % 1)) * (progress * 0.55);
+        ctx.strokeStyle = progress > 0.85 ? ("rgba(254, 240, 138, " + ringAlpha.toFixed(2) + ")") : ("rgba(249, 115, 22, " + ringAlpha.toFixed(2) + ")");
+        ctx.lineWidth = 1.1;
+        ctx.stroke();
+      }
+    }
+
+    // 4 Corner Fiery Brackets
+    ctx.translate(px, py);
+    ctx.rotate(rot);
+    ctx.strokeStyle = progress > 0.85 ? "#fef08a" : "#f97316";
+    ctx.lineWidth = 1.8;
+
+    var bSize = 5;
+    var bOffset = r + 3;
+    ctx.beginPath(); ctx.moveTo(-bOffset, -bOffset + bSize); ctx.lineTo(-bOffset, -bOffset); ctx.lineTo(-bOffset + bSize, -bOffset); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(bOffset - bSize, -bOffset); ctx.lineTo(bOffset, -bOffset); ctx.lineTo(bOffset, -bOffset + bSize); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(bOffset, bOffset - bSize); ctx.lineTo(bOffset, bOffset); ctx.lineTo(bOffset - bSize, bOffset); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(-bOffset + bSize, bOffset); ctx.lineTo(-bOffset, bOffset); ctx.lineTo(-bOffset, bOffset - bSize); ctx.stroke();
+
+    // 360-Degree Radial Magma Progress Ring
+    ctx.rotate(-rot);
+    ctx.beginPath();
+    ctx.arc(0, 0, r, 0, Math.PI * 2);
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.16)";
+    ctx.lineWidth = 2.4;
+    ctx.stroke();
+
+    if (progress > 0) {
+      ctx.beginPath();
+      ctx.arc(0, 0, r, -Math.PI / 2, -Math.PI / 2 + progress * Math.PI * 2);
+      ctx.strokeStyle = progress > 0.85 ? "#fef08a" : "#f97316";
+      ctx.lineWidth = 3.0;
+      ctx.lineCap = "round";
+      ctx.stroke();
+    }
+
+    // Digital Progress Readout
+    ctx.font = "700 10px 'Chakra Petch', monospace";
+    ctx.fillStyle = progress > 0.85 ? "#fef08a" : "#ffffff";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText((progress * 2.0).toFixed(1) + "s / 2.0s", 0, r + 15);
 
     ctx.restore();
   }
@@ -11538,7 +12122,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   <script>
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v26').catch(function() {});
+        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v40').catch(function() {});
       });
     }
   </script>
