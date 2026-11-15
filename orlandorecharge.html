@@ -8998,15 +8998,23 @@ try { checkUrlHashRoutine(); } catch(e){}
     }
   }
 
+  var afterRenderHook = null;
+
   function onPointerMove(e) {
-    mouse.targetX = e.clientX;
-    mouse.targetY = e.clientY;
-    mouse.active = true;
-    mouse.lastActiveTime = Date.now();
+    var cx = (e.touches && e.touches.length > 0) ? e.touches[0].clientX : e.clientX;
+    var cy = (e.touches && e.touches.length > 0) ? e.touches[0].clientY : e.clientY;
+    if (typeof cx === "number" && typeof cy === "number") {
+      mouse.targetX = cx;
+      mouse.targetY = cy;
+      mouse.active = true;
+      mouse.lastActiveTime = Date.now();
+    }
   }
 
   window.addEventListener("pointermove", onPointerMove, { passive: true });
   window.addEventListener("pointerdown", onPointerMove, { passive: true });
+  window.addEventListener("touchmove", onPointerMove, { passive: true });
+  window.addEventListener("touchstart", onPointerMove, { passive: true });
   window.addEventListener("pointerleave", function() {
     mouse.active = false;
     mouse.x = -9999;
@@ -10000,6 +10008,13 @@ try { checkUrlHashRoutine(); } catch(e){}
         backCtx.stroke();
       }
     }
+
+    // Solution 2: Master Animation Frame Tick - executes game overlay on unified clock
+    if (typeof afterRenderHook === "function") {
+      try {
+        afterRenderHook(now);
+      } catch (errHook) {}
+    }
   }
 
   if (enabled) {
@@ -10113,6 +10128,9 @@ try { checkUrlHashRoutine(); } catch(e){}
           pt.emergeBloom = 1.0;
         }
       }
+    },
+    setAfterRenderHook: function(fn) {
+      afterRenderHook = fn;
     }
   };
 })();
