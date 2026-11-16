@@ -4012,6 +4012,121 @@
     if (distHead) distHead.addEventListener('click', toggleDistDock);
     if (distMinBtn) distMinBtn.addEventListener('click', toggleDistDock);
 
+    
+    // System Dropdown Menu Toggle
+    const btnTimerSystemMenu = document.getElementById('btnTimerSystemMenu');
+    const timerSystemDropdown = document.getElementById('timerSystemDropdown');
+
+    function toggleTimerSystemMenu(e) {
+      if (e) e.stopPropagation();
+      if (!timerSystemDropdown) return;
+      const isOpen = timerSystemDropdown.style.display === 'block';
+      timerSystemDropdown.style.display = isOpen ? 'none' : 'block';
+      if (btnTimerSystemMenu) btnTimerSystemMenu.setAttribute('aria-expanded', String(!isOpen));
+    }
+
+    function closeTimerSystemMenu() {
+      if (timerSystemDropdown) timerSystemDropdown.style.display = 'none';
+      if (btnTimerSystemMenu) btnTimerSystemMenu.setAttribute('aria-expanded', 'false');
+    }
+
+    if (btnTimerSystemMenu) {
+      btnTimerSystemMenu.addEventListener('click', toggleTimerSystemMenu);
+    }
+    document.addEventListener('click', (e) => {
+      if (timerSystemDropdown && !e.target.closest('#timerSystemMenuWrapper')) {
+        closeTimerSystemMenu();
+      }
+    });
+
+    // Wire System Menu Items
+    const btnTimerSysCockpit = document.getElementById('btnTimerSysCockpit');
+    if (btnTimerSysCockpit) {
+      btnTimerSysCockpit.addEventListener('click', (e) => {
+        closeTimerSystemMenu();
+        const drawer = document.getElementById('cockpitDrawer');
+        if (drawer) drawer.classList.add('open');
+      });
+    }
+
+    const btnTimerSysAtmo = document.getElementById('btnTimerSysAtmo');
+    if (btnTimerSysAtmo) {
+      btnTimerSysAtmo.addEventListener('click', (e) => {
+        closeTimerSystemMenu();
+        const atmoCard = document.getElementById('atmoCard');
+        if (atmoCard) atmoCard.classList.add('open');
+      });
+    }
+
+    // Wire Timer Backup Modal
+    const btnTimerSysBackup = document.getElementById('btnTimerSysBackup');
+    const timerBackupModal = document.getElementById('timerBackupModal');
+    const btnCloseTimerBackupModal = document.getElementById('btnCloseTimerBackupModal');
+    const modalTimerExportBtn = document.getElementById('modalTimerExportBtn');
+    const modalTimerImportBtn = document.getElementById('modalTimerImportBtn');
+    const modalTimerImportFile = document.getElementById('modalTimerImportFile');
+
+    function openTimerBackupModal() {
+      closeTimerSystemMenu();
+      if (timerBackupModal) timerBackupModal.style.display = 'flex';
+    }
+    function closeTimerBackupModal() {
+      if (timerBackupModal) timerBackupModal.style.display = 'none';
+    }
+
+    if (btnTimerSysBackup) btnTimerSysBackup.addEventListener('click', openTimerBackupModal);
+    if (btnCloseTimerBackupModal) btnCloseTimerBackupModal.addEventListener('click', closeTimerBackupModal);
+    if (timerBackupModal) {
+      timerBackupModal.addEventListener('click', (e) => {
+        if (e.target === timerBackupModal) closeTimerBackupModal();
+      });
+    }
+
+    if (modalTimerExportBtn) {
+      modalTimerExportBtn.addEventListener('click', () => {
+        const stateObj = {
+          app: 'OrlandoTimer',
+          timestamp: new Date().toISOString(),
+          version: '2.0.0',
+          localStorageDump: { ...localStorage }
+        };
+        const blob = new Blob([JSON.stringify(stateObj, null, 2)], { type: 'application/json' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'OrlandoTimer-Backup-' + new Date().toISOString().slice(0, 10) + '.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        closeTimerBackupModal();
+        if (typeof showSupernovaToast === 'function') showSupernovaToast('💾 Horology state exported successfully!');
+      });
+    }
+
+    if (modalTimerImportBtn && modalTimerImportFile) {
+      modalTimerImportBtn.addEventListener('click', () => modalTimerImportFile.click());
+      modalTimerImportFile.addEventListener('change', (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (re) => {
+          try {
+            const data = JSON.parse(re.target.result);
+            if (data.localStorageDump) {
+              Object.keys(data.localStorageDump).forEach(k => {
+                localStorage.setItem(k, data.localStorageDump[k]);
+              });
+            }
+            closeTimerBackupModal();
+            alert('OrlandoTimer state restored successfully! Reloading...');
+            window.location.reload();
+          } catch(err) {
+            alert('Invalid backup file: ' + err.message);
+          }
+        };
+        reader.readAsText(file);
+      });
+    }
+  
     // Wire Holographic QR Modal
     const qrModal = document.getElementById('otQrModal');
     const qrMount = document.getElementById('otQrMount');
