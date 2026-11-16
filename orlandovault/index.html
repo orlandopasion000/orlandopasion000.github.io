@@ -69,15 +69,7 @@
       background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
     }
 
-    .scanline {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      pointer-events: none;
-      z-index: 1;
-      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
-      background-size: 100% 4px;
-      opacity: 0.35;
-    }
+    
 
     .vault-topbar {
       position: sticky;
@@ -2893,8 +2885,6 @@
   </style>
 </head>
 <body>
-  <div class="scanline"></div>
-  <canvas id="vaultParticleCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;opacity:0.65;"></canvas>
 
   <header class="vault-topbar">
     <a href="https://orlandopasion000.github.io/" class="brand-cluster" title="Sir Orlando V. Pasion, Jr. — Return to Master Portfolio Hub">
@@ -2903,10 +2893,7 @@
       </div>
       <div class="brand-meta">
         <h1>ORLANDO<span class="gold-mark">VAULT</span></h1>
-        <div class="jarvis-status">
-          <span class="live-pulse-dot"></span>
-          <span>JARVIS AI · ACTIVE & GUARDING</span>
-        </div>
+
       </div>
     </a>
 
@@ -2958,26 +2945,11 @@
   </header>
 
   <main class="vault-layout">
-    <section class="jarvis-hud-banner compressed" id="jarvisHudBanner">
-      <div class="banner-grid-compact">
-        <!-- Right: Ultra-Compact Inline Telemetry Chips -->
-        <div class="hud-chips-row">
-          <div class="hud-metric-chip" title="Total Granular Accounts Loaded">
-            <span class="chip-num" id="totalVaultAccounts">0</span>
-            <span class="chip-label">SECURED</span>
-          </div>
-
-          <div class="hud-metric-chip gold-chip" title="Cryptographic Health Rating">
-            <span class="chip-num" id="totalSecuredRating">100%</span>
-            <span class="chip-label">INDEX</span>
-          </div>
-        </div>
-      </div>
-    </section>
+    
 
     <section class="controls-panel">
       <div class="filter-pills-row" id="filterPillsRow">
-        <button type="button" class="filter-pill active" data-cat="all">ALL CREDENTIALS</button>
+        <button type="button" class="filter-pill active" data-cat="all">ALL (<span id="totalVaultAccounts">0</span>)</button>
         <button type="button" class="filter-pill" data-cat="DepEd">DEPED OFFICIAL</button>
         <button type="button" class="filter-pill" data-cat="Microsoft">MICROSOFT 365</button>
         <button type="button" class="filter-pill" data-cat="AI & Dev">CLAUDE & AI</button>
@@ -3067,14 +3039,7 @@
     </section>
 
     <!-- CLEAN MINIMAL STATUS TELEMETRY -->
-    <footer class="vault-bottom-dock" style="margin-top: 32px; padding: 14px 0; border-top: 1px solid rgba(56, 189, 248, 0.15); background: transparent; box-shadow: none;">
-      <div class="dock-inner-frame" style="justify-content: center;">
-        <span class="dock-center-telemetry" style="color: #64748b; font-size: 11px; letter-spacing: 1.5px;">
-          <span class="pulse-beacon-cyan"></span>
-          <span>ORLANDOVAULT · QUANTUM CRYPTOGRAPHIC MATRIX · ALL SYSTEMS SECURED</span>
-        </span>
-      </div>
-    </footer>
+    
   </main>
 
   <div class="modal-backdrop" id="historyModal">
@@ -3387,7 +3352,7 @@
         const maskedPwd = '•'.repeat(Math.min(12, (item.password || '').length || 10));
         const safeTitle = escapeHtml(item.title);
         const safeUser = escapeHtml(item.username);
-        const safeNotes = escapeHtml(item.notes || 'Secure credentials managed by Jarvis.');
+        const safeNotes = item.notes ? escapeHtml(item.notes) : '';
         const safePwd = escapeHtml(item.password);
 
         let catClass = 'cat-portals';
@@ -3436,9 +3401,7 @@
               </div>
             </div>
 
-            <div class="card-notes">
-              ${safeNotes}
-            </div>
+            ${safeNotes ? `<div class="card-notes">${safeNotes}</div>` : ''}
 
             <div class="card-footer">
               <span>STATUS: ${item.status || 'SECURED'}</span>
@@ -3584,7 +3547,7 @@
       }
 
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v10', { scope: '/orlandovault/' }).catch(err => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v11', { scope: '/orlandovault/' }).catch(err => {
           console.warn('Vault SW registration error:', err);
         });
       }

@@ -847,7 +847,7 @@
       acousticDot.classList.toggle('active', acousticTickEnabled);
     }
     if (acousticTickText) {
-      acousticTickText.textContent = 'Watch Tick';
+      acousticTickText.textContent = acousticTickEnabled ? 'Watch Tick: ON' : 'Watch Tick: OFF';
     }
     if (btnAcousticTick) {
       btnAcousticTick.title = acousticTickEnabled
@@ -1142,7 +1142,7 @@
     const textEl = document.getElementById('wakeLockText');
     const dotEl = document.querySelector('.status-dot-wake');
     const btnEl = document.getElementById('btnWakeLock');
-    if (textEl) textEl.textContent = 'Keep Awake';
+    if (textEl) textEl.textContent = active ? 'Keep Awake: Active' : 'Keep Awake: Off';
     if (dotEl) {
       dotEl.classList.toggle('active', Boolean(active));
     }
@@ -1802,8 +1802,10 @@
         if (e.target.closest('.btn-del-preset')) return;
         const mins = parseInt(el.getAttribute('data-minutes'), 10);
         if (!isNaN(mins) && mins > 0) {
+          const wasRunning = timerIsRunning;
           pauseTimer();
           setTimerDuration(mins * 60);
+          if (wasRunning) startTimer();
           AudioHUD.tick(920);
         }
       });
@@ -1876,9 +1878,11 @@
     btn.addEventListener('click', () => {
       const mins = parseInt(btn.getAttribute('data-dw-mins'), 10);
       if (!isNaN(mins) && mins > 0) {
+        const wasRunning = timerIsRunning;
         pauseTimer();
         setTimerDuration(mins * 60);
         updateDeepWorkStripUI(mins * 60, mins * 60);
+        if (wasRunning) startTimer();
         AudioHUD.confirm();
       }
     });
@@ -1891,15 +1895,19 @@
   [timerHourInput, timerMinInput, timerSecInput].forEach((input) => {
     if (!input) return;
     input.addEventListener('change', () => {
-      if (!timerIsRunning) {
-        const dur = getDurationFromInputs();
+      const wasRunning = timerIsRunning;
+      const dur = getDurationFromInputs();
+      if (dur > 0) {
+        if (wasRunning) pauseTimer();
         setTimerDuration(dur);
+        if (wasRunning) startTimer();
       }
     });
   });
 
   window.stepTime = function (type, amount) {
-    if (timerIsRunning) return;
+    const wasRunning = timerIsRunning;
+    if (wasRunning) pauseTimer();
     let h = parseInt(timerHourInput.value || '0', 10);
     let m = parseInt(timerMinInput.value || '0', 10);
     let s = parseInt(timerSecInput.value || '0', 10);
@@ -1912,7 +1920,9 @@
     timerMinInput.value = String(m).padStart(2, '0');
     timerSecInput.value = String(s).padStart(2, '0');
 
-    setTimerDuration(h * 3600 + m * 60 + s);
+    const total = h * 3600 + m * 60 + s;
+    setTimerDuration(total);
+    if (wasRunning && total > 0) startTimer();
   };
 
   btnTimerStart.addEventListener('click', startTimer);
@@ -2662,19 +2672,20 @@
   }
 
   function addFocusMinutes(mins) {
-    if (mins <= 0) return;
     const current = getFocusTelemetry();
+    if (mins <= 0) return current;
     const newMins = current.mins + Math.round(mins);
     localStorage.setItem('ot_focus_mins', String(newMins));
     recordWeeklyFocus(mins);
     updateFocusTelemetryUI();
+    return { date: current.date, mins: newMins };
   }
 
   function getSupernovaTier(mins) {
-    if (mins >= 120) return { tier: 3, label: 'Tier III · Hypernova', minMins: 120, nextMins: 120, nextLabel: 'MAX TIER' };
-    if (mins >= 60) return { tier: 2, label: 'Tier II · Supernova', minMins: 60, nextMins: 120, nextLabel: 'Tier III (120m)' };
-    if (mins >= 25) return { tier: 1, label: 'Tier I · Nova', minMins: 25, nextMins: 60, nextLabel: 'Tier II (60m)' };
-    return { tier: 0, label: 'Dormant Nebula', minMins: 0, nextMins: 25, nextLabel: 'Tier I (25m)' };
+    if (mins >= 120) return { tier: 3, label: 'Tier III · Hypernova', name: 'Tier III · Hypernova', minMins: 120, nextMins: 120, nextLabel: 'MAX TIER' };
+    if (mins >= 60) return { tier: 2, label: 'Tier II · Supernova', name: 'Tier II · Supernova', minMins: 60, nextMins: 120, nextLabel: 'Tier III (120m)' };
+    if (mins >= 25) return { tier: 1, label: 'Tier I · Nova', name: 'Tier I · Nova', minMins: 25, nextMins: 60, nextLabel: 'Tier II (60m)' };
+    return { tier: 0, label: 'Dormant Nebula', name: 'Tier I · Nova', minMins: 0, nextMins: 25, nextLabel: 'Tier I (25m)' };
   }
 
   function updateFocusTelemetryUI() {
@@ -2711,12 +2722,14 @@
 
     tTitle.textContent = title;
     tMsg.textContent = message;
+    toast.style.display = 'flex';
     toast.classList.add('visible');
 
     if (toastTimeout) clearTimeout(toastTimeout);
     toastTimeout = setTimeout(() => {
       toast.classList.remove('visible');
-    }, 4500);
+      toast.style.display = 'none';
+    }, 4200);
   }
 
   // ── 10D. QUANTUM RESONANCE BREATHING CALIBRATION (4-4-4-4) ──
@@ -2733,6 +2746,7 @@
   function startBreathingSession() {
     const overlay = document.getElementById('quantumBreathingOverlay');
     if (!overlay) return;
+    overlay.style.display = 'flex';
     overlay.classList.add('active');
     breathingPhase = 0;
     breathingSecLeft = 4;
@@ -2755,7 +2769,10 @@
 
   function stopBreathingSession() {
     const overlay = document.getElementById('quantumBreathingOverlay');
-    if (overlay) overlay.classList.remove('active');
+    if (overlay) {
+      overlay.classList.remove('active');
+      overlay.style.display = 'none';
+    }
     if (breathingInterval) {
       clearInterval(breathingInterval);
       breathingInterval = null;
@@ -2872,6 +2889,7 @@
     } else if (modeKey === 'deep-work') {
       switchAppTab('timer');
       toggleZenMode(false);
+      pauseTimer();
       setTimerDuration(90 * 60); // 90 min ultradian
       setTimerSubMode('deep-work');
     } else if (modeKey === 'quantum-flow') {
@@ -4330,26 +4348,43 @@
     }
 
     function setAndStartMinutes(mins) {
-      const tabTimer = document.getElementById('tab-timer');
-      if (tabTimer) tabTimer.click();
+      if (typeof switchAppTab === 'function') {
+        switchAppTab('timer');
+      } else {
+        const tabTimer = document.getElementById('tab-timer');
+        if (tabTimer) tabTimer.click();
+      }
+      // 1. Force stop any active countdown interval so timerEndTime and timerRemaining can be cleanly replaced
       if (typeof pauseTimer === 'function') pauseTimer();
+
+      // 2. Compute exact seconds and set the new countdown duration (updates timerTotalDuration, timerRemaining, inputs, big digits & progress bar)
       const totalSecs = Math.max(1, Math.round(mins * 60));
-      const h = Math.floor(totalSecs / 3600);
-      const m = Math.floor((totalSecs % 3600) / 60);
-      const s = totalSecs % 60;
-      const hIn = document.getElementById('timerHours');
-      const mIn = document.getElementById('timerMinutes');
-      const sIn = document.getElementById('timerSeconds');
-      if (hIn) hIn.value = String(h).padStart(2, '0');
-      if (mIn) mIn.value = String(m).padStart(2, '0');
-      if (sIn) sIn.value = String(s).padStart(2, '0');
-      if (typeof syncTimerFromInputs === 'function') syncTimerFromInputs();
-      if (typeof startTimer === 'function') startTimer();
-      if (typeof AudioHUD !== 'undefined' && AudioHUD.chimeHarmonic) AudioHUD.chimeHarmonic(true);
-      notifyUserToast('TIMER LAUNCHED', `⏱️ Started ${mins >= 1 ? Math.round(mins) + ' min' : totalSecs + ' sec'} countdown!`);
+      if (typeof setTimerDuration === 'function') {
+        setTimerDuration(totalSecs);
+      }
+
+      // 3. Immediately start the new countdown from the updated duration
+      if (typeof startTimer === 'function') {
+        startTimer();
+      }
+
+      if (typeof AudioHUD !== 'undefined' && AudioHUD.chimeHarmonic) {
+        AudioHUD.chimeHarmonic(true);
+      }
+      const timeStr = typeof formatTimeHHMMSS === 'function' ? formatTimeHHMMSS(totalSecs) : `${Math.round(mins)}m`;
+      notifyUserToast('INSTANT SPRINT ACTIVE', `⏱️ Countdown set to ${timeStr} and running now!`);
     }
 
     const BASE_SPOTLIGHT_COMMANDS = [
+      // Instant Timer Sprints (Top Priority — Works whether timer is running, paused, or stopped)
+      { id: 'timer-5', cat: 'Instant Timer Sprints', icon: '⏳', title: 'Start 5-Minute Quick Sprint', desc: 'Immediately switch countdown to 05:00 and start running', badge: '↵ Start', badgeAction: true, action: () => setAndStartMinutes(5) },
+      { id: 'timer-10', cat: 'Instant Timer Sprints', icon: '⏳', title: 'Start 10-Minute Focus Sprint', desc: 'Immediately switch countdown to 10:00 and start running', badge: '↵ Start', badgeAction: true, action: () => setAndStartMinutes(10) },
+      { id: 'timer-15', cat: 'Instant Timer Sprints', icon: '⏳', title: 'Start 15-Minute Focus Block', desc: 'Immediately switch countdown to 15:00 and start running', badge: '↵ Start', badgeAction: true, action: () => setAndStartMinutes(15) },
+      { id: 'timer-25', cat: 'Instant Timer Sprints', icon: '⏳', title: 'Start 25-Minute Pomodoro Sprint', desc: 'Immediately switch countdown to 25:00 and start running', badge: '↵ Start', badgeAction: true, action: () => setAndStartMinutes(25) },
+      { id: 'timer-45', cat: 'Instant Timer Sprints', icon: '⏳', title: 'Start 45-Minute Deep Session', desc: 'Immediately switch countdown to 45:00 and start running', badge: '↵ Start', badgeAction: true, action: () => setAndStartMinutes(45) },
+      { id: 'timer-60', cat: 'Instant Timer Sprints', icon: '⏳', title: 'Start 60-Minute Deep Work Block', desc: 'Immediately switch countdown to 01:00:00 and start running', badge: '↵ Start', badgeAction: true, action: () => setAndStartMinutes(60) },
+      { id: 'timer-90', cat: 'Instant Timer Sprints', icon: '⏳', title: 'Start 90-Minute Ultradian Block', desc: 'Immediately switch countdown to 01:30:00 and start running', badge: '↵ Start', badgeAction: true, action: () => setAndStartMinutes(90) },
+
       // Productivity Protocols (5)
       { id: 'proto-focus', cat: 'Productivity Protocols', icon: '🎯', title: 'Focus Protocol (Pomodoro 25m / 5m)', desc: 'Classic 25m Focus & 5m Break rhythm with auto-advance', badge: 'Protocol', action: () => { applyProductivityMode('focus-protocol', true); } },
       { id: 'proto-zen', cat: 'Productivity Protocols', icon: '🧘', title: 'Zen Immersion Mode (Pure Void)', desc: 'Distraction-free void with colossal floating horology digits', badge: 'Void', action: () => { applyProductivityMode('zen-immersion', true); } },
@@ -4357,27 +4392,38 @@
       { id: 'proto-flow', cat: 'Productivity Protocols', icon: '🌊', title: 'Quantum Flow (Count-Up Flow State)', desc: 'Serene HH:MM:SS count-up with unbroken Flow Milestones', badge: 'Flow State', action: () => { applyProductivityMode('quantum-flow', true); } },
       { id: 'proto-chrono', cat: 'Productivity Protocols', icon: '⏱️', title: 'Precision Chrono (100fps Split Laps)', desc: 'Swiss chronometer with millisecond precision & lap telemetry', badge: 'Chrono', action: () => { applyProductivityMode('precision-chrono', true); } },
 
-      // Quick Timer Sprints
-      { id: 'timer-5', cat: 'Instant Timer Sprints', icon: '⏳', title: 'Start 5-Minute Quick Sprint', desc: 'Immediate 05:00 countdown timer', badge: '↵ Start', badgeAction: true, action: () => setAndStartMinutes(5) },
-      { id: 'timer-15', cat: 'Instant Timer Sprints', icon: '⏳', title: 'Start 15-Minute Focus Block', desc: 'Immediate 15:00 countdown timer', badge: '↵ Start', badgeAction: true, action: () => setAndStartMinutes(15) },
-      { id: 'timer-25', cat: 'Instant Timer Sprints', icon: '⏳', title: 'Start 25-Minute Pomodoro Sprint', desc: 'Standard 25:00 executive focus session', badge: '↵ Start', badgeAction: true, action: () => setAndStartMinutes(25) },
-      { id: 'timer-45', cat: 'Instant Timer Sprints', icon: '⏳', title: 'Start 45-Minute Deep Session', desc: 'Extended 45:00 classroom / deep session', badge: '↵ Start', badgeAction: true, action: () => setAndStartMinutes(45) },
-      { id: 'timer-90', cat: 'Instant Timer Sprints', icon: '⏳', title: 'Start 90-Minute Ultradian Block', desc: 'Full 01:30:00 peak cognitive cycle', badge: '↵ Start', badgeAction: true, action: () => setAndStartMinutes(90) },
-
-      // Horology System & Audio Commands
+      // Horology System & Audio Commands (Every Item 100% Functional)
       { id: 'sys-vault-theme', cat: 'Horology System & Audio', icon: '🎨', title: 'Open Holographic Theme Vault', desc: 'Browse all 30 luxury themes with live holo-scrubbing (Hotkey: T)', badge: '30 Themes', action: () => { if (typeof openHoloVault === 'function') openHoloVault('theme'); } },
       { id: 'sys-vault-clock', cat: 'Horology System & Audio', icon: '🔢', title: 'Open Digit Style Vault', desc: 'Customize numeral material finish & specular reflections (Hotkey: D)', badge: 'Digits', action: () => { if (typeof openHoloVault === 'function') openHoloVault('clock'); } },
-      { id: 'sys-shuffle', cat: 'Horology System & Audio', icon: '🎲', title: 'Quantum Shuffle (Theme + Digit Style)', desc: 'Harmonize a random luxury App Theme & Digit Style pair', badge: 'Shuffle', action: () => { const btn = document.getElementById('btnQuantumShuffle'); if (btn) btn.click(); } },
+      { id: 'sys-shuffle', cat: 'Horology System & Audio', icon: '🎲', title: 'Quantum Shuffle (Theme + Digit Style)', desc: 'Harmonize a random luxury App Theme & Digit Style pair', badge: 'Shuffle', action: () => {
+        const randomApp = THEMES[Math.floor(Math.random() * THEMES.length)];
+        const randomClock = THEMES[Math.floor(Math.random() * THEMES.length)];
+        applyAppTheme(randomApp);
+        applyClockStyle(randomClock);
+        if (typeof AudioHUD !== 'undefined' && AudioHUD.chimeHarmonic) AudioHUD.chimeHarmonic(true);
+        notifyUserToast('QUANTUM SHUFFLE', `🎲 ${THEME_NAMES[randomApp] || randomApp} (App) + ${THEME_NAMES[randomClock] || randomClock} (Digits)`);
+      } },
       { id: 'sys-cockpit', cat: 'Horology System & Audio', icon: '🚀', title: 'Quantum Time Command Cockpit', desc: 'Earth Solar Horizon, Supernova Telemetry & Weekly Focus Chart', badge: 'Cockpit', action: () => { if (typeof toggleFunCockpit === 'function') toggleFunCockpit(true); } },
       { id: 'sys-atmo', cat: 'Horology System & Audio', icon: '✦', title: 'Atmosphere & Particle Lab', desc: 'Adjust Ambient Glow (0%-100%), Floating Particles & Cosmic Speed', badge: 'Lab', action: () => { if (typeof window.toggleAtmosphereLab === 'function') window.toggleAtmosphereLab(true); } },
-      { id: 'sys-supernova', cat: 'Horology System & Audio', icon: '💥', title: 'Detonate Celestial Supernova Shockwave', desc: 'Trigger a physics particle burst & sub-bass harmonic chime', badge: 'Burst', action: () => { const b = document.getElementById('btnFireSupernova'); if (b) b.click(); } },
-      { id: 'sys-breath', cat: 'Horology System & Audio', icon: '🌬️', title: 'Quantum Resonance Breathing (4-4-4-4)', desc: 'Guided 4-second inhale, hold, exhale & reset calibration', badge: 'Calibrate', action: () => { if (typeof startBreathingSession === 'function') startBreathingSession(); } },
+      { id: 'sys-supernova', cat: 'Horology System & Audio', icon: '💥', title: 'Detonate Celestial Supernova Shockwave', desc: 'Trigger a physics particle burst & sub-bass harmonic chime', badge: 'Burst', action: () => {
+        if (window.spawnSupernovaBurst) {
+          window.spawnSupernovaBurst(window.innerWidth / 2, window.innerHeight / 2, { tier: 2, showToast: true });
+        }
+      } },
+      { id: 'sys-breath', cat: 'Horology System & Audio', icon: '🌬️', title: 'Quantum Resonance Breathing (4-4-4-4)', desc: 'Guided 4-second inhale, hold, exhale & reset calibration modal', badge: 'Calibrate', action: () => { if (typeof startBreathingSession === 'function') startBreathingSession(); } },
       { id: 'sys-tick', cat: 'Horology System & Audio', icon: '🔊', title: 'Toggle Mechanical Watch Tick Audio', desc: 'Enable or mute 1-second Swiss escapement tick & UI click audio', badge: 'Audio', action: () => { const b = document.getElementById('btnAcousticTick'); if (b) b.click(); } },
       { id: 'sys-awake', cat: 'Horology System & Audio', icon: '👁️', title: 'Toggle Keep Screen Awake (Wake Lock)', desc: 'Prevent display from dimming or sleeping during active sessions', badge: 'WakeLock', action: () => { const b = document.getElementById('btnWakeLock'); if (b) b.click(); } },
       { id: 'sys-qr', cat: 'Horology System & Audio', icon: '📱', title: 'Holographic Phone QR Scanner', desc: 'Scan with iPhone or Android camera for instant cloud sync', badge: 'QR Sync', action: openQrModal },
       { id: 'sys-sync', cat: 'Horology System & Audio', icon: '☁️', title: 'Sync Google Cloud Firebase Now', desc: 'Reconcile Self-Healing Mutation Journal with Singapore Firestore', badge: '0ms SWR', action: () => { if (window.OrlandoTimerFirebase) window.OrlandoTimerFirebase.pullNow(); } },
       { id: 'sys-backup', cat: 'Horology System & Audio', icon: '💾', title: 'Backup & Restore Horology State (.json)', desc: 'Export or import your presets, alarms, themes & focus history', badge: 'JSON', action: openTimerBackupModal },
-      { id: 'sys-dock', cat: 'Horology System & Audio', icon: '🧭', title: 'Toggle Executive Sub-App Dock', desc: 'Show or hide the floating bottom 5-App Ecosystem Dock', badge: 'Dock', action: () => { const d = document.getElementById('standaloneSubAppDock'); if (d) d.classList.toggle('active'); } },
+      { id: 'sys-dock', cat: 'Horology System & Audio', icon: '🧭', title: 'Toggle Executive Sub-App Dock', desc: 'Show or hide the floating bottom 5-App Ecosystem Dock', badge: 'Dock', action: () => {
+        const d = document.getElementById('standaloneSubAppDock');
+        if (d) {
+          const isAct = d.classList.toggle('active');
+          notifyUserToast(isAct ? 'SUB-APP DOCK SHOWN' : 'SUB-APP DOCK HIDDEN', isAct ? '🧭 Bottom 5-App Ecosystem Dock is now visible.' : '🧭 Bottom Sub-App Dock concealed.');
+        }
+      } },
+      { id: 'sys-fullscreen', cat: 'Horology System & Audio', icon: '⛶', title: 'Toggle Full Screen Display', desc: 'Enter or exit distraction-free full-screen horology mode (Hotkey: F)', badge: 'Fullscreen', action: () => { const b = document.getElementById('btnFullscreen'); if (b) b.click(); } },
       { id: 'sys-standalone', cat: 'Horology System & Audio', icon: '🪟', title: 'Open Main Web App (Standalone Window)', desc: 'Launch Orlando Timer in a dedicated chromeless desktop window', badge: 'PWA', action: handleLaunchStandaloneApp },
 
       // Flagship Ecosystem Sub-Apps
@@ -4422,10 +4468,29 @@
         });
       }
 
-      // 2. Match Base Commands
+      // 2. Match Base Commands (and inject any user-saved custom presets right inside Instant Timer Sprints)
       BASE_SPOTLIGHT_COMMANDS.forEach(cmd => {
         if (!q || cmd.title.toLowerCase().includes(q) || cmd.desc.toLowerCase().includes(q) || cmd.cat.toLowerCase().includes(q)) {
           spotlightMatches.push(cmd);
+        }
+        if (cmd.id === 'timer-90' && typeof loadCustomPresets === 'function') {
+          const customPresets = loadCustomPresets();
+          customPresets.forEach(cMin => {
+            if ([5, 10, 15, 25, 45, 60, 90].includes(cMin)) return;
+            const titleStr = `Start ${cMin}-Minute Custom Sprint`;
+            const descStr = `Immediately switch countdown to ${cMin}:00 and start running`;
+            if (!q || titleStr.toLowerCase().includes(q) || descStr.toLowerCase().includes(q) || 'instant timer sprints'.includes(q)) {
+              spotlightMatches.push({
+                cat: 'Instant Timer Sprints',
+                icon: '⏳',
+                title: titleStr,
+                desc: descStr,
+                badge: '↵ Start',
+                badgeAction: true,
+                action: () => setAndStartMinutes(cMin)
+              });
+            }
+          });
         }
       });
 
@@ -4435,7 +4500,7 @@
           const td = THEME_DATA[themeKey];
           if (!td) return;
           const matchTheme = !q
-            ? (themeKey === 'pure-black' || themeKey === 'gold' || themeKey === 'platinum' || themeKey === 'cyber-matrix-rain')
+            ? true
             : (td.name.toLowerCase().includes(q) || td.desc.toLowerCase().includes(q) || td.category.toLowerCase().includes(q) || themeKey.includes(q));
           if (matchTheme) {
             spotlightMatches.push({
