@@ -3859,58 +3859,7 @@
       transform: translateY(0) scale(0.98);
     }
 
-    /* 4. MODAL KEYBOARD SHORTCUT BADGES & INTERACTION ENHANCEMENTS */
-    .modal-kbd {
-      font-family: var(--font-mono);
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0;
-      padding: 2.5px 6px;
-      border-radius: 4px;
-      background: rgba(0, 0, 0, 0.45);
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      color: rgba(255, 255, 255, 0.9);
-      margin-left: 6px;
-      display: inline-flex;
-      align-items: center;
-      line-height: 1;
-      vertical-align: middle;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
-    }
-    .modal-kbd-subtle {
-      font-family: var(--font-mono);
-      font-size: 9px;
-      font-weight: 600;
-      padding: 1.5px 5px;
-      border-radius: 3px;
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(255, 215, 0, 0.4);
-      color: #fef08a;
-      margin-left: 5px;
-      display: inline-flex;
-      align-items: center;
-    }
-    .modal-keyboard-hints {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 14px;
-      padding-top: 12px;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      font-size: 11px;
-      color: #94a3b8;
-      font-family: var(--font-tech), sans-serif;
-    }
-    .modal-keyboard-hints span {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-    }
-    .modal-keyboard-hints .modal-kbd {
-      margin-left: 0;
-    }
+    /* 4. MODAL FIELD INTERACTION ENHANCEMENTS */
     .btn-pwd-eye-toggle {
       position: absolute;
       right: 12px;
@@ -3923,20 +3872,21 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 4px;
-      border-radius: 4px;
-      transition: color 0.18s ease;
+      padding: 6px;
+      border-radius: 6px;
+      transition: all 0.18s ease;
       z-index: 2;
     }
     .btn-pwd-eye-toggle:hover {
       color: var(--cyan);
+      background: rgba(56, 189, 248, 0.1);
     }
     .btn-pwd-eye-toggle svg {
-      width: 17px;
-      height: 17px;
+      width: 18px;
+      height: 18px;
     }
     .edit-pwd-input {
-      padding-right: 44px !important;
+      padding-right: 46px !important;
     }
     @keyframes kbdActivePulse {
       0% { transform: scale(1); filter: brightness(1); }
@@ -3963,11 +3913,6 @@
     }
     .pwd-gen-glow {
       animation: pwdGenGlow 0.6s ease-out;
-    }
-    @media (max-width: 600px) {
-      .modal-kbd, .modal-kbd-subtle, .modal-keyboard-hints {
-        display: none !important;
-      }
     }
 
   
@@ -4340,11 +4285,11 @@
         <div class="edit-form-group">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
             <label class="edit-form-label" for="editInputPassword" style="margin-bottom:0;">PASSWORD:</label>
-            <button type="button" class="btn-gen-pwd" onclick="generateStrongPasswordForEditor()" title="Generate Random Secure Password (Alt + G)">⚡ Generate Strong <kbd class="modal-kbd-subtle">Alt+G</kbd></button>
+            <button type="button" class="btn-gen-pwd" onclick="generateStrongPasswordForEditor()" title="Generate Random Secure Password">⚡ Generate Strong</button>
           </div>
           <div class="edit-pwd-wrapper">
             <input type="text" class="edit-form-input edit-pwd-input" id="editInputPassword" autocomplete="off" placeholder="Secret password">
-            <button type="button" class="btn-pwd-eye-toggle" id="btnToggleEditPwdVisibility" onclick="toggleEditPasswordMask()" title="Toggle Mask/Unmask (Alt+P)" aria-label="Toggle password visibility">
+            <button type="button" class="btn-pwd-eye-toggle" id="btnToggleEditPwdVisibility" onclick="toggleEditPasswordMask()" title="Mask / Reveal Password" aria-label="Toggle password visibility">
               <svg class="eye-open-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
               <svg class="eye-closed-icon" style="display:none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
             </button>
@@ -4423,24 +4368,15 @@
               <span class="btn-cyber-bracket">[</span>
               <span>CANCEL</span>
               <span class="btn-cyber-bracket">]</span>
-              <kbd class="modal-kbd">Esc</kbd>
             </button>
-            <button type="button" class="btn-edit-save" id="btnSaveCardEdit" title="Save Changes (↵ Enter or Ctrl+Enter)">
+            <button type="button" class="btn-edit-save" id="btnSaveCardEdit" title="Save & Close (Enter)">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="width:16px;height:16px;"><polyline points="20 6 9 17 4 12"/></svg>
               <span>SAVE CHANGES</span>
-              <kbd class="modal-kbd">↵ Enter</kbd>
             </button>
           </div>
           <button type="button" class="btn-edit-delete" id="btnDeleteCardEdit" title="Remove this credential from vault">
             <span>Delete Account</span>
           </button>
-          <div class="modal-keyboard-hints" aria-label="Keyboard Shortcuts">
-            <span><kbd class="modal-kbd">↵ Enter</kbd> Quick Save</span>
-            <span><kbd class="modal-kbd">Ctrl+↵</kbd> Save from Notes</span>
-            <span><kbd class="modal-kbd">Esc</kbd> Cancel</span>
-            <span><kbd class="modal-kbd">Alt+G</kbd> Generate</span>
-            <span><kbd class="modal-kbd">Alt+P</kbd> Mask</span>
-          </div>
         </div>
       </form>
     </div>
@@ -4763,7 +4699,7 @@
     document.getElementById('editChkPriority')?.addEventListener('change', syncToggleChips);
     document.getElementById('editChkCritical')?.addEventListener('change', syncToggleChips);
 
-    function openCardEditor(itemId) {
+    function openCardEditor(itemId, targetField = 'editInputTitle') {
       const item = vaultItems.find(x => x.id === itemId);
       if (!item) return;
 
@@ -4772,7 +4708,21 @@
       document.getElementById('editInputTitle').value = item.title || '';
       document.getElementById('editSelectCategory').value = item.category || 'DepEd';
       document.getElementById('editInputUsername').value = item.username || '';
-      document.getElementById('editInputPassword').value = item.password || '';
+      
+      const pwdInput = document.getElementById('editInputPassword');
+      if (pwdInput) {
+        pwdInput.value = item.password || '';
+        pwdInput.type = 'text'; // Always start in visible mode for editing
+      }
+      const eyeBtn = document.getElementById('btnToggleEditPwdVisibility');
+      if (eyeBtn) {
+        const openIcon = eyeBtn.querySelector('.eye-open-icon');
+        const closedIcon = eyeBtn.querySelector('.eye-closed-icon');
+        if (openIcon && closedIcon) {
+          openIcon.style.display = 'block';
+          closedIcon.style.display = 'none';
+        }
+      }
 
       if (item.metadata !== undefined && item.metadata !== null) {
         document.getElementById('editInputMetadata').value = item.metadata || '';
@@ -4793,10 +4743,10 @@
         modal.classList.add('active');
         playJarvisSound('reveal');
         setTimeout(() => {
-          const titleInput = document.getElementById('editInputTitle');
-          if (titleInput) {
-            titleInput.focus();
-            titleInput.select();
+          const targetEl = document.getElementById(targetField) || document.getElementById('editInputTitle');
+          if (targetEl) {
+            targetEl.focus();
+            if (typeof targetEl.select === 'function') targetEl.select();
           }
         }, 80);
       }
@@ -4808,7 +4758,20 @@
       document.getElementById('editInputTitle').value = '';
       document.getElementById('editSelectCategory').value = 'DepEd';
       document.getElementById('editInputUsername').value = '';
-      document.getElementById('editInputPassword').value = '';
+      const pwdInput = document.getElementById('editInputPassword');
+      if (pwdInput) {
+        pwdInput.value = '';
+        pwdInput.type = 'text';
+      }
+      const eyeBtn = document.getElementById('btnToggleEditPwdVisibility');
+      if (eyeBtn) {
+        const openIcon = eyeBtn.querySelector('.eye-open-icon');
+        const closedIcon = eyeBtn.querySelector('.eye-closed-icon');
+        if (openIcon && closedIcon) {
+          openIcon.style.display = 'block';
+          closedIcon.style.display = 'none';
+        }
+      }
       document.getElementById('editInputMetadata').value = '';
       document.getElementById('editInputNotes').value = '';
       document.getElementById('editChkPriority').checked = true; // New cards default to priority
@@ -4869,8 +4832,8 @@
       const isPassword = input.type === 'password';
       input.type = isPassword ? 'text' : 'password';
       if (btn) {
-        btn.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password');
-        btn.title = isPassword ? 'Hide password (Alt+P)' : 'Show password (Alt+P)';
+        btn.setAttribute('aria-label', isPassword ? 'Show password' : 'Mask password');
+        btn.title = isPassword ? 'Mask Password' : 'Show Password';
         const openIcon = btn.querySelector('.eye-open-icon');
         const closedIcon = btn.querySelector('.eye-closed-icon');
         if (openIcon && closedIcon) {
@@ -4881,7 +4844,7 @@
       if (typeof playJarvisSound === 'function') playJarvisSound('click');
     }
 
-    function saveCardEditor() {
+    function saveCardEditor(keepOpen = false) {
       const id = document.getElementById('editCardId').value;
       const title = document.getElementById('editInputTitle').value.trim();
       const category = document.getElementById('editSelectCategory').value;
@@ -4930,7 +4893,7 @@
           item.updated_at = new Date().toISOString();
           trackCardUsage(id, 'edit_card', 4);
           logAudit('EDITED_CARD', 'Updated details for: ' + title);
-          showToast(`✓ Updated "${title}" successfully!`, '🛡️');
+          showToast(keepOpen ? `💾 Changes applied for "${title}"` : `✓ Updated "${title}" successfully!`, '🛡️');
           recordVaultMutation('CARD_UPDATE', item);
         }
       } else {
@@ -4955,8 +4918,9 @@
           updated_at: new Date().toISOString()
         };
         vaultItems.unshift(newItem);
+        document.getElementById('editCardId').value = newId;
         logAudit('CREATED_CARD', 'Created new account: ' + title);
-        showToast(`✓ Added "${title}" to your vault!`, '✨');
+        showToast(keepOpen ? `💾 Created and applied "${title}"!` : `✓ Added "${title}" to your vault!`, '✨');
         recordVaultMutation('CARD_CREATE', newItem);
       }
 
@@ -4964,10 +4928,13 @@
         localStorage.setItem(LS_VAULT_KEY, JSON.stringify(vaultItems));
       } catch(e) {}
 
-      closeCardEditor();
       renderVault();
       renderMetrics();
       playJarvisSound('copy');
+
+      if (!keepOpen) {
+        closeCardEditor();
+      }
     }
 
     function deleteCardFromEditor() {
@@ -5460,12 +5427,12 @@
       });
 
       document.addEventListener('keydown', (e) => {
-        // Universal Save when Card Editor is open
+        // Universal Apply when Card Editor is open (Saves & keeps open)
         if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
           const editModal = document.getElementById('cardEditModal');
           if (editModal && editModal.classList.contains('active')) {
             e.preventDefault();
-            saveCardEditor();
+            saveCardEditor(true);
             return;
           }
         }
@@ -6450,45 +6417,63 @@
 
       if (formCardEditor) {
         formCardEditor.addEventListener('keydown', (e) => {
-          // 1. Ctrl+Enter or Cmd+Enter: Save immediately from ANY field (including textarea notes)
-          if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-            e.preventDefault();
-            saveCardEditor();
-            return;
-          }
-
-          // 2. Ctrl+S or Cmd+S: Master Save shortcut
+          // 1. Ctrl+S or Cmd+S: "Apply" Incremental Save (Saves immediately without closing modal)
           if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
             e.preventDefault();
-            saveCardEditor();
+            saveCardEditor(true);
             return;
           }
 
-          // 3. Alt+G: Instant generate strong password
-          if (e.altKey && e.key.toLowerCase() === 'g') {
-            e.preventDefault();
-            generateStrongPasswordForEditor();
-            return;
-          }
-
-          // 4. Alt+P: Toggle password mask / unmask
-          if (e.altKey && e.key.toLowerCase() === 'p') {
-            e.preventDefault();
-            toggleEditPasswordMask();
-            return;
-          }
-
-          // 5. Enter on single-line inputs: Save changes immediately!
-          if (e.key === 'Enter' && e.target.tagName === 'INPUT' && e.target.type !== 'checkbox') {
-            e.preventDefault();
-            saveCardEditor();
-            return;
-          }
-
-          // 6. Escape key: Cancel and dismiss
+          // 2. Escape: Dismiss / Cancel
           if (e.key === 'Escape') {
             e.preventDefault();
             closeCardEditor();
+            return;
+          }
+
+          // 3. Tab Key Focus Trap (Smooth cycling loop inside modal)
+          if (e.key === 'Tab') {
+            const focusables = formCardEditor.querySelectorAll('input:not([type="hidden"]), select, textarea, button:not([disabled])');
+            if (focusables.length > 0) {
+              const firstEl = focusables[0];
+              const lastEl = focusables[focusables.length - 1];
+              if (e.shiftKey && document.activeElement === firstEl) {
+                e.preventDefault();
+                lastEl.focus();
+                return;
+              } else if (!e.shiftKey && document.activeElement === lastEl) {
+                e.preventDefault();
+                firstEl.focus();
+                return;
+              }
+            }
+          }
+
+          // 4. In PERSONAL NOTES (textarea):
+          if (e.target.id === 'editInputNotes') {
+            // Shift + Enter: inserts a new line cleanly!
+            if (e.shiftKey && e.key === 'Enter') {
+              return; // Allow native newline insertion
+            }
+            // Enter (without Shift) OR Ctrl+Enter: Save and Close!
+            if (e.key === 'Enter' || ((e.ctrlKey || e.metaKey) && e.key === 'Enter')) {
+              e.preventDefault();
+              saveCardEditor(false);
+              return;
+            }
+          }
+
+          // 5. In single-line inputs (APP / WEBSITE, USERNAME, PASSWORD, METADATA):
+          if (e.key === 'Enter' && e.target.tagName === 'INPUT' && e.target.type !== 'checkbox') {
+            e.preventDefault();
+            saveCardEditor(false);
+            return;
+          }
+
+          // 6. Ctrl + Enter from anywhere in modal: Save & Close
+          if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+            e.preventDefault();
+            saveCardEditor(false);
             return;
           }
         });
