@@ -3002,6 +3002,22 @@
       text-overflow: ellipsis;
       margin-top: 2px;
     }
+    .spotlight-item-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+      min-width: 0;
+      cursor: pointer;
+      border-radius: 8px;
+      padding: 3px 6px;
+      margin: -3px -6px;
+      transition: all 0.15s ease;
+    }
+    .spotlight-item-left:hover .spotlight-item-title {
+      color: #38bdf8;
+      text-shadow: 0 0 10px rgba(56, 189, 248, 0.45);
+    }
     .spotlight-item-badge {
       font-family: var(--font-mono);
       font-size: 10px;
@@ -3013,10 +3029,29 @@
       flex-shrink: 0;
     }
     .spotlight-item-badge.badge-action {
-      background: rgba(16, 185, 129, 0.12);
-      border-color: rgba(16, 185, 129, 0.35);
-      color: #34d399;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.18) 0%, rgba(5, 150, 105, 0.28) 100%);
+      border: 1px solid rgba(52, 211, 153, 0.45);
+      color: #a7f3d0;
       font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 10.5px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      touch-action: manipulation;
+    }
+    .spotlight-item-badge.badge-action:hover {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.38) 0%, rgba(5, 150, 105, 0.5) 100%);
+      border-color: #34d399;
+      color: #ffffff;
+      box-shadow: 0 0 14px rgba(52, 211, 153, 0.6);
+      transform: scale(1.05);
+    }
+    .spotlight-item-badge.badge-action:active {
+      transform: scale(0.96);
     }
 
     .spotlight-footer {
@@ -3298,6 +3333,34 @@
     .vault-card.is-priority-pinned {
       border-color: rgba(255, 215, 0, 0.6) !important;
       box-shadow: 0 12px 36px rgba(0, 0, 0, 0.9), 0 0 22px rgba(255, 215, 0, 0.2) !important;
+    }
+
+    @keyframes cardTargetPulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(0, 240, 255, 0.8), 0 0 40px rgba(0, 240, 255, 0.7);
+        border-color: #00f0ff !important;
+        transform: scale(1.025);
+      }
+      25% {
+        box-shadow: 0 0 0 12px rgba(0, 240, 255, 0), 0 0 50px rgba(217, 185, 92, 0.85);
+        border-color: #ffd700 !important;
+        transform: scale(1.02);
+      }
+      50% {
+        box-shadow: 0 0 0 0 rgba(0, 240, 255, 0.6), 0 0 35px rgba(0, 240, 255, 0.5);
+        border-color: #00f0ff !important;
+        transform: scale(1.01);
+      }
+      100% {
+        box-shadow: 0 0 0 0 transparent;
+        transform: scale(1);
+      }
+    }
+
+    .vault-card.spotlight-target-pulse {
+      animation: cardTargetPulse 2.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      z-index: 20 !important;
+      position: relative;
     }
 
     /* Add Account Filter Pill */
@@ -5132,7 +5195,7 @@
       }
 
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v30', { scope: '/orlandovault/' }).catch(err => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v31', { scope: '/orlandovault/' }).catch(err => {
           console.warn('Vault SW registration error:', err);
         });
       }
@@ -6362,7 +6425,8 @@
       <div class="spotlight-footer">
         <div class="spotlight-footer-keys">
           <span><kbd class="topbar-kbd">↑</kbd> <kbd class="topbar-kbd">↓</kbd> Navigate</span>
-          <span><kbd class="topbar-kbd">↵</kbd> Copy Password / Launch</span>
+          <span><kbd class="topbar-kbd">Click Left</kbd> View Card</span>
+          <span><kbd class="topbar-kbd">↵ / Click Right</kbd> Copy Password</span>
           <span><kbd class="topbar-kbd">esc</kbd> Close</span>
         </div>
         <button type="button" class="btn-spotlight-mobile-back" onclick="closeSpotlight()" aria-label="Back to Vault">
@@ -6546,6 +6610,48 @@
       if (spotlightModal) spotlightModal.classList.remove('open');
     }
 
+    function navigateToVaultCard(itemId) {
+      closeSpotlight();
+      const item = vaultItems.find(x => x.id === itemId);
+      if (!item) return;
+
+      // 1. Switch filter to show this item if needed
+      if (activeCategory !== 'all' && activeCategory !== item.category) {
+        activeCategory = 'all';
+        const pills = document.querySelectorAll('.filter-pills-row .filter-pill');
+        pills.forEach(p => {
+          if (p.getAttribute('data-cat') === 'all') p.classList.add('active');
+          else p.classList.remove('active');
+        });
+      }
+
+      // 2. Clear vault search input if query would filter it out
+      if (searchQuery) {
+        searchQuery = '';
+        const searchInput = document.getElementById('vaultSearchInput');
+        if (searchInput) searchInput.value = '';
+      }
+
+      renderVault();
+
+      // 3. Smooth scroll and high-tech target lock pulse animation
+      setTimeout(() => {
+        const cardEl = document.getElementById('card-' + itemId);
+        if (cardEl) {
+          cardEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          cardEl.classList.remove('spotlight-target-pulse');
+          void cardEl.offsetWidth; // Force reflow
+          cardEl.classList.add('spotlight-target-pulse');
+          setTimeout(() => {
+            cardEl.classList.remove('spotlight-target-pulse');
+          }, 3000);
+          if (typeof playJarvisSound === 'function') playJarvisSound('reveal');
+          showToast(`🎯 Located "${item.title}" in Vault`, '📍');
+        }
+      }, 100);
+    }
+    window.navigateToVaultCard = navigateToVaultCard;
+
     function renderSpotlightResults(query) {
       if (!spotlightResults) return;
       const q = (query || '').toLowerCase().trim();
@@ -6564,6 +6670,7 @@
       credMatches.forEach(item => {
         spotlightMatches.push({
           type: 'credential',
+          itemId: item.id,
           cat: 'Vault Credentials',
           icon: '🔑',
           title: item.title,
@@ -6606,23 +6713,60 @@
           html += '<div class="spotlight-group-title">' + currentCat + '</div>';
         }
         const isSel = idx === spotlightIndex;
-        html += '<div class="spotlight-item ' + (isSel ? 'selected' : '') + '" data-index="' + idx + '">';
-        html += '  <div class="spotlight-item-icon">' + item.icon + '</div>';
-        html += '  <div class="spotlight-item-info">';
-        html += '    <div class="spotlight-item-title">' + escapeHtml(item.title) + '</div>';
-        html += '    <div class="spotlight-item-desc">' + escapeHtml(item.desc) + '</div>';
+        const isCred = item.type === 'credential';
+        html += '<div class="spotlight-item ' + (isSel ? 'selected' : '') + (isCred ? ' is-credential-item' : '') + '" data-index="' + idx + '">';
+        html += '  <div class="spotlight-item-left" title="' + (isCred ? 'Click to open and view this card in Vault' : 'Click to select') + '">';
+        html += '    <div class="spotlight-item-icon">' + item.icon + '</div>';
+        html += '    <div class="spotlight-item-info">';
+        html += '      <div class="spotlight-item-title">' + escapeHtml(item.title) + '</div>';
+        html += '      <div class="spotlight-item-desc">' + escapeHtml(item.desc) + '</div>';
+        html += '    </div>';
         html += '  </div>';
-        html += '  <span class="spotlight-item-badge ' + (item.badgeAction ? 'badge-action' : '') + '">' + item.badge + '</span>';
+        html += '  <button type="button" class="spotlight-item-badge ' + (item.badgeAction ? 'badge-action' : '') + '" title="' + (isCred ? '1-Click Copy Password' : '') + '">' + item.badge + '</button>';
         html += '</div>';
       });
 
       spotlightResults.innerHTML = html;
 
-      // Item click binding
+      // Item click binding with dual left/right actions
       spotlightResults.querySelectorAll('.spotlight-item').forEach(el => {
+        const idx = parseInt(el.getAttribute('data-index'), 10);
+        const match = spotlightMatches[idx];
+
+        // 1. Right side click (badge / copy button)
+        const badgeBtn = el.querySelector('.spotlight-item-badge');
+        if (badgeBtn) {
+          badgeBtn.onclick = function(e) {
+            e.stopPropagation();
+            if (match && match.type === 'credential') {
+              if (match.action) match.action();
+              closeSpotlight();
+            } else if (match && match.action) {
+              executeSpotlightIndex(idx);
+            }
+          };
+        }
+
+        // 2. Left side click (icon + title + desc)
+        const leftSide = el.querySelector('.spotlight-item-left');
+        if (leftSide) {
+          leftSide.onclick = function(e) {
+            e.stopPropagation();
+            if (match && match.type === 'credential' && match.itemId) {
+              navigateToVaultCard(match.itemId);
+            } else if (match && match.action) {
+              executeSpotlightIndex(idx);
+            }
+          };
+        }
+
+        // Fallback row click
         el.onclick = function() {
-          const idx = parseInt(this.getAttribute('data-index'), 10);
-          executeSpotlightIndex(idx);
+          if (match && match.type === 'credential' && match.itemId) {
+            navigateToVaultCard(match.itemId);
+          } else if (match && match.action) {
+            executeSpotlightIndex(idx);
+          }
         };
       });
     }
