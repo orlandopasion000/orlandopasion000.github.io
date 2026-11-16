@@ -4054,13 +4054,13 @@
         <input type="hidden" id="editCardId">
 
         <div class="edit-form-group">
-          <label class="edit-form-label" for="editInputTitle">ACCOUNT / SERVICE TITLE:</label>
-          <input type="text" class="edit-form-input" id="editInputTitle" required autocomplete="off" placeholder="e.g. DepEd Microsoft 365">
+          <label class="edit-form-label" for="editInputTitle">APP / WEBSITE:</label>
+          <input type="text" class="edit-form-input" id="editInputTitle" required autocomplete="off" placeholder="e.g. Netflix, Facebook, Landbank, DepEd">
         </div>
 
         <div class="edit-form-row">
           <div class="edit-form-group" style="flex:1;">
-            <label class="edit-form-label" for="editSelectCategory">APP / WEBSITE:</label>
+            <label class="edit-form-label" for="editSelectCategory">CATEGORY:</label>
             <select class="edit-form-select" id="editSelectCategory">
               <option value="DepEd">DepEd & Academic</option>
               <option value="Microsoft">Microsoft 365</option>
@@ -4981,7 +4981,7 @@
       }
 
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v27', { scope: '/orlandovault/' }).catch(err => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v28', { scope: '/orlandovault/' }).catch(err => {
           console.warn('Vault SW registration error:', err);
         });
       }

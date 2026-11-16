@@ -1,5 +1,5 @@
 /* OrlandoVault · Offline-First Jarvis Security Service Worker */
-var CACHE_NAME = 'vault-jarvis-v27';
+var CACHE_NAME = 'vault-jarvis-v28';
 var ASSETS = [
   './',
   './index.html',
