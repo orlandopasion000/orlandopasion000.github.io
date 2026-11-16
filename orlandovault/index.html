@@ -823,14 +823,15 @@
     .modal-backdrop {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      z-index: 1000;
+      background: rgba(3, 5, 8, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      z-index: 100000;
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 16px;
+      overflow-y: auto;
     }
 
     .modal-backdrop.active {
@@ -1713,7 +1714,7 @@
     }
 
     /* ==========================================================================
-       HOLOGRAPHIC QR STUDIO MODAL
+       HOLOGRAPHIC QR STUDIO MODAL (OPTIMIZED FOR 100% RELIABLE MACHINE VISION)
        ========================================================================== */
     .qr-studio-modal {
       background: radial-gradient(circle at 50% 0%, rgba(2, 132, 199, 0.18) 0%, transparent 65%),
@@ -1722,7 +1723,7 @@
       border-radius: 20px;
       padding: 24px;
       width: 95%;
-      max-width: 640px;
+      max-width: 580px;
       max-height: 92vh;
       overflow-y: auto;
       display: flex;
@@ -1732,6 +1733,7 @@
       position: relative;
       color: #f3f4f6;
       text-align: left;
+      box-sizing: border-box;
     }
 
     .qr-studio-header {
@@ -1776,40 +1778,41 @@
     }
 
     .qr-studio-badge-live {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      letter-spacing: 1px;
+      background: rgba(0, 240, 255, 0.12);
+      color: var(--cyan);
+      border: 1px solid rgba(0, 240, 255, 0.35);
+      border-radius: 999px;
       padding: 3px 9px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 800;
-      background: rgba(93, 232, 160, 0.14);
-      color: #5de8a0;
-      border: 1px solid rgba(93, 232, 160, 0.4);
-      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      font-weight: 700;
     }
 
     .qr-studio-sub {
-      margin: 6px 0 0 0;
-      font-family: var(--font-tech);
+      margin: 6px 0 0;
       font-size: 12px;
-      color: #94a3b8;
+      color: var(--text-dim);
       line-height: 1.45;
     }
 
+    /* THE HOLOGRAPHIC STAGE (CRISP 1:1 SQUARE) */
     .qr-holo-stage {
       position: relative;
-      padding: 18px;
-      border-radius: 16px;
-      background: radial-gradient(circle at 50% 50%, rgba(0, 240, 255, 0.08), #000000 80%);
-      border: 2px solid var(--cyan-bright);
-      box-shadow: 0 0 35px rgba(0, 240, 255, 0.25), inset 0 0 25px rgba(0, 0, 0, 0.8);
+      padding: 20px;
+      border-radius: 18px;
+      background: radial-gradient(circle at 50% 50%, rgba(217, 185, 92, 0.12), #000000 80%);
+      border: 2px solid var(--qr-accent, #d9b95c);
+      box-shadow: 0 0 32px var(--qr-glow, rgba(217, 185, 92, 0.25)), inset 0 0 20px rgba(255, 255, 255, 0.04);
       overflow: hidden;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       width: 100%;
+      min-height: 330px;
+      box-sizing: border-box;
     }
 
     .qr-stage-top-bar {
@@ -1817,7 +1820,7 @@
       align-items: center;
       justify-content: space-between;
       width: 100%;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
 
     .qr-scan-ready-tag {
@@ -1857,17 +1860,16 @@
       font-weight: 700;
     }
 
-    /* Laser Scanning Beam BEHIND the high-contrast QR plate */
     .qr-laser-beam {
       position: absolute;
       left: 10px;
       right: 10px;
       height: 2px;
-      background: linear-gradient(90deg, transparent, var(--cyan-bright), #ffffff, var(--cyan-bright), transparent);
-      box-shadow: 0 0 14px var(--cyan-bright);
+      background: linear-gradient(90deg, transparent, var(--qr-accent, #d9b95c), #ffffff, var(--qr-accent, #d9b95c), transparent);
+      box-shadow: 0 0 12px var(--qr-accent, #d9b95c);
       z-index: 2;
       pointer-events: none;
-      opacity: 0.8;
+      opacity: 0.75;
       animation: qrLaserScan 3s ease-in-out infinite alternate;
     }
 
@@ -1876,49 +1878,152 @@
       100% { top: calc(100% - 12px); }
     }
 
-    /* 4 HUD Corners */
     .qr-corner {
       position: absolute;
-      width: 20px;
-      height: 20px;
-      border-color: var(--cyan-bright);
+      width: 22px;
+      height: 22px;
+      border-color: var(--qr-accent, #d9b95c);
       border-style: solid;
       z-index: 6;
       pointer-events: none;
-      filter: drop-shadow(0 0 6px var(--cyan-bright));
+      filter: drop-shadow(0 0 6px var(--qr-accent, #d9b95c));
     }
-    .qr-corner.tl { top: 6px; left: 6px; border-width: 3px 0 0 3px; border-top-left-radius: 6px; }
-    .qr-corner.tr { top: 6px; right: 6px; border-width: 3px 3px 0 0; border-top-right-radius: 6px; }
-    .qr-corner.bl { bottom: 6px; left: 6px; border-width: 0 0 3px 3px; border-bottom-left-radius: 6px; }
-    .qr-corner.br { bottom: 6px; right: 6px; border-width: 0 3px 3px 0; border-bottom-right-radius: 6px; }
+    .qr-corner.tl { top: 12px; left: 12px; border-width: 3px 0 0 3px; border-top-left-radius: 8px; }
+    .qr-corner.tr { top: 12px; right: 12px; border-width: 3px 3px 0 0; border-top-right-radius: 8px; }
+    .qr-corner.bl { bottom: 12px; left: 12px; border-width: 0 0 3px 3px; border-bottom-left-radius: 8px; }
+    .qr-corner.br { bottom: 12px; right: 12px; border-width: 0 3px 3px 0; border-bottom-right-radius: 8px; }
 
-    /* 100% HIGH-CONTRAST PURE WHITE QUIET-ZONE PLATE (ULTRA-EASY SCANNING) */
+    /* 100% HIGH-CONTRAST PURE WHITE QUIET-ZONE PLATE (NEVER STRETCHED) */
     .qr-img-wrapper {
       position: relative;
       z-index: 5;
+      width: 280px !important;
+      height: 280px !important;
+      min-width: 280px !important;
+      min-height: 280px !important;
+      max-width: min(82vw, 360px) !important;
+      max-height: min(82vw, 360px) !important;
+      aspect-ratio: 1 / 1 !important;
+      flex-shrink: 0 !important;
+      margin: 0 auto !important;
       background: #ffffff !important;
-      border-radius: 16px;
-      padding: 18px;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.95), 0 0 0 2px rgba(255, 255, 255, 0.3);
+      border-radius: 16px !important;
+      padding: 18px !important;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.95), 0 0 0 2px rgba(255, 255, 255, 0.4) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      box-sizing: border-box !important;
+      overflow: visible !important;
+    }
+
+    .qr-code-svg-holo, .qr-code-img-holo {
+      width: 100% !important;
+      height: 100% !important;
+      aspect-ratio: 1 / 1 !important;
+      display: block !important;
+      object-fit: contain !important;
+      background: #ffffff !important;
+    }
+
+    .qr-theme-pills {
       display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+    }
+
+    .qr-theme-pill {
+      background: #0c0f17;
+      border: 1px solid #1e293b;
+      color: #94a3b8;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      font-family: var(--font-tech);
+    }
+    .qr-theme-pill:hover {
+      color: #ffffff;
+      border-color: #475569;
+    }
+    .qr-theme-pill.active {
+      background: #141b2a;
+      border-color: var(--qr-accent, var(--gold));
+      color: #ffffff;
+      box-shadow: 0 0 12px var(--qr-glow, rgba(217, 185, 92, 0.3));
+    }
+
+    .qr-actions-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .btn-qr-action {
+      background: #0f1624;
+      border: 1px solid #1e293b;
+      color: #f1f5f9;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 10px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.25s ease;
+      gap: 6px;
+      font-family: var(--font-tech);
+      transition: all 0.2s ease;
+    }
+    .btn-qr-action:hover {
+      background: #1a2336;
+      border-color: #38bdf8;
+      color: #ffffff;
+    }
+    .btn-qr-action.primary {
+      background: linear-gradient(135deg, rgba(217, 185, 92, 0.25) 0%, rgba(217, 185, 92, 0.1) 100%);
+      border-color: var(--gold);
+      color: #ffd700;
+      box-shadow: 0 0 16px rgba(217, 185, 92, 0.2);
     }
 
-    .qr-code-svg-holo {
-      width: 100%;
-      height: 100%;
-      display: block;
+    .btn-qr-diag-toggle {
+      background: transparent;
+      border: none;
+      color: #64748b;
+      font-size: 11px;
+      font-family: var(--font-mono);
+      cursor: pointer;
+      text-align: center;
+      padding: 4px;
+      transition: color 0.2s ease;
+    }
+    .btn-qr-diag-toggle:hover {
+      color: var(--cyan);
     }
 
-    .qr-actions-row {
+    .qr-scan-diagnostics {
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-family: var(--font-mono);
+      font-size: 11px;
       display: flex;
-      gap: 10px;
-      width: 100%;
-      margin-top: 8px;
+      flex-direction: column;
+      gap: 6px;
     }
-
+    .qr-diag-row {
+      display: flex;
+      justify-content: space-between;
+      color: #94a3b8;
+    }
+    
     /* ==========================================================================
        GOOGLE SHEETS LIVE SYNC MODAL
        ========================================================================== */
@@ -2370,7 +2475,327 @@
       gap: 8px;
     }
 
-</style>
+
+    /* ==========================================================================
+       SPOTLIGHT COMMAND PALETTE (CTRL + K / ⌘K) & EXECUTIVE STANDALONE DOCK
+       ========================================================================== */
+    .btn-topbar-search {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 12px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 999px;
+      color: #e2e8f0;
+      font-family: var(--font-tech);
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .btn-topbar-search:hover {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: #38bdf8;
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.3);
+      transform: translateY(-1px);
+    }
+    .topbar-kbd {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: #94a3b8;
+    }
+
+    /* UNIFIED SPOTLIGHT SEARCH BAR TRIGGER ON PAGE */
+    .spotlight-search-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .spotlight-search-trigger:hover {
+      border-color: var(--cyan);
+      box-shadow: 0 0 24px rgba(0, 240, 255, 0.25);
+      transform: translateY(-1px);
+    }
+    .spotlight-trigger-text {
+      flex: 1;
+      font-size: 13.5px;
+      color: #94a3b8;
+      font-family: var(--font-tech);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .spotlight-kbd-cluster {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .spotlight-kbd-chip {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      padding: 3px 7px;
+      border-radius: 5px;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: #38bdf8;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    }
+
+    /* SPOTLIGHT HUD MODAL (FROSTED GLASS OMNI-PALETTE) */
+    .spotlight-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 5, 8, 0.85);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      z-index: 100001;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: clamp(50px, 10vh, 100px);
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+    .spotlight-backdrop.open {
+      display: flex;
+      animation: spotlightFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes spotlightFadeIn {
+      from { opacity: 0; transform: scale(0.97); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .spotlight-box {
+      width: 100%;
+      max-width: 680px;
+      background: radial-gradient(circle at 50% 0%, rgba(2, 132, 199, 0.15) 0%, transparent 70%),
+                  linear-gradient(180deg, #0d121c 0%, #06090e 100%);
+      border: 1.5px solid rgba(56, 189, 248, 0.4);
+      border-radius: 18px;
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.95), 0 0 40px rgba(0, 240, 255, 0.2);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .spotlight-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .spotlight-icon-pulse {
+      width: 18px;
+      height: 18px;
+      color: var(--cyan);
+      flex-shrink: 0;
+    }
+    .spotlight-input {
+      flex: 1;
+      background: none;
+      border: none;
+      color: #ffffff;
+      font-family: var(--font-tech);
+      font-size: 15px;
+      font-weight: 600;
+      outline: none;
+    }
+    .spotlight-input::placeholder {
+      color: #64748b;
+      font-weight: 400;
+    }
+    .spotlight-esc-chip {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      padding: 3px 7px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.06);
+      color: #94a3b8;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      cursor: pointer;
+    }
+
+    .spotlight-results {
+      max-height: 420px;
+      overflow-y: auto;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .spotlight-group-title {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      padding: 10px 12px 4px;
+    }
+
+    .spotlight-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: none;
+      border: 1px solid transparent;
+      color: #f1f5f9;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      width: 100%;
+    }
+    .spotlight-item:hover, .spotlight-item.selected {
+      background: rgba(56, 189, 248, 0.12);
+      border-color: rgba(56, 189, 248, 0.35);
+      box-shadow: 0 0 18px rgba(0, 240, 255, 0.12);
+    }
+    .spotlight-item-icon {
+      font-size: 16px;
+      width: 26px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      background: rgba(0, 240, 255, 0.08);
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      flex-shrink: 0;
+    }
+    .spotlight-item-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .spotlight-item-title {
+      font-family: var(--font-tech);
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .spotlight-item-desc {
+      font-size: 11.5px;
+      color: #94a3b8;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 2px;
+    }
+    .spotlight-item-badge {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #cbd5e1;
+      flex-shrink: 0;
+    }
+    .spotlight-item-badge.badge-action {
+      background: rgba(16, 185, 129, 0.12);
+      border-color: rgba(16, 185, 129, 0.35);
+      color: #34d399;
+      font-weight: 700;
+    }
+
+    .spotlight-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 18px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(0, 0, 0, 0.4);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: #64748b;
+    }
+    .spotlight-footer-keys {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* EXECUTIVE STANDALONE SUB-APP DOCK (SHOWN IN STANDALONE MODE) */
+    .standalone-subapp-dock {
+      display: none;
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(10, 14, 22, 0.85);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.9), 0 0 25px rgba(0, 240, 255, 0.18);
+      padding: 6px 10px;
+      border-radius: 999px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      z-index: 99999;
+      align-items: center;
+      gap: 8px;
+    }
+    .standalone-subapp-dock.active {
+      display: flex;
+    }
+    .dock-apps-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--gold);
+      font-weight: 700;
+      margin-left: 6px;
+      margin-right: 2px;
+    }
+    .dock-pill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      font-family: var(--font-tech);
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      text-decoration: none;
+    }
+    .dock-pill-btn:hover {
+      background: rgba(56, 189, 248, 0.2);
+      border-color: #38bdf8;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(56, 189, 248, 0.3);
+    }
+    .dock-pill-btn.active {
+      background: rgba(0, 240, 255, 0.15);
+      border-color: var(--cyan);
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.25);
+    }
+    .active-dot-cyan {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 8px var(--cyan);
+    }
+
+  </style>
 </head>
 <body>
   <div class="scanline"></div>
@@ -2391,6 +2816,12 @@
     </a>
 
     <div class="topbar-actions">
+      <!-- Spotlight Command Palette Pill Trigger -->
+      <button type="button" class="btn-topbar-search" id="btnTopbarSearch" title="Open Spotlight Command Palette (Ctrl + K / ⌘K)">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span>Search</span>
+        <kbd class="topbar-kbd">Ctrl K</kbd>
+      </button>
       <!-- Google Cloud Firebase Firestore Real-Time Sync Badge Button -->
       <button type="button" class="btn-firebase-sync" id="btnFirebaseVaultSync" title="Google Cloud Firebase Real-Time Sync (Click to Sync Now)">
         <span class="firebase-sync-dot" id="firebaseVaultSyncDot"></span>
@@ -2474,14 +2905,16 @@
     </section>
 
     <section class="controls-panel">
-      <div class="search-quantum-box">
-        <svg class="search-icon-left" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <div class="search-quantum-box spotlight-search-trigger" id="btnSpotlightTrigger" role="button" tabindex="0" title="Launch Jarvis Spotlight Command Palette (Ctrl + K / ⌘K)">
+        <svg class="search-icon-left" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2.5">
           <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
-        <input type="text" id="vaultSearchInput" class="search-input-field" placeholder="Jarvis, locate credentials... (Type email, service, note, or username)" autocomplete="off" spellcheck="false">
-        <button type="button" id="searchClearBtn" class="search-clear-btn" title="Clear Search">✕</button>
+        <span class="spotlight-trigger-text">Jarvis, locate credentials or execute system commands...</span>
+        <div class="spotlight-kbd-cluster">
+          <kbd class="spotlight-kbd-chip">Ctrl</kbd>
+          <kbd class="spotlight-kbd-chip">K</kbd>
+        </div>
       </div>
-
       <div class="filter-pills-row" id="filterPillsRow">
         <button type="button" class="filter-pill active" data-cat="all">ALL CREDENTIALS</button>
         <button type="button" class="filter-pill" data-cat="DepEd">DEPED OFFICIAL</button>
@@ -3083,7 +3516,7 @@
       }
 
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v4', { scope: '/orlandovault/' }).catch(err => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v5', { scope: '/orlandovault/' }).catch(err => {
           console.warn('Vault SW registration error:', err);
         });
       }
@@ -3541,7 +3974,7 @@
     function generateVaultQrMarkup(text, fgHex, bgHex) {
       if (typeof window.qrcode === 'function') {
         try {
-          const qr = window.qrcode(0, 'L');
+          const qr = window.qrcode(0, 'M');
           qr.addData(text);
           qr.make();
           const count = qr.getModuleCount();
@@ -3557,7 +3990,7 @@
           }
           const cleanBg = bgHex.charAt(0) === '#' ? bgHex : ('#' + bgHex);
           const cleanFg = fgHex.charAt(0) === '#' ? fgHex : ('#' + fgHex);
-          const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${total} ${total}" shape-rendering="crispEdges" class="qr-code-svg-holo"><rect width="100%" height="100%" fill="${cleanBg}"/><path fill="${cleanFg}" d="${d}"/></svg>`;
+          const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${total} ${total}" shape-rendering="crispEdges" preserveAspectRatio="xMidYMid meet" class="qr-code-svg-holo"><rect width="100%" height="100%" fill="${cleanBg}"/><path fill="${cleanFg}" d="${d}"/></svg>`;
           return { svg: svg, count: count, qrInstance: qr };
         } catch(e) {
           console.warn("Client QR generator error:", e);
@@ -4077,6 +4510,349 @@
     } else {
       setTimeout(initVaultFirebase, 200);
     }
+  })();
+  </script>
+
+
+  <!-- SPOTLIGHT COMMAND PALETTE MODAL (CTRL + K / ⌘K) -->
+  <div class="spotlight-backdrop" id="vaultSpotlightModal" role="dialog" aria-modal="true" aria-label="Jarvis Spotlight Command Palette">
+    <div class="spotlight-box">
+      <div class="spotlight-header">
+        <svg class="spotlight-icon-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" class="spotlight-input" id="vaultSpotlightInput" placeholder="Search 138+ credentials, system commands, or sub-apps..." autocomplete="off" spellcheck="false">
+        <kbd class="spotlight-esc-chip" id="btnCloseSpotlight">ESC</kbd>
+      </div>
+
+      <div class="spotlight-results" id="vaultSpotlightResults">
+        <!-- Rendered dynamically by JavaScript -->
+      </div>
+
+      <div class="spotlight-footer">
+        <div class="spotlight-footer-keys">
+          <span><kbd class="topbar-kbd">↑</kbd> <kbd class="topbar-kbd">↓</kbd> Navigate</span>
+          <span><kbd class="topbar-kbd">↵</kbd> Copy Password / Launch</span>
+          <span><kbd class="topbar-kbd">esc</kbd> Close</span>
+        </div>
+        <span style="color:var(--gold);font-weight:700;">Sir Orlando V. Pasion, Jr. · OrlandoVault</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXECUTIVE STANDALONE SUB-APP DOCK (SHOWN IN STANDALONE MODE) -->
+  <div class="standalone-subapp-dock" id="standaloneSubAppDock">
+    <span class="dock-apps-label">APPS:</span>
+    <button type="button" class="dock-pill-btn" onclick="launchSubApp('', 'OVPJMasterPortfolio', 1340, 880)" title="Master Portfolio">
+      <svg class="modern-icon" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+      <span>Portfolio</span>
+    </button>
+    <button type="button" class="dock-pill-btn" onclick="launchSubApp('orlandorecharge', 'OrlandoRechargeMainAppWindow', 1280, 850)" title="OrlandoRecharge">
+      <svg class="modern-icon modern-icon-gold" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+      <span>Recharge</span>
+    </button>
+    <button type="button" class="dock-pill-btn" onclick="launchSubApp('orlandotimer', 'OrlandoTimerStandaloneWindow', 1280, 860)" title="OrlandoTimer">
+      <svg class="modern-icon modern-icon-cyan" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+      <span>Timer</span>
+    </button>
+    <button type="button" class="dock-pill-btn" onclick="launchSubApp('orlandochrome', 'OrlandoChromeStandaloneWindow', 1180, 820)" title="OrlandoChrome">
+      <svg class="modern-icon modern-icon-emerald" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle><line x1="21.17" y1="8" x2="12" y2="8"></line><line x1="3.95" y1="6.06" x2="8.54" y2="14"></line><line x1="10.88" y1="21.94" x2="15.46" y2="14"></line></svg>
+      <span>Chrome</span>
+    </button>
+    <button type="button" class="dock-pill-btn active" title="OrlandoVault (Current Active App)">
+      <span class="active-dot-cyan"></span>
+      <span style="color:#00f0ff;font-weight:800;">Vault</span>
+    </button>
+  </div>
+
+
+  <!-- =========================================================================
+       PARTS 1, 2 & 3: SPOTLIGHT PALETTE, ZERO-LATENCY PREFETCH, STANDALONE DOCK
+       ========================================================================= -->
+  <script id="vault-trio-engine">
+  (function() {
+    'use strict';
+
+    // -------------------------------------------------------------------------
+    // PART 3: EXECUTIVE STANDALONE SUB-APP LAUNCHER & DOCK
+    // -------------------------------------------------------------------------
+    window.launchSubApp = function(folder, winName, w, h) {
+      const base = window.location.origin;
+      const targetUrl = (folder ? (base + '/' + folder + '/') : (base + '/')) + '?standalone=true';
+      const features = 'popup=yes,menubar=no,toolbar=no,location=no,status=no,personalbar=no,scrollbars=yes,resizable=yes,width=' + w + ',height=' + h + ',left=100,top=60';
+      const appWin = window.open(targetUrl, winName, features);
+      if (appWin) {
+        try { appWin.focus(); } catch (e) {}
+      } else {
+        window.location.href = targetUrl;
+      }
+    };
+
+    window.launchMainWebPortfolio = function() {
+      const targetUrl = window.location.origin + window.location.pathname + '?standalone=true';
+      const features = 'popup=yes,menubar=no,toolbar=no,location=no,status=no,personalbar=no,scrollbars=yes,resizable=yes,width=1240,height=820,left=80,top=40';
+      const appWin = window.open(targetUrl, 'OrlandoVaultMainAppWindow', features);
+      if (appWin) {
+        try { appWin.focus(); } catch (e) {}
+      } else {
+        window.location.href = targetUrl;
+      }
+    };
+
+    // Detect Standalone Mode
+    const isStandalone = window.location.search.includes('standalone=true') || window.matchMedia('(display-mode: standalone)').matches;
+    if (isStandalone) {
+      const topLabel = document.getElementById('topbarLaunchLabel');
+      if (topLabel) topLabel.textContent = '✔ Standalone Active';
+      const dock = document.getElementById('standaloneSubAppDock');
+      if (dock) dock.classList.add('active');
+    }
+
+    const btnTopbarLaunch = document.getElementById('btnTopbarLaunchApp');
+    if (btnTopbarLaunch) btnTopbarLaunch.onclick = window.launchMainWebPortfolio;
+
+    // -------------------------------------------------------------------------
+    // PART 2: ZERO-LATENCY SPECULATIVE PRE-FETCHING ENGINE (65ms Hover)
+    // -------------------------------------------------------------------------
+    const prefetchedUrls = new Set();
+    function prefetchUrl(url) {
+      if (!url || prefetchedUrls.has(url) || url.startsWith('#') || url.startsWith('javascript:')) return;
+      prefetchedUrls.add(url);
+      const link = document.createElement('link');
+      link.rel = 'prefetch';
+      link.href = url;
+      document.head.appendChild(link);
+    }
+
+    let hoverTimer = null;
+    document.addEventListener('mouseover', (e) => {
+      const a = e.target.closest('a, button[data-href], .dock-pill-btn[data-href]');
+      const targetHref = a ? (a.href || a.getAttribute('data-href')) : null;
+      if (targetHref && (targetHref.startsWith('/') || targetHref.includes(window.location.origin))) {
+        hoverTimer = setTimeout(() => prefetchUrl(targetHref), 65);
+      }
+    });
+    document.addEventListener('mouseout', (e) => {
+      if (hoverTimer) clearTimeout(hoverTimer);
+    });
+
+    // Automatically prefetch sibling flagship apps
+    setTimeout(() => {
+      prefetchUrl(window.location.origin + '/');
+      prefetchUrl(window.location.origin + '/orlandorecharge/?standalone=true');
+      prefetchUrl(window.location.origin + '/orlandotimer/?standalone=true');
+      prefetchUrl(window.location.origin + '/orlandochrome/?standalone=true');
+    }, 1500);
+
+    // -------------------------------------------------------------------------
+    // PART 1: SPOTLIGHT COMMAND PALETTE ENGINE (CTRL + K / ⌘K)
+    // -------------------------------------------------------------------------
+    const spotlightModal = document.getElementById('vaultSpotlightModal');
+    const spotlightInput = document.getElementById('vaultSpotlightInput');
+    const spotlightResults = document.getElementById('vaultSpotlightResults');
+    const btnTrigger1 = document.getElementById('btnSpotlightTrigger');
+    const btnTrigger2 = document.getElementById('btnTopbarSearch');
+    const btnClose = document.getElementById('btnCloseSpotlight');
+
+    let spotlightIndex = 0;
+    let spotlightMatches = [];
+
+    const SYSTEM_COMMANDS = [
+      { id: 'sys-qr', cat: 'Security Tools', icon: '📲', title: 'Holographic QR Suite', desc: 'Giant camera scanner & live cross-device sync', action: () => { if (typeof openVaultQrModal === 'function') openVaultQrModal(); }, badge: 'Scanner' },
+      { id: 'sys-sheets', cat: 'Security Tools', icon: '☁️', title: 'Google Sheets Live Sync', desc: 'Sync passwords automatically from your Google Sheet', action: () => { if (typeof openSheetSyncModal === 'function') openSheetSyncModal(); }, badge: 'Cloud Sync' },
+      { id: 'sys-backup', cat: 'Security Tools', icon: '💾', title: 'Export Vault Backup', desc: 'Export full encrypted JSON snapshot to local drive', action: () => { if (typeof exportVaultBackupFile === 'function') exportVaultBackupFile(); }, badge: 'Backup' },
+      { id: 'sys-history', cat: 'Security Tools', icon: '📜', title: 'Jarvis Access Audit Log', desc: 'Inspect recent logins, copy events, and timestamp hashes', action: () => { if (typeof openHistoryModal === 'function') openHistoryModal(); }, badge: 'Audit' },
+      { id: 'sys-desktop', cat: 'System Commands', icon: '🪟', title: 'Open Main Web App', desc: 'Dedicated borderless desktop app experience without tabs', action: window.launchMainWebPortfolio, badge: 'Desktop' },
+
+      { id: 'filter-all', cat: 'Filter Categories', icon: '🗂️', title: 'Show All Credentials', desc: 'View complete database of all accounts', action: () => { filterVaultByCategory('all'); }, badge: '138 Accounts' },
+      { id: 'filter-deped', cat: 'Filter Categories', icon: '🏛️', title: 'Filter: DepEd Official', desc: 'DepEd Microsoft 365 and Google Workspace accounts', action: () => { filterVaultByCategory('DepEd'); }, badge: 'DepEd' },
+      { id: 'filter-ms', cat: 'Filter Categories', icon: '💼', title: 'Filter: Microsoft 365', desc: 'Office 365, Teams, and OneDrive portals', action: () => { filterVaultByCategory('Microsoft'); }, badge: 'M365' },
+      { id: 'filter-ai', cat: 'Filter Categories', icon: '🤖', title: 'Filter: Claude & AI Ecosystem', desc: 'Claude AI, Gemini, OpenAI, and development portals', action: () => { filterVaultByCategory('AI & Dev'); }, badge: 'AI' },
+      { id: 'filter-gmail', cat: 'Filter Categories', icon: '📧', title: 'Filter: Gmail Ecosystem', desc: 'Personal and institutional Google Mail vaults', action: () => { filterVaultByCategory('Gmail'); }, badge: 'Gmail' },
+      { id: 'filter-crit', cat: 'Filter Categories', icon: '⚡', title: 'Filter: Critical Accounts Only', desc: 'High-security administrative and primary credentials', action: () => { filterVaultByCategory('Critical'); }, badge: 'Priority' },
+
+      { id: 'nav-recharge', cat: 'Flagship Web Apps', icon: '⚡', title: 'Switch to OrlandoRecharge', desc: 'Precision horology, 23-block alarm cockpit & Tier 3 particles', action: () => window.launchSubApp('orlandorecharge', 'OrlandoRechargeMainAppWindow', 1280, 850), badge: 'Flagship' },
+      { id: 'nav-timer', cat: 'Flagship Web Apps', icon: '⏱️', title: 'Switch to Orlando Timer', desc: 'Executive 3-in-1 timepiece suite & Atmosphere audio engine', action: () => window.launchSubApp('orlandotimer', 'OrlandoTimerStandaloneWindow', 1280, 860), badge: 'Flagship' },
+      { id: 'nav-chrome', cat: 'Flagship Web Apps', icon: '🌐', title: 'Switch to OrlandoChrome', desc: '22-profile Chrome taskbar command center & Wispr Flow bridge', action: () => window.launchSubApp('orlandochrome', 'OrlandoChromeStandaloneWindow', 1180, 820), badge: 'Flagship' },
+      { id: 'nav-portfolio', cat: 'Flagship Web Apps', icon: '🏛️', title: 'Return to Master Portfolio', desc: 'Sir Orlando V. Pasion, Jr. official portfolio & digital resource library', action: () => { window.location.href = window.location.origin + '/'; }, badge: 'Root' }
+    ];
+
+    function filterVaultByCategory(cat) {
+      if (typeof currentCategory !== 'undefined') currentCategory = cat;
+      const pills = document.querySelectorAll('.filter-pill');
+      pills.forEach(p => {
+        if (p.getAttribute('data-cat') === cat) p.classList.add('active');
+        else p.classList.remove('active');
+      });
+      if (typeof renderVault === 'function') renderVault();
+    }
+
+    function openSpotlight() {
+      if (!spotlightModal) return;
+      spotlightModal.classList.add('open');
+      if (spotlightInput) {
+        spotlightInput.value = '';
+        spotlightInput.focus();
+      }
+      renderSpotlightResults('');
+      if (typeof playJarvisSound === 'function') playJarvisSound('reveal');
+    }
+
+    function closeSpotlight() {
+      if (spotlightModal) spotlightModal.classList.remove('open');
+    }
+
+    function renderSpotlightResults(query) {
+      if (!spotlightResults) return;
+      const q = (query || '').toLowerCase().trim();
+      spotlightMatches = [];
+
+      // 1. Match Vault Credentials
+      const creds = Array.isArray(vaultItems) ? vaultItems : [];
+      const credMatches = creds.filter(item => {
+        if (!q) return false;
+        return (item.title || '').toLowerCase().includes(q) ||
+               (item.username || '').toLowerCase().includes(q) ||
+               (item.category || '').toLowerCase().includes(q) ||
+               (item.notes || '').toLowerCase().includes(q);
+      }).slice(0, 8); // Top 8 credentials
+
+      credMatches.forEach(item => {
+        spotlightMatches.push({
+          type: 'credential',
+          cat: 'Vault Credentials',
+          icon: '🔑',
+          title: item.title,
+          desc: item.username + (item.notes ? (' · ' + item.notes) : ''),
+          badge: '↵ Copy Password',
+          badgeAction: true,
+          action: () => {
+            if (navigator.clipboard) {
+              navigator.clipboard.writeText(item.password).then(() => {
+                if (typeof showToast === 'function') showToast(`🔐 Password copied for ${item.title}!`, '📋');
+                if (typeof playJarvisSound === 'function') playJarvisSound('copy');
+              }).catch(() => {});
+            }
+          }
+        });
+      });
+
+      // 2. Match System Commands & Sub-Apps
+      const sysMatches = SYSTEM_COMMANDS.filter(cmd => {
+        if (!q) return true; // Show all when empty
+        return cmd.title.toLowerCase().includes(q) ||
+               cmd.desc.toLowerCase().includes(q) ||
+               cmd.cat.toLowerCase().includes(q);
+      });
+
+      sysMatches.forEach(item => spotlightMatches.push(item));
+
+      if (spotlightMatches.length === 0) {
+        spotlightResults.innerHTML = '<div style="padding:28px;text-align:center;color:#64748b;font-size:13px;font-family:var(--font-tech);">No credentials or commands matching "' + escapeHtml(query) + '". Type "DepEd", "Microsoft", "Sheets", or "QR".</div>';
+        return;
+      }
+
+      spotlightIndex = 0;
+      let html = '';
+      let currentCat = '';
+
+      spotlightMatches.forEach((item, idx) => {
+        if (item.cat !== currentCat) {
+          currentCat = item.cat;
+          html += '<div class="spotlight-group-title">' + currentCat + '</div>';
+        }
+        const isSel = idx === spotlightIndex;
+        html += '<div class="spotlight-item ' + (isSel ? 'selected' : '') + '" data-index="' + idx + '">';
+        html += '  <div class="spotlight-item-icon">' + item.icon + '</div>';
+        html += '  <div class="spotlight-item-info">';
+        html += '    <div class="spotlight-item-title">' + escapeHtml(item.title) + '</div>';
+        html += '    <div class="spotlight-item-desc">' + escapeHtml(item.desc) + '</div>';
+        html += '  </div>';
+        html += '  <span class="spotlight-item-badge ' + (item.badgeAction ? 'badge-action' : '') + '">' + item.badge + '</span>';
+        html += '</div>';
+      });
+
+      spotlightResults.innerHTML = html;
+
+      // Item click binding
+      spotlightResults.querySelectorAll('.spotlight-item').forEach(el => {
+        el.onclick = function() {
+          const idx = parseInt(this.getAttribute('data-index'), 10);
+          executeSpotlightIndex(idx);
+        };
+      });
+    }
+
+    function executeSpotlightIndex(idx) {
+      const match = spotlightMatches[idx];
+      if (match && match.action) {
+        closeSpotlight();
+        match.action();
+      }
+    }
+
+    function updateSpotlightSelection(newIdx) {
+      const items = spotlightResults.querySelectorAll('.spotlight-item');
+      if (items.length === 0) return;
+      spotlightIndex = Math.max(0, Math.min(newIdx, items.length - 1));
+      items.forEach((el, idx) => {
+        if (idx === spotlightIndex) {
+          el.classList.add('selected');
+          el.scrollIntoView({ block: 'nearest' });
+        } else {
+          el.classList.remove('selected');
+        }
+      });
+    }
+
+    // Input & Navigation Listeners
+    if (spotlightInput) {
+      spotlightInput.addEventListener('input', (e) => {
+        renderSpotlightResults(e.target.value);
+      });
+
+      spotlightInput.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          updateSpotlightSelection(spotlightIndex + 1);
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          updateSpotlightSelection(spotlightIndex - 1);
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          executeSpotlightIndex(spotlightIndex);
+        } else if (e.key === 'Escape') {
+          e.preventDefault();
+          closeSpotlight();
+        }
+      });
+    }
+
+    // Keyboard Shortcut (Ctrl + K / ⌘K and /)
+    window.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        if (spotlightModal && spotlightModal.classList.contains('open')) closeSpotlight();
+        else openSpotlight();
+      } else if (e.key === '/' && document.activeElement && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+        openSpotlight();
+      } else if (e.key === 'Escape' && spotlightModal && spotlightModal.classList.contains('open')) {
+        closeSpotlight();
+      }
+    });
+
+    // Button triggers
+    if (btnTrigger1) btnTrigger1.onclick = openSpotlight;
+    if (btnTrigger2) btnTrigger2.onclick = openSpotlight;
+    if (btnClose) btnClose.onclick = closeSpotlight;
+    if (spotlightModal) {
+      spotlightModal.addEventListener('click', (e) => {
+        if (e.target === spotlightModal) closeSpotlight();
+      });
+    }
+
+    // Expose global
+    window.openVaultSpotlight = openSpotlight;
+    window.closeVaultSpotlight = closeSpotlight;
   })();
   </script>
 
