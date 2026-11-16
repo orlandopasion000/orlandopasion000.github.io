@@ -10402,14 +10402,8 @@ try { checkUrlHashRoutine(); } catch(e){}
       // ── 1. Inverse Kinematics Spine Tracking: Head curves first, tail follows curve, goes straight immediately ──
       var isHelix = (gameParticleStyle === "helix");
       var isMeteor = (gameParticleStyle === "meteor");
-      var targetSpineK;
-      if (isHelix) {
-        targetSpineK = isGameMode ? (p.isFront ? 10 : 8) : (p.isFront ? 8 : 6);
-      } else if (isMeteor) {
-        targetSpineK = isGameMode ? (p.isFront ? 9 : 7) : (p.isFront ? 7 : 5);
-      } else {
-        targetSpineK = isGameMode ? (p.isFront ? 9 : 7) : (p.isFront ? 7 : 5);
-      }
+      // Unified proportional spine joint count across Quantum Realm, Quantum Helix, and Quantum Meteor
+      var targetSpineK = isGameMode ? (p.isFront ? 9 : 7) : (p.isFront ? 7 : 5);
       if (!p.spine || p.spine.length !== targetSpineK) {
         var spc = p.segmentSpacing || 3.2;
         p.spine = [];
@@ -10424,8 +10418,8 @@ try { checkUrlHashRoutine(); } catch(e){}
       var speedRatio = Math.max(0, (currentSpeed - p.baseSpeed) / (p.baseSpeed * 2.2));
       p.wavePhase = (p.wavePhase || 0) + (0.16 + speedRatio * 0.22);
 
-      // In Game Mode when moving fast: segment spacing stretches aerodynamically
-      var curSpacing = (p.segmentSpacing || 3.2) * 1.28 * curGrowth * (1.0 + (isGameMode ? Math.min(1.4, speedRatio * 0.75) : 0));
+      // In Game Mode when moving fast: segment spacing scales proportionally (1.65x) with the 2.00x particle size across all 3 modes
+      var curSpacing = (p.segmentSpacing || 3.2) * 1.65 * curGrowth * (1.0 + (isGameMode ? Math.min(1.4, speedRatio * 0.75) : 0));
       var K = p.spine.length;
       var cosH = Math.cos(p.heading);
       var sinH = Math.sin(p.heading);
@@ -10551,28 +10545,30 @@ try { checkUrlHashRoutine(); } catch(e){}
       // ── 2. Render Seamless Smooth Tapered Quantum Wavepacket Body & Intertwined Ribbons ──
       if (K >= 2) {
         var invKm1 = 1 / (K - 1);
-        for (var sj = 0; sj < K; sj++) {
-          var tNorm = 1 - sj * invKm1; // 1.0 at head (sj=0), 0.0 at tail tip (sj=K-1)
-          var taper = tNorm * (0.15 + 0.85 * tNorm);
-          var rj = Math.max(0.35, headR * (0.10 + 0.90 * taper));
-          var dxT, dyT;
-          if (sj === 0) {
-            dxT = _ptsX[0] - _ptsX[1];
-            dyT = _ptsY[0] - _ptsY[1];
-          } else if (sj === K - 1) {
-            dxT = _ptsX[K - 2] - _ptsX[K - 1];
-            dyT = _ptsY[K - 2] - _ptsY[K - 1];
-          } else {
-            dxT = _ptsX[sj - 1] - _ptsX[sj + 1];
-            dyT = _ptsY[sj - 1] - _ptsY[sj + 1];
+        if (!isHelix) {
+          for (var sj = 0; sj < K; sj++) {
+            var tNorm = 1 - sj * invKm1; // 1.0 at head (sj=0), 0.0 at tail tip (sj=K-1)
+            var taper = tNorm * (0.15 + 0.85 * tNorm);
+            var rj = Math.max(0.35, headR * (0.10 + 0.90 * taper));
+            var dxT, dyT;
+            if (sj === 0) {
+              dxT = _ptsX[0] - _ptsX[1];
+              dyT = _ptsY[0] - _ptsY[1];
+            } else if (sj === K - 1) {
+              dxT = _ptsX[K - 2] - _ptsX[K - 1];
+              dyT = _ptsY[K - 2] - _ptsY[K - 1];
+            } else {
+              dxT = _ptsX[sj - 1] - _ptsX[sj + 1];
+              dyT = _ptsY[sj - 1] - _ptsY[sj + 1];
+            }
+            var dLen = Math.hypot(dxT, dyT) || 1;
+            var nx = (-dyT / dLen) * rj;
+            var ny = (dxT / dLen) * rj;
+            _leftX[sj] = _ptsX[sj] + nx;
+            _leftY[sj] = _ptsY[sj] + ny;
+            _rightX[sj] = _ptsX[sj] - nx;
+            _rightY[sj] = _ptsY[sj] - ny;
           }
-          var dLen = Math.hypot(dxT, dyT) || 1;
-          var nx = (-dyT / dLen) * rj;
-          var ny = (dxT / dLen) * rj;
-          _leftX[sj] = _ptsX[sj] + nx;
-          _leftY[sj] = _ptsY[sj] + ny;
-          _rightX[sj] = _ptsX[sj] - nx;
-          _rightY[sj] = _ptsY[sj] - ny;
         }
 
         var tailTipX = _ptsX[K - 1];
@@ -10704,16 +10700,15 @@ try { checkUrlHashRoutine(); } catch(e){}
           }
 
         } else if (isHelix) {
-          // ── 2B. ULTRA-FAST & SILKY QUANTUM HELIX DOUBLE-STRAND DNA BRAID (ENLARGED & BOLD) ──
-          // Zero runtime gradient allocations for 120 FPS buttery smoothness
-          var hAlpha = renderAlpha.toFixed(2);
-          var strandWidth = Math.max(1.8, headR * (tier === 2 ? 0.44 : 0.32));
+          // ── 2B. ULTRA-FAST & SILKY QUANTUM HELIX DOUBLE-STRAND DNA BRAID (ZERO-LAG 120 FPS PIPELINE) ──
+          var strandWidth = Math.max(1.6, headR * (tier === 2 ? 0.42 : (tier === 1 ? 0.34 : 0.28)));
 
-          // 1. Delicate Base-Pair Cross Rungs connecting both strands at twist intervals
-          targetCtx.strokeStyle = "rgba(224, 231, 255, " + (renderAlpha * 0.45).toFixed(2) + ")";
-          targetCtx.lineWidth = 1.0;
+          // 1. Base-Pair Cross Rungs (stepped by 2 on Tier 0 to halve path segments while keeping full rungs on Tier 1 & 2)
+          targetCtx.strokeStyle = "rgba(224, 231, 255, " + (renderAlpha * 0.44).toFixed(2) + ")";
+          targetCtx.lineWidth = 0.95;
           targetCtx.beginPath();
-          for (var rk = 1; rk < K - 1; rk++) {
+          var rungStep = (tier === 0) ? 2 : 1;
+          for (var rk = 1; rk < K - 1; rk += rungStep) {
             targetCtx.moveTo(_ribbon1X[rk], _ribbon1Y[rk]);
             targetCtx.lineTo(_ribbon2X[rk], _ribbon2Y[rk]);
           }
@@ -10745,65 +10740,32 @@ try { checkUrlHashRoutine(); } catch(e){}
           targetCtx.lineTo(tailTipX, tailTipY);
           targetCtx.stroke();
 
-          // 4. Additive Helix Tail Effects: Harmonic Central Phase-Beam, Base-Pair Nucleotide Pearls & Bioluminescent Spark Orbs
+          // 4. Additive Helix Tail Effects (Zero save/restore overhead, single-pass phase spine & sprite blits)
           if (tier >= 1 && K >= 3) {
-            var hPulse = 0.60 + 0.40 * Math.abs(Math.sin(now * 0.016 + (p.pulsePhase || 0) * 3.2));
-            var hBeamAlpha = renderAlpha * (tier === 2 ? 0.85 : 0.65) * hPulse;
+            var hPulse = 0.62 + 0.38 * Math.abs(Math.sin(now * 0.016 + (p.pulsePhase || 0) * 3.2));
+            var hBeamAlpha = renderAlpha * (tier === 2 ? 0.84 : 0.64) * hPulse;
 
-            // 4A. Central Helical Phase-Resonance Spine Filament threading through the DNA axis
-            targetCtx.lineCap = "round";
-            targetCtx.strokeStyle = "rgba(168, 85, 247, " + (hBeamAlpha * 0.34).toFixed(2) + ")";
-            targetCtx.lineWidth = Math.max(1.5, headR * 0.36);
+            // 4A. Single-Pass Central Helical Phase-Resonance Spine Filament
+            targetCtx.strokeStyle = "rgba(207, 250, 254, " + (hBeamAlpha * 0.68).toFixed(2) + ")";
+            targetCtx.lineWidth = Math.max(0.85, headR * 0.16);
             targetCtx.beginPath();
             targetCtx.moveTo(_ptsX[0], _ptsY[0]);
-            for (var hj = 1; hj < K - 1; hj++) {
-              var hmx = (_ptsX[hj] + _ptsX[hj + 1]) * 0.5;
-              var hmy = (_ptsY[hj] + _ptsY[hj + 1]) * 0.5;
-              targetCtx.quadraticCurveTo(_ptsX[hj], _ptsY[hj], hmx, hmy);
+            for (var hj = 1; hj < K; hj++) {
+              targetCtx.lineTo(_ptsX[hj], _ptsY[hj]);
             }
-            targetCtx.lineTo(tailTipX, tailTipY);
             targetCtx.stroke();
 
-            targetCtx.strokeStyle = "rgba(224, 242, 254, " + (hBeamAlpha * 0.82).toFixed(2) + ")";
-            targetCtx.lineWidth = Math.max(0.7, headR * 0.14);
-            targetCtx.stroke();
-
-            // 4B. Energized Base-Pair Bridge Pulse & Nucleotide Node Pearls on Strand Crests
-            var activeRung = 1 + (((now * 0.012 + i) | 0) % Math.max(1, K - 2));
-            if (activeRung < K - 1) {
-              targetCtx.beginPath();
-              targetCtx.moveTo(_ribbon1X[activeRung], _ribbon1Y[activeRung]);
-              targetCtx.lineTo(_ribbon2X[activeRung], _ribbon2Y[activeRung]);
-              targetCtx.strokeStyle = "rgba(255, 255, 255, " + (hBeamAlpha * 0.90).toFixed(2) + ")";
-              targetCtx.lineWidth = Math.max(1.1, headR * 0.20);
-              targetCtx.stroke();
-
-              var pearlR = Math.max(1.1, headR * 0.22);
-              targetCtx.beginPath();
-              targetCtx.arc(_ribbon1X[activeRung], _ribbon1Y[activeRung], pearlR, 0, Math.PI * 2);
-              targetCtx.fillStyle = "rgba(103, 232, 249, " + (hBeamAlpha * 0.95).toFixed(2) + ")";
-              targetCtx.fill();
-
-              targetCtx.beginPath();
-              targetCtx.arc(_ribbon2X[activeRung], _ribbon2Y[activeRung], pearlR, 0, Math.PI * 2);
-              targetCtx.fillStyle = "rgba(244, 114, 182, " + (hBeamAlpha * 0.95).toFixed(2) + ")";
-              targetCtx.fill();
-            }
-
-            // 4C. Pre-rendered Bioluminescent Nucleotide Spark Sprites along the DNA Braids
+            // 4B. Pre-rendered Bioluminescent Nucleotide Spark Sprites along the DNA Braids (zero save/restore)
             var hCyanSpark = MeteorVFXEngine.getHelixSpark(false);
             var hMagSpark = MeteorVFXEngine.getHelixSpark(true);
             if (hCyanSpark && hMagSpark) {
               var hsIdx1 = Math.min(K - 1, 2);
-              var hsR = Math.max(2.4, headR * 0.44);
-              targetCtx.save();
-              targetCtx.globalAlpha = renderAlpha * 0.92;
+              var hsR = Math.max(2.6, headR * 0.45);
               targetCtx.drawImage(hCyanSpark, _ribbon1X[hsIdx1] - hsR * 0.5, _ribbon1Y[hsIdx1] - hsR * 0.5, hsR, hsR);
               if (tier === 2 && K >= 5) {
                 var hsIdx2 = Math.min(K - 1, 4);
                 targetCtx.drawImage(hMagSpark, _ribbon2X[hsIdx2] - hsR * 0.5, _ribbon2Y[hsIdx2] - hsR * 0.5, hsR, hsR);
               }
-              targetCtx.restore();
             }
           }
 
@@ -11056,15 +11018,16 @@ try { checkUrlHashRoutine(); } catch(e){}
 
       } else {
         // ── 3B. CLASSIC QUANTUM REALM & QUANTUM HELIX HEAD RENDERING ──
-        // Glowing quantum head droplet
+        // Glowing quantum head droplet (proportionally matched across Realm & Helix)
         if (isHelix) {
+          if (tier >= 1) {
+            targetCtx.beginPath();
+            targetCtx.arc(px0, py0, headR * 1.35, 0, Math.PI * 2);
+            targetCtx.fillStyle = "rgba(34, 211, 238, " + (renderAlpha * 0.26).toFixed(2) + ")";
+            targetCtx.fill();
+          }
           targetCtx.beginPath();
-          targetCtx.arc(px0, py0, headR * 1.5, 0, Math.PI * 2);
-          targetCtx.fillStyle = "rgba(34, 211, 238, " + (renderAlpha * 0.28).toFixed(2) + ")";
-          targetCtx.fill();
-
-          targetCtx.beginPath();
-          targetCtx.arc(px0, py0, headR * 1.15, 0, Math.PI * 2);
+          targetCtx.arc(px0, py0, headR, 0, Math.PI * 2);
           targetCtx.fillStyle = "hsla(188, 98%, 74%, " + renderAlpha.toFixed(2) + ")";
           targetCtx.fill();
         } else {
@@ -11175,9 +11138,9 @@ try { checkUrlHashRoutine(); } catch(e){}
         }
 
         // Additive Electric Wake Sparks along Quantum Realm tail (parallel to Meteor Ember Storm)
-        if (!isHelix && tier >= 1 && K >= 3 && Math.random() < (tier === 2 ? 0.62 : 0.40)) {
+        if (!isHelix && tier >= 1 && K >= 3 && Math.random() < (tier === 2 ? 0.55 : 0.35)) {
           if (!p.stardust) p.stardust = [];
-          if (p.stardust.length < 12) {
+          if (p.stardust.length < 8) {
             var eSpineIdx = Math.min(K - 1, 1 + ((Math.random() * (K - 1)) | 0));
             p.stardust.push({
               x: _ptsX[eSpineIdx] + (Math.random() - 0.5) * (headR * 1.95),
@@ -11191,9 +11154,9 @@ try { checkUrlHashRoutine(); } catch(e){}
         }
 
         // Additive Bi-Chromatic Nucleotide Spores along Quantum Helix DNA Strands (Cyan & Royal Magenta)
-        if (isHelix && tier >= 1 && K >= 3 && Math.random() < (tier === 2 ? 0.64 : 0.42)) {
+        if (isHelix && tier >= 1 && K >= 3 && Math.random() < (tier === 2 ? 0.55 : 0.35)) {
           if (!p.stardust) p.stardust = [];
-          if (p.stardust.length < 12) {
+          if (p.stardust.length < 8) {
             var hSpineIdx = Math.min(K - 1, 1 + ((Math.random() * (K - 1)) | 0));
             var useStrandB = Math.random() < 0.5;
             var baseX = useStrandB ? _ribbon2X[hSpineIdx] : _ribbon1X[hSpineIdx];
@@ -12867,42 +12830,41 @@ try { checkUrlHashRoutine(); } catch(e){}
     ctx.lineWidth = 1.0;
     ctx.stroke();
 
-    // ── 3. DNA Double-Helix Emblem Inscribed & Clipped Strictly Inside the Sphere ──
+    // ── 3. DNA Double-Helix Emblem Inscribed Analytically Inside the Sphere (Zero ctx.clip() GPU Stall & Batched Single-Stroke Rungs) ──
     ctx.save();
-    ctx.beginPath();
-    ctx.arc(0, 0, rCore - 0.8, 0, Math.PI * 2);
-    ctx.clip(); // Keeps the outer silhouette 100% perfectly spherical
-
     var dnaAngle = -0.45 + Math.sin(t * 0.7) * 0.08;
     ctx.rotate(dnaAngle);
 
-    var dnaLen = rCore * 1.85;
-    var dnaAmp = rCore * 0.38;
-    var dnaSteps = 16;
+    var dnaLen = (rCore - 1.8) * 1.92;
+    var dnaAmp = rCore * 0.36;
+    var dnaSteps = 12;
     var dnaPhase = t * spinMult * 2.2;
 
-    // Draw base-pair connecting rungs across the DNA helix
+    // Batched single-stroke base-pair connecting rungs across the DNA helix (1 stroke instead of 9)
     ctx.lineWidth = 1.0;
     ctx.strokeStyle = "rgba(255, 255, 255, 0.80)";
-    for (var bi = -4; bi <= 4; bi++) {
-      var bx = (bi / 4.5) * (dnaLen * 0.45);
-      var bPhase = dnaPhase + (bx / dnaLen) * Math.PI * 3.5;
-      var by1 = Math.sin(bPhase) * dnaAmp;
-      var by2 = -by1;
-      ctx.beginPath();
+    ctx.beginPath();
+    for (var bi = -3; bi <= 3; bi++) {
+      var bNorm = bi / 3.8;
+      var bx = bNorm * (dnaLen * 0.46);
+      var bEnv = Math.sqrt(Math.max(0, 1 - bNorm * bNorm));
+      var bPhase = dnaPhase + bNorm * Math.PI * 1.75;
+      var by1 = Math.sin(bPhase) * dnaAmp * bEnv;
       ctx.moveTo(bx, by1);
-      ctx.lineTo(bx, by2);
-      ctx.stroke();
+      ctx.lineTo(bx, -by1);
     }
+    ctx.stroke();
 
     // Strand 1: Electric Cyan DNA Helix Strand
     ctx.strokeStyle = "#38bdf8";
     ctx.lineWidth = 1.8;
     ctx.beginPath();
     for (var i = 0; i <= dnaSteps; i++) {
-      var ix = -dnaLen * 0.5 + (i / dnaSteps) * dnaLen;
-      var iPhase = dnaPhase + (ix / dnaLen) * Math.PI * 3.5;
-      var iy1 = Math.sin(iPhase) * dnaAmp;
+      var sNorm = -1 + (2 * i) / dnaSteps;
+      var ix = sNorm * (dnaLen * 0.48);
+      var sEnv = Math.sqrt(Math.max(0, 1 - sNorm * sNorm));
+      var iPhase = dnaPhase + sNorm * Math.PI * 1.75;
+      var iy1 = Math.sin(iPhase) * dnaAmp * sEnv;
       if (i === 0) ctx.moveTo(ix, iy1);
       else ctx.lineTo(ix, iy1);
     }
@@ -12913,9 +12875,11 @@ try { checkUrlHashRoutine(); } catch(e){}
     ctx.lineWidth = 1.8;
     ctx.beginPath();
     for (var i = 0; i <= dnaSteps; i++) {
-      var ix = -dnaLen * 0.5 + (i / dnaSteps) * dnaLen;
-      var iPhase = dnaPhase + (ix / dnaLen) * Math.PI * 3.5;
-      var iy2 = -Math.sin(iPhase) * dnaAmp;
+      var sNorm = -1 + (2 * i) / dnaSteps;
+      var ix = sNorm * (dnaLen * 0.48);
+      var sEnv = Math.sqrt(Math.max(0, 1 - sNorm * sNorm));
+      var iPhase = dnaPhase + sNorm * Math.PI * 1.75;
+      var iy2 = -Math.sin(iPhase) * dnaAmp * sEnv;
       if (i === 0) ctx.moveTo(ix, iy2);
       else ctx.lineTo(ix, iy2);
     }
@@ -13564,7 +13528,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   <script>
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v66', { scope: './' }).catch(function() {});
+        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v67', { scope: './' }).catch(function() {});
       });
     }
   </script>
