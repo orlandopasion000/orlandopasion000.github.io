@@ -1,5 +1,5 @@
 /* OrlandoVault · Offline-First Jarvis Security Service Worker */
-var CACHE_NAME = 'vault-jarvis-v1';
+var CACHE_NAME = 'vault-jarvis-v2';
 var ASSETS = [
   './',
   './index.html',
@@ -15,9 +15,7 @@ self.addEventListener('install', function(e) {
   self.skipWaiting();
   e.waitUntil(
     caches.open(CACHE_NAME).then(function(cache) {
-      return cache.addAll(ASSETS).catch(function() {
-        /* Continue gracefully even if an icon is pending */
-      });
+      return cache.addAll(ASSETS).catch(function() {});
     })
   );
 });
@@ -40,20 +38,23 @@ self.addEventListener('activate', function(e) {
 
 self.addEventListener('fetch', function(e) {
   if (e.request.method !== 'GET') return;
+  var url = e.request.url || '';
+  if (!url.startsWith('http://') && !url.startsWith('https://')) return;
+  if (url.indexOf('firestore.googleapis.com') !== -1 || url.indexOf('docs.google.com') !== -1 || url.indexOf('ntfy.sh') !== -1) return;
+
   e.respondWith(
-    caches.match(e.request).then(function(cached) {
-      var fetchPromise = fetch(e.request).then(function(networkResponse) {
+    fetch(e.request)
+      .then(function(networkResponse) {
         if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
           var responseToCache = networkResponse.clone();
           caches.open(CACHE_NAME).then(function(cache) {
-            cache.put(e.request, responseToCache);
+            cache.put(e.request, responseToCache).catch(function() {});
           });
         }
         return networkResponse;
-      }).catch(function() {
-        return cached;
-      });
-      return cached || fetchPromise;
-    })
+      })
+      .catch(function() {
+        return caches.match(e.request);
+      })
   );
 });

@@ -3894,6 +3894,211 @@
   // Initialize Atmosphere & Particle Field Lab
   initAtmosphereLab();
 
+  // ════════════════════════════════════════════════════════════════════════════
+  // GOOGLE CLOUD FIREBASE FIRESTORE REAL-TIME ENGINE (Singapore asia-southeast1)
+  // Project: orlandochrome-b6228 · Collection: orlandotimer_sync
+  // ════════════════════════════════════════════════════════════════════════════
+  (function initOrlandoTimerFirebase() {
+    const FIREBASE_CONFIG = {
+      apiKey: "AIzaSyCi8aUZiN1GnRXECM0Nc34UKMYQyTvzj9Y",
+      authDomain: "orlandochrome-b6228.firebaseapp.com",
+      projectId: "orlandochrome-b6228",
+      storageBucket: "orlandochrome-b6228.firebasestorage.app",
+      messagingSenderId: "775835530889",
+      appId: "1:775835530889:web:0ff6cb27e5be63d7c7f858"
+    };
+    const FIRESTORE_URL = `https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/orlandotimer_sync/master_channel?key=${FIREBASE_CONFIG.apiKey}`;
+    const CLIENT_ID = 'ot_' + Math.random().toString(36).slice(2, 10);
+    const LAST_MOD_KEY = 'orlando-last-modified';
+    const SYNC_KEYS = [
+      'orlando-app-theme',
+      'orlando-clock-style',
+      'orlando-clock-theme',
+      'orlando-acoustic-tick',
+      'orlando-custom-presets',
+      'orlando-alarms-v2',
+      'orlando-productivity-mode',
+      'orlando-weekly-focus',
+      'ot_focus_date',
+      'ot_focus_mins',
+      'orlando-ambient-glow',
+      'orlando-particle-field',
+      'orlando-particle-speed',
+      'orlando-atmo-panel-opacity'
+    ];
+
+    let isApplyingRemote = false;
+    let isSyncing = false;
+    let pushTimer = null;
+    const origSetItem = Storage.prototype.setItem;
+
+    function setSyncBadge(status) {
+      const dot = document.getElementById('firebaseTimerSyncDot');
+      const txt = document.getElementById('firebaseTimerSyncText');
+      if (!dot || !txt) return;
+      if (status === 'syncing') {
+        dot.style.background = '#38bdf8';
+        dot.style.boxShadow = '0 0 8px #38bdf8';
+        txt.textContent = 'Syncing...';
+      } else if (status === 'offline') {
+        dot.style.background = '#f59e0b';
+        dot.style.boxShadow = '0 0 8px #f59e0b';
+        txt.textContent = 'Offline';
+      } else {
+        dot.style.background = '#10b981';
+        dot.style.boxShadow = '0 0 8px #10b981';
+        txt.textContent = 'Cloud Synced';
+      }
+    }
+
+    function collectPacket() {
+      const data = {};
+      SYNC_KEYS.forEach(k => {
+        const v = localStorage.getItem(k);
+        if (v !== null) data[k] = v;
+      });
+      const ts = parseInt(localStorage.getItem(LAST_MOD_KEY) || String(Date.now()), 10);
+      return { v: 1, cid: CLIENT_ID, ts, data };
+    }
+
+    async function pushToCloud(showFeedback = false) {
+      if (isApplyingRemote) return false;
+      try {
+        setSyncBadge('syncing');
+        const pkt = collectPacket();
+        const body = {
+          fields: {
+            v: { integerValue: "1" },
+            ts: { integerValue: String(pkt.ts) },
+            cid: { stringValue: pkt.cid },
+            payload: { stringValue: JSON.stringify(pkt) }
+          }
+        };
+        const res = await fetch(FIRESTORE_URL, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+        if (res.ok) {
+          setSyncBadge('synced');
+          if (showFeedback && typeof announce === 'function') {
+            announce('Synced presets, alarms, and horology themes to Google Cloud Firebase');
+          }
+          return true;
+        }
+        setSyncBadge('offline');
+      } catch (e) {
+        setSyncBadge('offline');
+      }
+      return false;
+    }
+
+    function applyCloudPacket(pkt) {
+      if (!pkt || !pkt.data) return;
+      isApplyingRemote = true;
+      try {
+        Object.keys(pkt.data).forEach(k => {
+          origSetItem.call(localStorage, k, pkt.data[k]);
+        });
+        origSetItem.call(localStorage, LAST_MOD_KEY, String(pkt.ts || Date.now()));
+        if (pkt.data['orlando-app-theme'] && typeof applyAppTheme === 'function') {
+          try { applyAppTheme(pkt.data['orlando-app-theme']); } catch (e) {}
+        }
+        if (pkt.data['orlando-clock-style'] && typeof applyClockStyle === 'function') {
+          try { applyClockStyle(pkt.data['orlando-clock-style']); } catch (e) {}
+        }
+        if (typeof renderPresets === 'function') {
+          try { renderPresets(); } catch (e) {}
+        }
+        if (typeof loadAlarms === 'function' && typeof renderAlarms === 'function') {
+          try { loadAlarms(); renderAlarms(); } catch (e) {}
+        }
+        if (typeof renderWeeklyFocusChart === 'function') {
+          try { renderWeeklyFocusChart(); } catch (e) {}
+        }
+      } finally {
+        isApplyingRemote = false;
+      }
+    }
+
+    async function pullFromCloud(isInitial = false, showFeedback = false) {
+      if (isSyncing) return false;
+      isSyncing = true;
+      try {
+        const res = await fetch(FIRESTORE_URL, { cache: 'no-store' });
+        if (res.status === 404) {
+          isSyncing = false;
+          await pushToCloud(false);
+          return true;
+        }
+        if (!res.ok) {
+          setSyncBadge('offline');
+          isSyncing = false;
+          return false;
+        }
+        const doc = await res.json();
+        let pkt = null;
+        if (doc && doc.fields && doc.fields.payload && doc.fields.payload.stringValue) {
+          pkt = JSON.parse(doc.fields.payload.stringValue);
+        }
+        if (!pkt) {
+          isSyncing = false;
+          await pushToCloud(false);
+          return true;
+        }
+        const cloudTs = pkt.ts || 0;
+        const localTs = parseInt(localStorage.getItem(LAST_MOD_KEY) || '0', 10);
+        if (cloudTs > localTs && (pkt.cid !== CLIENT_ID || isInitial || showFeedback)) {
+          applyCloudPacket(pkt);
+        } else if (localTs > cloudTs) {
+          await pushToCloud(false);
+        } else if (showFeedback) {
+          await pushToCloud(true);
+        }
+        setSyncBadge('synced');
+      } catch (e) {
+        setSyncBadge('offline');
+      } finally {
+        isSyncing = false;
+      }
+      return true;
+    }
+
+    Storage.prototype.setItem = function(key, val) {
+      origSetItem.call(this, key, val);
+      if (!isApplyingRemote && this === localStorage && SYNC_KEYS.includes(key)) {
+        origSetItem.call(localStorage, LAST_MOD_KEY, String(Date.now()));
+        if (pushTimer) clearTimeout(pushTimer);
+        pushTimer = setTimeout(() => { pushToCloud(false); }, 120);
+      }
+    };
+
+    console.log('⚡ [OrlandoTimer] Google Cloud Firebase Firestore Sync Active (orlandochrome-b6228)');
+    const syncBtn = document.getElementById('btnFirebaseTimerSync');
+    if (syncBtn) {
+      syncBtn.addEventListener('click', () => {
+        pullFromCloud(false, true);
+      });
+    }
+    pullFromCloud(true, false);
+    window.addEventListener('focus', () => pullFromCloud(false, false));
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') pullFromCloud(false, false);
+    });
+    window.addEventListener('online', () => pullFromCloud(false, false));
+    window.addEventListener('offline', () => setSyncBadge('offline'));
+    setInterval(() => {
+      if (document.visibilityState === 'visible') pullFromCloud(false, false);
+    }, 5000);
+
+    window.OrlandoTimerFirebase = {
+      config: FIREBASE_CONFIG,
+      pushNow: () => pushToCloud(true),
+      pullNow: () => pullFromCloud(false, true)
+    };
+  })();
+
+
   // Service Worker Registration (scoped strictly to /orlandotimer/ so root index.html is never affected)
   if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
     window.addEventListener('load', () => {

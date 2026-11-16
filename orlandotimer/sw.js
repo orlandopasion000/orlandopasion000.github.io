@@ -3,7 +3,7 @@
  * Enables ultra-fast offline caching & PWA installation
  */
 
-const CACHE_NAME = 'orlandotimer-v33';
+const CACHE_NAME = 'orlandotimer-v34';
 const ASSETS_TO_CACHE = [
   './',
   'index.html',
@@ -47,6 +47,7 @@ self.addEventListener('activate', (event) => {
 // Network-first strategy: always serve latest code, fallback to cache when offline
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
+  if (event.request.url.includes('firestore.googleapis.com') || event.request.url.includes('ntfy.sh')) return;
   event.respondWith(
     fetch(event.request)
       .then((networkResponse) => {

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <base href="/orlandotimer/">
   <meta charset="utf-8">
+  <base href="/orlandotimer/">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#000000">
   <title>Orlando Timer</title>
@@ -560,6 +560,12 @@
             </div>
           </div>
         </div>
+
+        <!-- Google Cloud Firebase Real-Time Sync Button -->
+        <button type="button" class="btn-topbar-desktop" id="btnFirebaseTimerSync" title="Google Cloud Firebase Real-Time Sync (Click to Sync Now)">
+          <span id="firebaseTimerSyncDot" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#10b981;box-shadow:0 0 8px #10b981;"></span>
+          <span id="firebaseTimerSyncText">Cloud Synced</span>
+        </button>
 
         <!-- Mechanical Watch Tick & UI Sound Toggle -->
         <button type="button" class="btn-topbar-desktop" id="btnAcousticTick" title="Toggle 1-Second Mechanical Watch Tick & UI Click Audio">

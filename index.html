@@ -1249,41 +1249,45 @@
           }
         } catch (e) {}
 
-        // C. Real-Time Cloud SSE Stream for Cross-Device Sync (iPhone <-> Laptop)
-        try {
-          if (typeof EventSource !== 'undefined') {
-            sseEventSource = new EventSource('https://ntfy.sh/' + CLOUD_TOPIC + '/sse');
-            sseEventSource.onmessage = function(ev) {
-              try {
-                var env = JSON.parse(ev.data);
-                if (env && env.event === 'message' && env.message) {
-                  var pkt = JSON.parse(env.message);
-                  var c = 0;
-                  if (typeof pkt.pendingCount !== 'undefined') {
-                    c = pkt.pendingCount;
-                  } else if (Array.isArray(pkt.p)) {
-                    pkt.p.forEach(function(p) {
-                      if (Array.isArray(p.n)) {
-                        c += p.n.filter(function(note) { return !note.d; }).length;
-                      }
-                    });
-                  }
-                  localStorage.setItem('orlandochrome_live_pending_count', String(c));
-                  applyPendingCount(c);
+        // C. Google Cloud Firebase Firestore Live Sync (Singapore asia-southeast1)
+        var FIREBASE_FIRESTORE_URL = 'https://firestore.googleapis.com/v1/projects/orlandochrome-b6228/databases/(default)/documents/orlandochrome_sync/master_channel?key=AIzaSyCi8aUZiN1GnRXECM0Nc34UKMYQyTvzj9Y';
+        function pullPendingFromFirebase() {
+          fetch(FIREBASE_FIRESTORE_URL, { cache: 'no-store' })
+            .then(function(res) { return res.ok ? res.json() : null; })
+            .then(function(doc) {
+              if (doc && doc.fields && doc.fields.payload && doc.fields.payload.stringValue) {
+                var pkt = JSON.parse(doc.fields.payload.stringValue);
+                var c = 0;
+                if (typeof pkt.pendingCount !== 'undefined') {
+                  c = pkt.pendingCount;
+                } else if (Array.isArray(pkt.p)) {
+                  pkt.p.forEach(function(p) {
+                    if (Array.isArray(p.nt)) {
+                      c += p.nt.filter(function(note) { return !note.d; }).length;
+                    }
+                  });
                 }
-              } catch (err) {}
-            };
-          }
-        } catch (e) {}
+                localStorage.setItem('orlandochrome_live_pending_count', String(c));
+                applyPendingCount(c);
+              }
+            })
+            .catch(function() {});
+        }
+        pullPendingFromFirebase();
+        setInterval(function() {
+          if (document.visibilityState === 'visible') pullPendingFromFirebase();
+        }, 6000);
 
         // D. Re-check on Window Focus and Visibility Change
         window.addEventListener('focus', function() {
           applyPendingCount(calculateLocalPending());
+          pullPendingFromFirebase();
           if (broadcastChannel) broadcastChannel.postMessage({ type: 'REQUEST_STATUS' });
         });
         document.addEventListener('visibilitychange', function() {
           if (document.visibilityState === 'visible') {
             applyPendingCount(calculateLocalPending());
+            pullPendingFromFirebase();
             if (broadcastChannel) broadcastChannel.postMessage({ type: 'REQUEST_STATUS' });
           }
         });

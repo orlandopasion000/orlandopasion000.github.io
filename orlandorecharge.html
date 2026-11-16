@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
+  <meta charset="utf-8">
+  <base href="/orlandorecharge/">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#000000">
 <title>OrlandoRecharge (Main Version) — Sir Orlando V. Pasion, Jr.</title>
@@ -4633,6 +4634,10 @@ body.light-theme .highlight-card .dist-icon{
           </span>
         </div>
         <div class="preset-cluster-right">
+          <button class="ghost" id="firebaseSyncBtn" title="Google Cloud Firebase Real-Time Sync (Click to Sync Now)">
+            <span id="firebaseSyncDot" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#10b981;box-shadow:0 0 8px #10b981;margin-right:5px;"></span>
+            <span id="firebaseSyncLabel">Cloud Synced</span>
+          </button>
           <button class="ghost" id="shareRoutineBtn" title="Copy instant share link for this routine">
             <svg class="modern-icon modern-icon-cyan" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
             <span>Share</span>
@@ -13277,9 +13282,227 @@ try { checkUrlHashRoutine(); } catch(e){}
   <script>
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v62', { scope: './' }).catch(function() {});
+        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v63', { scope: './' }).catch(function() {});
       });
     }
+  </script>
+
+
+  <!-- OrlandoRecharge · Google Cloud Firebase Firestore Real-Time Engine (Singapore asia-southeast1) -->
+  <script id="orlandoRechargeFirebaseEngine">
+  (function() {
+    'use strict';
+    var FIREBASE_CONFIG = {
+      apiKey: "AIzaSyCi8aUZiN1GnRXECM0Nc34UKMYQyTvzj9Y",
+      authDomain: "orlandochrome-b6228.firebaseapp.com",
+      projectId: "orlandochrome-b6228",
+      storageBucket: "orlandochrome-b6228.firebasestorage.app",
+      messagingSenderId: "775835530889",
+      appId: "1:775835530889:web:0ff6cb27e5be63d7c7f858"
+    };
+    var IS_BLANK = new URLSearchParams(window.location.search).get('edition') === 'blank';
+    var DOC_ID = IS_BLANK ? 'blank_channel' : 'master_channel';
+    var FIRESTORE_URL = 'https://firestore.googleapis.com/v1/projects/' + FIREBASE_CONFIG.projectId + '/databases/(default)/documents/orlandorecharge_sync/' + DOC_ID + '?key=' + FIREBASE_CONFIG.apiKey;
+    var CLIENT_ID = 'or_' + Math.random().toString(36).slice(2, 10);
+    var LAST_MOD_KEY = 'dra-last-modified';
+    var SYNC_KEYS = [
+      'dra-schedule',
+      'dra-off',
+      'dra-days',
+      'dra-vol',
+      'dra-mute',
+      'dra-clock-theme',
+      'dra-preset-key',
+      'dra-snoozes',
+      'dra-theme-mode',
+      'dra-antigravity-fx'
+    ];
+
+    var isApplyingRemote = false;
+    var isSyncing = false;
+    var pushTimer = null;
+    var origSetItem = Storage.prototype.setItem;
+
+    function setBadge(status) {
+      var dot = document.getElementById('firebaseSyncDot');
+      var lbl = document.getElementById('firebaseSyncLabel');
+      if (!dot || !lbl) return;
+      if (status === 'syncing') {
+        dot.style.background = '#38bdf8';
+        dot.style.boxShadow = '0 0 8px #38bdf8';
+        lbl.textContent = 'Syncing...';
+      } else if (status === 'offline') {
+        dot.style.background = '#f59e0b';
+        dot.style.boxShadow = '0 0 8px #f59e0b';
+        lbl.textContent = 'Offline';
+      } else {
+        dot.style.background = '#10b981';
+        dot.style.boxShadow = '0 0 8px #10b981';
+        lbl.textContent = 'Cloud Synced';
+      }
+    }
+
+    function collectPacket() {
+      var data = {};
+      SYNC_KEYS.forEach(function(k) {
+        var v = localStorage.getItem(k);
+        if (v !== null) data[k] = v;
+      });
+      var ts = parseInt(localStorage.getItem(LAST_MOD_KEY) || String(Date.now()), 10);
+      return { v: 1, cid: CLIENT_ID, ts: ts, data: data };
+    }
+
+    async function pushToCloud(showFeedback) {
+      if (isApplyingRemote) return false;
+      try {
+        setBadge('syncing');
+        var pkt = collectPacket();
+        var body = {
+          fields: {
+            v: { integerValue: "1" },
+            ts: { integerValue: String(pkt.ts) },
+            cid: { stringValue: pkt.cid },
+            payload: { stringValue: JSON.stringify(pkt) }
+          }
+        };
+        var res = await fetch(FIRESTORE_URL, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+        if (res.ok) {
+          setBadge('synced');
+          if (showFeedback && typeof window.toast === 'function') {
+            window.toast('⚡ Synced schedule & alarms to Google Cloud Firebase!');
+          }
+          return true;
+        }
+        setBadge('offline');
+      } catch (e) {
+        setBadge('offline');
+      }
+      return false;
+    }
+
+    function applyCloudPacket(pkt) {
+      if (!pkt || !pkt.data) return;
+      isApplyingRemote = true;
+      try {
+        Object.keys(pkt.data).forEach(function(k) {
+          origSetItem.call(localStorage, k, pkt.data[k]);
+        });
+        origSetItem.call(localStorage, LAST_MOD_KEY, String(pkt.ts || Date.now()));
+        if (pkt.data['dra-schedule']) {
+          try { window.S = JSON.parse(pkt.data['dra-schedule']); } catch (e) {}
+        }
+        if (pkt.data['dra-off']) {
+          try { window.off = JSON.parse(pkt.data['dra-off']); } catch (e) {}
+        }
+        if (pkt.data['dra-days']) {
+          try { window.days = JSON.parse(pkt.data['dra-days']); } catch (e) {}
+        }
+        if (pkt.data['dra-clock-theme'] && typeof window.applyClockTheme === 'function') {
+          try { window.applyClockTheme(pkt.data['dra-clock-theme']); } catch (e) {}
+        }
+        if (typeof window.renderList === 'function') {
+          try { window.renderList(); } catch (e) {}
+        }
+        if (typeof window.renderDays === 'function') {
+          try { window.renderDays(); } catch (e) {}
+        }
+      } finally {
+        isApplyingRemote = false;
+      }
+    }
+
+    async function pullFromCloud(isInitial, showFeedback) {
+      if (isSyncing) return false;
+      isSyncing = true;
+      try {
+        var res = await fetch(FIRESTORE_URL, { cache: 'no-store' });
+        if (res.status === 404) {
+          isSyncing = false;
+          await pushToCloud(false);
+          return true;
+        }
+        if (!res.ok) {
+          setBadge('offline');
+          isSyncing = false;
+          return false;
+        }
+        var doc = await res.json();
+        var pkt = null;
+        if (doc && doc.fields && doc.fields.payload && doc.fields.payload.stringValue) {
+          pkt = JSON.parse(doc.fields.payload.stringValue);
+        }
+        if (!pkt) {
+          isSyncing = false;
+          await pushToCloud(false);
+          return true;
+        }
+        var cloudTs = pkt.ts || 0;
+        var localTs = parseInt(localStorage.getItem(LAST_MOD_KEY) || '0', 10);
+        if (cloudTs > localTs && (pkt.cid !== CLIENT_ID || isInitial || showFeedback)) {
+          applyCloudPacket(pkt);
+          if (showFeedback && typeof window.toast === 'function') {
+            window.toast('📲 Pulled latest schedule from Google Cloud Firebase!');
+          }
+        } else if (localTs > cloudTs) {
+          await pushToCloud(false);
+        } else if (showFeedback) {
+          await pushToCloud(true);
+        }
+        setBadge('synced');
+      } catch (e) {
+        setBadge('offline');
+      } finally {
+        isSyncing = false;
+      }
+      return true;
+    }
+
+    // Intercept localStorage writes for dra-* keys to auto-sync to Firebase
+    Storage.prototype.setItem = function(key, val) {
+      origSetItem.call(this, key, val);
+      if (!isApplyingRemote && this === localStorage && SYNC_KEYS.indexOf(key) !== -1) {
+        origSetItem.call(localStorage, LAST_MOD_KEY, String(Date.now()));
+        if (pushTimer) clearTimeout(pushTimer);
+        pushTimer = setTimeout(function() { pushToCloud(false); }, 120);
+      }
+    };
+
+    function initFirebaseSync() {
+      console.log('⚡ [OrlandoRecharge] Google Cloud Firebase Firestore Sync Active (orlandochrome-b6228)');
+      var btn = document.getElementById('firebaseSyncBtn');
+      if (btn) {
+        btn.addEventListener('click', function() {
+          pullFromCloud(false, true);
+        });
+      }
+      pullFromCloud(true, false);
+      window.addEventListener('focus', function() { pullFromCloud(false, false); });
+      document.addEventListener('visibilitychange', function() {
+        if (document.visibilityState === 'visible') pullFromCloud(false, false);
+      });
+      window.addEventListener('online', function() { pullFromCloud(false, false); });
+      window.addEventListener('offline', function() { setBadge('offline'); });
+      setInterval(function() {
+        if (document.visibilityState === 'visible') pullFromCloud(false, false);
+      }, 5000);
+    }
+
+    window.OrlandoRechargeFirebase = {
+      config: FIREBASE_CONFIG,
+      pushNow: function() { return pushToCloud(true); },
+      pullNow: function() { return pullFromCloud(false, true); }
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initFirebaseSync);
+    } else {
+      initFirebaseSync();
+    }
+  })();
   </script>
 
 </body>

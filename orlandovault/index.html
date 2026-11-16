@@ -2390,7 +2390,11 @@
       </div>
     </a>
 
-    <div class="topbar-actions">
+    <div class="topbar-actions" style="display:flex;align-items:center;gap:10px;">
+      <button type="button" class="dist-btn" id="btnFirebaseVaultSync" title="Google Cloud Firebase Real-Time Sync (Click to Sync Now)" style="padding:7px 13px;border-radius:999px;font-size:11.5px;font-weight:700;display:inline-flex;align-items:center;gap:6px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.35);color:#e2e8f0;cursor:pointer;">
+        <span id="firebaseVaultSyncDot" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#10b981;box-shadow:0 0 8px #10b981;"></span>
+        <span id="firebaseVaultSyncText">Cloud Synced</span>
+      </button>
       <!-- 24K Swiss Gold Quantum Pill Launcher -->
       <button type="button" class="btn-topbar-desktop" id="btnTopbarLaunchApp" title="Open OrlandoVault in Dedicated Standalone Desktop App" aria-label="Open Main Web App">
         <!-- Animated Kinetic Cyber Energy Border -->
@@ -2617,29 +2621,6 @@
   <div class="modal-backdrop" id="qrModal" role="dialog" aria-modal="true" aria-label="Holographic QR Command Suite">
     <div class="qr-studio-modal unified-command-suite" id="vaultHoloSuite" style="--qr-accent:#d9b95c; --qr-glow:rgba(217,185,92,0.4);">
       <!-- Dynamically hydrated by renderVaultHoloSuite() -->
-    </div>
-  </div><span class="qr-corner tl"></span>
-        <span class="qr-corner tr"></span>
-        <span class="qr-corner bl"></span>
-        <span class="qr-corner br"></span>
-        <div class="qr-laser-beam"></div>
-
-        <!-- 100% High-Contrast Pure White Quiet-Zone Plate -->
-        <div class="qr-img-wrapper" id="qrImgWrapper" style="width:300px; height:300px;">
-          <div id="vaultQrMount" style="width:100%;height:100%;"></div>
-        </div>
-      </div>
-
-      <div class="qr-actions-row">
-        <button type="button" class="dist-btn primary" id="qrCopyLinkBtn" style="flex:2;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-          <span>Copy App Link</span>
-        </button>
-        <button type="button" class="dist-btn" id="qrShareBtn" style="flex:1;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-          <span>Share</span>
-        </button>
-      </div>
     </div>
   </div>
 
@@ -3949,5 +3930,206 @@
     }
 
   </script>
+
+  <!-- OrlandoVault · Google Cloud Firebase Firestore Real-Time Engine (Singapore asia-southeast1) -->
+  <script id="orlandoVaultFirebaseEngine">
+  (function() {
+    'use strict';
+    var FIREBASE_CONFIG = {
+      apiKey: "AIzaSyCi8aUZiN1GnRXECM0Nc34UKMYQyTvzj9Y",
+      authDomain: "orlandochrome-b6228.firebaseapp.com",
+      projectId: "orlandochrome-b6228",
+      storageBucket: "orlandochrome-b6228.firebasestorage.app",
+      messagingSenderId: "775835530889",
+      appId: "1:775835530889:web:0ff6cb27e5be63d7c7f858"
+    };
+    var FIRESTORE_URL = 'https://firestore.googleapis.com/v1/projects/' + FIREBASE_CONFIG.projectId + '/databases/(default)/documents/orlandovault_sync/master_channel?key=' + FIREBASE_CONFIG.apiKey;
+    var CLIENT_ID = 'ov_' + Math.random().toString(36).slice(2, 10);
+    var LAST_MOD_KEY = 'orlandovault_last_modified';
+    var SYNC_KEYS = [
+      'orlandovault_credentials_v4',
+      'orlandovault_audit_history_v1',
+      'orlandovault_copy_count_v1',
+      'orlandovault_google_sheet_url',
+      'orlandovault_auto_sync'
+    ];
+
+    var isApplyingRemote = false;
+    var isSyncing = false;
+    var pushTimer = null;
+    var origSetItem = Storage.prototype.setItem;
+
+    function setVaultSyncBadge(status) {
+      var dot = document.getElementById('firebaseVaultSyncDot');
+      var txt = document.getElementById('firebaseVaultSyncText');
+      if (!dot || !txt) return;
+      if (status === 'syncing') {
+        dot.style.background = '#00f0ff';
+        dot.style.boxShadow = '0 0 8px #00f0ff';
+        txt.textContent = 'Syncing...';
+      } else if (status === 'offline') {
+        dot.style.background = '#f59e0b';
+        dot.style.boxShadow = '0 0 8px #f59e0b';
+        txt.textContent = 'Offline';
+      } else {
+        dot.style.background = '#10b981';
+        dot.style.boxShadow = '0 0 8px #10b981';
+        txt.textContent = 'Cloud Synced';
+      }
+    }
+
+    function collectPacket() {
+      var data = {};
+      SYNC_KEYS.forEach(function(k) {
+        var v = localStorage.getItem(k);
+        if (v !== null) data[k] = v;
+      });
+      var ts = parseInt(localStorage.getItem(LAST_MOD_KEY) || String(Date.now()), 10);
+      return { v: 1, cid: CLIENT_ID, ts: ts, data: data };
+    }
+
+    async function pushToCloud(showFeedback) {
+      if (isApplyingRemote) return false;
+      try {
+        setVaultSyncBadge('syncing');
+        var pkt = collectPacket();
+        var body = {
+          fields: {
+            v: { integerValue: "1" },
+            ts: { integerValue: String(pkt.ts) },
+            cid: { stringValue: pkt.cid },
+            payload: { stringValue: JSON.stringify(pkt) }
+          }
+        };
+        var res = await fetch(FIRESTORE_URL, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+        if (res.ok) {
+          setVaultSyncBadge('synced');
+          if (showFeedback && typeof showToast === 'function') {
+            showToast('⚡ Synced Vault credentials & audit log to Google Cloud Firebase!');
+          }
+          return true;
+        }
+        setVaultSyncBadge('offline');
+      } catch (e) {
+        setVaultSyncBadge('offline');
+      }
+      return false;
+    }
+
+    function applyCloudPacket(pkt) {
+      if (!pkt || !pkt.data) return;
+      isApplyingRemote = true;
+      try {
+        Object.keys(pkt.data).forEach(function(k) {
+          origSetItem.call(localStorage, k, pkt.data[k]);
+        });
+        origSetItem.call(localStorage, LAST_MOD_KEY, String(pkt.ts || Date.now()));
+        if (typeof initData === 'function') {
+          try { initData(); } catch (e) {}
+        }
+        if (typeof renderVault === 'function') {
+          try { renderVault(); } catch (e) {}
+        }
+        if (typeof renderMetrics === 'function') {
+          try { renderMetrics(); } catch (e) {}
+        }
+      } finally {
+        isApplyingRemote = false;
+      }
+    }
+
+    async function pullFromCloud(isInitial, showFeedback) {
+      if (isSyncing) return false;
+      isSyncing = true;
+      try {
+        var res = await fetch(FIRESTORE_URL, { cache: 'no-store' });
+        if (res.status === 404) {
+          isSyncing = false;
+          await pushToCloud(false);
+          return true;
+        }
+        if (!res.ok) {
+          setVaultSyncBadge('offline');
+          isSyncing = false;
+          return false;
+        }
+        var doc = await res.json();
+        var pkt = null;
+        if (doc && doc.fields && doc.fields.payload && doc.fields.payload.stringValue) {
+          pkt = JSON.parse(doc.fields.payload.stringValue);
+        }
+        if (!pkt) {
+          isSyncing = false;
+          await pushToCloud(false);
+          return true;
+        }
+        var cloudTs = pkt.ts || 0;
+        var localTs = parseInt(localStorage.getItem(LAST_MOD_KEY) || '0', 10);
+        if (cloudTs > localTs && (pkt.cid !== CLIENT_ID || isInitial || showFeedback)) {
+          applyCloudPacket(pkt);
+          if (showFeedback && typeof showToast === 'function') {
+            showToast('📲 Pulled latest Vault credentials from Google Cloud Firebase!');
+          }
+        } else if (localTs > cloudTs) {
+          await pushToCloud(false);
+        } else if (showFeedback) {
+          await pushToCloud(true);
+        }
+        setVaultSyncBadge('synced');
+      } catch (e) {
+        setVaultSyncBadge('offline');
+      } finally {
+        isSyncing = false;
+      }
+      return true;
+    }
+
+    Storage.prototype.setItem = function(key, val) {
+      origSetItem.call(this, key, val);
+      if (!isApplyingRemote && this === localStorage && SYNC_KEYS.indexOf(key) !== -1) {
+        origSetItem.call(localStorage, LAST_MOD_KEY, String(Date.now()));
+        if (pushTimer) clearTimeout(pushTimer);
+        pushTimer = setTimeout(function() { pushToCloud(false); }, 120);
+      }
+    };
+
+    function initVaultFirebase() {
+      console.log('⚡ [OrlandoVault] Google Cloud Firebase Firestore Sync Active (orlandochrome-b6228)');
+      var btn = document.getElementById('btnFirebaseVaultSync');
+      if (btn) {
+        btn.addEventListener('click', function() {
+          pullFromCloud(false, true);
+        });
+      }
+      pullFromCloud(true, false);
+      window.addEventListener('focus', function() { pullFromCloud(false, false); });
+      document.addEventListener('visibilitychange', function() {
+        if (document.visibilityState === 'visible') pullFromCloud(false, false);
+      });
+      window.addEventListener('online', function() { pullFromCloud(false, false); });
+      window.addEventListener('offline', function() { setVaultSyncBadge('offline'); });
+      setInterval(function() {
+        if (document.visibilityState === 'visible') pullFromCloud(false, false);
+      }, 5000);
+    }
+
+    window.OrlandoVaultFirebase = {
+      config: FIREBASE_CONFIG,
+      pushNow: function() { return pushToCloud(true); },
+      pullNow: function() { return pullFromCloud(false, true); }
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initVaultFirebase);
+    } else {
+      initVaultFirebase();
+    }
+  })();
+  </script>
+
 </body>
 </html>
