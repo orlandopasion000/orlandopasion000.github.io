@@ -1153,6 +1153,124 @@
       60% { opacity: 1; transform: translate(var(--dx), var(--dy)) scale(1.3); }
       100% { opacity: 0; transform: translate(var(--dx), calc(var(--dy) - 30px)) scale(0.3); }
     }
+  
+    /* ==========================================================================
+       SPOTLIGHT COMMAND TRIGGER & UNIFIED SEARCH CAPSULE
+       ========================================================================== */
+    .hub-spotlight-trigger {
+      margin: 32px 0 36px;
+      padding: 16px 24px;
+      background: linear-gradient(135deg, rgba(15, 17, 23, 0.9) 0%, rgba(20, 24, 35, 0.8) 100%);
+      border: 1px solid rgba(212, 168, 83, 0.35);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      cursor: pointer;
+      user-select: none;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(212, 168, 83, 0.05);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .hub-spotlight-trigger:hover, .hub-spotlight-trigger:focus-visible {
+      border-color: var(--gold-bright);
+      background: linear-gradient(135deg, rgba(22, 25, 36, 0.95) 0%, rgba(28, 32, 48, 0.9) 100%);
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.7), 0 0 25px rgba(212, 168, 83, 0.25);
+      transform: translateY(-2px);
+      outline: none;
+    }
+    .spotlight-trigger-content {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex: 1;
+      min-width: 0;
+    }
+    .spotlight-trigger-icon {
+      font-size: 18px;
+      color: var(--gold);
+      filter: drop-shadow(0 0 6px rgba(212, 168, 83, 0.6));
+      flex-shrink: 0;
+    }
+    .spotlight-trigger-text {
+      font-family: var(--font-heading);
+      font-size: 14.5px;
+      color: rgba(242, 239, 232, 0.75);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      letter-spacing: 0.3px;
+    }
+    .hub-spotlight-trigger:hover .spotlight-trigger-text {
+      color: #ffffff;
+    }
+    .spotlight-trigger-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .spotlight-kbd {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--gold-bright);
+    }
+    .spotlight-badge {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: rgba(212, 168, 83, 0.15);
+      border: 1px solid rgba(212, 168, 83, 0.4);
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    /* MOBILE ADAPTATION FOR TOP ACTIONS & DOCK */
+    @media (max-width: 768px) {
+      .nav-actions-cluster {
+        display: flex !important;
+        gap: 6px !important;
+      }
+      .nav-matrix-pill {
+        display: none !important;
+      }
+      .nav-cmd-trigger .cmd-label,
+      .nav-cmd-trigger .cmd-kbd {
+        display: none !important;
+      }
+      .nav-cmd-trigger {
+        padding: 7px 10px !important;
+        border-radius: 8px !important;
+      }
+      .btn-topbar-desktop {
+        padding: 7px 10px !important;
+        border-radius: 8px !important;
+      }
+      #topbarLaunchLabel {
+        display: none !important;
+      }
+      .spotlight-trigger-meta {
+        display: none !important;
+      }
+      .spotlight-trigger-text {
+        font-size: 13px !important;
+      }
+      .standalone-subapp-dock {
+        bottom: max(12px, env(safe-area-inset-bottom)) !important;
+        padding: 5px 10px !important;
+        max-width: calc(100vw - 24px) !important;
+      }
+      .dock-pill-btn {
+        padding: 5px 9px !important;
+        font-size: 10.5px !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1311,9 +1429,15 @@
       <h2 class="sec-title sr sr-d1">Digital <em>Library</em></h2>
       <p class="sec-desc sr sr-d2">All my reviewers, tools, and learning resources — one click to open what you need.</p>
 
-      <div class="hub-search-bar sr">
-        <span class="hub-search-icon">⌕</span>
-        <input type="text" id="hubSearch" placeholder="Search resources... (e.g., NASH, mock test, Academy)">
+      <div class="hub-spotlight-trigger sr" id="hubSpotlightTrigger" role="button" tabindex="0" title="Launch Spotlight Command Palette (Ctrl + K / ⌘K)">
+        <div class="spotlight-trigger-content">
+          <span class="spotlight-trigger-icon">🔍</span>
+          <span class="spotlight-trigger-text">Search all 75+ educational resources, mock tests, and flagship apps...</span>
+        </div>
+        <div class="spotlight-trigger-meta">
+          <kbd class="spotlight-kbd">Ctrl K</kbd>
+          <span class="spotlight-badge">SPOTLIGHT</span>
+        </div>
       </div>
 
       <div class="hub-stats sr">
@@ -1688,6 +1812,12 @@
           });
 
           updateHubMetrics();
+          
+          // Dynamically index all loaded resources into Spotlight Command Palette
+          if (window.indexResourcesToCommandPalette) {
+            window.indexResourcesToCommandPalette(resources);
+          }
+
           if (window.syncOrlandoChromeBridgeUI) window.syncOrlandoChromeBridgeUI();
         })
         .catch(function(err) {
@@ -1724,25 +1854,19 @@
     // Load resources on page load
     loadResources();
 
-    // SEARCH (works with dynamically loaded cards)
-    document.getElementById('hubSearch').addEventListener('input', function() {
-      var query = this.value.toLowerCase().trim();
-      var cards = document.querySelectorAll('.hub-card');
-      var visible = 0;
-      var visibleCards = [];
-      cards.forEach(function(card) {
-        var searchText = (card.getAttribute('data-search') || '') + ' ' + card.textContent.toLowerCase();
-        if (!query || searchText.indexOf(query) !== -1) {
-          card.style.display = '';
-          visible++;
-          visibleCards.push(card);
-        } else {
-          card.style.display = 'none';
+    // Wire Unified Spotlight Trigger
+    const hubSpotlightTrigger = document.getElementById('hubSpotlightTrigger');
+    if (hubSpotlightTrigger) {
+      hubSpotlightTrigger.onclick = function() {
+        if (typeof openCommandPalette === 'function') openCommandPalette();
+      };
+      hubSpotlightTrigger.onkeydown = function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          if (typeof openCommandPalette === 'function') openCommandPalette();
         }
-      });
-      updateHubMetrics(visibleCards);
-      document.getElementById('hubEmpty').style.display = visible === 0 ? 'block' : 'none';
-    });
+      };
+    }
   </script>
 
   <!-- OVPJ Multi-Cloud Neural Telemetry Matrix & Optimistic UI Engine -->
@@ -2198,10 +2322,7 @@
 
     // Wire buttons
     const btnTopbarLaunch = document.getElementById('btnTopbarLaunchApp');
-    const btnHeroLaunch = document.getElementById('btnHeroLaunchApp');
     if (btnTopbarLaunch) btnTopbarLaunch.onclick = launchMainWebPortfolio;
-    if (btnHeroLaunch) btnHeroLaunch.onclick = launchMainWebPortfolio;
-
     // Detect Standalone Mode
     const isStandalone = window.location.search.includes('standalone=true') || window.matchMedia('(display-mode: standalone)').matches;
     if (isStandalone) {
@@ -2212,6 +2333,29 @@
     }
 
     // 2. SPOTLIGHT COMMAND PALETTE ENGINE
+    
+    // Dynamically index loaded resources into Spotlight Command Palette
+    window.indexResourcesToCommandPalette = function(items) {
+      if (!Array.isArray(items)) return;
+      items.forEach(it => {
+        if (!it.title) return;
+        const exists = COMMAND_ITEMS.some(ci => ci.title === it.title || ci.id === it.title);
+        if (!exists) {
+          COMMAND_ITEMS.push({
+            id: 'res-' + (it.href || it.title).replace(/[^a-zA-Z0-9]/g, '-'),
+            cat: it.badge && it.badge.includes('FLAGSHIP') ? 'Flagship Web Apps' : 'Educational Resources',
+            icon: it.icon && it.icon.includes('<img') ? '⚡' : (typeof it.icon === 'string' && it.icon.length <= 4 ? it.icon : '📚'),
+            title: it.title,
+            desc: it.desc || 'Interactive learning resource & mock test reviewer',
+            action: () => {
+              if (it.href) window.location.href = it.href;
+            },
+            badge: it.badge ? it.badge.replace(/[★·]/g, '').trim() : 'Live'
+          });
+        }
+      });
+    };
+
     const COMMAND_ITEMS = [
       { id: 'app-recharge', cat: 'Flagship Web Apps', icon: '⚡', title: 'OrlandoRecharge (Main Version)', desc: 'Complete 23-block main schedule alarm cockpit & horology', action: () => launchSubApp('orlandorecharge', 'OrlandoRechargeMainAppWindow', 1280, 850), badge: 'PWA' },
       { id: 'app-chrome', cat: 'Flagship Web Apps', icon: '🌐', title: 'OrlandoChrome (Main Version)', desc: '22-profile Chrome taskbar command center & Wispr Flow', action: () => launchSubApp('orlandochrome', 'OrlandoChromeStandaloneWindow', 1180, 820), badge: 'PWA' },
@@ -2233,7 +2377,6 @@
     const cmdInput = document.getElementById('cmdPaletteInput');
     const cmdResults = document.getElementById('cmdPaletteResults');
     const btnOpenCmd = document.getElementById('btnOpenCmdPalette');
-    const btnHeroCmd = document.getElementById('btnHeroOpenCmd');
     const btnCloseCmd = document.getElementById('btnCloseCmdPalette');
 
     let selectedIndex = 0;
@@ -2315,7 +2458,6 @@
     }
 
     if (btnOpenCmd) btnOpenCmd.onclick = openCommandPalette;
-    if (btnHeroCmd) btnHeroCmd.onclick = openCommandPalette;
     if (btnCloseCmd) btnCloseCmd.onclick = closeCommandPalette;
     if (cmdModal) {
       cmdModal.onclick = (e) => {
@@ -2356,8 +2498,8 @@
       }
     });
 
-    // 3. SPECULATIVE PRE-FETCHING ENGINE (ZERO-MILLISECOND NAVIGATION)
-    // When the mouse hovers over any link for >65ms, prefetch in the background
+    // 3. GENIUS SPECULATIVE PRE-FETCHING ENGINE (ZERO-MILLISECOND NAVIGATION)
+    // Multi-Device: Desktop Hover (65ms) + Mobile Touch Speculation + Idle Background Warmup
     const prefetchedUrls = new Set();
     function prefetchUrl(url) {
       if (!url || prefetchedUrls.has(url) || url.startsWith('#') || url.startsWith('javascript:')) return;
@@ -2368,6 +2510,7 @@
       document.head.appendChild(link);
     }
 
+    // A. Desktop Mouse Hover Intent (>65ms)
     let hoverTimer = null;
     document.addEventListener('mouseover', (e) => {
       const a = e.target.closest('a');
@@ -2378,6 +2521,33 @@
     document.addEventListener('mouseout', (e) => {
       if (hoverTimer) clearTimeout(hoverTimer);
     });
+
+    // B. Mobile Touch Speculation (Prefetches immediately upon finger contact)
+    document.addEventListener('touchstart', (e) => {
+      const a = e.target.closest('a');
+      if (a && a.href && a.origin === window.location.origin) {
+        prefetchUrl(a.href);
+      }
+    }, { passive: true });
+
+    // C. Background Idle Warmup for Flagship Apps
+    function warmupFlagshipFleet() {
+      const fleet = [
+        'https://orlandopasion000.github.io/orlandochrome/',
+        'https://orlandopasion000.github.io/orlandorecharge/',
+        'https://orlandopasion000.github.io/orlandotimer/',
+        'https://orlandopasion000.github.io/orlandovault/',
+        'may-2026-mock-test-reviewer.html'
+      ];
+      fleet.forEach((u, idx) => {
+        setTimeout(() => prefetchUrl(u), 800 + idx * 300);
+      });
+    }
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(warmupFlagshipFleet);
+    } else {
+      setTimeout(warmupFlagshipFleet, 1800);
+    }
   </script>
 
 </body>
