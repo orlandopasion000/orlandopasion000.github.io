@@ -1,14 +1,12 @@
 /* OrlandoChrome · Offline-First Service Worker (PWA Ready) */
-const CACHE_NAME = 'orlandochrome-arena-v207';
+const CACHE_NAME = 'orlandochrome-arena-v208';
 const ASSETS = [
   './',
   './index.html',
-  './styles.css?v=pure121',
-  './quantum-universe.css?v=qgame1',
-  './quantum-universe.js?v=qgame1',
-  './game.js?v=arena205',
+  './styles.css?v=pure208',
+  './game.js?v=arena208',
   './qrcode.min.js',
-  './app.js?v=pure121',
+  './app.js?v=pure208',
   './sound.js?v=pure121',
   './oc-logo.png',
   './oc-logo.svg',

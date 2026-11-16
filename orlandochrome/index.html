@@ -21,12 +21,11 @@
   <link rel="apple-touch-icon" sizes="167x167" href="apple-touch-icon-167x167.png?v=pure125">
   <link rel="apple-touch-icon" sizes="152x152" href="apple-touch-icon-152x152.png?v=pure125">
   <link rel="apple-touch-icon" sizes="120x120" href="apple-touch-icon-120x120.png?v=pure125">
-  <link rel="stylesheet" href="styles.css?v=pure127">
+  <link rel="stylesheet" href="styles.css?v=pure208">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="quantum-universe.css?v=qgame2">
-</head>
+  </head>
 <body class="netflix-messenger-theme">
   <!-- Top Application Bar -->
   <header class="app-topbar">
@@ -39,14 +38,14 @@
       </div>
     </div>
 
-            <div class="topbar-right">
-      <!-- Quantum Universe Game Suite (Quantum Realm, Quantum Helix, Quantum Meteor) -->
+    <!-- Quantum Universe Game Suite Launcher Cluster (Exact Realm, Helix, Meteor) -->
+    <div class="qgame-topbar-cluster" id="qgameTopbarCluster">
       <button type="button" class="qgame-btn-launch qgame-btn-realm" id="btnLaunchGame" title="Enter Quantum Realm Game (Classic Particles)" aria-label="Launch Quantum Realm Game">
         <span class="game-btn-glyph" aria-hidden="true">◈</span>
         <span class="game-btn-label"><span class="qg-word-quantum">QUANTUM </span>REALM</span>
       </button>
 
-      <button type="button" class="qgame-btn-launch qgame-btn-helix" id="btnLaunchHelixGame" title="Enter Quantum Helix Game (Cyan and violet strands twist around each other along the original sweeping paths)" aria-label="Launch Quantum Helix Game">
+      <button type="button" class="qgame-btn-launch qgame-btn-helix" id="btnLaunchHelixGame" title="Enter Quantum Helix Game (Cyan & Violet Double-Helix)" aria-label="Launch Quantum Helix Game">
         <span class="game-btn-glyph game-btn-glyph-helix" aria-hidden="true">
           <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M4 6c4 0 6 12 10 12s6-12 10-12" stroke="#22d3ee"/>
@@ -66,7 +65,10 @@
         </span>
         <span class="game-btn-label"><span class="qg-word-quantum">QUANTUM </span>METEOR</span>
       </button>
+    </div>
 
+    <div class="topbar-right">
+      <!-- Quantum Universe Game Suite (Quantum Realm, Quantum Helix, Quantum Meteor) -->
       <!-- 1. Designated Game Button: Math Overdrive -->
       <button type="button" class="btn-topbar-game-dest btn-game-math" id="btnLaunchMathGame" title="Math Overdrive: Eight-Level Difficulty System (20 Qs · 10 Strikes Max)">
         <svg class="modern-icon" viewBox="0 0 24 24" fill="none" width="13" height="13">
@@ -497,7 +499,7 @@
   <script src="assets/relative-time.js"></script>
   <script src="sound.js?v=pure125"></script>
   <script src="qrcode.min.js"></script>
-  <script src="app.js?v=pure127"></script>
+  <script src="app.js?v=pure208"></script>
 
   <!-- BACKUP & RESTORE WORKSPACE MODAL -->
   <div class="modal-wrap" id="backupRestoreModal" role="dialog" aria-modal="true" aria-label="Backup & Restore Workspace" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:9999;align-items:center;justify-content:center;">
@@ -559,7 +561,7 @@
 
 
     
-  <script src="game.js?v=arena205"></script>
+  <script src="game.js?v=arena208"></script>
 
   <!-- Antigravity Interactive Particles Canvases for Quantum Universe Games -->
   <canvas id="antigravityCanvas" class="antigravity-canvas" aria-hidden="true" style="display:none;"></canvas>
@@ -674,7 +676,5 @@
   </div>
 </div>
 
-  <script src="quantum-universe.js?v=qgame2"></script>
-
-</body>
+  </body>
 </html>
