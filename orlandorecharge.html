@@ -9809,6 +9809,8 @@ try { checkUrlHashRoutine(); } catch(e){}
   var _ribbon1Y = new Float32Array(24);
   var _ribbon2X = new Float32Array(24);
   var _ribbon2Y = new Float32Array(24);
+  var _ribbon1Z = new Float32Array(24);
+  var _ribbon2Z = new Float32Array(24);
 
   document.addEventListener("visibilitychange", function() {
     if (document.hidden) {
@@ -10446,9 +10448,13 @@ try { checkUrlHashRoutine(); } catch(e){}
 
       var invK = 1 / K;
       if (isHelix) {
-        // High-frequency, tight double-helix DNA braid (matching user reference image)
+        // High-frequency, tight 3D double-helix DNA braid with true Z-depth coordinates
         // ~2 to 3 full twisting cycles along the spine
-        var waveAmp = curSize * 0.32;
+        var waveAmp = curSize * (tier === 3 ? 0.40 : (tier === 2 ? 0.35 : 0.30));
+        var twistRate = 1.85;
+
+        _ribbon1Z[0] = 0;
+        _ribbon2Z[0] = 0;
 
         for (var sj = 1; sj < K; sj++) {
           var pPrev = p.spine[sj - 1];
@@ -10460,7 +10466,11 @@ try { checkUrlHashRoutine(); } catch(e){}
           var perpY = segDx / segLen;
 
           var env = Math.sin((sj * invK) * Math.PI); // Envelope: 0 at head, peaks at mid-body, 0 at tail
-          var wave1 = Math.sin(p.wavePhase - sj * 1.75) * waveAmp * env;
+          var twistAngle = p.wavePhase - sj * twistRate;
+          var sSin = Math.sin(twistAngle);
+          var sCos = Math.cos(twistAngle);
+
+          var wave1 = sSin * waveAmp * env;
           var wave2 = -wave1; // Counter-phase intertwined strand
 
           _ptsX[sj] = pCurr.x;
@@ -10468,9 +10478,11 @@ try { checkUrlHashRoutine(); } catch(e){}
 
           _ribbon1X[sj] = pCurr.x + perpX * wave1;
           _ribbon1Y[sj] = pCurr.y + perpY * wave1;
+          _ribbon1Z[sj] = sCos; // +1.0 = near/front, -1.0 = far/back
 
           _ribbon2X[sj] = pCurr.x + perpX * wave2;
           _ribbon2Y[sj] = pCurr.y + perpY * wave2;
+          _ribbon2Z[sj] = -sCos;
         }
       } else {
         // Classic streamlined single-contour quantum wavepacket (Pure, sleek wave)
@@ -10646,71 +10658,57 @@ try { checkUrlHashRoutine(); } catch(e){}
           }
 
         } else if (isHelix) {
-          // ── QUANTUM HELIX: DOUBLE-STRAND DNA BRAID (Tier 3 Extra Big, Tier 2 Big, Tier 1 Medium) ──
-          var strandWidth = Math.max(1.8, headR * (tier === 3 ? 0.46 : (tier === 2 ? 0.38 : 0.30)));
-
-          // 1. Base-Pair Cross Rungs
-          targetCtx.strokeStyle = "rgba(224, 231, 255, " + (renderAlpha * (tier === 3 ? 0.65 : 0.48)).toFixed(2) + ")";
-          targetCtx.lineWidth = tier === 3 ? 1.35 : 1.0;
-          targetCtx.beginPath();
+          // ── MAGNIFICENT 3D QUANTUM HELIX: LIVING CHROMOSOMAL BIO-QUANTUM MACROMOLECULE ──
+          var baseStrandW = Math.max(2.2, headR * (tier === 3 ? 0.48 : (tier === 2 ? 0.40 : 0.32)));
           var rungStep = (tier === 1) ? 2 : 1;
-          for (var rk = 1; rk < K - 1; rk += rungStep) {
-            targetCtx.moveTo(_ribbon1X[rk], _ribbon1Y[rk]);
-            targetCtx.lineTo(_ribbon2X[rk], _ribbon2Y[rk]);
-          }
-          targetCtx.stroke();
+          var hPulse = 0.65 + 0.35 * Math.abs(Math.sin(now * 0.016 + (p.pulsePhase || 0) * 3.2));
 
-          // 2. Luminous Energized Base-Pair Nucleotide Pearls (Tier 3 & Tier 2)
-          if (tier >= 2) {
-            var pearlR = Math.max(1.6, headR * (tier === 3 ? 0.24 : 0.18));
-            for (var pk = 1; pk < K - 1; pk += rungStep) {
-              var isCyanPearl = (pk % 2 === 0);
-              targetCtx.beginPath();
-              targetCtx.arc(_ribbon1X[pk], _ribbon1Y[pk], pearlR, 0, Math.PI * 2);
-              targetCtx.fillStyle = isCyanPearl ? "rgba(165, 243, 252, " + (renderAlpha * 0.95).toFixed(2) + ")" : "rgba(245, 208, 254, " + (renderAlpha * 0.95).toFixed(2) + ")";
-              targetCtx.fill();
+          // ── PASS 1: FAR-SIDE (BACKGROUND) STRAND SEGMENTS (Z < 0) ──
+          // Drawn behind the central axis and rungs with depth fogging
+          targetCtx.lineCap = "round";
+          targetCtx.lineJoin = "round";
 
+          // Strand A Back Segments
+          for (var sj = 0; sj < K - 1; sj++) {
+            var midZ1 = (_ribbon1Z[sj] + _ribbon1Z[sj + 1]) * 0.5;
+            if (midZ1 < 0.08) {
+              var depthFogA = Math.max(0.35, 0.75 + midZ1 * 0.40);
+              targetCtx.strokeStyle = "rgba(14, 116, 144, " + (renderAlpha * 0.62 * depthFogA).toFixed(2) + ")";
+              targetCtx.lineWidth = Math.max(1.4, baseStrandW * 0.78);
               targetCtx.beginPath();
-              targetCtx.arc(_ribbon2X[pk], _ribbon2Y[pk], pearlR, 0, Math.PI * 2);
-              targetCtx.fillStyle = isCyanPearl ? "rgba(245, 208, 254, " + (renderAlpha * 0.95).toFixed(2) + ")" : "rgba(165, 243, 252, " + (renderAlpha * 0.95).toFixed(2) + ")";
-              targetCtx.fill();
+              targetCtx.moveTo(_ribbon1X[sj], _ribbon1Y[sj]);
+              var mx1 = (_ribbon1X[sj] + _ribbon1X[sj + 1]) * 0.5;
+              var my1 = (_ribbon1Y[sj] + _ribbon1Y[sj + 1]) * 0.5;
+              targetCtx.quadraticCurveTo(_ribbon1X[sj], _ribbon1Y[sj], mx1, my1);
+              targetCtx.lineTo(_ribbon1X[sj + 1], _ribbon1Y[sj + 1]);
+              targetCtx.stroke();
             }
           }
 
-          // 3. Strand A: Luminous Electric Cyan Ribbon
-          targetCtx.strokeStyle = "rgba(34, 211, 238, " + (renderAlpha * 0.96).toFixed(2) + ")";
-          targetCtx.lineWidth = strandWidth;
-          targetCtx.beginPath();
-          targetCtx.moveTo(_ribbon1X[0], _ribbon1Y[0]);
+          // Strand B Back Segments
           for (var sj = 0; sj < K - 1; sj++) {
-            var mx1 = (_ribbon1X[sj] + _ribbon1X[sj + 1]) * 0.5;
-            var my1 = (_ribbon1Y[sj] + _ribbon1Y[sj + 1]) * 0.5;
-            targetCtx.quadraticCurveTo(_ribbon1X[sj], _ribbon1Y[sj], mx1, my1);
+            var midZ2 = (_ribbon2Z[sj] + _ribbon2Z[sj + 1]) * 0.5;
+            if (midZ2 < 0.08) {
+              var depthFogB = Math.max(0.35, 0.75 + midZ2 * 0.40);
+              targetCtx.strokeStyle = "rgba(126, 34, 206, " + (renderAlpha * 0.62 * depthFogB).toFixed(2) + ")";
+              targetCtx.lineWidth = Math.max(1.4, baseStrandW * 0.78);
+              targetCtx.beginPath();
+              targetCtx.moveTo(_ribbon2X[sj], _ribbon2Y[sj]);
+              var mx2 = (_ribbon2X[sj] + _ribbon2X[sj + 1]) * 0.5;
+              var my2 = (_ribbon2Y[sj] + _ribbon2Y[sj + 1]) * 0.5;
+              targetCtx.quadraticCurveTo(_ribbon2X[sj], _ribbon2Y[sj], mx2, my2);
+              targetCtx.lineTo(_ribbon2X[sj + 1], _ribbon2Y[sj + 1]);
+              targetCtx.stroke();
+            }
           }
-          targetCtx.lineTo(tailTipX, tailTipY);
-          targetCtx.stroke();
 
-          // 4. Strand B: Luminous Royal Magenta Ribbon
-          targetCtx.strokeStyle = "rgba(217, 70, 239, " + (renderAlpha * 0.96).toFixed(2) + ")";
-          targetCtx.lineWidth = strandWidth;
-          targetCtx.beginPath();
-          targetCtx.moveTo(_ribbon2X[0], _ribbon2Y[0]);
-          for (var sj = 0; sj < K - 1; sj++) {
-            var mx2 = (_ribbon2X[sj] + _ribbon2X[sj + 1]) * 0.5;
-            var my2 = (_ribbon2Y[sj] + _ribbon2Y[sj + 1]) * 0.5;
-            targetCtx.quadraticCurveTo(_ribbon2X[sj], _ribbon2Y[sj], mx2, my2);
-          }
-          targetCtx.lineTo(tailTipX, tailTipY);
-          targetCtx.stroke();
-
-          // 5. Central Harmonic Phase-Beam & Pre-Rendered Bi-Chromatic Nucleotide Sparks
+          // ── PASS 2: CENTRAL AXIAL BIO-PHOTON ENERGY BEAM & RESONANCE CONDUIT ──
           if (K >= 3) {
-            var hPulse = 0.65 + 0.35 * Math.abs(Math.sin(now * 0.016 + (p.pulsePhase || 0) * 3.2));
-            var hBeamAlpha = renderAlpha * (tier === 3 ? 0.92 : (tier === 2 ? 0.78 : 0.60)) * hPulse;
+            var hBeamAlpha = renderAlpha * (tier === 3 ? 0.95 : (tier === 2 ? 0.82 : 0.65)) * hPulse;
 
-            // Central Laser-Coherent Helical Phase-Beam
-            targetCtx.strokeStyle = "rgba(207, 250, 254, " + (hBeamAlpha * 0.75).toFixed(2) + ")";
-            targetCtx.lineWidth = Math.max(1.1, headR * (tier === 3 ? 0.22 : 0.16));
+            // Soft Volumetric Bio-Resonance Halo
+            targetCtx.strokeStyle = "rgba(165, 243, 252, " + (hBeamAlpha * 0.32).toFixed(2) + ")";
+            targetCtx.lineWidth = Math.max(2.6, headR * (tier === 3 ? 0.55 : 0.40));
             targetCtx.beginPath();
             targetCtx.moveTo(_ptsX[0], _ptsY[0]);
             for (var hj = 1; hj < K; hj++) {
@@ -10718,17 +10716,134 @@ try { checkUrlHashRoutine(); } catch(e){}
             }
             targetCtx.stroke();
 
-            // Pre-rendered Bi-Chromatic Bioluminescent Nucleotide Sparks (Cyan & Magenta)
-            var hCyanSpark = MeteorVFXEngine.getHelixSpark(false);
-            var hMagSpark = MeteorVFXEngine.getHelixSpark(true);
-            if (hCyanSpark && hMagSpark) {
-              var hsIdx1 = Math.min(K - 1, 2);
-              var hsR = Math.max(2.8, headR * (tier === 3 ? 0.52 : (tier === 2 ? 0.44 : 0.36)));
-              targetCtx.drawImage(hCyanSpark, _ribbon1X[hsIdx1] - hsR * 0.5, _ribbon1Y[hsIdx1] - hsR * 0.5, hsR, hsR);
-              if (tier >= 2 && K >= 5) {
-                var hsIdx2 = Math.min(K - 1, 4);
-                targetCtx.drawImage(hMagSpark, _ribbon2X[hsIdx2] - hsR * 0.5, _ribbon2Y[hsIdx2] - hsR * 0.5, hsR, hsR);
+            // Crystalline Coherent Laser-Vein Core
+            targetCtx.strokeStyle = "rgba(255, 255, 255, " + (hBeamAlpha * 0.95).toFixed(2) + ")";
+            targetCtx.lineWidth = Math.max(1.2, headR * (tier === 3 ? 0.20 : 0.14));
+            targetCtx.stroke();
+          }
+
+          // ── PASS 3: ENERGIZED HYDROGEN-BOND BASE-PAIR CROSS RUNGS & CENTRAL NODES ──
+          for (var rk = 1; rk < K - 1; rk += rungStep) {
+            var rx1 = _ribbon1X[rk], ry1 = _ribbon1Y[rk];
+            var rx2 = _ribbon2X[rk], ry2 = _ribbon2Y[rk];
+            var rungGrad = targetCtx.createLinearGradient(rx1, ry1, rx2, ry2);
+            rungGrad.addColorStop(0.0, "rgba(34, 211, 238, " + (renderAlpha * 0.95).toFixed(2) + ")");
+            rungGrad.addColorStop(0.48, "rgba(255, 255, 255, " + (renderAlpha * 0.98).toFixed(2) + ")");
+            rungGrad.addColorStop(1.0, "rgba(217, 70, 239, " + (renderAlpha * 0.95).toFixed(2) + ")");
+
+            targetCtx.strokeStyle = rungGrad;
+            targetCtx.lineWidth = tier === 3 ? 1.6 : (tier === 2 ? 1.3 : 1.0);
+            targetCtx.beginPath();
+            targetCtx.moveTo(rx1, ry1);
+            targetCtx.lineTo(rx2, ry2);
+            targetCtx.stroke();
+
+            // Central Sparkling Hydrogen-Bond Quantum Junction Node
+            var rmx = (rx1 + rx2) * 0.5;
+            var rmy = (ry1 + ry2) * 0.5;
+            targetCtx.beginPath();
+            targetCtx.arc(rmx, rmy, tier === 3 ? 1.8 : 1.3, 0, Math.PI * 2);
+            targetCtx.fillStyle = "rgba(255, 255, 255, " + (renderAlpha * 0.98).toFixed(2) + ")";
+            targetCtx.fill();
+          }
+
+          // ── PASS 4: NEAR-SIDE (FOREGROUND) STRAND SEGMENTS (Z >= 0) ──
+          // Drawn ON TOP of the rungs and background strands -> Genuine 3D Spatial Twist!
+
+          // Strand A Foreground Segments (Electric Cyan)
+          for (var sj = 0; sj < K - 1; sj++) {
+            var midZ1 = (_ribbon1Z[sj] + _ribbon1Z[sj + 1]) * 0.5;
+            if (midZ1 >= 0.08) {
+              var zScaleA = 1.0 + midZ1 * 0.35;
+              // Outer Volumetric Neon Glow Sheath
+              targetCtx.strokeStyle = "rgba(34, 211, 238, " + (renderAlpha * 0.45).toFixed(2) + ")";
+              targetCtx.lineWidth = baseStrandW * zScaleA * 1.6;
+              targetCtx.beginPath();
+              targetCtx.moveTo(_ribbon1X[sj], _ribbon1Y[sj]);
+              var mx1 = (_ribbon1X[sj] + _ribbon1X[sj + 1]) * 0.5;
+              var my1 = (_ribbon1Y[sj] + _ribbon1Y[sj + 1]) * 0.5;
+              targetCtx.quadraticCurveTo(_ribbon1X[sj], _ribbon1Y[sj], mx1, my1);
+              targetCtx.lineTo(_ribbon1X[sj + 1], _ribbon1Y[sj + 1]);
+              targetCtx.stroke();
+
+              // Inner Luminous Core
+              targetCtx.strokeStyle = "rgba(165, 243, 252, " + (renderAlpha * 0.98).toFixed(2) + ")";
+              targetCtx.lineWidth = baseStrandW * zScaleA;
+              targetCtx.beginPath();
+              targetCtx.moveTo(_ribbon1X[sj], _ribbon1Y[sj]);
+              targetCtx.quadraticCurveTo(_ribbon1X[sj], _ribbon1Y[sj], mx1, my1);
+              targetCtx.lineTo(_ribbon1X[sj + 1], _ribbon1Y[sj + 1]);
+              targetCtx.stroke();
+            }
+          }
+
+          // Strand B Foreground Segments (Royal Magenta)
+          for (var sj = 0; sj < K - 1; sj++) {
+            var midZ2 = (_ribbon2Z[sj] + _ribbon2Z[sj + 1]) * 0.5;
+            if (midZ2 >= 0.08) {
+              var zScaleB = 1.0 + midZ2 * 0.35;
+              // Outer Volumetric Neon Glow Sheath
+              targetCtx.strokeStyle = "rgba(217, 70, 239, " + (renderAlpha * 0.45).toFixed(2) + ")";
+              targetCtx.lineWidth = baseStrandW * zScaleB * 1.6;
+              targetCtx.beginPath();
+              targetCtx.moveTo(_ribbon2X[sj], _ribbon2Y[sj]);
+              var mx2 = (_ribbon2X[sj] + _ribbon2X[sj + 1]) * 0.5;
+              var my2 = (_ribbon2Y[sj] + _ribbon2Y[sj + 1]) * 0.5;
+              targetCtx.quadraticCurveTo(_ribbon2X[sj], _ribbon2Y[sj], mx2, my2);
+              targetCtx.lineTo(_ribbon2X[sj + 1], _ribbon2Y[sj + 1]);
+              targetCtx.stroke();
+
+              // Inner Luminous Core
+              targetCtx.strokeStyle = "rgba(245, 208, 254, " + (renderAlpha * 0.98).toFixed(2) + ")";
+              targetCtx.lineWidth = baseStrandW * zScaleB;
+              targetCtx.beginPath();
+              targetCtx.moveTo(_ribbon2X[sj], _ribbon2Y[sj]);
+              targetCtx.quadraticCurveTo(_ribbon2X[sj], _ribbon2Y[sj], mx2, my2);
+              targetCtx.lineTo(_ribbon2X[sj + 1], _ribbon2Y[sj + 1]);
+              targetCtx.stroke();
+            }
+          }
+
+          // ── PASS 5: 3D SPHERICAL NUCLEOTIDE PEARLS WITH SPECULAR HIGHLIGHTS ──
+          if (tier >= 2) {
+            var pearlR = Math.max(1.8, headR * (tier === 3 ? 0.28 : 0.22));
+            for (var pk = 1; pk < K - 1; pk += rungStep) {
+              // Strand A Pearl
+              if (_ribbon1Z[pk] >= -0.25) {
+                targetCtx.beginPath();
+                targetCtx.arc(_ribbon1X[pk], _ribbon1Y[pk], pearlR * (1.0 + _ribbon1Z[pk] * 0.25), 0, Math.PI * 2);
+                targetCtx.fillStyle = "rgba(34, 211, 238, " + (renderAlpha * 0.96).toFixed(2) + ")";
+                targetCtx.fill();
+                targetCtx.beginPath();
+                targetCtx.arc(_ribbon1X[pk] - 0.5, _ribbon1Y[pk] - 0.5, pearlR * 0.45, 0, Math.PI * 2);
+                targetCtx.fillStyle = "#ffffff";
+                targetCtx.fill();
               }
+
+              // Strand B Pearl
+              if (_ribbon2Z[pk] >= -0.25) {
+                targetCtx.beginPath();
+                targetCtx.arc(_ribbon2X[pk], _ribbon2Y[pk], pearlR * (1.0 + _ribbon2Z[pk] * 0.25), 0, Math.PI * 2);
+                targetCtx.fillStyle = "rgba(217, 70, 239, " + (renderAlpha * 0.96).toFixed(2) + ")";
+                targetCtx.fill();
+                targetCtx.beginPath();
+                targetCtx.arc(_ribbon2X[pk] - 0.5, _ribbon2Y[pk] - 0.5, pearlR * 0.45, 0, Math.PI * 2);
+                targetCtx.fillStyle = "#ffffff";
+                targetCtx.fill();
+              }
+            }
+          }
+
+          // ── PASS 6: PRE-RENDERED BI-CHROMATIC NUCLEOTIDE SPARKS ──
+          var hCyanSpark = MeteorVFXEngine.getHelixSpark(false);
+          var hMagSpark = MeteorVFXEngine.getHelixSpark(true);
+          if (hCyanSpark && hMagSpark) {
+            var hsIdx1 = Math.min(K - 1, 2);
+            var hsR = Math.max(3.2, headR * (tier === 3 ? 0.60 : (tier === 2 ? 0.48 : 0.38)));
+            targetCtx.drawImage(hCyanSpark, _ribbon1X[hsIdx1] - hsR * 0.5, _ribbon1Y[hsIdx1] - hsR * 0.5, hsR, hsR);
+            if (tier >= 2 && K >= 5) {
+              var hsIdx2 = Math.min(K - 1, 4);
+              targetCtx.drawImage(hMagSpark, _ribbon2X[hsIdx2] - hsR * 0.5, _ribbon2Y[hsIdx2] - hsR * 0.5, hsR, hsR);
             }
           }
 
@@ -10933,29 +11048,61 @@ try { checkUrlHashRoutine(); } catch(e){}
       } else {
         // ── CLASSIC QUANTUM REALM & QUANTUM HELIX HEAD RENDERING ──
         if (isHelix) {
+          // ── MAGNIFICENT BIOLUMINESCENT GENOME NUCLEOSOME HEAD CORE ──
+          var hHeadR = headR * (tier === 3 ? 1.20 : (tier === 2 ? 1.10 : 1.02));
+
+          // 1. Iridescent Bio-Corona Mantle
+          var mantleGrad = targetCtx.createRadialGradient(px0, py0, hHeadR * 0.35, px0, py0, hHeadR * 1.65);
+          mantleGrad.addColorStop(0.0, "rgba(255, 255, 255, " + (renderAlpha * 0.98).toFixed(2) + ")");
+          mantleGrad.addColorStop(0.30, "rgba(34, 211, 238, " + (renderAlpha * 0.92).toFixed(2) + ")");
+          mantleGrad.addColorStop(0.70, "rgba(217, 70, 239, " + (renderAlpha * 0.58).toFixed(2) + ")");
+          mantleGrad.addColorStop(1.0, "rgba(126, 34, 206, 0.0)");
+          targetCtx.fillStyle = mantleGrad;
           targetCtx.beginPath();
-          targetCtx.arc(px0, py0, headR * (tier === 3 ? 1.45 : (tier === 2 ? 1.35 : 1.25)), 0, Math.PI * 2);
-          targetCtx.fillStyle = "rgba(34, 211, 238, " + (renderAlpha * (tier === 3 ? 0.34 : 0.26)).toFixed(2) + ")";
+          targetCtx.arc(px0, py0, hHeadR * 1.65, 0, Math.PI * 2);
           targetCtx.fill();
 
+          // 2. 3D Spherical Normal-Shaded Chromosomal Genome Sphere
+          var coreGrad = targetCtx.createRadialGradient(px0 - hHeadR * 0.28, py0 - hHeadR * 0.28, 0, px0, py0, hHeadR);
+          coreGrad.addColorStop(0.0, "#ffffff");
+          coreGrad.addColorStop(0.28, "#a5f3fc");
+          coreGrad.addColorStop(0.62, "#0284c7");
+          coreGrad.addColorStop(0.88, "#9333ea");
+          coreGrad.addColorStop(1.0, "#581c87");
+          targetCtx.fillStyle = coreGrad;
           targetCtx.beginPath();
-          targetCtx.arc(px0, py0, headR, 0, Math.PI * 2);
-          targetCtx.fillStyle = "hsla(188, 98%, 74%, " + renderAlpha.toFixed(2) + ")";
+          targetCtx.arc(px0, py0, hHeadR, 0, Math.PI * 2);
           targetCtx.fill();
+
+          // 3. Central Diamond Starlight Diffraction Flare
+          targetCtx.strokeStyle = "rgba(255, 255, 255, " + (renderAlpha * 0.98).toFixed(2) + ")";
+          targetCtx.lineWidth = 1.0;
+          targetCtx.beginPath();
+          var spLen = hHeadR * 1.35;
+          targetCtx.moveTo(px0, py0 - spLen); targetCtx.lineTo(px0, py0 + spLen);
+          targetCtx.moveTo(px0 - spLen, py0); targetCtx.lineTo(px0 + spLen, py0);
+          targetCtx.stroke();
+
+          // High-Intensity White Planck Core
+          targetCtx.beginPath();
+          targetCtx.arc(px0 + cosH * (hHeadR * 0.18), py0 + sinH * (hHeadR * 0.18), hHeadR * 0.38, 0, Math.PI * 2);
+          targetCtx.fillStyle = "#ffffff";
+          targetCtx.fill();
+
         } else {
           targetCtx.beginPath();
           targetCtx.arc(px0, py0, headR, 0, Math.PI * 2);
           targetCtx.fillStyle = "hsla(" + fHeadHue + ", 98%, " + fHeadLit.toFixed(1) + "%, " + renderAlpha.toFixed(2) + ")";
           targetCtx.fill();
+
+          // Pure white quantum singularity center
+          targetCtx.beginPath();
+          targetCtx.arc(px0 + cosH * (headR * 0.25), py0 + sinH * (headR * 0.25), headR * 0.45, 0, Math.PI * 2);
+          targetCtx.fillStyle = "rgba(255, 255, 255, " + (renderAlpha * 0.96).toFixed(2) + ")";
+          targetCtx.fill();
         }
 
-        // Pure white quantum singularity center
-        targetCtx.beginPath();
-        targetCtx.arc(px0 + cosH * (headR * 0.25), py0 + sinH * (headR * 0.25), headR * 0.45, 0, Math.PI * 2);
-        targetCtx.fillStyle = "rgba(255, 255, 255, " + (renderAlpha * 0.96).toFixed(2) + ")";
-        targetCtx.fill();
-
-        // Miniature Bohr probability orbital rings
+        // Miniature Bohr probability orbital rings / 3D Toroidal Chromatin Loops
         if (renderAsBrightest) {
           var morphEase = p.isFront ? Math.max(0.35, gameGlowProgress) : gameGlowProgress;
           var orbBaseR = headR * (tier === 3 ? 2.85 : (tier === 2 ? 2.30 : 1.80)) * (0.75 + 0.25 * morphEase);
@@ -10963,26 +11110,55 @@ try { checkUrlHashRoutine(); } catch(e){}
           var ringAlpha = renderAlpha * morphEase;
 
           if (isHelix) {
-            // Quantum Helix: Dual Counter-Phase Cyan & Violet Orbital Resonance Rings
+            // Quantum Helix: Dual Counter-Revolving 3D Toroidal Chromatin Rings with Multiple Orbiting Nucleotides
+            var spinCyan = p.heading + spinAngle;
+            var spinMag = p.heading - spinAngle * 0.92;
+
+            // Ring 1: Electric Cyan Chromatin Loop
             targetCtx.beginPath();
-            targetCtx.arc(px0, py0, orbBaseR * 0.85, 0, Math.PI * 2);
-            targetCtx.strokeStyle = "rgba(34, 211, 238, " + (ringAlpha * 0.44).toFixed(2) + ")";
+            targetCtx.ellipse(px0, py0, orbBaseR * 1.30, orbBaseR * 0.65, spinCyan, 0, Math.PI * 2);
+            targetCtx.strokeStyle = "rgba(34, 211, 238, " + (ringAlpha * 0.55).toFixed(2) + ")";
+            targetCtx.lineWidth = tier === 3 ? 1.45 : 1.1;
+            targetCtx.stroke();
+
+            // 3 Orbiting Cyan Nucleotide Nodules (Adenine / Thymine Nodes)
+            for (var oi = 0; oi < 3; oi++) {
+              var oAng1 = spinCyan + (oi / 3) * Math.PI * 2;
+              var ox1 = px0 + Math.cos(oAng1) * (orbBaseR * 1.30);
+              var oy1 = py0 + Math.sin(oAng1) * (orbBaseR * 0.65);
+              targetCtx.beginPath();
+              targetCtx.arc(ox1, oy1, tier === 3 ? 2.2 : 1.6, 0, Math.PI * 2);
+              targetCtx.fillStyle = "rgba(165, 243, 252, " + (ringAlpha * 0.98).toFixed(2) + ")";
+              targetCtx.fill();
+            }
+
+            // Ring 2: Royal Magenta Chromatin Loop
+            targetCtx.beginPath();
+            targetCtx.ellipse(px0, py0, orbBaseR * 1.30, orbBaseR * 0.65, spinMag, 0, Math.PI * 2);
+            targetCtx.strokeStyle = "rgba(217, 70, 239, " + (ringAlpha * 0.52).toFixed(2) + ")";
             targetCtx.lineWidth = tier === 3 ? 1.35 : 1.0;
             targetCtx.stroke();
 
-            var worldSpin2 = p.heading + spinAngle;
-            targetCtx.beginPath();
-            targetCtx.ellipse(px0, py0, orbBaseR * 1.35, orbBaseR * 0.75, worldSpin2, 0, Math.PI * 2);
-            targetCtx.strokeStyle = "rgba(217, 70, 239, " + (ringAlpha * 0.42).toFixed(2) + ")";
-            targetCtx.lineWidth = tier === 3 ? 1.25 : 0.95;
-            targetCtx.stroke();
+            // 3 Orbiting Royal Magenta Nucleotide Nodules (Guanine / Cytosine Nodes)
+            for (var oj = 0; oj < 3; oj++) {
+              var oAng2 = spinMag + (oj / 3) * Math.PI * 2;
+              var ox2 = px0 + Math.cos(oAng2) * (orbBaseR * 1.30);
+              var oy2 = py0 + Math.sin(oAng2) * (orbBaseR * 0.65);
+              targetCtx.beginPath();
+              targetCtx.arc(ox2, oy2, tier === 3 ? 2.0 : 1.5, 0, Math.PI * 2);
+              targetCtx.fillStyle = "rgba(245, 208, 254, " + (ringAlpha * 0.98).toFixed(2) + ")";
+              targetCtx.fill();
+            }
 
-            var qNodeX = px0 + Math.cos(worldSpin2) * orbBaseR * 1.35;
-            var qNodeY = py0 + Math.sin(worldSpin2) * orbBaseR * 1.35;
-            targetCtx.beginPath();
-            targetCtx.arc(qNodeX, qNodeY, tier === 3 ? 2.0 : 1.4, 0, Math.PI * 2);
-            targetCtx.fillStyle = "rgba(34, 211, 238, " + (ringAlpha * 0.96).toFixed(2) + ")";
-            targetCtx.fill();
+            // Target Synchronized Aura: Resonant Golden Bio-Quantum Double Ring
+            if (isTargetLocked) {
+              var syncRatioH = (typeof contactDuration === "number") ? Math.min(1.0, contactDuration / 2.0) : 0.6;
+              targetCtx.beginPath();
+              targetCtx.arc(px0, py0, orbBaseR * (1.35 + syncRatioH * 0.4), 0, Math.PI * 2);
+              targetCtx.strokeStyle = "rgba(255, 215, 0, " + (syncRatioH * 0.85).toFixed(2) + ")";
+              targetCtx.lineWidth = 1.6;
+              targetCtx.stroke();
+            }
 
           } else {
             // Classic Quantum Realm: Concentric Quantum Orbitals with Counter-Rotating Phase Node
@@ -13412,7 +13588,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   <script>
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v69', { scope: './' }).catch(function() {});
+        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v70', { scope: './' }).catch(function() {});
       });
     }
   </script>
