@@ -18,7 +18,7 @@
 
 /* ───────── FUTURISTIC FULLSCREEN CONTROLLER ("Enter Full Screen" / "Exit Full Screen") ───────── */
 (function initFullscreenManager() {
-  var btnNormal = document.getElementById("btnToggleFullscreen");
+  var btnNormal = document.getElementById("btnToggleFullscreen") || document.getElementById("btnTopbarFullscreen");
   var btnGame = document.getElementById("btnGameToggleFullscreen");
   var lastExitTime = 0;
 
@@ -2819,9 +2819,9 @@ FUTURISTIC QUANTUM UNIVERSE GAME SUITE (window.quantumGame)
 (function initQuantumUniverseGame() {
   var overlay = document.getElementById("quantumGameOverlay");
   var canvas = document.getElementById("quantumGameCanvas");
-  var btnLaunch = document.getElementById("btnLaunchGame");
-  var btnLaunchHelix = document.getElementById("btnLaunchHelixGame");
-  var btnLaunchMeteor = document.getElementById("btnLaunchMeteorGame");
+  var btnLaunch = document.getElementById("btnLaunchGame") || document.getElementById("btnLaunchRealm");
+  var btnLaunchHelix = document.getElementById("btnLaunchHelixGame") || document.getElementById("btnLaunchHelix");
+  var btnLaunchMeteor = document.getElementById("btnLaunchMeteorGame") || document.getElementById("btnLaunchMeteor");
   var btnExit = document.getElementById("btnExitGame");
   var btnPlayAgain = document.getElementById("btnGamePlayAgain");
   var btnReturn = document.getElementById("btnGameReturn");
@@ -2850,7 +2850,7 @@ FUTURISTIC QUANTUM UNIVERSE GAME SUITE (window.quantumGame)
   var actionIcon = document.getElementById("qGameActionIcon");
   var actionLabel = document.getElementById("qGameActionLabel");
 
-  if (!overlay || !canvas || !btnLaunch) return;
+  if (!overlay || !canvas) return;
 
   var ctx = canvas.getContext("2d");
   if (!ctx) return;
@@ -3364,7 +3364,13 @@ FUTURISTIC QUANTUM UNIVERSE GAME SUITE (window.quantumGame)
   }
 
   function launchGame(variant) {
-    if (isActive) return;
+    if (isActive) {
+      if (variant && variant !== currentGameVariant) {
+        exitGame();
+        launchGame(variant);
+      }
+      return;
+    }
     if (variant) {
       currentGameVariant = (variant === "helix") ? "helix" : ((variant === "meteor") ? "meteor" : "classic");
     }
@@ -4869,6 +4875,7 @@ FUTURISTIC QUANTUM UNIVERSE GAME SUITE (window.quantumGame)
     var btnHelix = document.getElementById('btnLaunchHelix');
     var btnMeteor = document.getElementById('btnLaunchMeteor');
     var btnFs = document.getElementById('btnTopbarFullscreen');
+    var btnExit = document.getElementById('btnExitGame');
 
     if (btnRealm) {
       btnRealm.addEventListener('click', function(e) {
@@ -4903,6 +4910,13 @@ FUTURISTIC QUANTUM UNIVERSE GAME SUITE (window.quantumGame)
             document.exitFullscreen().catch(function(){});
           }
         }
+      });
+    }
+
+    if (btnExit) {
+      btnExit.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (window.quantumGame) window.quantumGame.exit();
       });
     }
 

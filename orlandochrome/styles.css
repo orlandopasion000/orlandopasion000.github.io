@@ -13966,7 +13966,6 @@ body.netflix-messenger-theme {
 }
 
 
-
 /* ══════════════════════════════════════════════════════════════
    ORLANDORECHARGE THREE QUANTUM FULLSCREEN GAMES ENGINE CSS
    ══════════════════════════════════════════════════════════════ */
@@ -13993,7 +13992,16 @@ body.netflix-messenger-theme {
   z-index: 1;
 }
 
-/* OrlandoChrome Host View Dimming & Hiding when Game is Active */
+/* OrlandoChrome Host View Dimming & Hiding when Game is Active - TRUE 100% FULLSCREEN CANVAS */
+body.universe-game-active .app-topbar,
+body.universe-game-active #appWorkspace,
+body.universe-game-active .app-workspace,
+body.universe-game-active .sidebar,
+body.universe-game-active .main-content,
+body.universe-game-active .floating-taskbar-wrap,
+body.universe-game-active .standalone-subapp-dock,
+body.universe-game-active .spotlight-palette-modal,
+body.universe-game-active .modal,
 body.universe-game-active .app-header,
 body.universe-game-active #appHeader,
 body.universe-game-active .topbar,
@@ -14011,9 +14019,43 @@ body.universe-game-active main {
   transition: opacity 1.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
+/* HUD Interactive Buttons Pointer Events */
+.qgame-btn-music,
+.qgame-btn-exit,
+.qgame-fs-exit,
+.fs-toggle-btn,
+.qgame-btn-action,
+.qgame-exit-hud,
+.qgame-left-hud,
+.qgame-exit-hud button,
+.qgame-left-hud button {
+  pointer-events: auto !important;
+}
+
 /* Topbar Game Launch Buttons Specific Styling */
+.btn-topbar-game-dest {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 9999px;
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+  user-select: none;
+  flex-shrink: 0;
+}
+
 .btn-game-realm {
-  border-color: rgba(56, 189, 248, 0.35) !important;
+  border: 1px solid rgba(56, 189, 248, 0.35) !important;
   color: #38bdf8 !important;
 }
 .btn-game-realm:hover {
@@ -14023,7 +14065,7 @@ body.universe-game-active main {
 }
 
 .btn-game-helix {
-  border-color: rgba(168, 85, 247, 0.35) !important;
+  border: 1px solid rgba(168, 85, 247, 0.35) !important;
   color: #c084fc !important;
 }
 .btn-game-helix:hover {
@@ -14033,13 +14075,22 @@ body.universe-game-active main {
 }
 
 .btn-game-meteor {
-  border-color: rgba(245, 158, 11, 0.35) !important;
+  border: 1px solid rgba(245, 158, 11, 0.35) !important;
   color: #fbbf24 !important;
 }
 .btn-game-meteor:hover {
   background: rgba(245, 158, 11, 0.15) !important;
   border-color: #f59e0b !important;
   box-shadow: 0 0 12px rgba(245, 158, 11, 0.4) !important;
+}
+
+@media (max-width: 600px) {
+  .btn-topbar-game-dest {
+    height: 26px;
+    padding: 0 7px;
+    font-size: 0.65rem;
+    gap: 3px;
+  }
 }
 
 /* ───────── TWIN QUANTUM REALM NAVIGATION & FULLSCREEN CONTROLS (Co-located Single-Click In/Out) ───────── */
