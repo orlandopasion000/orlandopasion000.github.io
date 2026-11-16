@@ -836,13 +836,61 @@ const Icons = {
   // Register Service Worker for Offline PWA & iOS Home Screen Support
   if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js?v=arena210').then(reg => {
+      navigator.serviceWorker.register('sw.js?v=arena212').then(reg => {
         if (reg) {
           reg.update().catch(() => {});
         }
       }).catch(() => {});
     });
   }
+
+  // Ensure Quantum Universe Launcher Cluster is always present beside ORLANDOCHROME logo
+  (function ensureQuantumClusterBesideLogo() {
+    function checkAndInject() {
+      const logo = document.getElementById('logoBtn');
+      if (!logo) return;
+      let cluster = document.getElementById('qgameTopbarCluster');
+      if (!cluster) {
+        cluster = document.createElement('div');
+        cluster.className = 'qgame-topbar-cluster';
+        cluster.id = 'qgameTopbarCluster';
+        cluster.innerHTML = `
+          <button type="button" class="qgame-btn-launch qgame-btn-realm" id="btnLaunchGame" title="Enter Quantum Realm Game (Classic Particles)" aria-label="Launch Quantum Realm Game">
+            <span class="game-btn-glyph" aria-hidden="true">◈</span>
+            <span class="game-btn-label"><span class="qg-word-quantum">QUANTUM </span>REALM</span>
+          </button>
+          <button type="button" class="qgame-btn-launch qgame-btn-helix" id="btnLaunchHelixGame" title="Enter Quantum Helix Game (Cyan & Violet Double-Helix)" aria-label="Launch Quantum Helix Game">
+            <span class="game-btn-glyph game-btn-glyph-helix" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 6c4 0 6 12 10 12s6-12 10-12" stroke="#22d3ee"/>
+                <path d="M4 18c4 0 6-12 10-12s6 12 10 12" stroke="#c084fc" stroke-dasharray="2 2" opacity="0.92"/>
+              </svg>
+            </span>
+            <span class="game-btn-label"><span class="qg-word-quantum">QUANTUM </span>HELIX</span>
+          </button>
+          <button type="button" class="qgame-btn-launch qgame-btn-meteor" id="btnLaunchMeteorGame" title="Enter Quantum Meteor Game (Fiery Meteors & Molten Asteroids)" aria-label="Launch Quantum Meteor Game">
+            <span class="game-btn-glyph game-btn-glyph-meteor" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 3L13.5 10.5M19 7L14 12M17 3L11.5 8.5" stroke="#f97316" stroke-width="1.8" opacity="0.95"/>
+                <path d="M5.5 12.5L3 15c-1.3 1.3-1.3 3.5 0 4.8 1.3 1.3 3.5 1.3 4.8 0l2.5-2.5-1.2-3.6-3.6-1.2z" fill="rgba(234, 88, 12, 0.55)" stroke="#fb923c" stroke-width="1.8"/>
+                <circle cx="6" cy="18" r="1.5" fill="#fef08a"/>
+              </svg>
+            </span>
+            <span class="game-btn-label"><span class="qg-word-quantum">QUANTUM </span>METEOR</span>
+          </button>
+        `;
+        logo.parentNode.insertBefore(cluster, logo.nextSibling);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', checkAndInject);
+    } else {
+      checkAndInject();
+    }
+    setTimeout(checkAndInject, 100);
+    setTimeout(checkAndInject, 500);
+    setTimeout(checkAndInject, 1500);
+  })();
 
   // Application State
   const state = {

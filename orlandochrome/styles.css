@@ -14703,43 +14703,47 @@ body.universe-game-active .qgame-fs-exit {
 
 .qgame-btn-realm {
   background: rgba(14, 165, 233, 0.16) !important;
-  border: 1.5px solid rgba(56, 189, 248, 0.60) !important;
+  border: 1.5px solid #38bdf8 !important;
+  color: #f8fafc !important;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.45), inset 0 0 8px rgba(56, 189, 248, 0.20) !important;
+}
+.qgame-btn-realm .game-btn-glyph {
   color: #38bdf8 !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35), 0 0 10px rgba(56, 189, 248, 0.25) !important;
+  text-shadow: 0 0 8px #38bdf8 !important;
 }
 .qgame-btn-realm:hover {
   background: rgba(14, 165, 233, 0.32) !important;
   border-color: #38bdf8 !important;
   color: #ffffff !important;
-  box-shadow: 0 0 16px rgba(56, 189, 248, 0.65) !important;
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.85), inset 0 0 12px rgba(56, 189, 248, 0.35) !important;
   transform: translateY(-1px);
 }
 
 .qgame-btn-helix {
-  background: linear-gradient(135deg, rgba(34, 211, 238, 0.16) 0%, rgba(192, 132, 252, 0.16) 100%) !important;
-  border: 1.5px solid rgba(192, 132, 252, 0.60) !important;
-  color: #e2e8f0 !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35), 0 0 10px rgba(192, 132, 252, 0.25) !important;
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.14) 0%, rgba(192, 132, 252, 0.18) 100%) !important;
+  border: 1.5px solid #c084fc !important;
+  color: #f8fafc !important;
+  box-shadow: 0 0 12px rgba(192, 132, 252, 0.45), 0 0 16px rgba(34, 211, 238, 0.25), inset 0 0 8px rgba(192, 132, 252, 0.20) !important;
 }
 .qgame-btn-helix:hover {
-  background: linear-gradient(135deg, rgba(34, 211, 238, 0.30) 0%, rgba(192, 132, 252, 0.30) 100%) !important;
-  border-color: #c084fc !important;
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.28) 0%, rgba(192, 132, 252, 0.32) 100%) !important;
+  border-color: #22d3ee !important;
   color: #ffffff !important;
-  box-shadow: 0 0 16px rgba(192, 132, 252, 0.65) !important;
+  box-shadow: 0 0 22px rgba(192, 132, 252, 0.80), 0 0 24px rgba(34, 211, 238, 0.50) !important;
   transform: translateY(-1px);
 }
 
 .qgame-btn-meteor {
   background: rgba(234, 88, 12, 0.18) !important;
-  border: 1.5px solid rgba(249, 115, 22, 0.60) !important;
-  color: #fb923c !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35), 0 0 10px rgba(249, 115, 22, 0.25) !important;
+  border: 1.5px solid #fb923c !important;
+  color: #f8fafc !important;
+  box-shadow: 0 0 12px rgba(251, 146, 60, 0.48), inset 0 0 8px rgba(249, 115, 22, 0.22) !important;
 }
 .qgame-btn-meteor:hover {
   background: rgba(234, 88, 12, 0.34) !important;
-  border-color: #f97316 !important;
+  border-color: #fb923c !important;
   color: #ffffff !important;
-  box-shadow: 0 0 16px rgba(249, 115, 22, 0.65) !important;
+  box-shadow: 0 0 22px rgba(251, 146, 60, 0.90), inset 0 0 14px rgba(249, 115, 22, 0.45) !important;
   transform: translateY(-1px);
 }
 

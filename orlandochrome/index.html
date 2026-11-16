@@ -21,10 +21,102 @@
   <link rel="apple-touch-icon" sizes="167x167" href="apple-touch-icon-167x167.png?v=pure125">
   <link rel="apple-touch-icon" sizes="152x152" href="apple-touch-icon-152x152.png?v=pure125">
   <link rel="apple-touch-icon" sizes="120x120" href="apple-touch-icon-120x120.png?v=pure125">
-  <link rel="stylesheet" href="styles.css?v=pure210">
+  <link rel="stylesheet" href="styles.css?v=pure212">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style id="qgameTopbarInlineStyles">
+    .topbar-left {
+      display: flex !important;
+      align-items: center !important;
+      gap: 12px !important;
+      flex-shrink: 0 !important;
+    }
+    .topbar-left .qgame-topbar-cluster,
+    .qgame-topbar-cluster {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      flex-shrink: 0 !important;
+      z-index: 50 !important;
+    }
+    .topbar-left .qgame-btn-launch,
+    .qgame-btn-launch {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 6px !important;
+      height: 28px !important;
+      box-sizing: border-box !important;
+      padding: 0 10px !important;
+      border-radius: 9999px !important;
+      font-family: 'Lexend', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+      font-size: 0.68rem !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.04em !important;
+      cursor: pointer !important;
+      user-select: none !important;
+      text-decoration: none !important;
+      white-space: nowrap !important;
+      flex-shrink: 0 !important;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+    .qgame-btn-realm {
+      background: rgba(14, 165, 233, 0.16) !important;
+      border: 1.5px solid #38bdf8 !important;
+      color: #f8fafc !important;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.45), inset 0 0 8px rgba(56, 189, 248, 0.20) !important;
+    }
+    .qgame-btn-realm .game-btn-glyph {
+      color: #38bdf8 !important;
+      text-shadow: 0 0 8px #38bdf8 !important;
+    }
+    .qgame-btn-realm:hover {
+      background: rgba(14, 165, 233, 0.32) !important;
+      border-color: #38bdf8 !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.85), inset 0 0 12px rgba(56, 189, 248, 0.35) !important;
+      transform: translateY(-1px);
+    }
+    .qgame-btn-helix {
+      background: linear-gradient(135deg, rgba(34, 211, 238, 0.14) 0%, rgba(192, 132, 252, 0.18) 100%) !important;
+      border: 1.5px solid #c084fc !important;
+      color: #f8fafc !important;
+      box-shadow: 0 0 12px rgba(192, 132, 252, 0.45), 0 0 16px rgba(34, 211, 238, 0.25), inset 0 0 8px rgba(192, 132, 252, 0.20) !important;
+    }
+    .qgame-btn-helix:hover {
+      background: linear-gradient(135deg, rgba(34, 211, 238, 0.28) 0%, rgba(192, 132, 252, 0.32) 100%) !important;
+      border-color: #22d3ee !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 22px rgba(192, 132, 252, 0.80), 0 0 24px rgba(34, 211, 238, 0.50) !important;
+      transform: translateY(-1px);
+    }
+    .qgame-btn-meteor {
+      background: rgba(234, 88, 12, 0.18) !important;
+      border: 1.5px solid #fb923c !important;
+      color: #f8fafc !important;
+      box-shadow: 0 0 12px rgba(251, 146, 60, 0.48), inset 0 0 8px rgba(249, 115, 22, 0.22) !important;
+    }
+    .qgame-btn-meteor:hover {
+      background: rgba(234, 88, 12, 0.34) !important;
+      border-color: #fb923c !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 22px rgba(251, 146, 60, 0.90), inset 0 0 14px rgba(249, 115, 22, 0.45) !important;
+      transform: translateY(-1px);
+    }
+    @media (max-width: 1350px) {
+      .qg-word-quantum {
+        display: none !important;
+      }
+    }
+    @media (max-width: 600px) {
+      .qgame-topbar-cluster {
+        display: none !important;
+      }
+    }
+  </style>
   </head>
 <body class="netflix-messenger-theme">
   <!-- Top Application Bar -->
@@ -499,7 +591,7 @@
   <script src="assets/relative-time.js"></script>
   <script src="sound.js?v=pure125"></script>
   <script src="qrcode.min.js"></script>
-  <script src="app.js?v=pure210"></script>
+  <script src="app.js?v=pure212"></script>
 
   <!-- BACKUP & RESTORE WORKSPACE MODAL -->
   <div class="modal-wrap" id="backupRestoreModal" role="dialog" aria-modal="true" aria-label="Backup & Restore Workspace" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:9999;align-items:center;justify-content:center;">
@@ -561,7 +653,7 @@
 
 
     
-  <script src="game.js?v=arena210"></script>
+  <script src="game.js?v=arena212"></script>
 
   <!-- Antigravity Interactive Particles Canvases for Quantum Universe Games -->
   <canvas id="antigravityCanvas" class="antigravity-canvas" aria-hidden="true" style="display:none;"></canvas>

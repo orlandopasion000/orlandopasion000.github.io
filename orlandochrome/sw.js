@@ -1,12 +1,12 @@
 /* OrlandoChrome · Offline-First Service Worker (PWA Ready) */
-const CACHE_NAME = 'orlandochrome-arena-v210';
+const CACHE_NAME = 'orlandochrome-arena-v212';
 const ASSETS = [
   './',
   './index.html',
-  './styles.css?v=pure210',
-  './game.js?v=arena210',
+  './styles.css?v=pure212',
+  './game.js?v=arena212',
   './qrcode.min.js',
-  './app.js?v=pure210',
+  './app.js?v=pure212',
   './sound.js?v=pure121',
   './oc-logo.png',
   './oc-logo.svg',
@@ -40,6 +40,21 @@ self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
   // Always bypass live cloud sync streams (Google Firebase Firestore & ntfy)
   if (event.request.url.includes('firestore.googleapis.com') || event.request.url.includes('ntfy.sh')) return;
+  
+  // Navigation requests: always fetch fresh from network to prevent stale HTML
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request)
+        .then((res) => {
+          const copy = res.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy)).catch(() => {});
+          return res;
+        })
+        .catch(() => caches.match(event.request))
+    );
+    return;
+  }
+
   event.respondWith(
     fetch(event.request)
       .then((res) => {
