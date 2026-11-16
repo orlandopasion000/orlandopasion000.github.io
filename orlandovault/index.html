@@ -942,6 +942,90 @@
       font-family: var(--font-inter);
     }
 
+    /* ==========================================================================
+       SMART METADATA TELEMETRY CLUSTER & CHIPS
+       ========================================================================== */
+    .vault-metadata-cluster {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 2px;
+      margin-bottom: 3px;
+    }
+
+    .meta-telemetry-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5.5px;
+      background: linear-gradient(135deg, rgba(16, 21, 32, 0.88) 0%, rgba(10, 15, 24, 0.95) 100%);
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      border-radius: 6px;
+      padding: 4px 9px;
+      font-family: var(--font-mono), monospace;
+      font-size: 11px;
+      color: #e2e8f0;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+      line-height: 1.25;
+    }
+
+    .meta-telemetry-chip:hover {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.22) 0%, rgba(2, 132, 199, 0.25) 100%);
+      border-color: #38bdf8;
+      color: #ffffff;
+      transform: translateY(-1.5px);
+      box-shadow: 0 4px 14px rgba(56, 189, 248, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+    }
+
+    .meta-telemetry-chip code {
+      font-family: inherit;
+      color: #38bdf8;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .meta-telemetry-chip b {
+      color: #94a3b8;
+      font-weight: 600;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .meta-chip-url {
+      background: linear-gradient(135deg, rgba(6, 78, 59, 0.4) 0%, rgba(4, 120, 87, 0.25) 100%);
+      border-color: rgba(52, 211, 153, 0.5);
+      color: #a7f3d0;
+    }
+
+    .meta-chip-url:hover {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.35) 0%, rgba(5, 150, 105, 0.4) 100%);
+      border-color: #34d399;
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(52, 211, 153, 0.5);
+    }
+
+    .meta-chip-phone {
+      border-color: rgba(168, 85, 247, 0.4);
+      background: linear-gradient(135deg, rgba(88, 28, 135, 0.3) 0%, rgba(126, 34, 206, 0.2) 100%);
+    }
+    .meta-chip-phone code { color: #d8b4fe; }
+
+    .meta-chip-card {
+      border-color: rgba(245, 158, 11, 0.4);
+      background: linear-gradient(135deg, rgba(120, 53, 15, 0.3) 0%, rgba(180, 83, 9, 0.2) 100%);
+    }
+    .meta-chip-card code { color: #fde047; }
+
+    .meta-chip-gov {
+      border-color: rgba(14, 165, 233, 0.45);
+      background: linear-gradient(135deg, rgba(3, 105, 161, 0.3) 0%, rgba(2, 132, 199, 0.2) 100%);
+    }
+    .meta-chip-gov code { color: #7dd3fc; }
+
     .card-footer {
       display: flex;
       justify-content: space-between;
@@ -4090,8 +4174,8 @@
         </div>
 
         <div class="edit-form-group">
-          <label class="edit-form-label" for="editInputNotes">NOTES / PORTAL URL / METADATA:</label>
-          <textarea class="edit-form-textarea" id="editInputNotes" rows="2" placeholder="e.g. Official University Portal: https://up.ucu.edu.ph/"></textarea>
+          <label class="edit-form-label" for="editInputNotes">SECURITY NOTES & SMART METADATA:</label>
+          <textarea class="edit-form-textarea" id="editInputNotes" rows="2" placeholder="e.g. Official University Portal: https://up.ucu.edu.ph/ | School ID: 300406 | Phone: 09278641467 (Auto-detected as 1-click chips!)"></textarea>
         </div>
 
         <div class="edit-form-options-row">
@@ -4704,6 +4788,80 @@
       } catch (e) {}
     }
 
+    function copyMetaValue(val, label, e) {
+      if (e) e.stopPropagation();
+      if (!val) return;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(val).then(() => {
+          showToast(`📋 Copied ${label || 'Value'}: ${val}`, '✓');
+          if (typeof playJarvisSound === 'function') playJarvisSound('copy');
+        }).catch(() => {});
+      }
+    }
+
+    function renderSmartMetadata(notes) {
+      if (!notes || typeof notes !== 'string') return '';
+      
+      const chips = [];
+      let remaining = notes;
+
+      // 1. Extract URLs
+      const urlRegex = /(https?:\/\/[^\s,;|\)]+)/gi;
+      remaining = remaining.replace(urlRegex, (url) => {
+        const cleanUrl = url.replace(/[\.,;\)]+$/, '');
+        chips.push({ type: 'url', label: 'Portal', value: cleanUrl, icon: '🌐' });
+        return '';
+      });
+
+      // 2. Extract Key-Value Telemetry (Phone, IDs, Card, Savings, etc.)
+      const kvRegex = /(?:(Phone\/Recovery|Phone|Mobile|SMS|Savings|Acc(?:ount)?|Credit Card|Card|BP Number|GSIS(?: No)?|TIN|NOA|LERIS|School(?: ID)?|Employee ID|Senior ID|Passport|Code|PIN|LRMDS|User(?:name)?|Issued|Subscribed|CSP 2nd Level|LET))\s*[:=]\s*([^\s\|;,]+(?:\s+[^\s\|;,]+)*?)(?=\s*(?:\||;|,|\(|$|\n))/gi;
+      remaining = remaining.replace(kvRegex, (match, key, val) => {
+        const cleanVal = val.trim().replace(/[\.,;]+$/, '');
+        if (cleanVal.length > 0 && cleanVal.length < 40) {
+          let icon = '📋';
+          let chipClass = 'meta-chip-id';
+          const k = key.toLowerCase();
+          if (k.includes('phone') || k.includes('mobile') || k.includes('sms')) { icon = '📱'; chipClass = 'meta-chip-phone'; }
+          else if (k.includes('savings') || k.includes('acc') || k.includes('card')) { icon = '💳'; chipClass = 'meta-chip-card'; }
+          else if (k.includes('school')) { icon = '🏫'; chipClass = 'meta-chip-school'; }
+          else if (k.includes('leris') || k.includes('email')) { icon = '✉️'; chipClass = 'meta-chip-email'; }
+          else if (k.includes('issued') || k.includes('subscribed')) { icon = '📅'; chipClass = 'meta-chip-date'; }
+          else if (k.includes('gsis') || k.includes('tin') || k.includes('bp') || k.includes('employee') || k.includes('noa')) { icon = '🪪'; chipClass = 'meta-chip-gov'; }
+          chips.push({ type: 'id', label: key.replace(/Phone\/Recovery/i, 'Phone'), value: cleanVal, icon, chipClass });
+          return '';
+        }
+        return match;
+      });
+
+      // Clean remaining text
+      let cleaned = remaining.split(/\|+/).map(s => s.trim()).filter(s => s.length > 0 && s !== '()' && s !== '·').join(' · ');
+      cleaned = cleaned.replace(/\s{2,}/g, ' ').replace(/^[\s·\-,:;()]+|[\s·\-,:;()]+$/g, '').trim();
+
+      let html = '';
+      if (chips.length > 0) {
+        html += '<div class="vault-metadata-cluster">';
+        chips.forEach(c => {
+          if (c.type === 'url') {
+            const safeHref = escapeHtml(c.value);
+            html += `<a href="${safeHref}" target="_blank" rel="noopener noreferrer" class="meta-telemetry-chip meta-chip-url" onclick="event.stopPropagation(); if(typeof playJarvisSound==='function') playJarvisSound('click');" title="Open ${safeHref}"><span>${c.icon}</span> <b>Launch Portal</b> <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>`;
+          } else {
+            const escapedVal = escapeHtml(c.value);
+            const escapedLabel = escapeHtml(c.label);
+            const rawJsVal = c.value.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+            const rawJsLabel = c.label.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+            html += `<button type="button" class="meta-telemetry-chip ${c.chipClass || 'meta-chip-id'}" onclick="copyMetaValue('${rawJsVal}', '${rawJsLabel}', event)" title="Click to copy ${escapedLabel}: ${escapedVal}"><span>${c.icon}</span> <b>${escapedLabel}:</b> <code>${escapedVal}</code></button>`;
+          }
+        });
+        html += '</div>';
+      }
+
+      if (cleaned) {
+        html += `<div class="card-notes">${escapeHtml(cleaned)}</div>`;
+      }
+
+      return html;
+    }
+
     function renderVault() {
       const container = document.getElementById('vaultGridContainer');
       if (!container) return;
@@ -4802,7 +4960,7 @@
               </div>
             </div>
 
-            ${safeNotes ? `<div class="card-notes">${safeNotes}</div>` : ''}
+            ${renderSmartMetadata(item.notes)}
 
             <div class="card-footer">
               <span class="card-status-pill"><span class="status-live-beacon">●</span> STATUS: ${item.status || 'SECURED'}${item.lastUsedAt ? ` · <span class="vault-used-time" data-relative-time="${item.lastUsedAt}" data-relative-prefix="Used " data-relative-format="compact">${window.formatRelativeTime ? window.formatRelativeTime(item.lastUsedAt, {compact:true}) : 'just now'}</span>` : ''}</span>
@@ -4890,6 +5048,7 @@
     window.generateStrongPasswordForEditor = generateStrongPasswordForEditor;
     window.copyToClipboard = copyToClipboard;
     window.copyUsername = copyUsername;
+    window.copyMetaValue = copyMetaValue;
     window.toggleReveal = toggleReveal;
     window.markPasswordRotated = markPasswordRotated;
     window.handleLaunchStandaloneApp = handleLaunchStandaloneApp;
@@ -4973,7 +5132,7 @@
       }
 
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v29', { scope: '/orlandovault/' }).catch(err => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v30', { scope: '/orlandovault/' }).catch(err => {
           console.warn('Vault SW registration error:', err);
         });
       }
