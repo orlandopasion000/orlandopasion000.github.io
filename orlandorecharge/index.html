@@ -11050,16 +11050,138 @@ try { checkUrlHashRoutine(); } catch(e){}
           targetCtx.fill();
 
         } else {
+          // ── CLASSIC QUANTUM REALM: HIGH-SPEED TESLA DYNAMO ELECTRIC HEAD ──
           targetCtx.beginPath();
           targetCtx.arc(px0, py0, headR, 0, Math.PI * 2);
           targetCtx.fillStyle = "hsla(" + fHeadHue + ", 98%, " + fHeadLit.toFixed(1) + "%, " + renderAlpha.toFixed(2) + ")";
           targetCtx.fill();
 
-          // Pure white quantum singularity center
+          // High-Voltage Electric Discharge & Sparkling Electrons Inside Head Orb
+          targetCtx.save();
           targetCtx.beginPath();
-          targetCtx.arc(px0 + cosH * (headR * 0.25), py0 + sinH * (headR * 0.25), headR * 0.45, 0, Math.PI * 2);
-          targetCtx.fillStyle = "rgba(255, 255, 255, " + (renderAlpha * 0.96).toFixed(2) + ")";
+          targetCtx.arc(px0, py0, headR - 0.5, 0, Math.PI * 2);
+          targetCtx.clip();
+
+          var coreOffset = headR * 0.22;
+          var coreX = px0 + cosH * coreOffset;
+          var coreY = py0 + sinH * coreOffset;
+          var coreR = headR * 0.38;
+
+          // Ionized plasma backdrop within orb
+          var eIonBack = targetCtx.createRadialGradient(coreX, coreY, coreR * 0.3, px0, py0, headR);
+          eIonBack.addColorStop(0, "rgba(186, 230, 253, " + (renderAlpha * 0.48).toFixed(2) + ")");
+          eIonBack.addColorStop(0.55, "rgba(56, 189, 248, " + (renderAlpha * 0.35).toFixed(2) + ")");
+          eIonBack.addColorStop(1.0, "rgba(14, 165, 233, " + (renderAlpha * 0.70).toFixed(2) + ")");
+          targetCtx.fillStyle = eIonBack;
+          targetCtx.fillRect(px0 - headR, py0 - headR, headR * 2, headR * 2);
+
+          // Fast-moving crackling lightning branches (ultra-rapid high-frequency electric vibration)
+          var fastTick = now * 0.055 + i * 1.73;
+          var numLightning = (tier === 3) ? 8 : (tier === 2 ? 6 : 5);
+          var rotSpeed = now * 0.008;
+
+          targetCtx.lineCap = "round";
+          targetCtx.lineJoin = "bevel";
+
+          for (var la = 0; la < numLightning; la++) {
+            var baseAng = (la / numLightning) * Math.PI * 2 + rotSpeed + Math.sin(fastTick + la * 2.1) * 0.25;
+            var targetDist = headR * (0.88 + 0.10 * Math.sin(fastTick * 1.8 + la * 3.7));
+            var ltx = px0 + Math.cos(baseAng) * targetDist;
+            var lty = py0 + Math.sin(baseAng) * targetDist;
+
+            // Pass 1: Electric Cyan Plasma Ion Sheath (Wider, glowing)
+            targetCtx.strokeStyle = "rgba(56, 189, 248, " + (renderAlpha * 0.85).toFixed(2) + ")";
+            targetCtx.lineWidth = Math.max(1.8, headR * 0.055);
+            targetCtx.beginPath();
+            targetCtx.moveTo(coreX, coreY);
+            
+            var steps = 4;
+            var perpAng = baseAng + Math.PI / 2;
+            var midX = coreX, midY = coreY;
+
+            for (var ls = 1; ls <= steps; ls++) {
+              var lt = ls / steps;
+              var lx = coreX + (ltx - coreX) * lt;
+              var ly = coreY + (lty - coreY) * lt;
+              var jitter = (ls === steps) ? 0 : Math.sin(fastTick * 3.1 + la * 4.3 + ls * 5.7) * (headR * 0.22);
+              lx += Math.cos(perpAng) * jitter;
+              ly += Math.sin(perpAng) * jitter;
+              targetCtx.lineTo(lx, ly);
+              if (ls === 2) { midX = lx; midY = ly; }
+            }
+            targetCtx.stroke();
+
+            // Pass 2: Searing White-Hot Lightning Core (Razor-sharp)
+            targetCtx.strokeStyle = "rgba(255, 255, 255, " + (renderAlpha * 0.98).toFixed(2) + ")";
+            targetCtx.lineWidth = Math.max(0.9, headR * 0.022);
+            targetCtx.stroke();
+
+            // Fast micro-fork branch for Tier 2 & 3
+            if (tier >= 2 && (la % 2 === 0)) {
+              var forkAng = baseAng + ((Math.sin(fastTick * 2.3 + la) > 0) ? 0.55 : -0.55);
+              var fLen = headR * 0.32;
+              targetCtx.beginPath();
+              targetCtx.moveTo(midX, midY);
+              targetCtx.lineTo(midX + Math.cos(forkAng) * fLen, midY + Math.sin(forkAng) * fLen);
+              targetCtx.strokeStyle = "rgba(186, 230, 253, " + (renderAlpha * 0.92).toFixed(2) + ")";
+              targetCtx.lineWidth = Math.max(0.8, headR * 0.018);
+              targetCtx.stroke();
+            }
+
+            // Outer Spark Node on Perimeter
+            targetCtx.fillStyle = "rgba(255, 255, 255, " + (renderAlpha * 0.98).toFixed(2) + ")";
+            targetCtx.beginPath();
+            targetCtx.arc(ltx, lty, Math.max(1.5, headR * 0.038), 0, Math.PI * 2);
+            targetCtx.fill();
+
+            // Cyan spark halo
+            targetCtx.fillStyle = "rgba(56, 189, 248, " + (renderAlpha * 0.65).toFixed(2) + ")";
+            targetCtx.beginPath();
+            targetCtx.arc(ltx, lty, Math.max(2.8, headR * 0.075), 0, Math.PI * 2);
+            targetCtx.fill();
+          }
+
+          // 3. Shining small electric spark dots inside (high-frequency twinkling electrons)
+          var numSparkDots = (tier === 3) ? 14 : (tier === 2 ? 10 : 7);
+          for (var sd = 0; sd < numSparkDots; sd++) {
+            var dotSpeed = fastTick * 1.6 + sd * 1.9;
+            var dotDist = (0.25 + 0.60 * Math.abs(Math.sin(dotSpeed * 0.8 + sd * 2.4))) * (headR * 0.84);
+            var dotAng = (sd / numSparkDots) * Math.PI * 2 + dotSpeed * 0.5;
+            var dotX = px0 + Math.cos(dotAng) * dotDist;
+            var dotY = py0 + Math.sin(dotAng) * dotDist;
+            var dotSize = Math.max(1.0, (headR * 0.04) * (1 + 0.6 * Math.sin(dotSpeed * 2.5)));
+            var dotGlow = (0.70 + 0.30 * Math.sin(dotSpeed * 3.0)) * renderAlpha;
+
+            // Bright white micro spark dot
+            targetCtx.fillStyle = "rgba(255, 255, 255, " + dotGlow.toFixed(2) + ")";
+            targetCtx.beginPath();
+            targetCtx.arc(dotX, dotY, dotSize, 0, Math.PI * 2);
+            targetCtx.fill();
+
+            // Ionized blue shimmer halo around the dot
+            targetCtx.fillStyle = "rgba(125, 211, 252, " + (dotGlow * 0.70).toFixed(2) + ")";
+            targetCtx.beginPath();
+            targetCtx.arc(dotX, dotY, dotSize * 2.5, 0, Math.PI * 2);
+            targetCtx.fill();
+          }
+
+          // 4. Searing Pure White Quantum Singularity Center
+          var sGrad = targetCtx.createRadialGradient(coreX, coreY, 0, coreX, coreY, coreR);
+          sGrad.addColorStop(0.0, "rgba(255, 255, 255, " + renderAlpha.toFixed(2) + ")");
+          sGrad.addColorStop(0.40, "rgba(255, 255, 255, " + (renderAlpha * 0.98).toFixed(2) + ")");
+          sGrad.addColorStop(0.75, "rgba(224, 242, 254, " + (renderAlpha * 0.75).toFixed(2) + ")");
+          sGrad.addColorStop(1.0, "rgba(186, 230, 253, 0.0)");
+          targetCtx.fillStyle = sGrad;
+          targetCtx.beginPath();
+          targetCtx.arc(coreX, coreY, coreR, 0, Math.PI * 2);
           targetCtx.fill();
+
+          targetCtx.fillStyle = "#ffffff";
+          targetCtx.beginPath();
+          targetCtx.arc(coreX, coreY, coreR * 0.45, 0, Math.PI * 2);
+          targetCtx.fill();
+
+          targetCtx.restore(); // Restore clip
         }
 
         // Miniature Bohr probability orbital rings / 3D Toroidal Chromatin Loops
