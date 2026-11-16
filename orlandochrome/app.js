@@ -5922,7 +5922,7 @@ const Icons = {
               </div>
             </div>
             <div class="note-timestamp" data-action="edit-date" data-nid="${n.id}" role="button" tabindex="0" title="Click to change or edit date/time (Apple Notes style)">
-              <span class="note-time-text">${formatNoteDateTime(n.createdAt)} · ${n.done ? 'Completed' : 'Pending'}</span>
+              <span class="note-time-text">${formatNoteDateTime(n.createdAt)} <span class="note-rel-time" data-relative-time="${n.createdAt || Date.now()}" data-relative-prefix="· " data-relative-format="compact">just now</span> · ${n.done ? 'Completed' : 'Pending'}</span>
               ${n.isCustomDate ? `<span class="note-custom-date-badge" title="Customized date (originally created ${formatNoteDateTime(n.originalCreatedAt || n.createdAt)})">${Icons.calendar(11)} <span>Edited Date</span></span>` : (n.editedAt ? `<span class="note-edited-label">(edited ${formatNoteDateTime(n.editedAt)})</span>` : '')}
               <span class="note-timestamp-edit-icon" title="Edit Date & Time">${Icons.laserStylus(12)}</span>
             </div>
@@ -6942,6 +6942,9 @@ const Icons = {
       const s = $('#notesStream');
       if (s) s.scrollTop = s.scrollHeight;
     });
+    if (window.updateRelativeTimestamps) {
+      window.updateRelativeTimestamps(main);
+    }
   }
 
   // Save inline edited message

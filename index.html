@@ -1486,7 +1486,7 @@
   <footer class="footer">
     <div class="footer-name">Sir Orlando V. Pasion, Jr.</div>
     <div class="footer-sub">Teacher VI · Mathematics Educator · EdTech Innovator</div>
-    <div class="footer-copy">&copy; 2026 Sir Orlando V. Pasion, Jr. — Designed and developed with HTML, CSS, and JavaScript</div>
+    <div class="footer-copy">&copy; 2026 Sir Orlando V. Pasion, Jr. — Designed and developed with HTML, CSS, and JavaScript · <span data-relative-time="2026-11-16T18:40:00+08:00" data-relative-prefix="Ecosystem active ">just now</span></div>
   </footer>
 
   <button class="to-top" id="toTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
@@ -2130,13 +2130,15 @@
           if (cardTitle) cardTitle.textContent = fullTitle;
           var badge = card.querySelector('.hub-card-badge');
           if (badge) {
+            var timeHtml = ' <span class="hub-sync-time" data-relative-time="' + Date.now() + '" data-relative-prefix="· " data-relative-format="compact">just now</span>';
             if (pending > 0) {
-              badge.innerHTML = '★ FLAGSHIP APP · <span class="oc-live-badge-dot pending"></span> <strong>' + pending + ' PENDING</strong>';
+              badge.innerHTML = '★ FLAGSHIP APP · <span class="oc-live-badge-dot pending"></span> <strong>' + pending + ' PENDING</strong>' + timeHtml;
               card.classList.add('has-pending-card');
             } else {
-              badge.innerHTML = '★ FLAGSHIP APP · <span class="oc-live-badge-dot synced"></span> <strong>22 PROFILES · LIVE SYNCED</strong>';
+              badge.innerHTML = '★ FLAGSHIP APP · <span class="oc-live-badge-dot synced"></span> <strong>22 PROFILES · LIVE SYNCED</strong>' + timeHtml;
               card.classList.remove('has-pending-card');
             }
+            if (window.updateRelativeTimestamps) window.updateRelativeTimestamps(card);
           }
         }
       }
@@ -2146,7 +2148,9 @@
         if (card) {
           var badge = card.querySelector('.hub-card-badge');
           if (badge) {
-            badge.innerHTML = '★ JARVIS SECURITY · <span class="oc-live-badge-dot synced"></span> <strong>' + keys + ' AES KEYS GUARDED</strong>';
+            var timeHtml = ' <span class="hub-sync-time" data-relative-time="' + Date.now() + '" data-relative-prefix="· " data-relative-format="compact">just now</span>';
+            badge.innerHTML = '★ JARVIS SECURITY · <span class="oc-live-badge-dot synced"></span> <strong>' + keys + ' AES KEYS GUARDED</strong>' + timeHtml;
+            if (window.updateRelativeTimestamps) window.updateRelativeTimestamps(card);
           }
         }
       }
@@ -2156,7 +2160,9 @@
         if (card) {
           var badge = card.querySelector('.hub-card-badge');
           if (badge) {
-            badge.innerHTML = '★ FLAGSHIP APP · <span class="oc-live-badge-dot synced"></span> <strong>' + blocks + '-BLOCK SCHEDULE ACTIVE</strong>';
+            var timeHtml = ' <span class="hub-sync-time" data-relative-time="' + Date.now() + '" data-relative-prefix="· " data-relative-format="compact">just now</span>';
+            badge.innerHTML = '★ FLAGSHIP APP · <span class="oc-live-badge-dot synced"></span> <strong>' + blocks + '-BLOCK SCHEDULE ACTIVE</strong>' + timeHtml;
+            if (window.updateRelativeTimestamps) window.updateRelativeTimestamps(card);
           }
         }
       }
@@ -2170,7 +2176,9 @@
         if (card) {
           var badge = card.querySelector('.hub-card-badge');
           if (badge) {
-            badge.innerHTML = '★ FLAGSHIP APP · <span class="oc-live-badge-dot synced"></span> <strong>PRECISION HOROLOGY SYNCED</strong>';
+            var timeHtml = ' <span class="hub-sync-time" data-relative-time="' + Date.now() + '" data-relative-prefix="· " data-relative-format="compact">just now</span>';
+            badge.innerHTML = '★ FLAGSHIP APP · <span class="oc-live-badge-dot synced"></span> <strong>PRECISION HOROLOGY SYNCED</strong>' + timeHtml;
+            if (window.updateRelativeTimestamps) window.updateRelativeTimestamps(card);
           }
         }
       }
@@ -2554,5 +2562,7 @@
     }
   </script>
 
+  <!-- Live Relative Time Engine (Zero-Reload, 60s Ticker) -->
+  <script src="assets/relative-time.js"></script>
 </body>
 </html>

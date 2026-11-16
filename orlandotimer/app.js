@@ -2689,6 +2689,7 @@
     if (mins <= 0) return current;
     const newMins = current.mins + Math.round(mins);
     localStorage.setItem('ot_focus_mins', String(newMins));
+    localStorage.setItem('ot_last_focus_ts', String(Date.now()));
     recordWeeklyFocus(mins);
     updateFocusTelemetryUI();
     return { date: current.date, mins: newMins };
@@ -2709,7 +2710,12 @@
     const nextTierEl = document.getElementById('telemetryNextTier');
     const progressFill = document.getElementById('telemetryProgressFill');
 
-    if (tierBadge) tierBadge.textContent = tierInfo.label;
+    if (tierBadge) {
+      const lastTs = localStorage.getItem('ot_last_focus_ts');
+      const timeTag = lastTs ? ` · <span data-relative-time="${lastTs}" data-relative-prefix="Last: " data-relative-format="compact">${window.formatRelativeTime ? window.formatRelativeTime(Number(lastTs), {compact:true}) : 'just now'}</span>` : '';
+      tierBadge.innerHTML = tierInfo.label + timeTag;
+      if (window.updateRelativeTimestamps) window.updateRelativeTimestamps(tierBadge);
+    }
     if (focusMinsEl) focusMinsEl.textContent = `${tele.mins}m`;
     if (nextTierEl) nextTierEl.textContent = tierInfo.nextLabel;
     if (progressFill) {
@@ -4788,7 +4794,11 @@
       if (txt) {
         if (status === 'syncing') txt.textContent = 'Syncing Cloud...';
         else if (status === 'offline') txt.textContent = 'Offline · Journal Armed';
-        else txt.textContent = 'Cloud Synced';
+        else {
+          const syncTs = Date.now();
+          txt.innerHTML = 'Cloud Synced <span class="sync-time-tag" data-relative-time="' + syncTs + '" data-relative-prefix="· " data-relative-format="compact">just now</span>';
+          if (window.updateRelativeTimestamps) window.updateRelativeTimestamps(txt);
+        }
       }
     }
 

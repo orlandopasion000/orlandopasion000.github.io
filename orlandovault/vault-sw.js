@@ -1,5 +1,5 @@
 /* OrlandoVault · Offline-First Jarvis Security Service Worker */
-var CACHE_NAME = 'vault-jarvis-v14';
+var CACHE_NAME = 'vault-jarvis-v15';
 var ASSETS = [
   './',
   './index.html',
@@ -10,7 +10,8 @@ var ASSETS = [
   './assets/vault-icon-maskable.png',
   './assets/app-icon.ico',
   './assets/qrcode.min.js',
-  './assets/vault-icon-128.png'
+  './assets/vault-icon-128.png',
+  './assets/relative-time.js'
 ];
 
 self.addEventListener('install', function(e) {
