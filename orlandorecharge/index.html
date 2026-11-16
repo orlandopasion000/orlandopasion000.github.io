@@ -14470,19 +14470,31 @@ try { checkUrlHashRoutine(); } catch(e){}
       cmdResults.innerHTML = html;
 
       cmdResults.querySelectorAll('.cmd-item').forEach(function(el) {
-        el.onclick = function() {
+        el.onclick = function(e) {
+          e.preventDefault();
           var idx = parseInt(this.getAttribute('data-index'), 10);
           executeCommandIndex(idx);
         };
       });
     }
 
+    // Event delegation backup for flawless tap and click response
+    if (cmdResults) {
+      cmdResults.onclick = function(e) {
+        var btn = e.target.closest('.cmd-item');
+        if (btn) {
+          var idx = parseInt(btn.getAttribute('data-index'), 10);
+          executeCommandIndex(idx);
+        }
+      };
+    }
+
     function executeCommandIndex(idx) {
       var item = filteredItems[idx];
       if (item && item.action) {
         closeCommandPalette();
-        RechargeHaptics.confirm();
-        item.action();
+        try { RechargeHaptics.confirm(); } catch(e){}
+        try { item.action(); } catch(err) { console.error('Command action error:', err); }
       }
     }
 
