@@ -9674,6 +9674,10 @@ try { checkUrlHashRoutine(); } catch(e){}
     if (typeof cx === "number" && typeof cy === "number") {
       mouse.targetX = cx;
       mouse.targetY = cy;
+      if (isGameMode) {
+        mouse.x = cx;
+        mouse.y = cy;
+      }
       mouse.active = true;
       mouse.lastActiveTime = Date.now();
     }
@@ -9761,8 +9765,11 @@ try { checkUrlHashRoutine(); } catch(e){}
       if (mouse.x < -1000) {
         mouse.x = mouse.targetX;
         mouse.y = mouse.targetY;
+      } else if (isGameMode) {
+        mouse.x = mouse.targetX;
+        mouse.y = mouse.targetY;
       } else {
-        var mLerp = isGameMode ? 0.68 : 0.35;
+        var mLerp = 0.35;
         mouse.x += (mouse.targetX - mouse.x) * mLerp;
         mouse.y += (mouse.targetY - mouse.y) * mLerp;
       }
@@ -11838,16 +11845,11 @@ try { checkUrlHashRoutine(); } catch(e){}
     var events = (typeof e.getCoalescedEvents === "function") ? e.getCoalescedEvents() : [e];
     var lastEv = events[events.length - 1] || e;
 
-    // Exact 1:1 location on touch: 0ms latency, zero offset, the atom IS the player itself
-    if (deviceInputMode === "touch") {
-      cursor.x = lastEv.clientX;
-      cursor.y = lastEv.clientY;
-      cursor.targetX = lastEv.clientX;
-      cursor.targetY = lastEv.clientY;
-    } else {
-      cursor.targetX = lastEv.clientX;
-      cursor.targetY = lastEv.clientY;
-    }
+    // Exact 1:1 tracking for both mouse & touch: 0ms latency, responds immediately at full hardware speed
+    cursor.x = lastEv.clientX;
+    cursor.y = lastEv.clientY;
+    cursor.targetX = lastEv.clientX;
+    cursor.targetY = lastEv.clientY;
 
     cursor.active = true;
     hasDeliberateMove = true;
@@ -12176,21 +12178,10 @@ try { checkUrlHashRoutine(); } catch(e){}
 
     ctx.clearRect(0, 0, width, height);
 
-    // Direct 1:1 true value on touch; smooth lerp on mouse
+    // Direct 1:1 true value for both mouse and touch (zero lag, matches fast hardware DPI)
     if (cursor.active && hasDeliberateMove && typeof cursor.targetX === "number" && cursor.targetX > -1000) {
-      if (deviceInputMode === "touch") {
-        cursor.x = cursor.targetX;
-        cursor.y = cursor.targetY;
-      } else {
-        var lerpRate = 0.20;
-        if (cursor.x < -1000) {
-          cursor.x = cursor.targetX;
-          cursor.y = cursor.targetY;
-        } else {
-          cursor.x += (cursor.targetX - cursor.x) * lerpRate;
-          cursor.y += (cursor.targetY - cursor.y) * lerpRate;
-        }
-      }
+      cursor.x = cursor.targetX;
+      cursor.y = cursor.targetY;
     }
 
     // Damp cursor velocity when idle
@@ -13282,7 +13273,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   <script>
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v63', { scope: './' }).catch(function() {});
+        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v64', { scope: './' }).catch(function() {});
       });
     }
   </script>

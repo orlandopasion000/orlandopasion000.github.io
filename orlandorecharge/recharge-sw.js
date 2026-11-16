@@ -1,5 +1,5 @@
 /* OrlandoRecharge · Offline-First Service Worker (PWA Ready) */
-var CACHE_NAME = 'recharge-v63';
+var CACHE_NAME = 'recharge-v64';
 var ASSETS = [
   './',
   './index.html',
@@ -54,7 +54,6 @@ self.addEventListener('fetch', function (event) {
   
   // 1. Never cache non-HTTP schemes (e.g. chrome-extension://, devtools://, data:, blob:)
   if (!url.startsWith('http://') && !url.startsWith('https://')) return;
-  if (url.indexOf('firestore.googleapis.com') !== -1 || url.indexOf('ntfy.sh') !== -1) return;
 
   event.respondWith(
     fetch(event.request)
