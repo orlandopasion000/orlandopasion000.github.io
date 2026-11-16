@@ -947,6 +947,7 @@
     if (!dom.modal) return;
 
     state.gameType = type;
+    dom.modal.classList.add('active');
     dom.modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
 
@@ -966,7 +967,10 @@
       cancelAnimationFrame(animFrameId);
       animFrameId = null;
     }
-    if (dom.modal) dom.modal.style.display = 'none';
+    if (dom.modal) {
+      dom.modal.classList.remove('active');
+      dom.modal.style.display = 'none';
+    }
     document.body.style.overflow = '';
   }
 

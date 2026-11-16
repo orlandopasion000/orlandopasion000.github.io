@@ -13412,17 +13412,20 @@ body.netflix-messenger-theme {
 
 /* ── TRUE FULLSCREEN ARENA MODAL ── */
 .game-modal-overlay {
-  position: fixed !important;
-  inset: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  z-index: 99999 !important;
-  background: #030712 !important;
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 99999;
+  background: #030712;
+  display: none;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+.game-modal-overlay.active {
   display: flex !important;
-  flex-direction: column !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  overflow: hidden !important;
 }
 
 .game-container-card {
@@ -13913,5 +13916,51 @@ body.netflix-messenger-theme {
   .matrix-box canvas {
     width: 48px !important;
     height: 48px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .topbar-right {
+    gap: 4px !important;
+  }
+  .btn-topbar-game-dest {
+    height: 29px !important;
+    padding: 0 6px !important;
+    font-size: 10px !important;
+    gap: 3px !important;
+  }
+  .btn-topbar-game-dest span {
+    display: inline !important;
+    font-size: 10px !important;
+  }
+  .btn-topbar-fullscreen span,
+  .btn-topbar-quick#btnNextReady span {
+    display: none !important;
+  }
+  .btn-topbar-fullscreen,
+  .btn-topbar-quick#btnNextReady {
+    padding: 0 6px !important;
+    height: 29px !important;
+  }
+  .math-hud-meta {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+  .shields-cells {
+    gap: 3px !important;
+  }
+  .shield-cell {
+    width: 11px !important;
+    height: 11px !important;
+  }
+  .math-eq-display {
+    font-size: 30px !important;
+  }
+  .math-opt-btn {
+    padding: 12px 14px !important;
+  }
+  .opt-val {
+    font-size: 17px !important;
   }
 }
