@@ -272,6 +272,12 @@
 
               <!-- Action Pills -->
               <div class="supernova-action-pills">
+                <button type="button" class="sn-action-pill primary" id="btnCockpitLaunchApp" title="Launch Orlando Timer in a dedicated standalone desktop window">
+                  <svg class="sn-pill-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line>
+                  </svg>
+                  <span id="cockpitLaunchAppLabel">Open Main Web App</span>
+                </button>
                 <button type="button" class="sn-action-pill primary" id="btnFireSupernova" title="Detonate Celestial Supernova Shockwave (Particle Burst)">
                   <svg class="sn-pill-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
@@ -559,6 +565,16 @@
             </div>
           </div>
         </div>
+
+        <!-- 24K Swiss Gold Standalone App Launcher Button -->
+        <button type="button" class="btn-topbar-desktop btn-topbar-launch-gold" id="btnTopbarLaunchApp" title="Open Orlando Timer in Dedicated Standalone Desktop Window">
+          <span class="desktop-btn-icon" id="topbarLaunchIcon">
+            <svg class="cyber-topbar-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+          </span>
+          <span id="topbarLaunchLabel">Open Main Web App</span>
+        </button>
 
         <!-- Google Cloud Firebase Real-Time Sync Button -->
         <button type="button" class="btn-topbar-desktop" id="btnFirebaseTimerSync" title="Google Cloud Firebase Real-Time Sync (Click to Sync Now)">
@@ -914,6 +930,134 @@
           <!-- Dynamically populated cards -->
         </div>
       </section>
+
+    <!-- ════════════════════════════════════════════════════════════════════
+         APP DISTRIBUTION & LIVE SYNC SUITE (4-CARD COMMAND DOCK · PWA READY)
+         ════════════════════════════════════════════════════════════════════ -->
+    <section class="ot-app-dist minimized" id="appDistSection" aria-labelledby="otDistTitle">
+      <div class="ot-dist-head" id="otDistHead" role="button" tabindex="0" title="Click anywhere on header to expand or minimize App Suite">
+        <div class="ot-dist-head-left">
+          <div class="ot-dist-mini-logo">
+            <img src="assets/ot-icon-192.png" alt="OT">
+          </div>
+          <div>
+            <div class="ot-dist-title-row" id="otDistTitle">
+              <span class="ot-dist-title-name">App Distribution &amp; Live Sync Suite</span>
+              <span class="ot-dist-badge">● PWA READY</span>
+              <span class="ot-dist-hint" id="otDistCollapseHint">· 4 Command Tools · Tap to Expand</span>
+            </div>
+            <div class="ot-dist-subtitle">Installed, offline-cached, zero-warning standalone window &amp; Google Cloud Firebase sync</div>
+          </div>
+        </div>
+        <button type="button" class="ot-dist-toggle-btn" id="otDistMinimizeBtn" aria-expanded="false">
+          <span id="otDistMinIcon">▸</span> <span id="otDistMinText">Expand</span>
+        </button>
+      </div>
+
+      <div class="ot-dist-body" id="otDistBody">
+        <div class="ot-dist-grid">
+          <!-- Card 1: Main Executive App -->
+          <div class="ot-dist-card" id="otDistCardMain">
+            <div class="ot-dist-card-top">
+              <div class="ot-dist-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+              </div>
+              <div>
+                <div class="ot-dist-name" id="otDistCardMainTitle">Orlando Timer (Main Version)</div>
+                <div class="ot-dist-desc">Complete 3-in-1 executive horology suite</div>
+              </div>
+            </div>
+            <div class="ot-dist-btn-stack">
+              <button type="button" class="ot-dist-btn primary-gold" id="openMainAppBtn" title="Open Orlando Timer in a dedicated standalone desktop window or install as PWA">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                <span id="openMainAppBtnLabel">Open Main Web App</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Card 2: Holographic Phone QR -->
+          <div class="ot-dist-card" id="otCardHoloQr">
+            <div class="ot-dist-card-top">
+              <div class="ot-dist-icon cyan">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+              </div>
+              <div>
+                <div class="ot-dist-name">Holographic QR</div>
+                <div class="ot-dist-desc">Instant iPhone scanner &amp; live cloud sync</div>
+              </div>
+            </div>
+            <div class="ot-dist-btn-stack">
+              <button type="button" class="ot-dist-btn holo-cyan" id="otOpenQrBtn">
+                <span>📱 Open Phone QR</span>
+              </button>
+              <button type="button" class="ot-dist-btn" id="otShareLinkBtn">
+                <span>🔗 Share / Copy Link</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Card 3: Firebase Cloud & JSON Backup -->
+          <div class="ot-dist-card">
+            <div class="ot-dist-card-top">
+              <div class="ot-dist-icon emerald">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              </div>
+              <div>
+                <div class="ot-dist-name">Firebase Cloud &amp; Backup</div>
+                <div class="ot-dist-desc">Real-time Firestore sync &amp; JSON export</div>
+              </div>
+            </div>
+            <div class="ot-dist-btn-stack">
+              <div class="ot-dist-btn-row">
+                <button type="button" class="ot-dist-btn" id="otExportBackupBtn"><span>⬇ Export</span></button>
+                <button type="button" class="ot-dist-btn" id="otImportBackupBtn"><span>⬆ Import</span></button>
+              </div>
+              <button type="button" class="ot-dist-btn holo-cyan" id="otSyncCloudNowBtn">
+                <span>⚡ Sync Firebase Cloud Now</span>
+              </button>
+              <input type="file" id="otImportFileInput" accept=".json,application/json" style="display:none">
+            </div>
+          </div>
+
+          <!-- Card 4: Clean Blank Edition -->
+          <div class="ot-dist-card">
+            <div class="ot-dist-card-top">
+              <div class="ot-dist-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              </div>
+              <div>
+                <div class="ot-dist-name">Clean Blank Edition</div>
+                <div class="ot-dist-desc">Zero-preset fresh horology workspace</div>
+              </div>
+            </div>
+            <div class="ot-dist-btn-stack">
+              <a class="ot-dist-btn" id="otSwitchEditionBtn" href="?edition=blank">
+                <span id="otSwitchEditionLabel">✨ Launch Blank Edition</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOLOGRAPHIC QR MODAL FOR ORLANDO TIMER -->
+    <div class="ot-qr-modal-backdrop" id="otQrModal" role="dialog" aria-modal="true" aria-label="Orlando Timer Holographic QR Scanner">
+      <div class="ot-qr-modal-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+          <strong style="color:#fef08a;font-size:15px;">📱 Orlando Timer · Holographic Phone QR</strong>
+          <button type="button" id="otCloseQrModal" style="background:none;border:none;color:#94a3b8;font-size:18px;cursor:pointer;">✕</button>
+        </div>
+        <p style="font-size:12px;color:#94a3b8;margin:0 0 8px;">Point your iPhone or Android camera here to open &amp; sync Orlando Timer instantly.</p>
+        <div class="ot-qr-plate" id="otQrPlate" style="width:260px;height:260px;">
+          <div id="otQrMount" style="width:100%;height:100%;"></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:10px;">
+          <button type="button" class="ot-dist-btn primary-gold" id="otQrCopyBtn" style="flex:2;">📋 Copy App Link</button>
+          <button type="button" class="ot-dist-btn" id="otQrCloseBtn2" style="flex:1;">Done</button>
+        </div>
+      </div>
+    </div>
+
     </main>
   </div>
 
@@ -1082,6 +1226,7 @@
   <audio id="alarmAudioElement" preload="auto" src="sounds/piano.mp3"></audio>
 
   <!-- Relative JavaScript (with cache-bust versioning) -->
+  <script src="assets/qrcode.min.js"></script>
   <script src="app.js?v=29.0"></script>
 
 </body>

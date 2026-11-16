@@ -3891,6 +3891,220 @@
     applyPanelOpacity(currentPanelOpacity, false);
   }
 
+
+  // ════════════════════════════════════════════════════════════════════════════
+  // ORLANDO TIMER · STANDALONE PWA LAUNCHER & 4-CARD APP DISTRIBUTION ENGINE
+  // ════════════════════════════════════════════════════════════════════════════
+  (function initOrlandoTimerPwaSuite() {
+    let deferredInstallPrompt = null;
+    const APP_URL = 'https://orlandopasion000.github.io/orlandotimer/';
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+      updateLaunchButtonState();
+    });
+
+    window.addEventListener('appinstalled', () => {
+      deferredInstallPrompt = null;
+      updateLaunchButtonState();
+    });
+
+    function isStandaloneMode() {
+      return (
+        (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) ||
+        (window.matchMedia && window.matchMedia('(display-mode: window-controls-overlay)').matches) ||
+        window.navigator.standalone === true ||
+        window.name === 'OrlandoTimerStandaloneWindow' ||
+        (window.location.search && window.location.search.includes('standalone=true'))
+      );
+    }
+
+    function updateLaunchButtonState() {
+      const topBtn = document.getElementById('btnTopbarLaunchApp');
+      const topLbl = document.getElementById('topbarLaunchLabel');
+      const mainBtnLbl = document.getElementById('openMainAppBtnLabel');
+      const cockpitLbl = document.getElementById('cockpitLaunchAppLabel');
+      const active = isStandaloneMode();
+
+      if (topBtn && topLbl) {
+        if (active) {
+          topBtn.classList.add('btn-app-active');
+          topBtn.title = 'Orlando Timer (Main Web App) is Active';
+          topLbl.textContent = '✔ App Active';
+        } else {
+          topBtn.classList.remove('btn-app-active');
+          topBtn.title = 'Open Orlando Timer in Dedicated Standalone Desktop Window';
+          topLbl.textContent = 'Open Main Web App';
+        }
+      }
+      if (mainBtnLbl) {
+        mainBtnLbl.textContent = active ? '✔ Main Web App Active' : 'Open Main Web App';
+      }
+      if (cockpitLbl) {
+        cockpitLbl.textContent = active ? '✔ Standalone App Active' : 'Open Main Web App';
+      }
+    }
+
+    async function handleLaunchStandaloneApp() {
+      if (typeof AudioHUD !== 'undefined' && AudioHUD.tick) {
+        try { AudioHUD.tick(980); } catch (e) {}
+      }
+      if (isStandaloneMode()) {
+        if (typeof showTelemetryToast === 'function') {
+          showTelemetryToast('STANDALONE APP ACTIVE', '✨ Orlando Timer is already running as Main Web App!');
+        }
+        return;
+      }
+
+      if (deferredInstallPrompt) {
+        deferredInstallPrompt.prompt();
+        try {
+          const choice = await deferredInstallPrompt.userChoice;
+          if (choice && choice.outcome === 'accepted') {
+            deferredInstallPrompt = null;
+            updateLaunchButtonState();
+            return;
+          }
+        } catch (err) {}
+      }
+
+      const targetUrl = APP_URL + '?standalone=true';
+      const features = 'popup=yes,menubar=no,toolbar=no,location=no,status=no,personalbar=no,scrollbars=yes,resizable=yes,width=1280,height=860,left=100,top=60';
+      const appWin = window.open(targetUrl, 'OrlandoTimerStandaloneWindow', features);
+      if (appWin) {
+        try { appWin.focus(); } catch (e) {}
+      } else {
+        window.location.href = targetUrl;
+      }
+    }
+
+    // Wire all Open Main Web App triggers
+    ['btnTopbarLaunchApp', 'openMainAppBtn', 'btnCockpitLaunchApp'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          handleLaunchStandaloneApp();
+        });
+      }
+    });
+    updateLaunchButtonState();
+
+    // Wire collapsible 4-Card App Distribution Dock
+    const distSec = document.getElementById('appDistSection');
+    const distHead = document.getElementById('otDistHead');
+    const distMinBtn = document.getElementById('otDistMinimizeBtn');
+    const distMinIcon = document.getElementById('otDistMinIcon');
+    const distMinText = document.getElementById('otDistMinText');
+    const distHint = document.getElementById('otDistCollapseHint');
+
+    function toggleDistDock(e) {
+      if (e) e.stopPropagation();
+      if (!distSec) return;
+      const isMin = distSec.classList.toggle('minimized');
+      if (distMinIcon) distMinIcon.textContent = isMin ? '▸' : '▾';
+      if (distMinText) distMinText.textContent = isMin ? 'Expand' : 'Minimize';
+      if (distHint) distHint.textContent = isMin ? '· 4 Command Tools · Tap to Expand' : '· 4 Command Tools Active';
+      if (distMinBtn) distMinBtn.setAttribute('aria-expanded', String(!isMin));
+    }
+    if (distHead) distHead.addEventListener('click', toggleDistDock);
+    if (distMinBtn) distMinBtn.addEventListener('click', toggleDistDock);
+
+    // Wire Holographic QR Modal
+    const qrModal = document.getElementById('otQrModal');
+    const qrMount = document.getElementById('otQrMount');
+    function openQrModal() {
+      if (!qrModal) return;
+      qrModal.classList.add('open');
+      if (qrMount && typeof window.qrcode === 'function') {
+        try {
+          const qr = window.qrcode(0, 'M');
+          qr.addData(APP_URL);
+          qr.make();
+          const count = qr.getModuleCount();
+          const margin = 2;
+          const total = count + margin * 2;
+          let d = '';
+          for (let r = 0; r < count; r++) {
+            for (let c = 0; c < count; c++) {
+              if (qr.isDark(r, c)) d += `M${c + margin},${r + margin}h1v1h-1z `;
+            }
+          }
+          qrMount.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${total} ${total}" shape-rendering="crispEdges" style="width:100%;height:100%;"><rect width="100%" height="100%" fill="#ffffff"/><path fill="#000000" d="${d}"/></svg>`;
+        } catch (e) {}
+      }
+    }
+    function closeQrModal() {
+      if (qrModal) qrModal.classList.remove('open');
+    }
+    const openQrBtn = document.getElementById('otOpenQrBtn');
+    const closeQr1 = document.getElementById('otCloseQrModal');
+    const closeQr2 = document.getElementById('otQrCloseBtn2');
+    const copyQrBtn = document.getElementById('otQrCopyBtn');
+    const shareLinkBtn = document.getElementById('otShareLinkBtn');
+
+    if (openQrBtn) openQrBtn.addEventListener('click', openQrModal);
+    if (closeQr1) closeQr1.addEventListener('click', closeQrModal);
+    if (closeQr2) closeQr2.addEventListener('click', closeQrModal);
+    if (qrModal) qrModal.addEventListener('click', (e) => { if (e.target === qrModal) closeQrModal(); });
+
+    function copyTimerLink() {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(APP_URL).catch(() => {});
+      }
+      if (typeof showTelemetryToast === 'function') {
+        showTelemetryToast('LINK COPIED', '📋 Orlando Timer link copied to clipboard!');
+      }
+    }
+    if (copyQrBtn) copyQrBtn.addEventListener('click', copyTimerLink);
+    if (shareLinkBtn) shareLinkBtn.addEventListener('click', copyTimerLink);
+
+    // Wire Export / Import / Cloud Sync buttons
+    const syncNowBtn = document.getElementById('otSyncCloudNowBtn');
+    if (syncNowBtn) {
+      syncNowBtn.addEventListener('click', () => {
+        if (window.OrlandoTimerFirebase) window.OrlandoTimerFirebase.pullNow();
+      });
+    }
+    const expBtn = document.getElementById('otExportBackupBtn');
+    if (expBtn) {
+      expBtn.addEventListener('click', () => {
+        const dump = {};
+        for (let i = 0; i < localStorage.length; i++) {
+          const k = localStorage.key(i);
+          if (k && (k.startsWith('orlando-') || k.startsWith('ot_'))) {
+            dump[k] = localStorage.getItem(k);
+          }
+        }
+        const blob = new Blob([JSON.stringify(dump, null, 2)], { type: 'application/json' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'orlandotimer-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+        a.click();
+      });
+    }
+    const impBtn = document.getElementById('otImportBackupBtn');
+    const impInput = document.getElementById('otImportFileInput');
+    if (impBtn && impInput) {
+      impBtn.addEventListener('click', () => impInput.click());
+      impInput.addEventListener('change', (e) => {
+        const f = e.target.files && e.target.files[0];
+        if (!f) return;
+        const r = new FileReader();
+        r.onload = (ev) => {
+          try {
+            const parsed = JSON.parse(ev.target.result);
+            Object.keys(parsed).forEach(k => localStorage.setItem(k, parsed[k]));
+            window.location.reload();
+          } catch (err) {}
+        };
+        r.readAsText(f);
+      });
+    }
+  })();
+
   // Initialize Atmosphere & Particle Field Lab
   initAtmosphereLab();
 
