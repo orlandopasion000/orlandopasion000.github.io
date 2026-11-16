@@ -4449,7 +4449,8 @@
 })();
 
 
-(function initQuantumUniverseGame() {
+(function() {
+  function initQuantumUniverseGame() {
   var overlay = document.getElementById("quantumGameOverlay");
   var canvas = document.getElementById("quantumGameCanvas");
   var btnLaunch = document.getElementById("btnLaunchGame");
@@ -4483,7 +4484,14 @@
   var actionIcon = document.getElementById("qGameActionIcon");
   var actionLabel = document.getElementById("qGameActionLabel");
 
-  if (!overlay || !canvas || !btnLaunch) return;
+  if (!overlay || !canvas) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initQuantumUniverseGame);
+    } else {
+      setTimeout(initQuantumUniverseGame, 100);
+    }
+    return;
+  }
 
   var ctx = canvas.getContext("2d");
   if (!ctx) return;
@@ -4997,7 +5005,13 @@
   }
 
   function launchGame(variant) {
-    if (isActive) return;
+    if (isActive) {
+      if (variant && variant !== currentGameVariant) {
+        exitGame();
+      } else {
+        return;
+      }
+    }
     if (variant) {
       currentGameVariant = (variant === "helix") ? "helix" : ((variant === "meteor") ? "meteor" : "classic");
     }
@@ -6493,4 +6507,54 @@
     isLocked: function() { return !!lockedParticle; },
     isCursorActivelyMoving: function() { return hasDeliberateMove && (performance.now() - lastCursorMoveTime < 1000); }
   };
+  }
+
+  // Resilient Global Event Delegation for all Quantum Universe Buttons
+  document.addEventListener('click', function(e) {
+    var realm = e.target.closest('#btnLaunchGame, .qgame-btn-realm');
+    if (realm) {
+      e.preventDefault();
+      if (window.quantumGame && typeof window.quantumGame.launch === 'function') {
+        window.quantumGame.launch('classic');
+      } else {
+        initQuantumUniverseGame();
+        if (window.quantumGame && typeof window.quantumGame.launch === 'function') {
+          window.quantumGame.launch('classic');
+        }
+      }
+      return;
+    }
+    var helix = e.target.closest('#btnLaunchHelixGame, .qgame-btn-helix');
+    if (helix) {
+      e.preventDefault();
+      if (window.quantumGame && typeof window.quantumGame.launch === 'function') {
+        window.quantumGame.launch('helix');
+      } else {
+        initQuantumUniverseGame();
+        if (window.quantumGame && typeof window.quantumGame.launch === 'function') {
+          window.quantumGame.launch('helix');
+        }
+      }
+      return;
+    }
+    var meteor = e.target.closest('#btnLaunchMeteorGame, .qgame-btn-meteor');
+    if (meteor) {
+      e.preventDefault();
+      if (window.quantumGame && typeof window.quantumGame.launch === 'function') {
+        window.quantumGame.launch('meteor');
+      } else {
+        initQuantumUniverseGame();
+        if (window.quantumGame && typeof window.quantumGame.launch === 'function') {
+          window.quantumGame.launch('meteor');
+        }
+      }
+      return;
+    }
+  });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initQuantumUniverseGame);
+  } else {
+    initQuantumUniverseGame();
+  }
 })();
