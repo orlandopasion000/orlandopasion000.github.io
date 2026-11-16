@@ -778,6 +778,7 @@
     setMode: setMode,
     start: startGame
   };
+  window.openChromeGame = openGameModal;
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initEvents);
