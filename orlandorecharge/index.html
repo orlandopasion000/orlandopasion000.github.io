@@ -9074,6 +9074,7 @@ try { checkUrlHashRoutine(); } catch(e){}
     var smokeSprite = null;
     var plasmaSprite = null;
     var emberSprite = null;
+    var electricSparkSprite = null;
     var flameWispSprite = null;
     var flamePuffSprite = null;
     var cursorAsteroidSprite = null;
@@ -9089,6 +9090,7 @@ try { checkUrlHashRoutine(); } catch(e){}
         smokeSprite = generateSmokeCanvas(64);
         plasmaSprite = generatePlasmaCanvas(64);
         emberSprite = generateEmberCanvas(24);
+        electricSparkSprite = generateElectricSparkCanvas(24);
         flameWispSprite = generateFlameWispCanvas(64, 96);
         flamePuffSprite = generateFlamePuffCanvas(64);
         initialized = true;
@@ -9322,6 +9324,44 @@ try { checkUrlHashRoutine(); } catch(e){}
       return canvas;
     }
 
+    // High-Voltage Electric Plasma Spark Sprite for Quantum Realm Tail Discharges
+    function generateElectricSparkCanvas(size) {
+      var canvas = document.createElement("canvas");
+      canvas.width = size;
+      canvas.height = size;
+      var ctx = canvas.getContext("2d");
+      if (!ctx) return canvas;
+
+      var cx = size * 0.5;
+      var cy = size * 0.5;
+      var r = size * 0.46;
+
+      var g = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+      g.addColorStop(0.0, "rgba(255, 255, 255, 1.0)");
+      g.addColorStop(0.22, "rgba(186, 230, 253, 0.96)");
+      g.addColorStop(0.54, "rgba(56, 189, 248, 0.58)");
+      g.addColorStop(0.84, "rgba(129, 140, 248, 0.22)");
+      g.addColorStop(1.0, "rgba(99, 102, 241, 0.0)");
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.strokeStyle = "rgba(224, 242, 254, 0.92)";
+      ctx.lineWidth = 0.85;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy - r * 0.88); ctx.lineTo(cx, cy + r * 0.88);
+      ctx.moveTo(cx - r * 0.88, cy); ctx.lineTo(cx + r * 0.88, cy);
+      ctx.stroke();
+
+      ctx.fillStyle = "#ffffff";
+      ctx.beginPath();
+      ctx.arc(cx, cy, size * 0.11, 0, Math.PI * 2);
+      ctx.fill();
+
+      return canvas;
+    }
+
     // High-Intensity Incandescent Burning Ember Spark (Optical Spikes & Thermal Corona)
     function generateEmberCanvas(size) {
       var canvas = document.createElement("canvas");
@@ -9456,6 +9496,10 @@ try { checkUrlHashRoutine(); } catch(e){}
       getEmber: function() {
         if (!initialized) init();
         return emberSprite;
+      },
+      getElectricSpark: function() {
+        if (!initialized) init();
+        return electricSparkSprite;
       },
       getFlameWisp: function() {
         if (!initialized) init();
@@ -10694,6 +10738,93 @@ try { checkUrlHashRoutine(); } catch(e){}
           targetCtx.closePath();
           targetCtx.fill();
         }
+
+        // 2C. Quantum Realm Electric Lightning Filaments & Micro-Spark Wake (Additive on Tier 1 & 2, zero Meteor/Helix overlap)
+        if (!isMeteor && !isHelix && tier >= 1 && K >= 3) {
+          var eTick = ((now * 0.036 + i * 0.41) | 0);
+          var eSurge = 0.58 + 0.42 * Math.abs(Math.sin(now * 0.015 + (p.pulsePhase || 0) * 3.7));
+          var eAlpha = renderAlpha * (tier === 2 ? 0.92 : 0.72) * eSurge;
+          var eHue = isPrismaticQuark ? prismMidHue : Math.round(196 * 0.68 + fHeadHue * 0.32);
+          var arcAmp = Math.max(1.8, headR * (tier === 2 ? 1.05 : 0.80));
+          var forkPtX = _ptsX[1];
+          var forkPtY = _ptsY[1];
+          var forkDirX = -sinH;
+          var forkDirY = cosH;
+
+          // Pass 1: Soft Electric Ionized Glow Aura
+          targetCtx.lineCap = "round";
+          targetCtx.lineJoin = "round";
+          targetCtx.strokeStyle = "hsla(" + eHue + ", 100%, 68%, " + (eAlpha * 0.36).toFixed(2) + ")";
+          targetCtx.lineWidth = Math.max(1.7, headR * 0.48);
+          targetCtx.beginPath();
+          targetCtx.moveTo(_ptsX[0], _ptsY[0]);
+          for (var ej = 1; ej < K; ej++) {
+            var ax = _ptsX[ej];
+            var ay = _ptsY[ej];
+            if (ej < K - 1) {
+              var edx = _ptsX[ej - 1] - _ptsX[ej + 1];
+              var edy = _ptsY[ej - 1] - _ptsY[ej + 1];
+              var edLen = Math.hypot(edx, edy) || 1;
+              var enx = -edy / edLen;
+              var eny = edx / edLen;
+              var eEnv = Math.sin((ej * invKm1) * Math.PI);
+              var jWave = Math.sin(eTick * 3.71 + ej * 4.93 + i * 2.17) * Math.cos(eTick * 1.43 + ej * 2.61);
+              var eOff = jWave * arcAmp * eEnv;
+              ax += enx * eOff;
+              ay += eny * eOff;
+              if (ej === 2) {
+                forkPtX = ax;
+                forkPtY = ay;
+                forkDirX = enx;
+                forkDirY = eny;
+              }
+            }
+            targetCtx.lineTo(ax, ay);
+          }
+          targetCtx.stroke();
+
+          // Pass 2: Razor-Crisp Incandescent Lightning Bolt Core along exact same vertices
+          targetCtx.strokeStyle = "rgba(232, 248, 255, " + (eAlpha * 0.92).toFixed(2) + ")";
+          targetCtx.lineWidth = Math.max(0.75, headR * 0.18);
+          targetCtx.stroke();
+
+          // Secondary micro-fork branch & crackling electric spark nodes along the tail
+          if (tier === 2 || dopplerBoost > 0.18) {
+            var branchSide = ((eTick + i) & 1) ? 1 : -1;
+            var branchLen = headR * (tier === 2 ? 1.45 : 1.05);
+            var bx1 = forkPtX + (forkDirX * branchSide - cosH * 0.65) * (branchLen * 0.55);
+            var by1 = forkPtY + (forkDirY * branchSide - sinH * 0.65) * (branchLen * 0.55);
+            var bx2 = bx1 + (forkDirX * branchSide * 0.7 - cosH * 0.85) * (branchLen * 0.55);
+            var by2 = by1 + (forkDirY * branchSide * 0.7 - sinH * 0.85) * (branchLen * 0.55);
+            targetCtx.beginPath();
+            targetCtx.moveTo(forkPtX, forkPtY);
+            targetCtx.lineTo(bx1, by1);
+            targetCtx.lineTo(bx2, by2);
+            targetCtx.strokeStyle = "hsla(" + eHue + ", 100%, 74%, " + (eAlpha * 0.34).toFixed(2) + ")";
+            targetCtx.lineWidth = Math.max(1.2, headR * 0.32);
+            targetCtx.stroke();
+            targetCtx.strokeStyle = "rgba(240, 249, 255, " + (eAlpha * 0.85).toFixed(2) + ")";
+            targetCtx.lineWidth = 0.75;
+            targetCtx.stroke();
+          }
+
+          // Pre-rendered glowing electric spark lights hugging the tail wake (parallel to Meteor embers)
+          var eSparkCanvas = MeteorVFXEngine.getElectricSpark();
+          if (eSparkCanvas) {
+            var esIdx1 = Math.min(K - 1, 2);
+            var esLat1 = Math.sin(now * 0.021 + (p.pulsePhase || 0) * 2.8) * (headR * 0.52);
+            var esR = Math.max(2.2, headR * 0.42);
+            targetCtx.save();
+            targetCtx.globalAlpha = renderAlpha * 0.90;
+            targetCtx.drawImage(eSparkCanvas, _ptsX[esIdx1] + (-sinH) * esLat1 - esR * 0.5, _ptsY[esIdx1] + cosH * esLat1 - esR * 0.5, esR, esR);
+            if (tier === 2 && K >= 5) {
+              var esIdx2 = Math.min(K - 1, 4);
+              var esLat2 = Math.cos(now * 0.026 + (p.pulsePhase || 0) * 3.3) * (headR * 0.52);
+              targetCtx.drawImage(eSparkCanvas, _ptsX[esIdx2] + (-sinH) * esLat2 - esR * 0.5, _ptsY[esIdx2] + cosH * esLat2 - esR * 0.5, esR, esR);
+            }
+            targetCtx.restore();
+          }
+        }
       }
 
       // ── 3. Render Radiant Leading Quantum Head (Direct World Coordinates - Zero save/restore Overhead) ──
@@ -10913,10 +11044,10 @@ try { checkUrlHashRoutine(); } catch(e){}
           }
         }
 
-        // Micro-Stardust Quantum Sparks (Tier 2 Beacons Only - Emitted from Tail)
+        // Micro-Stardust Quantum Sparks (Tier 2 Beacons Only - Emitted from Tail - Maintained)
         if (tier === 2 && Math.random() < 0.25) {
           if (!p.stardust) p.stardust = [];
-          if (p.stardust.length < 3) {
+          if (p.stardust.length < 13) {
             p.stardust.push({
               x: _ptsX[K - 1] + (Math.random() - 0.5) * 2.0,
               y: _ptsY[K - 1] + (Math.random() - 0.5) * 2.0,
@@ -10926,23 +11057,47 @@ try { checkUrlHashRoutine(); } catch(e){}
             });
           }
         }
+
+        // Additive Electric Wake Sparks along Quantum Realm tail (parallel to Meteor Ember Storm)
+        if (!isHelix && tier >= 1 && K >= 3 && Math.random() < (tier === 2 ? 0.62 : 0.40)) {
+          if (!p.stardust) p.stardust = [];
+          if (p.stardust.length < 12) {
+            var eSpineIdx = Math.min(K - 1, 1 + ((Math.random() * (K - 1)) | 0));
+            p.stardust.push({
+              x: _ptsX[eSpineIdx] + (Math.random() - 0.5) * (headR * 1.95),
+              y: _ptsY[eSpineIdx] + (Math.random() - 0.5) * (headR * 1.95),
+              alpha: 0.98,
+              r: 0.75 + Math.random() * 1.35,
+              hue: Math.random() < 0.76 ? (190 + Math.random() * 24) : (258 + Math.random() * 22),
+              electric: true
+            });
+          }
+        }
       }
 
-      // Render Micro-Stardust Quantum Sparks in World Coordinates
+      // Render Micro-Stardust Quantum Sparks & Electric Wake Lights in World Coordinates
       if (p.stardust && p.stardust.length > 0) {
         for (var si = p.stardust.length - 1; si >= 0; si--) {
           var spk = p.stardust[si];
-          spk.alpha *= isMeteor ? 0.88 : 0.76;
+          spk.alpha *= spk.electric ? 0.90 : (isMeteor ? 0.88 : 0.76);
           if (spk.alpha > 0.05) {
+            if (spk.electric && !isMeteor && !isHelix) {
+              targetCtx.beginPath();
+              targetCtx.arc(spk.x, spk.y, spk.r * 2.30, 0, Math.PI * 2);
+              targetCtx.fillStyle = "hsla(" + Math.round(spk.hue) + ", 100%, 66%, " + (spk.alpha * 0.28).toFixed(2) + ")";
+              targetCtx.fill();
+            }
             targetCtx.beginPath();
             targetCtx.arc(spk.x, spk.y, spk.r, 0, Math.PI * 2);
             targetCtx.fillStyle = isMeteor
               ? ("rgba(255, " + Math.round(135 + (spk.hue || 24) * 2.2) + ", 60, " + spk.alpha.toFixed(2) + ")")
-              : ("hsla(" + Math.round(spk.hue) + ", 100%, 82%, " + spk.alpha.toFixed(2) + ")");
+              : (spk.electric
+                ? ("hsla(" + Math.round(spk.hue) + ", 100%, 76%, " + spk.alpha.toFixed(2) + ")")
+                : ("hsla(" + Math.round(spk.hue) + ", 100%, 82%, " + spk.alpha.toFixed(2) + ")"));
             targetCtx.fill();
-            if (isMeteor && spk.alpha > 0.45 && spk.r > 0.9) {
+            if ((isMeteor || spk.electric) && spk.alpha > 0.40 && spk.r > 0.85) {
               targetCtx.beginPath();
-              targetCtx.arc(spk.x, spk.y, spk.r * 0.45, 0, Math.PI * 2);
+              targetCtx.arc(spk.x, spk.y, spk.r * 0.46, 0, Math.PI * 2);
               targetCtx.fillStyle = "rgba(255, 255, 255, " + spk.alpha.toFixed(2) + ")";
               targetCtx.fill();
             }
@@ -13273,7 +13428,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   <script>
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v64', { scope: './' }).catch(function() {});
+        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v65', { scope: './' }).catch(function() {});
       });
     }
   </script>
