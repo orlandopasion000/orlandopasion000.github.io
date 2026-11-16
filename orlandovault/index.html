@@ -4060,7 +4060,7 @@
 
         <div class="edit-form-row">
           <div class="edit-form-group" style="flex:1;">
-            <label class="edit-form-label" for="editSelectCategory">CATEGORY:</label>
+            <label class="edit-form-label" for="editSelectCategory">APP / WEBSITE:</label>
             <select class="edit-form-select" id="editSelectCategory">
               <option value="DepEd">DepEd & Academic</option>
               <option value="Microsoft">Microsoft 365</option>
@@ -4981,7 +4981,7 @@
       }
 
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v26', { scope: '/orlandovault/' }).catch(err => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v27', { scope: '/orlandovault/' }).catch(err => {
           console.warn('Vault SW registration error:', err);
         });
       }
@@ -6357,12 +6357,12 @@
       { id: 'sys-history', cat: 'Security Tools', icon: '📜', title: 'Jarvis Access Audit Log', desc: 'Inspect recent logins, copy events, and timestamp hashes', action: () => { if (typeof openHistoryModal === 'function') openHistoryModal(); }, badge: 'Audit' },
       { id: 'sys-desktop', cat: 'System Commands', icon: '🪟', title: 'Open Main Web App', desc: 'Dedicated borderless desktop app experience without tabs', action: window.launchMainWebPortfolio, badge: 'Desktop' },
 
-      { id: 'filter-all', cat: 'Filter Categories', icon: '🗂️', title: 'Show All Credentials', desc: 'View complete database of all verified accounts', action: () => { filterVaultByCategory('all'); }, badge: 'All Accounts' },
-      { id: 'filter-deped', cat: 'Filter Categories', icon: '🏛️', title: 'Filter: DepEd & Academic', desc: 'DepEd Official, Region 1 Admin, and Urdaneta City University', action: () => { filterVaultByCategory('DepEd'); }, badge: 'DepEd' },
-      { id: 'filter-ms', cat: 'Filter Categories', icon: '💼', title: 'Filter: Microsoft 365', desc: 'DepEd and Institutional Microsoft accounts', action: () => { filterVaultByCategory('Microsoft'); }, badge: 'M365' },
-      { id: 'filter-gmail', cat: 'Filter Categories', icon: '📧', title: 'Filter: Gmail Ecosystem', desc: 'Personal, Gaming, and Institutional Google Mail vaults', action: () => { filterVaultByCategory('Gmail'); }, badge: 'Gmail' },
-      { id: 'filter-portals', cat: 'Filter Categories', icon: '🌐', title: 'Filter: Government & Portals', desc: 'LTO, DTS, and official web portals', action: () => { filterVaultByCategory('Portals'); }, badge: 'Portals' },
-      { id: 'filter-crit', cat: 'Filter Categories', icon: '⚡', title: 'Filter: Critical Accounts Only', desc: 'High-security administrative and primary credentials', action: () => { filterVaultByCategory('Critical'); }, badge: 'Priority' },
+      { id: 'filter-all', cat: 'Filter Apps & Websites', icon: '🗂️', title: 'Show All Credentials', desc: 'View complete database of all verified accounts', action: () => { filterVaultByCategory('all'); }, badge: 'All Accounts' },
+      { id: 'filter-deped', cat: 'Filter Apps & Websites', icon: '🏛️', title: 'Filter: DepEd & Academic', desc: 'DepEd Official, Region 1 Admin, and Urdaneta City University', action: () => { filterVaultByCategory('DepEd'); }, badge: 'DepEd' },
+      { id: 'filter-ms', cat: 'Filter Apps & Websites', icon: '💼', title: 'Filter: Microsoft 365', desc: 'DepEd and Institutional Microsoft accounts', action: () => { filterVaultByCategory('Microsoft'); }, badge: 'M365' },
+      { id: 'filter-gmail', cat: 'Filter Apps & Websites', icon: '📧', title: 'Filter: Gmail Ecosystem', desc: 'Personal, Gaming, and Institutional Google Mail vaults', action: () => { filterVaultByCategory('Gmail'); }, badge: 'Gmail' },
+      { id: 'filter-portals', cat: 'Filter Apps & Websites', icon: '🌐', title: 'Filter: Government & Portals', desc: 'LTO, DTS, and official web portals', action: () => { filterVaultByCategory('Portals'); }, badge: 'Portals' },
+      { id: 'filter-crit', cat: 'Filter Apps & Websites', icon: '⚡', title: 'Filter: Critical Accounts Only', desc: 'High-security administrative and primary credentials', action: () => { filterVaultByCategory('Critical'); }, badge: 'Priority' },
 
       { id: 'nav-recharge', cat: 'Flagship Web Apps', icon: '⚡', title: 'Switch to OrlandoRecharge', desc: 'Precision horology, 23-block alarm cockpit & Tier 3 particles', action: () => window.launchSubApp('orlandorecharge', 'OrlandoRechargeMainAppWindow', 1280, 850), badge: 'Flagship' },
       { id: 'nav-timer', cat: 'Flagship Web Apps', icon: '⏱️', title: 'Switch to Orlando Timer', desc: 'Executive 3-in-1 timepiece suite & Atmosphere audio engine', action: () => window.launchSubApp('orlandotimer', 'OrlandoTimerStandaloneWindow', 1280, 860), badge: 'Flagship' },
