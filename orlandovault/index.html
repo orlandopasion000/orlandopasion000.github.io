@@ -4046,7 +4046,6 @@
             </div>
             <h3 id="editModalHeaderTitle">Credential Anatomy</h3>
           </div>
-          <p class="qr-studio-sub">Update any anatomy of this account (changes save instantly across devices).</p>
         </div>
         <button type="button" class="modal-close-btn" id="btnCloseCardEditor" title="Close">✕</button>
       </div>
@@ -4982,7 +4981,7 @@
       }
 
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v25', { scope: '/orlandovault/' }).catch(err => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v26', { scope: '/orlandovault/' }).catch(err => {
           console.warn('Vault SW registration error:', err);
         });
       }
