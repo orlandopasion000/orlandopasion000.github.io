@@ -3859,6 +3859,117 @@
       transform: translateY(0) scale(0.98);
     }
 
+    /* 4. MODAL KEYBOARD SHORTCUT BADGES & INTERACTION ENHANCEMENTS */
+    .modal-kbd {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0;
+      padding: 2.5px 6px;
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      color: rgba(255, 255, 255, 0.9);
+      margin-left: 6px;
+      display: inline-flex;
+      align-items: center;
+      line-height: 1;
+      vertical-align: middle;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    }
+    .modal-kbd-subtle {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      font-weight: 600;
+      padding: 1.5px 5px;
+      border-radius: 3px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 215, 0, 0.4);
+      color: #fef08a;
+      margin-left: 5px;
+      display: inline-flex;
+      align-items: center;
+    }
+    .modal-keyboard-hints {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 11px;
+      color: #94a3b8;
+      font-family: var(--font-tech), sans-serif;
+    }
+    .modal-keyboard-hints span {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .modal-keyboard-hints .modal-kbd {
+      margin-left: 0;
+    }
+    .btn-pwd-eye-toggle {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      border-radius: 4px;
+      transition: color 0.18s ease;
+      z-index: 2;
+    }
+    .btn-pwd-eye-toggle:hover {
+      color: var(--cyan);
+    }
+    .btn-pwd-eye-toggle svg {
+      width: 17px;
+      height: 17px;
+    }
+    .edit-pwd-input {
+      padding-right: 44px !important;
+    }
+    @keyframes kbdActivePulse {
+      0% { transform: scale(1); filter: brightness(1); }
+      50% { transform: scale(1.03); filter: brightness(1.25); }
+      100% { transform: scale(1); filter: brightness(1); }
+    }
+    .kbd-active-pulse {
+      animation: kbdActivePulse 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+    @keyframes inputShakeError {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-5px); }
+      40%, 80% { transform: translateX(5px); }
+    }
+    .input-shake-error {
+      animation: inputShakeError 0.35s ease-in-out;
+      border-color: #ef4444 !important;
+      box-shadow: 0 0 16px rgba(239, 68, 68, 0.6) !important;
+    }
+    @keyframes pwdGenGlow {
+      0% { box-shadow: 0 0 0 rgba(255, 215, 0, 0); }
+      50% { box-shadow: 0 0 25px rgba(255, 215, 0, 0.8), inset 0 0 10px rgba(255, 215, 0, 0.4); border-color: #ffd700; }
+      100% { box-shadow: 0 0 0 rgba(255, 215, 0, 0); }
+    }
+    .pwd-gen-glow {
+      animation: pwdGenGlow 0.6s ease-out;
+    }
+    @media (max-width: 600px) {
+      .modal-kbd, .modal-kbd-subtle, .modal-keyboard-hints {
+        display: none !important;
+      }
+    }
+
   
 
     /* ==========================================================================
@@ -4229,10 +4340,14 @@
         <div class="edit-form-group">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
             <label class="edit-form-label" for="editInputPassword" style="margin-bottom:0;">PASSWORD:</label>
-            <button type="button" class="btn-gen-pwd" onclick="generateStrongPasswordForEditor()" title="Generate Random Secure Password">⚡ Generate Strong</button>
+            <button type="button" class="btn-gen-pwd" onclick="generateStrongPasswordForEditor()" title="Generate Random Secure Password (Alt + G)">⚡ Generate Strong <kbd class="modal-kbd-subtle">Alt+G</kbd></button>
           </div>
           <div class="edit-pwd-wrapper">
             <input type="text" class="edit-form-input edit-pwd-input" id="editInputPassword" autocomplete="off" placeholder="Secret password">
+            <button type="button" class="btn-pwd-eye-toggle" id="btnToggleEditPwdVisibility" onclick="toggleEditPasswordMask()" title="Toggle Mask/Unmask (Alt+P)" aria-label="Toggle password visibility">
+              <svg class="eye-open-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              <svg class="eye-closed-icon" style="display:none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+            </button>
           </div>
         </div>
 
@@ -4304,19 +4419,28 @@
 
         <div class="edit-actions-container">
           <div class="edit-actions-primary-row">
-            <button type="button" class="btn-edit-cancel" id="btnCancelCardEdit">
+            <button type="button" class="btn-edit-cancel" id="btnCancelCardEdit" title="Cancel & Close (Esc)">
               <span class="btn-cyber-bracket">[</span>
               <span>CANCEL</span>
               <span class="btn-cyber-bracket">]</span>
+              <kbd class="modal-kbd">Esc</kbd>
             </button>
-            <button type="button" class="btn-edit-save" id="btnSaveCardEdit">
+            <button type="button" class="btn-edit-save" id="btnSaveCardEdit" title="Save Changes (↵ Enter or Ctrl+Enter)">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="width:16px;height:16px;"><polyline points="20 6 9 17 4 12"/></svg>
               <span>SAVE CHANGES</span>
+              <kbd class="modal-kbd">↵ Enter</kbd>
             </button>
           </div>
           <button type="button" class="btn-edit-delete" id="btnDeleteCardEdit" title="Remove this credential from vault">
             <span>Delete Account</span>
           </button>
+          <div class="modal-keyboard-hints" aria-label="Keyboard Shortcuts">
+            <span><kbd class="modal-kbd">↵ Enter</kbd> Quick Save</span>
+            <span><kbd class="modal-kbd">Ctrl+↵</kbd> Save from Notes</span>
+            <span><kbd class="modal-kbd">Esc</kbd> Cancel</span>
+            <span><kbd class="modal-kbd">Alt+G</kbd> Generate</span>
+            <span><kbd class="modal-kbd">Alt+P</kbd> Mask</span>
+          </div>
         </div>
       </form>
     </div>
@@ -4668,6 +4792,13 @@
       if (modal) {
         modal.classList.add('active');
         playJarvisSound('reveal');
+        setTimeout(() => {
+          const titleInput = document.getElementById('editInputTitle');
+          if (titleInput) {
+            titleInput.focus();
+            titleInput.select();
+          }
+        }, 80);
       }
     }
 
@@ -4689,12 +4820,19 @@
       if (modal) {
         modal.classList.add('active');
         playJarvisSound('reveal');
+        setTimeout(() => {
+          const titleInput = document.getElementById('editInputTitle');
+          if (titleInput) titleInput.focus();
+        }, 80);
       }
     }
 
     function closeCardEditor() {
       const modal = document.getElementById('cardEditModal');
-      if (modal) modal.classList.remove('active');
+      if (modal && modal.classList.contains('active')) {
+        modal.classList.remove('active');
+        if (typeof playJarvisSound === 'function') playJarvisSound('click');
+      }
     }
 
     function generateStrongPasswordForEditor() {
@@ -4716,9 +4854,31 @@
       const input = document.getElementById('editInputPassword');
       if (input) {
         input.value = pwd;
+        input.classList.remove('pwd-gen-glow');
+        void input.offsetWidth;
+        input.classList.add('pwd-gen-glow');
         showToast('⚡ Strong password generated!', '🔐');
         playJarvisSound('click');
       }
+    }
+
+    function toggleEditPasswordMask() {
+      const input = document.getElementById('editInputPassword');
+      const btn = document.getElementById('btnToggleEditPwdVisibility');
+      if (!input) return;
+      const isPassword = input.type === 'password';
+      input.type = isPassword ? 'text' : 'password';
+      if (btn) {
+        btn.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password');
+        btn.title = isPassword ? 'Hide password (Alt+P)' : 'Show password (Alt+P)';
+        const openIcon = btn.querySelector('.eye-open-icon');
+        const closedIcon = btn.querySelector('.eye-closed-icon');
+        if (openIcon && closedIcon) {
+          openIcon.style.display = isPassword ? 'block' : 'none';
+          closedIcon.style.display = isPassword ? 'none' : 'block';
+        }
+      }
+      if (typeof playJarvisSound === 'function') playJarvisSound('click');
     }
 
     function saveCardEditor() {
@@ -4734,8 +4894,22 @@
       const isCritical = document.getElementById('editChkCritical').checked;
 
       if (!title) {
-        showToast('⚠️ Please enter an Account Title');
+        showToast('⚠️ Please enter App / Website Title');
+        const titleInput = document.getElementById('editInputTitle');
+        if (titleInput) {
+          titleInput.focus();
+          titleInput.classList.remove('input-shake-error');
+          void titleInput.offsetWidth;
+          titleInput.classList.add('input-shake-error');
+        }
+        if (typeof playJarvisSound === 'function') playJarvisSound('error');
         return;
+      }
+
+      const saveBtn = document.getElementById('btnSaveCardEdit');
+      if (saveBtn) {
+        saveBtn.classList.add('kbd-active-pulse');
+        setTimeout(() => saveBtn.classList.remove('kbd-active-pulse'), 200);
       }
 
       if (id) {
@@ -5187,6 +5361,7 @@
     window.deleteCardFromEditor = deleteCardFromEditor;
     window.toggleCardPriority = toggleCardPriority;
     window.generateStrongPasswordForEditor = generateStrongPasswordForEditor;
+    window.toggleEditPasswordMask = toggleEditPasswordMask;
     window.copyToClipboard = copyToClipboard;
     window.copyUsername = copyUsername;
     window.copyMetaValue = copyMetaValue;
@@ -5285,6 +5460,16 @@
       });
 
       document.addEventListener('keydown', (e) => {
+        // Universal Save when Card Editor is open
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+          const editModal = document.getElementById('cardEditModal');
+          if (editModal && editModal.classList.contains('active')) {
+            e.preventDefault();
+            saveCardEditor();
+            return;
+          }
+        }
+
         if (e.key === '/' && document.activeElement !== searchInput) {
           e.preventDefault();
           if (searchInput) {
@@ -5292,6 +5477,12 @@
             searchInput.select();
           }
         } else if (e.key === 'Escape') {
+          const editModal = document.getElementById('cardEditModal');
+          if (editModal && editModal.classList.contains('active')) {
+            e.preventDefault();
+            closeCardEditor();
+            return;
+          }
           if (historyModal && historyModal.classList.contains('active')) {
             historyModal.classList.remove('active');
           } else if (searchInput && searchInput.value) {
@@ -6245,6 +6436,7 @@
       const btnSaveCardEdit = document.getElementById('btnSaveCardEdit');
       const btnDeleteCardEdit = document.getElementById('btnDeleteCardEdit');
       const cardEditModal = document.getElementById('cardEditModal');
+      const formCardEditor = document.getElementById('formCardEditor');
 
       if (btnCloseCardEditor) btnCloseCardEditor.onclick = closeCardEditor;
       if (btnCancelCardEdit) btnCancelCardEdit.onclick = closeCardEditor;
@@ -6253,6 +6445,52 @@
       if (cardEditModal) {
         cardEditModal.addEventListener('click', (e) => {
           if (e.target === cardEditModal) closeCardEditor();
+        });
+      }
+
+      if (formCardEditor) {
+        formCardEditor.addEventListener('keydown', (e) => {
+          // 1. Ctrl+Enter or Cmd+Enter: Save immediately from ANY field (including textarea notes)
+          if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+            e.preventDefault();
+            saveCardEditor();
+            return;
+          }
+
+          // 2. Ctrl+S or Cmd+S: Master Save shortcut
+          if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+            e.preventDefault();
+            saveCardEditor();
+            return;
+          }
+
+          // 3. Alt+G: Instant generate strong password
+          if (e.altKey && e.key.toLowerCase() === 'g') {
+            e.preventDefault();
+            generateStrongPasswordForEditor();
+            return;
+          }
+
+          // 4. Alt+P: Toggle password mask / unmask
+          if (e.altKey && e.key.toLowerCase() === 'p') {
+            e.preventDefault();
+            toggleEditPasswordMask();
+            return;
+          }
+
+          // 5. Enter on single-line inputs: Save changes immediately!
+          if (e.key === 'Enter' && e.target.tagName === 'INPUT' && e.target.type !== 'checkbox') {
+            e.preventDefault();
+            saveCardEditor();
+            return;
+          }
+
+          // 6. Escape key: Cancel and dismiss
+          if (e.key === 'Escape') {
+            e.preventDefault();
+            closeCardEditor();
+            return;
+          }
         });
       }
 
