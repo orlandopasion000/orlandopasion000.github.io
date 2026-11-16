@@ -2966,10 +2966,7 @@
             <span class="chip-num" id="totalVaultAccounts">0</span>
             <span class="chip-label">SECURED</span>
           </div>
-          <div class="hud-metric-chip" title="Instant Clipboard 1-Clicks Completed">
-            <span class="chip-num" id="totalCopiesMade">0</span>
-            <span class="chip-label">COPIES</span>
-          </div>
+
           <div class="hud-metric-chip gold-chip" title="Cryptographic Health Rating">
             <span class="chip-num" id="totalSecuredRating">100%</span>
             <span class="chip-label">INDEX</span>
@@ -3324,11 +3321,9 @@
       }
       try {
         await navigator.clipboard.writeText(text);
-        copyCount++;
-        localStorage.setItem(LS_COPY_KEY, copyCount.toString());
         renderMetrics();
         logAudit('COPIED_PASSWORD', 'Copied password for: ' + accountTitle);
-        recordVaultMutation('COPY_INCREMENT', { count: copyCount, title: accountTitle });
+        recordVaultMutation('COPY_EVENT', { title: accountTitle });
 
         if (btnElement) {
           const originalText = btnElement.innerHTML;
@@ -3481,9 +3476,7 @@
 
     function renderMetrics() {
       const accountsEl = document.getElementById('totalVaultAccounts');
-      const copiesEl = document.getElementById('totalCopiesMade');
       if (accountsEl) accountsEl.textContent = vaultItems.length;
-      if (copiesEl) copiesEl.textContent = copyCount;
     }
 
     function renderHistory() {
@@ -3591,7 +3584,7 @@
       }
 
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v9', { scope: '/orlandovault/' }).catch(err => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v10', { scope: '/orlandovault/' }).catch(err => {
           console.warn('Vault SW registration error:', err);
         });
       }
