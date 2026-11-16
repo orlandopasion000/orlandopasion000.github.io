@@ -2882,6 +2882,201 @@
       }
     }
 
+  
+    /* ==========================================================================
+       CREDENTIAL CARD PRIORITY PINNING, USAGE RANKING & QUICK-EDITOR
+       ========================================================================== */
+    .card-header-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+      margin-left: 8px;
+    }
+
+    .btn-card-pin, .btn-card-edit {
+      background: rgba(16, 21, 32, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #94a3b8;
+      border-radius: 8px;
+      padding: 4px 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      font-family: var(--font-tech), sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      touch-action: manipulation;
+    }
+
+    .btn-card-pin:hover, .btn-card-edit:hover {
+      background: rgba(24, 32, 48, 0.95);
+      border-color: var(--cyan);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .btn-card-pin:active, .btn-card-edit:active {
+      transform: translateY(0) scale(0.96);
+    }
+
+    .btn-card-pin.pinned {
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.18) 0%, rgba(245, 158, 11, 0.12) 100%) !important;
+      border-color: #ffd700 !important;
+      color: #ffd700 !important;
+      box-shadow: 0 0 12px rgba(255, 215, 0, 0.35) !important;
+    }
+
+    .btn-card-pin svg, .btn-card-edit svg {
+      width: 13px;
+      height: 13px;
+      stroke-width: 2.2;
+    }
+
+    .vault-card.is-priority-pinned {
+      border-color: rgba(255, 215, 0, 0.6) !important;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.9), 0 0 22px rgba(255, 215, 0, 0.2) !important;
+    }
+
+    /* Add Account Filter Pill */
+    .btn-pill-add {
+      background: rgba(16, 185, 129, 0.15) !important;
+      border-color: rgba(16, 185, 129, 0.45) !important;
+      color: #34d399 !important;
+      font-weight: 800 !important;
+    }
+    .btn-pill-add:hover {
+      background: rgba(16, 185, 129, 0.3) !important;
+      border-color: #10b981 !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 14px rgba(16, 185, 129, 0.4) !important;
+    }
+
+    /* CARD EDITOR MODAL */
+    .card-editor-modal {
+      background: radial-gradient(circle at 50% 0%, rgba(2, 132, 199, 0.15) 0%, transparent 65%),
+                  linear-gradient(180deg, #090d14 0%, #030508 100%);
+      border: 1.5px solid rgba(56, 189, 248, 0.45);
+      border-radius: 22px;
+      padding: clamp(16px, 3vw, 24px);
+      width: 95%;
+      max-width: 560px;
+      max-height: 90vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.98), 0 0 40px rgba(0, 240, 255, 0.22);
+      position: relative;
+      color: #f3f4f6;
+    }
+
+    .edit-form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .edit-form-row {
+      display: flex;
+      gap: 12px;
+    }
+
+    .edit-form-label {
+      font-family: var(--font-tech), sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--cyan);
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+
+    .edit-form-input, .edit-form-select, .edit-form-textarea {
+      background: rgba(16, 21, 32, 0.85);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: #ffffff;
+      font-family: var(--font-mono), monospace;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+      width: 100%;
+    }
+
+    .edit-form-input:focus, .edit-form-select:focus, .edit-form-textarea:focus {
+      border-color: #00f0ff;
+      box-shadow: 0 0 14px rgba(0, 240, 255, 0.3);
+      background: rgba(20, 28, 44, 0.95);
+    }
+
+    .edit-pwd-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .btn-gen-pwd {
+      background: rgba(217, 185, 92, 0.15);
+      border: 1px solid rgba(217, 185, 92, 0.4);
+      color: #d9b95c;
+      font-family: var(--font-tech), sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 6px;
+      padding: 3px 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-gen-pwd:hover {
+      background: rgba(217, 185, 92, 0.3);
+      color: #ffffff;
+      border-color: #ffd700;
+    }
+
+    .edit-form-options-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      background: rgba(16, 21, 32, 0.6);
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 12px;
+    }
+
+    .edit-checkbox-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-tech), sans-serif;
+      font-size: 12.5px;
+      cursor: pointer;
+    }
+
+    .edit-actions-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .dist-btn-danger {
+      background: rgba(239, 68, 68, 0.15) !important;
+      border: 1px solid rgba(239, 68, 68, 0.4) !important;
+      color: #f87171 !important;
+    }
+    .dist-btn-danger:hover {
+      background: rgba(239, 68, 68, 0.35) !important;
+      border-color: #ef4444 !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 14px rgba(239, 68, 68, 0.4) !important;
+    }
+
   </style>
 </head>
 <body>
@@ -2956,6 +3151,7 @@
         <button type="button" class="filter-pill" data-cat="Gmail">GMAIL ECOSYSTEM</button>
         <button type="button" class="filter-pill" data-cat="Portals">GOVERNMENT & PORTALS</button>
         <button type="button" class="filter-pill" data-cat="Critical">CRITICAL ONLY</button>
+        <button type="button" class="filter-pill btn-pill-add" id="btnAddNewAccount" title="Add New Credential Card" onclick="openNewCardEditor()">+ NEW ACCOUNT</button>
       </div>
     </section>
 
@@ -3067,6 +3263,96 @@
   </div>
 
   <!-- GOOGLE SHEETS LIVE SYNC MODAL -->
+  
+  <!-- CREDENTIAL CARD QUICK-EDITOR MODAL -->
+  <div class="modal-backdrop" id="cardEditModal" role="dialog" aria-modal="true" aria-label="Edit Credential Card">
+    <div class="card-editor-modal">
+      <div class="qr-studio-header">
+        <div class="qr-studio-title-wrap">
+          <div class="qr-studio-title-row">
+            <div class="suite-ov-mini-logo" style="border-color:var(--cyan);color:var(--cyan);">EDIT</div>
+            <h3 id="editModalHeaderTitle">Edit Credential Card</h3>
+          </div>
+          <p class="qr-studio-sub">Update any anatomy of this account (changes save instantly across devices).</p>
+        </div>
+        <button type="button" class="modal-close-btn" id="btnCloseCardEditor" title="Close">✕</button>
+      </div>
+
+      <form id="formCardEditor" class="card-edit-form" onsubmit="return false;">
+        <input type="hidden" id="editCardId">
+
+        <div class="edit-form-group">
+          <label class="edit-form-label">ACCOUNT / SERVICE TITLE:</label>
+          <input type="text" class="edit-form-input" id="editInputTitle" required autocomplete="off" placeholder="e.g. DepEd Microsoft 365">
+        </div>
+
+        <div class="edit-form-row">
+          <div class="edit-form-group" style="flex:1;">
+            <label class="edit-form-label">CATEGORY:</label>
+            <select class="edit-form-select" id="editSelectCategory">
+              <option value="DepEd">DepEd & Academic</option>
+              <option value="Microsoft">Microsoft 365</option>
+              <option value="Gmail">Gmail Ecosystem</option>
+              <option value="Portals">Government & Portals</option>
+              <option value="System">System & Device</option>
+              <option value="Entertainment">Entertainment & Streaming</option>
+              <option value="Social">Social Media</option>
+            </select>
+          </div>
+          <div class="edit-form-group" style="flex:1;">
+            <label class="edit-form-label">BADGE TAG:</label>
+            <input type="text" class="edit-form-input" id="editInputBadge" placeholder="e.g. Official Portal">
+          </div>
+        </div>
+
+        <div class="edit-form-group">
+          <label class="edit-form-label">USERNAME / EMAIL / ID:</label>
+          <input type="text" class="edit-form-input" id="editInputUsername" autocomplete="off" placeholder="e.g. 300406@deped.gov.ph">
+        </div>
+
+        <div class="edit-form-group">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+            <label class="edit-form-label" style="margin-bottom:0;">PASSWORD:</label>
+            <button type="button" class="btn-gen-pwd" onclick="generateStrongPasswordForEditor()" title="Generate Random Secure Password">⚡ Generate Strong</button>
+          </div>
+          <div class="edit-pwd-wrapper">
+            <input type="text" class="edit-form-input edit-pwd-input" id="editInputPassword" autocomplete="off" placeholder="Secret password">
+          </div>
+        </div>
+
+        <div class="edit-form-group">
+          <label class="edit-form-label">NOTES / PORTAL URL / METADATA:</label>
+          <textarea class="edit-form-textarea" id="editInputNotes" rows="2" placeholder="e.g. Official University Portal: https://up.ucu.edu.ph/"></textarea>
+        </div>
+
+        <div class="edit-form-options-row">
+          <label class="edit-checkbox-label">
+            <input type="checkbox" id="editChkPriority" style="width:16px;height:16px;accent-color:#ffd700;">
+            <span style="color:#ffd700;font-weight:700;">★ Pin to Top (Priority Favorite)</span>
+          </label>
+
+          <label class="edit-checkbox-label">
+            <input type="checkbox" id="editChkCritical" style="width:16px;height:16px;accent-color:#ef4444;">
+            <span style="color:#f87171;font-weight:700;">⚡ Mark as Critical Account</span>
+          </label>
+        </div>
+
+        <div class="edit-actions-row">
+          <button type="button" class="dist-btn dist-btn-emerald" id="btnSaveCardEdit" style="flex:2;padding:12px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Save Changes</span>
+          </button>
+          <button type="button" class="dist-btn" id="btnCancelCardEdit" style="flex:1;padding:12px;">
+            Cancel
+          </button>
+          <button type="button" class="dist-btn dist-btn-danger" id="btnDeleteCardEdit" title="Remove this credential card" style="padding:12px 14px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <div class="modal-backdrop" id="sheetSyncModal">
     <div class="sheet-sync-modal">
       <div class="qr-studio-header">
@@ -3279,7 +3565,249 @@
       }, 3500);
     }
 
-    async function copyToClipboard(text, accountTitle, btnElement) {
+    async 
+    /* ==========================================================================
+       DYNAMIC USAGE TRACKER & PRIORITY PINNING ENGINE
+       ========================================================================== */
+    function trackCardUsage(itemId, eventType, points) {
+      if (!itemId) return;
+      const item = vaultItems.find(x => x.id === itemId);
+      if (!item) return;
+
+      item.usageScore = (parseFloat(item.usageScore) || 0) + points;
+      item.lastUsedAt = Date.now();
+      if (eventType === 'copy_password') item.copyPasswordCount = (item.copyPasswordCount || 0) + 1;
+      if (eventType === 'copy_username') item.copyUsernameCount = (item.copyUsernameCount || 0) + 1;
+      if (eventType === 'view_password') item.viewPasswordCount = (item.viewPasswordCount || 0) + 1;
+      if (eventType === 'edit_card') item.editCount = (item.editCount || 0) + 1;
+
+      try {
+        localStorage.setItem(LS_VAULT_KEY, JSON.stringify(vaultItems));
+      } catch (e) {}
+
+      recordVaultMutation('CARD_USAGE', { id: itemId, event: eventType, score: item.usageScore });
+    }
+
+    function toggleCardPriority(itemId) {
+      const item = vaultItems.find(x => x.id === itemId);
+      if (!item) return;
+
+      item.isPriority = !(item.isPriority || item.pinned);
+      item.pinned = item.isPriority;
+      item.pinned_at = item.isPriority ? Date.now() : 0;
+      if (item.isPriority) {
+        item.usageScore = (parseFloat(item.usageScore) || 0) + 5;
+      }
+
+      try {
+        localStorage.setItem(LS_VAULT_KEY, JSON.stringify(vaultItems));
+      } catch(e) {}
+
+      renderVault();
+      playJarvisSound('copy');
+      logAudit(item.isPriority ? 'PINNED_PRIORITY' : 'UNPINNED_PRIORITY', (item.isPriority ? 'Pinned to top: ' : 'Unpinned: ') + item.title);
+      showToast(item.isPriority ? `★ "${item.title}" is now Priority pinned to top!` : `"${item.title}" unpinned.`);
+      recordVaultMutation('CARD_PRIORITY_TOGGLE', { id: itemId, isPriority: item.isPriority, title: item.title });
+    }
+
+    function sortVaultCards(items) {
+      return items.slice().sort((a, b) => {
+        // 1. Priority Pinned cards ALWAYS stay on top
+        const aPinned = !!(a.isPriority || a.pinned);
+        const bPinned = !!(b.isPriority || b.pinned);
+        if (aPinned !== bPinned) {
+          return aPinned ? -1 : 1;
+        }
+        if (aPinned && bPinned) {
+          // Among pinned cards, sort by most recent pin first
+          return (b.pinned_at || 0) - (a.pinned_at || 0) || (b.usageScore || 0) - (a.usageScore || 0);
+        }
+
+        // 2. Unpinned cards arranged by usage score (most copied, viewed, edited on top)
+        const aScore = parseFloat(a.usageScore) || 0;
+        const bScore = parseFloat(b.usageScore) || 0;
+        if (bScore !== aScore) {
+          return bScore - aScore;
+        }
+
+        // 3. Fallback: most recently used timestamp or update date
+        const aTime = Math.max(a.lastUsedAt || 0, new Date(a.updated_at || 0).getTime() || 0);
+        const bTime = Math.max(b.lastUsedAt || 0, new Date(b.updated_at || 0).getTime() || 0);
+        return bTime - aTime;
+      });
+    }
+
+    /* ==========================================================================
+       CARD ANATOMY QUICK-EDITOR ENGINE
+       ========================================================================== */
+    function openCardEditor(itemId) {
+      const item = vaultItems.find(x => x.id === itemId);
+      if (!item) return;
+
+      document.getElementById('editCardId').value = item.id;
+      document.getElementById('editModalHeaderTitle').textContent = `Edit: ${item.title}`;
+      document.getElementById('editInputTitle').value = item.title || '';
+      document.getElementById('editSelectCategory').value = item.category || 'DepEd';
+      document.getElementById('editInputBadge').value = item.badge || '';
+      document.getElementById('editInputUsername').value = item.username || '';
+      document.getElementById('editInputPassword').value = item.password || '';
+      document.getElementById('editInputNotes').value = item.notes || '';
+      document.getElementById('editChkPriority').checked = !!(item.isPriority || item.pinned);
+      document.getElementById('editChkCritical').checked = (item.importance || '').toLowerCase() === 'critical';
+      document.getElementById('btnDeleteCardEdit').style.display = 'inline-flex';
+
+      const modal = document.getElementById('cardEditModal');
+      if (modal) {
+        modal.classList.add('active');
+        playJarvisSound('reveal');
+      }
+    }
+
+    function openNewCardEditor() {
+      document.getElementById('editCardId').value = '';
+      document.getElementById('editModalHeaderTitle').textContent = 'Add New Credential Card';
+      document.getElementById('editInputTitle').value = '';
+      document.getElementById('editSelectCategory').value = 'DepEd';
+      document.getElementById('editInputBadge').value = 'Official Portal';
+      document.getElementById('editInputUsername').value = '';
+      document.getElementById('editInputPassword').value = '';
+      document.getElementById('editInputNotes').value = '';
+      document.getElementById('editChkPriority').checked = true; // New cards default to priority
+      document.getElementById('editChkCritical').checked = false;
+      document.getElementById('btnDeleteCardEdit').style.display = 'none';
+
+      const modal = document.getElementById('cardEditModal');
+      if (modal) {
+        modal.classList.add('active');
+        playJarvisSound('reveal');
+      }
+    }
+
+    function closeCardEditor() {
+      const modal = document.getElementById('cardEditModal');
+      if (modal) modal.classList.remove('active');
+    }
+
+    function generateStrongPasswordForEditor() {
+      const upper = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+      const lower = 'abcdefghijkmnopqrstuvwxyz';
+      const digits = '23456789';
+      const symbols = '!@#$%^&*-_=+';
+      const all = upper + lower + digits + symbols;
+      let pwd = '';
+      pwd += upper[Math.floor(Math.random() * upper.length)];
+      pwd += lower[Math.floor(Math.random() * lower.length)];
+      pwd += digits[Math.floor(Math.random() * digits.length)];
+      pwd += symbols[Math.floor(Math.random() * symbols.length)];
+      for (let i = 4; i < 16; i++) {
+        pwd += all[Math.floor(Math.random() * all.length)];
+      }
+      // Shuffle
+      pwd = pwd.split('').sort(() => Math.random() - 0.5).join('');
+      const input = document.getElementById('editInputPassword');
+      if (input) {
+        input.value = pwd;
+        showToast('⚡ Strong password generated!', '🔐');
+        playJarvisSound('click');
+      }
+    }
+
+    function saveCardEditor() {
+      const id = document.getElementById('editCardId').value;
+      const title = document.getElementById('editInputTitle').value.trim();
+      const category = document.getElementById('editSelectCategory').value;
+      const badge = document.getElementById('editInputBadge').value.trim() || category;
+      const username = document.getElementById('editInputUsername').value.trim();
+      const password = document.getElementById('editInputPassword').value.trim();
+      const notes = document.getElementById('editInputNotes').value.trim();
+      const isPriority = document.getElementById('editChkPriority').checked;
+      const isCritical = document.getElementById('editChkCritical').checked;
+
+      if (!title) {
+        showToast('⚠️ Please enter an Account Title');
+        return;
+      }
+
+      if (id) {
+        // Edit existing card
+        const item = vaultItems.find(x => x.id === id);
+        if (item) {
+          item.title = title;
+          item.category = category;
+          item.badge = badge;
+          item.username = username;
+          item.password = password;
+          item.notes = notes;
+          item.isPriority = isPriority;
+          item.pinned = isPriority;
+          if (isPriority && !item.pinned_at) item.pinned_at = Date.now();
+          item.importance = isCritical ? 'Critical' : 'Normal';
+          item.updated_at = new Date().toISOString();
+          trackCardUsage(id, 'edit_card', 4);
+          logAudit('EDITED_CARD', 'Updated details for: ' + title);
+          showToast(`✓ Updated "${title}" successfully!`, '🛡️');
+          recordVaultMutation('CARD_UPDATE', item);
+        }
+      } else {
+        // Create brand new card
+        const newId = 'vault-item-' + Date.now();
+        const newItem = {
+          id: newId,
+          category: category,
+          badge: badge,
+          title: title,
+          username: username,
+          password: password,
+          old_password: '',
+          notes: notes,
+          importance: isCritical ? 'Critical' : 'Normal',
+          isPriority: isPriority,
+          pinned: isPriority,
+          pinned_at: isPriority ? Date.now() : 0,
+          usageScore: 10, // give new cards an initial boost
+          status: 'Secured',
+          updated_at: new Date().toISOString()
+        };
+        vaultItems.unshift(newItem);
+        logAudit('CREATED_CARD', 'Created new account: ' + title);
+        showToast(`✓ Added "${title}" to your vault!`, '✨');
+        recordVaultMutation('CARD_CREATE', newItem);
+      }
+
+      try {
+        localStorage.setItem(LS_VAULT_KEY, JSON.stringify(vaultItems));
+      } catch(e) {}
+
+      closeCardEditor();
+      renderVault();
+      renderMetrics();
+      playJarvisSound('copy');
+    }
+
+    function deleteCardFromEditor() {
+      const id = document.getElementById('editCardId').value;
+      if (!id) return;
+      const item = vaultItems.find(x => x.id === id);
+      const title = item ? item.title : 'this account';
+      if (!confirm(`Are you sure you want to permanently delete "${title}" from your vault?`)) {
+        return;
+      }
+
+      vaultItems = vaultItems.filter(x => x.id !== id);
+      try {
+        localStorage.setItem(LS_VAULT_KEY, JSON.stringify(vaultItems));
+      } catch(e) {}
+
+      closeCardEditor();
+      renderVault();
+      renderMetrics();
+      logAudit('DELETED_CARD', 'Removed account: ' + title);
+      showToast(`Deleted "${title}" from vault.`, '🗑️');
+      recordVaultMutation('CARD_DELETE', { id: id, title: title });
+      playJarvisSound('reveal');
+    }
+
+    function copyToClipboard(text, accountTitle, btnElement) {
       if (!text) {
         showToast('⚠️ No password stored for this account');
         return;
@@ -3316,10 +3844,11 @@
       }
     }
 
-    async function copyUsername(text, btnElement) {
+    async function copyUsername(text, btnElement, itemId) {
       if (!text) return;
       try {
         await navigator.clipboard.writeText(text);
+        if (itemId) trackCardUsage(itemId, 'copy_username', 1.5);
         logAudit('COPIED_USERNAME', 'Copied username: ' + text);
         showToast('Copied username: ' + text);
       } catch (e) {}
@@ -3347,7 +3876,11 @@
         return;
       }
 
-      container.innerHTML = filtered.map(item => {
+      // Priority Pinned on Top, followed by Usage Rank
+      const sortedCards = sortVaultCards(filtered);
+
+      container.innerHTML = sortedCards.map(item => {
+        const isPinned = !!(item.isPriority || item.pinned);
         const isCritical = (item.importance || '').toLowerCase() === 'critical';
         const maskedPwd = '•'.repeat(Math.min(12, (item.password || '').length || 10));
         const safeTitle = escapeHtml(item.title);
@@ -3370,17 +3903,30 @@
         const rotationLabel = daysAgo <= 0 ? 'Today' : `${daysAgo}d ago`;
 
         return `
-          <article class="vault-card ${catClass}" id="card-${item.id}">
+          <article class="vault-card ${catClass} ${isPinned ? 'is-priority-pinned' : ''}" id="card-${item.id}">
             <div class="card-header">
               <div class="card-title-group">
-                <span class="card-badge ${isCritical ? 'critical' : ''}">${isCritical ? '⚡ CRITICAL ACCOUNT' : item.badge || item.category}</span>
+                <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                  <span class="card-badge ${isCritical ? 'critical' : ''}">${isCritical ? '⚡ CRITICAL ACCOUNT' : item.badge || item.category}</span>
+                  ${isPinned ? '<span class="card-badge" style="background:rgba(255,215,0,0.18)!important;border-color:#ffd700!important;color:#ffd700!important;box-shadow:0 0 8px rgba(255,215,0,0.3)!important;">★ TOP PRIORITY</span>' : ''}
+                </div>
                 <h3 class="card-account-title">${safeTitle}</h3>
+              </div>
+              <div class="card-header-actions">
+                <button type="button" class="btn-card-pin ${isPinned ? 'pinned' : ''}" onclick="toggleCardPriority('${item.id}')" title="${isPinned ? 'Pinned Priority (Click to unpin)' : 'Make Priority (Pin to top)'}" aria-label="Toggle Priority">
+                  <svg viewBox="0 0 24 24" fill="${isPinned ? '#ffd700' : 'none'}" stroke="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <span>${isPinned ? 'TOP' : 'PIN'}</span>
+                </button>
+                <button type="button" class="btn-card-edit" onclick="openCardEditor('${item.id}')" title="Edit Card Details" aria-label="Edit Card">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                  <span>EDIT</span>
+                </button>
               </div>
             </div>
 
             <div class="card-username-row">
               <span title="${safeUser}">${safeUser}</span>
-              <button type="button" class="btn-copy-user" onclick="copyUsername('${safeUser}', this)" title="Copy Username / Email">
+              <button type="button" class="btn-copy-user" onclick="copyUsername('${safeUser}', this, '${item.id}')" title="Copy Username / Email">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                 Copy
               </button>
@@ -3394,7 +3940,7 @@
                 <button type="button" class="btn-pwd-action" onclick="toggleReveal('${item.id}')" title="Toggle Show/Hide Password">
                   <svg width="15" height="15" id="eyeIcon-${item.id}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                 </button>
-                <button type="button" class="btn-copy-instant" onclick="copyToClipboard('${safePwd}', '${safeTitle}', this)" title="1-Click Copy Password">
+                <button type="button" class="btn-copy-instant" onclick="copyToClipboard('${safePwd}', '${safeTitle}', this, '${item.id}')" title="1-Click Copy Password">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                   COPY
                 </button>
@@ -3427,6 +3973,7 @@
           icon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
         }
         playJarvisSound("reveal");
+        trackCardUsage(id, 'view_password', 1);
         logAudit('REVEALED_PASSWORD', 'Revealed password for card ' + id);
       } else {
         box.classList.add('masked');
@@ -3547,7 +4094,7 @@
       }
 
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v11', { scope: '/orlandovault/' }).catch(err => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v12', { scope: '/orlandovault/' }).catch(err => {
           console.warn('Vault SW registration error:', err);
         });
       }
@@ -4382,6 +4929,24 @@
 
       // Close sheet modal on backdrop click
       const sheetSyncModal = document.getElementById('sheetSyncModal');
+      
+      // Card Editor Modal Bindings
+      const btnCloseCardEditor = document.getElementById('btnCloseCardEditor');
+      const btnCancelCardEdit = document.getElementById('btnCancelCardEdit');
+      const btnSaveCardEdit = document.getElementById('btnSaveCardEdit');
+      const btnDeleteCardEdit = document.getElementById('btnDeleteCardEdit');
+      const cardEditModal = document.getElementById('cardEditModal');
+
+      if (btnCloseCardEditor) btnCloseCardEditor.onclick = closeCardEditor;
+      if (btnCancelCardEdit) btnCancelCardEdit.onclick = closeCardEditor;
+      if (btnSaveCardEdit) btnSaveCardEdit.onclick = saveCardEditor;
+      if (btnDeleteCardEdit) btnDeleteCardEdit.onclick = deleteCardFromEditor;
+      if (cardEditModal) {
+        cardEditModal.addEventListener('click', (e) => {
+          if (e.target === cardEditModal) closeCardEditor();
+        });
+      }
+
       if (sheetSyncModal) {
         sheetSyncModal.addEventListener('click', (e) => {
           if (e.target === sheetSyncModal) closeSheetSyncModal();
