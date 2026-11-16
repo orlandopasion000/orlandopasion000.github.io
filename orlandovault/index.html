@@ -4999,7 +4999,7 @@
       }
 
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v23', { scope: '/orlandovault/' }).catch(err => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v24', { scope: '/orlandovault/' }).catch(err => {
           console.warn('Vault SW registration error:', err);
         });
       }
@@ -5291,6 +5291,8 @@
       const merged = baseList.slice().map(item => Object.assign({}, item));
       let updatedCount = 0;
       let addedCount = 0;
+      const updatedTitles = [];
+      const addedTitles = [];
 
       incomingList.forEach((incoming, idx) => {
         const inUser = smartNorm(incoming.username);
@@ -5305,7 +5307,7 @@
         }
 
         // 2. Strong match on username
-        if (!match && inUser && inUser.length >= 5) {
+        if (!match && inUser && inUser.length >= 4) {
           match = merged.find(ex => {
             const exUser = smartNorm(ex.username);
             if (exUser === inUser) {
@@ -5317,7 +5319,7 @@
         }
 
         // 3. Strong match on title if usernames are compatible
-        if (!match && inTitle && inTitle.length >= 5) {
+        if (!match && inTitle && inTitle.length >= 4) {
           match = merged.find(ex => {
             const exTitle = smartNorm(ex.title);
             if (exTitle === inTitle) {
@@ -5330,6 +5332,7 @@
 
         if (match) {
           updatedCount++;
+          updatedTitles.push(match.title || incoming.title || match.username);
           // Preserve existing priority pins, usage stats, and IDs
           if (incoming.password && incoming.password !== match.password) {
             if (match.password && !match.old_password) {
@@ -5346,12 +5349,19 @@
           match.updated_at = new Date().toISOString();
         } else {
           addedCount++;
+          addedTitles.push(incoming.title || incoming.username);
           const newCardId = incoming.id || ('vault-sheet-' + Date.now() + '-' + idx);
           merged.push(Object.assign({}, incoming, { id: newCardId }));
         }
       });
 
-      return { mergedList: merged, updatedCount: updatedCount, addedCount: addedCount };
+      return { 
+        mergedList: merged, 
+        updatedCount: updatedCount, 
+        addedCount: addedCount,
+        updatedTitles: updatedTitles,
+        addedTitles: addedTitles
+      };
     }
 
     function extractGoogleSheetCsvUrl(rawUrl) {
@@ -5401,36 +5411,68 @@
         return result;
       }
 
-      const headers = parseRow(lines[0]).map(h => h.toLowerCase());
+      // 1. Locate the true header row (scan first 10 rows for user/pass/email/account keywords)
+      let headerRowIdx = 0;
+      let bestMatchScore = 0;
+      for (let r = 0; r < Math.min(lines.length, 10); r++) {
+        const rowCols = parseRow(lines[r]).map(c => c.toLowerCase());
+        let score = 0;
+        if (rowCols.some(c => c.includes('user') || c.includes('email') || c.includes('login') || c.includes('username'))) score += 3;
+        if (rowCols.some(c => c.includes('pass') || c.includes('password') || c.includes('pwd'))) score += 3;
+        if (rowCols.some(c => c.includes('service') || c.includes('account') || c.includes('title') || (c.includes('name') && !c.includes('user')) || c.includes('app') || c.includes('platform') || c.includes('website') || c.includes('site'))) score += 2;
+        if (rowCols.some(c => c.includes('category') || c.includes('notes'))) score += 1;
+        if (score > bestMatchScore) {
+          bestMatchScore = score;
+          headerRowIdx = r;
+        }
+      }
+
+      const headers = parseRow(lines[headerRowIdx]).map(h => h.toLowerCase());
       let catIdx = headers.findIndex(h => h.includes('category') || h.includes('group') || h.includes('type'));
-      let titleIdx = headers.findIndex(h => h.includes('service') || h.includes('account') || h.includes('title') || h.includes('name') || h.includes('app'));
-      let userIdx = headers.findIndex(h => h.includes('email') || h.includes('user') || h.includes('login') || h.includes('id'));
+      let titleIdx = headers.findIndex(h => h.includes('service') || h.includes('account') || h.includes('title') || (h.includes('name') && !h.includes('user')) || h.includes('app') || h.includes('platform') || h.includes('website') || h.includes('site'));
+      let userIdx = headers.findIndex(h => h.includes('email') || h.includes('user') || h.includes('login') || h.includes('username') || h.includes('id'));
       let passIdx = headers.findIndex(h => h.includes('current') || (h.includes('primary') && h.includes('pass')) || (h.includes('password') && !h.includes('previous') && !h.includes('old') && !h.includes('alt')));
-      if (passIdx === -1) passIdx = headers.findIndex(h => h.includes('password') || h.includes('pass'));
+      if (passIdx === -1) passIdx = headers.findIndex(h => h.includes('password') || h.includes('pass') || h.includes('pwd'));
       let oldPassIdx = headers.findIndex(h => h.includes('previous') || h.includes('alternate') || h.includes('old'));
       let phoneIdx = headers.findIndex(h => h.includes('phone') || h.includes('recovery') || h.includes('mobile'));
-      let notesIdx = headers.findIndex(h => h.includes('note') || h.includes('remark') || h.includes('detail') || h.includes('info'));
+      let notesIdx = headers.findIndex(h => h.includes('note') || h.includes('remark') || h.includes('detail') || h.includes('info') || h.includes('used for'));
 
-      if (titleIdx === -1) titleIdx = 1;
-      if (userIdx === -1) userIdx = 2;
-      if (passIdx === -1) passIdx = 3;
-      if (oldPassIdx === -1) oldPassIdx = 4;
-      if (phoneIdx === -1) phoneIdx = 5;
-      if (notesIdx === -1) notesIdx = 6;
+      // Intelligent column index fallback based on layout:
+      // If 3 columns [col0, Username, Password]: col0 is Service Title!
+      if (titleIdx === -1) {
+        if (userIdx === 1 && passIdx === 2) {
+          titleIdx = 0; // Column 0 is the account name (e.g. Facebook)
+        } else if (userIdx === 0 && passIdx === 1) {
+          titleIdx = -1; // No title column, will derive from username/email
+        } else {
+          titleIdx = (catIdx === 0) ? 1 : 0;
+        }
+      }
+      if (userIdx === -1) userIdx = (titleIdx === 0) ? 1 : (titleIdx === 1 ? 0 : 1);
+      if (passIdx === -1) passIdx = (userIdx === 1 && titleIdx === 0) ? 2 : 2;
 
       const newItems = [];
-      for (let i = 1; i < lines.length; i++) {
+      for (let i = headerRowIdx + 1; i < lines.length; i++) {
         const cols = parseRow(lines[i]);
         if (!cols || cols.length === 0) continue;
         const rawCat = (catIdx !== -1 && cols[catIdx]) ? cols[catIdx].trim() : '';
-        const title = (cols[titleIdx] || '').trim();
-        const user = (cols[userIdx] || '').trim();
-        const pass = (cols[passIdx] || '').trim();
+        let title = (titleIdx !== -1 && cols[titleIdx]) ? cols[titleIdx].trim() : '';
+        const user = (userIdx !== -1 && cols[userIdx]) ? cols[userIdx].trim() : '';
+        const pass = (passIdx !== -1 && cols[passIdx]) ? cols[passIdx].trim() : '';
         const oldPass = (oldPassIdx !== -1 && cols[oldPassIdx]) ? cols[oldPassIdx].trim() : '';
         const phone = (phoneIdx !== -1 && cols[phoneIdx]) ? cols[phoneIdx].trim() : '';
         const notes = (notesIdx !== -1 && cols[notesIdx]) ? cols[notesIdx].trim() : '';
 
         if (!title && !user && !pass) continue;
+        if (!title && user) {
+          // Derive a friendly title if column was empty (e.g. from user or domain)
+          if (user.includes('@')) {
+            const domain = user.split('@')[1];
+            title = domain.split('.')[0].toUpperCase() + ' (' + user + ')';
+          } else {
+            title = user;
+          }
+        }
 
         // Strict Hygiene: reject non-login row junk
         const passLower = pass.toLowerCase();
@@ -5532,10 +5574,13 @@
           renderMetrics();
           const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
           if (descEl) descEl.textContent = `Smart Synced: ${vaultItems.length} items (${timestamp})`;
-          if (detailsEl) detailsEl.textContent = `✓ Connected & Protected! ${mergeResult.updatedCount} accounts refreshed, ${mergeResult.addedCount} new added. Total: ${vaultItems.length} accounts.`;
-          logAudit('SMART_SYNCED_GOOGLE_SHEETS', `Smart merged sheet: ${mergeResult.updatedCount} updated, ${mergeResult.addedCount} added. Zero accounts lost.`);
+          const detailMsg = mergeResult.addedCount > 0 
+            ? `✓ Connected & Merged! ${mergeResult.addedCount} new accounts added, ${mergeResult.updatedCount} refreshed. Total: ${vaultItems.length} accounts.`
+            : `✓ Connected & Updated! Refreshed ${mergeResult.updatedCount} account(s) (${mergeResult.updatedTitles.slice(0, 2).join(', ')}). Your sheet had ${parsed.length} account which matched your existing card. Total: ${vaultItems.length} accounts.`;
+          if (detailsEl) detailsEl.textContent = detailMsg;
+          logAudit('SMART_SYNCED_GOOGLE_SHEETS', `Smart merged sheet: ${mergeResult.updatedCount} updated (${mergeResult.updatedTitles.join(', ')}), ${mergeResult.addedCount} added. Zero accounts lost.`);
           playJarvisSound('copy');
-          showToast(`⚡ Smart Merge Complete! ${mergeResult.updatedCount} refreshed, ${mergeResult.addedCount} new added. Total: ${vaultItems.length}`, '🛡️');
+          showToast(`⚡ Smart Merge: ${mergeResult.updatedCount} updated, ${mergeResult.addedCount} added!`, '🛡️');
           recordVaultMutation('SMART_MERGE', { total: vaultItems.length, updated: mergeResult.updatedCount, added: mergeResult.addedCount });
         } else {
           throw new Error('No valid credentials found in sheet');
