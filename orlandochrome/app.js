@@ -11407,6 +11407,9 @@ const manualBtn = backdrop.querySelector('#btnCreateManualSnapshot');
 
     // C. SEARCH: Quick Actions & System Tools
     const actions = [
+      { id: 'act-quantum-realm', title: 'Quantum Realm (Game 1)', desc: 'Classic streamlined quantum wavepackets & electric tail arcs (Touch/hold 2.0s)', badge: 'REALM ◈', action: () => { if (window.quantumGame) window.quantumGame.launch('classic'); } },
+      { id: 'act-quantum-helix', title: 'Quantum Helix (Game 2)', desc: 'Silky-smooth bi-chromatic cyan & violet DNA double-helix (Touch/hold 2.0s)', badge: 'HELIX 🧬', action: () => { if (window.quantumGame) window.quantumGame.launch('helix'); } },
+      { id: 'act-quantum-meteor', title: 'Quantum Meteor (Game 3)', desc: 'High-fidelity 3D tumbling molten asteroid & solar dynamo rings (Touch/hold 2.0s)', badge: 'METEOR ☄️', action: () => { if (window.quantumGame) window.quantumGame.launch('meteor'); } },
       { id: 'act-math', title: 'Math Overdrive: Eight-Level Difficulty System', desc: 'Academically structured arithmetic progression (20 Qs · 10 Mistakes Max)', badge: 'MATH 🧮', action: () => { if (window.chromeSynapseGame) window.chromeSynapseGame.open('math'); } },
       { id: 'act-reflex', title: 'Reflex Blitz: Quantum Realm, Helix & Meteor Catcher', desc: 'Extra Big Tier 3 particles · Catcher transmutations (10 Lives)', badge: 'REFLEX ⚡', action: () => { if (window.chromeSynapseGame) window.chromeSynapseGame.open('reflex'); } },
       { id: 'act-memory', title: 'Memory Matrix: 16-Box Quantum Array', desc: 'Fullscreen 4x4 array · Musical harmonic sequence (1 Mistake Game Over)', badge: 'MATRIX 🧠', action: () => { if (window.chromeSynapseGame) window.chromeSynapseGame.open('memory'); } },
