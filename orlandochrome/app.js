@@ -3,6 +3,7 @@
  * 7 High-Impact Enhancements + Wispr Flow Pro Dictation + App Distribution & Command Suite (PWA & Blank Edition)
  */
 (function() {
+  window.connectSSE = function() {};
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -4166,7 +4167,9 @@ const Icons = {
         takeBackupSnapshot('Background Freeze Checkpoint');
       } else if (document.visibilityState === 'visible') {
         pullFromCloud(false, false);
-        connectSSE();
+        if (typeof connectSSE === 'function') {
+          try { connectSSE(); } catch (e) {}
+        }
       }
     });
 
