@@ -567,6 +567,308 @@
       100% { box-shadow: 0 0 55px rgba(0, 255, 102, 0.7), 0 0 110px rgba(0, 255, 102, 0.35); }
     }
 
+  
+    /* ==========================================================================
+       COMMAND PALETTE, SPOTLIGHT HUD & OPEN MAIN WEB APP LAUNCHER STYLES
+       ========================================================================== */
+    .nav-actions-cluster {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-cmd-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(212, 168, 83, 0.25);
+      color: var(--white-dim);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .nav-cmd-trigger:hover {
+      background: rgba(212, 168, 83, 0.12);
+      border-color: var(--gold);
+      color: var(--white);
+      box-shadow: 0 0 16px rgba(212, 168, 83, 0.2);
+      transform: translateY(-1px);
+    }
+    .cmd-kbd {
+      font-size: 9.5px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-weight: 700;
+    }
+
+    /* 24K Swiss Gold Quantum Launch Pill */
+    .btn-topbar-launch-gold {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #f0d078 0%, #d4a853 50%, #997328 100%);
+      color: #050507;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border: 1px solid #fef08a;
+      box-shadow: 0 4px 18px rgba(212, 168, 83, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-topbar-launch-gold::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(60deg, transparent 30%, rgba(255, 255, 255, 0.5) 50%, transparent 70%);
+      transform: rotate(25deg) translateY(-100%);
+      transition: transform 0.6s ease;
+    }
+    .btn-topbar-launch-gold:hover::before {
+      transform: rotate(25deg) translateY(100%);
+    }
+    .btn-topbar-launch-gold:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(212, 168, 83, 0.5), 0 0 15px rgba(240, 208, 120, 0.4);
+      background: linear-gradient(135deg, #fff 0%, #f0d078 50%, #d4a853 100%);
+    }
+
+    .hero-launch-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* COMMAND PALETTE MODAL */
+    .cmd-palette-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 5, 7, 0.78);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      z-index: 10000;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: clamp(60px, 12vh, 120px);
+    }
+    .cmd-palette-backdrop.open {
+      display: flex;
+      animation: cmdFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes cmdFadeIn {
+      from { opacity: 0; transform: scale(0.97); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .cmd-palette-box {
+      width: 100%;
+      max-width: 640px;
+      background: #0d0f14;
+      border: 1px solid rgba(212, 168, 83, 0.35);
+      border-radius: 16px;
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9), 0 0 40px rgba(212, 168, 83, 0.15);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .cmd-palette-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .cmd-palette-input {
+      flex: 1;
+      background: none;
+      border: none;
+      color: #fff;
+      font-family: var(--font-heading);
+      font-size: 16px;
+      outline: none;
+    }
+    .cmd-palette-input::placeholder {
+      color: var(--white-dim);
+      font-size: 14px;
+    }
+    .cmd-palette-esc {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--white-dim);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .cmd-palette-results {
+      max-height: 400px;
+      overflow-y: auto;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .cmd-palette-group-title {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      padding: 10px 12px 4px;
+    }
+    .cmd-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      background: none;
+      border: 1px solid transparent;
+      color: var(--white);
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+    .cmd-item:hover, .cmd-item.selected {
+      background: rgba(212, 168, 83, 0.12);
+      border-color: rgba(212, 168, 83, 0.4);
+      transform: translateX(3px);
+    }
+    .cmd-item-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .cmd-item-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .cmd-item-title {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #fff;
+    }
+    .cmd-item-desc {
+      font-size: 11px;
+      color: var(--white-dim);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .cmd-item-badge {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: rgba(212, 168, 83, 0.15);
+      color: var(--gold-bright);
+      border: 1px solid rgba(212, 168, 83, 0.3);
+    }
+
+    .cmd-palette-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(0, 0, 0, 0.4);
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      color: var(--white-dim);
+    }
+    .cmd-footer-keys {
+      display: flex;
+      gap: 12px;
+    }
+
+    /* STANDALONE DOCK (WHEN IN DESKTOP APP WINDOW) */
+    .standalone-subapp-dock {
+      display: none;
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(13, 15, 20, 0.85);
+      border: 1px solid rgba(212, 168, 83, 0.4);
+      border-radius: 999px;
+      padding: 6px 14px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(212, 168, 83, 0.2);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      z-index: 999;
+      align-items: center;
+      gap: 8px;
+    }
+    .standalone-subapp-dock.active {
+      display: flex;
+    }
+    .dock-pill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #fff;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .dock-pill-btn:hover {
+      background: rgba(212, 168, 83, 0.2);
+      border-color: var(--gold);
+      transform: translateY(-2px);
+    }
+    .dock-pill-btn img {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+    }
+
+    @media (max-width: 768px) {
+      .nav-actions-cluster {
+        display: none;
+      }
+      .cmd-palette-box {
+        width: 95%;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -583,6 +885,21 @@
       <li><a href="#resources">Resources</a></li>
       <li><a href="#journey">Journey</a></li>
     </ul>
+
+    <!-- Action Cluster: Spotlight Command Palette & Open Main Web App -->
+    <div class="nav-actions-cluster">
+      <button type="button" class="nav-cmd-trigger" id="btnOpenCmdPalette" title="Open Spotlight Command Palette (Ctrl + K / ⌘K)">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span class="cmd-label">Search</span>
+        <kbd class="cmd-kbd">Ctrl K</kbd>
+      </button>
+
+      <button type="button" class="btn-topbar-desktop btn-topbar-launch-gold" id="btnTopbarLaunchApp" title="Open Sir Orlando V. Pasion, Jr. in Dedicated Standalone Desktop App" aria-label="Open Main Web App">
+        <svg class="modern-icon" viewBox="0 0 24 24" fill="none" style="width:14px;height:14px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" fill="currentColor"></polygon></svg>
+        <span id="topbarLaunchLabel">Open Main Web App</span>
+      </button>
+    </div>
+
     <button class="nav-hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
   </nav>
   <div class="mobile-menu" id="mobileMenu">
@@ -605,8 +922,13 @@
     <div class="hero-bar"></div>
     <p class="hero-subtitle"><strong>Teacher VI</strong> at Nancalobasaan National High School — advancing Mathematics education through innovation, technology, and a commitment to every Filipino learner.</p>
     <div class="hero-cta">
-      <a href="#resources" class="btn btn-gold">▸ View Resources</a>
-      <a href="#about" class="btn btn-ghost">Learn More</a>
+      <button type="button" class="btn btn-gold hero-launch-btn" id="btnHeroLaunchApp" title="Launch OVPJ Master Portfolio in Borderless Dedicated Desktop App">
+        ⚡ Open Main Web App
+      </button>
+      <a href="#resources" class="btn btn-ghost">▸ View Resources</a>
+      <button type="button" class="btn btn-ghost hero-cmd-btn" id="btnHeroOpenCmd" title="Launch Command Palette (Ctrl + K)">
+        ⌘ Command Palette (Ctrl+K)
+      </button>
     </div>
     <div class="hero-scroll"><span>Scroll</span><div class="scroll-line"></div></div>
   </section>
@@ -1340,5 +1662,260 @@
       }
     })();
   </script>
+
+  <!-- SPOTLIGHT COMMAND PALETTE MODAL (CTRL + K) -->
+  <div class="cmd-palette-backdrop" id="cmdPaletteModal" role="dialog" aria-modal="true" aria-label="Spotlight Command Palette">
+    <div class="cmd-palette-box">
+      <div class="cmd-palette-header">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--gold)" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" class="cmd-palette-input" id="cmdPaletteInput" placeholder="Type a command, app, or resource (e.g., 'Recharge', 'Chrome', 'Timer', 'Vault', 'NASH', 'Math')..." autocomplete="off" spellcheck="false">
+        <kbd class="cmd-palette-esc" id="btnCloseCmdPalette">ESC</kbd>
+      </div>
+
+      <div class="cmd-palette-results" id="cmdPaletteResults">
+        <!-- Rendered dynamically by JavaScript -->
+      </div>
+
+      <div class="cmd-palette-footer">
+        <div class="cmd-footer-keys">
+          <span><kbd class="cmd-kbd">↑</kbd> <kbd class="cmd-kbd">↓</kbd> Navigate</span>
+          <span><kbd class="cmd-kbd">↵</kbd> Launch</span>
+          <span><kbd class="cmd-kbd">esc</kbd> Close</span>
+        </div>
+        <span style="color:var(--gold);font-weight:700;">Sir Orlando V. Pasion, Jr. · Master Suite</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- STANDALONE EXECUTIVE SUB-APP DOCK (SHOWN IN STANDALONE MODE) -->
+  <div class="standalone-subapp-dock" id="standaloneSubAppDock">
+    <span style="font-family:var(--font-mono);font-size:10px;color:var(--gold);font-weight:700;margin-right:4px;">APPS:</span>
+    <button type="button" class="dock-pill-btn" onclick="launchSubApp('orlandorecharge', 'OrlandoRechargeMainAppWindow', 1280, 850)">
+      <img src="assets/recharge-icon-192.png" alt="Recharge"> <span>Recharge</span>
+    </button>
+    <button type="button" class="dock-pill-btn" onclick="launchSubApp('orlandochrome', 'OrlandoChromeStandaloneWindow', 1180, 820)">
+      <img src="oc-logo.svg" alt="Chrome"> <span>Chrome</span>
+    </button>
+    <button type="button" class="dock-pill-btn" onclick="launchSubApp('orlandotimer', 'OrlandoTimerStandaloneWindow', 1280, 860)">
+      <img src="assets/ot-icon-192.png" alt="Timer"> <span>Timer</span>
+    </button>
+    <button type="button" class="dock-pill-btn" onclick="launchSubApp('orlandovault', 'OrlandoVaultStandaloneWindow', 1200, 800)">
+      <img src="assets/vault-icon-128.png" alt="Vault"> <span>Vault</span>
+    </button>
+  </div>
+
+
+  <script>
+    // =========================================================================
+    // OVPJ MASTER STANDALONE LAUNCHER & SPOTLIGHT COMMAND PALETTE ENGINE
+    // =========================================================================
+
+    // 1. OPEN MAIN WEB APP STANDALONE WINDOW (SINGLETON PATTERN)
+    function launchMainWebPortfolio() {
+      const targetUrl = window.location.origin + window.location.pathname + '?standalone=true';
+      const features = 'popup=yes,menubar=no,toolbar=no,location=no,status=no,personalbar=no,scrollbars=yes,resizable=yes,width=1340,height=880,left=80,top=40';
+      const appWin = window.open(targetUrl, 'OVPJMainWebPortfolioWindow', features);
+      if (appWin) {
+        try { appWin.focus(); } catch (e) {}
+      } else {
+        window.location.href = targetUrl;
+      }
+    }
+
+    function launchSubApp(folder, winName, w, h) {
+      const targetUrl = window.location.origin + '/' + folder + '/?standalone=true';
+      const features = 'popup=yes,menubar=no,toolbar=no,location=no,status=no,personalbar=no,scrollbars=yes,resizable=yes,width=' + w + ',height=' + h + ',left=100,top=60';
+      const appWin = window.open(targetUrl, winName, features);
+      if (appWin) {
+        try { appWin.focus(); } catch (e) {}
+      } else {
+        window.location.href = targetUrl;
+      }
+    }
+
+    // Wire buttons
+    const btnTopbarLaunch = document.getElementById('btnTopbarLaunchApp');
+    const btnHeroLaunch = document.getElementById('btnHeroLaunchApp');
+    if (btnTopbarLaunch) btnTopbarLaunch.onclick = launchMainWebPortfolio;
+    if (btnHeroLaunch) btnHeroLaunch.onclick = launchMainWebPortfolio;
+
+    // Detect Standalone Mode
+    const isStandalone = window.location.search.includes('standalone=true') || window.matchMedia('(display-mode: standalone)').matches;
+    if (isStandalone) {
+      const topLabel = document.getElementById('topbarLaunchLabel');
+      if (topLabel) topLabel.textContent = '✔ Main Web App Active';
+      const dock = document.getElementById('standaloneSubAppDock');
+      if (dock) dock.classList.add('active');
+    }
+
+    // 2. SPOTLIGHT COMMAND PALETTE ENGINE
+    const COMMAND_ITEMS = [
+      { id: 'app-recharge', cat: 'Flagship Web Apps', icon: '⚡', title: 'OrlandoRecharge (Main Version)', desc: 'Complete 23-block main schedule alarm cockpit & horology', action: () => launchSubApp('orlandorecharge', 'OrlandoRechargeMainAppWindow', 1280, 850), badge: 'PWA' },
+      { id: 'app-chrome', cat: 'Flagship Web Apps', icon: '🌐', title: 'OrlandoChrome (Main Version)', desc: '22-profile Chrome taskbar command center & Wispr Flow', action: () => launchSubApp('orlandochrome', 'OrlandoChromeStandaloneWindow', 1180, 820), badge: 'PWA' },
+      { id: 'app-timer', cat: 'Flagship Web Apps', icon: '⏱️', title: 'Orlando Timer — Executive Horology', desc: '3-in-1 timepiece suite, Atmosphere controls & Supernova engine', action: () => launchSubApp('orlandotimer', 'OrlandoTimerStandaloneWindow', 1280, 860), badge: 'PWA' },
+      { id: 'app-vault', cat: 'Flagship Web Apps', icon: '🛡️', title: 'OrlandoVault — Jarvis Security Engine', desc: '138-credential offline-first vault, Google Sheets & Firebase sync', action: () => launchSubApp('orlandovault', 'OrlandoVaultStandaloneWindow', 1200, 800), badge: 'PWA' },
+
+      { id: 'res-nash', cat: 'NASH & Educational Resources', icon: '📚', title: 'May 2026 NASH Mock Test Reviewer', desc: 'Comprehensive principal qualifying reviewer across all 5 PPSSH domains', action: () => { window.location.href = 'may-2026-mock-test-reviewer.html'; }, badge: 'Reviewer' },
+      { id: 'res-math', cat: 'NASH & Educational Resources', icon: '📐', title: 'Grade 8 Mathematics Learning Suite', desc: 'Central Tendency, Probability, and MATATAG curriculum modules', action: () => { window.location.hash = '#resources'; }, badge: 'Curriculum' },
+
+      { id: 'nav-about', cat: 'Portfolio Sections', icon: '👤', title: 'About Sir Orlando V. Pasion, Jr.', desc: 'Teacher VI at Nancalobasaan National High School & EdD studies', action: () => { window.location.hash = '#about'; }, badge: 'Biography' },
+      { id: 'nav-expertise', cat: 'Portfolio Sections', icon: '⭐', title: 'Professional Strengths & Expertise', desc: 'EdTech, Mathematics instruction, and Education Governance', action: () => { window.location.hash = '#expertise'; }, badge: 'PPSSH' },
+      { id: 'nav-journey', cat: 'Portfolio Sections', icon: '🚀', title: 'Career Journey & Purpose', desc: 'Classroom teaching to school principalship aspiration', action: () => { window.location.hash = '#journey'; }, badge: 'Timeline' },
+
+      { id: 'sys-launch', cat: 'System Commands', icon: '🪟', title: 'Open Main Web App (Dedicated Window)', desc: 'Borderless standalone desktop experience without tabs', action: launchMainWebPortfolio, badge: 'Desktop' },
+      { id: 'sys-copy', cat: 'System Commands', icon: '📋', title: 'Copy Portfolio Web Link', desc: 'Copies https://orlandopasion000.github.io to clipboard', action: () => { navigator.clipboard.writeText('https://orlandopasion000.github.io/'); alert('📋 Portfolio Link Copied to Clipboard!'); }, badge: 'Share' }
+    ];
+
+    const cmdModal = document.getElementById('cmdPaletteModal');
+    const cmdInput = document.getElementById('cmdPaletteInput');
+    const cmdResults = document.getElementById('cmdPaletteResults');
+    const btnOpenCmd = document.getElementById('btnOpenCmdPalette');
+    const btnHeroCmd = document.getElementById('btnHeroOpenCmd');
+    const btnCloseCmd = document.getElementById('btnCloseCmdPalette');
+
+    let selectedIndex = 0;
+    let filteredItems = [...COMMAND_ITEMS];
+
+    function openCommandPalette() {
+      if (!cmdModal) return;
+      cmdModal.classList.add('open');
+      if (cmdInput) {
+        cmdInput.value = '';
+        cmdInput.focus();
+      }
+      renderCommandResults('');
+    }
+
+    function closeCommandPalette() {
+      if (cmdModal) cmdModal.classList.remove('open');
+    }
+
+    function renderCommandResults(query) {
+      if (!cmdResults) return;
+      const q = (query || '').toLowerCase().trim();
+      filteredItems = COMMAND_ITEMS.filter(item => {
+        return !q || item.title.toLowerCase().includes(q) || item.desc.toLowerCase().includes(q) || item.cat.toLowerCase().includes(q);
+      });
+
+      if (filteredItems.length === 0) {
+        cmdResults.innerHTML = '<div style="padding:24px;text-align:center;color:var(--white-dim);font-size:13px;">No commands or resources matching "' + query + '". Try typing "Recharge", "Chrome", "Timer", or "NASH".</div>';
+        return;
+      }
+
+      selectedIndex = 0;
+      let html = '';
+      let currentCat = '';
+
+      filteredItems.forEach((item, index) => {
+        if (item.cat !== currentCat) {
+          currentCat = item.cat;
+          html += '<div class="cmd-palette-group-title">' + currentCat + '</div>';
+        }
+        const isSel = index === selectedIndex;
+        html += '<button type="button" class="cmd-item ' + (isSel ? 'selected' : '') + '" data-index="' + index + '">';
+        html += '  <div class="cmd-item-icon">' + item.icon + '</div>';
+        html += '  <div class="cmd-item-info">';
+        html += '    <div class="cmd-item-title">' + item.title + '</div>';
+        html += '    <div class="cmd-item-desc">' + item.desc + '</div>';
+        html += '  </div>';
+        html += '  <span class="cmd-item-badge">' + item.badge + '</span>';
+        html += '</button>';
+      });
+
+      cmdResults.innerHTML = html;
+
+      // Click binding
+      cmdResults.querySelectorAll('.cmd-item').forEach(el => {
+        el.onclick = function() {
+          const idx = parseInt(this.getAttribute('data-index'), 10);
+          executeCommandIndex(idx);
+        };
+      });
+    }
+
+    function executeCommandIndex(idx) {
+      const item = filteredItems[idx];
+      if (item && item.action) {
+        closeCommandPalette();
+        item.action();
+      }
+    }
+
+    function updateSelection(newIdx) {
+      const items = cmdResults.querySelectorAll('.cmd-item');
+      if (items.length === 0) return;
+      selectedIndex = Math.max(0, Math.min(newIdx, items.length - 1));
+      items.forEach((it, i) => {
+        it.classList.toggle('selected', i === selectedIndex);
+        if (i === selectedIndex) it.scrollIntoView({ block: 'nearest' });
+      });
+    }
+
+    if (btnOpenCmd) btnOpenCmd.onclick = openCommandPalette;
+    if (btnHeroCmd) btnHeroCmd.onclick = openCommandPalette;
+    if (btnCloseCmd) btnCloseCmd.onclick = closeCommandPalette;
+    if (cmdModal) {
+      cmdModal.onclick = (e) => {
+        if (e.target === cmdModal) closeCommandPalette();
+      };
+    }
+
+    if (cmdInput) {
+      cmdInput.addEventListener('input', (e) => {
+        renderCommandResults(e.target.value);
+      });
+      cmdInput.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          updateSelection(selectedIndex + 1);
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          updateSelection(selectedIndex - 1);
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          executeCommandIndex(selectedIndex);
+        } else if (e.key === 'Escape') {
+          e.preventDefault();
+          closeCommandPalette();
+        }
+      });
+    }
+
+    // Global Key Listener: Ctrl+K or Cmd+K
+    window.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        if (cmdModal && cmdModal.classList.contains('open')) {
+          closeCommandPalette();
+        } else {
+          openCommandPalette();
+        }
+      }
+    });
+
+    // 3. SPECULATIVE PRE-FETCHING ENGINE (ZERO-MILLISECOND NAVIGATION)
+    // When the mouse hovers over any link for >65ms, prefetch in the background
+    const prefetchedUrls = new Set();
+    function prefetchUrl(url) {
+      if (!url || prefetchedUrls.has(url) || url.startsWith('#') || url.startsWith('javascript:')) return;
+      prefetchedUrls.add(url);
+      const link = document.createElement('link');
+      link.rel = 'prefetch';
+      link.href = url;
+      document.head.appendChild(link);
+    }
+
+    let hoverTimer = null;
+    document.addEventListener('mouseover', (e) => {
+      const a = e.target.closest('a');
+      if (a && a.href && a.origin === window.location.origin) {
+        hoverTimer = setTimeout(() => prefetchUrl(a.href), 65);
+      }
+    });
+    document.addEventListener('mouseout', (e) => {
+      if (hoverTimer) clearTimeout(hoverTimer);
+    });
+  </script>
+
 </body>
 </html>
