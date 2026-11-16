@@ -5610,25 +5610,8 @@ function getAudioBeatTelemetry(){
 
   return _audioTelemetryCache;
 }
-function primeMediaAudio(){
-  try {
-    SONGS.forEach(function(s){
-      var el = getSongAudioElement(s);
-      if(el && el.paused && el.currentTime === 0){
-        var p = el.play();
-        if(p && p.then){
-          p.then(function(){
-            el.pause();
-            el.currentTime = 0;
-          }).catch(function(){});
-        }
-      }
-    });
-  } catch(e){}
-}
 function unlock(){
   initAudio();
-  primeMediaAudio();
   if(ac&&ac.state!=="running"){
     ac.resume().then(function(){
       updateAudioBadge();
@@ -5641,7 +5624,7 @@ function unlock(){
     if(armed) startAudioKeepAlive();
   }
 }
-["pointerdown","keydown","touchstart","scroll"].forEach(function(ev){document.addEventListener(ev,unlock,{passive:true,capture:true})});
+["pointerdown","keydown","touchstart"].forEach(function(ev){document.addEventListener(ev,unlock,{passive:true,capture:true})});
 
 function updateAudioBadge(){
   var badge=$("audioBadge"),text=$("audioBadgeText");
@@ -7961,7 +7944,7 @@ function loadSnoozes() {
     if (saved) {
       var parsed = JSON.parse(saved);
       var now = Date.now();
-      snoozes = parsed.filter(function(item){ return item.at > (now - 10*60000); });
+      snoozes = parsed.filter(function(item){ return item.at > now; });
     }
   } catch(e) { snoozes = []; }
 }
@@ -13166,7 +13149,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   <script>
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v56', { scope: './' }).catch(function() {});
+        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v57', { scope: './' }).catch(function() {});
       });
     }
   </script>
