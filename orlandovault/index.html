@@ -3112,46 +3112,103 @@
       margin-left: 8px;
     }
 
-    .btn-card-pin, .btn-card-edit {
-      background: rgba(16, 21, 32, 0.85);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      color: #94a3b8;
-      border-radius: 8px;
-      padding: 4px 8px;
+    /* ==========================================================================
+       TACTICAL HUD RETICLE CONTROLS (CARD HEADER PIN & EDIT)
+       ========================================================================== */
+    .card-header-actions {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 8px;
+      flex-shrink: 0;
+      margin-left: 8px;
+    }
+
+    .btn-card-pin, .btn-card-edit {
+      position: relative;
+      background: linear-gradient(180deg, #131b29 0%, #0a0f18 52%, #05080f 100%);
+      border: 1.5px solid rgba(56, 189, 248, 0.35);
+      clip-path: polygon(6px 0, calc(100% - 6px) 0, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px), 0 6px);
+      padding: 7px 11px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
-      font-family: var(--font-tech), sans-serif;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
+      overflow: hidden;
       transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
       touch-action: manipulation;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.18);
     }
 
-    .btn-card-pin:hover, .btn-card-edit:hover {
-      background: rgba(24, 32, 48, 0.95);
-      border-color: var(--cyan);
-      color: #ffffff;
-      transform: translateY(-1px);
+    .btn-card-pin::after, .btn-card-edit::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transform: translateX(-150%) skewX(-25deg);
+      pointer-events: none;
     }
 
-    .btn-card-pin:active, .btn-card-edit:active {
+    .btn-card-pin:hover::after, .btn-card-edit:hover::after {
+      animation: cyberSweepGlint 1.2s infinite ease-in-out;
+    }
+
+    @keyframes cyberSweepGlint {
+      0% { transform: translateX(-150%) skewX(-25deg); }
+      100% { transform: translateX(250%) skewX(-25deg); }
+    }
+
+    /* PIN RETICLE */
+    .btn-card-pin {
+      border-color: rgba(255, 215, 0, 0.45);
+      color: #fbbf24;
+    }
+    .btn-card-pin:hover {
+      border-color: #ffd700;
+      background: linear-gradient(180deg, #242618 0%, #15180f 50%, #0a0d08 100%);
+      box-shadow: 0 0 18px rgba(255, 215, 0, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.35);
+      transform: translateY(-2px) scale(1.06);
+    }
+    .btn-card-pin:active {
       transform: translateY(0) scale(0.96);
     }
 
+    /* WHEN PINNED: 24K Split-Horizon Solar Chrome Reactor */
     .btn-card-pin.pinned {
-      background: linear-gradient(135deg, rgba(255, 215, 0, 0.18) 0%, rgba(245, 158, 11, 0.12) 100%) !important;
-      border-color: #ffd700 !important;
-      color: #ffd700 !important;
-      box-shadow: 0 0 12px rgba(255, 215, 0, 0.35) !important;
+      background: linear-gradient(180deg, #fffbeb 0%, #fde68a 16%, #f59e0b 44%, #78350f 48%, #92400e 64%, #d97706 82%, #fbbf24 100%) !important;
+      border: 1.5px solid #fffbeb !important;
+      box-shadow: 0 0 22px rgba(255, 215, 0, 0.75), 0 4px 14px rgba(0, 0, 0, 0.9), inset 0 1.5px 2px #ffffff !important;
+      color: #451a03 !important;
+    }
+    .btn-card-pin.pinned svg {
+      color: #451a03 !important;
+      fill: #451a03 !important;
+      filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.8));
+    }
+
+    /* EDIT RETICLE */
+    .btn-card-edit {
+      border-color: rgba(56, 189, 248, 0.45);
+      color: #38bdf8;
+    }
+    .btn-card-edit:hover {
+      background: linear-gradient(180deg, #0e2438 0%, #081624 50%, #030b14 100%);
+      border-color: #38bdf8;
+      color: #ffffff;
+      box-shadow: 0 0 18px rgba(56, 189, 248, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.35);
+      transform: translateY(-2px) scale(1.06);
+    }
+    .btn-card-edit:active {
+      transform: translateY(0) scale(0.96);
     }
 
     .btn-card-pin svg, .btn-card-edit svg {
-      width: 13px;
-      height: 13px;
-      stroke-width: 2.2;
+      width: 15px;
+      height: 15px;
+      stroke-width: 1.8;
+      transition: all 0.2s ease;
     }
 
     .vault-card.is-priority-pinned {
@@ -3288,43 +3345,29 @@
       border-color: #ffd700;
     }
 
-    /* ==========================================================================
-       CYBERNETIC TOGGLE PILLS & RADIANT ACTION CONTROLS
+/* ==========================================================================
+       TACTICAL CYBER ACTUATOR PANELS (MODAL PROTOCOL TOGGLES)
        ========================================================================== */
     .edit-form-options-row {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
       gap: 12px;
-      background: linear-gradient(135deg, rgba(16, 21, 32, 0.8) 0%, rgba(10, 15, 24, 0.95) 100%);
+      background: linear-gradient(180deg, rgba(16, 21, 32, 0.9) 0%, rgba(8, 11, 18, 0.98) 100%);
       padding: 12px;
-      border-radius: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1), 0 4px 16px rgba(0, 0, 0, 0.5);
+      border-radius: 12px;
+      border: 1.5px solid rgba(56, 189, 248, 0.25);
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.7), 0 4px 16px rgba(0, 0, 0, 0.5);
       margin-bottom: 14px;
     }
 
-    .cyber-toggle-chip {
+    .cyber-actuator-panel {
       position: relative;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 14px;
-      border-radius: 10px;
-      border: 1.5px solid rgba(255, 255, 255, 0.14);
-      background: rgba(255, 255, 255, 0.04);
       cursor: pointer;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
       user-select: none;
       touch-action: manipulation;
     }
 
-    .cyber-toggle-chip:hover {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(255, 255, 255, 0.3);
-      transform: translateY(-1px);
-    }
-
-    .cyber-toggle-input {
+    .cyber-actuator-input {
       position: absolute;
       opacity: 0;
       width: 0;
@@ -3332,97 +3375,193 @@
       pointer-events: none;
     }
 
-    .cyber-toggle-indicator {
-      width: 22px;
-      height: 22px;
+    .actuator-chassis {
+      position: relative;
+      background: linear-gradient(180deg, #121927 0%, #0a0e17 50%, #05070c 100%);
+      border: 1.5px solid rgba(255, 255, 255, 0.14);
+      clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      overflow: hidden;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.12);
+    }
+
+    .actuator-chassis::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transform: translateX(-150%) skewX(-25deg);
+      pointer-events: none;
+    }
+
+    .cyber-actuator-panel:hover .actuator-chassis {
+      border-color: rgba(255, 255, 255, 0.35);
+      transform: translateY(-1px);
+    }
+    .cyber-actuator-panel:hover .actuator-chassis::after {
+      animation: cyberSweepGlint 1.2s infinite ease-in-out;
+    }
+
+    .actuator-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .actuator-tag {
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: #64748b;
+      text-transform: uppercase;
+    }
+
+    /* Segmented LED Power Bar Meter */
+    .actuator-power-meter {
+      display: flex;
+      gap: 3px;
+      align-items: center;
+    }
+    .actuator-power-meter .led-bar {
+      width: 8px;
+      height: 4px;
+      border-radius: 1px;
+      background: rgba(255, 255, 255, 0.12);
+      transition: all 0.2s ease;
+    }
+
+    .actuator-body-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .actuator-reticle-node {
+      width: 30px;
+      height: 30px;
       border-radius: 6px;
-      border: 1.5px solid rgba(255, 255, 255, 0.3);
-      background: rgba(0, 0, 0, 0.45);
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.16);
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.22s ease;
       flex-shrink: 0;
+      transition: all 0.25s ease;
+    }
+    .actuator-reticle-node svg {
+      width: 18px;
+      height: 18px;
+      color: #64748b;
+      transition: all 0.25s ease;
     }
 
-    .cyber-toggle-indicator .check-svg {
-      display: none;
-      width: 13px;
-      height: 13px;
+    .actuator-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
     }
-    .cyber-toggle-indicator .glyph-idle {
-      display: inline-block;
-      font-size: 11px;
-    }
-
-    .cyber-toggle-text {
+    .actuator-title {
       font-family: var(--font-inter);
       font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      color: #cbd5e1;
+      transition: all 0.2s ease;
+    }
+    .actuator-sub {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: #64748b;
+      letter-spacing: 0.2px;
+    }
+
+    /* PRIORITY PROTOCOL ACTIVATED: 24K Solar Gold Horizon Chrome */
+    .panel-priority.active .actuator-chassis,
+    .panel-priority:has(.cyber-actuator-input:checked) .actuator-chassis {
+      background: linear-gradient(180deg, #fffbeb 0%, #fde68a 16%, #f59e0b 44%, #78350f 48%, #92400e 64%, #d97706 82%, #fbbf24 100%) !important;
+      border: 1.5px solid #fffbeb !important;
+      box-shadow: 0 0 24px rgba(255, 215, 0, 0.6), inset 0 1.5px 2px #ffffff !important;
+    }
+    .panel-priority.active .actuator-tag,
+    .panel-priority:has(.cyber-actuator-input:checked) .actuator-tag {
+      color: #451a03;
       font-weight: 800;
-      letter-spacing: 0.01em;
-      color: #94a3b8;
-      transition: color 0.2s ease;
+    }
+    .panel-priority.active .actuator-power-meter .led-bar,
+    .panel-priority:has(.cyber-actuator-input:checked) .actuator-power-meter .led-bar {
+      background: #451a03;
+      box-shadow: 0 0 6px #ffd700;
+    }
+    .panel-priority.active .actuator-reticle-node,
+    .panel-priority:has(.cyber-actuator-input:checked) .actuator-reticle-node {
+      background: #451a03;
+      border-color: #fffbeb;
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+    }
+    .panel-priority.active .actuator-reticle-node svg,
+    .panel-priority:has(.cyber-actuator-input:checked) .actuator-reticle-node svg {
+      color: #ffd700;
+    }
+    .panel-priority.active .actuator-title,
+    .panel-priority:has(.cyber-actuator-input:checked) .actuator-title {
+      color: #451a03;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+    }
+    .panel-priority.active .actuator-sub,
+    .panel-priority:has(.cyber-actuator-input:checked) .actuator-sub {
+      color: #592506;
+      font-weight: 700;
     }
 
-    /* Priority Chip Active (24K Gold Aurora) */
-    .cyber-toggle-chip.chip-priority.active,
-    .cyber-toggle-chip.chip-priority:has(.cyber-toggle-input:checked) {
-      background: linear-gradient(135deg, rgba(255, 215, 0, 0.28) 0%, rgba(245, 158, 11, 0.16) 100%) !important;
-      border-color: #ffd700 !important;
-      box-shadow: 0 0 20px rgba(255, 215, 0, 0.45), inset 0 1px 1.5px rgba(255, 255, 255, 0.4) !important;
+    /* CRITICAL PROTOCOL ACTIVATED: Incandescent Plasma Ruby Horizon Chrome */
+    .panel-critical.active .actuator-chassis,
+    .panel-critical:has(.cyber-actuator-input:checked) .actuator-chassis {
+      background: linear-gradient(180deg, #fff1f2 0%, #fecdd3 16%, #fb7185 44%, #4c0519 48%, #881337 64%, #e11d48 82%, #fda4af 100%) !important;
+      border: 1.5px solid #fff1f2 !important;
+      box-shadow: 0 0 24px rgba(239, 68, 68, 0.65), inset 0 1.5px 2px #ffffff !important;
     }
-    .cyber-toggle-chip.chip-priority.active .cyber-toggle-indicator,
-    .cyber-toggle-chip.chip-priority:has(.cyber-toggle-input:checked) .cyber-toggle-indicator {
-      background: #ffd700;
-      border-color: #ffd700;
-      color: #000000;
-      box-shadow: 0 0 14px rgba(255, 215, 0, 0.95);
+    .panel-critical.active .actuator-tag,
+    .panel-critical:has(.cyber-actuator-input:checked) .actuator-tag {
+      color: #4c0519;
+      font-weight: 800;
     }
-    .cyber-toggle-chip.chip-priority.active .cyber-toggle-indicator .check-svg,
-    .cyber-toggle-chip.chip-priority:has(.cyber-toggle-input:checked) .cyber-toggle-indicator .check-svg {
-      display: block;
-      stroke: #000000;
+    .panel-critical.active .actuator-power-meter .led-bar,
+    .panel-critical:has(.cyber-actuator-input:checked) .actuator-power-meter .led-bar {
+      background: #4c0519;
+      box-shadow: 0 0 6px #ef4444;
     }
-    .cyber-toggle-chip.chip-priority.active .cyber-toggle-indicator .glyph-idle,
-    .cyber-toggle-chip.chip-priority:has(.cyber-toggle-input:checked) .cyber-toggle-indicator .glyph-idle {
-      display: none;
+    .panel-critical.active .actuator-reticle-node,
+    .panel-critical:has(.cyber-actuator-input:checked) .actuator-reticle-node {
+      background: #4c0519;
+      border-color: #fff1f2;
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.8);
     }
-    .cyber-toggle-chip.chip-priority.active .cyber-toggle-text,
-    .cyber-toggle-chip.chip-priority:has(.cyber-toggle-input:checked) .cyber-toggle-text {
-      color: #ffffff;
-      text-shadow: 0 0 10px rgba(255, 215, 0, 0.9);
+    .panel-critical.active .actuator-reticle-node svg,
+    .panel-critical:has(.cyber-actuator-input:checked) .actuator-reticle-node svg {
+      color: #fecdd3;
     }
-
-    /* Critical Chip Active (Plasma Ruby / Crimson Glow) */
-    .cyber-toggle-chip.chip-critical.active,
-    .cyber-toggle-chip.chip-critical:has(.cyber-toggle-input:checked) {
-      background: linear-gradient(135deg, rgba(239, 68, 68, 0.28) 0%, rgba(185, 28, 28, 0.16) 100%) !important;
-      border-color: #ef4444 !important;
-      box-shadow: 0 0 20px rgba(239, 68, 68, 0.45), inset 0 1px 1.5px rgba(255, 255, 255, 0.4) !important;
+    .panel-critical.active .actuator-title,
+    .panel-critical:has(.cyber-actuator-input:checked) .actuator-title {
+      color: #4c0519;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
     }
-    .cyber-toggle-chip.chip-critical.active .cyber-toggle-indicator,
-    .cyber-toggle-chip.chip-critical:has(.cyber-toggle-input:checked) .cyber-toggle-indicator {
-      background: #ef4444;
-      border-color: #ef4444;
-      color: #ffffff;
-      box-shadow: 0 0 14px rgba(239, 68, 68, 0.95);
-    }
-    .cyber-toggle-chip.chip-critical.active .cyber-toggle-indicator .check-svg,
-    .cyber-toggle-chip.chip-critical:has(.cyber-toggle-input:checked) .cyber-toggle-indicator .check-svg {
-      display: block;
-      stroke: #ffffff;
-    }
-    .cyber-toggle-chip.chip-critical.active .cyber-toggle-indicator .glyph-idle,
-    .cyber-toggle-chip.chip-critical:has(.cyber-toggle-input:checked) .cyber-toggle-indicator .glyph-idle {
-      display: none;
-    }
-    .cyber-toggle-chip.chip-critical.active .cyber-toggle-text,
-    .cyber-toggle-chip.chip-critical:has(.cyber-toggle-input:checked) .cyber-toggle-text {
-      color: #ffffff;
-      text-shadow: 0 0 10px rgba(239, 68, 68, 0.9);
+    .panel-critical.active .actuator-sub,
+    .panel-critical:has(.cyber-actuator-input:checked) .actuator-sub {
+      color: #630822;
+      font-weight: 700;
     }
 
-    /* Pro Responsive Action Footer (Laptop & iPhone) */
+    /* ==========================================================================
+       TACTICAL QUANTUM ACTION CONTROLS (SAVE / CANCEL / PURGE)
+       ========================================================================== */
     .edit-actions-container {
       display: flex;
       flex-direction: column;
@@ -3438,113 +3577,152 @@
       width: 100%;
     }
 
-    /* 1. SAVE CHANGES: Quantum Emerald / Split-Horizon Luminescence */
+    /* 1. SAVE CHANGES: Split-Horizon Emerald Metallic Chrome Button */
     .btn-edit-save {
       flex: 1.4;
-      background: linear-gradient(135deg, #00f5a0 0%, #00d26a 50%, #059669 100%);
-      border: 1.5px solid rgba(255, 255, 255, 0.55);
-      border-radius: 12px;
-      padding: 12px 22px;
-      color: #022c22;
+      position: relative;
+      background: linear-gradient(180deg, #f0fdf4 0%, #a7f3d0 16%, #34d399 44%, #064e3b 48%, #065f46 64%, #047857 84%, #10b981 100%) !important;
+      border: 1.5px solid #f0fdf4 !important;
+      clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+      padding: 13px 24px;
+      color: #022c22 !important;
       font-family: var(--font-inter);
-      font-size: 14.5px;
+      font-size: 15px;
       font-weight: 900;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.05em;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 9px;
-      box-shadow: 0 0 24px rgba(0, 245, 160, 0.45), 0 8px 24px rgba(0, 0, 0, 0.5), inset 0 1.5px 2px rgba(255, 255, 255, 0.75);
+      gap: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 24px rgba(16, 185, 129, 0.65), 0 6px 20px rgba(0, 0, 0, 0.9), inset 0 1.5px 2px #ffffff !important;
       transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
       touch-action: manipulation;
-      min-height: 48px;
+      min-height: 50px;
       white-space: nowrap;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
     }
     .btn-edit-save svg {
-      stroke: #022c22;
-      filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.4));
+      stroke: #022c22 !important;
+      stroke-width: 3;
+      filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.6));
+    }
+    .btn-edit-save::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+      transform: translateX(-150%) skewX(-25deg);
+      pointer-events: none;
+    }
+    .btn-edit-save:hover::after {
+      animation: cyberSweepGlint 1.2s infinite ease-in-out;
     }
     .btn-edit-save:hover {
-      background: linear-gradient(135deg, #2df8af 0%, #00e676 50%, #059669 100%);
-      box-shadow: 0 0 34px rgba(0, 245, 160, 0.75), 0 10px 28px rgba(0, 0, 0, 0.6), inset 0 2px 3px rgba(255, 255, 255, 0.9);
+      box-shadow: 0 0 35px rgba(52, 211, 153, 0.9), 0 8px 24px rgba(0, 0, 0, 0.95), inset 0 2px 3px #ffffff !important;
       transform: translateY(-2px) scale(1.02);
     }
     .btn-edit-save:active {
       transform: translateY(0) scale(0.98);
     }
 
-    /* 2. CANCEL: Frosted Titanium Cyber-Glass */
+    /* 2. CANCEL: Stealth Obsidian Carbon-Alloy Tactical Plate */
     .btn-edit-cancel {
       flex: 1;
-      background: linear-gradient(135deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
-      border: 1.5px solid rgba(148, 163, 184, 0.35);
-      border-radius: 12px;
-      padding: 12px 18px;
-      color: #e2e8f0;
+      position: relative;
+      background: linear-gradient(180deg, #1e293b 0%, #0f172a 50%, #060911 100%);
+      border: 1.5px solid rgba(56, 189, 248, 0.35);
+      clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+      padding: 13px 20px;
+      color: #94a3b8;
       font-family: var(--font-inter);
-      font-size: 14.5px;
+      font-size: 14px;
       font-weight: 800;
-      letter-spacing: 0.01em;
+      letter-spacing: 0.05em;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.18);
+      gap: 6px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.15);
       transition: all 0.22s ease;
       touch-action: manipulation;
-      min-height: 48px;
+      min-height: 50px;
       white-space: nowrap;
     }
+    .btn-edit-cancel .btn-cyber-bracket {
+      color: #38bdf8;
+      opacity: 0.7;
+      font-family: var(--font-mono);
+    }
     .btn-edit-cancel:hover {
-      background: linear-gradient(135deg, rgba(56, 189, 248, 0.25) 0%, rgba(30, 41, 59, 0.95) 100%);
+      background: linear-gradient(180deg, #0e2438 0%, #0a1726 50%, #040910 100%);
       border-color: #38bdf8;
       color: #ffffff;
-      box-shadow: 0 0 20px rgba(56, 189, 248, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.35);
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.25);
       transform: translateY(-2px);
     }
     .btn-edit-cancel:active {
       transform: translateY(0) scale(0.98);
     }
 
-    /* 3. DELETE ACCOUNT: Plasma Crimson Warning Shield */
+    /* 3. PURGE: Class-IV Hazard Nuclear Plasma Ejection Shield */
     .btn-edit-delete {
       width: 100%;
-      background: linear-gradient(135deg, rgba(239, 68, 68, 0.18) 0%, rgba(185, 28, 28, 0.12) 50%, rgba(127, 29, 29, 0.22) 100%);
-      border: 1.5px solid rgba(239, 68, 68, 0.6);
-      border-radius: 12px;
-      padding: 12px 18px;
+      position: relative;
+      background: repeating-linear-gradient(
+        -45deg,
+        rgba(239, 68, 68, 0.12),
+        rgba(239, 68, 68, 0.12) 10px,
+        rgba(15, 23, 42, 0.8) 10px,
+        rgba(15, 23, 42, 0.8) 20px
+      );
+      border: 1.5px solid rgba(239, 68, 68, 0.65);
+      clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+      padding: 13px 20px;
       color: #fca5a5;
       font-family: var(--font-inter);
       font-size: 13.5px;
-      font-weight: 800;
-      letter-spacing: 0.02em;
+      font-weight: 900;
+      letter-spacing: 0.06em;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      text-shadow: 0 0 10px rgba(239, 68, 68, 0.7);
-      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.18);
+      gap: 10px;
+      overflow: hidden;
+      text-shadow: 0 0 10px rgba(239, 68, 68, 0.85);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.15);
       transition: all 0.22s ease;
       touch-action: manipulation;
-      min-height: 44px;
+      min-height: 46px;
     }
     .btn-edit-delete svg {
       stroke: #fca5a5;
-      filter: drop-shadow(0 0 6px rgba(239, 68, 68, 0.8));
+      filter: drop-shadow(0 0 6px rgba(239, 68, 68, 0.9));
     }
     .btn-edit-delete:hover {
-      background: linear-gradient(135deg, rgba(239, 68, 68, 0.38) 0%, rgba(185, 28, 28, 0.3) 100%);
+      background: repeating-linear-gradient(
+        -45deg,
+        rgba(239, 68, 68, 0.28),
+        rgba(239, 68, 68, 0.28) 10px,
+        rgba(127, 29, 29, 0.5) 10px,
+        rgba(127, 29, 29, 0.5) 20px
+      );
       border-color: #ef4444;
       color: #ffffff;
-      box-shadow: 0 0 28px rgba(239, 68, 68, 0.75), 0 8px 24px rgba(0, 0, 0, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.4);
-      text-shadow: 0 0 12px rgba(255, 255, 255, 0.95);
+      box-shadow: 0 0 28px rgba(239, 68, 68, 0.85), 0 8px 24px rgba(0, 0, 0, 0.8), inset 0 1px 2px rgba(255, 255, 255, 0.4);
+      text-shadow: 0 0 14px rgba(255, 255, 255, 1);
       transform: translateY(-2px);
     }
     .btn-edit-delete:hover svg {
       stroke: #ffffff;
-      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.95));
+      filter: drop-shadow(0 0 8px #ffffff);
     }
     .btn-edit-delete:active {
       transform: translateY(0) scale(0.98);
@@ -3935,38 +4113,70 @@
         </div>
 
         <div class="edit-form-options-row">
-          <label class="cyber-toggle-chip chip-priority" for="editChkPriority">
-            <input type="checkbox" id="editChkPriority" class="cyber-toggle-input">
-            <div class="cyber-toggle-indicator">
-              <svg class="check-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg>
-              <span class="glyph-idle">★</span>
+          <label class="cyber-actuator-panel panel-priority" for="editChkPriority">
+            <input type="checkbox" id="editChkPriority" class="cyber-actuator-input">
+            <div class="actuator-chassis">
+              <div class="actuator-header-row">
+                <span class="actuator-tag">// PROTOCOL 01</span>
+                <div class="actuator-power-meter">
+                  <span class="led-bar"></span><span class="led-bar"></span><span class="led-bar"></span>
+                </div>
+              </div>
+              <div class="actuator-body-row">
+                <div class="actuator-reticle-node">
+                  <svg class="reticle-node-svg" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="2 2"/>
+                    <path d="M12 3.5l2.4 4.8 5.3.8-3.8 3.7.9 5.3-4.8-2.5-4.8 2.5.9-5.3-3.8-3.7 5.3-.8z" fill="currentColor"/>
+                  </svg>
+                </div>
+                <div class="actuator-meta">
+                  <span class="actuator-title">PIN TO TOP</span>
+                  <span class="actuator-sub">Priority Favorite Lock</span>
+                </div>
+              </div>
             </div>
-            <span class="cyber-toggle-text">★ Pin to Top (Priority Favorite)</span>
           </label>
 
-          <label class="cyber-toggle-chip chip-critical" for="editChkCritical">
-            <input type="checkbox" id="editChkCritical" class="cyber-toggle-input">
-            <div class="cyber-toggle-indicator">
-              <svg class="check-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg>
-              <span class="glyph-idle">⚡</span>
+          <label class="cyber-actuator-panel panel-critical" for="editChkCritical">
+            <input type="checkbox" id="editChkCritical" class="cyber-actuator-input">
+            <div class="actuator-chassis">
+              <div class="actuator-header-row">
+                <span class="actuator-tag">// PROTOCOL 02</span>
+                <div class="actuator-power-meter">
+                  <span class="led-bar"></span><span class="led-bar"></span><span class="led-bar"></span>
+                </div>
+              </div>
+              <div class="actuator-body-row">
+                <div class="actuator-reticle-node">
+                  <svg class="reticle-node-svg" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="2 2"/>
+                    <polygon points="13 2 4 14 11 14 10 22 20 10 13 10 13 2" fill="currentColor"/>
+                  </svg>
+                </div>
+                <div class="actuator-meta">
+                  <span class="actuator-title">CRITICAL ACCOUNT</span>
+                  <span class="actuator-sub">High-Security Administrative</span>
+                </div>
+              </div>
             </div>
-            <span class="cyber-toggle-text">⚡ Mark as Critical Account</span>
           </label>
         </div>
 
         <div class="edit-actions-container">
           <div class="edit-actions-primary-row">
             <button type="button" class="btn-edit-cancel" id="btnCancelCardEdit">
-              Cancel
+              <span class="btn-cyber-bracket">[</span>
+              <span>CANCEL</span>
+              <span class="btn-cyber-bracket">]</span>
             </button>
             <button type="button" class="btn-edit-save" id="btnSaveCardEdit">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px;"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>Save Changes</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="width:16px;height:16px;"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>SAVE CHANGES</span>
             </button>
           </div>
           <button type="button" class="btn-edit-delete" id="btnDeleteCardEdit" title="Remove this credential from vault">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-            <span>Delete Account from Vault</span>
+            <span>PURGE ACCOUNT FROM VAULT</span>
           </button>
         </div>
       </form>
@@ -4267,12 +4477,12 @@
       const pChk = document.getElementById('editChkPriority');
       const cChk = document.getElementById('editChkCritical');
       if (pChk) {
-        const pChip = pChk.closest('.cyber-toggle-chip');
-        if (pChip) pChip.classList.toggle('active', pChk.checked);
+        const pPanel = pChk.closest('.cyber-actuator-panel') || pChk.closest('.cyber-toggle-chip');
+        if (pPanel) pPanel.classList.toggle('active', pChk.checked);
       }
       if (cChk) {
-        const cChip = cChk.closest('.cyber-toggle-chip');
-        if (cChip) cChip.classList.toggle('active', cChk.checked);
+        const cPanel = cChk.closest('.cyber-actuator-panel') || cChk.closest('.cyber-toggle-chip');
+        if (cPanel) cPanel.classList.toggle('active', cChk.checked);
       }
     }
 
@@ -4564,10 +4774,17 @@
               </div>
               <div class="card-header-actions">
                 <button type="button" class="btn-card-pin ${isPinned ? 'pinned' : ''}" onclick="toggleCardPriority('${item.id}')" title="${isPinned ? 'Top Priority Pinned (Click to unpin)' : 'Pin to Top (Priority)'}" aria-label="Toggle Priority">
-                  <svg viewBox="0 0 24 24" fill="${isPinned ? '#ffd700' : 'none'}" stroke="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <svg viewBox="0 0 24 24" class="hud-reticle-star">
+                    <circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="2 2" opacity="0.6"/>
+                    <path d="M12 3.2l2.4 4.8 5.3.8-3.8 3.7.9 5.3-4.8-2.5-4.8 2.5.9-5.3-3.8-3.7 5.3-.8z" fill="${isPinned ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.6"/>
+                  </svg>
                 </button>
                 <button type="button" class="btn-card-edit" onclick="openCardEditor('${item.id}')" title="Edit Card Anatomy" aria-label="Edit Card Anatomy">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                  <svg viewBox="0 0 24 24" class="hud-reticle-edit">
+                    <circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="2 2" opacity="0.6"/>
+                    <path d="M11 4H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h13a2 2 0 0 0 2-2v-6" fill="none" stroke="currentColor" stroke-width="1.8"/>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+                  </svg>
                 </button>
               </div>
             </div>
@@ -4766,7 +4983,7 @@
       }
 
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v20', { scope: '/orlandovault/' }).catch(err => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v21', { scope: '/orlandovault/' }).catch(err => {
           console.warn('Vault SW registration error:', err);
         });
       }
