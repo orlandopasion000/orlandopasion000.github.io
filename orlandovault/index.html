@@ -8,6 +8,7 @@
   <link rel="apple-touch-icon" href="assets/vault-icon-192.png">
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#000000">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="description" content="Personal Jarvis Security Engine for Sir Orlando V. Pasion, Jr. - 1-Click Instant Password Access, Quantum Search, and Real-Time Cryptographic History.">
@@ -3433,7 +3434,10 @@
         syncBridge = new BroadcastChannel('orlandovault_quantum_bridge');
         syncBridge.onmessage = (e) => {
           if (e.data && e.data.type === 'VAULT_UPDATED') {
-            initData();
+            
+
+
+    initData();
             renderVault();
             renderMetrics();
           }
@@ -3565,7 +3569,6 @@
       }, 3500);
     }
 
-    async 
     /* ==========================================================================
        DYNAMIC USAGE TRACKER & PRIORITY PINNING ENGINE
        ========================================================================== */
@@ -3807,41 +3810,50 @@
       playJarvisSound('reveal');
     }
 
-    function copyToClipboard(text, accountTitle, btnElement) {
+    async function copyToClipboard(text, accountTitle, btnElement, itemId) {
       if (!text) {
         showToast('⚠️ No password stored for this account');
         return;
       }
-      try {
-        await navigator.clipboard.writeText(text);
-        renderMetrics();
-        logAudit('COPIED_PASSWORD', 'Copied password for: ' + accountTitle);
-        recordVaultMutation('COPY_EVENT', { title: accountTitle });
-
-        if (btnElement) {
-          const originalText = btnElement.innerHTML;
-          btnElement.classList.add('copied');
-          btnElement.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> COPIED!';
-          setTimeout(() => {
-            btnElement.classList.remove('copied');
-            btnElement.innerHTML = originalText;
-          }, 2000);
-        }
-
-        playJarvisSound("copy");
-        startClipboardAutoWipe(text, accountTitle, btnElement);
-        showToast('✨ Copied! Auto-wiping clipboard in 20s');
-      } catch (err) {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
-        showToast('✨ Copied password for ' + accountTitle + '!');
+      if (itemId) {
+        trackCardUsage(itemId, 'copy_password', 2.0);
       }
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          throw new Error('Clipboard API not available');
+        }
+      } catch (err) {
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+        } catch(fallbackErr) {}
+      }
+
+      renderMetrics();
+      logAudit('COPIED_PASSWORD', 'Copied password for: ' + accountTitle);
+      recordVaultMutation('COPY_EVENT', { title: accountTitle });
+
+      if (btnElement) {
+        const originalText = btnElement.innerHTML;
+        btnElement.classList.add('copied');
+        btnElement.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> COPIED!';
+        setTimeout(() => {
+          btnElement.classList.remove('copied');
+          btnElement.innerHTML = originalText;
+        }, 2000);
+      }
+
+      playJarvisSound("copy");
+      startClipboardAutoWipe(text, accountTitle, btnElement);
+      showToast('✨ Copied! Auto-wiping clipboard in 20s');
     }
 
     async function copyUsername(text, btnElement, itemId) {
@@ -4020,6 +4032,27 @@
         .replace(/'/g, '&#39;');
     }
 
+        /* ==========================================================================
+       GLOBAL WINDOW REGISTRATIONS (FOR INSTANT INLINE EVENT HANDLERS)
+       ========================================================================== */
+    window.openNewCardEditor = openNewCardEditor;
+    window.openCardEditor = openCardEditor;
+    window.closeCardEditor = closeCardEditor;
+    window.saveCardEditor = saveCardEditor;
+    window.deleteCardFromEditor = deleteCardFromEditor;
+    window.toggleCardPriority = toggleCardPriority;
+    window.generateStrongPasswordForEditor = generateStrongPasswordForEditor;
+    window.copyToClipboard = copyToClipboard;
+    window.copyUsername = copyUsername;
+    window.toggleReveal = toggleReveal;
+    window.markPasswordRotated = markPasswordRotated;
+    window.handleLaunchStandaloneApp = handleLaunchStandaloneApp;
+    window.openVaultQrModal = openVaultQrModal;
+    window.closeVaultQrModal = closeVaultQrModal;
+    window.openSheetSyncModal = openSheetSyncModal;
+    window.closeSheetSyncModal = closeSheetSyncModal;
+    window.exportVaultBackupFile = exportVaultBackupFile;
+
     document.addEventListener('DOMContentLoaded', () => {
       initData();
       renderVault();
@@ -4094,7 +4127,7 @@
       }
 
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v12', { scope: '/orlandovault/' }).catch(err => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v13', { scope: '/orlandovault/' }).catch(err => {
           console.warn('Vault SW registration error:', err);
         });
       }
@@ -4326,28 +4359,7 @@
       return false;
     }
 
-    async function handleLaunchStandaloneApp() {
-      if (isStandaloneMode()) {
-        showToast('✨ OrlandoVault is currently running in Standalone App Mode!', '🛡️');
-        return;
-      }
-
-      if (deferredInstallPrompt) {
-        deferredInstallPrompt.prompt();
-        try {
-          var choice = await deferredInstallPrompt.userChoice;
-          if (choice && choice.outcome === 'accepted') {
-            deferredInstallPrompt = null;
-            updateLaunchButtonState();
-            showToast('🎉 OrlandoVault Windows App Installed! Launching...', '🚀');
-            return;
-          }
-        } catch (err) {}
-      }
-
-      var appUrl = 'https://orlandopasion000.github.io/orlandovault/';
-      launchStandaloneAppWindow(appUrl, 'OrlandoVaultMainAppWindow');
-    }
+    
 
   
     /* ==========================================================================
