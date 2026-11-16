@@ -3365,13 +3365,13 @@
         <input type="hidden" id="editCardId">
 
         <div class="edit-form-group">
-          <label class="edit-form-label">ACCOUNT / SERVICE TITLE:</label>
+          <label class="edit-form-label" for="editInputTitle">ACCOUNT / SERVICE TITLE:</label>
           <input type="text" class="edit-form-input" id="editInputTitle" required autocomplete="off" placeholder="e.g. DepEd Microsoft 365">
         </div>
 
         <div class="edit-form-row">
           <div class="edit-form-group" style="flex:1;">
-            <label class="edit-form-label">CATEGORY:</label>
+            <label class="edit-form-label" for="editSelectCategory">CATEGORY:</label>
             <select class="edit-form-select" id="editSelectCategory">
               <option value="DepEd">DepEd & Academic</option>
               <option value="Microsoft">Microsoft 365</option>
@@ -3383,19 +3383,19 @@
             </select>
           </div>
           <div class="edit-form-group" style="flex:1;">
-            <label class="edit-form-label">BADGE TAG:</label>
+            <label class="edit-form-label" for="editInputBadge">BADGE TAG:</label>
             <input type="text" class="edit-form-input" id="editInputBadge" placeholder="e.g. Official Portal">
           </div>
         </div>
 
         <div class="edit-form-group">
-          <label class="edit-form-label">USERNAME / EMAIL / ID:</label>
+          <label class="edit-form-label" for="editInputUsername">USERNAME / EMAIL / ID:</label>
           <input type="text" class="edit-form-input" id="editInputUsername" autocomplete="off" placeholder="e.g. 300406@deped.gov.ph">
         </div>
 
         <div class="edit-form-group">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-            <label class="edit-form-label" style="margin-bottom:0;">PASSWORD:</label>
+            <label class="edit-form-label" for="editInputPassword" style="margin-bottom:0;">PASSWORD:</label>
             <button type="button" class="btn-gen-pwd" onclick="generateStrongPasswordForEditor()" title="Generate Random Secure Password">⚡ Generate Strong</button>
           </div>
           <div class="edit-pwd-wrapper">
@@ -3404,17 +3404,17 @@
         </div>
 
         <div class="edit-form-group">
-          <label class="edit-form-label">NOTES / PORTAL URL / METADATA:</label>
+          <label class="edit-form-label" for="editInputNotes">NOTES / PORTAL URL / METADATA:</label>
           <textarea class="edit-form-textarea" id="editInputNotes" rows="2" placeholder="e.g. Official University Portal: https://up.ucu.edu.ph/"></textarea>
         </div>
 
         <div class="edit-form-options-row">
-          <label class="edit-checkbox-label">
+          <label class="edit-checkbox-label" for="editChkPriority">
             <input type="checkbox" id="editChkPriority" style="width:16px;height:16px;accent-color:#ffd700;">
             <span style="color:#ffd700;font-weight:700;">★ Pin to Top (Priority Favorite)</span>
           </label>
 
-          <label class="edit-checkbox-label">
+          <label class="edit-checkbox-label" for="editChkCritical">
             <input type="checkbox" id="editChkCritical" style="width:16px;height:16px;accent-color:#ef4444;">
             <span style="color:#f87171;font-weight:700;">⚡ Mark as Critical Account</span>
           </label>
@@ -3459,7 +3459,7 @@
       </div>
 
       <div>
-        <label style="display:block;font-family:var(--font-tech);font-size:12px;color:var(--cyan);font-weight:700;margin-bottom:6px;">
+        <label for="inputGoogleSheetUrl" style="display:block;font-family:var(--font-tech);font-size:12px;color:var(--cyan);font-weight:700;margin-bottom:6px;">
           GOOGLE SHEET URL OR PUBLISHED CSV LINK:
         </label>
         <input type="text" class="sheet-input-box" id="inputGoogleSheetUrl" placeholder="https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit" autocomplete="off" spellcheck="false">
@@ -4211,7 +4211,7 @@
       }
 
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v15', { scope: '/orlandovault/' }).catch(err => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v16', { scope: '/orlandovault/' }).catch(err => {
           console.warn('Vault SW registration error:', err);
         });
       }
