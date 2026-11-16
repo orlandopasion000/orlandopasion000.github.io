@@ -421,23 +421,21 @@
 
   // --- Particle Systems & Quantum Renderers (Realm, Helix, Meteor) ---
   const QuantumRenderer = {
-    // 1. Quantum Realm Atomic Cursor (Quantum Core / Player Atom / Singularity Core)
+    // 1. Quantum Realm Quantum Core (Player Atom / Singularity Core)
     drawQuantumAtomic(ctx, cx, cy, now, progress = 0) {
       ctx.save();
       ctx.translate(cx, cy);
 
-      const t = now * 0.0016;
-      const rotBase = now * 0.0004;
-      const colorShift = (now * 0.04) % 360;
-      const exc = progress > 0 ? progress * 0.35 : 0;
-      const spinMult = 1.0 + exc * 2.5;
+      var t = now * 0.0016;
+      var rotBase = now * 0.0004;
+      var colorShift = (now * 0.04) % 360;
+      var exc = (progress > 0) ? (progress * 0.35) : 0;
+      var spinMult = 1.0 + exc * 2.5;
 
-      // ── 1. Diffracted Horizontal & Diagonal Photonic Lens Flares ──
-      const flareLen = 44 + exc * 12;
-      const flareW = 2.8 + exc * 1.0;
-
-      // Horizontal primary flare beam (cyan to purple to violet)
-      const hGrad = ctx.createLinearGradient(-flareLen, 0, flareLen, 0);
+      // 1. Horizontal & Diagonal Photonic Lens Flares
+      var flareLen = 44 + exc * 12;
+      var flareW = 2.8 + exc * 1.0;
+      var hGrad = ctx.createLinearGradient(-flareLen, 0, flareLen, 0);
       hGrad.addColorStop(0.0, "rgba(168, 85, 247, 0)");
       hGrad.addColorStop(0.2, "rgba(192, 132, 252, 0.40)");
       hGrad.addColorStop(0.38, "rgba(56, 189, 248, 0.75)");
@@ -445,7 +443,6 @@
       hGrad.addColorStop(0.62, "rgba(56, 189, 248, 0.75)");
       hGrad.addColorStop(0.8, "rgba(192, 132, 252, 0.40)");
       hGrad.addColorStop(1.0, "rgba(168, 85, 247, 0)");
-
       ctx.fillStyle = hGrad;
       ctx.beginPath();
       ctx.moveTo(-flareLen, 0);
@@ -456,11 +453,11 @@
       ctx.fill();
 
       // Diagonal flares (golden amber along 60 deg and -60 deg axes)
-      for (let d = 0; d < 2; d++) {
-        const dAngle = d === 0 ? Math.PI / 3 : -Math.PI / 3;
+      for (var d = 0; d < 2; d++) {
+        var dAngle = d === 0 ? (Math.PI / 3) : (-Math.PI / 3);
         ctx.save();
         ctx.rotate(dAngle);
-        const dGrad = ctx.createLinearGradient(-flareLen * 0.75, 0, flareLen * 0.75, 0);
+        var dGrad = ctx.createLinearGradient(-flareLen * 0.75, 0, flareLen * 0.75, 0);
         dGrad.addColorStop(0.0, "rgba(245, 158, 11, 0)");
         dGrad.addColorStop(0.3, "rgba(251, 191, 36, 0.40)");
         dGrad.addColorStop(0.5, "rgba(255, 255, 255, 0.85)");
@@ -477,9 +474,9 @@
         ctx.restore();
       }
 
-      // ── 2. Central Quantum Nucleus Sphere ──
-      const rCore = 14.5 + exc * 2.0;
-      const haloGrad = ctx.createRadialGradient(0, 0, rCore * 0.7, 0, 0, rCore * 1.55);
+      // 2. Central Quantum Nucleus Sphere
+      var rCore = 14.5 + exc * 2.0;
+      var haloGrad = ctx.createRadialGradient(0, 0, rCore * 0.7, 0, 0, rCore * 1.55);
       haloGrad.addColorStop(0.0, "rgba(168, 85, 247, 0.40)");
       haloGrad.addColorStop(0.5, "rgba(56, 189, 248, 0.20)");
       haloGrad.addColorStop(1.0, "rgba(0, 0, 0, 0)");
@@ -488,83 +485,67 @@
       ctx.arc(0, 0, rCore * 1.55, 0, Math.PI * 2);
       ctx.fill();
 
-      const sphereGrad = ctx.createRadialGradient(-2, -3, 1, 0, 0, rCore);
+      var sphereGrad = ctx.createRadialGradient(-2, -3, 1, 0, 0, rCore);
       sphereGrad.addColorStop(0.0, "rgba(233, 213, 255, 0.98)");
       sphereGrad.addColorStop(0.25, "rgba(168, 85, 247, 0.95)");
       sphereGrad.addColorStop(0.55, "rgba(67, 20, 103, 0.95)");
-      const hueRim1 = (colorShift + 30) % 360;
-      const hueRim2 = (colorShift + 180) % 360;
-      sphereGrad.addColorStop(0.80, 'hsla(' + hueRim1 + ', 90%, 55%, 0.85)');
-      sphereGrad.addColorStop(0.95, 'hsla(' + hueRim2 + ', 95%, 65%, 0.92)');
+      sphereGrad.addColorStop(0.80, "hsla(" + ((colorShift + 30) % 360) + ", 90%, 55%, 0.85)");
+      sphereGrad.addColorStop(0.95, "hsla(" + ((colorShift + 180) % 360) + ", 95%, 65%, 0.92)");
       sphereGrad.addColorStop(1.0, progress > 0.8 ? "rgba(255, 215, 0, 0.98)" : "rgba(254, 240, 138, 0.95)");
-
       ctx.fillStyle = sphereGrad;
       ctx.beginPath();
       ctx.arc(0, 0, rCore, 0, Math.PI * 2);
       ctx.fill();
-
       ctx.strokeStyle = "rgba(255, 255, 255, 0.65)";
       ctx.lineWidth = 0.9;
       ctx.stroke();
 
-      // ── 3. Three 3D Precessing Orbital Rings with Shifting Colors ──
-      const majorA = 26 + exc * 4;
-      const minorB = 9.8 + exc * 1.5;
-      const rings = [
+      // 3. Three 3D Precessing Orbital Rings
+      var majorA = 26 + exc * 4;
+      var minorB = 9.8 + exc * 1.5;
+      var rings = [
         { baseAngle: 0, phaseOffset: 0, hueBase: colorShift },
         { baseAngle: Math.PI / 3, phaseOffset: 2.094, hueBase: (colorShift + 120) % 360 },
         { baseAngle: 2 * Math.PI / 3, phaseOffset: 4.188, hueBase: (colorShift + 240) % 360 }
       ];
 
-      for (let ri = 0; ri < 3; ri++) {
-        const ring = rings[ri];
+      for (var ri = 0; ri < 3; ri++) {
+        var ring = rings[ri];
         ctx.save();
-        const wobble = Math.sin(t * 1.4 * spinMult + ring.phaseOffset) * 0.08;
+        var wobble = Math.sin(t * 1.4 * spinMult + ring.phaseOffset) * 0.08;
         ctx.rotate(ring.baseAngle + wobble + rotBase * spinMult);
-        const curB = minorB * (1.0 + 0.12 * Math.cos(t * 1.6 * spinMult + ring.phaseOffset));
+        var curB = minorB * (1.0 + 0.12 * Math.cos(t * 1.6 * spinMult + ring.phaseOffset));
 
-        const rGrad = ctx.createLinearGradient(-majorA, 0, majorA, 0);
-        const h1 = Math.round(ring.hueBase);
-        const h2 = Math.round((ring.hueBase + 60) % 360);
-        rGrad.addColorStop(0.0, 'hsla(' + h1 + ', 95%, 68%, 0.95)');
+        var rGrad = ctx.createLinearGradient(-majorA, 0, majorA, 0);
+        var h1 = Math.round(ring.hueBase);
+        var h2 = Math.round((ring.hueBase + 60) % 360);
+        rGrad.addColorStop(0.0, "hsla(" + h1 + ", 95%, 68%, 0.95)");
         rGrad.addColorStop(0.3, "rgba(255, 255, 255, 0.95)");
-        rGrad.addColorStop(0.5, 'hsla(' + h2 + ', 100%, 72%, 0.90)');
+        rGrad.addColorStop(0.5, "hsla(" + h2 + ", 100%, 72%, 0.90)");
         rGrad.addColorStop(0.7, "rgba(255, 255, 255, 0.95)");
-        rGrad.addColorStop(1.0, 'hsla(' + h1 + ', 95%, 68%, 0.95)');
-
+        rGrad.addColorStop(1.0, "hsla(" + h1 + ", 95%, 68%, 0.95)");
         ctx.strokeStyle = rGrad;
         ctx.lineWidth = 1.6;
         ctx.beginPath();
         ctx.ellipse(0, 0, majorA, curB, 0, 0, Math.PI * 2);
         ctx.stroke();
 
-        // Circulating electron quantum wavepacket spark
-        const eSpeed = 0.0032 * spinMult;
-        const u = (now * eSpeed + ring.phaseOffset) % (Math.PI * 2);
-        const ex = majorA * Math.cos(u);
-        const ey = curB * Math.sin(u);
-
+        // Circulating Electron Spark
+        var u = (now * (0.0032 * spinMult) + ring.phaseOffset) % (Math.PI * 2);
+        var ex = majorA * Math.cos(u);
+        var ey = curB * Math.sin(u);
         ctx.beginPath();
         ctx.arc(ex, ey, 4.2, 0, Math.PI * 2);
-        ctx.fillStyle = 'hsla(' + h1 + ', 100%, 70%, 0.28)';
+        ctx.fillStyle = "hsla(" + h1 + ", 100%, 70%, 0.28)";
         ctx.fill();
-
         ctx.beginPath();
         ctx.arc(ex, ey, 2.0, 0, Math.PI * 2);
         ctx.fillStyle = "#ffffff";
         ctx.fill();
-
-        // Apex flares
-        ctx.beginPath();
-        ctx.arc(majorA, 0, 1.4, 0, Math.PI * 2);
-        ctx.arc(-majorA, 0, 1.4, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(255, 255, 255, 0.90)";
-        ctx.fill();
-
         ctx.restore();
       }
 
-      // ── 4. Precision Micro-Singularity Center Reticle ──
+      // 4. Center Singularity Reticle
       ctx.beginPath();
       ctx.arc(0, 0, 1.5, 0, Math.PI * 2);
       ctx.fillStyle = "#ffffff";
@@ -573,27 +554,25 @@
       ctx.restore();
     },
 
-    // 2. Quantum Helix Atomic Cursor (Quantum Core / Player Atom / Singularity Core)
+    // 2. Quantum Helix Quantum Core (Player Atom / Singularity Core)
     drawHelixCore(ctx, cx, cy, now, progress = 0) {
       ctx.save();
       ctx.translate(cx, cy);
 
-      const exc = progress > 0 ? progress * 0.35 : 0;
-      const t = now * 0.0016;
-      const rotBase = now * 0.0006;
-      const spinMult = 1.0 + exc * 2.5;
+      var exc = (progress > 0) ? (progress * 0.35) : 0;
+      var t = now * 0.0016;
+      var rotBase = now * 0.0006;
+      var spinMult = 1.0 + exc * 2.5;
 
-      // ── 1. Compact Specular Bi-Chromatic Lens Flare Glint ──
-      const flareLen = 28 + exc * 8;
-      const flareW = 2.0 + exc * 0.5;
-
-      const hGrad = ctx.createLinearGradient(-flareLen, 0, flareLen, 0);
+      // 1. Bi-Chromatic Lens Flare Glint
+      var flareLen = 28 + exc * 8;
+      var flareW = 2.0 + exc * 0.5;
+      var hGrad = ctx.createLinearGradient(-flareLen, 0, flareLen, 0);
       hGrad.addColorStop(0.0, "rgba(6, 182, 212, 0)");
       hGrad.addColorStop(0.30, "rgba(34, 211, 238, 0.40)");
       hGrad.addColorStop(0.50, "rgba(255, 255, 255, 0.95)");
       hGrad.addColorStop(0.70, "rgba(217, 70, 239, 0.40)");
       hGrad.addColorStop(1.0, "rgba(168, 85, 247, 0)");
-
       ctx.fillStyle = hGrad;
       ctx.beginPath();
       ctx.moveTo(-flareLen, 0);
@@ -603,11 +582,9 @@
       ctx.closePath();
       ctx.fill();
 
-      // ── 2. Prominent 3D Quantum Helix Sphere ──
-      const rCore = 16.0 + exc * 2.5;
-
-      // Ambient Luminous Halo
-      const haloGrad = ctx.createRadialGradient(0, 0, rCore * 0.65, 0, 0, rCore * 1.55);
+      // 2. 3D Quantum Helix Sphere
+      var rCore = 16.0 + exc * 2.5;
+      var haloGrad = ctx.createRadialGradient(0, 0, rCore * 0.65, 0, 0, rCore * 1.55);
       haloGrad.addColorStop(0.0, "rgba(34, 211, 238, 0.38)");
       haloGrad.addColorStop(0.5, "rgba(217, 70, 239, 0.22)");
       haloGrad.addColorStop(1.0, "rgba(0, 0, 0, 0)");
@@ -616,114 +593,105 @@
       ctx.arc(0, 0, rCore * 1.55, 0, Math.PI * 2);
       ctx.fill();
 
-      // Solid 3D Spherical Core Shading
-      const sphereGrad = ctx.createRadialGradient(-3, -4, 1, 0, 0, rCore);
+      var sphereGrad = ctx.createRadialGradient(-3, -4, 1, 0, 0, rCore);
       sphereGrad.addColorStop(0.0, "rgba(255, 255, 255, 0.98)");
       sphereGrad.addColorStop(0.28, "rgba(56, 189, 248, 0.95)");
       sphereGrad.addColorStop(0.62, "rgba(147, 51, 234, 0.92)");
       sphereGrad.addColorStop(0.88, "rgba(59, 7, 100, 0.95)");
       sphereGrad.addColorStop(1.0, progress > 0.8 ? "rgba(255, 215, 0, 0.98)" : "rgba(34, 211, 238, 0.95)");
-
       ctx.fillStyle = sphereGrad;
       ctx.beginPath();
       ctx.arc(0, 0, rCore, 0, Math.PI * 2);
       ctx.fill();
-
       ctx.strokeStyle = "rgba(255, 255, 255, 0.75)";
       ctx.lineWidth = 1.0;
       ctx.stroke();
 
-      // ── 3. DNA Double-Helix Emblem Inscribed Inside the Sphere ──
+      // 3. DNA Double-Helix Emblem Inscribed Inside the Sphere
       ctx.save();
-      const dnaAngle = -0.45 + Math.sin(t * 0.7) * 0.08;
-      ctx.rotate(dnaAngle);
+      ctx.rotate(-0.45 + Math.sin(t * 0.7) * 0.08);
+      var dnaLen = (rCore - 1.8) * 1.92;
+      var dnaAmp = rCore * 0.36;
+      var dnaSteps = 12;
+      var dnaPhase = t * spinMult * 2.2;
 
-      const dnaLen = (rCore - 1.8) * 1.92;
-      const dnaAmp = rCore * 0.36;
-      const dnaSteps = 12;
-      const dnaPhase = t * spinMult * 2.2;
-
-      // Batched base-pair connecting rungs
+      // Connecting Base-Pair Rungs
       ctx.lineWidth = 1.0;
       ctx.strokeStyle = "rgba(255, 255, 255, 0.80)";
       ctx.beginPath();
-      for (let bi = -3; bi <= 3; bi++) {
-        const bNorm = bi / 3.8;
-        const bx = bNorm * (dnaLen * 0.46);
-        const bEnv = Math.sqrt(Math.max(0, 1 - bNorm * bNorm));
-        const bPhase = dnaPhase + bNorm * Math.PI * 1.75;
-        const by1 = Math.sin(bPhase) * dnaAmp * bEnv;
+      for (var bi = -3; bi <= 3; bi++) {
+        var bNorm = bi / 3.8;
+        var bx = bNorm * (dnaLen * 0.46);
+        var bEnv = Math.sqrt(Math.max(0, 1 - bNorm * bNorm));
+        var bPhase = dnaPhase + bNorm * Math.PI * 1.75;
+        var by1 = Math.sin(bPhase) * dnaAmp * bEnv;
         ctx.moveTo(bx, by1);
         ctx.lineTo(bx, -by1);
       }
       ctx.stroke();
 
-      // Strand 1: Electric Cyan DNA Helix Strand
+      // Strand 1: Electric Cyan DNA Strand
       ctx.strokeStyle = "#38bdf8";
       ctx.lineWidth = 1.8;
       ctx.beginPath();
-      for (let i = 0; i <= dnaSteps; i++) {
-        const sNorm = -1 + (2 * i) / dnaSteps;
-        const ix = sNorm * (dnaLen * 0.48);
-        const sEnv = Math.sqrt(Math.max(0, 1 - sNorm * sNorm));
-        const iPhase = dnaPhase + sNorm * Math.PI * 1.75;
-        const iy1 = Math.sin(iPhase) * dnaAmp * sEnv;
+      for (var i = 0; i <= dnaSteps; i++) {
+        var sNorm = -1 + (2 * i) / dnaSteps;
+        var ix = sNorm * (dnaLen * 0.48);
+        var sEnv = Math.sqrt(Math.max(0, 1 - sNorm * sNorm));
+        var iy1 = Math.sin(dnaPhase + sNorm * Math.PI * 1.75) * dnaAmp * sEnv;
         if (i === 0) ctx.moveTo(ix, iy1); else ctx.lineTo(ix, iy1);
       }
       ctx.stroke();
 
-      // Strand 2: Royal Magenta DNA Helix Strand
+      // Strand 2: Royal Magenta DNA Strand
       ctx.strokeStyle = "#f472b6";
       ctx.lineWidth = 1.8;
       ctx.beginPath();
-      for (let i = 0; i <= dnaSteps; i++) {
-        const sNorm = -1 + (2 * i) / dnaSteps;
-        const ix = sNorm * (dnaLen * 0.48);
-        const sEnv = Math.sqrt(Math.max(0, 1 - sNorm * sNorm));
-        const iPhase = dnaPhase + sNorm * Math.PI * 1.75;
-        const iy2 = -Math.sin(iPhase) * dnaAmp * sEnv;
+      for (var i = 0; i <= dnaSteps; i++) {
+        var sNorm = -1 + (2 * i) / dnaSteps;
+        var ix = sNorm * (dnaLen * 0.48);
+        var sEnv = Math.sqrt(Math.max(0, 1 - sNorm * sNorm));
+        var iy2 = -Math.sin(dnaPhase + sNorm * Math.PI * 1.75) * dnaAmp * sEnv;
         if (i === 0) ctx.moveTo(ix, iy2); else ctx.lineTo(ix, iy2);
       }
       ctx.stroke();
       ctx.restore();
 
-      // ── 4. Three 3D Precessing Gyroscope Rings ──
-      const majorA = 27 + exc * 4;
-      const minorB = 10.2 + exc * 1.5;
+      // 4. Three 3D Precessing Gyroscope Rings (+45 deg, -45 deg, 0 deg)
+      var majorA = 27 + exc * 4;
+      var minorB = 10.2 + exc * 1.5;
 
-      // Ring 1: Electric Cyan (+45 deg)
+      // Ring 1 (+45 deg Cyan)
       ctx.save();
-      ctx.rotate(Math.PI / 4 + rotBase * spinMult);
+      ctx.rotate((Math.PI / 4) + rotBase * spinMult);
       ctx.beginPath();
       ctx.ellipse(0, 0, majorA, minorB, 0, 0, Math.PI * 2);
       ctx.strokeStyle = "rgba(34, 211, 238, 0.75)";
       ctx.lineWidth = 1.1;
       ctx.stroke();
-
-      const nodeAngle1 = t * 2.0 * spinMult;
+      var nAngle1 = t * 2.0 * spinMult;
       ctx.beginPath();
-      ctx.arc(Math.cos(nodeAngle1) * majorA, Math.sin(nodeAngle1) * minorB, 1.8, 0, Math.PI * 2);
+      ctx.arc(Math.cos(nAngle1) * majorA, Math.sin(nAngle1) * minorB, 1.8, 0, Math.PI * 2);
       ctx.fillStyle = "#67e8f9";
       ctx.fill();
       ctx.restore();
 
-      // Ring 2: Royal Magenta (-45 deg)
+      // Ring 2 (-45 deg Magenta)
       ctx.save();
-      ctx.rotate(-Math.PI / 4 - rotBase * spinMult);
+      ctx.rotate((-Math.PI / 4) - rotBase * spinMult);
       ctx.beginPath();
       ctx.ellipse(0, 0, majorA, minorB, 0, 0, Math.PI * 2);
       ctx.strokeStyle = "rgba(217, 70, 239, 0.75)";
       ctx.lineWidth = 1.1;
       ctx.stroke();
-
-      const nodeAngle2 = -t * 2.0 * spinMult;
+      var nAngle2 = -t * 2.0 * spinMult;
       ctx.beginPath();
-      ctx.arc(Math.cos(nodeAngle2) * majorA, Math.sin(nodeAngle2) * minorB, 1.8, 0, Math.PI * 2);
+      ctx.arc(Math.cos(nAngle2) * majorA, Math.sin(nAngle2) * minorB, 1.8, 0, Math.PI * 2);
       ctx.fillStyle = "#f472b6";
       ctx.fill();
       ctx.restore();
 
-      // Ring 3: Equatorial Iridescent Violet (0 deg)
+      // Ring 3 (0 deg Violet)
       ctx.save();
       ctx.rotate(rotBase * spinMult * 0.5);
       ctx.beginPath();
@@ -733,7 +701,7 @@
       ctx.stroke();
       ctx.restore();
 
-      // Precision Center Reticle
+      // Center Reticle
       ctx.beginPath();
       ctx.arc(0, 0, 1.5, 0, Math.PI * 2);
       ctx.fillStyle = "#ffffff";
@@ -742,44 +710,40 @@
       ctx.restore();
     },
 
-    // 3. Quantum Meteor Asteroid Cursor (Quantum Core / Player Atom / Singularity Core)
+    // 3. Quantum Meteor Quantum Core (Player Atom / Singularity Core)
     drawMeteorAsteroid(ctx, cx, cy, now, progress = 0) {
       ctx.save();
 
-      const exc = progress > 0 ? progress * 0.35 : 0;
-      const t = now * 0.0018;
-      const rotBase = now * 0.0006;
-      const spinMult = 1.0 + exc * 2.5;
-      const tumble = now * 0.0012;
-      const pitch = Math.sin(now * 0.0015) * 0.25;
+      var exc = (progress > 0) ? (progress * 0.35) : 0;
+      var t = now * 0.0018;
+      var rotBase = now * 0.0006;
+      var spinMult = 1.0 + exc * 2.5;
+      var tumble = now * 0.0012;
+      var pitch = Math.sin(now * 0.0015) * 0.25;
+      var coreR = 15.0 + exc * 3.0;
 
-      const trailAngle = -Math.PI * 0.5; // flames flow up/back
-      const coreR = 15.0 + exc * 3.0;
-
-      // ── 1. SOLAR CORONA & VOLUMETRIC ATMOSPHERIC PLASMA HALO ──
-      const coronaR = coreR * 2.3;
-      const coronaGrad = ctx.createRadialGradient(cx, cy, coreR * 0.35, cx, cy, coronaR);
-      coronaGrad.addColorStop(0.0, 'rgba(255, 255, 250, ' + (0.92 + exc * 0.08).toFixed(2) + ')');
-      coronaGrad.addColorStop(0.20, 'rgba(254, 240, 138, ' + (0.75 + exc * 0.15).toFixed(2) + ')');
-      coronaGrad.addColorStop(0.48, 'rgba(249, 115, 22, ' + (0.42 + exc * 0.20).toFixed(2) + ')');
-      coronaGrad.addColorStop(0.80, 'rgba(220, 38, 38, ' + (0.16 + exc * 0.12).toFixed(2) + ')');
+      // 1. Solar Corona & Volumetric Atmospheric Plasma Halo
+      var coronaR = coreR * 2.3;
+      var coronaGrad = ctx.createRadialGradient(cx, cy, coreR * 0.35, cx, cy, coronaR);
+      coronaGrad.addColorStop(0.0, "rgba(255, 255, 250, " + (0.92 + exc * 0.08).toFixed(2) + ")");
+      coronaGrad.addColorStop(0.20, "rgba(254, 240, 138, " + (0.75 + exc * 0.15).toFixed(2) + ")");
+      coronaGrad.addColorStop(0.48, "rgba(249, 115, 22, " + (0.42 + exc * 0.20).toFixed(2) + ")");
+      coronaGrad.addColorStop(0.80, "rgba(220, 38, 38, " + (0.16 + exc * 0.12).toFixed(2) + ")");
       coronaGrad.addColorStop(1.0, "rgba(185, 28, 28, 0.0)");
       ctx.fillStyle = coronaGrad;
       ctx.beginPath();
       ctx.arc(cx, cy, coronaR, 0, Math.PI * 2);
       ctx.fill();
 
-      // ── 2. ANAMORPHIC SOLAR PROMINENCE FLARE BEAMS ──
-      const flareLen = coreR * 2.6 + exc * 12;
-      const flareW = coreR * 0.18 + exc * 1.2;
+      // 2. Anamorphic Solar Prominence Flare Beams
+      var flareLen = coreR * 2.6 + exc * 12;
+      var flareW = coreR * 0.18 + exc * 1.2;
       ctx.save();
       ctx.translate(cx, cy);
-      const hFlare = ctx.createLinearGradient(-flareLen, 0, flareLen, 0);
+      var hFlare = ctx.createLinearGradient(-flareLen, 0, flareLen, 0);
       hFlare.addColorStop(0.0, "rgba(220, 38, 38, 0)");
       hFlare.addColorStop(0.25, "rgba(249, 115, 22, 0.45)");
-      hFlare.addColorStop(0.45, "rgba(254, 240, 138, 0.85)");
       hFlare.addColorStop(0.50, "rgba(255, 255, 255, 1.0)");
-      hFlare.addColorStop(0.55, "rgba(254, 240, 138, 0.85)");
       hFlare.addColorStop(0.75, "rgba(249, 115, 22, 0.45)");
       hFlare.addColorStop(1.0, "rgba(220, 38, 38, 0)");
       ctx.fillStyle = hFlare;
@@ -792,10 +756,10 @@
       ctx.fill();
 
       // Diagonal flares (at 60 deg and -60 deg)
-      for (let d = 0; d < 2; d++) {
+      for (var d = 0; d < 2; d++) {
         ctx.save();
-        ctx.rotate(d === 0 ? Math.PI / 3 : -Math.PI / 3);
-        const dFlare = ctx.createLinearGradient(-flareLen * 0.72, 0, flareLen * 0.72, 0);
+        ctx.rotate(d === 0 ? (Math.PI / 3) : (-Math.PI / 3));
+        var dFlare = ctx.createLinearGradient(-flareLen * 0.72, 0, flareLen * 0.72, 0);
         dFlare.addColorStop(0.0, "rgba(234, 88, 12, 0)");
         dFlare.addColorStop(0.35, "rgba(251, 191, 36, 0.45)");
         dFlare.addColorStop(0.50, "rgba(255, 255, 255, 0.90)");
@@ -813,544 +777,83 @@
       }
       ctx.restore();
 
-      // ── 3. LIVING FLAME WISPS & CONVECTION VORTICES ──
-      const flameBaseLen = coreR * 1.45;
-      for (let f = 0; f < 4; f++) {
-        const fAng = trailAngle + (f - 1.5) * 0.38 + Math.sin(t * 6.0 + f * 1.8) * 0.14;
-        const fLen = flameBaseLen * (0.85 + 0.30 * Math.sin(t * 7.5 + f * 2.2));
-        const fEndX = cx + Math.cos(fAng) * fLen;
-        const fEndY = cy + Math.sin(fAng) * fLen;
-        const fMidX = (cx + fEndX) * 0.5 + Math.sin(t * 8.0 + f) * (coreR * 0.22);
-        const fMidY = (cy + fEndY) * 0.5 + Math.cos(t * 8.0 + f) * (coreR * 0.22);
-
-        ctx.beginPath();
-        ctx.moveTo(cx + Math.cos(fAng + 0.25) * (coreR * 0.55), cy + Math.sin(fAng + 0.25) * (coreR * 0.55));
-        ctx.quadraticCurveTo(fMidX, fMidY, fEndX, fEndY);
-        ctx.quadraticCurveTo(fMidX - Math.sin(fAng) * 4, fMidY + Math.cos(fAng) * 4, cx + Math.cos(fAng - 0.25) * (coreR * 0.55), cy + Math.sin(fAng - 0.25) * (coreR * 0.55));
-        ctx.closePath();
-        const flGrad = ctx.createLinearGradient(cx, cy, fEndX, fEndY);
-        flGrad.addColorStop(0.0, "rgba(254, 240, 138, 0.88)");
-        flGrad.addColorStop(0.40, "rgba(249, 115, 22, 0.68)");
-        flGrad.addColorStop(0.80, "rgba(220, 38, 38, 0.35)");
-        flGrad.addColorStop(1.0, "rgba(185, 28, 28, 0.0)");
-        ctx.fillStyle = flGrad;
-        ctx.fill();
-      }
-
-      // Floating Convection Cinder Sparks around the asteroid core
-      for (let sp = 0; sp < 6; sp++) {
-        const sAng = t * 3.2 + sp * 1.05;
-        const sDist = coreR * (1.15 + 0.35 * Math.sin(t * 4.0 + sp * 2.1));
-        const sx = cx + Math.cos(sAng) * sDist;
-        const sy = cy + Math.sin(sAng) * sDist;
-        const sAlpha = 0.40 + 0.50 * Math.sin(t * 6.0 + sp * 1.7);
-        ctx.beginPath();
-        ctx.arc(sx, sy, 1.4, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(254, 240, 138, ' + sAlpha.toFixed(2) + ')';
-        ctx.fill();
-      }
-
-      // ── 4. THREE 3D PRECESSED BLAZING SOLAR MAGNETIC DYNAMO RINGS ──
-      const majorA = 26 + exc * 4;
-      const minorB = 9.8 + exc * 1.5;
-      const rings = [
+      // 3. Three 3D Precessed Blazing Magnetic Dynamo Rings with Orbiting Plasmoids
+      var majorA = 26 + exc * 4;
+      var minorB = 9.8 + exc * 1.5;
+      var rings = [
         { baseAngle: 0, phaseOffset: 0, color: "rgba(251, 191, 36, 0.95)" },
         { baseAngle: Math.PI / 3, phaseOffset: 2.094, color: "rgba(244, 63, 94, 0.90)" },
         { baseAngle: 2 * Math.PI / 3, phaseOffset: 4.188, color: "rgba(254, 240, 138, 0.95)" }
       ];
 
-      for (let ri = 0; ri < 3; ri++) {
-        const ring = rings[ri];
+      for (var ri = 0; ri < 3; ri++) {
+        var ring = rings[ri];
         ctx.save();
         ctx.translate(cx, cy);
-        const wobble = Math.sin(t * 1.4 * spinMult + ring.phaseOffset) * 0.08;
+        var wobble = Math.sin(t * 1.4 * spinMult + ring.phaseOffset) * 0.08;
         ctx.rotate(ring.baseAngle + wobble + rotBase * spinMult);
-        const curB = minorB * (1.0 + 0.12 * Math.cos(t * 1.6 * spinMult + ring.phaseOffset));
+        var curB = minorB * (1.0 + 0.12 * Math.cos(t * 1.6 * spinMult + ring.phaseOffset));
 
-        const rGrad = ctx.createLinearGradient(-majorA, 0, majorA, 0);
-        rGrad.addColorStop(0.0, "rgba(220, 38, 38, 0.3)");
-        rGrad.addColorStop(0.25, ring.color);
-        rGrad.addColorStop(0.50, "rgba(255, 255, 255, 0.98)");
-        rGrad.addColorStop(0.75, ring.color);
-        rGrad.addColorStop(1.0, "rgba(220, 38, 38, 0.3)");
-
-        ctx.strokeStyle = rGrad;
+        ctx.strokeStyle = ring.color;
         ctx.lineWidth = 1.7;
         ctx.beginPath();
         ctx.ellipse(0, 0, majorA, curB, 0, 0, Math.PI * 2);
         ctx.stroke();
 
         // Circulating Miniature Sun Plasmoid
-        const eSpeed = 0.0035 * spinMult;
-        const u = (now * eSpeed + ring.phaseOffset) % (Math.PI * 2);
-        const ex = majorA * Math.cos(u);
-        const ey = curB * Math.sin(u);
-
+        var u = (now * (0.0035 * spinMult) + ring.phaseOffset) % (Math.PI * 2);
+        var ex = majorA * Math.cos(u);
+        var ey = curB * Math.sin(u);
         ctx.beginPath();
         ctx.arc(ex, ey, 4.8, 0, Math.PI * 2);
         ctx.fillStyle = "rgba(249, 115, 22, 0.38)";
         ctx.fill();
-
         ctx.beginPath();
         ctx.arc(ex, ey, 2.6, 0, Math.PI * 2);
         ctx.fillStyle = "rgba(254, 240, 138, 0.92)";
         ctx.fill();
-
         ctx.beginPath();
         ctx.arc(ex, ey, 1.4, 0, Math.PI * 2);
         ctx.fillStyle = "#ffffff";
         ctx.fill();
-
         ctx.restore();
       }
 
-      // ── 5. HYPER-REALISTIC PROCEDURAL 3D MOLTEN ASTEROID ROCK CORE ──
-      const rockR = coreR * 1.05;
-      const SAMPLES = 32;
-      const dTheta = (Math.PI * 2) / SAMPLES;
-      const contourPts = [];
-      for (let s = 0; s < SAMPLES; s++) {
-        const th = s * dTheta;
-        let rVar = 1.0;
-        rVar += Math.sin(th * 2 + tumble * 0.7) * 0.14;
-        rVar += Math.cos(th * 3 - pitch * 1.5) * 0.09;
-        rVar += Math.sin(th * 5 + tumble * 1.2) * 0.06;
-        rVar += Math.cos(th * 7) * 0.04;
-        const rad = rockR * Math.max(0.70, rVar);
-        contourPts.push({ x: cx + Math.cos(th) * rad, y: cy + Math.sin(th) * rad });
+      // 4. Hyper-Realistic Procedural 3D Molten Asteroid Body
+      var rockR = coreR * 1.05;
+      var SAMPLES = 32;
+      var dTheta = (Math.PI * 2) / SAMPLES;
+      var contourPts = [];
+      for (var s = 0; s < SAMPLES; s++) {
+        var th = s * dTheta;
+        var rVar = 1.0 + Math.sin(th * 2 + tumble * 0.7) * 0.14 + Math.cos(th * 3 - pitch * 1.5) * 0.09;
+        contourPts.push({ x: cx + Math.cos(th) * (rockR * Math.max(0.70, rVar)), y: cy + Math.sin(th) * (rockR * Math.max(0.70, rVar)) });
       }
 
       ctx.save();
       ctx.beginPath();
-      for (let s = 0; s < SAMPLES; s++) {
-        if (s === 0) ctx.moveTo(contourPts[s].x, contourPts[s].y);
-        else ctx.lineTo(contourPts[s].x, contourPts[s].y);
+      for (var s = 0; s < SAMPLES; s++) {
+        if (s === 0) ctx.moveTo(contourPts[s].x, contourPts[s].y); else ctx.lineTo(contourPts[s].x, contourPts[s].y);
       }
       ctx.closePath();
       ctx.clip();
 
       // 3D Directional Lighting
-      const sunX = cx - rockR * 0.45;
-      const sunY = cy - rockR * 0.55;
-      const bodyGrad = ctx.createRadialGradient(sunX, sunY, rockR * 0.12, cx, cy, rockR * 1.30);
+      var bodyGrad = ctx.createRadialGradient(cx - rockR * 0.45, cy - rockR * 0.55, rockR * 0.12, cx, cy, rockR * 1.30);
       bodyGrad.addColorStop(0.0, "#5c4537");
       bodyGrad.addColorStop(0.30, "#3d2b20");
       bodyGrad.addColorStop(0.62, "#21140e");
-      bodyGrad.addColorStop(0.88, "#110906");
       bodyGrad.addColorStop(1.0, "#050302");
       ctx.fillStyle = bodyGrad;
       ctx.fill();
 
-      // 3D Impact Craters with Sunlit Rims and Molten Magma Wells
-      const craterDefs = [
-        { x: -0.32, y: -0.38, r: 0.22, heatPhase: 0 },
-        { x: 0.38, y: -0.25, r: 0.26, heatPhase: 1.8 },
-        { x: -0.25, y: 0.35, r: 0.28, heatPhase: 3.5 }
-      ];
-      for (let c = 0; c < craterDefs.length; c++) {
-        const cr = craterDefs[c];
-        const crAng = Math.atan2(cr.y, cr.x) + tumble * 0.4;
-        const crDist = Math.hypot(cr.x, cr.y) * rockR;
-        const crX = cx + Math.cos(crAng) * crDist;
-        const crY = cy + Math.sin(crAng) * crDist;
-        const crRad = rockR * cr.r;
-
-        ctx.beginPath();
-        ctx.arc(crX, crY, crRad, 0, Math.PI * 2);
-        ctx.fillStyle = "#070302";
-        ctx.fill();
-
-        ctx.beginPath();
-        ctx.arc(crX - 0.7, crY - 0.9, crRad, Math.PI * 0.7, Math.PI * 1.9);
-        ctx.strokeStyle = "rgba(160, 130, 110, 0.65)";
-        ctx.lineWidth = 1.1;
-        ctx.stroke();
-
-        const crHeat = 0.5 + 0.5 * Math.sin(t * 4.2 + cr.heatPhase);
-        ctx.beginPath();
-        ctx.arc(crX, crY, crRad * 0.58, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(234, 88, 12, ' + (0.60 + crHeat * 0.35).toFixed(2) + ')';
-        ctx.fill();
-
-        ctx.beginPath();
-        ctx.arc(crX, crY, crRad * 0.26, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(254, 240, 138, ' + (0.75 + crHeat * 0.25).toFixed(2) + ')';
-        ctx.fill();
-      }
-
-      // Branching 5000K Magma Fissures
-      const magmaPulse = 0.5 + 0.5 * Math.sin(t * 3.6);
-      const fissureChains = [
-        [[-0.60, -0.35], [-0.38, -0.28], [-0.18, -0.10], [0.05, 0.04], [0.28, 0.12], [0.48, 0.28], [0.68, 0.38]],
-        [[0.32, -0.52], [0.22, -0.28], [0.05, 0.04], [-0.12, 0.25], [-0.28, 0.45], [-0.48, 0.60]]
-      ];
-
-      for (let fc = 0; fc < fissureChains.length; fc++) {
-        const chain = fissureChains[fc];
-        const pts = [];
-        for (let j = 0; j < chain.length; j++) {
-          const wobbleX = Math.sin(t * 4.5 + fc * 2.3 + j * 1.2) * 1.1;
-          const wobbleY = Math.cos(t * 4.0 + fc * 1.7 + j * 1.4) * 1.1;
-          pts.push({ x: cx + chain[j][0] * rockR + wobbleX, y: cy + chain[j][1] * rockR + wobbleY });
-        }
-
-        // Layer 1: Radiant molten solar orange-gold lava stream
-        ctx.beginPath();
-        ctx.moveTo(pts[0].x, pts[0].y);
-        for (let j = 1; j < pts.length; j++) {
-          const midX = (pts[j - 1].x + pts[j].x) * 0.5;
-          const midY = (pts[j - 1].y + pts[j].y) * 0.5;
-          ctx.quadraticCurveTo(pts[j - 1].x, pts[j - 1].y, midX, midY);
-        }
-        ctx.lineTo(pts[pts.length - 1].x, pts[pts.length - 1].y);
-        ctx.strokeStyle = 'rgba(249, 115, 22, ' + (0.85 + magmaPulse * 0.15).toFixed(2) + ')';
-        ctx.lineWidth = Math.max(1.4, rockR * 0.14);
-        ctx.stroke();
-
-        // Layer 2: Blinding 5000K incandescent white-gold core vein
-        ctx.beginPath();
-        ctx.moveTo(pts[0].x, pts[0].y);
-        for (let j = 1; j < pts.length; j++) {
-          const midX = (pts[j - 1].x + pts[j].x) * 0.5;
-          const midY = (pts[j - 1].y + pts[j].y) * 0.5;
-          ctx.quadraticCurveTo(pts[j - 1].x, pts[j - 1].y, midX, midY);
-        }
-        ctx.lineTo(pts[pts.length - 1].x, pts[pts.length - 1].y);
-        ctx.strokeStyle = 'rgba(255, 255, 245, ' + (0.92 + magmaPulse * 0.08).toFixed(2) + ')';
-        ctx.lineWidth = Math.max(0.8, rockR * 0.06);
-        ctx.stroke();
-      }
-
-      ctx.restore(); // end clip
-      ctx.restore();
-    },
-
-    // 4. Tier 3 Extra Big Quantum Realm Particle (Falling in Reflex Blitz & Displayed in Memory Matrix)
-    drawTier3RealmParticle(ctx, p, now) {
-      ctx.save();
-      const headR = p.headR || 23.0;
-      const K = p.spine.length;
-
-      // ── 1. Tapered Inverse Kinematics Body Streamer ──
-      const tailX = p.spine[K - 1].x;
-      const tailY = p.spine[K - 1].y;
-      const grad = ctx.createLinearGradient(tailX, tailY, p.x, p.y);
-      grad.addColorStop(0.0, "rgba(168, 85, 247, 0.0)");
-      grad.addColorStop(0.35, "rgba(192, 132, 252, 0.45)");
-      grad.addColorStop(0.70, "rgba(56, 189, 248, 0.85)");
-      grad.addColorStop(1.0, "rgba(255, 255, 255, 0.98)");
-
-      ctx.fillStyle = grad;
-      // Draw smoothly tapered tail polygon
-      ctx.beginPath();
-      const perpAngle = Math.atan2(p.y - tailY, p.x - tailX) + Math.PI / 2;
-      const cosP = Math.cos(perpAngle);
-      const sinP = Math.sin(perpAngle);
-      ctx.moveTo(p.x - cosP * (headR * 0.85), p.y - sinP * (headR * 0.85));
-      for (let i = 1; i < K; i++) {
-        const seg = p.spine[i];
-        const taper = 1.0 - (i / K);
-        ctx.lineTo(seg.x - cosP * (headR * 0.85 * taper), seg.y - sinP * (headR * 0.85 * taper));
-      }
-      ctx.lineTo(tailX, tailY);
-      for (let i = K - 1; i >= 1; i--) {
-        const seg = p.spine[i];
-        const taper = 1.0 - (i / K);
-        ctx.lineTo(seg.x + cosP * (headR * 0.85 * taper), seg.y + sinP * (headR * 0.85 * taper));
-      }
-      ctx.lineTo(p.x + cosP * (headR * 0.85), p.y + sinP * (headR * 0.85));
-      ctx.closePath();
-      ctx.fill();
-
-      // ── 2. Multi-Branch Crackling Lightning Electric Arcs along Spine ──
-      ctx.strokeStyle = "#38bdf8";
-      ctx.lineWidth = 1.8;
-      ctx.beginPath();
-      for (let i = 0; i < K - 1; i++) {
-        const seg = p.spine[i];
-        const next = p.spine[i + 1];
-        const mx = (seg.x + next.x) * 0.5 + Math.sin(now * 0.04 + i * 1.5) * 8;
-        const my = (seg.y + next.y) * 0.5 + Math.cos(now * 0.04 + i * 1.5) * 6;
-        if (i === 0) ctx.moveTo(seg.x, seg.y);
-        ctx.lineTo(mx, my);
-        ctx.lineTo(next.x, next.y);
-      }
-      ctx.stroke();
-
-      // Secondary White Lightning Filament
-      ctx.strokeStyle = "#ffffff";
-      ctx.lineWidth = 1.0;
-      ctx.beginPath();
-      for (let i = 0; i < K - 1; i++) {
-        const seg = p.spine[i];
-        const next = p.spine[i + 1];
-        const mx = (seg.x + next.x) * 0.5 - Math.sin(now * 0.035 + i * 2.1) * 6;
-        const my = (seg.y + next.y) * 0.5 - Math.cos(now * 0.035 + i * 2.1) * 4;
-        if (i === 0) ctx.moveTo(seg.x, seg.y);
-        ctx.lineTo(mx, my);
-        ctx.lineTo(next.x, next.y);
-      }
-      ctx.stroke();
-
-      // ── 3. Luminous Quantum Singularity Head ──
-      const haloR = headR * 1.45;
-      const aGrad = ctx.createRadialGradient(p.x, p.y, headR * 0.4, p.x, p.y, haloR);
-      aGrad.addColorStop(0.0, "rgba(56, 189, 248, 0.45)");
-      aGrad.addColorStop(0.6, "rgba(168, 85, 247, 0.22)");
-      aGrad.addColorStop(1.0, "rgba(168, 85, 247, 0.0)");
-      ctx.fillStyle = aGrad;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, haloR, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Searing Spherical Core
-      const hGrad = ctx.createRadialGradient(p.x - 2, p.y - 2, 2, p.x, p.y, headR);
-      hGrad.addColorStop(0.0, "#ffffff");
-      hGrad.addColorStop(0.35, "#38bdf8");
-      hGrad.addColorStop(0.75, "#c084fc");
-      hGrad.addColorStop(1.0, "#6b21a8");
-      ctx.fillStyle = hGrad;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, headR, 0, Math.PI * 2);
-      ctx.fill();
-
-      // ── 4. 3D Concentric & Precessing Bohr Orbitals with Quantum Spark ──
-      ctx.save();
-      ctx.translate(p.x, p.y);
-      const spinAngle = now * 0.0032;
-
-      // Inner Concentric Orbital
-      ctx.beginPath();
-      ctx.arc(0, 0, headR * 1.85, 0, Math.PI * 2);
-      ctx.strokeStyle = "rgba(168, 85, 247, 0.45)";
-      ctx.lineWidth = 1.35;
-      ctx.stroke();
-
-      // Outer Precessing Ellipse
-      ctx.beginPath();
-      ctx.ellipse(0, 0, headR * 2.35, headR * 1.15, spinAngle, 0, Math.PI * 2);
-      ctx.strokeStyle = "rgba(56, 189, 248, 0.55)";
-      ctx.lineWidth = 1.25;
-      ctx.stroke();
-
-      // Orbiting Quantum Spark Node
-      const qNodeX = Math.cos(spinAngle) * (headR * 2.35);
-      const qNodeY = Math.sin(spinAngle) * (headR * 1.15);
-      ctx.beginPath();
-      ctx.arc(qNodeX, qNodeY, 2.2, 0, Math.PI * 2);
-      ctx.fillStyle = "#ffffff";
-      ctx.fill();
-      ctx.restore();
-
-      ctx.restore();
-    },
-
-    // 5. Tier 3 Extra Big Quantum Helix Particle (Falling in Reflex Blitz & Displayed in Memory Matrix)
-    drawTier3HelixParticle(ctx, p, now) {
-      ctx.save();
-      const headR = p.headR || 23.0;
-      const K = p.spine.length;
-      const t = now * 0.003;
-      const waveAmp = 15;
-
-      // ── 1. Central Harmonic Phase-Beam ──
-      ctx.beginPath();
-      ctx.moveTo(p.spine[0].x, p.spine[0].y);
-      for (let i = 1; i < K; i++) {
-        ctx.lineTo(p.spine[i].x, p.spine[i].y);
-      }
-      ctx.strokeStyle = "rgba(165, 243, 252, 0.75)";
-      ctx.lineWidth = 1.8;
-      ctx.stroke();
-
-      // ── 2. Cyan & Magenta Intertwining DNA Ribbons ──
-      // Strand 1 (Electric Cyan)
-      ctx.strokeStyle = "#22d3ee";
-      ctx.lineWidth = 3.2;
-      ctx.beginPath();
-      for (let i = 0; i < K; i++) {
-        const seg = p.spine[i];
-        const offset = Math.sin(t - i * 0.75) * waveAmp;
-        const px = seg.x + offset;
-        if (i === 0) ctx.moveTo(px, seg.y); else ctx.lineTo(px, seg.y);
-      }
-      ctx.stroke();
-
-      // Strand 2 (Royal Magenta)
-      ctx.strokeStyle = "#d946ef";
-      ctx.lineWidth = 3.2;
-      ctx.beginPath();
-      for (let i = 0; i < K; i++) {
-        const seg = p.spine[i];
-        const offset = -Math.sin(t - i * 0.75) * waveAmp;
-        const px = seg.x + offset;
-        if (i === 0) ctx.moveTo(px, seg.y); else ctx.lineTo(px, seg.y);
-      }
-      ctx.stroke();
-
-      // Base Pair Connecting Rungs with Energized Nucleotide Pearls
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.85)";
-      ctx.lineWidth = 1.4;
-      for (let i = 1; i < K - 1; i += 2) {
-        const seg = p.spine[i];
-        const offset = Math.sin(t - i * 0.75) * waveAmp;
-        ctx.beginPath();
-        ctx.moveTo(seg.x + offset, seg.y);
-        ctx.lineTo(seg.x - offset, seg.y);
-        ctx.stroke();
-
-        // Pearl at midpoint
-        ctx.beginPath();
-        ctx.arc(seg.x, seg.y, 1.8, 0, Math.PI * 2);
-        ctx.fillStyle = "#ffffff";
-        ctx.fill();
-      }
-
-      // ── 3. Glowing Cyan Droplet Head with Searing White Nucleus ──
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, headR * 1.35, 0, Math.PI * 2);
-      ctx.fillStyle = "rgba(34, 211, 238, 0.32)";
-      ctx.fill();
-
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, headR, 0, Math.PI * 2);
-      ctx.fillStyle = "hsla(188, 98%, 74%, 0.98)";
-      ctx.fill();
-
-      ctx.beginPath();
-      ctx.arc(p.x, p.y + 2, headR * 0.44, 0, Math.PI * 2);
-      ctx.fillStyle = "rgba(255, 255, 255, 0.98)";
-      ctx.fill();
-
-      // ── 4. Bi-Chromatic Cyan & Magenta 3D Orbitals ──
-      ctx.save();
-      ctx.translate(p.x, p.y);
-      const spinAngle = now * 0.0032;
-
-      // Cyan Ring
-      ctx.beginPath();
-      ctx.arc(0, 0, headR * 1.85, 0, Math.PI * 2);
-      ctx.strokeStyle = "rgba(34, 211, 238, 0.45)";
-      ctx.lineWidth = 1.30;
-      ctx.stroke();
-
-      // Magenta Ellipse
-      ctx.beginPath();
-      ctx.ellipse(0, 0, headR * 2.35, headR * 1.15, spinAngle, 0, Math.PI * 2);
-      ctx.strokeStyle = "rgba(217, 70, 239, 0.45)";
-      ctx.lineWidth = 1.20;
-      ctx.stroke();
-
-      // Rotating Nucleotide Node
-      const nNodeX = Math.cos(spinAngle) * (headR * 2.35);
-      const nNodeY = Math.sin(spinAngle) * (headR * 1.15);
-      ctx.beginPath();
-      ctx.arc(nNodeX, nNodeY, 2.0, 0, Math.PI * 2);
-      ctx.fillStyle = "rgba(165, 243, 252, 0.98)";
-      ctx.fill();
-      ctx.restore();
-
-      ctx.restore();
-    },
-
-    // 6. Tier 3 Extra Big Quantum Meteor Particle (Falling in Reflex Blitz & Displayed in Memory Matrix)
-    drawTier3MeteorParticle(ctx, p, now) {
-      ctx.save();
-      const headR = p.headR || 24.0;
-      const K = p.spine.length;
-
-      // ── 1. Solar Prominence Smoke Puffs ──
-      const puffR = headR * 1.45;
-      const tailX = p.spine[K - 1].x;
-      const tailY = p.spine[K - 1].y;
-
-      const smokeGrad = ctx.createRadialGradient(tailX, tailY, puffR * 0.2, tailX, tailY, puffR);
-      smokeGrad.addColorStop(0.0, "rgba(80, 50, 40, 0.35)");
-      smokeGrad.addColorStop(0.5, "rgba(50, 30, 25, 0.18)");
-      smokeGrad.addColorStop(1.0, "rgba(30, 20, 20, 0.0)");
-      ctx.fillStyle = smokeGrad;
-      ctx.beginPath();
-      ctx.arc(tailX, tailY, puffR, 0, Math.PI * 2);
-      ctx.fill();
-
-      // ── 2. Real Fire Inner Core Convective Flame Tongue ──
-      const flameEndIdx = Math.min(K - 1, Math.max(2, (K * 0.75) | 0));
-      const fGrad = ctx.createLinearGradient(p.spine[flameEndIdx].x, p.spine[flameEndIdx].y, p.x, p.y);
-      fGrad.addColorStop(0.0, "rgba(185, 28, 28, 0.0)");
-      fGrad.addColorStop(0.3, "rgba(234, 88, 12, 0.65)");
-      fGrad.addColorStop(0.7, "rgba(251, 146, 60, 0.88)");
-      fGrad.addColorStop(1.0, "rgba(255, 255, 245, 0.98)");
-
-      // Outer Flame Tongue
-      ctx.fillStyle = fGrad;
-      ctx.beginPath();
-      ctx.moveTo(p.x - headR * 0.85, p.y);
-      ctx.quadraticCurveTo(p.x - headR * 0.4, p.spine[flameEndIdx].y + 10, tailX, tailY);
-      ctx.quadraticCurveTo(p.x + headR * 0.4, p.spine[flameEndIdx].y + 10, p.x + headR * 0.85, p.y);
-      ctx.closePath();
-      ctx.fill();
-
-      // Inner White-Hot Flame Core
-      const innerFlameGrad = ctx.createLinearGradient(p.spine[flameEndIdx].x, p.spine[flameEndIdx].y, p.x, p.y);
-      innerFlameGrad.addColorStop(0.0, "rgba(249, 115, 22, 0.0)");
-      innerFlameGrad.addColorStop(0.4, "rgba(254, 240, 138, 0.85)");
-      innerFlameGrad.addColorStop(1.0, "rgba(255, 255, 255, 1.0)");
-      ctx.strokeStyle = innerFlameGrad;
-      ctx.lineWidth = headR * 0.48;
-      ctx.lineCap = "round";
-      ctx.beginPath();
-      ctx.moveTo(p.x, p.y);
-      for (let sj = 1; sj <= flameEndIdx; sj++) {
-        ctx.lineTo(p.spine[sj].x, p.spine[sj].y);
-      }
-      ctx.stroke();
-
-      // ── 3. Hyper-Realistic Procedural 3D Molten Asteroid Body (32-point craggy contour) ──
-      const rockR = headR * 1.15;
-      const SAMPLES = 32;
-      const dTheta = (Math.PI * 2) / SAMPLES;
-      const contourPts = [];
-      const tumble = now * 0.002;
-
-      for (let s = 0; s < SAMPLES; s++) {
-        const th = s * dTheta;
-        let rVar = 1.0;
-        rVar += Math.sin(th * 2 + tumble * 0.7) * 0.14;
-        rVar += Math.cos(th * 3) * 0.09;
-        rVar += Math.sin(th * 5) * 0.06;
-        const rad = rockR * Math.max(0.70, rVar);
-        contourPts.push({ x: p.x + Math.cos(th) * rad, y: p.y + Math.sin(th) * rad });
-      }
-
-      ctx.save();
-      ctx.beginPath();
-      for (let s = 0; s < SAMPLES; s++) {
-        if (s === 0) ctx.moveTo(contourPts[s].x, contourPts[s].y);
-        else ctx.lineTo(contourPts[s].x, contourPts[s].y);
-      }
-      ctx.closePath();
-      ctx.clip();
-
-      // 3D Directional Lighting
-      const bodyGrad = ctx.createRadialGradient(p.x - rockR * 0.4, p.y - rockR * 0.5, rockR * 0.1, p.x, p.y, rockR * 1.3);
-      bodyGrad.addColorStop(0.0, "#5c4537");
-      bodyGrad.addColorStop(0.35, "#3d2b20");
-      bodyGrad.addColorStop(0.70, "#21140e");
-      bodyGrad.addColorStop(1.0, "#050302");
-      ctx.fillStyle = bodyGrad;
-      ctx.fill();
-
-      // 3D Impact Craters with Magma Wells
-      const craters = [
-        { x: -0.32, y: -0.38, r: 0.22 },
-        { x: 0.35, y: -0.22, r: 0.25 },
-        { x: -0.15, y: 0.32, r: 0.26 }
-      ];
-      for (let c = 0; c < craters.length; c++) {
-        const cr = craters[c];
-        const crX = p.x + cr.x * rockR;
-        const crY = p.y + cr.y * rockR;
-        const crRad = rockR * cr.r;
+      // Craters with Glowing Magma Wells
+      var craters = [{ x: -0.32, y: -0.38, r: 0.22 }, { x: 0.38, y: -0.25, r: 0.26 }, { x: -0.25, y: 0.35, r: 0.28 }];
+      for (var c = 0; c < craters.length; c++) {
+        var cr = craters[c];
+        var crX = cx + cr.x * rockR;
+        var crY = cy + cr.y * rockR;
+        var crRad = rockR * cr.r;
         ctx.beginPath();
         ctx.arc(crX, crY, crRad, 0, Math.PI * 2);
         ctx.fillStyle = "#070302";
@@ -1361,46 +864,331 @@
         ctx.fill();
       }
 
-      // 5000K Incandescent White-Gold Magma Fissures
-      const fissures = [
-        [[-0.55, -0.30], [-0.15, -0.08], [0.08, 0.06], [0.45, 0.25]],
-        [[0.28, -0.45], [0.08, 0.06], [-0.25, 0.40]]
+      // Branching 5000K White-Hot Magma Fissures
+      var magmaPulse = 0.5 + 0.5 * Math.sin(t * 3.6);
+      var fissures = [
+        [[-0.60, -0.35], [-0.18, -0.10], [0.05, 0.04], [0.48, 0.28], [0.68, 0.38]],
+        [[0.32, -0.52], [0.05, 0.04], [-0.28, 0.45], [-0.48, 0.60]]
       ];
-      for (let fc = 0; fc < fissures.length; fc++) {
-        const chain = fissures[fc];
+      for (var fc = 0; fc < fissures.length; fc++) {
+        var chain = fissures[fc];
         ctx.beginPath();
-        for (let j = 0; j < chain.length; j++) {
-          const fx = p.x + chain[j][0] * rockR;
-          const fy = p.y + chain[j][1] * rockR;
+        for (var j = 0; j < chain.length; j++) {
+          var fx = cx + chain[j][0] * rockR;
+          var fy = cy + chain[j][1] * rockR;
           if (j === 0) ctx.moveTo(fx, fy); else ctx.lineTo(fx, fy);
         }
-        ctx.strokeStyle = "rgba(249, 115, 22, 0.85)";
+        ctx.strokeStyle = "rgba(249, 115, 22, " + (0.85 + magmaPulse * 0.15).toFixed(2) + ")";
         ctx.lineWidth = Math.max(1.4, rockR * 0.14);
         ctx.stroke();
         ctx.strokeStyle = "rgba(255, 255, 245, 0.95)";
         ctx.lineWidth = Math.max(0.8, rockR * 0.06);
         ctx.stroke();
       }
-      ctx.restore(); // end clip
 
-      // ── 4. Orbiting Molten Ember Plasma Ring ──
-      const orbBaseRM = rockR * 1.95;
-      const spinM = now * 0.0035;
-      ctx.beginPath();
-      ctx.ellipse(p.x, p.y, orbBaseRM * 1.2, orbBaseRM * 0.7, spinM, 0, Math.PI * 2);
-      ctx.strokeStyle = "rgba(251, 146, 60, 0.45)";
-      ctx.lineWidth = 1.35;
-      ctx.stroke();
+      ctx.restore(); // end clip
+      ctx.restore();
+    },
+
+    // 4. Quantum Realm Extra Big (Tier 3) Particle
+    drawTier3RealmParticle(targetCtx, p, now) {
+      var tier = 3;
+      var headR = p.headR || 24.0;
+      var px0 = p.x;
+      var py0 = p.y;
+      var heading = p.heading || Math.PI / 2;
+      var pulsePhase = p.pulsePhase || 0;
+      var renderAlpha = 0.95;
+      var fHeadHue = 210;
+      var fHeadLit = 84;
+      var spinePts = p.spine;
+      var K = spinePts.length;
+
+      // Tail Streamer Body & Crackling Electric Arcs
+      if (K >= 2) {
+        var tailTipX = spinePts[K - 1].x;
+        var tailTipY = spinePts[K - 1].y;
+        var bodyGrad = targetCtx.createLinearGradient(tailTipX, tailTipY, px0, py0);
+        bodyGrad.addColorStop(0.0, "hsla(260, 95%, 60%, 0.10)");
+        bodyGrad.addColorStop(0.48, "hsla(230, 95%, 70%, 0.60)");
+        bodyGrad.addColorStop(1.0, "hsla(" + fHeadHue + ", 100%, " + fHeadLit.toFixed(1) + "%, " + (renderAlpha * 0.95).toFixed(2) + ")");
+        targetCtx.fillStyle = bodyGrad;
+
+        targetCtx.beginPath();
+        targetCtx.moveTo(spinePts[0].x - headR * 0.85, spinePts[0].y);
+        for (var sj = 1; sj < K; sj++) {
+          var taper = 1.0 - sj / K;
+          targetCtx.lineTo(spinePts[sj].x - headR * 0.85 * taper, spinePts[sj].y);
+        }
+        targetCtx.lineTo(tailTipX, tailTipY);
+        for (var sj = K - 1; sj >= 1; sj--) {
+          var taper = 1.0 - sj / K;
+          targetCtx.lineTo(spinePts[sj].x + headR * 0.85 * taper, spinePts[sj].y);
+        }
+        targetCtx.lineTo(spinePts[0].x + headR * 0.85, spinePts[0].y);
+        targetCtx.closePath();
+        targetCtx.fill();
+
+        // Crackling Electric Arcs Along Tail Spine
+        targetCtx.lineCap = "round";
+        targetCtx.lineJoin = "round";
+        targetCtx.strokeStyle = "hsla(196, 100%, 68%, 0.40)";
+        targetCtx.lineWidth = Math.max(2.0, headR * 0.58);
+        targetCtx.beginPath();
+        targetCtx.moveTo(spinePts[0].x, spinePts[0].y);
+        for (var ej = 1; ej < K; ej++) {
+          var wave = Math.sin(now * 0.04 + ej * 1.5) * 6;
+          targetCtx.lineTo(spinePts[ej].x + wave, spinePts[ej].y);
+        }
+        targetCtx.stroke();
+
+        targetCtx.strokeStyle = "rgba(232, 248, 255, 0.95)";
+        targetCtx.lineWidth = Math.max(0.9, headR * 0.24);
+        targetCtx.stroke();
+      }
+
+      // Luminous Quantum Glow Head
+      targetCtx.beginPath();
+      targetCtx.arc(px0, py0, headR, 0, Math.PI * 2);
+      targetCtx.fillStyle = "hsla(" + fHeadHue + ", 98%, " + fHeadLit.toFixed(1) + "%, " + renderAlpha.toFixed(2) + ")";
+      targetCtx.fill();
+
+      // Searing White-Hot Center Singularity
+      var cosH = Math.cos(heading);
+      var sinH = Math.sin(heading);
+      targetCtx.beginPath();
+      targetCtx.arc(px0 + cosH * (headR * 0.25), py0 + sinH * (headR * 0.25), headR * 0.45, 0, Math.PI * 2);
+      targetCtx.fillStyle = "rgba(255, 255, 255, " + (renderAlpha * 0.96).toFixed(2) + ")";
+      targetCtx.fill();
+
+      // 3D Bohr Probability Orbital Rings
+      var orbBaseR = headR * 2.85; // Scaled specifically for Tier 3
+      var spinAngle = now * 0.0032 + pulsePhase;
+      var ringAlpha = renderAlpha * 0.85;
+
+      // Inner Concentric Orbital
+      targetCtx.beginPath();
+      targetCtx.arc(px0, py0, orbBaseR * 0.85, 0, Math.PI * 2);
+      targetCtx.strokeStyle = "hsla(" + fHeadHue + ", 92%, 72%, " + (ringAlpha * 0.38).toFixed(2) + ")";
+      targetCtx.lineWidth = 1.35;
+      targetCtx.stroke();
+
+      // Outer Precessing Elliptical Orbital
+      var worldSpin = heading + spinAngle;
+      targetCtx.beginPath();
+      targetCtx.ellipse(px0, py0, orbBaseR * 1.35, orbBaseR * 0.75, worldSpin, 0, Math.PI * 2);
+      targetCtx.strokeStyle = "hsla(" + fHeadHue + ", 98%, 78%, " + (ringAlpha * 0.32).toFixed(2) + ")";
+      targetCtx.lineWidth = 1.20;
+      targetCtx.stroke();
+
+      // Orbiting Quantum Node Spark
+      var qNodeX = px0 + Math.cos(worldSpin) * orbBaseR * 1.35;
+      var qNodeY = py0 + Math.sin(worldSpin) * orbBaseR * 1.35;
+      targetCtx.beginPath();
+      targetCtx.arc(qNodeX, qNodeY, 2.0, 0, Math.PI * 2);
+      targetCtx.fillStyle = "rgba(255, 255, 255, " + (ringAlpha * 0.96).toFixed(2) + ")";
+      targetCtx.fill();
+    },
+
+    // 5. Quantum Helix Extra Big (Tier 3) Particle
+    drawTier3HelixParticle(targetCtx, p, now) {
+      var tier = 3;
+      var headR = p.headR || 24.0;
+      var px0 = p.x;
+      var py0 = p.y;
+      var heading = p.heading || Math.PI / 2;
+      var pulsePhase = p.pulsePhase || 0;
+      var renderAlpha = 0.95;
+      var spinePts = p.spine;
+      var K = spinePts.length;
+
+      // A. Double-Helix DNA Strands (Strand 1: Cyan, Strand 2: Magenta)
+      var strandWidth = Math.max(1.8, headR * 0.44);
+      var waveAmp = 14;
+      var t = now * 0.003;
+
+      // Central Harmonic Phase Beam
+      targetCtx.beginPath();
+      targetCtx.moveTo(spinePts[0].x, spinePts[0].y);
+      for (var sj = 1; sj < K; sj++) {
+        targetCtx.lineTo(spinePts[sj].x, spinePts[sj].y);
+      }
+      targetCtx.strokeStyle = "rgba(165, 243, 252, " + (renderAlpha * 0.88).toFixed(2) + ")";
+      targetCtx.lineWidth = Math.max(1.0, headR * 0.18);
+      targetCtx.stroke();
+
+      // Base-Pair Rungs
+      targetCtx.strokeStyle = "rgba(224, 231, 255, 0.52)";
+      targetCtx.lineWidth = 1.25;
+      for (var rk = 1; rk < K - 1; rk++) {
+        var offset = Math.sin(t - rk * 0.75) * waveAmp;
+        targetCtx.beginPath();
+        targetCtx.moveTo(spinePts[rk].x + offset, spinePts[rk].y);
+        targetCtx.lineTo(spinePts[rk].x - offset, spinePts[rk].y);
+        targetCtx.stroke();
+      }
+
+      // Strand 1: Cyan Ribbon
+      targetCtx.lineCap = "round";
+      targetCtx.lineJoin = "round";
+      targetCtx.strokeStyle = "rgba(34, 211, 238, " + (renderAlpha * 0.96).toFixed(2) + ")";
+      targetCtx.lineWidth = strandWidth;
+      targetCtx.beginPath();
+      for (var sj = 0; sj < K; sj++) {
+        var offset = Math.sin(t - sj * 0.75) * waveAmp;
+        var sx = spinePts[sj].x + offset;
+        var sy = spinePts[sj].y;
+        if (sj === 0) targetCtx.moveTo(sx, sy); else targetCtx.lineTo(sx, sy);
+      }
+      targetCtx.stroke();
+
+      // Strand 2: Magenta Ribbon
+      targetCtx.strokeStyle = "rgba(217, 70, 239, " + (renderAlpha * 0.96).toFixed(2) + ")";
+      targetCtx.lineWidth = strandWidth;
+      targetCtx.beginPath();
+      for (var sj = 0; sj < K; sj++) {
+        var offset = -Math.sin(t - sj * 0.75) * waveAmp;
+        var sx = spinePts[sj].x + offset;
+        var sy = spinePts[sj].y;
+        if (sj === 0) targetCtx.moveTo(sx, sy); else targetCtx.lineTo(sx, sy);
+      }
+      targetCtx.stroke();
+
+      // B. Glowing Cyan Droplet Head
+      targetCtx.beginPath();
+      targetCtx.arc(px0, py0, headR * 1.35, 0, Math.PI * 2);
+      targetCtx.fillStyle = "rgba(34, 211, 238, " + (renderAlpha * 0.32).toFixed(2) + ")";
+      targetCtx.fill();
+
+      targetCtx.beginPath();
+      targetCtx.arc(px0, py0, headR, 0, Math.PI * 2);
+      targetCtx.fillStyle = "hsla(188, 98%, 74%, " + renderAlpha.toFixed(2) + ")";
+      targetCtx.fill();
+
+      // Searing White Nucleus
+      var cosH = Math.cos(heading);
+      var sinH = Math.sin(heading);
+      targetCtx.beginPath();
+      targetCtx.arc(px0 + cosH * (headR * 0.22), py0 + sinH * (headR * 0.22), headR * 0.44, 0, Math.PI * 2);
+      targetCtx.fillStyle = "rgba(255, 255, 255, " + (renderAlpha * 0.98).toFixed(2) + ")";
+      targetCtx.fill();
+
+      // C. Bi-Chromatic Cyan & Magenta 3D Orbitals
+      var orbBaseR = headR * 2.85;
+      var spinAngle = now * 0.0032 + pulsePhase;
+      var ringAlpha = renderAlpha * 0.85;
+
+      // Cyan Ring
+      targetCtx.beginPath();
+      targetCtx.arc(px0, py0, orbBaseR * 0.85, 0, Math.PI * 2);
+      targetCtx.strokeStyle = "rgba(34, 211, 238, " + (ringAlpha * 0.40).toFixed(2) + ")";
+      targetCtx.lineWidth = 1.25;
+      targetCtx.stroke();
+
+      // Magenta Precessing Ellipse
+      var worldSpin = heading + spinAngle;
+      targetCtx.beginPath();
+      targetCtx.ellipse(px0, py0, orbBaseR * 1.35, orbBaseR * 0.75, worldSpin, 0, Math.PI * 2);
+      targetCtx.strokeStyle = "rgba(217, 70, 239, " + (ringAlpha * 0.38).toFixed(2) + ")";
+      targetCtx.lineWidth = 1.15;
+      targetCtx.stroke();
+
+      // Orbiting Nucleotide Spark Node
+      var qNodeX = px0 + Math.cos(worldSpin) * (orbBaseR * 1.35);
+      var qNodeY = py0 + Math.sin(worldSpin) * (orbBaseR * 1.35);
+      targetCtx.beginPath();
+      targetCtx.arc(qNodeX, qNodeY, 1.8, 0, Math.PI * 2);
+      targetCtx.fillStyle = "rgba(165, 243, 252, " + (ringAlpha * 0.96).toFixed(2) + ")";
+      targetCtx.fill();
+    },
+
+    // 6. Quantum Meteor Extra Big (Tier 3) Particle
+    drawTier3MeteorParticle(targetCtx, p, now) {
+      var tier = 3;
+      var headR = p.headR || 24.0;
+      var px0 = p.x;
+      var py0 = p.y;
+      var heading = p.heading || Math.PI / 2;
+      var pulsePhase = p.pulsePhase || 0;
+      var renderAlpha = 0.95;
+      var spinePts = p.spine;
+      var K = spinePts.length;
+
+      // A. Solar Prominence Ionization Smoke Puff
+      var puffR = headR * 1.55;
+      var smokeAlpha = renderAlpha * 0.28;
+      var smokeGrad = targetCtx.createRadialGradient(spinePts[K - 1].x, spinePts[K - 1].y, puffR * 0.2, spinePts[K - 1].x, spinePts[K - 1].y, puffR);
+      smokeGrad.addColorStop(0.0, "rgba(80, 50, 40, " + smokeAlpha.toFixed(2) + ")");
+      smokeGrad.addColorStop(0.5, "rgba(50, 30, 25, " + (smokeAlpha * 0.5).toFixed(2) + ")");
+      smokeGrad.addColorStop(1.0, "rgba(30, 20, 20, 0.0)");
+      targetCtx.fillStyle = smokeGrad;
+      targetCtx.beginPath();
+      targetCtx.arc(spinePts[K - 1].x, spinePts[K - 1].y, puffR, 0, Math.PI * 2);
+      targetCtx.fill();
+
+      // B. Real Fire Inner Core Convective Flame Tongue
+      var flameEndIdx = Math.min(K - 1, Math.max(2, (K * 0.75) | 0));
+      var innerFlameGrad = targetCtx.createLinearGradient(spinePts[flameEndIdx].x, spinePts[flameEndIdx].y, px0, py0);
+      innerFlameGrad.addColorStop(0.0, "rgba(220, 38, 38, 0.0)");
+      innerFlameGrad.addColorStop(0.35, "rgba(249, 115, 22, 0.75)");
+      innerFlameGrad.addColorStop(0.70, "rgba(254, 240, 138, 0.95)");
+      innerFlameGrad.addColorStop(1.0, "rgba(255, 255, 255, 1.0)");
+      targetCtx.strokeStyle = innerFlameGrad;
+      targetCtx.lineWidth = Math.max(1.4, headR * 0.62);
+      targetCtx.lineCap = "round";
+      targetCtx.beginPath();
+      targetCtx.moveTo(px0, py0);
+      for (var sj = 1; sj <= flameEndIdx; sj++) {
+        targetCtx.lineTo(spinePts[sj].x, spinePts[sj].y);
+      }
+      targetCtx.stroke();
+
+      // C. Molten Asteroid Rock Body (32-point procedural craggy contour)
+      var rockR = headR * 1.25;
+      var SAMPLES = 32;
+      var dTheta = (Math.PI * 2) / SAMPLES;
+      targetCtx.save();
+      targetCtx.beginPath();
+      for (var s = 0; s < SAMPLES; s++) {
+        var th = s * dTheta;
+        var rVar = 1.0 + Math.sin(th * 2 + now * 0.002) * 0.14 + Math.cos(th * 3) * 0.09;
+        var rx = px0 + Math.cos(th) * (rockR * rVar);
+        var ry = py0 + Math.sin(th) * (rockR * rVar);
+        if (s === 0) targetCtx.moveTo(rx, ry); else targetCtx.lineTo(rx, ry);
+      }
+      targetCtx.closePath();
+      targetCtx.clip();
+
+      // 3D Directional Molten Basalt Lighting
+      var bodyGrad = targetCtx.createRadialGradient(px0 - rockR * 0.4, py0 - rockR * 0.5, rockR * 0.1, px0, py0, rockR * 1.3);
+      bodyGrad.addColorStop(0.0, "#5c4537");
+      bodyGrad.addColorStop(0.35, "#3d2b20");
+      bodyGrad.addColorStop(0.70, "#21140e");
+      bodyGrad.addColorStop(1.0, "#050302");
+      targetCtx.fillStyle = bodyGrad;
+      targetCtx.fill();
+
+      // Magma Fissures with Glowing Core
+      targetCtx.strokeStyle = "rgba(254, 240, 138, 0.95)";
+      targetCtx.lineWidth = 1.2;
+      targetCtx.stroke();
+      targetCtx.restore(); // end clip
+
+      // D. Orbiting Molten Ember Plasma Ring
+      var orbBaseRM = rockR * 2.10;
+      var spinM = now * 0.0035 + pulsePhase;
+      targetCtx.beginPath();
+      targetCtx.ellipse(px0, py0, orbBaseRM * 1.2, orbBaseRM * 0.7, heading + spinM, 0, Math.PI * 2);
+      targetCtx.strokeStyle = "rgba(251, 146, 60, " + (renderAlpha * 0.44).toFixed(2) + ")";
+      targetCtx.lineWidth = 1.35;
+      targetCtx.stroke();
 
       // Orbiting Ember Spark
-      const eNodeX = p.x + Math.cos(spinM) * (orbBaseRM * 1.2);
-      const eNodeY = p.y + Math.sin(spinM) * (orbBaseRM * 0.7);
-      ctx.beginPath();
-      ctx.arc(eNodeX, eNodeY, 2.2, 0, Math.PI * 2);
-      ctx.fillStyle = "rgba(255, 240, 138, 0.98)";
-      ctx.fill();
-
-      ctx.restore();
+      var eAng = heading + spinM;
+      targetCtx.beginPath();
+      targetCtx.arc(px0 + Math.cos(eAng) * (orbBaseRM * 1.2), py0 + Math.sin(eAng) * (orbBaseRM * 0.7), 2.2, 0, Math.PI * 2);
+      targetCtx.fillStyle = "rgba(255, 240, 138, " + (renderAlpha * 0.98).toFixed(2) + ")";
+      targetCtx.fill();
     }
   };
 
