@@ -2390,121 +2390,44 @@
       </div>
     </a>
 
-    <div class="topbar-actions" style="display:flex;align-items:center;gap:10px;">
-      <!-- SYSTEM DROPDOWN MENU WRAPPER -->
-      <div class="system-menu-wrapper" id="vaultSystemMenuWrapper" style="position:relative;">
-        <button type="button" class="btn-topbar-desktop btn-topbar-system" id="btnVaultSystemMenu" aria-haspopup="true" aria-expanded="false" title="System Menu &amp; Security Tools" style="display:inline-flex;align-items:center;gap:7px;padding:7px 15px;border-radius:999px;font-size:12px;font-weight:700;border:1px solid rgba(0,240,255,0.45);background:rgba(0,240,255,0.12);color:#38bdf8;cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);">
-          <svg class="cyber-topbar-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;">
-            <circle cx="12" cy="12" r="3"></circle>
-            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+    <div class="topbar-actions">
+      <!-- 24K Swiss Gold Quantum Pill Launcher -->
+      <button type="button" class="btn-topbar-desktop" id="btnTopbarLaunchApp" title="Open OrlandoVault in Dedicated Standalone Desktop App" aria-label="Open Main Web App">
+        <!-- Animated Kinetic Cyber Energy Border -->
+        <span class="btn-kinetic-aura" aria-hidden="true"></span>
+        <!-- Holographic Light Sweep Shimmer Beam -->
+        <span class="btn-holo-shimmer" aria-hidden="true"></span>
+        
+        <!-- Glowing Hyperdrive Quantum Portal Vector -->
+        <span class="desktop-btn-icon" id="topbarLaunchIcon">
+          <svg class="futuristic-portal-svg" viewBox="0 0 24 24" fill="none">
+            <defs>
+              <linearGradient id="portalHexGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#ffd700"/>
+                <stop offset="45%" stop-color="#00f0ff"/>
+                <stop offset="100%" stop-color="#f59e0b"/>
+              </linearGradient>
+              <linearGradient id="portalArrowGrad" x1="12" y1="5" x2="12" y2="19" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#ffffff"/>
+                <stop offset="50%" stop-color="#fef08a"/>
+                <stop offset="100%" stop-color="#d4af37"/>
+              </linearGradient>
+            </defs>
+            <polygon class="portal-hex-orbit" points="12 2.5 20.5 7.4 20.5 16.6 12 21.5 3.5 16.6 3.5 7.4 12 2.5" stroke="url(#portalHexGrad)" stroke-width="2" stroke-linejoin="round"/>
+            <circle class="portal-reactor-core" cx="12" cy="12" r="3.2" fill="#00f0ff"/>
+            <path class="portal-arrow" d="M12 7V17M12 17L8.5 13.5M12 17L15.5 13.5" stroke="url(#portalArrowGrad)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <line class="portal-base" x1="7" y1="19.5" x2="17" y2="19.5" stroke="#00f0ff" stroke-width="1.8" stroke-linecap="round"/>
           </svg>
-          <span>System</span>
-          <span id="firebaseVaultSyncDot" style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#10b981;box-shadow:0 0 6px #10b981;"></span>
-          <svg viewBox="0 0 24 24" width="8" height="8" fill="none"><path d="M6 9l6 6 6-6" stroke="rgba(255,255,255,0.7)" stroke-width="2.5" stroke-linecap="round"/></svg>
-        </button>
+        </span>
 
-        <!-- System Dropdown Menu Items -->
-        <div class="system-dropdown-menu" id="vaultSystemDropdown" role="menu" style="display:none;position:absolute;top:calc(100% + 8px);right:0;width:320px;background:#090a0f;border:1px solid rgba(0,240,255,0.35);border-radius:12px;box-shadow:0 20px 50px rgba(0,0,0,0.95),0 0 30px rgba(0,240,255,0.15);padding:8px;z-index:9999;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);">
-          <!-- 1. Open Main Web App -->
-          <button type="button" class="system-menu-item" id="btnTopbarLaunchApp" role="menuitem" style="width:100%;display:flex;align-items:center;gap:12px;padding:10px 12px;background:none;border:none;border-radius:8px;cursor:pointer;text-align:left;color:#fff;">
-            <div style="width:32px;height:32px;border-radius:8px;background:rgba(217,185,92,0.18);border:1px solid rgba(217,185,92,0.4);display:flex;align-items:center;justify-content:center;color:#fde047;">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-            </div>
-            <div style="flex:1;">
-              <div style="font-size:13px;font-weight:700;color:#fef08a;" id="topbarLaunchLabel">Open Main Web App</div>
-              <div style="font-size:11px;color:#94a3b8;">Launch standalone desktop window</div>
-            </div>
-          </button>
+        <span class="desktop-btn-label" id="topbarLaunchLabel">OPEN MAIN WEB APP</span>
 
-          <!-- 2. Audio FX -->
-          <button type="button" class="system-menu-item" id="btnToggleSound" role="menuitem" style="width:100%;display:flex;align-items:center;gap:12px;padding:10px 12px;background:none;border:none;border-radius:8px;cursor:pointer;text-align:left;color:#fff;">
-            <div style="width:32px;height:32px;border-radius:8px;background:rgba(56,189,248,0.18);border:1px solid rgba(56,189,248,0.4);display:flex;align-items:center;justify-content:center;color:#38bdf8;">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-            </div>
-            <div style="flex:1;">
-              <div style="font-size:13px;font-weight:700;color:#e2e8f0;" id="soundLabel">Audio FX: ON</div>
-              <div style="font-size:11px;color:#94a3b8;">Cybernetic interface audio feedback</div>
-            </div>
-          </button>
-
-          <!-- 3. Password Generator -->
-          <button type="button" class="system-menu-item" id="btnOpenGenerator" role="menuitem" style="width:100%;display:flex;align-items:center;gap:12px;padding:10px 12px;background:none;border:none;border-radius:8px;cursor:pointer;text-align:left;color:#fff;">
-            <div style="width:32px;height:32px;border-radius:8px;background:rgba(245,158,11,0.18);border:1px solid rgba(245,158,11,0.4);display:flex;align-items:center;justify-content:center;color:#fbbf24;">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-6 6l-3-3m5 5l-2 2m-6 6l-3-3m5 5l-2 2m-7 1l4-4 4 4-4 4-4-4z"/><circle cx="7.5" cy="7.5" r="3.5"/></svg>
-            </div>
-            <div style="flex:1;">
-              <div style="font-size:13px;font-weight:700;color:#e2e8f0;">Password Generator</div>
-              <div style="font-size:11px;color:#94a3b8;">Generate quantum uncrackable credentials</div>
-            </div>
-          </button>
-
-          <!-- 4. Security Health Audit -->
-          <button type="button" class="system-menu-item" id="btnOpenAudit" role="menuitem" style="width:100%;display:flex;align-items:center;gap:12px;padding:10px 12px;background:none;border:none;border-radius:8px;cursor:pointer;text-align:left;color:#fff;">
-            <div style="width:32px;height:32px;border-radius:8px;background:rgba(16,185,129,0.18);border:1px solid rgba(16,185,129,0.4);display:flex;align-items:center;justify-content:center;color:#34d399;">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="11" r="3"/></svg>
-            </div>
-            <div style="flex:1;">
-              <div style="font-size:13px;font-weight:700;color:#e2e8f0;">Security Health</div>
-              <div style="font-size:11px;color:#94a3b8;">Weak &amp; reused password watchtower</div>
-            </div>
-          </button>
-
-          <!-- 5. Backup & Mobile Sync (Holographic QR) -->
-          <button type="button" class="system-menu-item" id="btnOpenBackup" role="menuitem" style="width:100%;display:flex;align-items:center;gap:12px;padding:10px 12px;background:none;border:none;border-radius:8px;cursor:pointer;text-align:left;color:#fff;">
-            <div style="width:32px;height:32px;border-radius:8px;background:rgba(6,182,212,0.18);border:1px solid rgba(6,182,212,0.4);display:flex;align-items:center;justify-content:center;color:#22d3ee;">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-            </div>
-            <div style="flex:1;">
-              <div style="font-size:13px;font-weight:700;color:#e2e8f0;">Backup &amp; Sync</div>
-              <div style="font-size:11px;color:#94a3b8;">Encrypted mobile QR &amp; live bridge</div>
-            </div>
-          </button>
-
-          <!-- 6. Audit Log -->
-          <button type="button" class="system-menu-item" id="btnOpenHistory" role="menuitem" style="width:100%;display:flex;align-items:center;gap:12px;padding:10px 12px;background:none;border:none;border-radius:8px;cursor:pointer;text-align:left;color:#fff;">
-            <div style="width:32px;height:32px;border-radius:8px;background:rgba(168,85,247,0.18);border:1px solid rgba(168,85,247,0.4);display:flex;align-items:center;justify-content:center;color:#c084fc;">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            </div>
-            <div style="flex:1;">
-              <div style="font-size:13px;font-weight:700;color:#e2e8f0;">Audit Log</div>
-              <div style="font-size:11px;color:#94a3b8;">Jarvis access &amp; cryptographic log</div>
-            </div>
-          </button>
-
-          <!-- 7. Google Sheets Live Sync -->
-          <button type="button" class="system-menu-item" id="openSheetSyncBtn" role="menuitem" style="width:100%;display:flex;align-items:center;gap:12px;padding:10px 12px;background:none;border:none;border-radius:8px;cursor:pointer;text-align:left;color:#fff;">
-            <div style="width:32px;height:32px;border-radius:8px;background:rgba(16,185,129,0.18);border:1px solid rgba(16,185,129,0.4);display:flex;align-items:center;justify-content:center;color:#34d399;">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><line x1="4" y1="10" x2="20" y2="10"/><line x1="10" y1="4" x2="10" y2="20"/></svg>
-            </div>
-            <div style="flex:1;">
-              <div style="font-size:13px;font-weight:700;color:#e2e8f0;">Google Sheets Live Sync</div>
-              <div style="font-size:11px;color:#94a3b8;">Solution Passwords &amp; Gmail Vault</div>
-            </div>
-          </button>
-
-          <!-- 8. Export Encrypted JSON Backup -->
-          <button type="button" class="system-menu-item" id="exportBackupDistBtn" role="menuitem" style="width:100%;display:flex;align-items:center;gap:12px;padding:10px 12px;background:none;border:none;border-radius:8px;cursor:pointer;text-align:left;color:#fff;">
-            <div style="width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;color:#fff;">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            </div>
-            <div style="flex:1;">
-              <div style="font-size:13px;font-weight:700;color:#e2e8f0;">Export Encrypted Backup</div>
-              <div style="font-size:11px;color:#94a3b8;">Download offline JSON credential file</div>
-            </div>
-          </button>
-
-          <!-- 9. Google Cloud Firebase Sync -->
-          <button type="button" class="system-menu-item" id="btnFirebaseVaultSync" role="menuitem" style="width:100%;display:flex;align-items:center;gap:12px;padding:10px 12px;background:none;border:none;border-radius:8px;cursor:pointer;text-align:left;color:#fff;">
-            <div style="width:32px;height:32px;border-radius:8px;background:rgba(16,185,129,0.18);border:1px solid rgba(16,185,129,0.4);display:flex;align-items:center;justify-content:center;color:#34d399;">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
-            </div>
-            <div style="flex:1;">
-              <div style="font-size:13px;font-weight:700;color:#e2e8f0;"><span id="firebaseVaultSyncText">Cloud Synced</span></div>
-              <div style="font-size:11px;color:#94a3b8;">Google Cloud Firebase Singapore sync</div>
-            </div>
-          </button>
-        </div>
-      </div>
+        <!-- Live Telemetry Pulse Beacon -->
+        <span class="btn-telemetry-beacon" aria-hidden="true" title="Standalone Engine Ready">
+          <span class="beacon-ping"></span>
+          <span class="beacon-core"></span>
+        </span>
+      </button>
     </div>
   </header>
 
@@ -2569,28 +2492,54 @@
     </section>
 
     
-        <!-- DISTRIBUTION & CROSS-DEVICE LIVE SYNC SUITE (4-CARD COMMAND DOCK) -->
-    <section class="dist-drawer-wrapper" id="distDrawerWrapper" style="margin-top:18px;background:rgba(8,12,22,0.88);border:1px solid rgba(0,240,255,0.22);border-radius:16px;padding:14px 18px;">
-      <div id="vaultDistHeader" role="button" tabindex="0" title="Click header anywhere to toggle App Distribution & Live Sync Suite" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;gap:12px;">
-        <div style="display:flex;align-items:center;gap:12px;">
-          <img src="assets/vault-icon-128.png" alt="OV" style="width:30px;height:30px;border-radius:8px;border:1px solid rgba(0,240,255,0.45);">
-          <div>
-            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-              <strong style="color:#f8fafc;font-size:13.5px;letter-spacing:0.3px;">App Distribution &amp; Live Sync Suite</strong>
-              <span style="font-size:10px;font-weight:800;padding:2px 8px;border-radius:999px;background:rgba(16,185,129,0.16);color:#34d399;border:1px solid rgba(16,185,129,0.4);">● PWA READY</span>
-              <span id="vaultDistHint" style="font-size:11.5px;color:#94a3b8;">· 4 Command Tools · Tap to Minimize</span>
+    <!-- DISTRIBUTION & CROSS-DEVICE LIVE SYNC SUITE -->
+    <section class="dist-drawer-wrapper" id="distDrawerWrapper">
+      <div class="dist-grid">
+        <!-- Card 1: Holographic QR & Phone Scanner (1:1 with OrlandoRecharge) -->
+        <div class="dist-card dist-card-holo" id="cardHoloQr" style="cursor:pointer;" title="Click to Open Holographic QR Scanner">
+          <div class="dist-card-top">
+            <div class="dist-icon dist-icon-cyan">
+              <svg class="modern-icon modern-icon-cyan" viewBox="0 0 24 24" style="width:20px;height:20px;stroke:#00f0ff;">
+                <rect x="3" y="3" width="7" height="7" rx="1.5" stroke-width="1.8"></rect>
+                <rect x="14" y="3" width="7" height="7" rx="1.5" stroke-width="1.8"></rect>
+                <rect x="14" y="14" width="7" height="7" rx="1.5" stroke-width="1.8"></rect>
+                <rect x="3" y="14" width="7" height="7" rx="1.5" stroke-width="1.8"></rect>
+                <circle cx="6.5" cy="6.5" r="1.2" fill="#00f0ff"></circle>
+                <circle cx="17.5" cy="6.5" r="1.2" fill="#00f0ff"></circle>
+                <circle cx="6.5" cy="17.5" r="1.2" fill="#00f0ff"></circle>
+                <circle cx="17.5" cy="17.5" r="1.2" fill="#00f0ff"></circle>
+              </svg>
             </div>
-            <div style="font-size:11px;color:#64748b;margin-top:2px;">Installed, offline-cached, zero-warning standalone window &amp; Google Cloud Firebase sync</div>
+            <div class="dist-card-meta">
+              <div class="dist-name">Holographic QR</div>
+              <div class="dist-desc">Instant phone scanner &amp; device sync</div>
+            </div>
+          </div>
+          <div class="dist-btn-stack">
+            <button type="button" class="dist-btn dist-btn-holo" id="openQrBtn" title="Launch Interactive Holographic QR Suite">
+              <svg class="modern-icon modern-icon-cyan" viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;">
+                <rect x="3" y="3" width="7" height="7" rx="1.2" stroke-width="1.8"></rect>
+                <rect x="14" y="3" width="7" height="7" rx="1.2" stroke-width="1.8"></rect>
+                <rect x="14" y="14" width="7" height="7" rx="1.2" stroke-width="1.8"></rect>
+                <rect x="3" y="14" width="7" height="7" rx="1.2" stroke-width="1.8"></rect>
+              </svg>
+              <span>Open Phone QR</span>
+            </button>
+            <button type="button" class="dist-btn" id="shareAppBtn" title="Copy OrlandoVault Web Link">
+              <svg class="modern-icon" viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;">
+                <circle cx="18" cy="5" r="3" stroke-width="1.8"></circle>
+                <circle cx="6" cy="12" r="3" stroke-width="1.8"></circle>
+                <circle cx="18" cy="19" r="3" stroke-width="1.8"></circle>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" stroke-width="1.8"></line>
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" stroke-width="1.8"></line>
+              </svg>
+              <span>Share / Copy Link</span>
+            </button>
           </div>
         </div>
-        <button type="button" class="dist-btn" id="vaultDistToggleBtn" style="width:auto;padding:5px 12px;border-radius:999px;font-size:11.5px;">
-          <span id="vaultDistMinIcon">▾</span> <span id="vaultDistMinText">Minimize</span>
-        </button>
-      </div>
 
-      <div class="dist-grid" id="vaultDistGrid" style="margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:12px;">
-        <!-- Card: Google Sheets & Firebase Cloud Sync Engine -->
-        <div class="dist-card" id="cardSheetSync" title="Sync live with Google Sheets & Firebase Cloud">
+        <!-- Card 2: Google Sheets Live Sync Engine -->
+        <div class="dist-card" id="cardSheetSync" title="Sync live with your Google Sheets passwords">
           <div class="dist-card-top">
             <div class="dist-icon dist-icon-emerald">
               <svg viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="1.8" style="width:20px;height:20px;">
@@ -2600,37 +2549,19 @@
               </svg>
             </div>
             <div class="dist-card-meta">
-              <div class="dist-name">Google Sheets &amp; Cloud Sync</div>
-              <div class="dist-desc" id="sheetSyncCardDesc">Real-time sync with Sheets &amp; Firebase</div>
+              <div class="dist-name">Google Sheets Live Sync</div>
+              <div class="dist-desc" id="sheetSyncCardDesc">Real-time sync with Google Sheets</div>
             </div>
           </div>
           <div class="dist-btn-stack">
             <button type="button" class="dist-btn dist-btn-emerald" id="openSheetSyncBtn" title="Open Google Sheets Live Sync Suite">
-              <span>📊 Sync with Google Sheets</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:14px;height:14px;"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+              <span>Sync with Google Sheets</span>
             </button>
             <button type="button" class="dist-btn" id="exportBackupDistBtn" title="Export complete encrypted JSON backup">
-              <span>⬇ Export Vault Backup</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:14px;height:14px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              <span>Export Vault Backup</span>
             </button>
-          </div>
-        </div>
-
-        <!-- Card 4: Clean Blank Edition -->
-        <div class="dist-card" id="distCardBlank">
-          <div class="dist-card-top">
-            <div class="dist-icon dist-icon-cyan">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="1.8" style="width:20px;height:20px;">
-                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-              </svg>
-            </div>
-            <div class="dist-card-meta">
-              <div class="dist-name">Clean Blank Edition</div>
-              <div class="dist-desc">Fresh zero-credential vault workspace</div>
-            </div>
-          </div>
-          <div class="dist-btn-stack">
-            <a class="dist-btn" href="?edition=blank" style="text-decoration:none;text-align:center;">
-              <span>✨ Launch Blank Edition</span>
-            </a>
           </div>
         </div>
       </div>
@@ -2686,6 +2617,29 @@
   <div class="modal-backdrop" id="qrModal" role="dialog" aria-modal="true" aria-label="Holographic QR Command Suite">
     <div class="qr-studio-modal unified-command-suite" id="vaultHoloSuite" style="--qr-accent:#d9b95c; --qr-glow:rgba(217,185,92,0.4);">
       <!-- Dynamically hydrated by renderVaultHoloSuite() -->
+    </div>
+  </div><span class="qr-corner tl"></span>
+        <span class="qr-corner tr"></span>
+        <span class="qr-corner bl"></span>
+        <span class="qr-corner br"></span>
+        <div class="qr-laser-beam"></div>
+
+        <!-- 100% High-Contrast Pure White Quiet-Zone Plate -->
+        <div class="qr-img-wrapper" id="qrImgWrapper" style="width:300px; height:300px;">
+          <div id="vaultQrMount" style="width:100%;height:100%;"></div>
+        </div>
+      </div>
+
+      <div class="qr-actions-row">
+        <button type="button" class="dist-btn primary" id="qrCopyLinkBtn" style="flex:2;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          <span>Copy App Link</span>
+        </button>
+        <button type="button" class="dist-btn" id="qrShareBtn" style="flex:1;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+          <span>Share</span>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -2760,7 +2714,7 @@
     let deferredInstallPrompt = null;
     let copyCount = 0;
 
-    const LS_VAULT_KEY = 'orlandovault_credentials_v4';
+    const LS_VAULT_KEY = 'orlandovault_credentials_v5';
     const LS_AUDIT_KEY = 'orlandovault_audit_history_v1';
     const LS_COPY_KEY = 'orlandovault_copy_count_v1';
 
@@ -2781,10 +2735,10 @@
     function initData() {
       try {
         const stored = localStorage.getItem(LS_VAULT_KEY);
-        if (stored && stored !== '[]' && JSON.parse(stored).length > 0) {
+        if (stored) {
           vaultItems = JSON.parse(stored);
         } else {
-          vaultItems = JSON.parse(JSON.stringify(SEED_VAULT));
+          vaultItems = SEED_VAULT;
           localStorage.setItem(LS_VAULT_KEY, JSON.stringify(vaultItems));
         }
 
@@ -2793,7 +2747,7 @@
 
         copyCount = parseInt(localStorage.getItem(LS_COPY_KEY) || '0', 10);
       } catch (err) {
-        vaultItems = JSON.parse(JSON.stringify(SEED_VAULT));
+        vaultItems = SEED_VAULT;
       }
     }
 
@@ -2846,7 +2800,494 @@
 
     async function handleLaunchStandaloneApp() {
       if (isStandaloneMode()) {
-        showToast('✨ OrlandoVault is already running as Main Web App!', '🛡️');
+        showToast('✨ OrlandoVault is already running as Main Web App!');
+        return;
+      }
+
+      if (deferredInstallPrompt) {
+        deferredInstallPrompt.prompt();
+        try {
+          const choice = await deferredInstallPrompt.userChoice;
+          if (choice && choice.outcome === 'accepted') {
+            deferredInstallPrompt = null;
+            updateLaunchButtonState();
+            showToast('🚀 OrlandoVault PWA Installed! Launching...');
+            return;
+          }
+        } catch (e) {}
+      }
+
+      const targetUrl = 'https://orlandopasion000.github.io/orlandovault/?standalone=true';
+      const windowFeatures = 'popup=yes,menubar=no,toolbar=no,location=no,status=no,personalbar=no,scrollbars=yes,resizable=yes,width=1280,height=850,left=100,top=60';
+      const appWin = window.open(targetUrl, 'OrlandoVaultStandaloneWindow', windowFeatures);
+
+      if (appWin) {
+        showToast('🚀 Launching OrlandoVault Desktop Window...');
+        try { appWin.focus(); } catch (err) {}
+      } else {
+        window.location.href = targetUrl;
+      }
+    }
+
+    let toastTimeout = null;
+    function showToast(message) {
+      const toast = document.getElementById('hudToast');
+      const text = document.getElementById('toastMessage');
+      if (!toast || !text) return;
+      text.textContent = message;
+      toast.classList.add('show');
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3500);
+    }
+
+    async function copyToClipboard(text, accountTitle, btnElement) {
+      if (!text) {
+        showToast('⚠️ No password stored for this account');
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(text);
+        copyCount++;
+        localStorage.setItem(LS_COPY_KEY, copyCount.toString());
+        renderMetrics();
+        logAudit('COPIED_PASSWORD', 'Copied password for: ' + accountTitle);
+
+        if (btnElement) {
+          const originalText = btnElement.innerHTML;
+          btnElement.classList.add('copied');
+          btnElement.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> COPIED!';
+          setTimeout(() => {
+            btnElement.classList.remove('copied');
+            btnElement.innerHTML = originalText;
+          }, 2000);
+        }
+
+        playJarvisSound("copy");
+        startClipboardAutoWipe(text, accountTitle, btnElement);
+        showToast('✨ Copied! Auto-wiping clipboard in 20s');
+      } catch (err) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast('✨ Copied password for ' + accountTitle + '!');
+      }
+    }
+
+    async function copyUsername(text, btnElement) {
+      if (!text) return;
+      try {
+        await navigator.clipboard.writeText(text);
+        logAudit('COPIED_USERNAME', 'Copied username: ' + text);
+        showToast('Copied username: ' + text);
+      } catch (e) {}
+    }
+
+    function renderVault() {
+      const container = document.getElementById('vaultGridContainer');
+      if (!container) return;
+
+      const q = searchQuery.toLowerCase().trim();
+      const filtered = vaultItems.filter(item => {
+        if (activeCategory === 'Critical' && (item.importance || '').toLowerCase() !== 'critical') {
+          return false;
+        } else if (activeCategory !== 'all' && activeCategory !== 'Critical' && item.category !== activeCategory) {
+          return false;
+        }
+
+        if (!q) return true;
+        const searchStr = (item.title + ' ' + item.username + ' ' + (item.notes || '') + ' ' + item.category + ' ' + (item.importance || '')).toLowerCase();
+        return searchStr.includes(q);
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="empty-state">No credentials found matching "' + q + '". Jarvis is standing by.</div>';
+        return;
+      }
+
+      container.innerHTML = filtered.map(item => {
+        const isCritical = (item.importance || '').toLowerCase() === 'critical';
+        const maskedPwd = '•'.repeat(Math.min(12, (item.password || '').length || 10));
+        const safeTitle = escapeHtml(item.title);
+        const safeUser = escapeHtml(item.username);
+        const safeNotes = escapeHtml(item.notes || 'Secure credentials managed by Jarvis.');
+        const safePwd = escapeHtml(item.password);
+
+        let catClass = 'cat-solutions';
+        if (item.category === 'DepEd') catClass = 'cat-deped';
+        else if (item.category === 'Microsoft') catClass = 'cat-microsoft';
+        else if (item.category === 'AI & Dev') catClass = 'cat-ai';
+        else if (item.category === 'Gmail') catClass = 'cat-gmail';
+
+        // Calculate rotation recency
+        const updatedDate = item.updated_at ? new Date(item.updated_at) : new Date();
+        const daysAgo = Math.floor((Date.now() - updatedDate.getTime()) / (1000 * 60 * 60 * 24));
+        const rotationLabel = daysAgo <= 0 ? 'Today' : `${daysAgo}d ago`;
+
+        return `
+          <article class="vault-card ${catClass}" id="card-${item.id}">
+            <div class="card-header">
+              <div class="card-title-group">
+                <span class="card-badge ${isCritical ? 'critical' : ''}">${isCritical ? '⚡ CRITICAL ACCOUNT' : item.badge || item.category}</span>
+                <h3 class="card-account-title">${safeTitle}</h3>
+              </div>
+            </div>
+
+            <div class="card-username-row">
+              <span title="${safeUser}">${safeUser}</span>
+              <button type="button" class="btn-copy-user" onclick="copyUsername('${safeUser}', this)" title="Copy Username / Email">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                Copy
+              </button>
+            </div>
+
+            <div class="password-quantum-deck">
+              <div class="pwd-display-box masked" id="pwdBox-${item.id}" data-raw="${safePwd}" data-masked="${maskedPwd}">
+                ${maskedPwd}
+              </div>
+              <div class="pwd-action-cluster">
+                <button type="button" class="btn-pwd-action" onclick="toggleReveal('${item.id}')" title="Toggle Show/Hide Password">
+                  <svg width="15" height="15" id="eyeIcon-${item.id}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+                <button type="button" class="btn-copy-instant" onclick="copyToClipboard('${safePwd}', '${safeTitle}', this)" title="1-Click Copy Password">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  COPY
+                </button>
+              </div>
+            </div>
+
+            <div class="card-notes">
+              ${safeNotes}
+            </div>
+
+            <div class="card-footer">
+              <span>STATUS: ${item.status || 'SECURED'}</span>
+              <button type="button" class="btn-rotate-mark" onclick="markPasswordRotated('${item.id}')" title="Click to update password rotation date">
+                ↺ Rotated ${rotationLabel}
+              </button>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function toggleReveal(id) {
+      const box = document.getElementById('pwdBox-' + id);
+      const icon = document.getElementById('eyeIcon-' + id);
+      if (!box) return;
+
+      const isMasked = box.classList.contains('masked');
+      if (isMasked) {
+        box.classList.remove('masked');
+        box.textContent = box.getAttribute('data-raw');
+        if (icon) {
+          icon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
+        }
+        playJarvisSound("reveal");
+        logAudit('REVEALED_PASSWORD', 'Revealed password for card ' + id);
+      } else {
+        box.classList.add('masked');
+        box.textContent = box.getAttribute('data-masked');
+        if (icon) {
+          icon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+        }
+      }
+    }
+
+    function renderMetrics() {
+      const accountsEl = document.getElementById('totalVaultAccounts');
+      const copiesEl = document.getElementById('totalCopiesMade');
+      if (accountsEl) accountsEl.textContent = vaultItems.length;
+      if (copiesEl) copiesEl.textContent = copyCount;
+    }
+
+    function renderHistory() {
+      const container = document.getElementById('historyTimelineContainer');
+      if (!container) return;
+      if (auditHistory.length === 0) {
+        container.innerHTML = '<div style="color:var(--text-dim);text-align:center;padding:30px;">No audit actions recorded yet. All activity is logged here.</div>';
+        return;
+      }
+
+      container.innerHTML = auditHistory.map(item => `
+        <div class="history-timeline-item">
+          <div class="history-time-meta">
+            <span>${item.action}</span>
+            <span>${item.dateFormatted} · ${item.timeFormatted}</span>
+          </div>
+          <div class="history-event-desc">${escapeHtml(item.details)}</div>
+        </div>
+      `).join('');
+    }
+
+    function updateJarvisClock() {
+      const clockEl = document.getElementById('jarvisClock');
+      if (!clockEl) return;
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      const dateStr = now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+      clockEl.textContent = `JARVIS HUD CLOCK: ${dateStr.toUpperCase()} · ${timeStr}`;
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initData();
+      renderVault();
+      renderMetrics();
+      updateLaunchButtonState();
+      updateJarvisClock();
+      setInterval(updateJarvisClock, 1000);
+
+      const searchInput = document.getElementById('vaultSearchInput');
+      const clearBtn = document.getElementById('searchClearBtn');
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          searchQuery = e.target.value;
+          if (clearBtn) clearBtn.style.display = searchQuery ? 'block' : 'none';
+          renderVault();
+        });
+      }
+
+      if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+          if (searchInput) {
+            searchInput.value = '';
+            searchQuery = '';
+            clearBtn.style.display = 'none';
+            searchInput.focus();
+            renderVault();
+          }
+        });
+      }
+
+      const pillContainer = document.getElementById('filterPillsRow');
+      if (pillContainer) {
+        pillContainer.addEventListener('click', (e) => {
+          const pill = e.target.closest('.filter-pill');
+          if (!pill) return;
+          pillContainer.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+          pill.classList.add('active');
+          activeCategory = pill.getAttribute('data-cat');
+          renderVault();
+        });
+      }
+
+      const launchBtn = document.getElementById('btnTopbarLaunchApp');
+      if (launchBtn) {
+        launchBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          handleLaunchStandaloneApp();
+        });
+      }
+
+      const btnOpenHistory = document.getElementById('btnOpenHistory');
+      const historyModal = document.getElementById('historyModal');
+      const btnCloseHistory = document.getElementById('btnCloseHistory');
+
+      if (btnOpenHistory && historyModal) {
+        btnOpenHistory.addEventListener('click', () => {
+          renderHistory();
+          historyModal.classList.add('active');
+        });
+      }
+
+      if (btnCloseHistory && historyModal) {
+        btnCloseHistory.addEventListener('click', () => {
+          historyModal.classList.remove('active');
+        });
+      }
+
+      if (historyModal) {
+        historyModal.addEventListener('click', (e) => {
+          if (e.target === historyModal) historyModal.classList.remove('active');
+        });
+      }
+
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('vault-sw.js', { scope: '/orlandovault/' }).catch(err => {
+          console.warn('Vault SW registration error:', err);
+        });
+      }
+
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredInstallPrompt = e;
+        updateLaunchButtonState();
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === '/' && document.activeElement !== searchInput) {
+          e.preventDefault();
+          if (searchInput) {
+            searchInput.focus();
+            searchInput.select();
+          }
+        } else if (e.key === 'Escape') {
+          if (historyModal && historyModal.classList.contains('active')) {
+            historyModal.classList.remove('active');
+          } else if (searchInput && searchInput.value) {
+            searchInput.value = '';
+            searchQuery = '';
+            if (clearBtn) clearBtn.style.display = 'none';
+            renderVault();
+          }
+        }
+      });
+    });
+  
+    /* ==========================================================================
+       TOP-TIER 1: KINETIC ARC REACTOR AMBIENT PARTICLE FIELD
+       ========================================================================== */
+    function initVaultParticles() {
+      const canvas = document.getElementById('vaultParticleCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let width = canvas.width = window.innerWidth;
+      let height = canvas.height = window.innerHeight;
+
+      window.addEventListener('resize', () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      });
+
+      const particleCount = 45;
+      const particles = [];
+      for (let i = 0; i < particleCount; i++) {
+        particles.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          radius: Math.random() * 1.8 + 0.6,
+          vx: (Math.random() - 0.5) * 0.35,
+          vy: (Math.random() - 0.5) * 0.35,
+          color: i % 2 === 0 ? 'rgba(0, 240, 255, ' : 'rgba(217, 185, 92, ',
+          alpha: Math.random() * 0.6 + 0.2
+        });
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, width, height);
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.x < 0) p.x = width;
+          if (p.x > width) p.x = 0;
+          if (p.y < 0) p.y = height;
+          if (p.y > height) p.y = 0;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fillStyle = p.color + p.alpha + ')';
+          ctx.shadowBlur = 8;
+          ctx.shadowColor = p.color + '0.8)';
+          ctx.fill();
+        });
+        requestAnimationFrame(draw);
+      }
+      draw();
+    }
+
+    /* ==========================================================================
+       TOP-TIER 3: HAPTIC WEB AUDIO SYNTHESIZER ENGINE
+       ========================================================================== */
+    let soundEnabled = true;
+    let audioCtx = null;
+
+    function playJarvisSound(type) {
+      if (!soundEnabled) return;
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        if (type === 'copy') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(880, now);
+          osc.frequency.exponentialRampToValueAtTime(1760, now + 0.15);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+          osc.start(now);
+          osc.stop(now + 0.22);
+        } else if (type === 'reveal') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(540, now);
+          osc.frequency.exponentialRampToValueAtTime(720, now + 0.08);
+          gain.gain.setValueAtTime(0.06, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+          osc.start(now);
+          osc.stop(now + 0.1);
+        } else if (type === 'click') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(600, now);
+          gain.gain.setValueAtTime(0.04, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+          osc.start(now);
+          osc.stop(now + 0.04);
+        }
+      } catch (e) {}
+    }
+
+    /* ==========================================================================
+       TOP-TIER 5: 1-TAP RESCHEDULE & ROTATION MARKER
+       ========================================================================== */
+    function markPasswordRotated(itemId) {
+      const item = vaultItems.find(x => x.id === itemId);
+      if (!item) return;
+      item.updated_at = new Date().toISOString();
+      try {
+        localStorage.setItem(LS_VAULT_KEY, JSON.stringify(vaultItems));
+      } catch(e){}
+      renderVault();
+      logAudit('PASSWORD_ROTATED', 'Marked rotation completed for: ' + item.title);
+      playJarvisSound('copy');
+      showToast('🛡️ Rotation timestamp updated for ' + item.title + '!');
+    }
+
+    /* ==========================================================================
+       STANDALONE PWA & APPLICATION WINDOW ENGINE
+       ========================================================================== */
+    function launchStandaloneAppWindow(targetUrl, windowTitle) {
+      var popupFeatures = "popup=yes,menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes,width=1380,height=880";
+      try {
+        var spawned = window.open(targetUrl, windowTitle, popupFeatures);
+        if (spawned && !spawned.closed) {
+          try { spawned.focus(); } catch(err){}
+          return true;
+        }
+      } catch(e){}
+      try {
+        var blankWin = window.open(targetUrl, "_blank");
+        if (blankWin) {
+          try { blankWin.focus(); } catch(err){}
+          return true;
+        }
+      } catch(e){}
+      window.location.href = targetUrl;
+      return false;
+    }
+
+    async function handleLaunchStandaloneApp() {
+      if (isStandaloneMode()) {
+        showToast('✨ OrlandoVault is currently running in Standalone App Mode!', '🛡️');
         return;
       }
 
@@ -2857,21 +3298,14 @@
           if (choice && choice.outcome === 'accepted') {
             deferredInstallPrompt = null;
             updateLaunchButtonState();
-            showToast('🎉 OrlandoVault PWA Installed! Launching...', '🚀');
+            showToast('🎉 OrlandoVault Windows App Installed! Launching...', '🚀');
             return;
           }
         } catch (err) {}
       }
 
-      var targetUrl = 'https://orlandopasion000.github.io/orlandovault/?standalone=true';
-      var windowFeatures = 'popup=yes,menubar=no,toolbar=no,location=no,status=no,personalbar=no,scrollbars=yes,resizable=yes,width=1280,height=860,left=100,top=60';
-      var appWin = window.open(targetUrl, 'OrlandoVaultStandaloneWindow', windowFeatures);
-      if (appWin) {
-        showToast('🚀 Opening OrlandoVault (Main Web App)...', '🛡️');
-        try { appWin.focus(); } catch (err) {}
-      } else {
-        window.location.href = targetUrl;
-      }
+      var appUrl = 'https://orlandopasion000.github.io/orlandovault/';
+      launchStandaloneAppWindow(appUrl, 'OrlandoVaultMainAppWindow');
     }
 
   
@@ -3442,38 +3876,23 @@
     }
 
     function bindVaultGlobalEvents() {
-
-      // System Menu Toggle
-      const btnVaultSystemMenu = document.getElementById('btnVaultSystemMenu');
-      const vaultSystemDropdown = document.getElementById('vaultSystemDropdown');
-
-      function toggleVaultSystemMenu(e) {
-        if (e) e.stopPropagation();
-        if (!vaultSystemDropdown) return;
-        const isOpen = vaultSystemDropdown.style.display === 'block';
-        vaultSystemDropdown.style.display = isOpen ? 'none' : 'block';
-        if (btnVaultSystemMenu) btnVaultSystemMenu.setAttribute('aria-expanded', String(!isOpen));
-      }
-
-      function closeVaultSystemMenu() {
-        if (vaultSystemDropdown) vaultSystemDropdown.style.display = 'none';
-        if (btnVaultSystemMenu) btnVaultSystemMenu.setAttribute('aria-expanded', 'false');
-      }
-
-      if (btnVaultSystemMenu) {
-        btnVaultSystemMenu.addEventListener('click', toggleVaultSystemMenu);
-      }
-      document.addEventListener('click', (e) => {
-        if (vaultSystemDropdown && !e.target.closest('#vaultSystemMenuWrapper')) {
-          closeVaultSystemMenu();
-        }
-      });
-  
       // Holographic QR open triggers
+      const openQrBtn = document.getElementById('openQrBtn');
+      const cardHoloQr = document.getElementById('cardHoloQr');
       const btnOpenBackup = document.getElementById('btnOpenBackup');
-      if (btnOpenBackup) {
-        btnOpenBackup.onclick = function(e) {
-          if (e) e.preventDefault();
+      const shareAppBtn = document.getElementById('shareAppBtn');
+
+      if (openQrBtn) {
+        openQrBtn.onclick = function(e) {
+          if (e) e.stopPropagation();
+          openVaultQrModal();
+        };
+      }
+
+      if (cardHoloQr) {
+        cardHoloQr.onclick = function(e) {
+          // If click was not on the share button, open QR modal
+          if (e && e.target && e.target.closest('#shareAppBtn')) return;
           openVaultQrModal();
         };
       }
@@ -3482,6 +3901,13 @@
         btnOpenBackup.onclick = function(e) {
           if (e) e.preventDefault();
           openVaultQrModal();
+        };
+      }
+
+      if (shareAppBtn) {
+        shareAppBtn.onclick = function(e) {
+          if (e) e.stopPropagation();
+          shareVaultApp();
         };
       }
 
@@ -3500,25 +3926,6 @@
       const btnExecuteSheetSync = document.getElementById('btnExecuteSheetSync');
       const btnSaveSheetUrlOnly = document.getElementById('btnSaveSheetUrlOnly');
       const exportBackupDistBtn = document.getElementById('exportBackupDistBtn');
-
-      
-      const btnTopbarLaunchApp = document.getElementById('btnTopbarLaunchApp');
-      if (btnTopbarLaunchApp) btnTopbarLaunchApp.onclick = function(e) { if (e) e.preventDefault(); handleLaunchStandaloneApp(); };
-      updateLaunchButtonState();
-      const vaultDistHeader = document.getElementById('vaultDistHeader');
-      const vaultDistGrid = document.getElementById('vaultDistGrid');
-      const vaultDistMinIcon = document.getElementById('vaultDistMinIcon');
-      const vaultDistMinText = document.getElementById('vaultDistMinText');
-      const vaultDistHint = document.getElementById('vaultDistHint');
-      if (vaultDistHeader && vaultDistGrid) {
-        vaultDistHeader.onclick = function() {
-          const isHidden = vaultDistGrid.style.display === 'none';
-          vaultDistGrid.style.display = isHidden ? 'grid' : 'none';
-          if (vaultDistMinIcon) vaultDistMinIcon.textContent = isHidden ? '▾' : '▸';
-          if (vaultDistMinText) vaultDistMinText.textContent = isHidden ? 'Minimize' : 'Expand';
-          if (vaultDistHint) vaultDistHint.textContent = isHidden ? '· 4 Command Tools · Tap to Minimize' : '· 4 Command Tools · Tap to Expand';
-        };
-      }
 
       if (openSheetSyncBtn) openSheetSyncBtn.onclick = openSheetSyncModal;
       if (closeSheetSyncModalBtn) closeSheetSyncModalBtn.onclick = closeSheetSyncModal;
@@ -3542,206 +3949,5 @@
     }
 
   </script>
-
-  <!-- OrlandoVault · Google Cloud Firebase Firestore Real-Time Engine (Singapore asia-southeast1) -->
-  <script id="orlandoVaultFirebaseEngine">
-  (function() {
-    'use strict';
-    var FIREBASE_CONFIG = {
-      apiKey: "AIzaSyCi8aUZiN1GnRXECM0Nc34UKMYQyTvzj9Y",
-      authDomain: "orlandochrome-b6228.firebaseapp.com",
-      projectId: "orlandochrome-b6228",
-      storageBucket: "orlandochrome-b6228.firebasestorage.app",
-      messagingSenderId: "775835530889",
-      appId: "1:775835530889:web:0ff6cb27e5be63d7c7f858"
-    };
-    var FIRESTORE_URL = 'https://firestore.googleapis.com/v1/projects/' + FIREBASE_CONFIG.projectId + '/databases/(default)/documents/orlandovault_sync/master_channel?key=' + FIREBASE_CONFIG.apiKey;
-    var CLIENT_ID = 'ov_' + Math.random().toString(36).slice(2, 10);
-    var LAST_MOD_KEY = 'orlandovault_last_modified';
-    var SYNC_KEYS = [
-      'orlandovault_credentials_v4',
-      'orlandovault_audit_history_v1',
-      'orlandovault_copy_count_v1',
-      'orlandovault_google_sheet_url',
-      'orlandovault_auto_sync'
-    ];
-
-    var isApplyingRemote = false;
-    var isSyncing = false;
-    var pushTimer = null;
-    var origSetItem = Storage.prototype.setItem;
-
-    function setVaultSyncBadge(status) {
-      var dot = document.getElementById('firebaseVaultSyncDot');
-      var txt = document.getElementById('firebaseVaultSyncText');
-      if (!dot || !txt) return;
-      if (status === 'syncing') {
-        dot.style.background = '#00f0ff';
-        dot.style.boxShadow = '0 0 8px #00f0ff';
-        txt.textContent = 'Syncing...';
-      } else if (status === 'offline') {
-        dot.style.background = '#f59e0b';
-        dot.style.boxShadow = '0 0 8px #f59e0b';
-        txt.textContent = 'Offline';
-      } else {
-        dot.style.background = '#10b981';
-        dot.style.boxShadow = '0 0 8px #10b981';
-        txt.textContent = 'Cloud Synced';
-      }
-    }
-
-    function collectPacket() {
-      var data = {};
-      SYNC_KEYS.forEach(function(k) {
-        var v = localStorage.getItem(k);
-        if (v !== null) data[k] = v;
-      });
-      var ts = parseInt(localStorage.getItem(LAST_MOD_KEY) || String(Date.now()), 10);
-      return { v: 1, cid: CLIENT_ID, ts: ts, data: data };
-    }
-
-    async function pushToCloud(showFeedback) {
-      if (isApplyingRemote) return false;
-      try {
-        setVaultSyncBadge('syncing');
-        var pkt = collectPacket();
-        var body = {
-          fields: {
-            v: { integerValue: "1" },
-            ts: { integerValue: String(pkt.ts) },
-            cid: { stringValue: pkt.cid },
-            payload: { stringValue: JSON.stringify(pkt) }
-          }
-        };
-        var res = await fetch(FIRESTORE_URL, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(body)
-        });
-        if (res.ok) {
-          setVaultSyncBadge('synced');
-          if (showFeedback && typeof showToast === 'function') {
-            showToast('⚡ Synced Vault credentials & audit log to Google Cloud Firebase!');
-          }
-          return true;
-        }
-        setVaultSyncBadge('offline');
-      } catch (e) {
-        setVaultSyncBadge('offline');
-      }
-      return false;
-    }
-
-    function applyCloudPacket(pkt) {
-      if (!pkt || !pkt.data) return;
-      isApplyingRemote = true;
-      try {
-        Object.keys(pkt.data).forEach(function(k) {
-          origSetItem.call(localStorage, k, pkt.data[k]);
-        });
-        origSetItem.call(localStorage, LAST_MOD_KEY, String(pkt.ts || Date.now()));
-        if (typeof initData === 'function') {
-          try { initData(); } catch (e) {}
-        }
-        if (typeof renderVault === 'function') {
-          try { renderVault(); } catch (e) {}
-        }
-        if (typeof renderMetrics === 'function') {
-          try { renderMetrics(); } catch (e) {}
-        }
-      } finally {
-        isApplyingRemote = false;
-      }
-    }
-
-    async function pullFromCloud(isInitial, showFeedback) {
-      if (isSyncing) return false;
-      isSyncing = true;
-      try {
-        var res = await fetch(FIRESTORE_URL, { cache: 'no-store' });
-        if (res.status === 404) {
-          isSyncing = false;
-          await pushToCloud(false);
-          return true;
-        }
-        if (!res.ok) {
-          setVaultSyncBadge('offline');
-          isSyncing = false;
-          return false;
-        }
-        var doc = await res.json();
-        var pkt = null;
-        if (doc && doc.fields && doc.fields.payload && doc.fields.payload.stringValue) {
-          pkt = JSON.parse(doc.fields.payload.stringValue);
-        }
-        if (!pkt) {
-          isSyncing = false;
-          await pushToCloud(false);
-          return true;
-        }
-        var cloudTs = pkt.ts || 0;
-        var localTs = parseInt(localStorage.getItem(LAST_MOD_KEY) || '0', 10);
-        if (cloudTs > localTs && (pkt.cid !== CLIENT_ID || isInitial || showFeedback)) {
-          applyCloudPacket(pkt);
-          if (showFeedback && typeof showToast === 'function') {
-            showToast('📲 Pulled latest Vault credentials from Google Cloud Firebase!');
-          }
-        } else if (localTs > cloudTs) {
-          await pushToCloud(false);
-        } else if (showFeedback) {
-          await pushToCloud(true);
-        }
-        setVaultSyncBadge('synced');
-      } catch (e) {
-        setVaultSyncBadge('offline');
-      } finally {
-        isSyncing = false;
-      }
-      return true;
-    }
-
-    Storage.prototype.setItem = function(key, val) {
-      origSetItem.call(this, key, val);
-      if (!isApplyingRemote && this === localStorage && SYNC_KEYS.indexOf(key) !== -1) {
-        origSetItem.call(localStorage, LAST_MOD_KEY, String(Date.now()));
-        if (pushTimer) clearTimeout(pushTimer);
-        pushTimer = setTimeout(function() { pushToCloud(false); }, 120);
-      }
-    };
-
-    function initVaultFirebase() {
-      console.log('⚡ [OrlandoVault] Google Cloud Firebase Firestore Sync Active (orlandochrome-b6228)');
-      var btn = document.getElementById('btnFirebaseVaultSync');
-      if (btn) {
-        btn.addEventListener('click', function() {
-          pullFromCloud(false, true);
-        });
-      }
-      pullFromCloud(true, false);
-      window.addEventListener('focus', function() { pullFromCloud(false, false); });
-      document.addEventListener('visibilitychange', function() {
-        if (document.visibilityState === 'visible') pullFromCloud(false, false);
-      });
-      window.addEventListener('online', function() { pullFromCloud(false, false); });
-      window.addEventListener('offline', function() { setVaultSyncBadge('offline'); });
-      setInterval(function() {
-        if (document.visibilityState === 'visible') pullFromCloud(false, false);
-      }, 5000);
-    }
-
-    window.OrlandoVaultFirebase = {
-      config: FIREBASE_CONFIG,
-      pushNow: function() { return pushToCloud(true); },
-      pullNow: function() { return pullFromCloud(false, true); }
-    };
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initVaultFirebase);
-    } else {
-      initVaultFirebase();
-    }
-  })();
-  </script>
-
 </body>
 </html>
