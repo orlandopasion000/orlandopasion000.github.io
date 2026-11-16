@@ -9078,20 +9078,20 @@ try { checkUrlHashRoutine(); } catch(e){}
       var cy = size * 0.5;
       var baseR = size * (isCursor ? 0.36 : 0.34);
 
-      // 1. Multi-harmonic organic rocky contour (cratered, non-convex silhouette)
-      var SAMPLES = 48;
+      // 1. Multi-harmonic organic rocky contour (cratered, chiseled asteroid silhouette)
+      var SAMPLES = 36;
       var dTheta = (Math.PI * 2) / SAMPLES;
       var rPts = [];
       for (var s = 0; s < SAMPLES; s++) {
         var th = s * dTheta;
         var rVar = 1.0;
-        rVar += Math.sin(th * 2 + type * 1.35) * 0.16;
-        rVar += Math.sin(th * 4 - type * 2.1) * 0.08;
-        rVar += Math.cos(th * 7 + type * 0.95) * 0.05;
-        rVar += Math.sin(th * 11) * 0.03;
-        if (type === 1) rVar += Math.cos(th * 3) * 0.14; // Iron-nickel angular facet
-        if (type === 4) rVar += Math.sin(th * 2) * 0.22; // Elongated bolide
-        rPts.push(baseR * Math.max(0.64, rVar));
+        rVar += Math.sin(th * 2 + type * 1.35) * 0.15;
+        rVar += Math.sin(th * 3 - type * 2.1) * 0.09;
+        rVar += Math.cos(th * 5 + type * 0.95) * 0.06;
+        rVar += Math.sin(th * 7) * 0.04;
+        if (type === 1) rVar += Math.cos(th * 2) * 0.12; // Iron-nickel angular facet
+        if (type === 4) rVar += Math.sin(th * 2) * 0.18; // Elongated bolide
+        rPts.push(baseR * Math.max(0.68, rVar));
       }
 
       // 2. Basalt Mineral Body with 3D Spherical Light Vector (-0.45, -0.55)
@@ -9110,96 +9110,145 @@ try { checkUrlHashRoutine(); } catch(e){}
       // 3D Directional Lighting Gradient (Deep Basalt Regolith)
       var lightX = cx - baseR * 0.45;
       var lightY = cy - baseR * 0.55;
-      var bodyGrad = ctx.createRadialGradient(lightX, lightY, baseR * 0.15, cx, cy, baseR * 1.35);
-      bodyGrad.addColorStop(0.0, "#4e3b31"); // Sunlit mineral ridge
-      bodyGrad.addColorStop(0.35, "#2a1c16"); // Deep basalt body
-      bodyGrad.addColorStop(0.75, "#150d0a"); // Shadowed regolith
-      bodyGrad.addColorStop(1.0, "#080403"); // Deep space shadow
+      var bodyGrad = ctx.createRadialGradient(lightX, lightY, baseR * 0.12, cx, cy, baseR * 1.30);
+      bodyGrad.addColorStop(0.0, "#5c4537"); // Sunlit mineral ridge
+      bodyGrad.addColorStop(0.30, "#3d2b20"); // Deep basalt mantle
+      bodyGrad.addColorStop(0.62, "#21140e"); // Deep regolith
+      bodyGrad.addColorStop(0.88, "#110906"); // Shadowed regolith
+      bodyGrad.addColorStop(1.0, "#050302"); // Deep space shadow
       ctx.fillStyle = bodyGrad;
       ctx.fill();
 
-      // Fine regolith mineral micro-texture (procedural flecks)
-      var numFlecks = isCursor ? 24 : 14;
-      for (var fl = 0; fl < numFlecks; fl++) {
-        var flAng = fl * 2.39 + type * 0.7;
-        var flDist = baseR * (0.15 + (fl * 0.13) % 0.68);
-        var flX = cx + Math.cos(flAng) * flDist;
-        var flY = cy + Math.sin(flAng) * flDist;
-        var flR = 0.8 + (fl % 3) * 0.5;
+      // Chiseled Crystalline Facets (Subtle geometric planar depth)
+      var facets = [
+        [[-0.45, -0.55], [0.10, -0.65], [0.18, -0.25], [-0.22, -0.18]],
+        [[0.18, -0.25], [0.65, -0.35], [0.55, 0.12], [0.08, -0.08]],
+        [[-0.52, -0.18], [-0.08, -0.08], [-0.18, 0.42], [-0.58, 0.22]],
+        [[-0.08, -0.08], [0.48, 0.12], [0.28, 0.58], [-0.08, 0.48]]
+      ];
+      for (var fc = 0; fc < facets.length; fc++) {
+        var fct = facets[fc];
         ctx.beginPath();
-        ctx.arc(flX, flY, flR, 0, Math.PI * 2);
-        ctx.fillStyle = fl % 2 === 0 ? "rgba(90, 72, 62, 0.45)" : "rgba(18, 12, 10, 0.55)";
+        for (var p = 0; p < fct.length; p++) {
+          var px = cx + fct[p][0] * baseR;
+          var py = cy + fct[p][1] * baseR;
+          if (p === 0) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
+        }
+        ctx.closePath();
+        ctx.fillStyle = fc % 2 === 0 ? "rgba(120, 95, 78, 0.30)" : "rgba(35, 20, 14, 0.42)";
         ctx.fill();
+        ctx.strokeStyle = "rgba(140, 110, 90, 0.22)";
+        ctx.lineWidth = 0.8;
+        ctx.stroke();
       }
 
-      // Vesicular Micro-Craters and Impact Depressions
-      var numCraters = isCursor ? 8 : 5;
+      // Vesicular 3D Impact Craters with Sunlit Rims and Molten Magma Wells
+      var numCraters = isCursor ? 6 : 4;
       for (var c = 0; c < numCraters; c++) {
         var cAng = (c * 1.85 + type * 1.1) % (Math.PI * 2);
         var cDist = baseR * (0.22 + (c * 0.14) % 0.52);
         var crX = cx + Math.cos(cAng) * cDist;
         var crY = cy + Math.sin(cAng) * cDist;
-        var crR = baseR * (0.12 + (c * 0.05) % 0.16);
+        var crR = baseR * (0.13 + (c * 0.05) % 0.16);
 
         ctx.beginPath();
         ctx.arc(crX, crY, crR, 0, Math.PI * 2);
-        ctx.fillStyle = "#0c0604"; // Crater hollow
+        ctx.fillStyle = "#070302"; // Crater hollow
         ctx.fill();
-        ctx.strokeStyle = "rgba(75, 58, 48, 0.65)"; // Sunlit rim highlight
+
+        ctx.beginPath();
+        ctx.arc(crX - 0.8, crY - 1.0, crR, Math.PI * 0.7, Math.PI * 1.9);
+        ctx.strokeStyle = "rgba(160, 130, 110, 0.65)"; // Sunlit rim highlight
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(crX + 0.8, crY + 1.0, crR, Math.PI * 1.9, Math.PI * 0.7);
+        ctx.strokeStyle = "rgba(8, 4, 2, 0.85)"; // Shadowed inner rim
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+
+        // Molten bubbling magma pool in crater floor
+        ctx.beginPath();
+        ctx.arc(crX, crY, crR * 0.55, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(234, 88, 12, 0.72)";
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(crX, crY, crR * 0.26, 0, Math.PI * 2);
+        ctx.fillStyle = "#fef08a";
+        ctx.fill();
+      }
+
+      // 3. Multi-Branching Curved Molten Magma Fissures (Planck Blackbody Radiation)
+      var fissureDefs = [
+        [[-0.58, -0.32], [-0.35, -0.22], [-0.15, -0.08], [0.08, 0.05], [0.32, 0.14], [0.58, 0.35]],
+        [[0.28, -0.48], [0.18, -0.22], [0.08, 0.05], [-0.12, 0.24], [-0.32, 0.48]],
+        [[-0.15, -0.08], [-0.30, 0.08], [-0.52, 0.12]]
+      ];
+
+      for (var f = 0; f < fissureDefs.length; f++) {
+        var pts = fissureDefs[f];
+        // Layer A: Wide crimson thermal heat aura bleeding into adjacent rock
+        ctx.beginPath();
+        ctx.moveTo(cx + pts[0][0] * baseR, cy + pts[0][1] * baseR);
+        for (var j = 1; j < pts.length; j++) {
+          var mx = (pts[j - 1][0] + pts[j][0]) * 0.5 * baseR + cx;
+          var my = (pts[j - 1][1] + pts[j][1]) * 0.5 * baseR + cy;
+          ctx.quadraticCurveTo(cx + pts[j - 1][0] * baseR, cy + pts[j - 1][1] * baseR, mx, my);
+        }
+        ctx.lineTo(cx + pts[pts.length - 1][0] * baseR, cy + pts[pts.length - 1][1] * baseR);
+        ctx.strokeStyle = "rgba(220, 38, 38, 0.65)";
+        ctx.lineWidth = 4.8;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.stroke();
+
+        // Layer B: Middle radiant magma mantle
+        ctx.beginPath();
+        ctx.moveTo(cx + pts[0][0] * baseR, cy + pts[0][1] * baseR);
+        for (var j = 1; j < pts.length; j++) {
+          var mx = (pts[j - 1][0] + pts[j][0]) * 0.5 * baseR + cx;
+          var my = (pts[j - 1][1] + pts[j][1]) * 0.5 * baseR + cy;
+          ctx.quadraticCurveTo(cx + pts[j - 1][0] * baseR, cy + pts[j - 1][1] * baseR, mx, my);
+        }
+        ctx.lineTo(cx + pts[pts.length - 1][0] * baseR, cy + pts[pts.length - 1][1] * baseR);
+        ctx.strokeStyle = "rgba(249, 115, 22, 0.92)";
+        ctx.lineWidth = 2.4;
+        ctx.stroke();
+
+        // Layer C: Core blackbody incandescent vein (5000K white-gold)
+        ctx.beginPath();
+        ctx.moveTo(cx + pts[0][0] * baseR, cy + pts[0][1] * baseR);
+        for (var j = 1; j < pts.length; j++) {
+          var mx = (pts[j - 1][0] + pts[j][0]) * 0.5 * baseR + cx;
+          var my = (pts[j - 1][1] + pts[j][1]) * 0.5 * baseR + cy;
+          ctx.quadraticCurveTo(cx + pts[j - 1][0] * baseR, cy + pts[j - 1][1] * baseR, mx, my);
+        }
+        ctx.lineTo(cx + pts[pts.length - 1][0] * baseR, cy + pts[pts.length - 1][1] * baseR);
+        ctx.strokeStyle = "rgba(255, 255, 245, 0.98)";
         ctx.lineWidth = 1.0;
         ctx.stroke();
       }
 
-      // 3. Multi-Branching Molten Magma Fissures (Planck Blackbody Radiation)
-      var numFissures = isCursor ? 6 : 4;
-      for (var f = 0; f < numFissures; f++) {
-        var fStartAng = f * (Math.PI * 2 / numFissures) + type * 0.7;
-        var startDist = baseR * 0.10;
-        var fStartX = cx + Math.cos(fStartAng) * startDist;
-        var fStartY = cy + Math.sin(fStartAng) * startDist;
-
-        var fEndAng = fStartAng + 0.45 + (f * 0.3);
-        var endDist = baseR * (0.75 + (f * 0.08) % 0.22);
-        var fEndX = cx + Math.cos(fEndAng) * endDist;
-        var fEndY = cy + Math.sin(fEndAng) * endDist;
-
-        var midX = (fStartX + fEndX) * 0.5 + (Math.sin(f * 2.3) * baseR * 0.22);
-        var midY = (fStartY + fEndY) * 0.5 + (Math.cos(f * 2.3) * baseR * 0.22);
-
-        // A. Wide thermal heat aura bleeding into adjacent rock
+      // Molten Caldera Hotspots at fissure convergence
+      var calderas = [[0.08, 0.05], [-0.15, -0.08]];
+      for (var k = 0; k < calderas.length; k++) {
+        var kx = cx + calderas[k][0] * baseR;
+        var ky = cy + calderas[k][1] * baseR;
         ctx.beginPath();
-        ctx.moveTo(fStartX, fStartY);
-        ctx.quadraticCurveTo(midX, midY, fEndX, fEndY);
-        ctx.strokeStyle = "rgba(185, 28, 28, 0.65)";
-        ctx.lineWidth = 4.2;
-        ctx.stroke();
-
-        // B. Middle radiant magma mantle
+        ctx.arc(kx, ky, 3.8, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(249, 115, 22, 0.70)";
+        ctx.fill();
         ctx.beginPath();
-        ctx.moveTo(fStartX, fStartY);
-        ctx.quadraticCurveTo(midX, midY, fEndX, fEndY);
-        ctx.strokeStyle = "rgba(249, 115, 22, 0.92)";
-        ctx.lineWidth = 2.2;
-        ctx.stroke();
-
-        // C. Core blackbody incandescent vein (3200K white-gold)
+        ctx.arc(kx, ky, 2.0, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(254, 240, 138, 0.95)";
+        ctx.fill();
         ctx.beginPath();
-        ctx.moveTo(fStartX, fStartY);
-        ctx.quadraticCurveTo(midX, midY, fEndX, fEndY);
-        ctx.strokeStyle = "rgba(254, 240, 138, 0.98)";
-        ctx.lineWidth = 1.0;
-        ctx.stroke();
-
-        // Secondary capillary fracture branch
-        var brAng = fEndAng - 0.35;
-        var brEndX = midX + Math.cos(brAng) * (baseR * 0.35);
-        var brEndY = midY + Math.sin(brAng) * (baseR * 0.35);
-        ctx.beginPath();
-        ctx.moveTo(midX, midY);
-        ctx.lineTo(brEndX, brEndY);
-        ctx.strokeStyle = "rgba(251, 146, 60, 0.85)";
-        ctx.lineWidth = 1.0;
-        ctx.stroke();
+        ctx.arc(kx, ky, 1.0, 0, Math.PI * 2);
+        ctx.fillStyle = "#ffffff";
+        ctx.fill();
       }
 
       ctx.restore();
@@ -9214,21 +9263,9 @@ try { checkUrlHashRoutine(); } catch(e){}
         else ctx.lineTo(x, y);
       }
       ctx.closePath();
-      ctx.strokeStyle = "rgba(251, 146, 60, 0.95)";
+      ctx.strokeStyle = "rgba(251, 191, 36, 0.95)";
       ctx.lineWidth = isCursor ? 1.8 : 1.4;
       ctx.stroke();
-
-      // 5. Leading Stagnation Point Incandescent Compression (Leading +X Edge)
-      var leadX = cx + baseR * 0.85;
-      var bowGrad = ctx.createRadialGradient(leadX, cy, 1, leadX, cy, baseR * 0.70);
-      bowGrad.addColorStop(0.0, "rgba(255, 255, 250, 0.98)");
-      bowGrad.addColorStop(0.30, "rgba(254, 240, 138, 0.80)");
-      bowGrad.addColorStop(0.65, "rgba(249, 115, 22, 0.35)");
-      bowGrad.addColorStop(1.0, "rgba(234, 88, 12, 0.0)");
-      ctx.fillStyle = bowGrad;
-      ctx.beginPath();
-      ctx.arc(leadX, cy, baseR * 0.70, 0, Math.PI * 2);
-      ctx.fill();
 
       return canvas;
     }
@@ -12870,7 +12907,11 @@ try { checkUrlHashRoutine(); } catch(e){}
     var rotBase = now * 0.0006;
     var spinMult = 1.0 + exc * 2.5;
 
-    // Buttery smooth angular damping to avoid sudden rotational snapping during fast mouse/touch sweeps
+    // Continuous majestic 3D tumbling rotation & pitch precession (ALWAYS alive, even when idle!)
+    var tumble = now * 0.0012 + (cursor.speed > 5 ? cursor.speed * 0.0025 : 0);
+    var pitch = Math.sin(now * 0.0015) * 0.25;
+
+    // Smooth heading damping for directional travel
     if (cursor.speed > 10) {
       var targetAngle = Math.atan2(cursor.vy, cursor.vx);
       if (typeof cursor.smoothAngle !== "number") cursor.smoothAngle = targetAngle;
@@ -12881,32 +12922,41 @@ try { checkUrlHashRoutine(); } catch(e){}
     }
     var renderHeading = (typeof cursor.smoothAngle === "number") ? cursor.smoothAngle : cursor.heading;
 
-    // Movement slipstream angle (opposite to cursor movement heading)
     var trailAngle = renderHeading + Math.PI;
     var cosT = Math.cos(trailAngle);
     var sinT = Math.sin(trailAngle);
     var perpX = -sinT;
     var perpY = cosT;
 
-    var coreR = 14.0 + exc * 2.5;
+    var coreR = 15.0 + exc * 3.0;
 
-    // ── 1. Burning Solar Prominence Lens Flares (Cross & Diagonal Beams - Matching Quantum Realm's Structure) ──
-    var flareLen = 38 + exc * 10;
-    var flareW = 2.4 + exc * 0.8;
+    // ── 1. SOLAR CORONA & VOLUMETRIC ATMOSPHERIC PLASMA HALO ──
+    var coronaR = coreR * 2.3;
+    var coronaGrad = ctx.createRadialGradient(cx, cy, coreR * 0.35, cx, cy, coronaR);
+    coronaGrad.addColorStop(0.0, "rgba(255, 255, 250, " + (0.92 + exc * 0.08).toFixed(2) + ")");
+    coronaGrad.addColorStop(0.20, "rgba(254, 240, 138, " + (0.75 + exc * 0.15).toFixed(2) + ")");
+    coronaGrad.addColorStop(0.48, "rgba(249, 115, 22, " + (0.42 + exc * 0.20).toFixed(2) + ")");
+    coronaGrad.addColorStop(0.80, "rgba(220, 38, 38, " + (0.16 + exc * 0.12).toFixed(2) + ")");
+    coronaGrad.addColorStop(1.0, "rgba(185, 28, 28, 0.0)");
+    ctx.fillStyle = coronaGrad;
+    ctx.beginPath();
+    ctx.arc(cx, cy, coronaR, 0, Math.PI * 2);
+    ctx.fill();
 
-    // Primary Horizontal Solar Flare Beam (Molten White-Gold into Crimson Fire)
+    // ── 2. ANAMORPHIC SOLAR PROMINENCE FLARE BEAMS ──
+    var flareLen = coreR * 2.6 + exc * 12;
+    var flareW = coreR * 0.18 + exc * 1.2;
     ctx.save();
     ctx.translate(cx, cy);
-    var hFlareGrad = ctx.createLinearGradient(-flareLen, 0, flareLen, 0);
-    hFlareGrad.addColorStop(0.0, "rgba(220, 38, 38, 0)");
-    hFlareGrad.addColorStop(0.25, "rgba(249, 115, 22, 0.45)");
-    hFlareGrad.addColorStop(0.42, "rgba(251, 191, 36, 0.75)");
-    hFlareGrad.addColorStop(0.5, "rgba(255, 255, 255, 0.98)");
-    hFlareGrad.addColorStop(0.58, "rgba(251, 191, 36, 0.75)");
-    hFlareGrad.addColorStop(0.75, "rgba(249, 115, 22, 0.45)");
-    hFlareGrad.addColorStop(1.0, "rgba(220, 38, 38, 0)");
-
-    ctx.fillStyle = hFlareGrad;
+    var hFlare = ctx.createLinearGradient(-flareLen, 0, flareLen, 0);
+    hFlare.addColorStop(0.0, "rgba(220, 38, 38, 0)");
+    hFlare.addColorStop(0.25, "rgba(249, 115, 22, 0.45)");
+    hFlare.addColorStop(0.45, "rgba(254, 240, 138, 0.85)");
+    hFlare.addColorStop(0.50, "rgba(255, 255, 255, 1.0)");
+    hFlare.addColorStop(0.55, "rgba(254, 240, 138, 0.85)");
+    hFlare.addColorStop(0.75, "rgba(249, 115, 22, 0.45)");
+    hFlare.addColorStop(1.0, "rgba(220, 38, 38, 0)");
+    ctx.fillStyle = hFlare;
     ctx.beginPath();
     ctx.moveTo(-flareLen, 0);
     ctx.lineTo(0, -flareW);
@@ -12915,129 +12965,73 @@ try { checkUrlHashRoutine(); } catch(e){}
     ctx.closePath();
     ctx.fill();
 
-    // Diagonal Solar Prominence Flares (at 60 deg and -60 deg)
+    // Diagonal flares (at 60 deg and -60 deg)
     for (var d = 0; d < 2; d++) {
-      var dAngle = d === 0 ? (Math.PI / 3) : (-Math.PI / 3);
       ctx.save();
-      ctx.rotate(dAngle);
-      var dGrad = ctx.createLinearGradient(-flareLen * 0.75, 0, flareLen * 0.75, 0);
-      dGrad.addColorStop(0.0, "rgba(220, 38, 38, 0)");
-      dGrad.addColorStop(0.3, "rgba(245, 158, 11, 0.45)");
-      dGrad.addColorStop(0.5, "rgba(255, 255, 250, 0.90)");
-      dGrad.addColorStop(0.7, "rgba(245, 158, 11, 0.45)");
-      dGrad.addColorStop(1.0, "rgba(220, 38, 38, 0)");
-      ctx.fillStyle = dGrad;
+      ctx.rotate(d === 0 ? (Math.PI / 3) : (-Math.PI / 3));
+      var dFlare = ctx.createLinearGradient(-flareLen * 0.72, 0, flareLen * 0.72, 0);
+      dFlare.addColorStop(0.0, "rgba(234, 88, 12, 0)");
+      dFlare.addColorStop(0.35, "rgba(251, 191, 36, 0.45)");
+      dFlare.addColorStop(0.50, "rgba(255, 255, 255, 0.90)");
+      dFlare.addColorStop(0.65, "rgba(251, 191, 36, 0.45)");
+      dFlare.addColorStop(1.0, "rgba(234, 88, 12, 0)");
+      ctx.fillStyle = dFlare;
       ctx.beginPath();
-      ctx.moveTo(-flareLen * 0.75, 0);
-      ctx.lineTo(0, -flareW * 0.85);
-      ctx.lineTo(flareLen * 0.75, 0);
-      ctx.lineTo(0, flareW * 0.85);
+      ctx.moveTo(-flareLen * 0.72, 0);
+      ctx.lineTo(0, -flareW * 0.72);
+      ctx.lineTo(flareLen * 0.72, 0);
+      ctx.lineTo(0, flareW * 0.72);
       ctx.closePath();
       ctx.fill();
       ctx.restore();
     }
     ctx.restore();
 
-    // ── 2. REAL FIRE VOLUMETRIC FLAME PLUME & FLICKERING LICKING FLAME WISPS ──
-    // Strictly clamped so it stays compact and never stretches across the screen!
-    var speedBonus = (cursor.speed > 25) ? Math.min(6.0, cursor.speed * 0.010) : 0;
-    var flameLen = coreR * 1.35 + speedBonus; // Compact: only ~22-26px, hugging the core!
-    var tipX = cx + cosT * flameLen;
-    var tipY = cy + sinT * flameLen;
+    // ── 3. LIVING FLAME WISPS & CONVECTION VORTICES (Continuous Dancing Fire) ──
+    var flameBaseLen = coreR * 1.45 + (cursor.speed > 20 ? Math.min(6.0, cursor.speed * 0.012) : 0);
+    for (var f = 0; f < 4; f++) {
+      var fAng = trailAngle + (f - 1.5) * 0.38 + Math.sin(t * 6.0 + f * 1.8) * 0.14;
+      var fLen = flameBaseLen * (0.85 + 0.30 * Math.sin(t * 7.5 + f * 2.2));
+      var fEndX = cx + Math.cos(fAng) * fLen;
+      var fEndY = cy + Math.sin(fAng) * fLen;
+      var fMidX = (cx + fEndX) * 0.5 + Math.sin(t * 8.0 + f) * (coreR * 0.22);
+      var fMidY = (cy + fEndY) * 0.5 + Math.cos(t * 8.0 + f) * (coreR * 0.22);
 
-    // A. Soft Volumetric Real Fire Combustion Flame Puff (Organic thermal billow)
-    var flamePuff = MeteorVFXEngine.getFlamePuff();
-    if (flamePuff) {
-      ctx.save();
-      ctx.globalAlpha = 0.68 + exc * 0.20;
-      var puffR = coreR * 1.45;
-      ctx.drawImage(flamePuff, cx + cosT * (coreR * 0.25) - puffR, cy + sinT * (coreR * 0.25) - puffR, puffR * 2, puffR * 2);
-      ctx.restore();
+      ctx.beginPath();
+      ctx.moveTo(cx + Math.cos(fAng + 0.25) * (coreR * 0.55), cy + Math.sin(fAng + 0.25) * (coreR * 0.55));
+      ctx.quadraticCurveTo(fMidX, fMidY, fEndX, fEndY);
+      ctx.quadraticCurveTo(fMidX - Math.sin(fAng) * 4, fMidY + Math.cos(fAng) * 4, cx + Math.cos(fAng - 0.25) * (coreR * 0.55), cy + Math.sin(fAng - 0.25) * (coreR * 0.55));
+      ctx.closePath();
+      var flGrad = ctx.createLinearGradient(cx, cy, fEndX, fEndY);
+      flGrad.addColorStop(0.0, "rgba(254, 240, 138, 0.88)");
+      flGrad.addColorStop(0.40, "rgba(249, 115, 22, 0.68)");
+      flGrad.addColorStop(0.80, "rgba(220, 38, 38, 0.35)");
+      flGrad.addColorStop(1.0, "rgba(185, 28, 28, 0.0)");
+      ctx.fillStyle = flGrad;
+      ctx.fill();
     }
 
-    // B. Real Licking Flame Wisps Dancing in Wake (Fluid fluttering fire)
-    var flameWisp = MeteorVFXEngine.getFlameWisp();
-    if (flameWisp) {
-      var wispRot = trailAngle + Math.PI * 0.5;
-      // Central licking flame tongue
-      var wisp1Flicker = Math.sin(t * 6.5) * 0.08;
-      var wisp1Len = flameLen * 1.15;
-      var wisp1W = coreR * 0.95;
-      ctx.save();
-      ctx.translate(cx, cy);
-      ctx.rotate(wispRot + wisp1Flicker);
-      ctx.globalAlpha = 0.88;
-      ctx.drawImage(flameWisp, -wisp1W * 0.5, -wisp1Len, wisp1W, wisp1Len);
-      ctx.restore();
-
-      // Left fluttering flame tongue
-      var wisp2Flicker = Math.sin(t * 7.8 + 1.6) * 0.12;
-      var wisp2Len = flameLen * 0.85;
-      var wisp2W = coreR * 0.72;
-      ctx.save();
-      ctx.translate(cx + perpX * (coreR * 0.35), cy + perpY * (coreR * 0.35));
-      ctx.rotate(wispRot - 0.18 + wisp2Flicker);
-      ctx.globalAlpha = 0.72;
-      ctx.drawImage(flameWisp, -wisp2W * 0.5, -wisp2Len, wisp2W, wisp2Len);
-      ctx.restore();
-
-      // Right fluttering flame tongue
-      var wisp3Flicker = Math.cos(t * 7.2 + 2.8) * 0.12;
-      var wisp3Len = flameLen * 0.80;
-      var wisp3W = coreR * 0.70;
-      ctx.save();
-      ctx.translate(cx - perpX * (coreR * 0.35), cy - perpY * (coreR * 0.35));
-      ctx.rotate(wispRot + 0.18 + wisp3Flicker);
-      ctx.globalAlpha = 0.72;
-      ctx.drawImage(flameWisp, -wisp3W * 0.5, -wisp3Len, wisp3W, wisp3Len);
-      ctx.restore();
+    // Floating Convection Cinder Sparks around the asteroid core
+    for (var sp = 0; sp < 6; sp++) {
+      var sAng = t * 3.2 + sp * 1.05;
+      var sDist = coreR * (1.15 + 0.35 * Math.sin(t * 4.0 + sp * 2.1));
+      var sx = cx + Math.cos(sAng) * sDist;
+      var sy = cy + Math.sin(sAng) * sDist;
+      var sAlpha = 0.40 + 0.50 * Math.sin(t * 6.0 + sp * 1.7);
+      ctx.beginPath();
+      ctx.arc(sx, sy, 1.4, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(254, 240, 138, " + sAlpha.toFixed(2) + ")";
+      ctx.fill();
     }
 
-    // C. Compact Smooth Central Streamer Tongue
-    var coreTongueLen = flameLen * 0.55;
-    ctx.beginPath();
-    ctx.moveTo(cx, cy);
-    ctx.lineTo(cx + cosT * coreTongueLen, cy + sinT * coreTongueLen);
-    ctx.strokeStyle = "rgba(255, 255, 250, 0.98)";
-    ctx.lineWidth = Math.max(1.8, coreR * 0.32);
-    ctx.lineCap = "round";
-    ctx.stroke();
-
-    // Subtle Compact Cinder Sparks (Hugging the rear core, strictly no long trails!)
-    var emberCanvas = MeteorVFXEngine.getEmber();
-    if (emberCanvas) {
-      for (var em = 0; em < 5; em++) {
-        var eDist = coreR * (0.65 + (em * 0.25) % 0.8);
-        var eLat = Math.sin(t * 3.5 + em * 2.1) * (coreR * 0.35);
-        var ex = cx + cosT * eDist + perpX * eLat;
-        var ey = cy + sinT * eDist + perpY * eLat;
-        var eSize = Math.max(2.2, coreR * 0.16);
-        var eAlpha = 0.50 + 0.45 * Math.sin(t * 5.0 + em * 1.5);
-        ctx.save();
-        ctx.globalAlpha = eAlpha;
-        ctx.drawImage(emberCanvas, ex - eSize * 0.5, ey - eSize * 0.5, eSize, eSize);
-        ctx.restore();
-      }
-    }
-
-    // ── 3. High-Intensity Solar Plasma Corona Aura ──
-    var plasmaCanvas = MeteorVFXEngine.getPlasma();
-    if (plasmaCanvas) {
-      ctx.save();
-      ctx.globalAlpha = 0.85 + exc * 0.15;
-      var pR = coreR * 1.85;
-      ctx.drawImage(plasmaCanvas, cx - pR, cy - pR, pR * 2, pR * 2);
-      ctx.restore();
-    }
-
-    // ── 4. Three 3D Precessing Burning Solar Magnetic Orbital Rings (Everything Burning!) ──
+    // ── 4. THREE 3D PRECESSED BLAZING SOLAR MAGNETIC DYNAMO RINGS ──
     var majorA = 26 + exc * 4;
     var minorB = 9.8 + exc * 1.5;
 
     var rings = [
-      { baseAngle: 0, phaseOffset: 0, color: "rgba(251, 191, 36, 0.90)" },
-      { baseAngle: Math.PI / 3, phaseOffset: 2.094, color: "rgba(244, 63, 94, 0.85)" },
-      { baseAngle: 2 * Math.PI / 3, phaseOffset: 4.188, color: "rgba(254, 240, 138, 0.92)" }
+      { baseAngle: 0, phaseOffset: 0, color: "rgba(251, 191, 36, 0.95)" },
+      { baseAngle: Math.PI / 3, phaseOffset: 2.094, color: "rgba(244, 63, 94, 0.90)" },
+      { baseAngle: 2 * Math.PI / 3, phaseOffset: 4.188, color: "rgba(254, 240, 138, 0.95)" }
     ];
 
     for (var ri = 0; ri < 3; ri++) {
@@ -13050,37 +13044,45 @@ try { checkUrlHashRoutine(); } catch(e){}
 
       var curB = minorB * (1.0 + 0.12 * Math.cos(t * 1.6 * spinMult + ring.phaseOffset));
 
-      // Fiery ring gradient
+      // Fiery Braided Magnetic Flux Arc
       var rGrad = ctx.createLinearGradient(-majorA, 0, majorA, 0);
-      rGrad.addColorStop(0.0, "rgba(220, 38, 38, 0.6)");
+      rGrad.addColorStop(0.0, "rgba(220, 38, 38, 0.3)");
       rGrad.addColorStop(0.25, ring.color);
-      rGrad.addColorStop(0.5, "rgba(255, 255, 255, 0.98)");
+      rGrad.addColorStop(0.50, "rgba(255, 255, 255, 0.98)");
       rGrad.addColorStop(0.75, ring.color);
-      rGrad.addColorStop(1.0, "rgba(220, 38, 38, 0.6)");
+      rGrad.addColorStop(1.0, "rgba(220, 38, 38, 0.3)");
 
       ctx.strokeStyle = rGrad;
-      ctx.lineWidth = 1.6;
+      ctx.lineWidth = 1.7;
       ctx.beginPath();
       ctx.ellipse(0, 0, majorA, curB, 0, 0, Math.PI * 2);
       ctx.stroke();
 
-      // Burning Circulating Fireball Ember Spark along the magnetic ring
+      // Miniature Solar Plasmoid Node (Blazing Miniature Sun with Halo & Core)
       var eSpeed = 0.0035 * spinMult;
       var u = (now * eSpeed + ring.phaseOffset) % (Math.PI * 2);
       var ex = majorA * Math.cos(u);
       var ey = curB * Math.sin(u);
 
+      // Outer Solar Flare Halo
       ctx.beginPath();
-      ctx.arc(ex, ey, 4.2, 0, Math.PI * 2);
-      ctx.fillStyle = "rgba(251, 146, 60, 0.35)";
+      ctx.arc(ex, ey, 4.8, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(249, 115, 22, 0.38)";
       ctx.fill();
 
+      // Middle Incandescent Gold
       ctx.beginPath();
-      ctx.arc(ex, ey, 2.0, 0, Math.PI * 2);
+      ctx.arc(ex, ey, 2.6, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(254, 240, 138, 0.92)";
+      ctx.fill();
+
+      // Inner White Specular Nucleus
+      ctx.beginPath();
+      ctx.arc(ex, ey, 1.4, 0, Math.PI * 2);
       ctx.fillStyle = "#ffffff";
       ctx.fill();
 
-      // Apex Solar Prominence Flares at ring tips
+      // Apex flares at major axis tips
       ctx.beginPath();
       ctx.arc(majorA, 0, 1.5, 0, Math.PI * 2);
       ctx.arc(-majorA, 0, 1.5, 0, Math.PI * 2);
@@ -13090,55 +13092,273 @@ try { checkUrlHashRoutine(); } catch(e){}
       ctx.restore();
     }
 
-    // ── 5. ALL-BURNING 3D BASALT ASTEROID IMPACTOR NUCLEUS ──
-    var cursorAsteroid = MeteorVFXEngine.getCursorAsteroid();
-    if (cursorAsteroid) {
-      ctx.save();
-      ctx.translate(cx, cy);
-      ctx.rotate(renderHeading);
-      var cRockR = coreR * 1.30;
+    // ── 5. HYPER-REALISTIC PROCEDURAL 3D MOLTEN ASTEROID ROCK CORE (TUMBLING IN 3D) ──
+    var rockR = coreR * 1.05;
 
-      // Soft Combustion Aura Behind Rock
-      if (flamePuff) {
-        ctx.save();
-        ctx.globalAlpha = 0.65;
-        var rkPuffR = cRockR * 1.25;
-        ctx.drawImage(flamePuff, -rkPuffR, -rkPuffR, rkPuffR * 2, rkPuffR * 2);
-        ctx.restore();
-      }
-
-      // 3D Asteroid Rock
-      ctx.drawImage(cursorAsteroid, -cRockR, -cRockR, cRockR * 2, cRockR * 2);
-
-      // Blazing Molten Vein Layer Over Rock
-      var rockBurnGrad = ctx.createRadialGradient(0, 0, cRockR * 0.1, 0, 0, cRockR * 1.05);
-      rockBurnGrad.addColorStop(0.0, "rgba(255, 255, 250, 0.85)");
-      rockBurnGrad.addColorStop(0.35, "rgba(254, 240, 138, 0.70)");
-      rockBurnGrad.addColorStop(0.70, "rgba(249, 115, 22, 0.55)");
-      rockBurnGrad.addColorStop(1.0, "rgba(220, 38, 38, 0.40)");
-      ctx.fillStyle = rockBurnGrad;
-      ctx.beginPath();
-      ctx.arc(0, 0, cRockR * 0.95, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.restore();
+    // Multi-harmonic organic rocky contour (craggy, non-convex, chiseled asteroid silhouette)
+    var SAMPLES = 32;
+    var dTheta = (Math.PI * 2) / SAMPLES;
+    var contourPts = [];
+    for (var s = 0; s < SAMPLES; s++) {
+      var th = s * dTheta;
+      var rVar = 1.0;
+      rVar += Math.sin(th * 2 + tumble * 0.7) * 0.14;
+      rVar += Math.cos(th * 3 - pitch * 1.5) * 0.09;
+      rVar += Math.sin(th * 5 + tumble * 1.2) * 0.06;
+      rVar += Math.cos(th * 7) * 0.04;
+      var rad = rockR * Math.max(0.70, rVar);
+      contourPts.push({ x: cx + Math.cos(th) * rad, y: cy + Math.sin(th) * rad });
     }
 
-    // ── 6. Burning Micro-Singularity Solar Reticle Core ──
+    // Draw Asteroid Body (Clipped to organic rocky contour)
+    ctx.save();
     ctx.beginPath();
-    ctx.arc(cx, cy, 1.6, 0, Math.PI * 2);
+    for (var s = 0; s < SAMPLES; s++) {
+      if (s === 0) ctx.moveTo(contourPts[s].x, contourPts[s].y);
+      else ctx.lineTo(contourPts[s].x, contourPts[s].y);
+    }
+    ctx.closePath();
+    ctx.clip();
+
+    // 3D Directional Lighting (Sunlit Crest to Deep Space Shadow)
+    var sunX = cx - rockR * 0.45;
+    var sunY = cy - rockR * 0.55;
+    var bodyGrad = ctx.createRadialGradient(sunX, sunY, rockR * 0.12, cx, cy, rockR * 1.30);
+    bodyGrad.addColorStop(0.0, "#5c4537"); // Sunlit basalt crest
+    bodyGrad.addColorStop(0.30, "#3d2b20"); // Iron-rich silicate mantle
+    bodyGrad.addColorStop(0.62, "#21140e"); // Deep basalt regolith
+    bodyGrad.addColorStop(0.88, "#110906"); // Shadowed regolith
+    bodyGrad.addColorStop(1.0, "#050302"); // Limb occlusion
+    ctx.fillStyle = bodyGrad;
+    ctx.fill();
+
+    // Chiseled Crystalline Facets (Subtle geometric planar depth)
+    var facets = [
+      [[-0.45, -0.55], [0.10, -0.65], [0.18, -0.25], [-0.22, -0.18]],
+      [[0.18, -0.25], [0.65, -0.35], [0.55, 0.12], [0.08, -0.08]],
+      [[-0.52, -0.18], [-0.08, -0.08], [-0.18, 0.42], [-0.58, 0.22]],
+      [[-0.08, -0.08], [0.48, 0.12], [0.28, 0.58], [-0.08, 0.48]]
+    ];
+    for (var fc = 0; fc < facets.length; fc++) {
+      var fct = facets[fc];
+      ctx.beginPath();
+      for (var p = 0; p < fct.length; p++) {
+        var px = cx + fct[p][0] * rockR;
+        var py = cy + fct[p][1] * rockR;
+        if (p === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.closePath();
+      ctx.fillStyle = fc % 2 === 0 ? "rgba(120, 95, 78, 0.30)" : "rgba(35, 20, 14, 0.42)";
+      ctx.fill();
+      ctx.strokeStyle = "rgba(140, 110, 90, 0.22)";
+      ctx.lineWidth = 0.8;
+      ctx.stroke();
+    }
+
+    // 3D Impact Craters with Sunlit Rims and Molten Magma Wells
+    var craterDefs = [
+      { x: -0.32, y: -0.38, r: 0.22, heatPhase: 0 },
+      { x: 0.38, y: -0.25, r: 0.26, heatPhase: 1.8 },
+      { x: -0.25, y: 0.35, r: 0.28, heatPhase: 3.5 },
+      { x: 0.32, y: 0.38, r: 0.20, heatPhase: 5.1 }
+    ];
+    for (var c = 0; c < craterDefs.length; c++) {
+      var cr = craterDefs[c];
+      var crAng = Math.atan2(cr.y, cr.x) + tumble * 0.4;
+      var crDist = Math.hypot(cr.x, cr.y) * rockR;
+      var crX = cx + Math.cos(crAng) * crDist;
+      var crY = cy + Math.sin(crAng) * crDist;
+      var crRad = rockR * cr.r;
+
+      ctx.beginPath();
+      ctx.arc(crX, crY, crRad, 0, Math.PI * 2);
+      ctx.fillStyle = "#070302";
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(crX - 0.7, crY - 0.9, crRad, Math.PI * 0.7, Math.PI * 1.9);
+      ctx.strokeStyle = "rgba(160, 130, 110, 0.65)";
+      ctx.lineWidth = 1.1;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(crX + 0.7, crY + 0.9, crRad, Math.PI * 1.9, Math.PI * 0.7);
+      ctx.strokeStyle = "rgba(8, 4, 2, 0.85)";
+      ctx.lineWidth = 1.1;
+      ctx.stroke();
+
+      var crHeat = 0.5 + 0.5 * Math.sin(t * 4.2 + cr.heatPhase);
+      ctx.beginPath();
+      ctx.arc(crX, crY, crRad * 0.58, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(234, 88, 12, " + (0.60 + crHeat * 0.35).toFixed(2) + ")";
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(crX, crY, crRad * 0.26, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(254, 240, 138, " + (0.75 + crHeat * 0.25).toFixed(2) + ")";
+      ctx.fill();
+    }
+
+    // LIVING BRANCHING MAGMA FISSURE NETWORK (Animated Flow & Planck Radiation)
+    var magmaPulse = 0.5 + 0.5 * Math.sin(t * 3.6);
+    var fissureChains = [
+      [[-0.60, -0.35], [-0.38, -0.28], [-0.18, -0.10], [0.05, 0.04], [0.28, 0.12], [0.48, 0.28], [0.68, 0.38]],
+      [[0.32, -0.52], [0.22, -0.28], [0.05, 0.04], [-0.12, 0.25], [-0.28, 0.45], [-0.48, 0.60]],
+      [[-0.18, -0.10], [-0.32, 0.05], [-0.55, 0.08]],
+      [[0.28, 0.12], [0.45, -0.05], [0.62, -0.18]]
+    ];
+
+    for (var fc = 0; fc < fissureChains.length; fc++) {
+      var chain = fissureChains[fc];
+      var pts = [];
+      for (var j = 0; j < chain.length; j++) {
+        var wobbleX = Math.sin(t * 4.5 + fc * 2.3 + j * 1.2) * 1.1;
+        var wobbleY = Math.cos(t * 4.0 + fc * 1.7 + j * 1.4) * 1.1;
+        pts.push({ x: cx + chain[j][0] * rockR + wobbleX, y: cy + chain[j][1] * rockR + wobbleY });
+      }
+
+      // Layer 1: Wide crimson thermal heat soak
+      ctx.beginPath();
+      ctx.moveTo(pts[0].x, pts[0].y);
+      for (var j = 1; j < pts.length; j++) {
+        var midX = (pts[j - 1].x + pts[j].x) * 0.5;
+        var midY = (pts[j - 1].y + pts[j].y) * 0.5;
+        ctx.quadraticCurveTo(pts[j - 1].x, pts[j - 1].y, midX, midY);
+      }
+      ctx.lineTo(pts[pts.length - 1].x, pts[pts.length - 1].y);
+      ctx.strokeStyle = "rgba(220, 38, 38, " + (0.52 + magmaPulse * 0.35).toFixed(2) + ")";
+      ctx.lineWidth = Math.max(2.4, rockR * 0.26);
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.stroke();
+
+      // Layer 2: Radiant molten solar orange-gold lava stream
+      ctx.beginPath();
+      ctx.moveTo(pts[0].x, pts[0].y);
+      for (var j = 1; j < pts.length; j++) {
+        var midX = (pts[j - 1].x + pts[j].x) * 0.5;
+        var midY = (pts[j - 1].y + pts[j].y) * 0.5;
+        ctx.quadraticCurveTo(pts[j - 1].x, pts[j - 1].y, midX, midY);
+      }
+      ctx.lineTo(pts[pts.length - 1].x, pts[pts.length - 1].y);
+      ctx.strokeStyle = "rgba(249, 115, 22, " + (0.85 + magmaPulse * 0.15).toFixed(2) + ")";
+      ctx.lineWidth = Math.max(1.4, rockR * 0.14);
+      ctx.stroke();
+
+      // Layer 3: Blinding 5000K incandescent white-gold core vein
+      ctx.beginPath();
+      ctx.moveTo(pts[0].x, pts[0].y);
+      for (var j = 1; j < pts.length; j++) {
+        var midX = (pts[j - 1].x + pts[j].x) * 0.5;
+        var midY = (pts[j - 1].y + pts[j].y) * 0.5;
+        ctx.quadraticCurveTo(pts[j - 1].x, pts[j - 1].y, midX, midY);
+      }
+      ctx.lineTo(pts[pts.length - 1].x, pts[pts.length - 1].y);
+      ctx.strokeStyle = "rgba(255, 255, 245, " + (0.92 + magmaPulse * 0.08).toFixed(2) + ")";
+      ctx.lineWidth = Math.max(0.8, rockR * 0.06);
+      ctx.stroke();
+    }
+
+    // Molten Caldera Hotspots at fissure intersections
+    var calderas = [{ x: 0.05, y: 0.04 }, { x: 0.28, y: 0.12 }, { x: -0.18, y: -0.10 }];
+    for (var k = 0; k < calderas.length; k++) {
+      var cX = cx + calderas[k].x * rockR;
+      var cY = cy + calderas[k].y * rockR;
+      var cPulse = 0.5 + 0.5 * Math.sin(t * 6.0 + k * 2.3);
+
+      ctx.beginPath();
+      ctx.arc(cX, cY, 3.2 + cPulse * 1.2, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(249, 115, 22, 0.70)";
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(cX, cY, 1.8 + cPulse * 0.8, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(254, 240, 138, 0.95)";
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(cX, cY, 0.9, 0, Math.PI * 2);
+      ctx.fillStyle = "#ffffff";
+      ctx.fill();
+    }
+
+    // Mineral micro-facets & regolith crystalline flecks
+    for (var fl = 0; fl < 14; fl++) {
+      var fAng = fl * 2.39 + tumble * 0.3;
+      var fDist = rockR * (0.18 + (fl * 0.14) % 0.65);
+      var fx = cx + Math.cos(fAng) * fDist;
+      var fy = cy + Math.sin(fAng) * fDist;
+      ctx.beginPath();
+      ctx.arc(fx, fy, 0.9, 0, Math.PI * 2);
+      ctx.fillStyle = fl % 2 === 0 ? "rgba(180, 145, 120, 0.40)" : "rgba(15, 8, 5, 0.55)";
+      ctx.fill();
+    }
+
+    ctx.restore(); // end clip
+
+    // ── 6. INCANDESCENT ABLATION PERIMETER RIM & SOLAR PROMINENCE LOOPS ──
+    ctx.beginPath();
+    for (var s = 0; s < SAMPLES; s++) {
+      if (s === 0) ctx.moveTo(contourPts[s].x, contourPts[s].y);
+      else ctx.lineTo(contourPts[s].x, contourPts[s].y);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = "rgba(251, 191, 36, 0.95)";
+    ctx.lineWidth = 1.8;
+    ctx.stroke();
+
+    // Erupting Coronal Solar Prominence Loops (Plasma Arches leaping beyond the rim)
+    for (var a = 0; a < 3; a++) {
+      var aAng1 = t * 1.4 + a * (Math.PI * 2 / 3);
+      var aAng2 = aAng1 + 0.52;
+      var p1x = cx + Math.cos(aAng1) * rockR;
+      var p1y = cy + Math.sin(aAng1) * rockR;
+      var p2x = cx + Math.cos(aAng2) * rockR;
+      var p2y = cy + Math.sin(aAng2) * rockR;
+      var archDist = rockR * (1.26 + 0.14 * Math.sin(t * 4.5 + a * 1.7));
+      var midAng = (aAng1 + aAng2) * 0.5;
+      var apexX = cx + Math.cos(midAng) * archDist;
+      var apexY = cy + Math.sin(midAng) * archDist;
+
+      ctx.beginPath();
+      ctx.moveTo(p1x, p1y);
+      ctx.quadraticCurveTo(apexX, apexY, p2x, p2y);
+      ctx.strokeStyle = "rgba(249, 115, 22, 0.45)";
+      ctx.lineWidth = 2.8;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(p1x, p1y);
+      ctx.quadraticCurveTo(apexX, apexY, p2x, p2y);
+      ctx.strokeStyle = "rgba(254, 240, 138, 0.90)";
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+    }
+
+    // ── 7. BURNING MICRO-SINGULARITY SOLAR RETICLE CORE ──
+    ctx.beginPath();
+    ctx.arc(cx, cy, 1.8, 0, Math.PI * 2);
     ctx.fillStyle = "#ffffff";
     ctx.fill();
 
-    // ── 7. Target Synchronization Resonance Wavefront ──
+    // ── 8. TARGET SYNCHRONIZATION RESONANCE WAVEFRONT (Supercritical Overdrive) ──
     if (progress > 0) {
       var syncPulse = Math.sin(now * 0.014) * 0.5 + 0.5;
       var syncR = coreR * (1.25 + progress * 0.65 + syncPulse * 0.2);
       ctx.beginPath();
       ctx.arc(cx, cy, syncR, 0, Math.PI * 2);
-      ctx.strokeStyle = progress > 0.85 ? "rgba(255, 255, 240, 0.90)" : "rgba(249, 115, 22, 0.75)";
-      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = progress > 0.85 ? "rgba(255, 255, 240, 0.95)" : "rgba(249, 115, 22, 0.80)";
+      ctx.lineWidth = 1.6;
       ctx.setLineDash([4, 4]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, syncR * 1.25, 0, Math.PI * 2);
+      ctx.strokeStyle = "rgba(251, 191, 36, 0.60)";
+      ctx.lineWidth = 1.1;
+      ctx.setLineDash([2, 5]);
       ctx.stroke();
       ctx.setLineDash([]);
     }
@@ -13421,7 +13641,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   <script>
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v71', { scope: './' }).catch(function() {});
+        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v72', { scope: './' }).catch(function() {});
       });
     }
   </script>
