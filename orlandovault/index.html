@@ -73,7 +73,7 @@
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
       pointer-events: none;
-      z-index: 9999;
+      z-index: 1;
       background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
       background-size: 100% 4px;
       opacity: 0.35;
@@ -1901,24 +1901,21 @@
     .qr-img-wrapper {
       position: relative;
       z-index: 5;
-      width: 280px !important;
-      height: 280px !important;
-      min-width: 280px !important;
-      min-height: 280px !important;
-      max-width: min(82vw, 360px) !important;
-      max-height: min(82vw, 360px) !important;
-      aspect-ratio: 1 / 1 !important;
-      flex-shrink: 0 !important;
-      margin: 0 auto !important;
+      width: clamp(260px, 80vw, 320px);
+      height: clamp(260px, 80vw, 320px);
+      max-width: min(86vw, 520px);
+      max-height: min(86vw, 520px);
+      aspect-ratio: 1 / 1;
+      margin: 0 auto;
       background: #ffffff !important;
-      border-radius: 16px !important;
-      padding: 18px !important;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.95), 0 0 0 2px rgba(255, 255, 255, 0.4) !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      box-sizing: border-box !important;
-      overflow: visible !important;
+      border-radius: 16px;
+      padding: clamp(12px, 3vw, 18px);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.95), 0 0 0 2px rgba(255, 255, 255, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      transition: width 0.25s ease, height 0.25s ease;
     }
 
     .qr-code-svg-holo, .qr-code-img-holo {
@@ -2799,6 +2796,90 @@
       box-shadow: 0 0 8px var(--cyan);
     }
 
+  
+    /* RESPONSIVE UPGRADES FOR ALL SCREEN SIZES & DEVICES */
+    @media (max-width: 600px) {
+      .vault-topbar {
+        padding: calc(8px + var(--safe-top)) 10px 8px 10px;
+        gap: 8px;
+      }
+      .brand-meta h1 {
+        font-size: 13px;
+        letter-spacing: 1px;
+      }
+      .jarvis-status {
+        display: none !important;
+      }
+      .btn-topbar-search {
+        padding: 6px 9px;
+        font-size: 11px;
+      }
+      .topbar-kbd {
+        display: none !important;
+      }
+      .btn-topbar-desktop {
+        padding: 6px 10px;
+      }
+      .btn-topbar-desktop .desktop-btn-label {
+        font-size: 11px;
+      }
+      .spotlight-backdrop {
+        padding-top: 14px;
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+      .spotlight-box {
+        border-radius: 14px;
+        max-height: 88vh;
+      }
+      .spotlight-input-row {
+        padding: 12px 14px;
+      }
+      .spotlight-input {
+        font-size: 14px;
+      }
+      .spotlight-results {
+        max-height: calc(88vh - 110px);
+        padding: 6px 8px;
+      }
+      .spotlight-item {
+        padding: 8px 10px;
+        gap: 10px;
+      }
+      .spotlight-item-title {
+        font-size: 13px;
+      }
+      .spotlight-item-desc {
+        font-size: 11px;
+      }
+      .spotlight-item-badge {
+        font-size: 10px;
+        padding: 2px 6px;
+      }
+    }
+
+    @media (max-width: 440px) {
+      .btn-topbar-desktop .desktop-btn-label {
+        font-size: 10px;
+      }
+      .standalone-subapp-dock {
+        bottom: 8px !important;
+        padding: 4px 6px !important;
+        gap: 4px !important;
+        max-width: 95vw !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+      }
+      .dock-pill-btn {
+        padding: 5px 8px !important;
+        font-size: 10.5px !important;
+        white-space: nowrap !important;
+      }
+      .dock-apps-label {
+        display: none !important;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -3223,6 +3304,7 @@
         localStorage.setItem(LS_COPY_KEY, copyCount.toString());
         renderMetrics();
         logAudit('COPIED_PASSWORD', 'Copied password for: ' + accountTitle);
+        recordVaultMutation('COPY_INCREMENT', { count: copyCount, title: accountTitle });
 
         if (btnElement) {
           const originalText = btnElement.innerHTML;
@@ -3396,14 +3478,7 @@
       `).join('');
     }
 
-    function updateJarvisClock() {
-      const clockEl = document.getElementById('jarvisClock');
-      if (!clockEl) return;
-      const now = new Date();
-      const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-      const dateStr = now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
-      clockEl.textContent = `JARVIS HUD CLOCK: ${dateStr.toUpperCase()} · ${timeStr}`;
-    }
+
 
     function escapeHtml(str) {
       if (!str) return '';
@@ -3420,8 +3495,8 @@
       renderVault();
       renderMetrics();
       updateLaunchButtonState();
-      updateJarvisClock();
-      setInterval(updateJarvisClock, 1000);
+      
+      
 
       const searchInput = document.getElementById('vaultSearchInput');
       const clearBtn = document.getElementById('searchClearBtn');
@@ -3489,7 +3564,7 @@
       }
 
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v7', { scope: '/orlandovault/' }).catch(err => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v8', { scope: '/orlandovault/' }).catch(err => {
           console.warn('Vault SW registration error:', err);
         });
       }
@@ -3577,6 +3652,32 @@
     let soundEnabled = true;
     let audioCtx = null;
 
+    /* ==========================================================================
+       DUAL-LAYER SYNTHESIZED WEB AUDIO HAPTICS & OPTIMISTIC MUTATION ENGINE
+       ========================================================================== */
+    const LS_MUTATION_JOURNAL = 'ov_mutation_journal';
+
+    function recordVaultMutation(type, payload) {
+      try {
+        let journal = [];
+        try {
+          journal = JSON.parse(localStorage.getItem(LS_MUTATION_JOURNAL) || '[]');
+        } catch (e) {}
+        journal.push({
+          id: 'mut_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+          type: type,
+          payload: payload,
+          ts: Date.now()
+        });
+        localStorage.setItem(LS_MUTATION_JOURNAL, JSON.stringify(journal));
+      } catch (e) {}
+
+      // Trigger self-healing background cloud reconcile
+      if (window.vaultSyncEngine && typeof window.vaultSyncEngine.schedulePush === 'function') {
+        window.vaultSyncEngine.schedulePush();
+      }
+    }
+
     function playJarvisSound(type) {
       if (!soundEnabled) return;
       try {
@@ -3584,34 +3685,73 @@
         if (audioCtx.state === 'suspended') audioCtx.resume();
 
         const now = audioCtx.currentTime;
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
+
+        // Layer 1: High-Definition Crystalline Harmonic Resonance
+        const osc1 = audioCtx.createOscillator();
+        const gain1 = audioCtx.createGain();
+        osc1.connect(gain1);
+        gain1.connect(audioCtx.destination);
+
+        // Layer 2: Sub-Bass Mechanical Tactile Pulse (Simulates physical click haptics)
+        const osc2 = audioCtx.createOscillator();
+        const gain2 = audioCtx.createGain();
+        osc2.connect(gain2);
+        gain2.connect(audioCtx.destination);
 
         if (type === 'copy') {
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(880, now);
-          osc.frequency.exponentialRampToValueAtTime(1760, now + 0.15);
-          gain.gain.setValueAtTime(0.08, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
-          osc.start(now);
-          osc.stop(now + 0.22);
+          // Sparkle ping 1174.66Hz -> 1760Hz
+          osc1.type = 'sine';
+          osc1.frequency.setValueAtTime(1174.66, now);
+          osc1.frequency.exponentialRampToValueAtTime(1760, now + 0.16);
+          gain1.gain.setValueAtTime(0.12, now);
+          gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+          osc1.start(now);
+          osc1.stop(now + 0.25);
+
+          // Sub-bass tactile kick 65Hz -> 32Hz
+          osc2.type = 'sine';
+          osc2.frequency.setValueAtTime(65, now);
+          osc2.frequency.exponentialRampToValueAtTime(32, now + 0.04);
+          gain2.gain.setValueAtTime(0.18, now);
+          gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+          osc2.start(now);
+          osc2.stop(now + 0.05);
+
+          // Native mobile vibration haptics
+          if (navigator.vibrate) {
+            try { navigator.vibrate([14, 35, 14]); } catch (ve) {}
+          }
         } else if (type === 'reveal') {
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(540, now);
-          osc.frequency.exponentialRampToValueAtTime(720, now + 0.08);
-          gain.gain.setValueAtTime(0.06, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
-          osc.start(now);
-          osc.stop(now + 0.1);
+          osc1.type = 'triangle';
+          osc1.frequency.setValueAtTime(540, now);
+          osc1.frequency.exponentialRampToValueAtTime(880, now + 0.12);
+          gain1.gain.setValueAtTime(0.08, now);
+          gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+          osc1.start(now);
+          osc1.stop(now + 0.18);
+
+          if (navigator.vibrate) {
+            try { navigator.vibrate(8); } catch (ve) {}
+          }
         } else if (type === 'click') {
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(600, now);
-          gain.gain.setValueAtTime(0.04, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
-          osc.start(now);
-          osc.stop(now + 0.04);
+          osc1.type = 'sine';
+          osc1.frequency.setValueAtTime(800, now);
+          gain1.gain.setValueAtTime(0.05, now);
+          gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+          osc1.start(now);
+          osc1.stop(now + 0.04);
+
+          // Tactile thump
+          osc2.type = 'sine';
+          osc2.frequency.setValueAtTime(55, now);
+          gain2.gain.setValueAtTime(0.12, now);
+          gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
+          osc2.start(now);
+          osc2.stop(now + 0.035);
+
+          if (navigator.vibrate) {
+            try { navigator.vibrate(6); } catch (ve) {}
+          }
         }
       } catch (e) {}
     }
@@ -3628,6 +3768,7 @@
       } catch(e){}
       renderVault();
       logAudit('PASSWORD_ROTATED', 'Marked rotation completed for: ' + item.title);
+      recordVaultMutation('PASSWORD_ROTATION', { itemId: itemId, title: item.title, ts: item.updated_at });
       playJarvisSound('copy');
       showToast('🛡️ Rotation timestamp updated for ' + item.title + '!');
     }
@@ -4020,7 +4161,7 @@
           <span class="qr-corner br"></span>
           <div class="qr-laser-beam"></div>
 
-          <div class="qr-img-wrapper" style="width:${qrSizePx}px; height:${qrSizePx}px;">
+          <div class="qr-img-wrapper" style="width:min(86vw, ${qrSizePx}px) !important; height:min(86vw, ${qrSizePx}px) !important;">
             ${qrRes.svg ? qrRes.svg : `<img src="${qrApiUrl}" crossorigin="anonymous" class="qr-code-img-holo" style="width:${qrSizePx}px; height:${qrSizePx}px;" alt="OrlandoVault QR Code">`}
           </div>
         </div>
@@ -4289,24 +4430,7 @@
     let pushTimer = null;
     const origSetItem = Storage.prototype.setItem;
 
-    function setVaultSyncBadge(status) {
-      const dot = document.getElementById('firebaseVaultSyncDot');
-      const txt = document.getElementById('firebaseVaultSyncText');
-      if (!dot || !txt) return;
-      if (status === 'syncing') {
-        dot.style.background = '#00f0ff';
-        dot.style.boxShadow = '0 0 8px #00f0ff';
-        txt.textContent = 'Syncing...';
-      } else if (status === 'offline') {
-        dot.style.background = '#f59e0b';
-        dot.style.boxShadow = '0 0 8px #f59e0b';
-        txt.textContent = 'Offline';
-      } else {
-        dot.style.background = '#10b981';
-        dot.style.boxShadow = '0 0 8px #10b981';
-        txt.textContent = 'Cloud Synced';
-      }
-    }
+    function setVaultSyncBadge(status) {}
 
     function collectPacket() {
       const data = {};
@@ -4341,6 +4465,10 @@
           body: JSON.stringify(body)
         });
         if (res.ok) {
+          // Cloud acknowledged mutation; flush self-healing mutation journal
+          try {
+            localStorage.setItem(LS_MUTATION_JOURNAL, '[]');
+          } catch(e){}
           setVaultSyncBadge('synced');
           if (showFeedback && typeof showToast === 'function') {
             showToast('⚡ Synced Vault credentials & audit log to Google Cloud Firebase!', '☁️');
@@ -4606,6 +4734,16 @@
     document.addEventListener('mouseout', (e) => {
       if (hoverTimer) clearTimeout(hoverTimer);
     });
+
+    // Touchstart Speculative Pre-Fetching for Mobile Touchscreens (Zero-Latency Navigation)
+    document.addEventListener('touchstart', (e) => {
+      const a = e.target.closest('a, button[data-href], .dock-pill-btn, button[onclick]');
+      if (!a) return;
+      const targetHref = a.href || a.getAttribute('data-href');
+      if (targetHref && (targetHref.startsWith('/') || targetHref.includes(window.location.origin))) {
+        prefetchUrl(targetHref);
+      }
+    }, { passive: true });
 
     // Automatically prefetch sibling flagship apps
     setTimeout(() => {
