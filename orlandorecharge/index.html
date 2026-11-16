@@ -4773,28 +4773,6 @@ body.light-theme .highlight-card .dist-icon{
 
     <div class="dist-body" id="distBody">
       <div class="dist-grid">
-        <!-- Card 1: Main Executive Schedule -->
-        <div class="dist-card">
-          <div class="dist-card-top">
-            <div class="dist-icon dist-icon-gold">
-              <svg class="modern-icon modern-icon-gold" viewBox="0 0 24 24" style="width:19px;height:19px;margin:0"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-            </div>
-            <div class="dist-card-meta">
-              <div class="dist-name">Main Executive App</div>
-              <div class="dist-desc">Complete 23-block main schedule</div>
-            </div>
-          </div>
-          <div class="dist-btn-stack">
-            <a class="primary dist-btn" id="openMainAppBtn" href="https://orlandopasion000.github.io/orlandorecharge" target="_blank" rel="noopener" title="Open Complete 23-Block Main Schedule in New Window">
-              <svg class="modern-icon" viewBox="0 0 24 24" fill="none" style="width:14px;height:14px">
-                <path d="M12 2.5L20.5 7.4V16.6L12 21.5L3.5 16.6V7.4L12 2.5Z" stroke="#000000" stroke-width="1.8" stroke-linejoin="round"/>
-                <path d="M12 7V17M12 17L8 13M12 17L16 13" stroke="#000000" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              <span>Open Main Web App</span>
-            </a>
-          </div>
-        </div>
-
         <!-- Card 2: Mobile QR Code & Link Sharing -->
         <div class="dist-card">
           <div class="dist-card-top">
@@ -7339,14 +7317,6 @@ function initRechargeAppLaunch() {
     };
   }
   updateLaunchButtonState();
-
-  var mainAppBtn = document.getElementById('openMainAppBtn');
-  if (mainAppBtn) {
-    mainAppBtn.onclick = function(e) {
-      if (e) e.preventDefault();
-      handleLaunchStandaloneApp();
-    };
-  }
 }
 window.addEventListener('DOMContentLoaded', initRechargeAppLaunch);
 setTimeout(initRechargeAppLaunch, 300);
@@ -7876,13 +7846,7 @@ function launchStandaloneAppWindow(targetUrl, windowTitle) {
   return false;
 }
 
-if ($("openMainAppBtn")) {
-  $("openMainAppBtn").onclick = function(e) {
-    if (e && e.preventDefault) e.preventDefault();
-    launchStandaloneAppWindow("https://orlandopasion000.github.io/orlandorecharge", "OrlandoRechargeMainAppWindow");
-    return false;
-  };
-}
+
 
 if ($("startBlankCanvasBtn")) {
   $("startBlankCanvasBtn").onclick = function() {

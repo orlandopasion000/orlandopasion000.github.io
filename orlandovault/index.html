@@ -2516,54 +2516,7 @@
       </div>
 
       <div class="dist-grid" id="vaultDistGrid" style="margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:12px;">
-        <!-- Card 1: Main Executive App (Open Main Web App) -->
-        <div class="dist-card" id="distCardMain">
-          <div class="dist-card-top">
-            <div class="dist-icon dist-icon-cyan" style="border-color:rgba(217,185,92,0.45);background:rgba(217,185,92,0.14);">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#ffd700" stroke-width="2" style="width:20px;height:20px;">
-                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-              </svg>
-            </div>
-            <div class="dist-card-meta">
-              <div class="dist-name">OrlandoVault (Main Version)</div>
-              <div class="dist-desc">Complete Jarvis cryptographic security console</div>
-            </div>
-          </div>
-          <div class="dist-btn-stack">
-            <button type="button" class="dist-btn primary" id="openMainAppBtn" title="Open OrlandoVault in Dedicated Standalone Desktop Window or Install PWA" style="background:linear-gradient(135deg,#d9b95c 0%,#b48a2e 100%);color:#090a0f;border-color:#fde047;font-weight:800;">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="width:14px;height:14px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-              <span id="openMainAppBtnLabel">Open Main Web App</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Card 2: Holographic QR & Phone Scanner -->
-        <div class="dist-card dist-card-holo" id="cardHoloQr" style="cursor:pointer;" title="Click to Open Holographic QR Scanner">
-          <div class="dist-card-top">
-            <div class="dist-icon dist-icon-cyan">
-              <svg class="modern-icon modern-icon-cyan" viewBox="0 0 24 24" style="width:20px;height:20px;stroke:#00f0ff;">
-                <rect x="3" y="3" width="7" height="7" rx="1.5" stroke-width="1.8"></rect>
-                <rect x="14" y="3" width="7" height="7" rx="1.5" stroke-width="1.8"></rect>
-                <rect x="14" y="14" width="7" height="7" rx="1.5" stroke-width="1.8"></rect>
-                <rect x="3" y="14" width="7" height="7" rx="1.5" stroke-width="1.8"></rect>
-              </svg>
-            </div>
-            <div class="dist-card-meta">
-              <div class="dist-name">Holographic QR</div>
-              <div class="dist-desc">Instant phone scanner &amp; device sync</div>
-            </div>
-          </div>
-          <div class="dist-btn-stack">
-            <button type="button" class="dist-btn dist-btn-holo" id="openQrBtn" title="Launch Interactive Holographic QR Suite">
-              <span>📱 Open Phone QR</span>
-            </button>
-            <button type="button" class="dist-btn" id="shareAppBtn" title="Copy OrlandoVault Web Link">
-              <span>🔗 Share / Copy Link</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Card 3: Google Sheets & Firebase Cloud Sync Engine -->
+        <!-- Card: Google Sheets & Firebase Cloud Sync Engine -->
         <div class="dist-card" id="cardSheetSync" title="Sync live with Google Sheets & Firebase Cloud">
           <div class="dist-card-top">
             <div class="dist-icon dist-icon-emerald">
@@ -3417,22 +3370,10 @@
 
     function bindVaultGlobalEvents() {
       // Holographic QR open triggers
-      const openQrBtn = document.getElementById('openQrBtn');
-      const cardHoloQr = document.getElementById('cardHoloQr');
       const btnOpenBackup = document.getElementById('btnOpenBackup');
-      const shareAppBtn = document.getElementById('shareAppBtn');
-
-      if (openQrBtn) {
-        openQrBtn.onclick = function(e) {
-          if (e) e.stopPropagation();
-          openVaultQrModal();
-        };
-      }
-
-      if (cardHoloQr) {
-        cardHoloQr.onclick = function(e) {
-          // If click was not on the share button, open QR modal
-          if (e && e.target && e.target.closest('#shareAppBtn')) return;
+      if (btnOpenBackup) {
+        btnOpenBackup.onclick = function(e) {
+          if (e) e.preventDefault();
           openVaultQrModal();
         };
       }
@@ -3441,13 +3382,6 @@
         btnOpenBackup.onclick = function(e) {
           if (e) e.preventDefault();
           openVaultQrModal();
-        };
-      }
-
-      if (shareAppBtn) {
-        shareAppBtn.onclick = function(e) {
-          if (e) e.stopPropagation();
-          shareVaultApp();
         };
       }
 
@@ -3471,17 +3405,6 @@
       const btnTopbarLaunchApp = document.getElementById('btnTopbarLaunchApp');
       if (btnTopbarLaunchApp) btnTopbarLaunchApp.onclick = function(e) { if (e) e.preventDefault(); handleLaunchStandaloneApp(); };
       updateLaunchButtonState();
-      const openMainAppBtn = document.getElementById('openMainAppBtn');
-      const openMainAppBtnLabel = document.getElementById('openMainAppBtnLabel');
-      if (openMainAppBtn) {
-        openMainAppBtn.onclick = function(e) {
-          if (e) e.preventDefault();
-          handleLaunchStandaloneApp();
-        };
-      }
-      if (openMainAppBtnLabel && isStandaloneMode()) {
-        openMainAppBtnLabel.textContent = '✔ Main Web App Active';
-      }
       const vaultDistHeader = document.getElementById('vaultDistHeader');
       const vaultDistGrid = document.getElementById('vaultDistGrid');
       const vaultDistMinIcon = document.getElementById('vaultDistMinIcon');

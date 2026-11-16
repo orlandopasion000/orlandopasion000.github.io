@@ -3980,7 +3980,7 @@
     }
 
     // Wire all Open Main Web App triggers
-    ['btnTopbarLaunchApp', 'openMainAppBtn', 'btnCockpitLaunchApp'].forEach(id => {
+    ['btnTopbarLaunchApp'].forEach(id => {
       const el = document.getElementById(id);
       if (el) {
         el.addEventListener('click', (e) => {

@@ -272,12 +272,6 @@
 
               <!-- Action Pills -->
               <div class="supernova-action-pills">
-                <button type="button" class="sn-action-pill primary" id="btnCockpitLaunchApp" title="Launch Orlando Timer in a dedicated standalone desktop window">
-                  <svg class="sn-pill-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line>
-                  </svg>
-                  <span id="cockpitLaunchAppLabel">Open Main Web App</span>
-                </button>
                 <button type="button" class="sn-action-pill primary" id="btnFireSupernova" title="Detonate Celestial Supernova Shockwave (Particle Burst)">
                   <svg class="sn-pill-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
@@ -956,26 +950,7 @@
 
       <div class="ot-dist-body" id="otDistBody">
         <div class="ot-dist-grid">
-          <!-- Card 1: Main Executive App -->
-          <div class="ot-dist-card" id="otDistCardMain">
-            <div class="ot-dist-card-top">
-              <div class="ot-dist-icon">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-              </div>
-              <div>
-                <div class="ot-dist-name" id="otDistCardMainTitle">Orlando Timer (Main Version)</div>
-                <div class="ot-dist-desc">Complete 3-in-1 executive horology suite</div>
-              </div>
-            </div>
-            <div class="ot-dist-btn-stack">
-              <button type="button" class="ot-dist-btn primary-gold" id="openMainAppBtn" title="Open Orlando Timer in a dedicated standalone desktop window or install as PWA">
-                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-                <span id="openMainAppBtnLabel">Open Main Web App</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Card 2: Holographic Phone QR -->
+          <!-- Card: Holographic Phone QR -->
           <div class="ot-dist-card" id="otCardHoloQr">
             <div class="ot-dist-card-top">
               <div class="ot-dist-icon cyan">
@@ -1012,9 +987,6 @@
                 <button type="button" class="ot-dist-btn" id="otExportBackupBtn"><span>⬇ Export</span></button>
                 <button type="button" class="ot-dist-btn" id="otImportBackupBtn"><span>⬆ Import</span></button>
               </div>
-              <button type="button" class="ot-dist-btn holo-cyan" id="otSyncCloudNowBtn">
-                <span>⚡ Sync Firebase Cloud Now</span>
-              </button>
               <input type="file" id="otImportFileInput" accept=".json,application/json" style="display:none">
             </div>
           </div>
