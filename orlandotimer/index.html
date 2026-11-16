@@ -40,7 +40,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&family=Orbitron:wght@600;700;800;900&family=Outfit:wght@600;700;800;900&family=Space+Grotesk:wght@600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
   <!-- Relative Stylesheet (with cache-bust versioning) -->
-  <link rel="stylesheet" href="style.css?v=30.2">
+  <link rel="stylesheet" href="style.css?v=30.3">
 </head>
 <body data-app-theme="pure-black" data-clock-style="pure-black">
   <!-- Accessibility Live Region for Screen Readers -->
@@ -695,51 +695,6 @@
           </button>
         </div>
 
-        <!-- Presets & Unified Protocol Strip -->
-        <div class="presets-section" id="timerPresetsSection">
-          <div class="presets-header-row">
-            <span class="presets-label">Timer Presets &amp; Protocol</span>
-            <button type="button" class="btn-add-preset" id="btnAddPreset" title="Add Custom Preset Minute">+ Custom Preset</button>
-          </div>
-          <div class="presets-row" id="presetsRow">
-            <button type="button" class="preset-pill" data-minutes="5">5 min</button>
-            <button type="button" class="preset-pill" data-minutes="10">10 min</button>
-            <button type="button" class="preset-pill" data-minutes="15">15 min</button>
-            <button type="button" class="preset-pill" data-minutes="25">25 min</button>
-            <button type="button" class="preset-pill" data-minutes="45">45 min</button>
-            <button type="button" class="preset-pill" data-minutes="90">90 min</button>
-          </div>
-
-          <!-- Strip A: Focus Protocol (25m / 5m / 15m Pomodoro) -->
-          <div class="pomodoro-cycle-strip" id="pomodoroCycleStrip">
-            <div class="pomo-status-left">
-              <span class="pomo-dot" id="pomoDot"></span>
-              <span class="pomo-stage-title" id="pomoStageTitle">Focus Session (25m)</span>
-              <span class="pomo-round-badge" id="pomoRoundBadge">Round 1/4</span>
-            </div>
-            <div class="pomo-buttons-right">
-              <button type="button" class="pomo-step-btn active" id="btnPomoFocus" title="25 Minute Focus Session">25m Focus</button>
-              <button type="button" class="pomo-step-btn" id="btnPomoShortBreak" title="5 Minute Short Break">5m Break</button>
-              <button type="button" class="pomo-step-btn" id="btnPomoLongBreak" title="15 Minute Long Break">15m Long</button>
-              <button type="button" class="pomo-toggle-btn active" id="btnPomoAutoNext" title="Auto-advance Pomodoro Cycles">Auto: ON</button>
-            </div>
-          </div>
-
-          <!-- Strip B: Deep Work (90m Ultradian Rhythm) -->
-          <div class="pomodoro-cycle-strip" id="deepWorkCycleStrip" style="display:none;">
-            <div class="pomo-status-left">
-              <span class="pomo-dot"></span>
-              <span class="pomo-stage-title" id="dwStageTitle">Ultradian Deep Work (90m)</span>
-              <span class="pomo-round-badge" id="dwPhaseBadge">Phase 1 · Warm-Up</span>
-            </div>
-            <div class="pomo-buttons-right">
-              <button type="button" class="pomo-step-btn" data-dw-mins="60">60m Deep</button>
-              <button type="button" class="pomo-step-btn active" data-dw-mins="90">90m Ultra</button>
-              <button type="button" class="pomo-step-btn" data-dw-mins="120">120m Peak</button>
-              <button type="button" class="pomo-step-btn" data-dw-mins="20">20m Recharge</button>
-            </div>
-          </div>
-        </div>
       </section>
 
       <!-- ========================================== -->
@@ -1299,7 +1254,7 @@
 
   <script src="assets/relative-time.js"></script>
   <script src="assets/qrcode.min.js"></script>
-  <script src="app.js?v=30.2"></script>
+  <script src="app.js?v=30.3"></script>
 
 
 

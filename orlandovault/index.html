@@ -3155,7 +3155,137 @@
       box-shadow: 0 0 14px rgba(239, 68, 68, 0.4) !important;
     }
 
-  </style>
+  
+
+    /* ==========================================================================
+       APPLE-GRADE TOUCH GESTURE & EDGE-SWIPE NAVIGATION STYLING
+       ========================================================================== */
+    .ios-grabber-bar {
+      width: 44px;
+      height: 5px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.35);
+      margin: 10px auto 4px auto;
+      cursor: grab;
+      touch-action: none;
+      transition: background 0.2s ease, transform 0.2s ease;
+      flex-shrink: 0;
+    }
+    .ios-grabber-bar:active {
+      background: #00f0ff;
+      transform: scaleX(1.2);
+    }
+
+    .apple-edge-indicator {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%) scale(0.7);
+      background: rgba(13, 18, 28, 0.88);
+      border: 1.5px solid rgba(56, 189, 248, 0.5);
+      border-radius: 999px;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #00f0ff;
+      font-family: var(--font-inter);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.85), 0 0 24px rgba(0, 240, 255, 0.35);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 999999;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .apple-edge-indicator.left {
+      left: 18px;
+    }
+    .apple-edge-indicator.right {
+      right: 18px;
+    }
+    .apple-edge-indicator.active {
+      opacity: 1;
+      transform: translateY(-50%) scale(1);
+    }
+    .apple-edge-indicator svg {
+      width: 16px;
+      height: 16px;
+      stroke-width: 3;
+    }
+
+    .btn-spotlight-touch-close {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 999px;
+      padding: 6px 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: #94a3b8;
+      cursor: pointer;
+      font-family: var(--font-inter);
+      font-size: 11.5px;
+      font-weight: 700;
+      transition: all 0.2s ease;
+      touch-action: manipulation;
+    }
+    .btn-spotlight-touch-close:hover,
+    .btn-spotlight-touch-close:active {
+      background: rgba(239, 68, 68, 0.25);
+      border-color: #ef4444;
+      color: #ffffff;
+      transform: scale(0.96);
+    }
+    .btn-spotlight-touch-close svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    .btn-spotlight-mobile-back {
+      display: none;
+      width: 100%;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 10px;
+      padding: 10px;
+      color: #38bdf8;
+      font-family: var(--font-inter);
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 8px;
+      touch-action: manipulation;
+    }
+    .btn-spotlight-mobile-back:active {
+      background: rgba(56, 189, 248, 0.3);
+      color: #ffffff;
+    }
+
+    @media (max-width: 768px) {
+      .btn-spotlight-mobile-back {
+        display: flex;
+      }
+      .spotlight-footer-keys {
+        display: none !important;
+      }
+      .spotlight-backdrop {
+        padding-top: calc(var(--safe-top) + 8px);
+        padding-bottom: calc(var(--safe-bottom) + 12px);
+      }
+      .spotlight-box, .card-editor-modal, .qr-suite-container, .modal-box {
+        transition: transform 0.25s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.25s ease;
+        will-change: transform, opacity;
+        touch-action: pan-y;
+      }
+    }
+
+</style>
 </head>
 <body>
 
@@ -3345,6 +3475,7 @@
   <!-- CREDENTIAL CARD QUICK-EDITOR MODAL -->
   <div class="modal-backdrop" id="cardEditModal" role="dialog" aria-modal="true" aria-label="Edit Credential Card">
     <div class="card-editor-modal">
+      <div class="ios-grabber-bar" aria-label="Swipe down or right to dismiss"></div>
       <div class="qr-studio-header">
         <div class="qr-studio-title-wrap">
           <div class="qr-studio-title-row">
@@ -4211,7 +4342,7 @@
       }
 
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v16', { scope: '/orlandovault/' }).catch(err => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v17', { scope: '/orlandovault/' }).catch(err => {
           console.warn('Vault SW registration error:', err);
         });
       }
@@ -5270,13 +5401,17 @@
   </script>
 
 
-  <!-- SPOTLIGHT COMMAND PALETTE MODAL (CTRL + K / ⌘K) -->
+  <!-- SPOTLIGHT COMMAND PALETTE MODAL (CTRL + K / ⌘K / SWIPE) -->
   <div class="spotlight-backdrop" id="vaultSpotlightModal" role="dialog" aria-modal="true" aria-label="Jarvis Spotlight Command Palette">
     <div class="spotlight-box">
+      <div class="ios-grabber-bar" aria-label="Swipe down or right to dismiss"></div>
       <div class="spotlight-header">
         <svg class="spotlight-icon-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <input type="text" class="spotlight-input" id="vaultSpotlightInput" placeholder="Search 138+ credentials, system commands, or sub-apps..." autocomplete="off" spellcheck="false">
-        <kbd class="spotlight-esc-chip" id="btnCloseSpotlight">ESC</kbd>
+        <button type="button" class="btn-spotlight-touch-close" id="btnCloseSpotlight" aria-label="Close Spotlight Palette" title="Close (or Swipe Right / Down)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          <span class="desktop-esc-hint">CLOSE</span>
+        </button>
       </div>
 
       <div class="spotlight-results" id="vaultSpotlightResults">
@@ -5289,6 +5424,10 @@
           <span><kbd class="topbar-kbd">↵</kbd> Copy Password / Launch</span>
           <span><kbd class="topbar-kbd">esc</kbd> Close</span>
         </div>
+        <button type="button" class="btn-spotlight-mobile-back" onclick="closeSpotlight()" aria-label="Back to Vault">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          <span>Back to Vault (Swipe Right / Down)</span>
+        </button>
         <span style="color:var(--gold);font-weight:700;">Sir Orlando V. Pasion, Jr. · OrlandoVault</span>
       </div>
     </div>
@@ -5619,6 +5758,268 @@
     // Expose global
     window.openVaultSpotlight = openSpotlight;
     window.closeVaultSpotlight = closeSpotlight;
+  })();
+  </script>
+
+  <!-- APPLE EDGE SWIPE NAVIGATION INDICATORS -->
+  <div class="apple-edge-indicator left" id="appleEdgeIndicatorLeft" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="15 18 9 12 15 6"/>
+    </svg>
+    <span>BACK</span>
+  </div>
+  <div class="apple-edge-indicator right" id="appleEdgeIndicatorRight" aria-hidden="true">
+    <span>FORWARD</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="9 18 15 12 9 6"/>
+    </svg>
+  </div>
+
+
+  <!-- APPLE-GRADE TOUCH GESTURE & NAVIGATION ENGINE -->
+  <script id="apple-gesture-engine">
+  (function() {
+    'use strict';
+
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchStartTime = 0;
+    let activeDragModal = null;
+    let activeDragBox = null;
+    let isHorizontalGesture = false;
+    let isVerticalGesture = false;
+
+    const FILTER_ORDER = ['all', 'DepEd', 'Microsoft', 'AI & Dev', 'Gmail', 'Portals', 'Critical'];
+
+    function getActiveModal() {
+      const candidates = [
+        document.getElementById('vaultSpotlightModal'),
+        document.getElementById('cardEditModal'),
+        document.getElementById('sheetSyncModal'),
+        document.getElementById('qrModal'),
+        document.getElementById('historyModal')
+      ];
+      for (let i = 0; i < candidates.length; i++) {
+        const m = candidates[i];
+        if (!m) continue;
+        if (m.classList.contains('open') || m.classList.contains('active')) {
+          return m;
+        }
+      }
+      return null;
+    }
+
+    function closeActiveModal() {
+      const m = getActiveModal();
+      if (!m) return false;
+
+      if (m.id === 'vaultSpotlightModal' && typeof window.closeVaultSpotlight === 'function') {
+        window.closeVaultSpotlight();
+      } else if (m.id === 'cardEditModal' && typeof window.closeCardEditor === 'function') {
+        window.closeCardEditor();
+      } else if (m.id === 'sheetSyncModal' && typeof window.closeSheetSyncModal === 'function') {
+        window.closeSheetSyncModal();
+      } else if (m.id === 'qrModal' && typeof window.closeVaultQrModal === 'function') {
+        window.closeVaultQrModal();
+      } else if (m.id === 'historyModal' && typeof window.closeAuditModal === 'function') {
+        window.closeAuditModal();
+      } else {
+        m.classList.remove('open', 'active');
+      }
+
+      if (typeof playJarvisSound === 'function') playJarvisSound('click');
+      if (navigator.vibrate) try { navigator.vibrate([10]); } catch(e){}
+      return true;
+    }
+
+    // Connect to Browser History (Native iOS Safari Screen Edge Swipe Back)
+    window.addEventListener('popstate', function() {
+      const modalClosed = closeActiveModal();
+      if (!modalClosed) {
+        const searchInput = document.getElementById('vaultSearchInput');
+        if (searchInput && searchInput.value) {
+          searchInput.value = '';
+          if (typeof searchQuery !== 'undefined') searchQuery = '';
+          const clearBtn = document.getElementById('searchClearBtn');
+          if (clearBtn) clearBtn.style.display = 'none';
+          if (typeof renderVault === 'function') renderVault();
+        } else {
+          triggerFilterSwipe(-1);
+        }
+      }
+    });
+
+    // Automatically push history state whenever any modal opens
+    function setupModalHistoryPush(modalId) {
+      const m = document.getElementById(modalId);
+      if (!m) return;
+      const obs = new MutationObserver(function() {
+        if (m.classList.contains('open') || m.classList.contains('active')) {
+          try {
+            history.pushState({ modalOpen: modalId }, '');
+          } catch(e){}
+        }
+      });
+      obs.observe(m, { attributes: true, attributeFilter: ['class'] });
+    }
+
+    ['vaultSpotlightModal', 'cardEditModal', 'sheetSyncModal', 'qrModal', 'historyModal'].forEach(setupModalHistoryPush);
+
+    function showEdgeIndicator(dir, text) {
+      const el = dir === 'left' ? document.getElementById('appleEdgeIndicatorLeft') : document.getElementById('appleEdgeIndicatorRight');
+      if (!el) return;
+      if (text) {
+        const span = el.querySelector('span');
+        if (span) span.textContent = text;
+      }
+      el.classList.add('active');
+      setTimeout(function() { el.classList.remove('active'); }, 650);
+    }
+
+    function triggerFilterSwipe(delta) {
+      const pills = document.querySelectorAll('.filter-pill[data-cat]');
+      if (!pills.length) return;
+
+      let activeCat = 'all';
+      pills.forEach(function(p) {
+        if (p.classList.contains('active')) activeCat = p.getAttribute('data-cat');
+      });
+
+      let curIdx = FILTER_ORDER.indexOf(activeCat);
+      if (curIdx === -1) curIdx = 0;
+
+      let nextIdx = curIdx + delta;
+      if (nextIdx < 0) nextIdx = 0;
+      if (nextIdx >= FILTER_ORDER.length) nextIdx = FILTER_ORDER.length - 1;
+
+      if (nextIdx !== curIdx) {
+        const nextCat = FILTER_ORDER[nextIdx];
+        const nextPill = document.querySelector('.filter-pill[data-cat="' + nextCat + '"]');
+        if (nextPill) {
+          nextPill.click();
+          if (nextPill.scrollIntoView) {
+            nextPill.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+          }
+          const label = nextPill.textContent.trim().split(' ')[0] || (delta < 0 ? 'BACK' : 'FORWARD');
+          showEdgeIndicator(delta < 0 ? 'left' : 'right', label);
+          if (typeof playJarvisSound === 'function') playJarvisSound('click');
+          if (navigator.vibrate) try { navigator.vibrate([8]); } catch(e){}
+        }
+      }
+    }
+
+    // Touch Event Handlers with Real-Time Spring Translation
+    document.addEventListener('touchstart', function(e) {
+      if (e.touches.length !== 1) return;
+      const touch = e.touches[0];
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
+      touchStartTime = Date.now();
+      isHorizontalGesture = false;
+      isVerticalGesture = false;
+
+      activeDragModal = getActiveModal();
+      if (activeDragModal) {
+        activeDragBox = activeDragModal.querySelector('.spotlight-box, .card-editor-modal, .qr-suite-container, .modal-box') || activeDragModal;
+        if (activeDragBox) {
+          activeDragBox.style.transition = 'none';
+        }
+      } else {
+        activeDragBox = null;
+      }
+    }, { passive: true });
+
+    document.addEventListener('touchmove', function(e) {
+      if (e.touches.length !== 1) return;
+      const touch = e.touches[0];
+      const dx = touch.clientX - touchStartX;
+      const dy = touch.clientY - touchStartY;
+      const absX = Math.abs(dx);
+      const absY = Math.abs(dy);
+
+      if (!isHorizontalGesture && !isVerticalGesture) {
+        if (absX > 8 || absY > 8) {
+          if (absX > absY * 1.2) {
+            isHorizontalGesture = true;
+          } else if (absY > absX * 1.2) {
+            isVerticalGesture = true;
+          }
+        }
+      }
+
+      if (activeDragModal && activeDragBox) {
+        if (isHorizontalGesture && dx > 0) {
+          activeDragBox.style.transform = 'translateX(' + dx + 'px)';
+          activeDragModal.style.opacity = String(Math.max(0.2, 1 - dx / 400));
+        } else if (isVerticalGesture && dy > 0) {
+          const scrollable = activeDragModal.querySelector('.spotlight-results, .card-edit-form, .modal-body') || activeDragBox;
+          if (!scrollable || scrollable.scrollTop <= 2) {
+            activeDragBox.style.transform = 'translateY(' + dy + 'px)';
+            activeDragModal.style.opacity = String(Math.max(0.2, 1 - dy / 400));
+          }
+        }
+      }
+    }, { passive: true });
+
+    document.addEventListener('touchend', function(e) {
+      const dt = Math.max(1, Date.now() - touchStartTime);
+      const changedTouch = e.changedTouches[0];
+      if (!changedTouch) return;
+
+      const dx = changedTouch.clientX - touchStartX;
+      const dy = changedTouch.clientY - touchStartY;
+      const absX = Math.abs(dx);
+      const absY = Math.abs(dy);
+      const vx = absX / dt;
+      const vy = absY / dt;
+
+      if (activeDragModal && activeDragBox) {
+        activeDragBox.style.transition = 'transform 0.28s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.28s ease';
+        activeDragModal.style.transition = 'opacity 0.28s ease';
+
+        const shouldDismissHorizontal = isHorizontalGesture && dx > 55 && (dx > 95 || vx > 0.32);
+        const shouldDismissVertical = isVerticalGesture && dy > 55 && (dy > 100 || vy > 0.32);
+
+        if (shouldDismissHorizontal) {
+          activeDragBox.style.transform = 'translateX(' + window.innerWidth + 'px)';
+          activeDragModal.style.opacity = '0';
+          setTimeout(function() {
+            closeActiveModal();
+            activeDragBox.style.transform = '';
+            activeDragBox.style.opacity = '';
+            activeDragModal.style.opacity = '';
+          }, 240);
+          return;
+        } else if (shouldDismissVertical) {
+          activeDragBox.style.transform = 'translateY(' + window.innerHeight + 'px)';
+          activeDragModal.style.opacity = '0';
+          setTimeout(function() {
+            closeActiveModal();
+            activeDragBox.style.transform = '';
+            activeDragBox.style.opacity = '';
+            activeDragModal.style.opacity = '';
+          }, 240);
+          return;
+        } else {
+          activeDragBox.style.transform = '';
+          activeDragModal.style.opacity = '';
+        }
+      } else {
+        // Main view edge swiping
+        if (isHorizontalGesture && absX > 50 && (absX > 80 || vx > 0.35)) {
+          if (dx > 0) {
+            triggerFilterSwipe(-1); // Back
+          } else {
+            triggerFilterSwipe(1);  // Forward
+          }
+        }
+      }
+
+      activeDragModal = null;
+      activeDragBox = null;
+    }, { passive: true });
+
+    window.closeActiveVaultModal = closeActiveModal;
   })();
   </script>
 
