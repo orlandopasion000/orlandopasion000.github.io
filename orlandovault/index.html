@@ -15,7 +15,7 @@
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -39,10 +39,12 @@
       --text-main: #f1f5f9;
       --text-dim: #94a3b8;
       --text-mute: #64748b;
-      --font-hud: 'Orbitron', -apple-system, sans-serif;
-      --font-tech: 'Rajdhani', -apple-system, sans-serif;
-      --font-mono: 'JetBrains Mono', monospace;
-      --font-ui: 'Inter', sans-serif;
+      --font-inter: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+      --font-hud: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+      --font-tech: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+      --font-mono: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+      --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+      --font-clock: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
       --safe-top: env(safe-area-inset-top, 0px);
       --safe-bottom: env(safe-area-inset-bottom, 0px);
     }
@@ -52,6 +54,7 @@
       margin: 0;
       padding: 0;
       -webkit-tap-highlight-color: transparent;
+      font-variant-numeric: tabular-nums;
     }
 
     body {
@@ -666,24 +669,29 @@
     }
 
     .card-account-title {
-      font-family: var(--font-hud);
-      font-size: 15px;
-      font-weight: 700;
+      font-family: var(--font-inter);
+      font-size: 1.12rem;
+      font-weight: 900;
+      letter-spacing: -0.015em;
+      line-height: 1.35;
       color: #ffffff;
-      word-break: break-all;
     }
 
     .card-username-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 8px;
-      padding: 8px 12px;
-      font-family: var(--font-mono);
-      font-size: 13px;
-      color: var(--text-dim);
+      gap: 12px;
+      background: rgba(16, 21, 32, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 9px;
+      padding: 9px 12px;
+      font-family: var(--font-inter);
+      font-weight: 600;
+      font-size: 0.94rem;
+      letter-spacing: 0.01em;
+      font-variant-numeric: tabular-nums;
+      color: #94a3b8;
     }
 
     .btn-copy-user {
@@ -720,14 +728,16 @@
     }
 
     .pwd-display-box {
-      font-family: var(--font-mono);
-      font-size: 14px;
-      letter-spacing: 2px;
-      color: var(--gold);
+      flex: 1;
+      font-family: var(--font-inter);
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: 0.06em;
+      font-variant-numeric: tabular-nums;
+      color: #ffffff;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      user-select: all;
     }
 
     .pwd-display-box.masked {
@@ -2988,22 +2998,27 @@
     }
 
     .edit-form-label {
-      font-family: var(--font-tech), sans-serif;
+      display: block;
+      font-family: var(--font-inter);
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 800;
       color: var(--cyan);
-      letter-spacing: 0.8px;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
+      margin-bottom: 6px;
     }
 
     .edit-form-input, .edit-form-select, .edit-form-textarea {
       background: rgba(16, 21, 32, 0.85);
       border: 1px solid rgba(56, 189, 248, 0.3);
       border-radius: 10px;
-      padding: 10px 14px;
+      padding: 11px 15px;
       color: #ffffff;
-      font-family: var(--font-mono), monospace;
-      font-size: 14px;
+      font-family: var(--font-inter);
+      font-weight: 600;
+      font-size: 14.5px;
+      letter-spacing: 0.01em;
+      font-variant-numeric: tabular-nums;
       outline: none;
       transition: all 0.2s ease;
       box-sizing: border-box;
@@ -3088,7 +3103,7 @@
         <img src="assets/vault-icon-128.png" alt="OrlandoVault Insignia" class="vault-topbar-emblem">
       </div>
       <div class="brand-meta">
-        <h1>ORLANDO<span class="gold-mark">VAULT</span></h1>
+        <h1><span class="chrome-emerald">ORLANDO</span> <span class="chrome-gold">VAULT</span></h1>
 
       </div>
     </a>
@@ -3271,8 +3286,13 @@
       <div class="qr-studio-header">
         <div class="qr-studio-title-wrap">
           <div class="qr-studio-title-row">
-            <div class="suite-ov-mini-logo" style="border-color:var(--cyan);color:var(--cyan);">EDIT</div>
-            <h3 id="editModalHeaderTitle">Edit Credential Card</h3>
+            <div class="suite-ov-mini-logo" style="border-color:var(--cyan);color:var(--cyan);display:flex;align-items:center;justify-content:center;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+            </div>
+            <h3 id="editModalHeaderTitle">Credential Anatomy</h3>
           </div>
           <p class="qr-studio-sub">Update any anatomy of this account (changes save instantly across devices).</p>
         </div>
@@ -3648,7 +3668,7 @@
       if (!item) return;
 
       document.getElementById('editCardId').value = item.id;
-      document.getElementById('editModalHeaderTitle').textContent = `Edit: ${item.title}`;
+      document.getElementById('editModalHeaderTitle').textContent = item.title || 'Credential Anatomy';
       document.getElementById('editInputTitle').value = item.title || '';
       document.getElementById('editSelectCategory').value = item.category || 'DepEd';
       document.getElementById('editInputBadge').value = item.badge || '';
@@ -3668,7 +3688,7 @@
 
     function openNewCardEditor() {
       document.getElementById('editCardId').value = '';
-      document.getElementById('editModalHeaderTitle').textContent = 'Add New Credential Card';
+      document.getElementById('editModalHeaderTitle').textContent = 'New Credential Account';
       document.getElementById('editInputTitle').value = '';
       document.getElementById('editSelectCategory').value = 'DepEd';
       document.getElementById('editInputBadge').value = 'Official Portal';
@@ -4127,7 +4147,7 @@
       }
 
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v13', { scope: '/orlandovault/' }).catch(err => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v14', { scope: '/orlandovault/' }).catch(err => {
           console.warn('Vault SW registration error:', err);
         });
       }
