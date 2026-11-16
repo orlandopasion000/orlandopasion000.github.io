@@ -1362,7 +1362,16 @@
 
     if (currentProductivityMode === 'deep-work' && timerTotalDuration > 0) {
       updateDeepWorkStripUI(timerTotalDuration, timerRemaining);
+    } else if (timerTotalDuration > 0 && typeof updatePomoUI === 'function') {
+      updatePomoUI();
     }
+
+    // Highlight active preset pill if timerTotalDuration matches a preset minute
+    const activePresetMins = Math.round((timerTotalDuration || 0) / 60);
+    document.querySelectorAll('#presetsRow [data-minutes]').forEach(el => {
+      const m = parseInt(el.getAttribute('data-minutes'), 10);
+      el.classList.toggle('active', (timerTotalDuration % 60 === 0) && m === activePresetMins);
+    });
   }
 
   function syncInputsFromRemaining(seconds) {
@@ -1383,10 +1392,18 @@
     return Math.max(0, h * 3600 + m * 60 + s);
   }
 
-  function setTimerDuration(seconds) {
-    timerTotalDuration = seconds;
-    timerRemaining = seconds;
-    syncInputsFromRemaining(seconds);
+  function setTimerDuration(seconds, skipInputSync = false) {
+    const validSecs = Math.max(0, Math.floor(seconds));
+    timerTotalDuration = validSecs;
+    timerRemaining = validSecs;
+    if (timerIsRunning) {
+      timerEndTime = Date.now() + validSecs * 1000;
+      if (validSecs > 1800) examAlertsFired = { 1800: false, 600: false, 300: false };
+      zenMilestonesTriggered = { 25: false, 50: false, 75: false };
+    }
+    if (!skipInputSync) {
+      syncInputsFromRemaining(validSecs);
+    }
     updateTimerDisplay();
   }
 
@@ -1489,14 +1506,16 @@
   }
 
   function updatePomoUI() {
-    if (btnPomoFocus) btnPomoFocus.classList.toggle('active', pomoMode === 'focus');
-    if (btnPomoShortBreak) btnPomoShortBreak.classList.toggle('active', pomoMode === 'shortBreak');
-    if (btnPomoLongBreak) btnPomoLongBreak.classList.toggle('active', pomoMode === 'longBreak');
+    const totalMins = Math.max(1, Math.round((timerTotalDuration || 1500) / 60));
+    if (btnPomoFocus) btnPomoFocus.classList.toggle('active', pomoMode === 'focus' && totalMins === 25);
+    if (btnPomoShortBreak) btnPomoShortBreak.classList.toggle('active', pomoMode === 'shortBreak' && totalMins === 5);
+    if (btnPomoLongBreak) btnPomoLongBreak.classList.toggle('active', pomoMode === 'longBreak' && totalMins === 15);
 
     if (pomoStageTitle) {
-      if (pomoMode === 'focus') pomoStageTitle.textContent = `Focus Session (25m)`;
-      else if (pomoMode === 'shortBreak') pomoStageTitle.textContent = `Short Rest (5m)`;
-      else pomoStageTitle.textContent = `Deep Rest (15m)`;
+      if (pomoMode === 'shortBreak' && totalMins === 5) pomoStageTitle.textContent = `Short Rest (5m)`;
+      else if (pomoMode === 'longBreak' && totalMins === 15) pomoStageTitle.textContent = `Deep Rest (15m)`;
+      else if (totalMins === 25) pomoStageTitle.textContent = `Focus Session (25m)`;
+      else pomoStageTitle.textContent = `Focus Sprint (${totalMins}m)`;
     }
 
     if (pomoRoundBadge) {
@@ -1520,6 +1539,7 @@
   }
 
   function setPomoMode(mode, autostart = false) {
+    const wasRunning = timerIsRunning;
     pomoMode = mode;
     pauseTimer();
 
@@ -1536,10 +1556,8 @@
 
     updatePomoUI();
 
-    if (autostart) {
-      setTimeout(() => {
-        startTimer();
-      }, 500);
+    if (autostart || wasRunning) {
+      startTimer();
     }
   }
 
@@ -1616,13 +1634,12 @@
   function startTimer() {
     if (timerIsRunning) return;
 
+    const inputDuration = getDurationFromInputs();
     if (timerRemaining <= 0) {
-      const inputDuration = getDurationFromInputs();
-      if (inputDuration <= 0) {
-        setTimerDuration(25 * 60);
-      } else {
-        setTimerDuration(inputDuration);
-      }
+      setTimerDuration(inputDuration > 0 ? inputDuration : 25 * 60);
+    } else if (inputDuration > 0 && inputDuration !== timerTotalDuration) {
+      // If the user changed the input boxes to a new duration before hitting Start, sync immediately
+      setTimerDuration(inputDuration);
     }
 
     timerIsRunning = true;
@@ -1672,12 +1689,8 @@
 
   function resetTimer() {
     pauseTimer();
-    const inputDuration = getDurationFromInputs();
-    if (inputDuration > 0) {
-      setTimerDuration(inputDuration);
-    } else {
-      setTimerDuration(timerTotalDuration || 25 * 60);
-    }
+    const targetSecs = (timerTotalDuration && timerTotalDuration > 0) ? timerTotalDuration : (getDurationFromInputs() || 25 * 60);
+    setTimerDuration(targetSecs);
   }
 
   function onTimerComplete() {
@@ -1894,20 +1907,23 @@
 
   [timerHourInput, timerMinInput, timerSecInput].forEach((input) => {
     if (!input) return;
-    input.addEventListener('change', () => {
-      const wasRunning = timerIsRunning;
+    input.addEventListener('input', () => {
       const dur = getDurationFromInputs();
       if (dur > 0) {
-        if (wasRunning) pauseTimer();
-        setTimerDuration(dur);
-        if (wasRunning) startTimer();
+        setTimerDuration(dur, true);
+      }
+    });
+    input.addEventListener('change', () => {
+      const dur = getDurationFromInputs();
+      if (dur > 0) {
+        setTimerDuration(dur, false);
+      } else {
+        syncInputsFromRemaining(timerTotalDuration || 25 * 60);
       }
     });
   });
 
   window.stepTime = function (type, amount) {
-    const wasRunning = timerIsRunning;
-    if (wasRunning) pauseTimer();
     let h = parseInt(timerHourInput.value || '0', 10);
     let m = parseInt(timerMinInput.value || '0', 10);
     let s = parseInt(timerSecInput.value || '0', 10);
@@ -1916,13 +1932,10 @@
     if (type === 'm') m = Math.max(0, Math.min(59, m + amount));
     if (type === 's') s = Math.max(0, Math.min(59, s + amount));
 
-    timerHourInput.value = String(h).padStart(2, '0');
-    timerMinInput.value = String(m).padStart(2, '0');
-    timerSecInput.value = String(s).padStart(2, '0');
-
     const total = h * 3600 + m * 60 + s;
-    setTimerDuration(total);
-    if (wasRunning && total > 0) startTimer();
+    if (total > 0) {
+      setTimerDuration(total, false);
+    }
   };
 
   btnTimerStart.addEventListener('click', startTimer);
@@ -2014,7 +2027,7 @@
     else if (totalMins >= 60) activeTarget = 60;
     else if (totalMins >= 30) activeTarget = 30;
     pills.forEach((pill) => {
-      const m = parseInt(pill.getAttribute('data-flow-min'), 10);
+      const m = parseInt(pill.getAttribute('data-min') || pill.getAttribute('data-flow-min'), 10);
       pill.classList.toggle('active', m === activeTarget || totalMins >= m);
     });
   }
@@ -2874,10 +2887,11 @@
     });
 
     if (modeKey === 'focus-protocol') {
+      const wasRunning = timerIsRunning;
       switchAppTab('timer');
       toggleZenMode(false);
       setTimerSubMode('focus-protocol');
-      setPomoMode('focus');
+      setPomoMode('focus', wasRunning);
     } else if (modeKey === 'zen-immersion') {
       switchAppTab('timer');
       setTimerSubMode('focus-protocol');
@@ -2887,16 +2901,20 @@
         toggleZenMode(false); // ALWAYS show full buttons and UI on page load/refresh
       }
     } else if (modeKey === 'deep-work') {
+      const wasRunning = timerIsRunning;
       switchAppTab('timer');
       toggleZenMode(false);
       pauseTimer();
       setTimerDuration(90 * 60); // 90 min ultradian
       setTimerSubMode('deep-work');
+      if (wasRunning) startTimer();
     } else if (modeKey === 'quantum-flow') {
+      pauseTimer();
       switchAppTab('stopwatch');
       toggleZenMode(false);
       setChronoMode('flow');
     } else if (modeKey === 'precision-chrono') {
+      pauseTimer();
       switchAppTab('stopwatch');
       toggleZenMode(false);
       setChronoMode('precision');
@@ -4978,9 +4996,11 @@
   // Service Worker Registration (scoped strictly to /orlandotimer/ so root index.html is never affected)
   if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
     window.addEventListener('load', () => {
-      const swPath = location.pathname.includes('/orlandotimer') ? '/orlandotimer/sw.js' : 'sw.js';
+      const swPath = location.pathname.includes('/orlandotimer') ? '/orlandotimer/sw.js?v=30.2' : 'sw.js?v=30.2';
       const swOpts = location.pathname.includes('/orlandotimer') ? { scope: '/orlandotimer/' } : {};
-      navigator.serviceWorker.register(swPath, swOpts).catch(() => {});
+      navigator.serviceWorker.register(swPath, swOpts).then(reg => {
+        try { reg.update(); } catch (e) {}
+      }).catch(() => {});
     });
   }
 })();
