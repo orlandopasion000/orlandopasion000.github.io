@@ -1411,6 +1411,8 @@
     }
 
     .banner-grid-compact {
+      justify-content: center;
+      margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -1539,6 +1541,8 @@
         display: none;
       }
       .banner-grid-compact {
+      justify-content: center;
+      margin: 0 auto;
         gap: 10px;
       }
     }
@@ -2822,11 +2826,6 @@
         <span>Search</span>
         <kbd class="topbar-kbd">Ctrl K</kbd>
       </button>
-      <!-- Google Cloud Firebase Firestore Real-Time Sync Badge Button -->
-      <button type="button" class="btn-firebase-sync" id="btnFirebaseVaultSync" title="Google Cloud Firebase Real-Time Sync (Click to Sync Now)">
-        <span class="firebase-sync-dot" id="firebaseVaultSyncDot"></span>
-        <span class="firebase-sync-text" id="firebaseVaultSyncText">Cloud Synced</span>
-      </button>
       <!-- 24K Swiss Gold Quantum Pill Launcher -->
       <button type="button" class="btn-topbar-desktop" id="btnTopbarLaunchApp" title="Open OrlandoVault in Dedicated Standalone Desktop App" aria-label="Open Main Web App">
         <!-- Animated Kinetic Cyber Energy Border -->
@@ -2870,22 +2869,6 @@
   <main class="vault-layout">
     <section class="jarvis-hud-banner compressed" id="jarvisHudBanner">
       <div class="banner-grid-compact">
-        <!-- Left: Slim Jarvis Telemetry & Status -->
-        <div class="jarvis-status-strip">
-          <div class="console-badge">
-            <span class="console-beacon-dot"></span>
-            <span class="console-tag-text">JARVIS CONSOLE</span>
-          </div>
-          <span class="console-divider">·</span>
-          <span class="jarvis-compact-quote" id="jarvisGreeting">
-            "All cryptographic keys and security parameters armed."
-          </span>
-          <span class="console-divider">·</span>
-          <span class="jarvis-compact-clock" id="jarvisClock">
-            SYSTEM CLOCK: INITIALIZING...
-          </span>
-        </div>
-
         <!-- Right: Ultra-Compact Inline Telemetry Chips -->
         <div class="hud-chips-row">
           <div class="hud-metric-chip" title="Total Granular Accounts Loaded">
@@ -2905,16 +2888,6 @@
     </section>
 
     <section class="controls-panel">
-      <div class="search-quantum-box spotlight-search-trigger" id="btnSpotlightTrigger" role="button" tabindex="0" title="Launch Jarvis Spotlight Command Palette (Ctrl + K / ⌘K)">
-        <svg class="search-icon-left" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2.5">
-          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-        <span class="spotlight-trigger-text">Jarvis, locate credentials or execute system commands...</span>
-        <div class="spotlight-kbd-cluster">
-          <kbd class="spotlight-kbd-chip">Ctrl</kbd>
-          <kbd class="spotlight-kbd-chip">K</kbd>
-        </div>
-      </div>
       <div class="filter-pills-row" id="filterPillsRow">
         <button type="button" class="filter-pill active" data-cat="all">ALL CREDENTIALS</button>
         <button type="button" class="filter-pill" data-cat="DepEd">DEPED OFFICIAL</button>
@@ -3516,7 +3489,7 @@
       }
 
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v6', { scope: '/orlandovault/' }).catch(err => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v7', { scope: '/orlandovault/' }).catch(err => {
           console.warn('Vault SW registration error:', err);
         });
       }
