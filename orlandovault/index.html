@@ -4237,8 +4237,19 @@
         </div>
 
         <div class="edit-form-group">
-          <label class="edit-form-label" for="editInputNotes">SECURITY NOTES & SMART METADATA:</label>
-          <textarea class="edit-form-textarea" id="editInputNotes" rows="2" placeholder="e.g. Official University Portal: https://up.ucu.edu.ph/ | School ID: 300406 | Phone: 09278641467 (Auto-detected as 1-click chips!)"></textarea>
+          <label class="edit-form-label" for="editInputMetadata" style="display:flex;justify-content:space-between;align-items:center;">
+            <span>METADATA & URL:</span>
+            <span style="font-size:11px;color:var(--cyan);font-weight:400;text-transform:none;">(Links, IDs & phones become 1-click chips)</span>
+          </label>
+          <input type="text" class="edit-form-input" id="editInputMetadata" autocomplete="off" placeholder="e.g. https://up.ucu.edu.ph/ | School ID: 300406 | Phone: 09278641467">
+        </div>
+
+        <div class="edit-form-group">
+          <label class="edit-form-label" for="editInputNotes" style="display:flex;justify-content:space-between;align-items:center;">
+            <span>PERSONAL NOTES:</span>
+            <span style="font-size:11px;color:#94a3b8;font-weight:400;text-transform:none;">(Remarks, instructions & reminders)</span>
+          </label>
+          <textarea class="edit-form-textarea" id="editInputNotes" rows="2" placeholder="e.g. Remarks, instructions, recovery reminders, or personal context"></textarea>
         </div>
 
         <div class="edit-form-options-row">
@@ -4638,7 +4649,16 @@
       document.getElementById('editSelectCategory').value = item.category || 'DepEd';
       document.getElementById('editInputUsername').value = item.username || '';
       document.getElementById('editInputPassword').value = item.password || '';
-      document.getElementById('editInputNotes').value = item.notes || '';
+
+      if (item.metadata !== undefined && item.metadata !== null) {
+        document.getElementById('editInputMetadata').value = item.metadata || '';
+        document.getElementById('editInputNotes').value = item.notes || '';
+      } else {
+        const split = splitLegacyNotes(item.notes || '');
+        document.getElementById('editInputMetadata').value = split.metadata;
+        document.getElementById('editInputNotes').value = split.notes;
+      }
+
       document.getElementById('editChkPriority').checked = !!(item.isPriority || item.pinned);
       document.getElementById('editChkCritical').checked = (item.importance || '').toLowerCase() === 'critical';
       if (typeof syncToggleChips === 'function') syncToggleChips();
@@ -4658,6 +4678,7 @@
       document.getElementById('editSelectCategory').value = 'DepEd';
       document.getElementById('editInputUsername').value = '';
       document.getElementById('editInputPassword').value = '';
+      document.getElementById('editInputMetadata').value = '';
       document.getElementById('editInputNotes').value = '';
       document.getElementById('editChkPriority').checked = true; // New cards default to priority
       document.getElementById('editChkCritical').checked = false;
@@ -4707,6 +4728,7 @@
       const badge = category;
       const username = document.getElementById('editInputUsername').value.trim();
       const password = document.getElementById('editInputPassword').value.trim();
+      const metadata = document.getElementById('editInputMetadata').value.trim();
       const notes = document.getElementById('editInputNotes').value.trim();
       const isPriority = document.getElementById('editChkPriority').checked;
       const isCritical = document.getElementById('editChkCritical').checked;
@@ -4725,6 +4747,7 @@
           item.badge = badge;
           item.username = username;
           item.password = password;
+          item.metadata = metadata;
           item.notes = notes;
           item.isPriority = isPriority;
           item.pinned = isPriority;
@@ -4747,6 +4770,7 @@
           username: username,
           password: password,
           old_password: '',
+          metadata: metadata,
           notes: notes,
           importance: isCritical ? 'Critical' : 'Normal',
           isPriority: isPriority,
@@ -4862,43 +4886,96 @@
       }
     }
 
-    function renderSmartMetadata(notes) {
-      if (!notes || typeof notes !== 'string') return '';
-      
-      const chips = [];
-      let remaining = notes;
+    function splitLegacyNotes(raw) {
+      if (!raw || typeof raw !== 'string') return { metadata: '', notes: '' };
+      const metaParts = [];
+      let notesText = raw;
 
-      // 1. Extract URLs
+      // Extract URLs
       const urlRegex = /(https?:\/\/[^\s,;|\)]+)/gi;
-      remaining = remaining.replace(urlRegex, (url) => {
+      notesText = notesText.replace(urlRegex, (url) => {
         const cleanUrl = url.replace(/[\.,;\)]+$/, '');
-        chips.push({ type: 'url', label: 'Portal', value: cleanUrl, icon: '🌐' });
+        metaParts.push(cleanUrl);
         return '';
       });
 
-      // 2. Extract Key-Value Telemetry (Phone, IDs, Card, Savings, etc.)
+      // Extract IDs, phones, cards, etc.
       const kvRegex = /(?:(Phone\/Recovery|Phone|Mobile|SMS|Savings|Acc(?:ount)?|Credit Card|Card|BP Number|GSIS(?: No)?|TIN|NOA|LERIS|School(?: ID)?|Employee ID|Senior ID|Passport|Code|PIN|LRMDS|User(?:name)?|Issued|Subscribed|CSP 2nd Level|LET))\s*[:=]\s*([^\s\|;,]+(?:\s+[^\s\|;,]+)*?)(?=\s*(?:\||;|,|\(|$|\n))/gi;
-      remaining = remaining.replace(kvRegex, (match, key, val) => {
+      notesText = notesText.replace(kvRegex, (match, key, val) => {
         const cleanVal = val.trim().replace(/[\.,;]+$/, '');
         if (cleanVal.length > 0 && cleanVal.length < 40) {
-          let icon = '📋';
-          let chipClass = 'meta-chip-id';
-          const k = key.toLowerCase();
-          if (k.includes('phone') || k.includes('mobile') || k.includes('sms')) { icon = '📱'; chipClass = 'meta-chip-phone'; }
-          else if (k.includes('savings') || k.includes('acc') || k.includes('card')) { icon = '💳'; chipClass = 'meta-chip-card'; }
-          else if (k.includes('school')) { icon = '🏫'; chipClass = 'meta-chip-school'; }
-          else if (k.includes('leris') || k.includes('email')) { icon = '✉️'; chipClass = 'meta-chip-email'; }
-          else if (k.includes('issued') || k.includes('subscribed')) { icon = '📅'; chipClass = 'meta-chip-date'; }
-          else if (k.includes('gsis') || k.includes('tin') || k.includes('bp') || k.includes('employee') || k.includes('noa')) { icon = '🪪'; chipClass = 'meta-chip-gov'; }
-          chips.push({ type: 'id', label: key.replace(/Phone\/Recovery/i, 'Phone'), value: cleanVal, icon, chipClass });
+          metaParts.push(key.replace(/Phone\/Recovery/i, 'Phone') + ': ' + cleanVal);
           return '';
         }
         return match;
       });
 
-      // Clean remaining text
-      let cleaned = remaining.split(/\|+/).map(s => s.trim()).filter(s => s.length > 0 && s !== '()' && s !== '·').join(' · ');
-      cleaned = cleaned.replace(/\s{2,}/g, ' ').replace(/^[\s·\-,:;()]+|[\s·\-,:;()]+$/g, '').trim();
+      let cleanedNotes = notesText.split(/\|+/).map(s => s.trim()).filter(s => s.length > 0 && s !== '()' && s !== '·').join(' · ');
+      cleanedNotes = cleanedNotes.replace(/\s{2,}/g, ' ').replace(/^[\s·\-,:;()]+|[\s·\-,:;()]+$/g, '').trim();
+
+      return {
+        metadata: metaParts.join(' | '),
+        notes: cleanedNotes
+      };
+    }
+
+    function renderSmartMetadata(metadata, notes) {
+      const chips = [];
+      let notesText = notes || '';
+      const metaSource = (metadata !== undefined && metadata !== null) ? metadata : '';
+
+      if (metaSource) {
+        let remainingMeta = metaSource;
+
+        // 1. URLs in metadata
+        const urlRegex = /(https?:\/\/[^\s,;|\)]+)/gi;
+        remainingMeta = remainingMeta.replace(urlRegex, (url) => {
+          const cleanUrl = url.replace(/[\.,;\)]+$/, '');
+          chips.push({ type: 'url', label: 'Portal', value: cleanUrl, icon: '🌐' });
+          return '';
+        });
+
+        // 2. Structured Key-Value in metadata
+        const kvRegex = /(?:(Phone\/Recovery|Phone|Mobile|SMS|Savings|Acc(?:ount)?|Credit Card|Card|BP Number|GSIS(?: No)?|TIN|NOA|LERIS|School(?: ID)?|Employee ID|Senior ID|Passport|Code|PIN|LRMDS|User(?:name)?|Issued|Subscribed|CSP 2nd Level|LET))\s*[:=]\s*([^\s\|;,]+(?:\s+[^\s\|;,]+)*?)(?=\s*(?:\||;|,|\(|$|\n))/gi;
+        remainingMeta = remainingMeta.replace(kvRegex, (match, key, val) => {
+          const cleanVal = val.trim().replace(/[\.,;]+$/, '');
+          if (cleanVal.length > 0 && cleanVal.length < 40) {
+            let icon = '📋';
+            let chipClass = 'meta-chip-id';
+            const k = key.toLowerCase();
+            if (k.includes('phone') || k.includes('mobile') || k.includes('sms')) { icon = '📱'; chipClass = 'meta-chip-phone'; }
+            else if (k.includes('savings') || k.includes('acc') || k.includes('card')) { icon = '💳'; chipClass = 'meta-chip-card'; }
+            else if (k.includes('school')) { icon = '🏫'; chipClass = 'meta-chip-school'; }
+            else if (k.includes('leris') || k.includes('email')) { icon = '✉️'; chipClass = 'meta-chip-email'; }
+            else if (k.includes('issued') || k.includes('subscribed')) { icon = '📅'; chipClass = 'meta-chip-date'; }
+            else if (k.includes('gsis') || k.includes('tin') || k.includes('bp') || k.includes('employee') || k.includes('noa')) { icon = '🪪'; chipClass = 'meta-chip-gov'; }
+            chips.push({ type: 'id', label: key.replace(/Phone\/Recovery/i, 'Phone'), value: cleanVal, icon, chipClass });
+            return '';
+          }
+          return match;
+        });
+
+        // 3. Any raw URLs or key-value pairs separated by '|'
+        const leftoverPills = remainingMeta.split(/\|+/).map(s => s.trim()).filter(s => s.length > 0);
+        leftoverPills.forEach(p => {
+          if (p.startsWith('http://') || p.startsWith('https://')) {
+            chips.push({ type: 'url', label: 'Portal', value: p, icon: '🌐' });
+          } else if (p.includes(':')) {
+            const parts = p.split(':');
+            const k = parts[0].trim();
+            const v = parts.slice(1).join(':').trim();
+            if (k && v) chips.push({ type: 'id', label: k, value: v, icon: '📋', chipClass: 'meta-chip-id' });
+          } else if (p.length > 0) {
+            chips.push({ type: 'id', label: 'Tag', value: p, icon: '🏷️', chipClass: 'meta-chip-id' });
+          }
+        });
+      } else if (notesText) {
+        // Fallback for unedited legacy cards where metadata hasn't been split yet
+        const split = splitLegacyNotes(notesText);
+        if (split.metadata) {
+          return renderSmartMetadata(split.metadata, split.notes);
+        }
+      }
 
       let html = '';
       if (chips.length > 0) {
@@ -4918,8 +4995,9 @@
         html += '</div>';
       }
 
-      if (cleaned) {
-        html += `<div class="card-notes">${escapeHtml(cleaned)}</div>`;
+      const cleanNotes = notesText.trim();
+      if (cleanNotes) {
+        html += `<div class="card-notes">${escapeHtml(cleanNotes)}</div>`;
       }
 
       return html;
@@ -4938,7 +5016,7 @@
         }
 
         if (!q) return true;
-        const searchStr = (item.title + ' ' + item.username + ' ' + (item.notes || '') + ' ' + item.category + ' ' + (item.importance || '')).toLowerCase();
+        const searchStr = (item.title + ' ' + item.username + ' ' + (item.notes || '') + ' ' + (item.metadata || '') + ' ' + item.category + ' ' + (item.importance || '')).toLowerCase();
         return searchStr.includes(q);
       });
 
@@ -5023,7 +5101,7 @@
               </div>
             </div>
 
-            ${renderSmartMetadata(item.notes)}
+            ${renderSmartMetadata(item.metadata, item.notes)}
 
             <div class="card-footer">
               <span class="card-status-pill"><span class="status-live-beacon">●</span> STATUS: ${item.status || 'SECURED'}${item.lastUsedAt ? ` · <span class="vault-used-time" data-relative-time="${item.lastUsedAt}" data-relative-prefix="Used " data-relative-format="compact">${window.formatRelativeTime ? window.formatRelativeTime(item.lastUsedAt, {compact:true}) : 'just now'}</span>` : ''}</span>
@@ -5195,7 +5273,7 @@
       }
 
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v31', { scope: '/orlandovault/' }).catch(err => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v32', { scope: '/orlandovault/' }).catch(err => {
           console.warn('Vault SW registration error:', err);
         });
       }
@@ -6664,6 +6742,7 @@
         return (item.title || '').toLowerCase().includes(q) ||
                (item.username || '').toLowerCase().includes(q) ||
                (item.category || '').toLowerCase().includes(q) ||
+               (item.metadata || '').toLowerCase().includes(q) ||
                (item.notes || '').toLowerCase().includes(q);
       }).slice(0, 8); // Top 8 credentials
 
