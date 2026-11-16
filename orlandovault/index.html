@@ -757,24 +757,29 @@
     }
 
     .btn-copy-user {
-      background: none;
-      border: none;
-      color: var(--cyan);
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(2, 132, 199, 0.1) 100%);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #38bdf8;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
       font-family: var(--font-tech);
-      font-size: 12px;
-      font-weight: 600;
-      padding: 3px 6px;
-      border-radius: 4px;
-      transition: all 0.2s;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      box-shadow: 0 0 8px rgba(56, 189, 248, 0.15);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      touch-action: manipulation;
     }
 
     .btn-copy-user:hover {
-      background: rgba(56, 189, 248, 0.15);
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.3) 0%, rgba(14, 165, 233, 0.25) 100%);
+      border-color: #38bdf8;
       color: #ffffff;
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.5);
+      transform: translateY(-1px);
     }
 
     .password-quantum-deck {
@@ -832,35 +837,43 @@
     }
 
     .btn-copy-instant {
-      background: linear-gradient(135deg, rgba(217, 185, 92, 0.2) 0%, rgba(2, 132, 199, 0.25) 100%);
-      border: 1.5px solid var(--gold);
-      border-radius: 8px;
-      padding: 8px 14px;
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.28) 0%, rgba(245, 158, 11, 0.22) 50%, rgba(180, 83, 9, 0.3) 100%);
+      border: 1.5px solid #ffd700;
+      border-radius: 9px;
+      padding: 8px 15px;
       color: #ffffff;
-      font-family: var(--font-tech);
+      font-family: var(--font-inter), sans-serif;
       font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 1px;
+      font-weight: 900;
+      letter-spacing: 0.05em;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 6px;
-      box-shadow: 0 0 12px var(--gold-glow);
-      transition: all 0.2s ease;
+      box-shadow: 0 0 16px rgba(255, 215, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.35);
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      touch-action: manipulation;
     }
 
     .btn-copy-instant:hover {
-      background: linear-gradient(135deg, var(--gold) 0%, #f59e0b 100%);
+      background: linear-gradient(135deg, #ffd700 0%, #f59e0b 100%);
       color: #000000;
-      box-shadow: 0 0 20px var(--gold-glow);
-      transform: scale(1.02);
+      box-shadow: 0 0 24px rgba(255, 215, 0, 0.75), inset 0 1px 2px rgba(255, 255, 255, 0.8);
+      transform: translateY(-1px) scale(1.03);
+    }
+    .btn-copy-instant:hover svg {
+      stroke: #000000;
     }
 
     .btn-copy-instant.copied {
-      background: var(--emerald);
-      border-color: #34d399;
-      color: #000000;
-      box-shadow: 0 0 18px var(--emerald-glow);
+      background: linear-gradient(135deg, #00f5a0 0%, #00b894 100%) !important;
+      border-color: #00f5a0 !important;
+      color: #022c22 !important;
+      box-shadow: 0 0 24px rgba(0, 245, 160, 0.75) !important;
+      transform: scale(1.02);
+    }
+    .btn-copy-instant.copied svg {
+      stroke: #022c22 !important;
     }
 
     .card-notes {
@@ -942,11 +955,29 @@
     }
 
     .modal-close-btn {
-      background: none;
-      border: none;
-      color: var(--text-dim);
-      font-size: 22px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      width: 32px;
+      height: 32px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #94a3b8;
+      font-size: 18px;
       cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      touch-action: manipulation;
+    }
+    .modal-close-btn:hover {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: #ef4444;
+      color: #ffffff;
+      box-shadow: 0 0 14px rgba(239, 68, 68, 0.55);
+      transform: scale(1.05);
+    }
+    .modal-close-btn:active {
+      transform: scale(0.95);
     }
 
     .modal-body {
@@ -3016,16 +3047,18 @@
 
     /* Add Account Filter Pill */
     .btn-pill-add {
-      background: rgba(16, 185, 129, 0.15) !important;
-      border-color: rgba(16, 185, 129, 0.45) !important;
-      color: #34d399 !important;
-      font-weight: 800 !important;
+      background: linear-gradient(135deg, rgba(0, 245, 160, 0.22) 0%, rgba(0, 184, 148, 0.15) 100%) !important;
+      border: 1.5px solid rgba(0, 245, 160, 0.6) !important;
+      color: #00f5a0 !important;
+      font-weight: 900 !important;
+      box-shadow: 0 0 14px rgba(0, 245, 160, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.25) !important;
     }
     .btn-pill-add:hover {
-      background: rgba(16, 185, 129, 0.3) !important;
-      border-color: #10b981 !important;
-      color: #ffffff !important;
-      box-shadow: 0 0 14px rgba(16, 185, 129, 0.4) !important;
+      background: linear-gradient(135deg, #00f5a0 0%, #00b894 100%) !important;
+      border-color: #00f5a0 !important;
+      color: #022c22 !important;
+      box-shadow: 0 0 22px rgba(0, 245, 160, 0.75) !important;
+      transform: translateY(-2px);
     }
 
     /* CARD EDITOR MODAL */
@@ -3111,16 +3144,29 @@
     }
 
     .btn-gen-pwd {
-      background: rgba(217, 185, 92, 0.15);
-      border: 1px solid rgba(217, 185, 92, 0.4);
-      color: #d9b95c;
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.22) 0%, rgba(245, 158, 11, 0.15) 100%);
+      border: 1.5px solid rgba(255, 215, 0, 0.6);
+      color: #fef08a;
       font-family: var(--font-tech), sans-serif;
       font-size: 11px;
       font-weight: 700;
       border-radius: 6px;
-      padding: 3px 8px;
+      padding: 4px 10px;
       cursor: pointer;
+      text-shadow: 0 0 8px rgba(255, 215, 0, 0.7);
+      box-shadow: 0 0 12px rgba(255, 215, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.3);
       transition: all 0.2s ease;
+      touch-action: manipulation;
+    }
+    .btn-gen-pwd:hover {
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.4) 0%, rgba(245, 158, 11, 0.3) 100%);
+      border-color: #ffd700;
+      color: #ffffff;
+      box-shadow: 0 0 18px rgba(255, 215, 0, 0.65);
+      transform: translateY(-1px);
+    }
+    .btn-gen-pwd:active {
+      transform: translateY(0) scale(0.96);
     }
     .btn-gen-pwd:hover {
       background: rgba(217, 185, 92, 0.3);
@@ -3950,6 +3996,22 @@
     /* ==========================================================================
        CARD ANATOMY QUICK-EDITOR ENGINE
        ========================================================================== */
+        function syncToggleChips() {
+      const pChk = document.getElementById('editChkPriority');
+      const cChk = document.getElementById('editChkCritical');
+      if (pChk) {
+        const pChip = pChk.closest('.cyber-toggle-chip');
+        if (pChip) pChip.classList.toggle('active', pChk.checked);
+      }
+      if (cChk) {
+        const cChip = cChk.closest('.cyber-toggle-chip');
+        if (cChip) cChip.classList.toggle('active', cChk.checked);
+      }
+    }
+
+    document.getElementById('editChkPriority')?.addEventListener('change', syncToggleChips);
+    document.getElementById('editChkCritical')?.addEventListener('change', syncToggleChips);
+
     function openCardEditor(itemId) {
       const item = vaultItems.find(x => x.id === itemId);
       if (!item) return;
@@ -3964,6 +4026,7 @@
       document.getElementById('editInputNotes').value = item.notes || '';
       document.getElementById('editChkPriority').checked = !!(item.isPriority || item.pinned);
       document.getElementById('editChkCritical').checked = (item.importance || '').toLowerCase() === 'critical';
+      if (typeof syncToggleChips === 'function') syncToggleChips();
       document.getElementById('btnDeleteCardEdit').style.display = 'inline-flex';
 
       const modal = document.getElementById('cardEditModal');
@@ -3984,6 +4047,7 @@
       document.getElementById('editInputNotes').value = '';
       document.getElementById('editChkPriority').checked = true; // New cards default to priority
       document.getElementById('editChkCritical').checked = false;
+      if (typeof syncToggleChips === 'function') syncToggleChips();
       document.getElementById('btnDeleteCardEdit').style.display = 'none';
 
       const modal = document.getElementById('cardEditModal');
@@ -4435,7 +4499,7 @@
       }
 
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v18', { scope: '/orlandovault/' }).catch(err => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v19', { scope: '/orlandovault/' }).catch(err => {
           console.warn('Vault SW registration error:', err);
         });
       }
