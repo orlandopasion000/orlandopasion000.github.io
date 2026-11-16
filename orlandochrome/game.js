@@ -1304,22 +1304,22 @@
   // GAME 3: MEMORY MATRIX (16 Boxes 4x4 Array, 1 Mistake Game Over)
   // ══════════════════════════════════════════════════════════════════════════
   const MATRIX_PALETTES = [
-    { name: 'Realm Violet', color: '#a855f7', type: 'realm' },
-    { name: 'Helix Cyan', color: '#06b6d4', type: 'helix' },
-    { name: 'Meteor Gold', color: '#f59e0b', type: 'meteor' },
-    { name: 'Emerald Plasma', color: '#10b981', type: 'realm' },
-    { name: 'Rose Laser', color: '#f43f5e', type: 'helix' },
-    { name: 'Solar Amber', color: '#ea580c', type: 'meteor' },
-    { name: 'Cobalt Spark', color: '#3b82f6', type: 'realm' },
-    { name: 'Neon Lime', color: '#84cc16', type: 'helix' },
-    { name: 'Crimson Flame', color: '#e11d48', type: 'meteor' },
-    { name: 'Aquamarine', color: '#14b8a6', type: 'realm' },
-    { name: 'Purple Core', color: '#9333ea', type: 'helix' },
-    { name: 'Topaz Nova', color: '#eab308', type: 'meteor' },
-    { name: 'Electric Sky', color: '#0ea5e9', type: 'realm' },
-    { name: 'Fuchsia Beam', color: '#d946ef', type: 'helix' },
-    { name: 'Molten Copper', color: '#c2410c', type: 'meteor' },
-    { name: 'Spectral White', color: '#f8fafc', type: 'realm' }
+    { name: 'Realm Core', color: '#a855f7', type: 'core-realm' },
+    { name: 'Helix Core', color: '#06b6d4', type: 'core-helix' },
+    { name: 'Meteor Core', color: '#f59e0b', type: 'core-meteor' },
+    { name: 'Tier 3 Realm', color: '#38bdf8', type: 'tier3-realm' },
+    { name: 'Tier 3 Helix', color: '#d946ef', type: 'tier3-helix' },
+    { name: 'Tier 3 Meteor', color: '#ea580c', type: 'tier3-meteor' },
+    { name: 'Emerald Core', color: '#10b981', type: 'core-realm' },
+    { name: 'Rose Helix', color: '#f43f5e', type: 'core-helix' },
+    { name: 'Solar Flame', color: '#f97316', type: 'core-meteor' },
+    { name: 'Cyan Apex', color: '#0ea5e9', type: 'tier3-realm' },
+    { name: 'Violet Wave', color: '#9333ea', type: 'tier3-helix' },
+    { name: 'Molten Rock', color: '#dc2626', type: 'tier3-meteor' },
+    { name: 'Gold Singularity', color: '#ffd700', type: 'core-realm' },
+    { name: 'Orchid Pulse', color: '#c084fc', type: 'core-helix' },
+    { name: 'Corona Blaze', color: '#fbbf24', type: 'core-meteor' },
+    { name: 'White Nova', color: '#f8fafc', type: 'tier3-realm' }
   ];
 
   function startMemoryGame() {
@@ -1343,7 +1343,7 @@
       box.dataset.index = i;
       box.style.setProperty('--box-color', pal.color);
 
-      // Mini Canvas inside box
+      // Mini Canvas inside box for character rendering
       const canvas = document.createElement('canvas');
       canvas.width = 120;
       canvas.height = 120;
@@ -1354,14 +1354,27 @@
       label.textContent = pal.name;
       box.appendChild(label);
 
-      // Draw initial static preview
+      // Draw character preview
       const ctx = canvas.getContext('2d');
-      if (pal.type === 'realm') {
-        QuantumRenderer.drawQuantumAtomic(ctx, 60, 52, 1000);
-      } else if (pal.type === 'helix') {
-        QuantumRenderer.drawHelixCore(ctx, 60, 52, 1000);
-      } else {
-        QuantumRenderer.drawMeteorAsteroid(ctx, 60, 52, 1000);
+      const cx = 60, cy = 52;
+      if (pal.type === 'core-realm') {
+        QuantumRenderer.drawQuantumAtomic(ctx, cx, cy, 1000 + i * 200);
+      } else if (pal.type === 'core-helix') {
+        QuantumRenderer.drawHelixCore(ctx, cx, cy, 1000 + i * 200);
+      } else if (pal.type === 'core-meteor') {
+        QuantumRenderer.drawMeteorAsteroid(ctx, cx, cy, 1000 + i * 200);
+      } else if (pal.type === 'tier3-realm') {
+        const fakeP = { x: cx, y: cy + 8, spine: [] };
+        for (let j = 0; j < 6; j++) fakeP.spine.push({ x: cx, y: cy + 8 + j * 6 });
+        QuantumRenderer.drawTier3RealmParticle(ctx, fakeP, 1000 + i * 200);
+      } else if (pal.type === 'tier3-helix') {
+        const fakeP = { x: cx, y: cy + 8, spine: [] };
+        for (let j = 0; j < 6; j++) fakeP.spine.push({ x: cx, y: cy + 8 + j * 6 });
+        QuantumRenderer.drawTier3HelixParticle(ctx, fakeP, 1000 + i * 200);
+      } else if (pal.type === 'tier3-meteor') {
+        const fakeP = { x: cx, y: cy + 8, spine: [] };
+        for (let j = 0; j < 6; j++) fakeP.spine.push({ x: cx, y: cy + 8 + j * 6 });
+        QuantumRenderer.drawTier3MeteorParticle(ctx, fakeP, 1000 + i * 200);
       }
 
       box.onclick = () => handleMemoryBoxClick(i);
