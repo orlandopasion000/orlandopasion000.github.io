@@ -3,7 +3,7 @@
  * Enables ultra-fast offline caching & PWA installation
  */
 
-const CACHE_NAME = 'orlandotimer-v35';
+const CACHE_NAME = 'orlandotimer-v36';
 const ASSETS_TO_CACHE = [
   './',
   'index.html',
@@ -11,6 +11,7 @@ const ASSETS_TO_CACHE = [
   'app.js',
   'manifest.webmanifest',
   'favicon.ico',
+  'assets/qrcode.min.js',
   'assets/ot-logo.png',
   'assets/ot-icon-192.png',
   'assets/ot-icon-512.png',

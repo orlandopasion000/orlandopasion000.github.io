@@ -40,7 +40,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&family=Orbitron:wght@600;700;800;900&family=Outfit:wght@600;700;800;900&family=Space+Grotesk:wght@600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
   <!-- Relative Stylesheet (with cache-bust versioning) -->
-  <link rel="stylesheet" href="style.css?v=29.0">
+  <link rel="stylesheet" href="style.css?v=30.0">
 </head>
 <body data-app-theme="pure-black" data-clock-style="pure-black">
   <!-- Accessibility Live Region for Screen Readers -->
@@ -386,116 +386,145 @@
         </div>
       </div>
       <div class="or-header-right">
-        <!-- SYSTEM DROPDOWN MENU -->
+        <!-- 1. SPOTLIGHT COMMAND PALETTE TRIGGER (CTRL + K / ⌘K) -->
+        <button type="button" class="btn-topbar-search" id="btnTopbarSearch" title="Open Horology Spotlight Command Palette (Ctrl + K / ⌘K)">
+          <svg class="topbar-search-svg" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-linecap="round"></line>
+          </svg>
+          <span class="topbar-search-label">Search</span>
+          <kbd class="topbar-kbd">Ctrl K</kbd>
+        </button>
+
+        <!-- 2. OPEN MAIN WEB APP DESKTOP LAUNCHER (24K SWISS GOLD QUANTUM PORTAL) -->
+        <button type="button" class="btn-topbar-desktop btn-topbar-launch-gold" id="btnTopbarLaunchApp" title="Open Orlando Timer in Dedicated Standalone Desktop Window" aria-label="Open Main Web App">
+          <span class="desktop-btn-icon" id="topbarLaunchIcon">
+            <svg class="futuristic-portal-svg" viewBox="0 0 24 24" width="15" height="15" fill="none">
+              <defs>
+                <linearGradient id="otPortalHexGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#ffd700"/>
+                  <stop offset="50%" stop-color="#38bdf8"/>
+                  <stop offset="100%" stop-color="#f59e0b"/>
+                </linearGradient>
+                <linearGradient id="otPortalArrowGrad" x1="12" y1="5" x2="12" y2="19" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#ffffff"/>
+                  <stop offset="60%" stop-color="#fef08a"/>
+                  <stop offset="100%" stop-color="#d9b95c"/>
+                </linearGradient>
+              </defs>
+              <polygon points="12 2.5 20.5 7.4 20.5 16.6 12 21.5 3.5 16.6 3.5 7.4 12 2.5" stroke="url(#otPortalHexGrad)" stroke-width="1.9" stroke-linejoin="round"/>
+              <circle cx="12" cy="12" r="3" fill="#38bdf8" opacity="0.45"/>
+              <path d="M12 17V7M12 7L8.5 10.5M12 7L15.5 10.5" stroke="url(#otPortalArrowGrad)" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+              <line x1="7.5" y1="19" x2="16.5" y2="19" stroke="#38bdf8" stroke-width="1.7" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span class="desktop-btn-label" id="topbarLaunchLabel">Open Main Web App</span>
+          <span class="topbar-launch-beacon" id="topbarLaunchBeacon" aria-hidden="true"></span>
+        </button>
+
+        <!-- 3. SYSTEM DROPDOWN MENU -->
         <div class="system-menu-wrapper" id="timerSystemMenuWrapper" style="position:relative;">
-          <button type="button" class="btn-topbar-desktop btn-topbar-system" id="btnTimerSystemMenu" aria-haspopup="true" aria-expanded="false" title="System Menu &amp; Command Suite" style="display:inline-flex;align-items:center;gap:7px;padding:7px 15px;border-radius:999px;font-size:12px;font-weight:700;border:1px solid rgba(217,185,92,0.45);background:rgba(217,185,92,0.12);color:#fef08a;cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);">
-            <svg class="cyber-topbar-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;">
+          <button type="button" class="btn-topbar-desktop btn-topbar-system" id="btnTimerSystemMenu" aria-haspopup="true" aria-expanded="false" title="System Menu &amp; Command Suite">
+            <svg class="cyber-topbar-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;flex-shrink:0;">
               <circle cx="12" cy="12" r="3"></circle>
               <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
             </svg>
-            <span>System</span>
-            <span id="systemSyncDot" style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#10b981;box-shadow:0 0 6px #10b981;"></span>
-            <svg viewBox="0 0 24 24" width="8" height="8" fill="none"><path d="M6 9l6 6 6-6" stroke="rgba(255,255,255,0.7)" stroke-width="2.5" stroke-linecap="round"/></svg>
+            <span class="system-btn-text">System</span>
+            <span id="systemSyncDot" class="system-sync-dot" title="Google Cloud Firebase Synced"></span>
+            <svg class="system-caret-svg" viewBox="0 0 24 24" width="8" height="8" fill="none"><path d="M6 9l6 6 6-6" stroke="rgba(255,255,255,0.7)" stroke-width="2.5" stroke-linecap="round"/></svg>
           </button>
 
           <!-- System Dropdown Menu Items -->
-          <div class="system-dropdown-menu" id="timerSystemDropdown" role="menu" style="display:none;position:absolute;top:calc(100% + 8px);right:0;width:310px;background:#0d0f14;border:1px solid rgba(217,185,92,0.3);border-radius:12px;box-shadow:0 20px 50px rgba(0,0,0,0.9),0 0 30px rgba(217,185,92,0.15);padding:8px;z-index:9999;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);">
-            <!-- 1. Open Main Web App -->
-            <button type="button" class="system-menu-item" id="btnTopbarLaunchApp" role="menuitem" style="width:100%;display:flex;align-items:center;gap:12px;padding:10px 12px;background:none;border:none;border-radius:8px;cursor:pointer;text-align:left;color:#fff;">
-              <div style="width:32px;height:32px;border-radius:8px;background:rgba(217,185,92,0.18);border:1px solid rgba(217,185,92,0.4);display:flex;align-items:center;justify-content:center;color:#fde047;">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-              </div>
-              <div style="flex:1;">
-                <div style="font-size:13px;font-weight:700;color:#fef08a;" id="topbarLaunchLabel">Open Main Web App</div>
-                <div style="font-size:11px;color:#94a3b8;">Standalone desktop window · PWA</div>
-              </div>
-            </button>
-
-            <!-- 2. Quantum Time Command (Cockpit) -->
-            <button type="button" class="system-menu-item" id="btnTimerSysCockpit" role="menuitem" style="width:100%;display:flex;align-items:center;gap:12px;padding:10px 12px;background:none;border:none;border-radius:8px;cursor:pointer;text-align:left;color:#fff;">
-              <div style="width:32px;height:32px;border-radius:8px;background:rgba(168,85,247,0.18);border:1px solid rgba(168,85,247,0.4);display:flex;align-items:center;justify-content:center;color:#c084fc;">
+          <div class="system-dropdown-menu" id="timerSystemDropdown" role="menu" style="display:none;position:absolute;top:calc(100% + 8px);right:0;width:320px;max-width:calc(100vw - 24px);background:#0d0f14;border:1px solid rgba(217,185,92,0.35);border-radius:14px;box-shadow:0 20px 55px rgba(0,0,0,0.92),0 0 30px rgba(217,185,92,0.15);padding:8px;z-index:9999;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);">
+            <!-- 1. Quantum Time Command (Cockpit) -->
+            <button type="button" class="system-menu-item" id="btnTimerSysCockpit" role="menuitem">
+              <div class="sys-item-icon" style="background:rgba(168,85,247,0.18);border:1px solid rgba(168,85,247,0.4);color:#c084fc;">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polygon points="12 2 15 9 22 9 17 14 19 21 12 17 5 21 7 14 2 9 9 9 12 2"/></svg>
               </div>
-              <div style="flex:1;">
-                <div style="font-size:13px;font-weight:700;color:#e2e8f0;">Quantum Time Command</div>
-                <div style="font-size:11px;color:#94a3b8;">Supernova telemetry &amp; focus cockpit</div>
+              <div style="flex:1;min-width:0;">
+                <div class="sys-item-title">Quantum Time Command</div>
+                <div class="sys-item-desc">Supernova telemetry &amp; focus cockpit</div>
               </div>
             </button>
 
-            <!-- 3. Atmosphere Audio & Visual Controls -->
-            <button type="button" class="system-menu-item" id="btnTimerSysAtmo" role="menuitem" style="width:100%;display:flex;align-items:center;gap:12px;padding:10px 12px;background:none;border:none;border-radius:8px;cursor:pointer;text-align:left;color:#fff;">
-              <div style="width:32px;height:32px;border-radius:8px;background:rgba(56,189,248,0.18);border:1px solid rgba(56,189,248,0.4);display:flex;align-items:center;justify-content:center;color:#38bdf8;">
+            <!-- 2. Atmosphere Audio & Visual Controls -->
+            <button type="button" class="system-menu-item" id="btnTimerSysAtmo" role="menuitem">
+              <div class="sys-item-icon" style="background:rgba(56,189,248,0.18);border:1px solid rgba(56,189,248,0.4);color:#38bdf8;">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
               </div>
-              <div style="flex:1;">
-                <div style="font-size:13px;font-weight:700;color:#e2e8f0;">Atmosphere Controls</div>
-                <div style="font-size:11px;color:#94a3b8;">Ambient soundscapes &amp; cosmic particles</div>
+              <div style="flex:1;min-width:0;">
+                <div class="sys-item-title">Atmosphere &amp; Particle Lab</div>
+                <div class="sys-item-desc">Ambient glow &amp; cosmic particle physics</div>
               </div>
             </button>
 
-            <!-- 4. Google Cloud Firebase Real-Time Sync -->
-            <button type="button" class="system-menu-item" id="btnFirebaseTimerSync" role="menuitem" style="width:100%;display:flex;align-items:center;gap:12px;padding:10px 12px;background:none;border:none;border-radius:8px;cursor:pointer;text-align:left;color:#fff;">
-              <div style="width:32px;height:32px;border-radius:8px;background:rgba(16,185,129,0.18);border:1px solid rgba(16,185,129,0.4);display:flex;align-items:center;justify-content:center;color:#34d399;">
+            <!-- 3. Google Cloud Firebase Real-Time Sync + Mutation Journal -->
+            <button type="button" class="system-menu-item" id="btnFirebaseTimerSync" role="menuitem">
+              <div class="sys-item-icon" style="background:rgba(16,185,129,0.18);border:1px solid rgba(16,185,129,0.4);color:#34d399;">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
               </div>
-              <div style="flex:1;">
-                <div style="font-size:13px;font-weight:700;color:#e2e8f0;"><span id="firebaseTimerSyncText">Cloud Synced</span></div>
-                <div style="font-size:11px;color:#94a3b8;">Google Cloud Firebase Singapore sync</div>
+              <div style="flex:1;min-width:0;">
+                <div class="sys-item-title" style="display:flex;align-items:center;gap:6px;">
+                  <span id="firebaseTimerSyncDot" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#10b981;box-shadow:0 0 8px #10b981;"></span>
+                  <span id="firebaseTimerSyncText">Cloud Synced</span>
+                  <span id="firebaseJournalBadge" style="font-size:9.5px;padding:1px 6px;border-radius:999px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.35);color:#34d399;font-weight:700;">0ms SWR</span>
+                </div>
+                <div class="sys-item-desc">Firebase Singapore · Self-healing journal</div>
               </div>
             </button>
 
-            <!-- 5. Watch Tick Audio -->
-            <button type="button" class="system-menu-item" id="btnAcousticTick" role="menuitem" style="width:100%;display:flex;align-items:center;gap:12px;padding:10px 12px;background:none;border:none;border-radius:8px;cursor:pointer;text-align:left;color:#fff;">
-              <div style="width:32px;height:32px;border-radius:8px;background:rgba(245,158,11,0.18);border:1px solid rgba(245,158,11,0.4);display:flex;align-items:center;justify-content:center;color:#fbbf24;">
+            <!-- 4. Watch Tick Audio -->
+            <button type="button" class="system-menu-item" id="btnAcousticTick" role="menuitem">
+              <div class="sys-item-icon" style="background:rgba(245,158,11,0.18);border:1px solid rgba(245,158,11,0.4);color:#fbbf24;">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
               </div>
-              <div style="flex:1;">
-                <div style="font-size:13px;font-weight:700;color:#e2e8f0;" id="acousticTickText">Watch Tick: Off</div>
-                <div style="font-size:11px;color:#94a3b8;">Mechanical horology escapement audio</div>
+              <div style="flex:1;min-width:0;">
+                <div class="sys-item-title" id="acousticTickText">Watch Tick: Off</div>
+                <div class="sys-item-desc">Mechanical horology escapement &amp; haptics</div>
               </div>
             </button>
 
-            <!-- 6. Keep Awake (Wake Lock) -->
-            <button type="button" class="system-menu-item" id="btnWakeLock" role="menuitem" style="width:100%;display:flex;align-items:center;gap:12px;padding:10px 12px;background:none;border:none;border-radius:8px;cursor:pointer;text-align:left;color:#fff;">
-              <div style="width:32px;height:32px;border-radius:8px;background:rgba(236,72,153,0.18);border:1px solid rgba(236,72,153,0.4);display:flex;align-items:center;justify-content:center;color:#f472b6;">
+            <!-- 5. Keep Awake (Wake Lock) -->
+            <button type="button" class="system-menu-item" id="btnWakeLock" role="menuitem">
+              <div class="sys-item-icon" style="background:rgba(236,72,153,0.18);border:1px solid rgba(236,72,153,0.4);color:#f472b6;">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
               </div>
-              <div style="flex:1;">
-                <div style="font-size:13px;font-weight:700;color:#e2e8f0;" id="wakeLockText">Keep Awake: Disabled</div>
-                <div style="font-size:11px;color:#94a3b8;">Prevent screen from dimming or sleep</div>
+              <div style="flex:1;min-width:0;">
+                <div class="sys-item-title" id="wakeLockText">Keep Awake: Disabled</div>
+                <div class="sys-item-desc">Prevent screen from dimming or sleep</div>
               </div>
             </button>
 
-            <!-- 7. Holographic QR Suite -->
-            <button type="button" class="system-menu-item" id="otOpenQrBtn" role="menuitem" style="width:100%;display:flex;align-items:center;gap:12px;padding:10px 12px;background:none;border:none;border-radius:8px;cursor:pointer;text-align:left;color:#fff;">
-              <div style="width:32px;height:32px;border-radius:8px;background:rgba(6,182,212,0.18);border:1px solid rgba(6,182,212,0.4);display:flex;align-items:center;justify-content:center;color:#22d3ee;">
+            <!-- 6. Holographic QR Suite -->
+            <button type="button" class="system-menu-item" id="otOpenQrBtn" role="menuitem">
+              <div class="sys-item-icon" style="background:rgba(6,182,212,0.18);border:1px solid rgba(6,182,212,0.4);color:#22d3ee;">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
               </div>
-              <div style="flex:1;">
-                <div style="font-size:13px;font-weight:700;color:#e2e8f0;">Holographic QR</div>
-                <div style="font-size:11px;color:#94a3b8;">Instant phone scanner &amp; device sync</div>
+              <div style="flex:1;min-width:0;">
+                <div class="sys-item-title">Holographic QR</div>
+                <div class="sys-item-desc">Instant phone scanner &amp; device sync</div>
               </div>
             </button>
 
-            <!-- 8. Backup & Restore Workspace -->
-            <button type="button" class="system-menu-item" id="btnTimerSysBackup" role="menuitem" style="width:100%;display:flex;align-items:center;gap:12px;padding:10px 12px;background:none;border:none;border-radius:8px;cursor:pointer;text-align:left;color:#fff;">
-              <div style="width:32px;height:32px;border-radius:8px;background:rgba(16,185,129,0.18);border:1px solid rgba(16,185,129,0.4);display:flex;align-items:center;justify-content:center;color:#34d399;">
+            <!-- 7. Backup & Restore Workspace -->
+            <button type="button" class="system-menu-item" id="btnTimerSysBackup" role="menuitem">
+              <div class="sys-item-icon" style="background:rgba(16,185,129,0.18);border:1px solid rgba(16,185,129,0.4);color:#34d399;">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
               </div>
-              <div style="flex:1;">
-                <div style="font-size:13px;font-weight:700;color:#e2e8f0;">Backup &amp; Restore</div>
-                <div style="font-size:11px;color:#94a3b8;">Export or import JSON state</div>
+              <div style="flex:1;min-width:0;">
+                <div class="sys-item-title">Backup &amp; Restore</div>
+                <div class="sys-item-desc">Export or import JSON horology state</div>
               </div>
             </button>
 
-            <!-- 9. Enter Full Screen -->
-            <button type="button" class="system-menu-item" id="btnFullscreen" role="menuitem" style="width:100%;display:flex;align-items:center;gap:12px;padding:10px 12px;background:none;border:none;border-radius:8px;cursor:pointer;text-align:left;color:#fff;">
-              <div style="width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;color:#fff;">
+            <!-- 8. Enter Full Screen -->
+            <button type="button" class="system-menu-item" id="btnFullscreen" role="menuitem">
+              <div class="sys-item-icon" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);color:#fff;">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
               </div>
-              <div style="flex:1;">
-                <div style="font-size:13px;font-weight:700;color:#e2e8f0;" id="fsLabel">Enter Full Screen</div>
-                <div style="font-size:11px;color:#94a3b8;">Immersive horology display</div>
+              <div style="flex:1;min-width:0;">
+                <div class="sys-item-title" id="fsLabel">Enter Full Screen</div>
+                <div class="sys-item-desc">Immersive horology display (Hotkey: F)</div>
               </div>
             </button>
           </div>
@@ -835,18 +864,24 @@
          ════════════════════════════════════════════════════════════════════ -->
     
 
-    <!-- HOLOGRAPHIC QR MODAL FOR ORLANDO TIMER -->
+    <!-- HOLOGRAPHIC QR MODAL FOR ORLANDO TIMER (100% RELIABLE MACHINE VISION) -->
     <div class="ot-qr-modal-backdrop" id="otQrModal" role="dialog" aria-modal="true" aria-label="Orlando Timer Holographic QR Scanner">
       <div class="ot-qr-modal-card">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
-          <strong style="color:#fef08a;font-size:15px;">📱 Orlando Timer · Holographic Phone QR</strong>
-          <button type="button" id="otCloseQrModal" style="background:none;border:none;color:#94a3b8;font-size:18px;cursor:pointer;">✕</button>
+          <strong style="color:#fef08a;font-size:15px;display:flex;align-items:center;gap:7px;">
+            <span>📱</span>
+            <span>Orlando Timer · Holographic Phone QR</span>
+          </strong>
+          <button type="button" id="otCloseQrModal" style="background:none;border:none;color:#94a3b8;font-size:18px;cursor:pointer;" aria-label="Close QR Modal">✕</button>
         </div>
-        <p style="font-size:12px;color:#94a3b8;margin:0 0 8px;">Point your iPhone or Android camera here to open &amp; sync Orlando Timer instantly.</p>
-        <div class="ot-qr-plate" id="otQrPlate" style="width:260px;height:260px;">
-          <div id="otQrMount" style="width:100%;height:100%;"></div>
+        <p style="font-size:12px;color:#94a3b8;margin:0 0 10px;">Point your iPhone or Android camera here to launch &amp; cloud-sync Orlando Timer instantly.</p>
+        <div class="ot-qr-holo-stage">
+          <div class="ot-qr-laser-beam" aria-hidden="true"></div>
+          <div class="ot-qr-plate" id="otQrPlate" style="width:260px;height:260px;padding:16px;background:#ffffff;border-radius:14px;box-sizing:border-box;">
+            <div id="otQrMount" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#ffffff;"></div>
+          </div>
         </div>
-        <div style="display:flex;gap:8px;margin-top:10px;">
+        <div style="display:flex;gap:8px;margin-top:12px;">
           <button type="button" class="ot-dist-btn primary-gold" id="otQrCopyBtn" style="flex:2;">📋 Copy App Link</button>
           <button type="button" class="ot-dist-btn" id="otQrCloseBtn2" style="flex:1;">Done</button>
         </div>
@@ -1021,13 +1056,172 @@
   <audio id="alarmAudioElement" preload="auto" src="sounds/piano.mp3"></audio>
 
   <!-- Relative JavaScript (with cache-bust versioning) -->
-  <script src="assets/qrcode.min.js"></script>
-  <script src="app.js?v=29.0"></script>
+  <!-- ATMOSPHERE & PARTICLE LAB MODAL (RESTORED & ENHANCED FOR ALL SCREENS) -->
+  <div class="atmo-modal-backdrop" id="atmoModalBackdrop" aria-hidden="true"></div>
+  <div class="atmo-popup-panel" id="atmospherePopup" role="dialog" aria-modal="true" aria-label="Ambient Glow and Floating Particles Controller">
+    <div class="atmo-popup-header">
+      <div class="atmo-header-title-wrap">
+        <span class="atmo-badge-icon">✦</span>
+        <div>
+          <div class="atmo-popup-title">ATMOSPHERE &amp; PARTICLE LAB</div>
+          <div class="atmo-popup-subtitle">Cosmic Radial Wash &amp; Dynamic Particle Field</div>
+        </div>
+      </div>
+      <button type="button" class="atmo-close-btn" id="btnCloseAtmosphere" title="Close Panel (Esc)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
 
+    <div class="atmo-controls-body">
+      <!-- CONTROL 1: AMBIENT GLOW (RADIAL GRADIENT BACKGROUND) -->
+      <div class="atmo-control-section">
+        <div class="atmo-row-header">
+          <div class="atmo-label-wrap">
+            <svg class="atmo-sec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="9"/>
+              <circle cx="12" cy="12" r="4" fill="currentColor" opacity="0.3"/>
+            </svg>
+            <span class="atmo-sec-label">Ambient Glow</span>
+          </div>
+          <span class="atmo-val-badge" id="glowValBadge">100% Vivid</span>
+        </div>
+        <p class="atmo-sec-desc">
+          Controls all glow across the entire suite — background radial wash, inside the timer stage, numerals, and UI accents.
+        </p>
+
+        <div class="atmo-slider-container">
+          <div class="atmo-track-meta">
+            <span class="atmo-track-end">Pure Black (0%)</span>
+            <span class="atmo-track-end">Max Glow (100%)</span>
+          </div>
+          <div class="atmo-slider-wrapper">
+            <input type="range" id="sliderAmbientGlow" class="atmo-range-slider" min="0" max="100" step="1" value="100" aria-label="Ambient Glow Intensity">
+            <div class="atmo-slider-fill" id="glowSliderFill"></div>
+          </div>
+          <div class="atmo-presets-row">
+            <button type="button" class="atmo-preset-chip" data-glow="0">OLED Black (0%)</button>
+            <button type="button" class="atmo-preset-chip" data-glow="35">Subtle (35%)</button>
+            <button type="button" class="atmo-preset-chip" data-glow="70">Balanced (70%)</button>
+            <button type="button" class="atmo-preset-chip active" data-glow="100">Max Glow (100%)</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="atmo-divider"></div>
+
+      <!-- CONTROL 2: FLOATING PARTICLES (PARTICLE FIELD) -->
+      <div class="atmo-control-section">
+        <div class="atmo-row-header">
+          <div class="atmo-label-wrap">
+            <svg class="atmo-sec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="7" cy="8" r="2" fill="currentColor"/>
+              <circle cx="17" cy="6" r="1.5" fill="currentColor"/>
+              <circle cx="12" cy="15" r="2.5" fill="currentColor"/>
+              <circle cx="19" cy="16" r="1.2" fill="currentColor"/>
+              <circle cx="5" cy="17" r="1" fill="currentColor"/>
+            </svg>
+            <span class="atmo-sec-label">Floating Particles</span>
+          </div>
+          <span class="atmo-val-badge" id="particlesValBadge">Min (Lean)</span>
+        </div>
+        <p class="atmo-sec-desc">
+          Particle field density, dot diameter, and cosmic luminescence. Current is minimum.
+        </p>
+
+        <div class="atmo-slider-container">
+          <div class="atmo-track-meta">
+            <span class="atmo-track-end">Minimum (Current Lean)</span>
+            <span class="atmo-track-end">Maximum (Hyper-Field)</span>
+          </div>
+          <div class="atmo-slider-wrapper">
+            <input type="range" id="sliderParticles" class="atmo-range-slider" min="0" max="100" step="1" value="0" aria-label="Floating Particles Field Intensity">
+            <div class="atmo-slider-fill" id="particlesSliderFill"></div>
+          </div>
+          <div class="atmo-presets-row">
+            <button type="button" class="atmo-preset-chip active" data-particles="0">Min (Current)</button>
+            <button type="button" class="atmo-preset-chip" data-particles="33">2x Balanced</button>
+            <button type="button" class="atmo-preset-chip" data-particles="66">3x Stellar</button>
+            <button type="button" class="atmo-preset-chip" data-particles="100">Max Swarm</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="atmo-divider"></div>
+
+      <!-- CONTROL 3: PARTICLE MOVEMENT (DRIFT & SPEED) -->
+      <div class="atmo-control-section">
+        <div class="atmo-row-header">
+          <div class="atmo-label-wrap">
+            <svg class="atmo-sec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="atmo-sec-label">Particle Movement</span>
+          </div>
+          <span class="atmo-val-badge" id="speedValBadge">50% Cosmic</span>
+        </div>
+        <p class="atmo-sec-desc">
+          Cosmic drift &amp; kinetic velocity of floating particles across space.
+        </p>
+
+        <div class="atmo-slider-container">
+          <div class="atmo-track-meta">
+            <span class="atmo-track-end">Still (0%)</span>
+            <span class="atmo-track-end">Hyper (100%)</span>
+          </div>
+          <div class="atmo-slider-wrapper">
+            <input type="range" id="sliderSpeed" class="atmo-range-slider" min="0" max="100" step="1" value="50" aria-label="Particle Movement Speed">
+            <div class="atmo-slider-fill" id="speedSliderFill"></div>
+          </div>
+          <div class="atmo-presets-row">
+            <button type="button" class="atmo-preset-chip" data-speed="0">Still (0%)</button>
+            <button type="button" class="atmo-preset-chip" data-speed="30">Gentle (30%)</button>
+            <button type="button" class="atmo-preset-chip active" data-speed="50">Cosmic (50%)</button>
+            <button type="button" class="atmo-preset-chip" data-speed="100">Hyper (100%)</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="atmo-divider"></div>
+
+      <!-- CONTROL 4: PANEL OPACITY (TRANSPARENCY) -->
+      <div class="atmo-control-section">
+        <div class="atmo-row-header">
+          <div class="atmo-label-wrap">
+            <svg class="atmo-sec-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="12" height="12" rx="2" stroke-dasharray="2 2"/>
+              <rect x="9" y="9" width="12" height="12" rx="2" fill="currentColor" opacity="0.4"/>
+            </svg>
+            <span class="atmo-sec-label">Panel Opacity</span>
+          </div>
+          <span class="atmo-val-badge" id="panelOpacityValBadge">88% Deep</span>
+        </div>
+        <p class="atmo-sec-desc">
+          Glass transparency vs solid opacity of this atmosphere panel.
+        </p>
+
+        <div class="atmo-slider-container">
+          <div class="atmo-track-meta">
+            <span class="atmo-track-end">Glass (35%)</span>
+            <span class="atmo-track-end">Solid (100%)</span>
+          </div>
+          <div class="atmo-slider-wrapper">
+            <input type="range" id="sliderPanelOpacity" class="atmo-range-slider" min="35" max="100" step="1" value="88" aria-label="Panel Transparency Opacity">
+            <div class="atmo-slider-fill" id="panelOpacitySliderFill"></div>
+          </div>
+          <div class="atmo-presets-row">
+            <button type="button" class="atmo-preset-chip" data-panel-opacity="45">Glass (45%)</button>
+            <button type="button" class="atmo-preset-chip" data-panel-opacity="70">Balanced (70%)</button>
+            <button type="button" class="atmo-preset-chip active" data-panel-opacity="88">Deep (88%)</button>
+            <button type="button" class="atmo-preset-chip" data-panel-opacity="100">Solid (100%)</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- TIMER BACKUP & RESTORE MODAL -->
-  <div class="modal-wrap" id="timerBackupModal" role="dialog" aria-modal="true" aria-label="Backup & Restore Timer" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:9999;align-items:center;justify-content:center;">
-    <div class="modal-card" style="max-width:440px;width:90%;background:#0d0f14;border:1px solid rgba(217,185,92,0.4);border-radius:14px;padding:22px;box-shadow:0 25px 60px rgba(0,0,0,0.9);color:#fff;">
+  <div class="modal-wrap" id="timerBackupModal" role="dialog" aria-modal="true" aria-label="Backup &amp; Restore Timer" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.78);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:10000;align-items:center;justify-content:center;padding:16px;">
+    <div class="modal-card" style="max-width:440px;width:100%;background:#0d0f14;border:1px solid rgba(217,185,92,0.45);border-radius:16px;padding:22px;box-shadow:0 25px 60px rgba(0,0,0,0.92);color:#fff;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
         <h3 style="margin:0;font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px;color:#fef08a;">
           <span>💾</span> Backup &amp; Restore Horology State
@@ -1035,14 +1229,14 @@
         <button type="button" id="btnCloseTimerBackupModal" style="background:none;border:none;color:#94a3b8;font-size:20px;cursor:pointer;line-height:1;">✕</button>
       </div>
       <p style="font-size:12.5px;color:#94a3b8;line-height:1.5;margin-bottom:18px;">
-        Export your timer settings, custom protocols, themes, and focus history as an encrypted JSON backup, or restore from a previously saved file.
+        Export your timer settings, custom protocols, 30 luxury themes, alarms, and focus history as a JSON backup, or restore from a saved file.
       </p>
       <div style="display:flex;flex-direction:column;gap:10px;">
-        <button type="button" class="primary dist-btn" id="modalTimerExportBtn" style="padding:12px;font-weight:700;background:linear-gradient(135deg,#d9b95c,#b48a2e);color:#000;border-radius:8px;border:none;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;">
+        <button type="button" class="primary dist-btn" id="modalTimerExportBtn" style="padding:12px;font-weight:700;background:linear-gradient(135deg,#d9b95c,#b48a2e);color:#000;border-radius:10px;border:none;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           <span>Export Timer State (.json)</span>
         </button>
-        <button type="button" class="ghost dist-btn" id="modalTimerImportBtn" style="padding:12px;font-weight:600;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);border-radius:8px;display:flex;align-items:center;justify-content:center;gap:8px;color:#e2e8f0;cursor:pointer;">
+        <button type="button" class="ghost dist-btn" id="modalTimerImportBtn" style="padding:12px;font-weight:600;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;gap:8px;color:#e2e8f0;cursor:pointer;">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
           <span>Restore Timer State (.json)</span>
         </button>
@@ -1050,5 +1244,63 @@
       </div>
     </div>
   </div>
+
+  <!-- SPOTLIGHT COMMAND PALETTE MODAL (CTRL + K / ⌘K) -->
+  <div class="spotlight-backdrop" id="timerSpotlightModal" role="dialog" aria-modal="true" aria-label="Orlando Timer Spotlight Command Palette">
+    <div class="spotlight-box">
+      <div class="spotlight-header">
+        <svg class="spotlight-icon-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-linecap="round"></line>
+        </svg>
+        <input type="text" class="spotlight-input" id="timerSpotlightInput" placeholder="Type a duration (e.g. 15m, 45m), theme (gold, matrix), protocol, or sub-app..." autocomplete="off" spellcheck="false" aria-label="Spotlight Command Input">
+        <kbd class="spotlight-esc-chip" id="btnCloseTimerSpotlight">ESC</kbd>
+      </div>
+
+      <div class="spotlight-results" id="timerSpotlightResults" role="listbox">
+        <!-- Dynamically populated by Orlando Timer Spotlight Engine -->
+      </div>
+
+      <div class="spotlight-footer">
+        <div class="spotlight-footer-keys">
+          <span><kbd class="topbar-kbd">↑</kbd> <kbd class="topbar-kbd">↓</kbd> Navigate</span>
+          <span><kbd class="topbar-kbd">↵</kbd> Execute / Apply</span>
+          <span><kbd class="topbar-kbd">esc</kbd> Close</span>
+        </div>
+        <span class="spotlight-brand-sig">Sir Orlando V. Pasion, Jr. · Horology Command</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXECUTIVE STANDALONE SUB-APP DOCK (SHOWN IN STANDALONE MODE OR ON DEMAND) -->
+  <nav class="standalone-subapp-dock" id="standaloneSubAppDock" aria-label="Executive Flagship Sub-App Dock">
+    <span class="dock-apps-label">APPS:</span>
+    <button type="button" class="dock-pill-btn" data-href="https://orlandopasion000.github.io/?standalone=true" onclick="window.launchSubApp('', 'OVPJMasterPortfolio', 1340, 880)" title="Master Portfolio &amp; Digital Resource Library">
+      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Portfolio</span>
+    </button>
+    <button type="button" class="dock-pill-btn" data-href="https://orlandopasion000.github.io/orlandorecharge/?standalone=true" onclick="window.launchSubApp('orlandorecharge', 'OrlandoRechargeMainAppWindow', 1280, 850)" title="OrlandoRecharge — 23-Block Schedule &amp; Quantum Realm">
+      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#fde047" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      <span>Recharge</span>
+    </button>
+    <button type="button" class="dock-pill-btn active" title="Orlando Timer (Current Active App)">
+      <span class="active-dot-cyan"></span>
+      <span style="color:#fef08a;font-weight:800;">Timer</span>
+    </button>
+    <button type="button" class="dock-pill-btn" data-href="https://orlandopasion000.github.io/orlandochrome/?standalone=true" onclick="window.launchSubApp('orlandochrome', 'OrlandoChromeStandaloneWindow', 1180, 820)" title="OrlandoChrome — 22-Profile Command Center">
+      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#34d399" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="21.17" y1="8" x2="12" y2="8"/><line x1="3.95" y1="6.06" x2="8.54" y2="14"/><line x1="10.88" y1="21.94" x2="15.46" y2="14"/></svg>
+      <span>Chrome</span>
+    </button>
+    <button type="button" class="dock-pill-btn" data-href="https://orlandopasion000.github.io/orlandovault/?standalone=true" onclick="window.launchSubApp('orlandovault', 'OrlandoVaultMainAppWindow', 1240, 820)" title="OrlandoVault — Jarvis Cryptographic Security Suite">
+      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#38bdf8" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <span>Vault</span>
+    </button>
+  </nav>
+
+  <script src="assets/qrcode.min.js"></script>
+  <script src="app.js?v=30.0"></script>
+
+
+
 </body>
 </html>

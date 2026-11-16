@@ -442,6 +442,41 @@
           });
         } catch (e) {}
       },
+      hapticPulse: function (freq = 960, forceAudio = false) {
+        try {
+          if (navigator.vibrate) navigator.vibrate(10);
+        } catch (e) {}
+        this.tick(freq, forceAudio);
+      },
+      chimeHarmonic: function (forceAudio = false) {
+        try {
+          if (navigator.vibrate) navigator.vibrate([12, 24, 12]);
+        } catch (e) {}
+        if (!acousticTickEnabled && !forceAudio) return;
+        try {
+          const c = getCtx();
+          if (!c) return;
+          const now = c.currentTime;
+          const osc1 = c.createOscillator();
+          const osc2 = c.createOscillator();
+          const gain = c.createGain();
+          osc1.type = 'sine';
+          osc1.frequency.setValueAtTime(880, now);
+          osc1.frequency.exponentialRampToValueAtTime(1760, now + 0.28);
+          osc2.type = 'triangle';
+          osc2.frequency.setValueAtTime(1318.5, now);
+          osc2.frequency.exponentialRampToValueAtTime(2637, now + 0.28);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.45);
+          osc1.connect(gain);
+          osc2.connect(gain);
+          gain.connect(c.destination);
+          osc1.start(now);
+          osc2.start(now);
+          osc1.stop(now + 0.46);
+          osc2.stop(now + 0.46);
+        } catch (e) {}
+      },
       supernovaShockwave: function (tier = 2) {
         try {
           const c = getCtx();
@@ -2858,18 +2893,13 @@
 
   // ── ATTACH ALL EVENT LISTENERS ──
 
-  // Logo opens Quantum Time Command Hub drawer
+  // Expose Quantum Time Command Hub toggle globally for System Menu & Spotlight Palette
+  window.toggleQuantumTimeCommand = toggleFunCockpit;
+
+  // Brand emblem link returns cleanly to Master Portfolio (no accidental drawer toggle)
   if (btnLogoEasterEgg) {
-    btnLogoEasterEgg.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const rect = btnLogoEasterEgg.getBoundingClientRect();
-      if (window.spawnSupernovaBurst) {
-        window.spawnSupernovaBurst(rect.left + rect.width / 2, rect.top + rect.height / 2, {
-          tier: 1,
-          showToast: false
-        });
-      }
-      toggleFunCockpit();
+    btnLogoEasterEgg.addEventListener('click', () => {
+      AudioHUD.hapticPulse(920);
     });
   }
 
@@ -3536,6 +3566,7 @@
   function initAtmosphereLab() {
     const btnAtmosphere = document.getElementById('btnAtmosphere');
     const atmospherePopup = document.getElementById('atmospherePopup');
+    const atmoModalBackdrop = document.getElementById('atmoModalBackdrop');
     const btnCloseAtmosphere = document.getElementById('btnCloseAtmosphere');
     const atmoDot = document.getElementById('atmoDot');
 
@@ -3557,15 +3588,19 @@
       const isOpen = force !== undefined ? force : !atmospherePopup.classList.contains('open');
       if (isOpen) {
         atmospherePopup.classList.add('open');
+        if (atmoModalBackdrop) atmoModalBackdrop.classList.add('open');
         btnAtmosphere?.classList.add('active');
         btnAtmosphere?.setAttribute('aria-expanded', 'true');
         if (typeof AudioHUD !== 'undefined' && AudioHUD.tick) AudioHUD.tick(980);
       } else {
         atmospherePopup.classList.remove('open');
+        if (atmoModalBackdrop) atmoModalBackdrop.classList.remove('open');
         btnAtmosphere?.classList.remove('active');
         btnAtmosphere?.setAttribute('aria-expanded', 'false');
       }
     }
+
+    window.toggleAtmosphereLab = toggleAtmospherePopup;
 
     if (btnAtmosphere) {
       btnAtmosphere.addEventListener('click', (e) => {
@@ -3581,11 +3616,16 @@
       });
     }
 
+    if (atmoModalBackdrop) {
+      atmoModalBackdrop.addEventListener('click', () => {
+        toggleAtmospherePopup(false);
+      });
+    }
+
     // Dismiss when clicking outside
     document.addEventListener('click', (e) => {
       if (atmospherePopup && atmospherePopup.classList.contains('open')) {
-        const wrapper = document.querySelector('.atmo-dropdown-container');
-        if (wrapper && !wrapper.contains(e.target)) {
+        if (!atmospherePopup.contains(e.target) && !e.target.closest('#btnTimerSysAtmo')) {
           toggleAtmospherePopup(false);
         }
       }
@@ -3893,11 +3933,47 @@
 
 
   // ════════════════════════════════════════════════════════════════════════════
-  // ORLANDO TIMER · STANDALONE PWA LAUNCHER & 4-CARD APP DISTRIBUTION ENGINE
+  // ORLANDO TIMER v30.0 · 7-PILLAR GENIUS FLAGSHIP ARCHITECTURE
+  // 1. Open Main Web App Desktop Launcher (PWA & Chromeless Standalone Window)
+  // 2. Horology Spotlight Command Palette (Ctrl + K / ⌘K & /)
+  // 3. Zero-Latency Speculative Pre-Fetching Engine (Hover 65ms + Touch + Idle)
+  // 4. Executive Standalone Sub-App Dock (5-App Ecosystem Switcher)
+  // 5. Deduplicated System Menu & 100% Machine-Vision Holographic QR
+  // 6. Optimistic UI with Self-Healing Mutation Journal & Web Audio Haptics
+  // 7. Google Cloud Firebase Firestore Singapore Real-Time Sync Engine
   // ════════════════════════════════════════════════════════════════════════════
   (function initOrlandoTimerPwaSuite() {
     let deferredInstallPrompt = null;
     const APP_URL = 'https://orlandopasion000.github.io/orlandotimer/';
+
+    function notifyUserToast(title, msg) {
+      if (typeof showQuantumTelemetryToast === 'function') {
+        showQuantumTelemetryToast(title, msg);
+      }
+      if (typeof announceSR === 'function') {
+        announceSR(title + ': ' + msg);
+      }
+    }
+    window.showTelemetryToast = notifyUserToast;
+
+    // -------------------------------------------------------------------------
+    // PILLAR 1 & 4: OPEN MAIN WEB APP LAUNCHER & STANDALONE SUB-APP DOCK
+    // -------------------------------------------------------------------------
+    window.launchSubApp = function(folder, winName, w, h) {
+      if (typeof AudioHUD !== 'undefined' && AudioHUD.hapticPulse) {
+        AudioHUD.hapticPulse(1040, true);
+      }
+      const isGithub = window.location.hostname.includes('github.io');
+      const origin = isGithub ? window.location.origin : 'https://orlandopasion000.github.io';
+      const targetUrl = (folder ? (origin + '/' + folder + '/') : (origin + '/')) + '?standalone=true';
+      const features = 'popup=yes,menubar=no,toolbar=no,location=no,status=no,personalbar=no,scrollbars=yes,resizable=yes,width=' + (w || 1280) + ',height=' + (h || 860) + ',left=90,top=50';
+      const appWin = window.open(targetUrl, winName || 'OVPJStandaloneSubApp', features);
+      if (appWin) {
+        try { appWin.focus(); } catch (e) {}
+      } else {
+        window.location.href = targetUrl;
+      }
+    };
 
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
@@ -3923,36 +3999,36 @@
     function updateLaunchButtonState() {
       const topBtn = document.getElementById('btnTopbarLaunchApp');
       const topLbl = document.getElementById('topbarLaunchLabel');
-      const mainBtnLbl = document.getElementById('openMainAppBtnLabel');
-      const cockpitLbl = document.getElementById('cockpitLaunchAppLabel');
+      const dock = document.getElementById('standaloneSubAppDock');
       const active = isStandaloneMode();
 
       if (topBtn && topLbl) {
         if (active) {
           topBtn.classList.add('btn-app-active');
-          topBtn.title = 'Orlando Timer (Main Web App) is Active';
-          topLbl.textContent = '✔ App Active';
+          topBtn.title = 'Orlando Timer (Main Web App) is Active · Click to toggle Sub-App Dock';
+          topLbl.textContent = '✔ Standalone Active';
         } else {
           topBtn.classList.remove('btn-app-active');
           topBtn.title = 'Open Orlando Timer in Dedicated Standalone Desktop Window';
           topLbl.textContent = 'Open Main Web App';
         }
       }
-      if (mainBtnLbl) {
-        mainBtnLbl.textContent = active ? '✔ Main Web App Active' : 'Open Main Web App';
-      }
-      if (cockpitLbl) {
-        cockpitLbl.textContent = active ? '✔ Standalone App Active' : 'Open Main Web App';
+      if (dock && active) {
+        dock.classList.add('active');
       }
     }
 
     async function handleLaunchStandaloneApp() {
-      if (typeof AudioHUD !== 'undefined' && AudioHUD.tick) {
-        try { AudioHUD.tick(980); } catch (e) {}
+      if (typeof AudioHUD !== 'undefined' && AudioHUD.chimeHarmonic) {
+        AudioHUD.chimeHarmonic(true);
       }
       if (isStandaloneMode()) {
-        if (typeof showTelemetryToast === 'function') {
-          showTelemetryToast('STANDALONE APP ACTIVE', '✨ Orlando Timer is already running as Main Web App!');
+        const dock = document.getElementById('standaloneSubAppDock');
+        if (dock) {
+          const nowActive = dock.classList.toggle('active');
+          notifyUserToast('STANDALONE APP ACTIVE', nowActive ? '✨ Executive Sub-App Dock revealed!' : '✨ Orlando Timer is running in Standalone Mode!');
+        } else {
+          notifyUserToast('STANDALONE APP ACTIVE', '✨ Orlando Timer is already running as Main Web App!');
         }
         return;
       }
@@ -3969,7 +4045,10 @@
         } catch (err) {}
       }
 
-      const targetUrl = APP_URL + '?standalone=true';
+      const base = (window.location.protocol === 'https:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+        ? (window.location.origin + window.location.pathname)
+        : APP_URL;
+      const targetUrl = base + (base.includes('?') ? '&' : '?') + 'standalone=true';
       const features = 'popup=yes,menubar=no,toolbar=no,location=no,status=no,personalbar=no,scrollbars=yes,resizable=yes,width=1280,height=860,left=100,top=60';
       const appWin = window.open(targetUrl, 'OrlandoTimerStandaloneWindow', features);
       if (appWin) {
@@ -3979,41 +4058,77 @@
       }
     }
 
-    // Wire all Open Main Web App triggers
-    ['btnTopbarLaunchApp'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) {
-        el.addEventListener('click', (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          handleLaunchStandaloneApp();
-        });
-      }
-    });
+    window.launchOrlandoTimerMainApp = handleLaunchStandaloneApp;
+
+    const launchBtn = document.getElementById('btnTopbarLaunchApp');
+    if (launchBtn) {
+      launchBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        handleLaunchStandaloneApp();
+      });
+    }
     updateLaunchButtonState();
 
-    // Wire collapsible 4-Card App Distribution Dock
-    const distSec = document.getElementById('appDistSection');
-    const distHead = document.getElementById('otDistHead');
-    const distMinBtn = document.getElementById('otDistMinimizeBtn');
-    const distMinIcon = document.getElementById('otDistMinIcon');
-    const distMinText = document.getElementById('otDistMinText');
-    const distHint = document.getElementById('otDistCollapseHint');
-
-    function toggleDistDock(e) {
-      if (e) e.stopPropagation();
-      if (!distSec) return;
-      const isMin = distSec.classList.toggle('minimized');
-      if (distMinIcon) distMinIcon.textContent = isMin ? '▸' : '▾';
-      if (distMinText) distMinText.textContent = isMin ? 'Expand' : 'Minimize';
-      if (distHint) distHint.textContent = isMin ? '· 4 Command Tools · Tap to Expand' : '· 4 Command Tools Active';
-      if (distMinBtn) distMinBtn.setAttribute('aria-expanded', String(!isMin));
+    // -------------------------------------------------------------------------
+    // PILLAR 3: ZERO-LATENCY SPECULATIVE PRE-FETCHING ENGINE
+    // Desktop Hover Intent (65ms) + Mobile Touch Speculation + Idle Warmup
+    // -------------------------------------------------------------------------
+    const prefetchedUrls = new Set();
+    function prefetchUrl(url) {
+      if (!url || prefetchedUrls.has(url) || url.startsWith('#') || url.startsWith('javascript:')) return;
+      prefetchedUrls.add(url);
+      try {
+        const link = document.createElement('link');
+        link.rel = 'prefetch';
+        link.href = url;
+        document.head.appendChild(link);
+      } catch (e) {}
     }
-    if (distHead) distHead.addEventListener('click', toggleDistDock);
-    if (distMinBtn) distMinBtn.addEventListener('click', toggleDistDock);
 
-    
-    // System Dropdown Menu Toggle
+    let hoverTimer = null;
+    document.addEventListener('mouseover', (e) => {
+      const el = e.target.closest('a, button[data-href], .dock-pill-btn[data-href]');
+      const href = el ? (el.href || el.getAttribute('data-href')) : null;
+      if (href && (href.startsWith('/') || href.includes('orlandopasion000.github.io') || href.includes(window.location.origin))) {
+        hoverTimer = setTimeout(() => prefetchUrl(href), 65);
+      }
+    });
+    document.addEventListener('mouseout', () => {
+      if (hoverTimer) clearTimeout(hoverTimer);
+    });
+
+    // Mobile Touch Speculation (Prefetches immediately on finger touch)
+    document.addEventListener('touchstart', (e) => {
+      const el = e.target.closest('a, button[data-href], .dock-pill-btn[data-href]');
+      const href = el ? (el.href || el.getAttribute('data-href')) : null;
+      if (href && (href.startsWith('/') || href.includes('orlandopasion000.github.io') || href.includes(window.location.origin))) {
+        prefetchUrl(href);
+      }
+    }, { passive: true });
+
+    // Background Idle Warmup for Sibling Flagship Apps
+    function warmupFlagshipFleet() {
+      const origin = window.location.hostname.includes('github.io') ? window.location.origin : 'https://orlandopasion000.github.io';
+      const fleet = [
+        origin + '/',
+        origin + '/orlandorecharge/?standalone=true',
+        origin + '/orlandochrome/?standalone=true',
+        origin + '/orlandovault/?standalone=true'
+      ];
+      fleet.forEach((u, idx) => {
+        setTimeout(() => prefetchUrl(u), 900 + idx * 350);
+      });
+    }
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(warmupFlagshipFleet);
+    } else {
+      setTimeout(warmupFlagshipFleet, 1800);
+    }
+
+    // -------------------------------------------------------------------------
+    // PILLAR 5: DEDUPLICATED SYSTEM DROPDOWN MENU & MACHINE-VISION QR
+    // -------------------------------------------------------------------------
     const btnTimerSystemMenu = document.getElementById('btnTimerSystemMenu');
     const timerSystemDropdown = document.getElementById('timerSystemDropdown');
 
@@ -4023,6 +4138,9 @@
       const isOpen = timerSystemDropdown.style.display === 'block';
       timerSystemDropdown.style.display = isOpen ? 'none' : 'block';
       if (btnTimerSystemMenu) btnTimerSystemMenu.setAttribute('aria-expanded', String(!isOpen));
+      if (!isOpen && typeof AudioHUD !== 'undefined' && AudioHUD.hapticPulse) {
+        AudioHUD.hapticPulse(940);
+      }
     }
 
     function closeTimerSystemMenu() {
@@ -4039,26 +4157,31 @@
       }
     });
 
-    // Wire System Menu Items
+    // Wire System Menu Item 1: Quantum Time Command (Cockpit) -> #funMicroCockpit
     const btnTimerSysCockpit = document.getElementById('btnTimerSysCockpit');
     if (btnTimerSysCockpit) {
       btnTimerSysCockpit.addEventListener('click', (e) => {
+        e.stopPropagation();
         closeTimerSystemMenu();
-        const drawer = document.getElementById('cockpitDrawer');
-        if (drawer) drawer.classList.add('open');
+        if (typeof toggleFunCockpit === 'function') {
+          toggleFunCockpit(true);
+        }
       });
     }
 
+    // Wire System Menu Item 2: Atmosphere & Particle Lab -> #atmospherePopup
     const btnTimerSysAtmo = document.getElementById('btnTimerSysAtmo');
     if (btnTimerSysAtmo) {
       btnTimerSysAtmo.addEventListener('click', (e) => {
+        e.stopPropagation();
         closeTimerSystemMenu();
-        const atmoCard = document.getElementById('atmoCard');
-        if (atmoCard) atmoCard.classList.add('open');
+        if (typeof window.toggleAtmosphereLab === 'function') {
+          window.toggleAtmosphereLab(true);
+        }
       });
     }
 
-    // Wire Timer Backup Modal
+    // Wire System Menu Item 7: Timer Backup & Restore Modal -> #timerBackupModal
     const btnTimerSysBackup = document.getElementById('btnTimerSysBackup');
     const timerBackupModal = document.getElementById('timerBackupModal');
     const btnCloseTimerBackupModal = document.getElementById('btnCloseTimerBackupModal');
@@ -4069,6 +4192,7 @@
     function openTimerBackupModal() {
       closeTimerSystemMenu();
       if (timerBackupModal) timerBackupModal.style.display = 'flex';
+      if (typeof AudioHUD !== 'undefined' && AudioHUD.hapticPulse) AudioHUD.hapticPulse(980);
     }
     function closeTimerBackupModal() {
       if (timerBackupModal) timerBackupModal.style.display = 'none';
@@ -4084,11 +4208,18 @@
 
     if (modalTimerExportBtn) {
       modalTimerExportBtn.addEventListener('click', () => {
+        const dump = {};
+        for (let i = 0; i < localStorage.length; i++) {
+          const k = localStorage.key(i);
+          if (k && (k.startsWith('orlando-') || k.startsWith('ot_'))) {
+            dump[k] = localStorage.getItem(k);
+          }
+        }
         const stateObj = {
           app: 'OrlandoTimer',
           timestamp: new Date().toISOString(),
-          version: '2.0.0',
-          localStorageDump: { ...localStorage }
+          version: '30.0.0',
+          localStorageDump: dump
         };
         const blob = new Blob([JSON.stringify(stateObj, null, 2)], { type: 'application/json' });
         const a = document.createElement('a');
@@ -4098,7 +4229,7 @@
         a.click();
         document.body.removeChild(a);
         closeTimerBackupModal();
-        if (typeof showSupernovaToast === 'function') showSupernovaToast('💾 Horology state exported successfully!');
+        notifyUserToast('BACKUP EXPORTED', '💾 Horology state JSON exported successfully!');
       });
     }
 
@@ -4111,28 +4242,33 @@
         reader.onload = (re) => {
           try {
             const data = JSON.parse(re.target.result);
-            if (data.localStorageDump) {
-              Object.keys(data.localStorageDump).forEach(k => {
-                localStorage.setItem(k, data.localStorageDump[k]);
+            const targetMap = data.localStorageDump || data;
+            if (targetMap && typeof targetMap === 'object') {
+              Object.keys(targetMap).forEach(k => {
+                if (typeof targetMap[k] === 'string') {
+                  localStorage.setItem(k, targetMap[k]);
+                }
               });
             }
             closeTimerBackupModal();
-            alert('OrlandoTimer state restored successfully! Reloading...');
-            window.location.reload();
-          } catch(err) {
+            notifyUserToast('STATE RESTORED', '✨ Horology state restored! Reloading...');
+            setTimeout(() => window.location.reload(), 600);
+          } catch (err) {
             alert('Invalid backup file: ' + err.message);
           }
         };
         reader.readAsText(file);
       });
     }
-  
-    // Wire Holographic QR Modal
+
+    // Wire System Menu Item 6: Holographic QR Modal (100% Machine-Vision Ready)
     const qrModal = document.getElementById('otQrModal');
     const qrMount = document.getElementById('otQrMount');
     function openQrModal() {
+      closeTimerSystemMenu();
       if (!qrModal) return;
       qrModal.classList.add('open');
+      if (typeof AudioHUD !== 'undefined' && AudioHUD.hapticPulse) AudioHUD.hapticPulse(1020);
       if (qrMount && typeof window.qrcode === 'function') {
         try {
           const qr = window.qrcode(0, 'M');
@@ -4147,18 +4283,19 @@
               if (qr.isDark(r, c)) d += `M${c + margin},${r + margin}h1v1h-1z `;
             }
           }
-          qrMount.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${total} ${total}" shape-rendering="crispEdges" style="width:100%;height:100%;"><rect width="100%" height="100%" fill="#ffffff"/><path fill="#000000" d="${d}"/></svg>`;
+          qrMount.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${total} ${total}" shape-rendering="crispEdges" preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%;display:block;background:#ffffff;"><rect width="100%" height="100%" fill="#ffffff"/><path fill="#000000" d="${d}"/></svg>`;
         } catch (e) {}
       }
     }
     function closeQrModal() {
       if (qrModal) qrModal.classList.remove('open');
     }
+    window.openOrlandoTimerQrModal = openQrModal;
+
     const openQrBtn = document.getElementById('otOpenQrBtn');
     const closeQr1 = document.getElementById('otCloseQrModal');
     const closeQr2 = document.getElementById('otQrCloseBtn2');
     const copyQrBtn = document.getElementById('otQrCopyBtn');
-    const shareLinkBtn = document.getElementById('otShareLinkBtn');
 
     if (openQrBtn) openQrBtn.addEventListener('click', openQrModal);
     if (closeQr1) closeQr1.addEventListener('click', closeQrModal);
@@ -4169,61 +4306,283 @@
       if (navigator.clipboard) {
         navigator.clipboard.writeText(APP_URL).catch(() => {});
       }
-      if (typeof showTelemetryToast === 'function') {
-        showTelemetryToast('LINK COPIED', '📋 Orlando Timer link copied to clipboard!');
-      }
+      if (typeof AudioHUD !== 'undefined' && AudioHUD.chimeHarmonic) AudioHUD.chimeHarmonic(true);
+      notifyUserToast('LINK COPIED', '📋 Orlando Timer link copied to clipboard!');
     }
     if (copyQrBtn) copyQrBtn.addEventListener('click', copyTimerLink);
-    if (shareLinkBtn) shareLinkBtn.addEventListener('click', copyTimerLink);
 
-    // Wire Export / Import / Cloud Sync buttons
-    const syncNowBtn = document.getElementById('otSyncCloudNowBtn');
-    if (syncNowBtn) {
-      syncNowBtn.addEventListener('click', () => {
-        if (window.OrlandoTimerFirebase) window.OrlandoTimerFirebase.pullNow();
-      });
+    // -------------------------------------------------------------------------
+    // PILLAR 2: GENIUS HOROLOGY SPOTLIGHT COMMAND PALETTE (CTRL + K / ⌘K & /)
+    // -------------------------------------------------------------------------
+    const spotlightModal = document.getElementById('timerSpotlightModal');
+    const spotlightInput = document.getElementById('timerSpotlightInput');
+    const spotlightResults = document.getElementById('timerSpotlightResults');
+    const btnTopbarSearch = document.getElementById('btnTopbarSearch');
+    const btnCloseSpotlight = document.getElementById('btnCloseTimerSpotlight');
+
+    let spotlightIndex = 0;
+    let spotlightMatches = [];
+
+    function escHtml(str) {
+      return String(str == null ? '' : str).replace(/[&<>"']/g, c => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[c]));
     }
-    const expBtn = document.getElementById('otExportBackupBtn');
-    if (expBtn) {
-      expBtn.addEventListener('click', () => {
-        const dump = {};
-        for (let i = 0; i < localStorage.length; i++) {
-          const k = localStorage.key(i);
-          if (k && (k.startsWith('orlando-') || k.startsWith('ot_'))) {
-            dump[k] = localStorage.getItem(k);
-          }
+
+    function setAndStartMinutes(mins) {
+      const tabTimer = document.getElementById('tab-timer');
+      if (tabTimer) tabTimer.click();
+      if (typeof pauseTimer === 'function') pauseTimer();
+      const totalSecs = Math.max(1, Math.round(mins * 60));
+      const h = Math.floor(totalSecs / 3600);
+      const m = Math.floor((totalSecs % 3600) / 60);
+      const s = totalSecs % 60;
+      const hIn = document.getElementById('timerHours');
+      const mIn = document.getElementById('timerMinutes');
+      const sIn = document.getElementById('timerSeconds');
+      if (hIn) hIn.value = String(h).padStart(2, '0');
+      if (mIn) mIn.value = String(m).padStart(2, '0');
+      if (sIn) sIn.value = String(s).padStart(2, '0');
+      if (typeof syncTimerFromInputs === 'function') syncTimerFromInputs();
+      if (typeof startTimer === 'function') startTimer();
+      if (typeof AudioHUD !== 'undefined' && AudioHUD.chimeHarmonic) AudioHUD.chimeHarmonic(true);
+      notifyUserToast('TIMER LAUNCHED', `⏱️ Started ${mins >= 1 ? Math.round(mins) + ' min' : totalSecs + ' sec'} countdown!`);
+    }
+
+    const BASE_SPOTLIGHT_COMMANDS = [
+      // Productivity Protocols (5)
+      { id: 'proto-focus', cat: 'Productivity Protocols', icon: '🎯', title: 'Focus Protocol (Pomodoro 25m / 5m)', desc: 'Classic 25m Focus & 5m Break rhythm with auto-advance', badge: 'Protocol', action: () => { applyProductivityMode('focus-protocol', true); } },
+      { id: 'proto-zen', cat: 'Productivity Protocols', icon: '🧘', title: 'Zen Immersion Mode (Pure Void)', desc: 'Distraction-free void with colossal floating horology digits', badge: 'Void', action: () => { applyProductivityMode('zen-immersion', true); } },
+      { id: 'proto-deep', cat: 'Productivity Protocols', icon: '⚡', title: 'Deep Work (90m Ultradian Cycle)', desc: '90-minute human ultradian cycle (Warm-Up · Peak Flow · Review)', badge: '90m Ultra', action: () => { applyProductivityMode('deep-work', true); } },
+      { id: 'proto-flow', cat: 'Productivity Protocols', icon: '🌊', title: 'Quantum Flow (Count-Up Flow State)', desc: 'Serene HH:MM:SS count-up with unbroken Flow Milestones', badge: 'Flow State', action: () => { applyProductivityMode('quantum-flow', true); } },
+      { id: 'proto-chrono', cat: 'Productivity Protocols', icon: '⏱️', title: 'Precision Chrono (100fps Split Laps)', desc: 'Swiss chronometer with millisecond precision & lap telemetry', badge: 'Chrono', action: () => { applyProductivityMode('precision-chrono', true); } },
+
+      // Quick Timer Sprints
+      { id: 'timer-5', cat: 'Instant Timer Sprints', icon: '⏳', title: 'Start 5-Minute Quick Sprint', desc: 'Immediate 05:00 countdown timer', badge: '↵ Start', badgeAction: true, action: () => setAndStartMinutes(5) },
+      { id: 'timer-15', cat: 'Instant Timer Sprints', icon: '⏳', title: 'Start 15-Minute Focus Block', desc: 'Immediate 15:00 countdown timer', badge: '↵ Start', badgeAction: true, action: () => setAndStartMinutes(15) },
+      { id: 'timer-25', cat: 'Instant Timer Sprints', icon: '⏳', title: 'Start 25-Minute Pomodoro Sprint', desc: 'Standard 25:00 executive focus session', badge: '↵ Start', badgeAction: true, action: () => setAndStartMinutes(25) },
+      { id: 'timer-45', cat: 'Instant Timer Sprints', icon: '⏳', title: 'Start 45-Minute Deep Session', desc: 'Extended 45:00 classroom / deep session', badge: '↵ Start', badgeAction: true, action: () => setAndStartMinutes(45) },
+      { id: 'timer-90', cat: 'Instant Timer Sprints', icon: '⏳', title: 'Start 90-Minute Ultradian Block', desc: 'Full 01:30:00 peak cognitive cycle', badge: '↵ Start', badgeAction: true, action: () => setAndStartMinutes(90) },
+
+      // Horology System & Audio Commands
+      { id: 'sys-vault-theme', cat: 'Horology System & Audio', icon: '🎨', title: 'Open Holographic Theme Vault', desc: 'Browse all 30 luxury themes with live holo-scrubbing (Hotkey: T)', badge: '30 Themes', action: () => { if (typeof openHoloVault === 'function') openHoloVault('theme'); } },
+      { id: 'sys-vault-clock', cat: 'Horology System & Audio', icon: '🔢', title: 'Open Digit Style Vault', desc: 'Customize numeral material finish & specular reflections (Hotkey: D)', badge: 'Digits', action: () => { if (typeof openHoloVault === 'function') openHoloVault('clock'); } },
+      { id: 'sys-shuffle', cat: 'Horology System & Audio', icon: '🎲', title: 'Quantum Shuffle (Theme + Digit Style)', desc: 'Harmonize a random luxury App Theme & Digit Style pair', badge: 'Shuffle', action: () => { const btn = document.getElementById('btnQuantumShuffle'); if (btn) btn.click(); } },
+      { id: 'sys-cockpit', cat: 'Horology System & Audio', icon: '🚀', title: 'Quantum Time Command Cockpit', desc: 'Earth Solar Horizon, Supernova Telemetry & Weekly Focus Chart', badge: 'Cockpit', action: () => { if (typeof toggleFunCockpit === 'function') toggleFunCockpit(true); } },
+      { id: 'sys-atmo', cat: 'Horology System & Audio', icon: '✦', title: 'Atmosphere & Particle Lab', desc: 'Adjust Ambient Glow (0%-100%), Floating Particles & Cosmic Speed', badge: 'Lab', action: () => { if (typeof window.toggleAtmosphereLab === 'function') window.toggleAtmosphereLab(true); } },
+      { id: 'sys-supernova', cat: 'Horology System & Audio', icon: '💥', title: 'Detonate Celestial Supernova Shockwave', desc: 'Trigger a physics particle burst & sub-bass harmonic chime', badge: 'Burst', action: () => { const b = document.getElementById('btnFireSupernova'); if (b) b.click(); } },
+      { id: 'sys-breath', cat: 'Horology System & Audio', icon: '🌬️', title: 'Quantum Resonance Breathing (4-4-4-4)', desc: 'Guided 4-second inhale, hold, exhale & reset calibration', badge: 'Calibrate', action: () => { if (typeof startBreathingSession === 'function') startBreathingSession(); } },
+      { id: 'sys-tick', cat: 'Horology System & Audio', icon: '🔊', title: 'Toggle Mechanical Watch Tick Audio', desc: 'Enable or mute 1-second Swiss escapement tick & UI click audio', badge: 'Audio', action: () => { const b = document.getElementById('btnAcousticTick'); if (b) b.click(); } },
+      { id: 'sys-awake', cat: 'Horology System & Audio', icon: '👁️', title: 'Toggle Keep Screen Awake (Wake Lock)', desc: 'Prevent display from dimming or sleeping during active sessions', badge: 'WakeLock', action: () => { const b = document.getElementById('btnWakeLock'); if (b) b.click(); } },
+      { id: 'sys-qr', cat: 'Horology System & Audio', icon: '📱', title: 'Holographic Phone QR Scanner', desc: 'Scan with iPhone or Android camera for instant cloud sync', badge: 'QR Sync', action: openQrModal },
+      { id: 'sys-sync', cat: 'Horology System & Audio', icon: '☁️', title: 'Sync Google Cloud Firebase Now', desc: 'Reconcile Self-Healing Mutation Journal with Singapore Firestore', badge: '0ms SWR', action: () => { if (window.OrlandoTimerFirebase) window.OrlandoTimerFirebase.pullNow(); } },
+      { id: 'sys-backup', cat: 'Horology System & Audio', icon: '💾', title: 'Backup & Restore Horology State (.json)', desc: 'Export or import your presets, alarms, themes & focus history', badge: 'JSON', action: openTimerBackupModal },
+      { id: 'sys-dock', cat: 'Horology System & Audio', icon: '🧭', title: 'Toggle Executive Sub-App Dock', desc: 'Show or hide the floating bottom 5-App Ecosystem Dock', badge: 'Dock', action: () => { const d = document.getElementById('standaloneSubAppDock'); if (d) d.classList.toggle('active'); } },
+      { id: 'sys-standalone', cat: 'Horology System & Audio', icon: '🪟', title: 'Open Main Web App (Standalone Window)', desc: 'Launch Orlando Timer in a dedicated chromeless desktop window', badge: 'PWA', action: handleLaunchStandaloneApp },
+
+      // Flagship Ecosystem Sub-Apps
+      { id: 'app-recharge', cat: 'Flagship Web Apps', icon: '⚡', title: 'Switch to OrlandoRecharge (Main Version)', desc: '23-block DepEd daily alarm cockpit & Tier 3 Quantum Realm', badge: 'Flagship', action: () => window.launchSubApp('orlandorecharge', 'OrlandoRechargeMainAppWindow', 1280, 850) },
+      { id: 'app-chrome', cat: 'Flagship Web Apps', icon: '🌐', title: 'Switch to OrlandoChrome (Main Version)', desc: '22-profile Chrome taskbar command center & Wispr Flow dictation', badge: 'Flagship', action: () => window.launchSubApp('orlandochrome', 'OrlandoChromeStandaloneWindow', 1180, 820) },
+      { id: 'app-vault', cat: 'Flagship Web Apps', icon: '🔐', title: 'Switch to OrlandoVault (Jarvis Security)', desc: '138+ AES-guarded accounts, Google Sheets sync & QR studio', badge: 'Flagship', action: () => window.launchSubApp('orlandovault', 'OrlandoVaultMainAppWindow', 1240, 820) },
+      { id: 'app-portfolio', cat: 'Flagship Web Apps', icon: '🏛️', title: 'Return to Master Portfolio & Digital Library', desc: 'Sir Orlando V. Pasion, Jr. Official Portfolio & Mock Test Reviewers', badge: 'Root Hub', action: () => { window.location.href = 'https://orlandopasion000.github.io/'; } }
+    ];
+
+    function parseDurationQuery(q) {
+      if (!q) return null;
+      const mMatch = q.match(/^(\d+(?:\.\d+)?)\s*(m|min|mins|minute|minutes)?$/i);
+      if (mMatch) {
+        const val = parseFloat(mMatch[1]);
+        if (val > 0 && val <= 999) return val;
+      }
+      const sMatch = q.match(/^(\d+)\s*(s|sec|secs|second|seconds)$/i);
+      if (sMatch) {
+        const secs = parseInt(sMatch[1], 10);
+        if (secs > 0 && secs <= 5999) return secs / 60;
+      }
+      return null;
+    }
+
+    function renderSpotlightResults(query) {
+      if (!spotlightResults) return;
+      const q = (query || '').toLowerCase().trim();
+      spotlightMatches = [];
+
+      // 1. Dynamic Smart Duration Parser (e.g. "20", "15m", "45 min", "30s")
+      const parsedMins = parseDurationQuery(q);
+      if (parsedMins !== null) {
+        const label = parsedMins >= 1 ? `${Math.round(parsedMins)}-Minute` : `${Math.round(parsedMins * 60)}-Second`;
+        spotlightMatches.push({
+          cat: 'Instant Custom Timer',
+          icon: '⚡',
+          title: `Start ${label} Countdown Timer Now`,
+          desc: `Immediately configure and start a ${label.toLowerCase()} timer sprint`,
+          badge: '↵ Start Now',
+          badgeAction: true,
+          action: () => setAndStartMinutes(parsedMins)
+        });
+      }
+
+      // 2. Match Base Commands
+      BASE_SPOTLIGHT_COMMANDS.forEach(cmd => {
+        if (!q || cmd.title.toLowerCase().includes(q) || cmd.desc.toLowerCase().includes(q) || cmd.cat.toLowerCase().includes(q)) {
+          spotlightMatches.push(cmd);
         }
-        const blob = new Blob([JSON.stringify(dump, null, 2)], { type: 'application/json' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'orlandotimer-backup-' + new Date().toISOString().slice(0, 10) + '.json';
-        a.click();
+      });
+
+      // 3. Match All 30 Luxury Themes & Digit Styles
+      if (Array.isArray(THEMES) && typeof THEME_DATA === 'object') {
+        THEMES.forEach(themeKey => {
+          const td = THEME_DATA[themeKey];
+          if (!td) return;
+          const matchTheme = !q
+            ? (themeKey === 'pure-black' || themeKey === 'gold' || themeKey === 'platinum' || themeKey === 'cyber-matrix-rain')
+            : (td.name.toLowerCase().includes(q) || td.desc.toLowerCase().includes(q) || td.category.toLowerCase().includes(q) || themeKey.includes(q));
+          if (matchTheme) {
+            spotlightMatches.push({
+              cat: '30 Luxury Themes & Digit Styles',
+              icon: '✦',
+              title: `Theme: ${td.name}`,
+              desc: td.desc,
+              badge: '↵ Apply Theme & Digits',
+              badgeAction: true,
+              action: () => {
+                applyAppTheme(themeKey);
+                applyClockStyle(themeKey);
+                if (typeof AudioHUD !== 'undefined' && AudioHUD.chimeHarmonic) AudioHUD.chimeHarmonic(true);
+                notifyUserToast('THEME LOCKED IN', `✦ Applied ${td.name} across App & Digits!`);
+              }
+            });
+          }
+        });
+      }
+
+      if (spotlightMatches.length === 0) {
+        spotlightResults.innerHTML = `<div style="padding:28px;text-align:center;color:#94a3b8;font-size:13px;">No commands or themes matching "<strong>${escHtml(query)}</strong>". Try typing <code>25m</code>, <code>gold</code>, <code>zen</code>, <code>qr</code>, or <code>recharge</code>.</div>`;
+        return;
+      }
+
+      spotlightIndex = 0;
+      let html = '';
+      let currentCat = '';
+      spotlightMatches.forEach((item, idx) => {
+        if (item.cat !== currentCat) {
+          currentCat = item.cat;
+          html += `<div class="spotlight-group-title">${escHtml(currentCat)}</div>`;
+        }
+        const isSel = idx === spotlightIndex;
+        html += `<button type="button" class="spotlight-item${isSel ? ' selected' : ''}" data-index="${idx}" role="option" aria-selected="${isSel}">`;
+        html += `  <div class="spotlight-item-icon">${item.icon}</div>`;
+        html += `  <div class="spotlight-item-info">`;
+        html += `    <div class="spotlight-item-title">${escHtml(item.title)}</div>`;
+        html += `    <div class="spotlight-item-desc">${escHtml(item.desc)}</div>`;
+        html += `  </div>`;
+        html += `  <span class="spotlight-item-badge${item.badgeAction ? ' badge-action' : ''}">${escHtml(item.badge || 'Run')}</span>`;
+        html += `</button>`;
+      });
+
+      spotlightResults.innerHTML = html;
+      spotlightResults.querySelectorAll('.spotlight-item').forEach(el => {
+        el.addEventListener('click', function() {
+          const idx = parseInt(this.getAttribute('data-index'), 10);
+          executeSpotlightIndex(idx);
+        });
       });
     }
-    const impBtn = document.getElementById('otImportBackupBtn');
-    const impInput = document.getElementById('otImportFileInput');
-    if (impBtn && impInput) {
-      impBtn.addEventListener('click', () => impInput.click());
-      impInput.addEventListener('change', (e) => {
-        const f = e.target.files && e.target.files[0];
-        if (!f) return;
-        const r = new FileReader();
-        r.onload = (ev) => {
-          try {
-            const parsed = JSON.parse(ev.target.result);
-            Object.keys(parsed).forEach(k => localStorage.setItem(k, parsed[k]));
-            window.location.reload();
-          } catch (err) {}
-        };
-        r.readAsText(f);
+
+    function updateSpotlightSelection(newIdx) {
+      if (!spotlightResults) return;
+      const items = spotlightResults.querySelectorAll('.spotlight-item');
+      if (items.length === 0) return;
+      spotlightIndex = Math.max(0, Math.min(newIdx, items.length - 1));
+      items.forEach((el, idx) => {
+        const active = idx === spotlightIndex;
+        el.classList.toggle('selected', active);
+        el.setAttribute('aria-selected', String(active));
+        if (active) el.scrollIntoView({ block: 'nearest' });
       });
     }
+
+    function openSpotlight() {
+      closeTimerSystemMenu();
+      if (!spotlightModal) return;
+      spotlightModal.classList.add('open');
+      if (spotlightInput) {
+        spotlightInput.value = '';
+        setTimeout(() => spotlightInput.focus(), 20);
+      }
+      renderSpotlightResults('');
+      if (typeof AudioHUD !== 'undefined' && AudioHUD.hapticPulse) AudioHUD.hapticPulse(1080);
+    }
+
+    function closeSpotlight() {
+      if (spotlightModal) spotlightModal.classList.remove('open');
+    }
+
+    function executeSpotlightIndex(idx) {
+      const match = spotlightMatches[idx];
+      if (match && typeof match.action === 'function') {
+        closeSpotlight();
+        match.action();
+      }
+    }
+
+    if (btnTopbarSearch) {
+      btnTopbarSearch.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openSpotlight();
+      });
+    }
+    if (btnCloseSpotlight) {
+      btnCloseSpotlight.addEventListener('click', closeSpotlight);
+    }
+    if (spotlightModal) {
+      spotlightModal.addEventListener('click', (e) => {
+        if (e.target === spotlightModal) closeSpotlight();
+      });
+    }
+    if (spotlightInput) {
+      spotlightInput.addEventListener('input', (e) => {
+        renderSpotlightResults(e.target.value);
+      });
+      spotlightInput.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          updateSpotlightSelection(spotlightIndex + 1);
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          updateSpotlightSelection(spotlightIndex - 1);
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          executeSpotlightIndex(spotlightIndex);
+        } else if (e.key === 'Escape') {
+          e.preventDefault();
+          closeSpotlight();
+        }
+      });
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        if (spotlightModal && spotlightModal.classList.contains('open')) closeSpotlight();
+        else openSpotlight();
+      } else if (e.key === '/' && document.activeElement && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) {
+        e.preventDefault();
+        openSpotlight();
+      } else if (e.key === 'Escape' && spotlightModal && spotlightModal.classList.contains('open')) {
+        closeSpotlight();
+      }
+    });
+
+    window.openTimerSpotlight = openSpotlight;
+    window.closeTimerSpotlight = closeSpotlight;
   })();
 
   // Initialize Atmosphere & Particle Field Lab
   initAtmosphereLab();
 
   // ════════════════════════════════════════════════════════════════════════════
+  // PILLAR 6 & 7: OPTIMISTIC UI WITH SELF-HEALING MUTATION JOURNAL &
   // GOOGLE CLOUD FIREBASE FIRESTORE REAL-TIME ENGINE (Singapore asia-southeast1)
   // Project: orlandochrome-b6228 · Collection: orlandotimer_sync
   // ════════════════════════════════════════════════════════════════════════════
@@ -4239,6 +4598,7 @@
     const FIRESTORE_URL = `https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/orlandotimer_sync/master_channel?key=${FIREBASE_CONFIG.apiKey}`;
     const CLIENT_ID = 'ot_' + Math.random().toString(36).slice(2, 10);
     const LAST_MOD_KEY = 'orlando-last-modified';
+    const JOURNAL_KEY = 'orlando-mutation-journal';
     const SYNC_KEYS = [
       'orlando-app-theme',
       'orlando-clock-style',
@@ -4253,7 +4613,12 @@
       'orlando-ambient-glow',
       'orlando-particle-field',
       'orlando-particle-speed',
-      'orlando-atmo-panel-opacity'
+      'orlando-atmo-panel-opacity',
+      'orlando-exam-mode',
+      'orlando-low-effects',
+      'orlando-milestone-toast',
+      'orlando-alarm-sound',
+      'orlando-alarm-volume'
     ];
 
     let isApplyingRemote = false;
@@ -4261,22 +4626,86 @@
     let pushTimer = null;
     const origSetItem = Storage.prototype.setItem;
 
+    // Cross-Tab 0ms Optimistic BroadcastChannel Bridge
+    let liveBridge = null;
+    try {
+      if (typeof BroadcastChannel !== 'undefined') {
+        liveBridge = new BroadcastChannel('orlandotimer_live_bridge');
+        liveBridge.onmessage = (ev) => {
+          if (ev.data && ev.data.type === 'OPTIMISTIC_STATE_PATCH' && ev.data.cid !== CLIENT_ID) {
+            applyCloudPacket(ev.data.packet);
+          }
+        };
+      }
+    } catch (e) {}
+
+    function getJournal() {
+      try {
+        const raw = localStorage.getItem(JOURNAL_KEY);
+        const parsed = raw ? JSON.parse(raw) : [];
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function appendJournalEntry(key) {
+      try {
+        const journal = getJournal();
+        journal.push({
+          id: 'mut_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 6),
+          key: key,
+          ts: Date.now(),
+          cid: CLIENT_ID
+        });
+        // Keep last 50 unacknowledged mutations max
+        const trimmed = journal.slice(-50);
+        origSetItem.call(localStorage, JOURNAL_KEY, JSON.stringify(trimmed));
+        updateJournalBadge(trimmed.length);
+      } catch (e) {}
+    }
+
+    function flushJournal() {
+      try {
+        origSetItem.call(localStorage, JOURNAL_KEY, '[]');
+        updateJournalBadge(0);
+      } catch (e) {}
+    }
+
+    function updateJournalBadge(queuedCount) {
+      const badge = document.getElementById('firebaseJournalBadge');
+      if (!badge) return;
+      if (queuedCount > 0) {
+        badge.textContent = `${queuedCount} Queued`;
+        badge.style.background = 'rgba(245, 158, 11, 0.18)';
+        badge.style.borderColor = 'rgba(245, 158, 11, 0.45)';
+        badge.style.color = '#fbbf24';
+      } else {
+        badge.textContent = '0ms SWR';
+        badge.style.background = 'rgba(16, 185, 129, 0.15)';
+        badge.style.borderColor = 'rgba(16, 185, 129, 0.35)';
+        badge.style.color = '#34d399';
+      }
+    }
+
     function setSyncBadge(status) {
+      const sysDot = document.getElementById('systemSyncDot');
       const dot = document.getElementById('firebaseTimerSyncDot');
       const txt = document.getElementById('firebaseTimerSyncText');
-      if (!dot || !txt) return;
-      if (status === 'syncing') {
-        dot.style.background = '#38bdf8';
-        dot.style.boxShadow = '0 0 8px #38bdf8';
-        txt.textContent = 'Syncing...';
-      } else if (status === 'offline') {
-        dot.style.background = '#f59e0b';
-        dot.style.boxShadow = '0 0 8px #f59e0b';
-        txt.textContent = 'Offline';
-      } else {
-        dot.style.background = '#10b981';
-        dot.style.boxShadow = '0 0 8px #10b981';
-        txt.textContent = 'Cloud Synced';
+      const color = status === 'syncing' ? '#38bdf8' : (status === 'offline' ? '#f59e0b' : '#10b981');
+
+      if (sysDot) {
+        sysDot.style.background = color;
+        sysDot.style.boxShadow = `0 0 8px ${color}`;
+      }
+      if (dot) {
+        dot.style.background = color;
+        dot.style.boxShadow = `0 0 8px ${color}`;
+      }
+      if (txt) {
+        if (status === 'syncing') txt.textContent = 'Syncing Cloud...';
+        else if (status === 'offline') txt.textContent = 'Offline · Journal Armed';
+        else txt.textContent = 'Cloud Synced';
       }
     }
 
@@ -4287,7 +4716,13 @@
         if (v !== null) data[k] = v;
       });
       const ts = parseInt(localStorage.getItem(LAST_MOD_KEY) || String(Date.now()), 10);
-      return { v: 1, cid: CLIENT_ID, ts, data };
+      return {
+        v: 2,
+        cid: CLIENT_ID,
+        ts,
+        journalDepth: getJournal().length,
+        data
+      };
     }
 
     async function pushToCloud(showFeedback = false) {
@@ -4297,7 +4732,7 @@
         const pkt = collectPacket();
         const body = {
           fields: {
-            v: { integerValue: "1" },
+            v: { integerValue: "2" },
             ts: { integerValue: String(pkt.ts) },
             cid: { stringValue: pkt.cid },
             payload: { stringValue: JSON.stringify(pkt) }
@@ -4309,9 +4744,10 @@
           body: JSON.stringify(body)
         });
         if (res.ok) {
+          flushJournal();
           setSyncBadge('synced');
-          if (showFeedback && typeof announce === 'function') {
-            announce('Synced presets, alarms, and horology themes to Google Cloud Firebase');
+          if (showFeedback && typeof window.showTelemetryToast === 'function') {
+            window.showTelemetryToast('FIREBASE CLOUD SYNCED', '☁️ Reconciled horology state with Google Cloud Singapore!');
           }
           return true;
         }
@@ -4336,6 +4772,9 @@
         if (pkt.data['orlando-clock-style'] && typeof applyClockStyle === 'function') {
           try { applyClockStyle(pkt.data['orlando-clock-style']); } catch (e) {}
         }
+        if (pkt.data['orlando-productivity-mode'] && typeof applyProductivityMode === 'function') {
+          try { applyProductivityMode(pkt.data['orlando-productivity-mode'], false); } catch (e) {}
+        }
         if (typeof renderPresets === 'function') {
           try { renderPresets(); } catch (e) {}
         }
@@ -4344,6 +4783,9 @@
         }
         if (typeof renderWeeklyFocusChart === 'function') {
           try { renderWeeklyFocusChart(); } catch (e) {}
+        }
+        if (typeof updateFocusTelemetryUI === 'function') {
+          try { updateFocusTelemetryUI(); } catch (e) {}
         }
       } finally {
         isApplyingRemote = false;
@@ -4354,10 +4796,18 @@
       if (isSyncing) return false;
       isSyncing = true;
       try {
+        // Self-healing check: if we have unacknowledged offline mutations in the journal, push them first!
+        const pendingMutations = getJournal();
+        if (pendingMutations.length > 0 && !isInitial) {
+          isSyncing = false;
+          await pushToCloud(showFeedback);
+          return true;
+        }
+
         const res = await fetch(FIRESTORE_URL, { cache: 'no-store' });
         if (res.status === 404) {
           isSyncing = false;
-          await pushToCloud(false);
+          await pushToCloud(showFeedback);
           return true;
         }
         if (!res.ok) {
@@ -4372,17 +4822,25 @@
         }
         if (!pkt) {
           isSyncing = false;
-          await pushToCloud(false);
+          await pushToCloud(showFeedback);
           return true;
         }
         const cloudTs = pkt.ts || 0;
         const localTs = parseInt(localStorage.getItem(LAST_MOD_KEY) || '0', 10);
-        if (cloudTs > localTs && (pkt.cid !== CLIENT_ID || isInitial || showFeedback)) {
+        if (cloudTs > localTs && (pkt.cid !== CLIENT_ID || isInitial)) {
           applyCloudPacket(pkt);
-        } else if (localTs > cloudTs) {
-          await pushToCloud(false);
+          flushJournal();
+          if (showFeedback && typeof window.showTelemetryToast === 'function') {
+            window.showTelemetryToast('FIREBASE CLOUD SYNCED', '☁️ Pulled latest horology state from Google Cloud!');
+          }
+        } else if (localTs > cloudTs || pendingMutations.length > 0) {
+          isSyncing = false;
+          await pushToCloud(showFeedback);
+          return true;
         } else if (showFeedback) {
+          isSyncing = false;
           await pushToCloud(true);
+          return true;
         }
         setSyncBadge('synced');
       } catch (e) {
@@ -4393,28 +4851,51 @@
       return true;
     }
 
+    // Intercept localStorage writes for Frame-0 Optimistic UI + Self-Healing Mutation Journal
     Storage.prototype.setItem = function(key, val) {
       origSetItem.call(this, key, val);
       if (!isApplyingRemote && this === localStorage && SYNC_KEYS.includes(key)) {
-        origSetItem.call(localStorage, LAST_MOD_KEY, String(Date.now()));
+        const nowTs = Date.now();
+        origSetItem.call(localStorage, LAST_MOD_KEY, String(nowTs));
+        appendJournalEntry(key);
+
+        // Frame-0 cross-tab optimistic broadcast (0ms)
+        if (liveBridge) {
+          try {
+            liveBridge.postMessage({
+              type: 'OPTIMISTIC_STATE_PATCH',
+              cid: CLIENT_ID,
+              packet: collectPacket()
+            });
+          } catch (e) {}
+        }
+
         if (pushTimer) clearTimeout(pushTimer);
         pushTimer = setTimeout(() => { pushToCloud(false); }, 120);
       }
     };
 
-    console.log('⚡ [OrlandoTimer] Google Cloud Firebase Firestore Sync Active (orlandochrome-b6228)');
+    console.log('⚡ [OrlandoTimer v30.0] Optimistic UI + Self-Healing Journal + Firebase Firestore Active (orlandochrome-b6228)');
+    updateJournalBadge(getJournal().length);
+
     const syncBtn = document.getElementById('btnFirebaseTimerSync');
     if (syncBtn) {
       syncBtn.addEventListener('click', () => {
+        if (typeof AudioHUD !== 'undefined' && AudioHUD.chimeHarmonic) AudioHUD.chimeHarmonic(true);
         pullFromCloud(false, true);
       });
     }
+
     pullFromCloud(true, false);
     window.addEventListener('focus', () => pullFromCloud(false, false));
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'visible') pullFromCloud(false, false);
     });
-    window.addEventListener('online', () => pullFromCloud(false, false));
+    window.addEventListener('online', () => {
+      // Self-heal queued mutations immediately on network recovery
+      if (getJournal().length > 0) pushToCloud(true);
+      else pullFromCloud(false, false);
+    });
     window.addEventListener('offline', () => setSyncBadge('offline'));
     setInterval(() => {
       if (document.visibilityState === 'visible') pullFromCloud(false, false);
@@ -4423,7 +4904,8 @@
     window.OrlandoTimerFirebase = {
       config: FIREBASE_CONFIG,
       pushNow: () => pushToCloud(true),
-      pullNow: () => pullFromCloud(false, true)
+      pullNow: () => pullFromCloud(false, true),
+      getJournal: getJournal
     };
   })();
 
