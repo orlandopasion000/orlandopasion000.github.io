@@ -4058,26 +4058,20 @@
           <input type="text" class="edit-form-input" id="editInputTitle" required autocomplete="off" placeholder="e.g. Netflix, Facebook, Landbank, DepEd">
         </div>
 
-        <div class="edit-form-row">
-          <div class="edit-form-group" style="flex:1;">
-            <label class="edit-form-label" for="editSelectCategory">CATEGORY:</label>
-            <select class="edit-form-select" id="editSelectCategory">
-              <option value="DepEd">DepEd & Academic</option>
-              <option value="Microsoft">Microsoft 365</option>
-              <option value="AI & Dev">Claude & AI</option>
-              <option value="Gmail">Gmail Ecosystem</option>
-              <option value="Banking & Finance">Banking & Finance</option>
-              <option value="Portals">Government & Portals</option>
-              <option value="Family">Family (Blanca & Mom)</option>
-              <option value="Entertainment">Entertainment & Streaming</option>
-              <option value="Social">Social Media</option>
-              <option value="System">System & Device</option>
-            </select>
-          </div>
-          <div class="edit-form-group" style="flex:1;">
-            <label class="edit-form-label" for="editInputBadge">BADGE TAG:</label>
-            <input type="text" class="edit-form-input" id="editInputBadge" placeholder="e.g. Official Portal">
-          </div>
+        <div class="edit-form-group">
+          <label class="edit-form-label" for="editSelectCategory">CATEGORY:</label>
+          <select class="edit-form-select" id="editSelectCategory">
+            <option value="DepEd">DepEd & Academic</option>
+            <option value="Microsoft">Microsoft 365</option>
+            <option value="AI & Dev">Claude & AI</option>
+            <option value="Gmail">Gmail Ecosystem</option>
+            <option value="Banking & Finance">Banking & Finance</option>
+            <option value="Portals">Government & Portals</option>
+            <option value="Family">Family (Blanca & Mom)</option>
+            <option value="Entertainment">Entertainment & Streaming</option>
+            <option value="Social">Social Media</option>
+            <option value="System">System & Device</option>
+          </select>
         </div>
 
         <div class="edit-form-group">
@@ -4495,7 +4489,6 @@
       document.getElementById('editModalHeaderTitle').textContent = item.title || 'Credential Anatomy';
       document.getElementById('editInputTitle').value = item.title || '';
       document.getElementById('editSelectCategory').value = item.category || 'DepEd';
-      document.getElementById('editInputBadge').value = item.badge || '';
       document.getElementById('editInputUsername').value = item.username || '';
       document.getElementById('editInputPassword').value = item.password || '';
       document.getElementById('editInputNotes').value = item.notes || '';
@@ -4516,7 +4509,6 @@
       document.getElementById('editModalHeaderTitle').textContent = 'New Credential Account';
       document.getElementById('editInputTitle').value = '';
       document.getElementById('editSelectCategory').value = 'DepEd';
-      document.getElementById('editInputBadge').value = 'Official Portal';
       document.getElementById('editInputUsername').value = '';
       document.getElementById('editInputPassword').value = '';
       document.getElementById('editInputNotes').value = '';
@@ -4565,7 +4557,7 @@
       const id = document.getElementById('editCardId').value;
       const title = document.getElementById('editInputTitle').value.trim();
       const category = document.getElementById('editSelectCategory').value;
-      const badge = document.getElementById('editInputBadge').value.trim() || category;
+      const badge = category;
       const username = document.getElementById('editInputUsername').value.trim();
       const password = document.getElementById('editInputPassword').value.trim();
       const notes = document.getElementById('editInputNotes').value.trim();
@@ -4765,7 +4757,7 @@
             <div class="card-header">
               <div class="card-title-group">
                 <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-                  ${isCritical ? '<span class="card-badge card-badge-critical"><span class="badge-glyph">⚡</span> CRITICAL ACCOUNT</span>' : `<span class="card-badge card-badge-category">${item.badge || item.category}</span>`}
+                  ${isCritical ? '<span class="card-badge card-badge-critical"><span class="badge-glyph">⚡</span> CRITICAL ACCOUNT</span>' : `<span class="card-badge card-badge-category">${item.category || 'ACCOUNT'}</span>`}
                   ${isPinned ? '<span class="card-badge card-badge-priority"><span class="badge-glyph">★</span> TOP PRIORITY</span>' : ''}
                 </div>
                 <h3 class="card-account-title">${safeTitle}</h3>
@@ -4981,7 +4973,7 @@
       }
 
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v28', { scope: '/orlandovault/' }).catch(err => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v29', { scope: '/orlandovault/' }).catch(err => {
           console.warn('Vault SW registration error:', err);
         });
       }
