@@ -20,10 +20,80 @@ body.universe-game-active .antigravity-front-canvas {
   display: block !important;
 }
 
-/* ───────── TWIN QUANTUM REALM NAVIGATION & FULLSCREEN CONTROLS (Co-located Single-Click In/Out) ───────── */
-.qgame-btn-launch,
-.qgame-btn-exit,
-.fs-toggle-btn {
+/* ───────── TWIN QUANTUM REALM NAVIGATION & CONTROLS ───────── */
+.qgame-btn-launch {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  height: 28px !important;
+  box-sizing: border-box !important;
+  padding: 0 10px !important;
+  border-radius: 9999px !important;
+  font-family: 'Lexend', var(--sans, sans-serif) !important;
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  text-decoration: none !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* 1. Quantum Realm: Electric Cyan Glass */
+.qgame-btn-realm {
+  background: rgba(14, 165, 233, 0.16) !important;
+  border: 1px solid rgba(56, 189, 248, 0.55) !important;
+  color: #38bdf8 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35), 0 0 10px rgba(56, 189, 248, 0.25) !important;
+}
+.qgame-btn-realm:hover {
+  background: rgba(14, 165, 233, 0.30) !important;
+  border-color: #38bdf8 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.55) !important;
+  transform: translateY(-1px);
+}
+
+/* 2. Quantum Helix: Cyan & Violet Intertwined */
+.qgame-btn-helix {
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.16) 0%, rgba(192, 132, 252, 0.16) 100%) !important;
+  border: 1px solid rgba(192, 132, 252, 0.55) !important;
+  color: #e2e8f0 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35), 0 0 10px rgba(192, 132, 252, 0.25) !important;
+}
+.qgame-btn-helix:hover {
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.28) 0%, rgba(192, 132, 252, 0.28) 100%) !important;
+  border-color: #c084fc !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 16px rgba(192, 132, 252, 0.55) !important;
+  transform: translateY(-1px);
+}
+
+/* 3. Quantum Meteor: Molten Orange & Amber Asteroid */
+.qgame-btn-meteor {
+  background: rgba(234, 88, 12, 0.18) !important;
+  border: 1px solid rgba(249, 115, 22, 0.55) !important;
+  color: #fb923c !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35), 0 0 10px rgba(249, 115, 22, 0.25) !important;
+}
+.qgame-btn-meteor:hover {
+  background: rgba(234, 88, 12, 0.32) !important;
+  border-color: #f97316 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 16px rgba(249, 115, 22, 0.55) !important;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 1400px) {
+  .qg-word-quantum {
+    display: none !important;
+  }
+}
+
+.qgame-btn-exit {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -39,7 +109,6 @@ body.universe-game-active .antigravity-front-canvas {
   cursor: pointer;
   user-select: none;
   text-decoration: none !important;
-  /* Ultra-transparent futuristic micro-HUD glassmorphism */
   background: linear-gradient(135deg, rgba(15, 23, 42, 0.14) 0%, rgba(30, 41, 59, 0.08) 100%) !important;
   border: 1px solid rgba(56, 189, 248, 0.20) !important;
   color: rgba(241, 245, 249, 0.56) !important;
