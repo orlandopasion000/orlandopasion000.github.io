@@ -1,10 +1,9 @@
 /* OrlandoRecharge · Offline-First Service Worker (PWA Ready) */
-var CACHE_NAME = 'recharge-v57';
+var CACHE_NAME = 'recharge-v60';
 var ASSETS = [
   './',
   './index.html',
   './orlandorecharge-manifest.webmanifest',
-  './manifest.webmanifest',
   './assets/recharge-icon-192.png',
   './assets/recharge-icon-512.png',
   './assets/recharge-icon-maskable.png',
@@ -26,10 +25,15 @@ var ASSETS = [
 self.addEventListener('install', function (event) {
   event.waitUntil(
     caches.open(CACHE_NAME).then(function (cache) {
-      return cache.addAll(ASSETS);
-    }).catch(function () {})
+      return Promise.all(
+        ASSETS.map(function (url) {
+          return cache.add(url);
+        })
+      );
+    }).then(function () {
+      return self.skipWaiting();
+    })
   );
-  self.skipWaiting();
 });
 
 self.addEventListener('activate', function (event) {

@@ -5637,8 +5637,8 @@ $("audioBadge").onclick=function(){
   unlock();
 };
 
-// Initialize audio immediately so Sound Ready is permanently on by default
-initAudio();
+// Sound status initialized for user gesture activation
+updateAudioBadge();
 
 /* ───────── CENTRAL AUDIO MASTER CONTROLLER ───────── */
 var audioPlayToken = 0;
@@ -5754,6 +5754,7 @@ function decode(i){
   return pr;
 }
 function prepare(){
+  if(!ac || ac.state !== "running") return;
   SONGS.forEach(function(_, i){
     if(!ready[i] && !bufs[i]){
       decode(i).catch(function(){});
@@ -5910,7 +5911,7 @@ function showSong(){
   if (typeof window.syncGameMusicBtn === "function") {
     window.syncGameMusicBtn();
   }
-  prepare();
+  if(ac && ac.state === "running") prepare();
 }
 
 /* ───────── VOLUME ───────── */
@@ -6765,7 +6766,6 @@ $("arm").onclick=function(){
   if(armed){
     unlock();
     requestWakeLock();
-    startAudioKeepAlive();
     try{if(window.Notification&&Notification.permission==="default")Notification.requestPermission()}catch(e){}
     // alarms armed
   } else {
@@ -7820,7 +7820,6 @@ document.addEventListener('visibilitychange', function() {
   if (document.visibilityState === 'visible') {
     if (armed) {
       requestWakeLock();
-      startAudioKeepAlive();
     }
     if (ac && ac.state === 'suspended') {
       ac.resume().catch(function(){});
@@ -7831,7 +7830,6 @@ document.addEventListener('visibilitychange', function() {
 window.addEventListener('focus', function() {
   if (armed) {
     requestWakeLock();
-    startAudioKeepAlive();
   }
   if (ac && ac.state === 'suspended') {
     ac.resume().catch(function(){});
@@ -8540,7 +8538,6 @@ try { updatePresetDaysBadge(); } catch(e){}
 try {
   if (armed) {
     requestWakeLock();
-    startAudioKeepAlive();
   }
 } catch(e){}
 function checkUrlPreset() {
@@ -13149,7 +13146,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   <script>
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v57', { scope: './' }).catch(function() {});
+        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v60', { scope: './' }).catch(function() {});
       });
     }
   </script>
