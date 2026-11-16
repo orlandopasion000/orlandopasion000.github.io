@@ -625,30 +625,38 @@
     }
 
     .filter-pill {
-      background: rgba(16, 20, 29, 0.6);
-      border: 1px solid rgba(56, 189, 248, 0.2);
+      background: linear-gradient(135deg, rgba(20, 28, 44, 0.75) 0%, rgba(10, 15, 24, 0.85) 100%);
+      border: 1.5px solid rgba(255, 255, 255, 0.14);
       border-radius: 20px;
       padding: 8px 18px;
       font-family: var(--font-tech);
       font-size: 13px;
       font-weight: 700;
       letter-spacing: 1.2px;
-      color: var(--text-dim);
+      color: #94a3b8;
       cursor: pointer;
       white-space: nowrap;
-      transition: all 0.2s ease;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
 
     .filter-pill:hover {
-      border-color: var(--cyan);
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.2) 0%, rgba(20, 28, 44, 0.9) 100%);
+      border-color: rgba(56, 189, 248, 0.65);
       color: #ffffff;
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.35);
+      transform: translateY(-1px);
     }
 
     .filter-pill.active {
-      background: linear-gradient(135deg, rgba(2, 132, 199, 0.3) 0%, rgba(217, 185, 92, 0.2) 100%);
-      border-color: var(--cyan-bright);
-      color: #ffffff;
-      box-shadow: 0 0 15px var(--cyan-glow);
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.35) 0%, rgba(2, 132, 199, 0.28) 50%, rgba(217, 185, 92, 0.22) 100%) !important;
+      border: 1.5px solid #00f0ff !important;
+      color: #ffffff !important;
+      text-shadow: 0 0 10px rgba(0, 240, 255, 0.85);
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.45), inset 0 1px 1.5px rgba(255, 255, 255, 0.5) !important;
+      transform: translateY(-1px);
     }
 
     .vault-grid {
@@ -709,25 +717,65 @@
       gap: 4px;
     }
 
+    /* ==========================================================================
+       MASTERPIECE GRAPHICS: RADIANT NEON CYBER BADGES & STATUS CAPSULES
+       ========================================================================== */
     .card-badge {
-      font-family: var(--font-tech);
+      font-family: var(--font-tech), -apple-system, sans-serif;
       font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 1.5px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
       text-transform: uppercase;
-      padding: 3px 8px;
-      border-radius: 4px;
-      background: rgba(2, 132, 199, 0.2);
-      border: 1px solid rgba(56, 189, 248, 0.4);
-      color: var(--cyan);
-      display: inline-block;
+      padding: 4px 9px;
+      border-radius: 6px;
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.25) 0%, rgba(14, 165, 233, 0.15) 100%);
+      border: 1.5px solid rgba(56, 189, 248, 0.55);
+      color: #e0f2fe;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
       width: fit-content;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+    }
+
+    /* 1. RADIANT PLASMA RUBY: Critical Account Core */
+    .card-badge-critical {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.38) 0%, rgba(185, 28, 28, 0.22) 50%, rgba(127, 29, 29, 0.38) 100%) !important;
+      border: 1.5px solid rgba(255, 99, 132, 0.9) !important;
+      color: #ffffff !important;
+      text-shadow: 0 0 10px rgba(255, 50, 80, 0.95), 0 0 20px rgba(239, 68, 68, 0.6) !important;
+      box-shadow: 0 0 16px rgba(239, 68, 68, 0.5), inset 0 1px 1.5px rgba(255, 255, 255, 0.5) !important;
+    }
+    .card-badge-critical .badge-glyph {
+      color: #ffd700;
+      filter: drop-shadow(0 0 6px #ff3b3b);
+      font-size: 11px;
+    }
+
+    /* 2. RADIANT 24K SOLAR GOLD: Top Priority Aurora */
+    .card-badge-priority {
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.35) 0%, rgba(245, 158, 11, 0.22) 50%, rgba(180, 83, 9, 0.35) 100%) !important;
+      border: 1.5px solid #ffd700 !important;
+      color: #ffffff !important;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.95), 0 0 22px rgba(245, 158, 11, 0.7) !important;
+      box-shadow: 0 0 18px rgba(255, 215, 0, 0.55), inset 0 1px 1.5px rgba(255, 255, 255, 0.65) !important;
+    }
+    .card-badge-priority .badge-glyph {
+      color: #ffd700;
+      filter: drop-shadow(0 0 6px rgba(255, 215, 0, 1));
+      font-size: 11.5px;
     }
 
     .card-badge.critical {
-      background: rgba(239, 68, 68, 0.2);
-      border-color: rgba(239, 68, 68, 0.5);
-      color: #fca5a5;
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.38) 0%, rgba(185, 28, 28, 0.22) 50%, rgba(127, 29, 29, 0.38) 100%) !important;
+      border: 1.5px solid rgba(255, 99, 132, 0.9) !important;
+      color: #ffffff !important;
+      text-shadow: 0 0 10px rgba(255, 50, 80, 0.95), 0 0 20px rgba(239, 68, 68, 0.6) !important;
+      box-shadow: 0 0 16px rgba(239, 68, 68, 0.5), inset 0 1px 1.5px rgba(255, 255, 255, 0.5) !important;
     }
 
     .card-account-title {
@@ -819,21 +867,26 @@
     }
 
     .btn-pwd-action {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 6px;
-      padding: 6px 10px;
-      color: var(--text-main);
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
+      border: 1.2px solid rgba(255, 255, 255, 0.16);
+      border-radius: 7px;
+      padding: 7px 11px;
+      color: #94a3b8;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s ease;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      touch-action: manipulation;
     }
 
     .btn-pwd-action:hover {
-      border-color: var(--cyan-bright);
-      color: var(--cyan-bright);
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.22) 0%, rgba(30, 41, 59, 0.95) 100%);
+      border-color: #38bdf8;
+      color: #ffffff;
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.5);
+      transform: translateY(-1px);
     }
 
     .btn-copy-instant {
@@ -877,13 +930,16 @@
     }
 
     .card-notes {
-      font-size: 12px;
-      color: var(--text-dim);
-      line-height: 1.5;
-      background: rgba(255, 255, 255, 0.02);
-      padding: 8px 10px;
-      border-radius: 6px;
-      border-left: 2px solid var(--cyan);
+      font-size: 12.5px;
+      color: #cbd5e1;
+      line-height: 1.55;
+      background: linear-gradient(135deg, rgba(16, 21, 32, 0.75) 0%, rgba(10, 15, 24, 0.85) 100%);
+      padding: 9px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(56, 189, 248, 0.22);
+      border-left: 3px solid #38bdf8;
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08), 0 2px 8px rgba(0, 0, 0, 0.35);
+      font-family: var(--font-inter);
     }
 
     .card-footer {
@@ -1240,20 +1296,58 @@
     }
 
     /* UPGRADE 5: ROTATION REMINDER BADGES */
-    .btn-rotate-mark {
-      background: none;
-      border: 1px solid rgba(217, 185, 92, 0.35);
-      border-radius: 4px;
-      color: var(--gold);
+    .card-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       font-family: var(--font-tech);
       font-size: 11px;
-      font-weight: 600;
-      padding: 2px 7px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      color: #94a3b8;
+    }
+
+    .status-live-beacon {
+      color: #00f5a0;
+      filter: drop-shadow(0 0 6px #00f5a0);
+      font-size: 9px;
+      animation: beaconPulse 2s infinite ease-in-out;
+    }
+
+    @keyframes beaconPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.45; transform: scale(0.85); }
+    }
+
+    .btn-rotate-mark {
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.16) 0%, rgba(245, 158, 11, 0.08) 100%);
+      border: 1.2px solid rgba(255, 215, 0, 0.5);
+      border-radius: 6px;
+      color: #fef08a;
+      font-family: var(--font-tech);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      padding: 3px 9px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 4px;
-      transition: all 0.2s ease;
+      gap: 5px;
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      touch-action: manipulation;
+    }
+
+    .btn-rotate-mark:hover {
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.35) 0%, rgba(245, 158, 11, 0.25) 100%);
+      border-color: #ffd700;
+      color: #ffffff;
+      box-shadow: 0 0 18px rgba(255, 215, 0, 0.65);
+      transform: translateY(-1px);
+    }
+
+    .btn-rotate-mark:active {
+      transform: translateY(0) scale(0.96);
     }
     .btn-rotate-mark:hover {
       background: rgba(217, 185, 92, 0.2);
@@ -1764,23 +1858,27 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      transition: all 0.2s ease;
-      background: rgba(16, 21, 32, 0.8);
-      color: #ffffff;
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
+      color: #e2e8f0;
+      border: 1.5px solid rgba(255, 255, 255, 0.16);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+      touch-action: manipulation;
     }
 
     .dist-btn:hover {
-      background: rgba(26, 34, 52, 0.95);
-      border-color: var(--cyan);
-      box-shadow: 0 4px 14px rgba(0, 240, 255, 0.2);
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.25) 0%, rgba(30, 41, 59, 0.95) 100%);
+      border-color: #38bdf8;
+      color: #ffffff;
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.45);
+      transform: translateY(-1px);
     }
 
     .dist-btn.primary {
       background: linear-gradient(135deg, #d4af37 0%, #b89738 100%);
       color: #000000;
       font-weight: 800;
-      border: 1px solid rgba(255, 255, 255, 0.35);
+      border: 1.5px solid rgba(255, 255, 255, 0.4);
       box-shadow: 0 2px 10px rgba(212, 175, 55, 0.35);
     }
 
@@ -1790,27 +1888,33 @@
     }
 
     .dist-btn-holo {
-      color: #5de8a0 !important;
-      border-color: rgba(93, 232, 160, 0.35) !important;
-      background: rgba(93, 232, 160, 0.08) !important;
+      color: #00f5a0 !important;
+      border-color: rgba(0, 245, 160, 0.5) !important;
+      background: linear-gradient(135deg, rgba(0, 245, 160, 0.18) 0%, rgba(0, 184, 148, 0.1) 100%) !important;
+      box-shadow: 0 0 12px rgba(0, 245, 160, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
     }
 
     .dist-btn-holo:hover {
-      background: rgba(93, 232, 160, 0.18) !important;
-      border-color: #5de8a0 !important;
-      box-shadow: 0 4px 16px rgba(93, 232, 160, 0.25) !important;
+      background: linear-gradient(135deg, #00f5a0 0%, #00b894 100%) !important;
+      border-color: #00f5a0 !important;
+      color: #022c22 !important;
+      box-shadow: 0 0 24px rgba(0, 245, 160, 0.75) !important;
+      transform: translateY(-1px);
     }
 
     .dist-btn-emerald {
       color: #34d399 !important;
-      border-color: rgba(16, 185, 129, 0.4) !important;
-      background: rgba(16, 185, 129, 0.08) !important;
+      border-color: rgba(52, 211, 153, 0.5) !important;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.18) 0%, rgba(5, 150, 105, 0.1) 100%) !important;
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
     }
 
     .dist-btn-emerald:hover {
-      background: rgba(16, 185, 129, 0.2) !important;
-      border-color: #10b981 !important;
-      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3) !important;
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+      border-color: #34d399 !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 24px rgba(16, 185, 129, 0.7) !important;
+      transform: translateY(-1px);
     }
 
     /* ==========================================================================
@@ -2590,17 +2694,27 @@
       display: inline-flex;
       align-items: center;
       gap: 7px;
-      padding: 7px 12px;
-      background: rgba(15, 23, 42, 0.8);
-      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 8px 16px;
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
+      border: 1.5px solid rgba(56, 189, 248, 0.4);
       border-radius: 999px;
-      color: #e2e8f0;
+      color: #e0f2fe;
       font-family: var(--font-tech);
-      font-size: 11.5px;
+      font-size: 12px;
       font-weight: 700;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.8px;
       cursor: pointer;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      touch-action: manipulation;
+    }
+
+    .btn-topbar-search:hover {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.25) 0%, rgba(30, 41, 59, 0.95) 100%);
+      border-color: #38bdf8;
+      color: #ffffff;
+      box-shadow: 0 0 18px rgba(56, 189, 248, 0.55), inset 0 1px 1.5px rgba(255, 255, 255, 0.3);
+      transform: translateY(-1px);
     }
     .btn-topbar-search:hover {
       background: rgba(56, 189, 248, 0.15);
@@ -3174,31 +3288,145 @@
       border-color: #ffd700;
     }
 
+    /* ==========================================================================
+       CYBERNETIC TOGGLE PILLS & RADIANT ACTION CONTROLS
+       ========================================================================== */
     .edit-form-options-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      background: rgba(16, 21, 32, 0.6);
-      padding: 10px 14px;
-      border-radius: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      margin-bottom: 12px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+      background: linear-gradient(135deg, rgba(16, 21, 32, 0.8) 0%, rgba(10, 15, 24, 0.95) 100%);
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1), 0 4px 16px rgba(0, 0, 0, 0.5);
+      margin-bottom: 14px;
     }
 
-    .edit-checkbox-label {
-      display: inline-flex;
+    .cyber-toggle-chip {
+      position: relative;
+      display: flex;
       align-items: center;
-      gap: 8px;
-      font-family: var(--font-tech), sans-serif;
-      font-size: 12.5px;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1.5px solid rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.04);
       cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+      touch-action: manipulation;
+    }
+
+    .cyber-toggle-chip:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-1px);
+    }
+
+    .cyber-toggle-input {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+      pointer-events: none;
+    }
+
+    .cyber-toggle-indicator {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      border: 1.5px solid rgba(255, 255, 255, 0.3);
+      background: rgba(0, 0, 0, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.22s ease;
+      flex-shrink: 0;
+    }
+
+    .cyber-toggle-indicator .check-svg {
+      display: none;
+      width: 13px;
+      height: 13px;
+    }
+    .cyber-toggle-indicator .glyph-idle {
+      display: inline-block;
+      font-size: 11px;
+    }
+
+    .cyber-toggle-text {
+      font-family: var(--font-inter);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+      color: #94a3b8;
+      transition: color 0.2s ease;
+    }
+
+    /* Priority Chip Active (24K Gold Aurora) */
+    .cyber-toggle-chip.chip-priority.active,
+    .cyber-toggle-chip.chip-priority:has(.cyber-toggle-input:checked) {
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.28) 0%, rgba(245, 158, 11, 0.16) 100%) !important;
+      border-color: #ffd700 !important;
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.45), inset 0 1px 1.5px rgba(255, 255, 255, 0.4) !important;
+    }
+    .cyber-toggle-chip.chip-priority.active .cyber-toggle-indicator,
+    .cyber-toggle-chip.chip-priority:has(.cyber-toggle-input:checked) .cyber-toggle-indicator {
+      background: #ffd700;
+      border-color: #ffd700;
+      color: #000000;
+      box-shadow: 0 0 14px rgba(255, 215, 0, 0.95);
+    }
+    .cyber-toggle-chip.chip-priority.active .cyber-toggle-indicator .check-svg,
+    .cyber-toggle-chip.chip-priority:has(.cyber-toggle-input:checked) .cyber-toggle-indicator .check-svg {
+      display: block;
+      stroke: #000000;
+    }
+    .cyber-toggle-chip.chip-priority.active .cyber-toggle-indicator .glyph-idle,
+    .cyber-toggle-chip.chip-priority:has(.cyber-toggle-input:checked) .cyber-toggle-indicator .glyph-idle {
+      display: none;
+    }
+    .cyber-toggle-chip.chip-priority.active .cyber-toggle-text,
+    .cyber-toggle-chip.chip-priority:has(.cyber-toggle-input:checked) .cyber-toggle-text {
+      color: #ffffff;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.9);
+    }
+
+    /* Critical Chip Active (Plasma Ruby / Crimson Glow) */
+    .cyber-toggle-chip.chip-critical.active,
+    .cyber-toggle-chip.chip-critical:has(.cyber-toggle-input:checked) {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.28) 0%, rgba(185, 28, 28, 0.16) 100%) !important;
+      border-color: #ef4444 !important;
+      box-shadow: 0 0 20px rgba(239, 68, 68, 0.45), inset 0 1px 1.5px rgba(255, 255, 255, 0.4) !important;
+    }
+    .cyber-toggle-chip.chip-critical.active .cyber-toggle-indicator,
+    .cyber-toggle-chip.chip-critical:has(.cyber-toggle-input:checked) .cyber-toggle-indicator {
+      background: #ef4444;
+      border-color: #ef4444;
+      color: #ffffff;
+      box-shadow: 0 0 14px rgba(239, 68, 68, 0.95);
+    }
+    .cyber-toggle-chip.chip-critical.active .cyber-toggle-indicator .check-svg,
+    .cyber-toggle-chip.chip-critical:has(.cyber-toggle-input:checked) .cyber-toggle-indicator .check-svg {
+      display: block;
+      stroke: #ffffff;
+    }
+    .cyber-toggle-chip.chip-critical.active .cyber-toggle-indicator .glyph-idle,
+    .cyber-toggle-chip.chip-critical:has(.cyber-toggle-input:checked) .cyber-toggle-indicator .glyph-idle {
+      display: none;
+    }
+    .cyber-toggle-chip.chip-critical.active .cyber-toggle-text,
+    .cyber-toggle-chip.chip-critical:has(.cyber-toggle-input:checked) .cyber-toggle-text {
+      color: #ffffff;
+      text-shadow: 0 0 10px rgba(239, 68, 68, 0.9);
     }
 
     /* Pro Responsive Action Footer (Laptop & iPhone) */
     .edit-actions-container {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
       margin-top: 14px;
       width: 100%;
     }
@@ -3210,15 +3438,85 @@
       width: 100%;
     }
 
+    /* 1. SAVE CHANGES: Quantum Emerald / Split-Horizon Luminescence */
     .btn-edit-save {
       flex: 1.4;
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-      border: 1px solid rgba(52, 211, 153, 0.5);
+      background: linear-gradient(135deg, #00f5a0 0%, #00d26a 50%, #059669 100%);
+      border: 1.5px solid rgba(255, 255, 255, 0.55);
       border-radius: 12px;
-      padding: 12px 20px;
-      color: #ffffff;
+      padding: 12px 22px;
+      color: #022c22;
       font-family: var(--font-inter);
-      font-size: 14px;
+      font-size: 14.5px;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      box-shadow: 0 0 24px rgba(0, 245, 160, 0.45), 0 8px 24px rgba(0, 0, 0, 0.5), inset 0 1.5px 2px rgba(255, 255, 255, 0.75);
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      touch-action: manipulation;
+      min-height: 48px;
+      white-space: nowrap;
+    }
+    .btn-edit-save svg {
+      stroke: #022c22;
+      filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.4));
+    }
+    .btn-edit-save:hover {
+      background: linear-gradient(135deg, #2df8af 0%, #00e676 50%, #059669 100%);
+      box-shadow: 0 0 34px rgba(0, 245, 160, 0.75), 0 10px 28px rgba(0, 0, 0, 0.6), inset 0 2px 3px rgba(255, 255, 255, 0.9);
+      transform: translateY(-2px) scale(1.02);
+    }
+    .btn-edit-save:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    /* 2. CANCEL: Frosted Titanium Cyber-Glass */
+    .btn-edit-cancel {
+      flex: 1;
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
+      border: 1.5px solid rgba(148, 163, 184, 0.35);
+      border-radius: 12px;
+      padding: 12px 18px;
+      color: #e2e8f0;
+      font-family: var(--font-inter);
+      font-size: 14.5px;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.18);
+      transition: all 0.22s ease;
+      touch-action: manipulation;
+      min-height: 48px;
+      white-space: nowrap;
+    }
+    .btn-edit-cancel:hover {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.25) 0%, rgba(30, 41, 59, 0.95) 100%);
+      border-color: #38bdf8;
+      color: #ffffff;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.35);
+      transform: translateY(-2px);
+    }
+    .btn-edit-cancel:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    /* 3. DELETE ACCOUNT: Plasma Crimson Warning Shield */
+    .btn-edit-delete {
+      width: 100%;
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.18) 0%, rgba(185, 28, 28, 0.12) 50%, rgba(127, 29, 29, 0.22) 100%);
+      border: 1.5px solid rgba(239, 68, 68, 0.6);
+      border-radius: 12px;
+      padding: 12px 18px;
+      color: #fca5a5;
+      font-family: var(--font-inter);
+      font-size: 13.5px;
       font-weight: 800;
       letter-spacing: 0.02em;
       cursor: pointer;
@@ -3226,69 +3524,30 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      box-shadow: 0 4px 18px rgba(16, 185, 129, 0.35);
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      text-shadow: 0 0 10px rgba(239, 68, 68, 0.7);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.18);
+      transition: all 0.22s ease;
       touch-action: manipulation;
-      min-height: 46px;
-      white-space: nowrap;
+      min-height: 44px;
     }
-    .btn-edit-save:hover, .btn-edit-save:active {
-      background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
-      box-shadow: 0 6px 24px rgba(16, 185, 129, 0.55);
-      transform: translateY(-1px);
+    .btn-edit-delete svg {
+      stroke: #fca5a5;
+      filter: drop-shadow(0 0 6px rgba(239, 68, 68, 0.8));
     }
-
-    .btn-edit-cancel {
-      flex: 1;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      border-radius: 12px;
-      padding: 12px 18px;
-      color: #cbd5e1;
-      font-family: var(--font-inter);
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: 0.01em;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-      touch-action: manipulation;
-      min-height: 46px;
-      white-space: nowrap;
-    }
-    .btn-edit-cancel:hover, .btn-edit-cancel:active {
-      background: rgba(255, 255, 255, 0.12);
-      color: #ffffff;
-      border-color: rgba(255, 255, 255, 0.3);
-    }
-
-    .btn-edit-delete {
-      width: 100%;
-      background: rgba(239, 68, 68, 0.12);
-      border: 1px solid rgba(239, 68, 68, 0.35);
-      border-radius: 12px;
-      padding: 10px 16px;
-      color: #f87171;
-      font-family: var(--font-inter);
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: all 0.2s ease;
-      touch-action: manipulation;
-      min-height: 42px;
-    }
-    .btn-edit-delete:hover, .btn-edit-delete:active {
-      background: rgba(239, 68, 68, 0.28);
+    .btn-edit-delete:hover {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.38) 0%, rgba(185, 28, 28, 0.3) 100%);
       border-color: #ef4444;
       color: #ffffff;
-      box-shadow: 0 4px 18px rgba(239, 68, 68, 0.35);
+      box-shadow: 0 0 28px rgba(239, 68, 68, 0.75), 0 8px 24px rgba(0, 0, 0, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.4);
+      text-shadow: 0 0 12px rgba(255, 255, 255, 0.95);
+      transform: translateY(-2px);
+    }
+    .btn-edit-delete:hover svg {
+      stroke: #ffffff;
+      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.95));
+    }
+    .btn-edit-delete:active {
+      transform: translateY(0) scale(0.98);
     }
 
   
@@ -3676,14 +3935,22 @@
         </div>
 
         <div class="edit-form-options-row">
-          <label class="edit-checkbox-label" for="editChkPriority">
-            <input type="checkbox" id="editChkPriority" style="width:16px;height:16px;accent-color:#ffd700;">
-            <span style="color:#ffd700;font-weight:700;">★ Pin to Top (Priority Favorite)</span>
+          <label class="cyber-toggle-chip chip-priority" for="editChkPriority">
+            <input type="checkbox" id="editChkPriority" class="cyber-toggle-input">
+            <div class="cyber-toggle-indicator">
+              <svg class="check-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <span class="glyph-idle">★</span>
+            </div>
+            <span class="cyber-toggle-text">★ Pin to Top (Priority Favorite)</span>
           </label>
 
-          <label class="edit-checkbox-label" for="editChkCritical">
-            <input type="checkbox" id="editChkCritical" style="width:16px;height:16px;accent-color:#ef4444;">
-            <span style="color:#f87171;font-weight:700;">⚡ Mark as Critical Account</span>
+          <label class="cyber-toggle-chip chip-critical" for="editChkCritical">
+            <input type="checkbox" id="editChkCritical" class="cyber-toggle-input">
+            <div class="cyber-toggle-indicator">
+              <svg class="check-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <span class="glyph-idle">⚡</span>
+            </div>
+            <span class="cyber-toggle-text">⚡ Mark as Critical Account</span>
           </label>
         </div>
 
@@ -4290,8 +4557,8 @@
             <div class="card-header">
               <div class="card-title-group">
                 <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-                  <span class="card-badge ${isCritical ? 'critical' : ''}">${isCritical ? '⚡ CRITICAL ACCOUNT' : item.badge || item.category}</span>
-                  ${isPinned ? '<span class="card-badge" style="background:rgba(255,215,0,0.18)!important;border-color:#ffd700!important;color:#ffd700!important;box-shadow:0 0 8px rgba(255,215,0,0.3)!important;">★ TOP PRIORITY</span>' : ''}
+                  ${isCritical ? '<span class="card-badge card-badge-critical"><span class="badge-glyph">⚡</span> CRITICAL ACCOUNT</span>' : `<span class="card-badge card-badge-category">${item.badge || item.category}</span>`}
+                  ${isPinned ? '<span class="card-badge card-badge-priority"><span class="badge-glyph">★</span> TOP PRIORITY</span>' : ''}
                 </div>
                 <h3 class="card-account-title">${safeTitle}</h3>
               </div>
@@ -4331,7 +4598,7 @@
             ${safeNotes ? `<div class="card-notes">${safeNotes}</div>` : ''}
 
             <div class="card-footer">
-              <span>STATUS: ${item.status || 'SECURED'}${item.lastUsedAt ? ` · <span class="vault-used-time" data-relative-time="${item.lastUsedAt}" data-relative-prefix="Used " data-relative-format="compact">${window.formatRelativeTime ? window.formatRelativeTime(item.lastUsedAt, {compact:true}) : 'just now'}</span>` : ''}</span>
+              <span class="card-status-pill"><span class="status-live-beacon">●</span> STATUS: ${item.status || 'SECURED'}${item.lastUsedAt ? ` · <span class="vault-used-time" data-relative-time="${item.lastUsedAt}" data-relative-prefix="Used " data-relative-format="compact">${window.formatRelativeTime ? window.formatRelativeTime(item.lastUsedAt, {compact:true}) : 'just now'}</span>` : ''}</span>
               <button type="button" class="btn-rotate-mark" onclick="markPasswordRotated('${item.id}')" title="Click to update password rotation date">
                 ↺ Rotated <span data-relative-time="${item.updated_at || Date.now()}" data-relative-compact="true">${rotationLabel}</span>
               </button>
@@ -4499,7 +4766,7 @@
       }
 
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v19', { scope: '/orlandovault/' }).catch(err => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v20', { scope: '/orlandovault/' }).catch(err => {
           console.warn('Vault SW registration error:', err);
         });
       }
