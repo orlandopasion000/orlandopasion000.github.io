@@ -1832,7 +1832,7 @@ body.light-theme .rest-mode-btn:hover {
   box-shadow: 0 6px 18px rgba(99, 102, 241, 0.18);
 }
 
-/* ───────── TWIN QUANTUM REALM NAVIGATION & FULLSCREEN CONTROLS (Co-located Single-Click In/Out) ───────── */
+/* ───────── TWIN QUANTUM DYNAMO NAVIGATION & FULLSCREEN CONTROLS (Co-located Single-Click In/Out) ───────── */
 .qgame-btn-launch,
 .qgame-btn-exit,
 .fs-toggle-btn {
@@ -2520,7 +2520,7 @@ body.universe-game-active .qgame-mission-hud {
   100% { transform: rotate(360deg); }
 }
 
-/* Upper Right: Return to Horizon Button - Co-located with Quantum Realm */
+/* Upper Right: Return to Horizon Button - Co-located with Quantum Dynamo */
 .qgame-exit-hud {
   display: flex;
   align-items: center;
@@ -4530,10 +4530,10 @@ body.light-theme .highlight-card .dist-icon{
         <span class="fs-btn-label">ENTER FULL SCREEN</span>
       </button>
 
-      <!-- Enter Quantum Realm Game Mode (Game 1: Classic Streamlined Wavepackets) -->
-      <button type="button" class="qgame-btn-launch qgame-btn-realm" id="btnLaunchGame" title="Enter Quantum Realm Game (Classic Particles)" aria-label="Launch Quantum Realm Game">
-        <span class="game-btn-glyph" aria-hidden="true">◈</span>
-        <span class="game-btn-label"><span class="qg-word-quantum">QUANTUM </span>REALM</span>
+      <!-- Enter Quantum Dynamo Game Mode (Game 1: High-Voltage Tesla Arcs & Faraday Induction Core) -->
+      <button type="button" class="qgame-btn-launch qgame-btn-realm" id="btnLaunchGame" title="Enter Quantum Dynamo Game (High-Voltage Tesla Arcs &amp; Electromagnetic Induction Core)" aria-label="Launch Quantum Dynamo Game">
+        <span class="game-btn-glyph" aria-hidden="true">⚡</span>
+        <span class="game-btn-label"><span class="qg-word-quantum">QUANTUM </span>DYNAMO</span>
       </button>
 
       <!-- Enter Quantum Helix Game Mode (Game 2: Cyan & Violet Intertwined Double-Helix) -->
@@ -5897,7 +5897,7 @@ function stopAllAudio(){
     });
   }
 
-  // 5. Stop Quantum Realm game lock audio and synthesizer
+  // 5. Stop Quantum Dynamo game lock audio and synthesizer
   if(typeof stopLockAudio === "function"){
     try { stopLockAudio(); } catch(e){}
   }
@@ -9453,7 +9453,7 @@ try { checkUrlHashRoutine(); } catch(e){}
       return canvas;
     }
 
-    // High-Voltage Electric Plasma Spark Sprite for Quantum Realm Tail Discharges (Hyper-Ionized Corona & Multi-Spikes)
+    // High-Voltage Electric Plasma Spark Sprite for Quantum Dynamo Tail Discharges (Hyper-Ionized Corona & Multi-Spikes)
     function generateElectricSparkCanvas(size) {
       var canvas = document.createElement("canvas");
       canvas.width = size;
@@ -10166,7 +10166,7 @@ try { checkUrlHashRoutine(); } catch(e){}
       var mult = p.growthMultiplier || 1.25;
       var curGrowth = 1.0 + (mult - 1.0) * gameGlowProgress;
       var isHelix = (gameParticleStyle === "helix");
-      var sizeMultiplier = isHelix ? 2.00 : 2.00; // 2.00x across Quantum Helix, Quantum Realm, and Quantum Meteor
+      var sizeMultiplier = isHelix ? 2.00 : 2.00; // 2.00x across Quantum Helix, Quantum Dynamo, and Quantum Meteor
       var curSize = (p.baseSize * depthScale) * curGrowth * sizeMultiplier;
       var lenGrowth = 1.0 + (mult - 1.0) * gameGlowProgress * 0.85;
       var baseLength = (p.baseLength * (p.isWeaver ? (0.90 + Math.max(0, p.z) * 0.38) : 1.0)) * lenGrowth;
@@ -10525,7 +10525,7 @@ try { checkUrlHashRoutine(); } catch(e){}
       var speedRatio = Math.max(0, (currentSpeed - p.baseSpeed) / (p.baseSpeed * 2.2));
       p.wavePhase = (p.wavePhase || 0) + (0.16 + speedRatio * 0.22);
 
-      // Controlled tail length & reduced high-speed stretch across Quantum Realm, Quantum Helix, and Quantum Meteor
+      // Controlled tail length & reduced high-speed stretch across Quantum Dynamo, Quantum Helix, and Quantum Meteor
       var tailGrowth = 1.0 + (mult - 1.0) * gameGlowProgress * 0.50;
       var speedStretch = isGameMode ? Math.min(0.35, speedRatio * 0.25) : 0;
       var curSpacing = (p.segmentSpacing || 3.0) * (isGameMode ? 1.18 : 1.0) * tailGrowth * (1.0 + speedStretch);
@@ -10677,7 +10677,7 @@ try { checkUrlHashRoutine(); } catch(e){}
             targetCtx.restore();
           }
 
-          // B. Quantum Realm Silky-Smooth Aerodynamic Taper Envelope with Real Fire Combustion Gradient
+          // B. Quantum Dynamo Silky-Smooth Aerodynamic Taper Envelope with Real Fire Combustion Gradient
           var meteorBodyGrad = targetCtx.createLinearGradient(tailTipX, tailTipY, headPtX, headPtY);
           meteorBodyGrad.addColorStop(0.0, "rgba(185, 28, 28, 0.0)");
           meteorBodyGrad.addColorStop(0.25, "rgba(220, 38, 38, " + (renderAlpha * 0.42).toFixed(2) + ")");
@@ -10831,7 +10831,7 @@ try { checkUrlHashRoutine(); } catch(e){}
           }
 
         } else {
-          // ── QUANTUM REALM: STREAMLINED WAVEPACKET & HIGH-VOLTAGE ELECTRIC ARCS ──
+          // ── QUANTUM DYNAMO: HIGH-ENERGY ELECTROMAGNETIC WAVEPACKET & TESLA DISCHARGE ARCS ──
           var bodyGrad = targetCtx.createLinearGradient(tailTipX, tailTipY, headPtX, headPtY);
           bodyGrad.addColorStop(0.0, "hsla(" + fTailHue + ", " + p.sat + "%, " + fTailLit.toFixed(1) + "%, " + (renderAlpha * 0.10).toFixed(2) + ")");
           bodyGrad.addColorStop(0.48, "hsla(" + midHue + ", " + p.sat + "%, " + ((fTailLit + fHeadLit) * 0.5).toFixed(1) + "%, " + (renderAlpha * 0.60).toFixed(2) + ")");
@@ -10856,7 +10856,7 @@ try { checkUrlHashRoutine(); } catch(e){}
           targetCtx.closePath();
           targetCtx.fill();
 
-          // Crackling Electric Arcs Along Tail Spine (Tier 3 Multi-Branch, Tier 2 Single Fork, Tier 1 Streamlined Arc)
+          // High-Frequency RF Displacement Current Lightning Spine (Maxwell-Ampère & Tesla Resonant Surge)
           if (K >= 3 && (tier >= 2 || (i % 2 === 0))) {
             var eTick = ((now * 0.036 + i * 0.41) | 0);
             var eSurge = 0.60 + 0.40 * Math.abs(Math.sin(now * 0.015 + (p.pulsePhase || 0) * 3.7));
@@ -10866,11 +10866,11 @@ try { checkUrlHashRoutine(); } catch(e){}
             var forkPtX = _ptsX[1], forkPtY = _ptsY[1];
             var forkDirX = -sinH, forkDirY = cosH;
 
-            // Pass 1: Ionized Plasma Glow Sheath
+            // Pass 0: Atmospheric Nitrogen Ionization Violet Corona Fringe (Tier 3/2 wide violet, Tier 1 cyan-only for 120 FPS)
             targetCtx.lineCap = "round";
             targetCtx.lineJoin = "round";
-            targetCtx.strokeStyle = "hsla(" + eHue + ", 100%, 68%, " + (eAlpha * 0.40).toFixed(2) + ")";
-            targetCtx.lineWidth = Math.max(2.0, headR * (tier === 3 ? 0.58 : (tier === 2 ? 0.46 : 0.36)));
+            targetCtx.strokeStyle = (tier >= 2) ? ("rgba(168, 85, 247, " + (eAlpha * 0.32).toFixed(2) + ")") : ("hsla(" + eHue + ", 100%, 68%, " + (eAlpha * 0.40).toFixed(2) + ")");
+            targetCtx.lineWidth = (tier >= 2) ? Math.max(3.2, headR * (tier === 3 ? 0.78 : 0.62)) : Math.max(2.0, headR * 0.36);
             targetCtx.beginPath();
             targetCtx.moveTo(_ptsX[0], _ptsY[0]);
             for (var ej = 1; ej < K; ej++) {
@@ -10893,9 +10893,16 @@ try { checkUrlHashRoutine(); } catch(e){}
             }
             targetCtx.stroke();
 
+            // Pass 1: Ionized Oxygen Plasma Glow Sheath (Electric Cyan) — Tier 3/2 only
+            if (tier >= 2) {
+              targetCtx.strokeStyle = "hsla(" + eHue + ", 100%, 68%, " + (eAlpha * 0.50).toFixed(2) + ")";
+              targetCtx.lineWidth = Math.max(2.0, headR * (tier === 3 ? 0.54 : 0.44));
+              targetCtx.stroke();
+            }
+
             // Pass 2: Razor-Crisp Incandescent Lightning Bolt Core
             targetCtx.strokeStyle = "rgba(232, 248, 255, " + (eAlpha * 0.95).toFixed(2) + ")";
-            targetCtx.lineWidth = Math.max(0.9, headR * (tier === 3 ? 0.24 : 0.18));
+            targetCtx.lineWidth = Math.max(0.9, headR * (tier === 3 ? 0.22 : 0.16));
             targetCtx.stroke();
 
             // Secondary Branched Lightning Bolt (Tier 3 & Tier 2)
@@ -11029,7 +11036,7 @@ try { checkUrlHashRoutine(); } catch(e){}
         }
 
       } else {
-        // ── CLASSIC QUANTUM REALM & QUANTUM HELIX HEAD RENDERING ──
+        // ── CLASSIC QUANTUM DYNAMO & QUANTUM HELIX HEAD RENDERING ──
         if (isHelix) {
           // ── ICONIC QUANTUM HELIX GLOWING HEAD (Recognizable, Clean, Glowing Cyan Droplet) ──
           targetCtx.beginPath();
@@ -11049,7 +11056,7 @@ try { checkUrlHashRoutine(); } catch(e){}
           targetCtx.fill();
 
         } else {
-          // ── CLASSIC QUANTUM REALM: ZERO-LAG HIGH-SPEED TESLA DYNAMO (60-120 FPS) ──
+          // ── QUANTUM DYNAMO: HIGH-ENERGY TESLA ARMATURE CORE & TOWNSEND IONIZATION (60-120 FPS) ──
           targetCtx.beginPath();
           targetCtx.arc(px0, py0, headR, 0, Math.PI * 2);
           targetCtx.fillStyle = "hsla(" + fHeadHue + ", 98%, " + fHeadLit.toFixed(1) + "%, " + renderAlpha.toFixed(2) + ")";
@@ -11062,10 +11069,16 @@ try { checkUrlHashRoutine(); } catch(e){}
 
           if (tier >= 2) {
             // ── TIER 3 & TIER 2: FULL HIGH-VOLTAGE TESLA DYNAMO (Pure Geometry, Zero Clip Flushes) ──
-            // Ionized plasma backdrop inner orb
+            // Atmospheric Townsend Dielectric Breakdown Fringe: Nitrogen violet glow at outer perimeter
+            targetCtx.beginPath();
+            targetCtx.arc(px0, py0, headR * 1.06, 0, Math.PI * 2);
+            targetCtx.fillStyle = "rgba(168, 85, 247, " + (renderAlpha * 0.30).toFixed(2) + ")";
+            targetCtx.fill();
+
+            // Ionized plasma backdrop inner orb (electric cyan)
             targetCtx.beginPath();
             targetCtx.arc(px0, py0, headR * 0.94, 0, Math.PI * 2);
-            targetCtx.fillStyle = "rgba(14, 165, 233, " + (renderAlpha * 0.42).toFixed(2) + ")";
+            targetCtx.fillStyle = "rgba(14, 165, 233, " + (renderAlpha * 0.44).toFixed(2) + ")";
             targetCtx.fill();
 
             // Fast-moving crackling lightning branches (dynamic high-frequency electric vibration)
@@ -11123,20 +11136,21 @@ try { checkUrlHashRoutine(); } catch(e){}
                 targetCtx.stroke();
               }
 
-              // Outer Spark Node on Perimeter
+              // Outer Spark Node on Perimeter (dielectric air contact terminal)
               targetCtx.fillStyle = "rgba(255, 255, 255, " + (renderAlpha * 0.98).toFixed(2) + ")";
               targetCtx.beginPath();
               targetCtx.arc(ltx, lty, Math.max(1.5, headR * 0.038), 0, Math.PI * 2);
               targetCtx.fill();
 
-              // Cyan spark halo
+              // Cyan & Violet ionization spark halo
               targetCtx.fillStyle = "rgba(56, 189, 248, " + (renderAlpha * 0.65).toFixed(2) + ")";
               targetCtx.beginPath();
               targetCtx.arc(ltx, lty, Math.max(2.8, headR * 0.075), 0, Math.PI * 2);
               targetCtx.fill();
+
             }
 
-            // Shining small electric spark dots inside (high-frequency twinkling electrons)
+            // High-frequency cyclotron electron dots (twinkling charged particles trapped in magnetic potential)
             var numSparkDots = (tier === 3) ? 12 : 8;
             for (var sd = 0; sd < numSparkDots; sd++) {
               var dotSpeed = fastTick * 1.6 + sd * 1.9;
@@ -11160,7 +11174,7 @@ try { checkUrlHashRoutine(); } catch(e){}
               targetCtx.fill();
             }
 
-            // Searing Pure White Quantum Singularity Center
+            // Searing Pure White Tesla Cathode Singularity Center
             targetCtx.beginPath();
             targetCtx.arc(coreX, coreY, coreR, 0, Math.PI * 2);
             targetCtx.fillStyle = "rgba(255, 255, 255, " + (renderAlpha * 0.98).toFixed(2) + ")";
@@ -11188,7 +11202,7 @@ try { checkUrlHashRoutine(); } catch(e){}
           }
         }
 
-        // Miniature Bohr probability orbital rings / 3D Toroidal Chromatin Loops
+        // Miniature Bohr probability orbital rings / 3D Toroidal Chromatin Loops / Faraday Induction Loops
         if (renderAsBrightest) {
           var morphEase = p.isFront ? Math.max(0.35, gameGlowProgress) : gameGlowProgress;
           var orbBaseR = headR * (tier === 3 ? 2.85 : (tier === 2 ? 2.30 : 1.80)) * (0.75 + 0.25 * morphEase);
@@ -11231,25 +11245,46 @@ try { checkUrlHashRoutine(); } catch(e){}
             }
 
           } else {
-            // Classic Quantum Realm: Concentric Quantum Orbitals with Counter-Rotating Phase Node
+            // Quantum Dynamo: Faraday Magnetic Induction Loops with Cyclotron Relativistic Electron Gyration
+            var bSpin = p.heading + spinAngle;
+            var bSpinPerp = p.heading - spinAngle * 0.85 + Math.PI * 0.5;
+
+            // Loop 1: Equatorial Magnetic Induction Ring (Electric Cyan)
             targetCtx.beginPath();
-            targetCtx.arc(px0, py0, orbBaseR * 0.85, 0, Math.PI * 2);
-            targetCtx.strokeStyle = "hsla(" + fHeadHue + ", 92%, 72%, " + (ringAlpha * 0.38).toFixed(2) + ")";
+            targetCtx.ellipse(px0, py0, orbBaseR * 1.15, orbBaseR * 0.65, bSpin, 0, Math.PI * 2);
+            targetCtx.strokeStyle = "rgba(56, 189, 248, " + (ringAlpha * 0.44).toFixed(2) + ")";
             targetCtx.lineWidth = tier === 3 ? 1.35 : 1.0;
             targetCtx.stroke();
 
-            var worldSpin2 = p.heading + spinAngle;
+            // Loop 2: Poloidal Magnetic Dipole Flux Ellipse (Townsend Nitrogen Violet)
             targetCtx.beginPath();
-            targetCtx.ellipse(px0, py0, orbBaseR * 1.35, orbBaseR * 0.75, worldSpin2, 0, Math.PI * 2);
-            targetCtx.strokeStyle = "hsla(" + fHeadHue + ", 98%, 78%, " + (ringAlpha * 0.32).toFixed(2) + ")";
+            targetCtx.ellipse(px0, py0, orbBaseR * 1.38, orbBaseR * 0.72, bSpinPerp, 0, Math.PI * 2);
+            targetCtx.strokeStyle = "rgba(168, 85, 247, " + (ringAlpha * 0.38).toFixed(2) + ")";
             targetCtx.lineWidth = tier === 3 ? 1.20 : 0.95;
             targetCtx.stroke();
 
-            var qNodeX = px0 + Math.cos(worldSpin2) * orbBaseR * 1.35;
-            var qNodeY = py0 + Math.sin(worldSpin2) * orbBaseR * 1.35;
+            // Cyclotron Relativistic Electron Gyration Node 1 (Equatorial)
+            var qNode1X = px0 + Math.cos(bSpin) * orbBaseR * 1.15;
+            var qNode1Y = py0 + Math.sin(bSpin) * orbBaseR * 1.15;
             targetCtx.beginPath();
-            targetCtx.arc(qNodeX, qNodeY, tier === 3 ? 2.0 : 1.4, 0, Math.PI * 2);
-            targetCtx.fillStyle = "rgba(255, 255, 255, " + (ringAlpha * 0.96).toFixed(2) + ")";
+            targetCtx.arc(qNode1X, qNode1Y, tier === 3 ? 2.2 : 1.5, 0, Math.PI * 2);
+            targetCtx.fillStyle = "rgba(255, 255, 255, " + (ringAlpha * 0.98).toFixed(2) + ")";
+            targetCtx.fill();
+            targetCtx.beginPath();
+            targetCtx.arc(qNode1X, qNode1Y, tier === 3 ? 4.2 : 3.0, 0, Math.PI * 2);
+            targetCtx.fillStyle = "rgba(56, 189, 248, " + (ringAlpha * 0.48).toFixed(2) + ")";
+            targetCtx.fill();
+
+            // Cyclotron Relativistic Electron Gyration Node 2 (Poloidal Dipole Node)
+            var qNode2X = px0 + Math.cos(bSpinPerp + Math.PI) * orbBaseR * 1.38;
+            var qNode2Y = py0 + Math.sin(bSpinPerp + Math.PI) * orbBaseR * 1.38;
+            targetCtx.beginPath();
+            targetCtx.arc(qNode2X, qNode2Y, tier === 3 ? 2.0 : 1.4, 0, Math.PI * 2);
+            targetCtx.fillStyle = "rgba(255, 255, 255, " + (ringAlpha * 0.98).toFixed(2) + ")";
+            targetCtx.fill();
+            targetCtx.beginPath();
+            targetCtx.arc(qNode2X, qNode2Y, tier === 3 ? 3.8 : 2.8, 0, Math.PI * 2);
+            targetCtx.fillStyle = "rgba(192, 132, 252, " + (ringAlpha * 0.42).toFixed(2) + ")";
             targetCtx.fill();
           }
 
@@ -11264,12 +11299,12 @@ try { checkUrlHashRoutine(); } catch(e){}
           }
         }
 
-        // Additive Electric Wake Sparks along Quantum Realm tail (parallel to Meteor Ember Storm)
-        var realmSpawnRate = tier === 3 ? 0.68 : (tier === 2 ? 0.48 : 0.32);
-        var realmMaxStardust = tier === 3 ? 14 : (tier === 2 ? 10 : 6);
-        if (!isHelix && K >= 3 && Math.random() < realmSpawnRate) {
+        // Additive Electric Wake Sparks along Quantum Dynamo tail (parallel to Meteor Ember Storm)
+        var dynamoSpawnRate = tier === 3 ? 0.68 : (tier === 2 ? 0.48 : 0.32);
+        var dynamoMaxStardust = tier === 3 ? 14 : (tier === 2 ? 10 : 6);
+        if (!isHelix && K >= 3 && Math.random() < dynamoSpawnRate) {
           if (!p.stardust) p.stardust = [];
-          if (p.stardust.length < realmMaxStardust) {
+          if (p.stardust.length < dynamoMaxStardust) {
             var eSpineIdx = Math.min(K - 1, 1 + ((Math.random() * (K - 1)) | 0));
             p.stardust.push({
               x: _ptsX[eSpineIdx] + (Math.random() - 0.5) * (headR * 1.95),
@@ -11905,7 +11940,7 @@ try { checkUrlHashRoutine(); } catch(e){}
       } else if (currentGameVariant === "meteor") {
         return "TOUCH ANY METEOR · HOLD 2.0s";
       } else {
-        return "TOUCH ANY PARTICLE · HOLD 2.0s";
+        return "TOUCH ANY DYNAMO PARTICLE · HOLD 2.0s";
       }
     } else {
       if (currentGameVariant === "helix") {
@@ -11913,7 +11948,7 @@ try { checkUrlHashRoutine(); } catch(e){}
       } else if (currentGameVariant === "meteor") {
         return "TARGET: TOUCH ANY METEOR · MAINTAIN CONTACT FOR 2.0s";
       } else {
-        return "TARGET: TOUCH ANY PARTICLE · MAINTAIN CONTACT FOR 2.0s";
+        return "TARGET: TOUCH ANY DYNAMO PARTICLE · MAINTAIN CONTACT FOR 2.0s";
       }
     }
   }
@@ -12138,10 +12173,10 @@ try { checkUrlHashRoutine(); } catch(e){}
           resultIcon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" class="qgame-victory-svg"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="url(#vicMeteorGrad)" stroke="#ffffff" stroke-width="1.2"/><defs><linearGradient id="vicMeteorGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#fef08a"/><stop offset="45%" stop-color="#f97316"/><stop offset="100%" stop-color="#b91c1c"/></linearGradient></defs></svg>';
         }
       } else {
-        if (resultTitle) resultTitle.textContent = "QUANTUM RESONANCE COMPLETE";
-        if (resultSubtitle) resultSubtitle.textContent = "TARGET SYNCHRONIZED · HARMONIC DANCE ACTIVE";
+        if (resultTitle) resultTitle.textContent = "QUANTUM DYNAMO COMPLETE";
+        if (resultSubtitle) resultSubtitle.textContent = "DYNAMO SYNCHRONIZED · HARMONIC DANCE ACTIVE";
         if (resultIcon) {
-          resultIcon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" class="qgame-victory-svg"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="url(#vicGoldGrad)" stroke="#ffffff" stroke-width="1.2"/><defs><linearGradient id="vicGoldGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#ffd700"/><stop offset="50%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#f59e0b"/></linearGradient></defs></svg>';
+          resultIcon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" class="qgame-victory-svg"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="url(#vicGoldGrad)" stroke="#ffffff" stroke-width="1.2"/><defs><linearGradient id="vicGoldGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#38bdf8"/><stop offset="50%" stop-color="#ffd700"/><stop offset="100%" stop-color="#a855f7"/></linearGradient></defs></svg>';
         }
       }
       if (statLabel1) statLabel1.textContent = "FINAL TIME PRESERVED";
@@ -12325,7 +12360,7 @@ try { checkUrlHashRoutine(); } catch(e){}
       ? "INITIALIZING QUANTUM HELIX · PREPARE RETICLE"
       : ((currentGameVariant === "meteor")
         ? "INITIALIZING QUANTUM METEOR · PREPARE RETICLE"
-        : "INITIALIZING QUANTUM REALM · PREPARE RETICLE");
+        : "INITIALIZING QUANTUM DYNAMO · PREPARE RETICLE");
     syncGameMusicBtn();
 
     if (window.antigravityFX) {
@@ -12388,7 +12423,7 @@ try { checkUrlHashRoutine(); } catch(e){}
       ? "INITIALIZING QUANTUM HELIX · PREPARE RETICLE"
       : ((currentGameVariant === "meteor")
         ? "INITIALIZING QUANTUM METEOR · PREPARE RETICLE"
-        : "INITIALIZING QUANTUM REALM · PREPARE RETICLE");
+        : "INITIALIZING QUANTUM DYNAMO · PREPARE RETICLE");
     digitsEl.textContent = TOTAL_TIME.toFixed(2);
     digitsEl.classList.remove("victory-frozen", "defeat-frozen");
     fillEl.style.width = "100%";
@@ -12542,7 +12577,7 @@ try { checkUrlHashRoutine(); } catch(e){}
       ? "☍ QUANTUM HELIX ACHIEVED · CELEBRATION DANCE ACTIVE ☍"
       : ((currentGameVariant === "meteor")
         ? "☄ METEOR RESONANCE ACHIEVED · CELEBRATION DANCE ACTIVE ☄"
-        : "◈ QUANTUM RESONANCE ACHIEVED · CELEBRATION DANCE ACTIVE ◈");
+        : "⚡ QUANTUM DYNAMO ACHIEVED · CELEBRATION DANCE ACTIVE ⚡");
 
     // 6. Reveal Victory Hologram Card
     setTimeout(function() {
@@ -12710,7 +12745,7 @@ try { checkUrlHashRoutine(); } catch(e){}
       }
     }
 
-    // ── Render Alive Cursor (Atomic for Realm, Double-Helix for Helix, Fiery Meteor for Meteor Mode) ──
+    // ── Render Alive Cursor (Atomic Dynamo for Dynamo, Double-Helix for Helix, Fiery Meteor for Meteor Mode) ──
     if (!isWon && !isGameOver && cursor.active && hasDeliberateMove) {
       var lockProgress = (lockedParticle && isPhysicallyTouching && contactDuration > 0) ? (contactDuration / REQUIRED_CONTACT) : 0;
       if (currentGameVariant === "meteor") {
