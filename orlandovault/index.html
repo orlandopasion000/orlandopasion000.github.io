@@ -5868,21 +5868,19 @@
        ========================================================================== */
     function trackCardUsage(itemId, eventType, points) {
       if (!itemId) return;
-      const item = vaultItems.find(x => x.id === itemId);
-      if (!item) return;
-
-      item.usageScore = (parseFloat(item.usageScore) || 0) + points;
-      item.lastUsedAt = Date.now();
-      if (eventType === 'copy_password') item.copyPasswordCount = (item.copyPasswordCount || 0) + 1;
-      if (eventType === 'copy_username') item.copyUsernameCount = (item.copyUsernameCount || 0) + 1;
-      if (eventType === 'view_password') item.viewPasswordCount = (item.viewPasswordCount || 0) + 1;
-      if (eventType === 'edit_card') item.editCount = (item.editCount || 0) + 1;
-
-      try {
-        localStorage.setItem(LS_VAULT_KEY, JSON.stringify(vaultItems));
-      } catch (e) {}
-
-      recordVaultMutation('CARD_USAGE', { id: itemId, event: eventType, score: item.usageScore });
+      if (typeof recordAccountInteraction === 'function') {
+        recordAccountInteraction(itemId, '', eventType, points);
+      } else {
+        const item = vaultItems.find(x => x.id === itemId);
+        if (!item) return;
+        item.usageScore = (parseFloat(item.usageScore) || 0) + points;
+        item.lastUsedAt = Date.now();
+        if (eventType === 'copy_password') item.copyPasswordCount = (item.copyPasswordCount || 0) + 1;
+        if (eventType === 'copy_username') item.copyUsernameCount = (item.copyUsernameCount || 0) + 1;
+        if (eventType === 'view_password') item.viewPasswordCount = (item.viewPasswordCount || 0) + 1;
+        if (eventType === 'edit_card') item.editCount = (item.editCount || 0) + 1;
+        try { localStorage.setItem(LS_VAULT_KEY, JSON.stringify(vaultItems)); } catch(e) {}
+      }
     }
 
     function toggleCardPriority(itemId) {
@@ -5907,24 +5905,167 @@
       recordVaultMutation('CARD_PRIORITY_TOGGLE', { id: itemId, isPriority: item.isPriority, title: item.title });
     }
 
+    
+    // ==========================================================================
+    // FACEBOOK-GRADE FRECENCY (FREQUENCY + RECENCY) & QUERY-AFFINITY ENGINE
+    // ==========================================================================
+    const LS_FRECENCY_KEY = 'vault_jarvis_frecency_v1';
+    let frecencyCache = null;
+
+    function getFrecencyData() {
+      if (frecencyCache) return frecencyCache;
+      try {
+        const raw = localStorage.getItem(LS_FRECENCY_KEY);
+        if (raw) frecencyCache = JSON.parse(raw);
+      } catch(e) {}
+      if (!frecencyCache || typeof frecencyCache !== 'object') {
+        frecencyCache = { affinity: {}, items: {} };
+      }
+      return frecencyCache;
+    }
+
+    function saveFrecencyData() {
+      try {
+        if (frecencyCache) {
+          localStorage.setItem(LS_FRECENCY_KEY, JSON.stringify(frecencyCache));
+        }
+      } catch(e) {}
+    }
+
+    function recordAccountInteraction(itemId, query = '', eventType = 'click', points = 5) {
+      if (!itemId) return;
+      const creds = Array.isArray(vaultItems) ? vaultItems : [];
+      const item = creds.find(x => x.id === itemId);
+      if (!item) return;
+
+      const now = Date.now();
+      item.lastUsedAt = now;
+      item.usageScore = (parseFloat(item.usageScore) || 0) + points;
+
+      if (eventType === 'copy_password') item.copyPasswordCount = (item.copyPasswordCount || 0) + 1;
+      if (eventType === 'copy_username') item.copyUsernameCount = (item.copyUsernameCount || 0) + 1;
+      if (eventType === 'view_password') item.viewPasswordCount = (item.viewPasswordCount || 0) + 1;
+
+      // 1. Update Query-Target Affinity (The Facebook Algorithm)
+      const data = getFrecencyData();
+      const normQ = (query || '').toLowerCase().trim();
+      if (normQ) {
+        data.affinity[normQ] = data.affinity[normQ] || {};
+        data.affinity[normQ][itemId] = (data.affinity[normQ][itemId] || 0) + 1;
+
+        // Also bind first word / alias if multi-word
+        const firstToken = normQ.split(/\s+/)[0];
+        if (firstToken && firstToken !== normQ) {
+          data.affinity[firstToken] = data.affinity[firstToken] || {};
+          data.affinity[firstToken][itemId] = (data.affinity[firstToken][itemId] || 0) + 1;
+        }
+      }
+
+      // 2. Update Global Item Frecency Stats
+      data.items[itemId] = data.items[itemId] || { clicks: 0, lastAt: 0 };
+      data.items[itemId].clicks += 1;
+      data.items[itemId].lastAt = now;
+
+      saveFrecencyData();
+
+      try {
+        localStorage.setItem(LS_VAULT_KEY, JSON.stringify(vaultItems));
+      } catch(e) {}
+
+      if (typeof recordVaultMutation === 'function') {
+        recordVaultMutation('CARD_INTERACTION', { id: itemId, event: eventType, query: normQ, score: item.usageScore });
+      }
+    }
+
+    function computeItemFrecencyBonus(item, query = '') {
+      if (!item) return 0;
+      let bonus = 0;
+      const now = Date.now();
+      const itemId = item.id;
+      const data = getFrecencyData();
+      const normQ = (query || '').toLowerCase().trim();
+
+      // 1. Query-Specific Affinity (Massive Priority Override)
+      if (normQ && data.affinity[normQ]) {
+        const queryClicks = data.affinity[normQ][itemId] || 0;
+        if (queryClicks > 0) {
+          bonus += Math.min(3500, queryClicks * 1600);
+        }
+      }
+
+      // 2. Recency Bonus with Exponential Half-Life
+      const lastTime = item.lastUsedAt || (data.items[itemId] ? data.items[itemId].lastAt : 0);
+      if (lastTime) {
+        const diffHours = (now - lastTime) / (1000 * 60 * 60);
+        if (diffHours < 1) {
+          bonus += 850; // Used in last hour
+        } else if (diffHours < 24) {
+          bonus += 500; // Used today
+        } else if (diffHours < 72) {
+          bonus += 300; // Used in last 3 days
+        } else if (diffHours < 168) {
+          bonus += 150; // Used in last week
+        } else if (diffHours < 720) {
+          bonus += 50;  // Used this month
+        }
+      }
+
+      // 3. Frequency Multiplier (Total Lifetime Clicks & Usage Points)
+      const totalScore = parseFloat(item.usageScore) || 0;
+      const globalClicks = (data.items[itemId] ? data.items[itemId].clicks : 0);
+      bonus += Math.min(600, (totalScore * 6) + (globalClicks * 25));
+
+      return bonus;
+    }
+
+    function computeItemGridScore(item) {
+      if (!item) return 0;
+      const now = Date.now();
+      let score = (parseFloat(item.usageScore) || 0) * 10;
+      score += (item.copyPasswordCount || 0) * 15;
+      score += (item.copyUsernameCount || 0) * 8;
+      score += (item.viewPasswordCount || 0) * 5;
+
+      const lastTime = item.lastUsedAt || new Date(item.updated_at || 0).getTime() || 0;
+      if (lastTime) {
+        const diffHours = (now - lastTime) / (1000 * 60 * 60);
+        if (diffHours < 2) score += 600;
+        else if (diffHours < 24) score += 350;
+        else if (diffHours < 72) score += 200;
+        else if (diffHours < 168) score += 100;
+        else if (diffHours < 720) score += 40;
+      }
+      return score;
+    }
+
+    window.recordAccountInteraction = recordAccountInteraction;
+    window.computeItemFrecencyBonus = computeItemFrecencyBonus;
+    window.computeItemGridScore = computeItemGridScore;
+
+
     function sortVaultCards(items) {
       return items.slice().sort((a, b) => {
-        // 1. Priority Pinned cards ALWAYS stay on top
+        // 1. Priority Pinned cards ALWAYS strictly stay on Top #1
         const aPinned = !!(a.isPriority || a.pinned);
         const bPinned = !!(b.isPriority || b.pinned);
         if (aPinned !== bPinned) {
           return aPinned ? -1 : 1;
         }
         if (aPinned && bPinned) {
-          // Among pinned cards, sort by most recent pin first
-          return (b.pinned_at || 0) - (a.pinned_at || 0) || (b.usageScore || 0) - (a.usageScore || 0);
+          // Among pinned cards, sort by most recent pin, then frecency
+          const aPinTime = a.pinned_at || 0;
+          const bPinTime = b.pinned_at || 0;
+          if (bPinTime !== aPinTime) return bPinTime - aPinTime;
+          return (typeof computeItemGridScore === 'function' ? computeItemGridScore(b) : 0) -
+                 (typeof computeItemGridScore === 'function' ? computeItemGridScore(a) : 0);
         }
 
-        // 2. Unpinned cards arranged by usage score (most copied, viewed, edited on top)
-        const aScore = parseFloat(a.usageScore) || 0;
-        const bScore = parseFloat(b.usageScore) || 0;
-        if (bScore !== aScore) {
-          return bScore - aScore;
+        // 2. Unpinned cards arranged dynamically by Frecency (Frequency + Recency)
+        // The more you click, view, copy or use an account, the higher it climbs!
+        const aFrecency = typeof computeItemGridScore === 'function' ? computeItemGridScore(a) : (parseFloat(a.usageScore) || 0);
+        const bFrecency = typeof computeItemGridScore === 'function' ? computeItemGridScore(b) : (parseFloat(b.usageScore) || 0);
+        if (bFrecency !== aFrecency) {
+          return bFrecency - aFrecency;
         }
 
         // 3. Fallback: most recently used timestamp or update date
@@ -8465,6 +8606,16 @@
       openedFromSpotlight = !!isFromSpotlight;
       focusPwdRevealed = false;
 
+      if (openedFromSpotlight) {
+        const spotInput = document.getElementById('vaultSpotlightInput');
+        if (spotInput && spotInput.value) {
+          lastSpotlightQuery = spotInput.value.trim();
+        }
+      }
+
+      // Record interaction with query binding (Facebook Algorithm)
+      recordAccountInteraction(item.id, openedFromSpotlight ? lastSpotlightQuery : '', 'view_focus', 6);
+
       const modal = document.getElementById('accountFocusModal');
       const content = document.getElementById('focusHudContent');
       const btnBack = document.getElementById('btnFocusBackToSearch');
@@ -8473,8 +8624,6 @@
       if (!modal || !content) return;
 
       if (openedFromSpotlight) {
-        const spotInput = document.getElementById('vaultSpotlightInput');
-        lastSpotlightQuery = spotInput ? spotInput.value : '';
         if (typeof closeSpotlight === 'function') closeSpotlight(false); // don't wipe query
         if (btnBack) {
           btnBack.style.display = 'inline-flex';
@@ -8626,6 +8775,7 @@
       }
       openedFromSpotlight = false;
       currentFocusItem = null;
+      if (typeof renderVault === 'function') renderVault();
     }
 
     window.openAccountFocusModal = openAccountFocusModal;
@@ -8722,7 +8872,7 @@
       spotlightMatches = [];
 
       if (!q) {
-        // When empty, show all System Commands & Top Priority Accounts
+        // When empty, show Top Priority Accounts & Facebook-style Frequent Accounts
         const creds = Array.isArray(vaultItems) ? vaultItems : [];
         const topPinned = creds.filter(c => c.isPriority || c.pinned).slice(0, 4);
 
@@ -8742,8 +8892,45 @@
               action: () => {
                 if (navigator.clipboard) {
                   navigator.clipboard.writeText(item.password).then(() => {
+                    if (typeof recordAccountInteraction === 'function') recordAccountInteraction(item.id, '', 'copy_password', 6);
                     if (typeof showToast === 'function') showToast(`🔐 Password copied for ${item.title}!`, '📋');
                     if (typeof playJarvisSound === 'function') playJarvisSound('copy');
+                    if (typeof renderVault === 'function') renderVault();
+                  }).catch(() => {});
+                }
+              }
+            });
+          });
+        }
+
+        // Top Frequent & Recent Accounts (Facebook Zero-Query Jump)
+        const unpinned = creds.filter(c => !c.isPriority && !c.pinned);
+        unpinned.sort((a, b) => {
+          return (typeof computeItemGridScore === 'function' ? computeItemGridScore(b) : (b.usageScore || 0)) -
+                 (typeof computeItemGridScore === 'function' ? computeItemGridScore(a) : (a.usageScore || 0));
+        });
+        const topFrequent = unpinned.filter(c => (c.lastUsedAt || (typeof getFrecencyData === 'function' && getFrecencyData().items[c.id] && getFrecencyData().items[c.id].clicks > 0))).slice(0, 4);
+
+        if (topFrequent.length > 0) {
+          topFrequent.forEach(item => {
+            const brand = typeof getServiceBrandInfo === 'function' ? getServiceBrandInfo(item) : { logoSvg: '🔑', brandTag: item.category };
+            spotlightMatches.push({
+              type: 'credential',
+              itemId: item.id,
+              cat: '⚡ FREQUENT & RECENT ACCOUNTS',
+              iconSvg: brand.logoSvg,
+              title: item.title,
+              rawTitle: item.title,
+              desc: item.username + (item.metadata ? (' · ' + item.metadata) : ''),
+              badge: '↵ Copy Password',
+              badgeAction: true,
+              action: () => {
+                if (navigator.clipboard) {
+                  navigator.clipboard.writeText(item.password).then(() => {
+                    if (typeof recordAccountInteraction === 'function') recordAccountInteraction(item.id, '', 'copy_password', 6);
+                    if (typeof showToast === 'function') showToast(`🔐 Password copied for ${item.title}!`, '📋');
+                    if (typeof playJarvisSound === 'function') playJarvisSound('copy');
+                    if (typeof renderVault === 'function') renderVault();
                   }).catch(() => {});
                 }
               }
@@ -8849,10 +9036,15 @@
           }
 
           if (totalScore > 0) {
+            // Facebook Frecency (Frequency + Recency) & Query Affinity Boost
+            const frecencyBonus = typeof computeItemFrecencyBonus === 'function' ? computeItemFrecencyBonus(item, q) : 0;
+            totalScore += frecencyBonus;
+
             if (item.isPriority || item.pinned) totalScore += 15;
             scoredCreds.push({
               item,
               score: totalScore,
+              frecencyBonus: frecencyBonus,
               matchedWhere: matchedWhere || 'notes'
             });
           }
@@ -8866,11 +9058,14 @@
         const noteMatches = scoredCreds.filter(s => s.matchedWhere === 'notes' || s.matchedWhere === 'meta' || s.matchedWhere === 'pass');
 
         // Add Direct Matches (up to 15)
-        directMatches.slice(0, 15).forEach(({ item, score, matchedWhere }) => {
+        directMatches.slice(0, 15).forEach(({ item, score, frecencyBonus, matchedWhere }) => {
           const brand = typeof getServiceBrandInfo === 'function' ? getServiceBrandInfo(item) : { logoSvg: '🔑', brandTag: item.category };
           let tagHtml = '<span class="spotlight-tag-pill tag-app-match">APP MATCH</span>';
-          if (matchedWhere === 'user') tagHtml = '<span class="spotlight-tag-pill tag-user-match">USER MATCH</span>';
-          else if (matchedWhere === 'category') tagHtml = '<span class="spotlight-tag-pill tag-app-match">CATEGORY</span>';
+          if (frecencyBonus >= 1000) {
+            tagHtml = '<span class="spotlight-tag-pill" style="background:linear-gradient(135deg,rgba(234,179,8,0.25),rgba(245,158,11,0.18));color:#facc15;border:1px solid rgba(234,179,8,0.6);font-weight:800;letter-spacing:0.5px;box-shadow:0 0 10px rgba(234,179,8,0.25);">★ TOP PICK</span> ' + tagHtml;
+          }
+          if (matchedWhere === 'user') tagHtml += ' <span class="spotlight-tag-pill tag-user-match">USER MATCH</span>';
+          else if (matchedWhere === 'category') tagHtml += ' <span class="spotlight-tag-pill tag-app-match">CATEGORY</span>';
 
           spotlightMatches.push({
             type: 'credential',
