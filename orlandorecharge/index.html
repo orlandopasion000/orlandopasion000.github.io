@@ -12299,6 +12299,21 @@ try { checkUrlHashRoutine(); } catch(e){}
     return hitR + particleHeadR;
   }
 
+  
+  // 4K Master HD Core Assets (Dynamo, Helix, Meteor)
+  var CoreAssets = {
+    dynamo: new Image(),
+    helix: new Image(),
+    meteor: new Image(),
+    loaded: { dynamo: false, helix: false, meteor: false }
+  };
+  CoreAssets.dynamo.onload = function() { CoreAssets.loaded.dynamo = true; };
+  CoreAssets.dynamo.src = 'assets/core-dynamo-hd.jpg';
+  CoreAssets.helix.onload = function() { CoreAssets.loaded.helix = true; };
+  CoreAssets.helix.src = 'assets/core-helix-hd.jpg';
+  CoreAssets.meteor.onload = function() { CoreAssets.loaded.meteor = true; };
+  CoreAssets.meteor.src = 'assets/core-meteor-hd.jpg';
+
   var audioCtx = null;
   var lockOsc = null;
   var lockGain = null;
@@ -12563,11 +12578,14 @@ try { checkUrlHashRoutine(); } catch(e){}
     hasDeliberateMove = true;
     lastCursorMoveTime = performance.now();
 
-    // Exact location, true value: where the user touches IS where the atom is!
+    // Touch Comfort: Offset atom 64px ABOVE finger on touch so finger never covers it!
+    var touchOffsetY = (deviceInputMode === "touch") ? 64 : 0;
+    cursor.touchRealX = e.clientX;
+    cursor.touchRealY = e.clientY;
     cursor.x = e.clientX;
-    cursor.y = e.clientY;
+    cursor.y = e.clientY - touchOffsetY;
     cursor.targetX = e.clientX;
-    cursor.targetY = e.clientY;
+    cursor.targetY = e.clientY - touchOffsetY;
     lastSampleCursorX = e.clientX;
     lastSampleCursorY = e.clientY;
 
@@ -12591,11 +12609,12 @@ try { checkUrlHashRoutine(); } catch(e){}
     var events = (typeof e.getCoalescedEvents === "function") ? e.getCoalescedEvents() : [e];
     var lastEv = events[events.length - 1] || e;
 
-    // Exact 1:1 tracking for both mouse & touch: 0ms latency, responds immediately at full hardware speed
-    cursor.x = lastEv.clientX;
-    cursor.y = lastEv.clientY;
+    // Touch Comfort: Offset atom 64px ABOVE touch point with lerp smoothing
+    var touchOffsetY = (deviceInputMode === "touch") ? 64 : 0;
+    cursor.touchRealX = lastEv.clientX;
+    cursor.touchRealY = lastEv.clientY;
     cursor.targetX = lastEv.clientX;
-    cursor.targetY = lastEv.clientY;
+    cursor.targetY = lastEv.clientY - touchOffsetY;
 
     cursor.active = true;
     hasDeliberateMove = true;
@@ -12926,8 +12945,9 @@ try { checkUrlHashRoutine(); } catch(e){}
 
     // Direct 1:1 true value for both mouse and touch (zero lag, matches fast hardware DPI)
     if (cursor.active && hasDeliberateMove && typeof cursor.targetX === "number" && cursor.targetX > -1000) {
-      cursor.x = cursor.targetX;
-      cursor.y = cursor.targetY;
+      var lerpFactor = (deviceInputMode === "touch") ? 0.35 : 0.22;
+      cursor.x += (cursor.targetX - cursor.x) * lerpFactor;
+      cursor.y += (cursor.targetY - cursor.y) * lerpFactor;
     }
 
     // Damp cursor velocity when idle
@@ -13091,6 +13111,26 @@ try { checkUrlHashRoutine(); } catch(e){}
   }
 
   function drawQuantumAtomicCursor(cx, cy, now, progress) {
+    if (deviceInputMode === "touch" && isTouchDown && typeof cursor.touchRealX === "number") {
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cursor.touchRealX, cursor.touchRealY);
+      ctx.strokeStyle = "rgba(56, 189, 248, 0.3)";
+      ctx.lineWidth = 1.2;
+      ctx.setLineDash([3, 3]);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(cursor.touchRealX, cursor.touchRealY, 20, 0, Math.PI * 2);
+      ctx.strokeStyle = "rgba(212, 168, 83, 0.55)";
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([]);
+      ctx.stroke();
+      ctx.fillStyle = "rgba(56, 189, 248, 0.12)";
+      ctx.fill();
+      ctx.restore();
+    }
     ctx.save();
     ctx.translate(cx, cy);
 
@@ -14203,7 +14243,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   <script>
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v85', { scope: './' }).catch(function() {});
+        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v86', { scope: './' }).catch(function() {});
       });
     }
   </script>
