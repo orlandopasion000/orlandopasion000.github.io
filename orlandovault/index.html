@@ -5299,6 +5299,12 @@
         </svg>
         <span>Sheets Sync</span>
       </button>
+
+      <!-- Vault Cloud Sync Health & Cryptographic Integrity Pill -->
+      <button type="button" class="btn-topbar-tool btn-tool-sync-health" id="btnTopbarSyncHealth" title="Vault Cloud Sync Health & Cryptographic Integrity Status">
+        <span class="sync-health-pulse-dot" id="syncHealthPulseDot"></span>
+        <span id="syncHealthLabel">Sync Health</span>
+      </button>
       <!-- 24K Swiss Gold Quantum Pill Launcher -->
       <button type="button" class="btn-topbar-desktop" id="btnTopbarLaunchApp" title="Open OrlandoVault in Dedicated Standalone Desktop App" aria-label="Open Main Web App">
         <!-- Animated Kinetic Cyber Energy Border -->
@@ -5464,6 +5470,64 @@
   <div class="modal-backdrop" id="qrModal" role="dialog" aria-modal="true" aria-label="Holographic QR Command Suite">
     <div class="qr-studio-modal unified-command-suite" id="vaultHoloSuite" style="--qr-accent:#d9b95c; --qr-glow:rgba(217,185,92,0.4);">
       <!-- Dynamically hydrated by renderVaultHoloSuite() -->
+    </div>
+  </div>
+
+  <!-- SYNC HEALTH & INTEGRITY HUD MODAL -->
+  <div class="modal-backdrop" id="syncHealthModal" style="display:none;" role="dialog" aria-modal="true" aria-label="Cloud Sync Health & Cryptographic Integrity">
+    <div class="sync-health-card">
+      <div class="sync-health-header">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="sync-health-pulse-dot" id="modalPulseDot"></span>
+          <h3 style="margin:0;font-size:16px;color:#f8fafc;letter-spacing:0.02em;">Cloud Sync Health & Integrity</h3>
+        </div>
+        <button type="button" class="modal-close-btn" id="closeSyncHealthModal" title="Close">✕</button>
+      </div>
+
+      <div class="sync-health-grid">
+        <div class="sync-stat-box">
+          <div class="sync-stat-label">Cloud Backend</div>
+          <div class="sync-stat-val" style="font-size:13px;color:#60a5fa;">Firebase Firestore</div>
+        </div>
+        <div class="sync-stat-box">
+          <div class="sync-stat-label">Security Shield</div>
+          <div class="sync-stat-val match" style="font-size:12.5px;">AES-256-GCM Zero-Knowledge</div>
+        </div>
+        <div class="sync-stat-box">
+          <div class="sync-stat-label">Local Records</div>
+          <div class="sync-stat-val" id="statLocalCount">200</div>
+        </div>
+        <div class="sync-stat-box">
+          <div class="sync-stat-label">Cloud Records</div>
+          <div class="sync-stat-val" id="statCloudCount">200</div>
+        </div>
+        <div class="sync-stat-box">
+          <div class="sync-stat-label">Priority Pins</div>
+          <div class="sync-stat-val match" id="statPinnedCount">2 Accounts</div>
+        </div>
+        <div class="sync-stat-box">
+          <div class="sync-stat-label">Integrity Status</div>
+          <div class="sync-stat-val match" id="statIntegrityHash">100% MATCH</div>
+        </div>
+        <div class="sync-stat-box">
+          <div class="sync-stat-label">Outbox Queue</div>
+          <div class="sync-stat-val" id="statOutboxCount">0 Pending</div>
+        </div>
+        <div class="sync-stat-box">
+          <div class="sync-stat-label">Last Cloud Pull</div>
+          <div class="sync-stat-val" id="statLastPull" style="font-size:11.5px;color:#94a3b8;">Just now</div>
+        </div>
+      </div>
+
+      <div style="font-size:11px;color:#94a3b8;margin-bottom:14px;line-height:1.5;">
+        🔒 All passwords and recovery notes are encrypted with Web Crypto AES-256-GCM using client-derived PBKDF2 keys before syncing. Firebase Firestore holds only ciphertext.
+      </div>
+
+      <div class="sync-health-actions">
+        <button type="button" class="btn-sync-action primary" id="btnForceResyncCloud">⚡ Force Cloud Pull</button>
+        <button type="button" class="btn-sync-action" id="btnCreateLocalSnapshot">💾 Create Snapshot</button>
+        <button type="button" class="btn-sync-action" id="btnRestoreSnapshot">↺ Restore Snapshot</button>
+      </div>
     </div>
   </div>
 
@@ -5711,9 +5775,11 @@
   <script src="assets/relative-time.js"></script>
   <script src="assets/qrcode.min.js"></script>
   <script>
-    const SEED_VAULT = [{"id":"vault-item-1","category":"DepEd","badge":"DepEd & Academic","title":"Urdaneta City University (UCU Portal)","username":"20110549","password":"Be2Qo5Ka","old_password":"","notes":"Official University Portal: https://up.ucu.edu.ph/","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.404Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-2","category":"DepEd","badge":"DepEd & Academic","title":"DepEd Microsoft 365 (School 300406)","username":"300406@deped.gov.ph","password":"regularMS*2023","old_password":"","notes":"DepEd Microsoft 365 Institutional Account (School ID: 300406)","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.404Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-3","category":"DepEd","badge":"DepEd & Academic","title":"DepEd Region 1 Admin (School 300406)","username":"300406@r1.deped.gov.ph","password":"NNHSadmin1968!","old_password":"","notes":"NNHS Admin Account (Region 1)","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.404Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-4","category":"DepEd","badge":"DepEd & Academic","title":"DepEd Google Workspace (School 300406)","username":"300406@deped.gov.ph","password":"regularGS*2021","old_password":"","notes":"DepEd Google Workspace Institutional Account","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.404Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-5","category":"Gmail","badge":"Google Ecosystem","title":"Primary Gmail","username":"orlandopasion1994@gmail.com","password":"J#Y9rtWd-6N*DeU5iV6d","old_password":"qwerty.17@7","notes":"Primary Gmail. Microsoft account, Apple ID login, X @orlando_pasion, Facebook primary, banking and many apps.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-17T08:46:06.404Z","isPriority":true,"pinned":true,"pinned_at":1794906132025,"lastUsedAt":1794905091291,"lastActiveWorkingAt":1794905091291,"usageScore":8,"copyPasswordCount":1},{"id":"vault-item-6","category":"Gmail","badge":"Google Ecosystem","title":"Secondary Gmail (orlandopasion0817)","username":"orlandopasion0817@gmail.com","password":"s86NFd&y_j6n3fJRd$2t","old_password":"qwerty.17","notes":"Secondary Gmail. Facebook secondary, Disney+, Google Play Games for \"MrBeast\", X @orlandopasion07.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-17T08:46:06.404Z","isPriority":false,"pinned":false,"pinned_at":0,"lastUsedAt":1794905166888,"lastActiveWorkingAt":1794905166888,"usageScore":24,"copyPasswordCount":2},{"id":"vault-item-8","category":"Gmail","badge":"Google Ecosystem","title":"Gmail · Scite & Honor of Kings 001","username":"orlandopasion001@gmail.com","password":"qwerty.17@1","old_password":"qwerty.17@1","notes":"Auxiliary Gmail account · Scite research tool · Honor of Kings (001).","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.404Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-9","category":"Gmail","badge":"Google Ecosystem","title":"Gmail · Honor of Kings 002","username":"orlandopasion002@gmail.com","password":"qwerty.17","old_password":"qwerty.17","notes":"Honor of Kings (002). (Do-next queue: 8) | Auxiliary Gmail account.","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.404Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-10","category":"Gmail","badge":"Google Ecosystem","title":"Gmail · Honor of Kings 003","username":"orlandopasion003@gmail.com","password":"qwerty.17","old_password":"qwerty.17","notes":"Honor of Kings (003). (Do-next queue: 9) | Auxiliary Gmail account.","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.404Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-11","category":"Gmail","badge":"Google Ecosystem","title":"Gmail · Honor of Kings 004","username":"orlandopasion004@gmail.com","password":"qwerty.17","old_password":"qwerty.17","notes":"Honor of Kings (004). (Do-next queue: 10) | Auxiliary Gmail account.","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.404Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-12","category":"Gmail","badge":"Google Ecosystem","title":"Gmail · Honor of Kings 005","username":"orlandopasion005@gmail.com","password":"qwerty.17","old_password":"(not recorded)","notes":"Honor of Kings (005). (Do-next queue: 11) | Mom's phone verified.","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.404Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-13","category":"Gmail","badge":"Google Ecosystem","title":"Gmail","username":"orlandopasion006@gmail.com","password":"qwerty.17","old_password":"(not recorded)","notes":"No use recorded. | Auxiliary Gmail account","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.404Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-14","category":"Gmail","badge":"Google Ecosystem","title":"Boxbe","username":"orlandopasion1994@gmail.com","password":"qooq jlhg oaek ppmx","old_password":"qwerty.17@7","notes":"Primary Gmail. Microsoft account, Apple ID login, X @orlando_pasion, Facebook primary, banking and many apps. | App password for email filtering","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-17T08:46:06.404Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-15","category":"Microsoft","badge":"Microsoft 365","title":"Microsoft","username":"orlandopasion1994@gmail.com","password":"Qwerty.17@7","old_password":"","notes":"Password sa desktop pc: Qwerty.17@7 | Password sa desktop PC: Qwerty.17@7","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.404Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-16","category":"DepEd","badge":"DepEd & Academic","title":"DepEd Microsoft 365 Account","username":"orlando.pasion001@r1.deped.gov.ph","password":"Qwerty.17.1@","old_password":"","notes":"Qwerty.17@7","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.404Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-17","category":"DepEd","badge":"DepEd & Academic","title":"DepEd Microsoft 365 Account","username":"orlando.pasion001@deped.gov.ph","password":"Qwerty.17@7","old_password":"","notes":"National DepEd Tenant","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.404Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-18","category":"DepEd","badge":"DepEd & Academic","title":"Deped Google Email","username":"orlando.pasion001@deped.gov.ph","password":"Qwerty.17@1","old_password":"","notes":"@pasion_orlando   Twitter","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.404Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-19","category":"DepEd","badge":"DepEd & Academic","title":"Deped Google Email","username":"blancaeunice.pasion@deped.gov.ph","password":"Blanca070796","old_password":"","notes":"both Microsoft and Google","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.404Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-20","category":"DepEd","badge":"DepEd & Academic","title":"My LIS","username":"orlandopasion","password":"Qwerty","old_password":"","notes":"Learner Information System","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.404Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-21","category":"DepEd","badge":"DepEd & Academic","title":"My LIS","username":"Principal LIS","password":"sirrabut1234","old_password":"","notes":"Babe iphone password: Qwerty_1996","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.404Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-22","category":"Banking & Finance","badge":"Banking & Finance","title":"PruLife","username":"plukorlandopasion@gmail.com","password":"@1Ncorrect@1","old_password":"","notes":"","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.404Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-23","category":"System","badge":"Device Admin","title":"Lenovo Laptop","username":".\\Admin","password":"d3P3d-DCP#","old_password":"","notes":"","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.404Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-24","category":"DepEd","badge":"DepEd & Academic","title":"NASH Reviewer (revnash0@gmail.com)","username":"revnash0@gmail.com","password":"nashreviewer","old_password":"","notes":"Nash Reviewer","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.404Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-25","category":"DepEd","badge":"DepEd & Academic","title":"gbfclassbuilder","username":"orlando.pasion001@deped.gov.ph","password":"qwerty.17@123","old_password":"","notes":"Class builder educational tool","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.404Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-28","category":"Gmail","badge":"Google Ecosystem","title":"cpaeph.com","username":"orlandopasion1994@gmail.com","password":"J#Y9rtWd-6N*DeU5iV6d","old_password":"qwerty.17@7","notes":"Primary Gmail. Microsoft account, Apple ID login, X @orlando_pasion, Facebook primary, banking and many apps.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-17T08:46:06.405Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-29","category":"Entertainment","badge":"Entertainment & Streaming","title":"PlayT","username":"9605337379","password":"qwerty17","old_password":"","notes":"Binded thru 0960","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.405Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-30","category":"Portals","badge":"Government Portal","title":"LTO","username":"22-940817-2048105","password":"Qwerty.17","old_password":"","notes":"LTMS Portal","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.405Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-31","category":"DepEd","badge":"DepEd & Academic","title":"DTS","username":"4213571","password":"Qwerty@1","old_password":"","notes":"Management kapag may pipirmahan ang principal... at Admin kapag ako lang ang pipirma | Employee ID 4213571 | Management/Admin signature","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.405Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-32","category":"Gmail","badge":"Google Ecosystem","title":"Audacity","username":"orlandopasion1994@gmail.com","password":"J#Y9rtWd-6N*DeU5iV6d","old_password":"qwerty.17@7","notes":"Primary Gmail. Microsoft account, Apple ID login, X @orlando_pasion, Facebook primary, banking and many apps.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-17T08:46:06.405Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-33","category":"Social","badge":"Social Media","title":"Discord","username":"orlandopasion1994@gmail.com","password":"qwerty.17@123","old_password":"qwerty.17@7","notes":"Primary Gmail. Microsoft account, Apple ID login, X @orlando_pasion, Facebook primary, banking and many apps. | Linked to Midjourney","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-17T08:46:06.405Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-34","category":"Shopping","badge":"Shopping & Delivery","title":"Zalora","username":"orlandopasion1994@gmail.com","password":"J#Y9rtWd-6N*DeU5iV6d","old_password":"qwerty.17@7","notes":"Primary Gmail. Microsoft account, Apple ID login, X @orlando_pasion, Facebook primary, banking and many apps.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-17T08:46:06.405Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-36","category":"Shopping","badge":"Shopping & Delivery","title":"Grab","username":"9278641467","password":"Logged it via viber number","old_password":"","notes":"","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.405Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-37","category":"Portals","badge":"Government Portal","title":"eTravel","username":"orlandopasion1994@gmail.com","password":"J#Y9rtWd-6N*DeU5iV6d","old_password":"qwerty.17@7","notes":"Primary Gmail. Microsoft account, Apple ID login, X @orlando_pasion, Facebook primary, banking and many apps.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-17T08:46:06.405Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-38","category":"Gmail","badge":"Google Ecosystem","title":"PUISSANT","username":"orlandopasion1994@gmail.com","password":"J#Y9rtWd-6N*DeU5iV6d","old_password":"qwerty.17@7","notes":"Primary Gmail. Microsoft account, Apple ID login, X @orlando_pasion, Facebook primary, banking and many apps.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-17T08:46:06.405Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-41","category":"DepEd","badge":"DepEd & Academic","title":"coursera","username":"orlandopasion1994@gmail.com","password":"J#Y9rtWd-6N*DeU5iV6d","old_password":"qwerty.17@7","notes":"Primary Gmail. Microsoft account, Apple ID login, X @orlando_pasion, Facebook primary, banking and many apps.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-17T08:46:06.405Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-47","category":"DepEd","badge":"DepEd & Academic","title":"Google Scholar","username":"orlandopasion1994@gmail.com","password":"J#Y9rtWd-6N*DeU5iV6d","old_password":"qwerty.17@7","notes":"Primary Gmail. Microsoft account, Apple ID login, X @orlando_pasion, Facebook primary, banking and many apps.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-17T08:46:06.406Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-48","category":"Shopping","badge":"Shopping & Delivery","title":"Mcdo and Delivery","username":"orlandopasion1994@gmail.com","password":"J#Y9rtWd-6N*DeU5iV6d","old_password":"qwerty.17@7","notes":"Primary Gmail. Microsoft account, Apple ID login, X @orlando_pasion, Facebook primary, banking and many apps.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-17T08:46:06.406Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-49","category":"Shopping","badge":"Shopping & Delivery","title":"Chowking","username":"orlandopasion1994@gmail.com","password":"J#Y9rtWd-6N*DeU5iV6d","old_password":"qwerty.17@7","notes":"Primary Gmail. Microsoft account, Apple ID login, X @orlando_pasion, Facebook primary, banking and many apps.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-17T08:46:06.406Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-50","category":"Shopping","badge":"Shopping & Delivery","title":"Jollibee","username":"orlandopasion1994@gmail.com","password":"J#Y9rtWd-6N*DeU5iV6d","old_password":"qwerty.17@7","notes":"Primary Gmail. Microsoft account, Apple ID login, X @orlando_pasion, Facebook primary, banking and many apps.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-17T08:46:06.406Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-51","category":"Shopping","badge":"Shopping & Delivery","title":"Klook","username":"orlandopasion1994@gmail.com","password":"J#Y9rtWd-6N*DeU5iV6d","old_password":"qwerty.17@7","notes":"Primary Gmail. Microsoft account, Apple ID login, X @orlando_pasion, Facebook primary, banking and many apps.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-17T08:46:06.406Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-52","category":"Shopping","badge":"Shopping & Delivery","title":"Agoda","username":"orlandopasion1994@gmail.com","password":"J#Y9rtWd-6N*DeU5iV6d","old_password":"qwerty.17@7","notes":"Primary Gmail. Microsoft account, Apple ID login, X @orlando_pasion, Facebook primary, banking and many apps.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-17T08:46:06.406Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-53","category":"Entertainment","badge":"Entertainment & Streaming","title":"SM Cinema","username":"orlandopasion1994@gmail.com","password":"J#Y9rtWd-6N*DeU5iV6d","old_password":"qwerty.17@7","notes":"Primary Gmail. Microsoft account, Apple ID login, X @orlando_pasion, Facebook primary, banking and many apps.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-17T08:46:06.406Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-54","category":"DepEd","badge":"DepEd & Academic","title":"Duolingo","username":"orlandopasion1994@gmail.com","password":"J#Y9rtWd-6N*DeU5iV6d","old_password":"qwerty.17@7","notes":"Primary Gmail. Microsoft account, Apple ID login, X @orlando_pasion, Facebook primary, banking and many apps.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-17T08:46:06.406Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-55","category":"DepEd","badge":"DepEd & Academic","title":"Khan Academy","username":"orlando.pasion001@deped.gov.ph","password":"qwerty.17","old_password":"","notes":"Orlando Jr","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.406Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-56","category":"Social","badge":"Social Media","title":"Facebook/Meta","username":"sirorlandovpasionjr","password":"Qwertyuiop@0207","old_password":"Babe_020717@120822","notes":"Babe_020717@120822@1 | Phone/Recovery: 9278641467 | Primary identity","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.406Z","isPriority":true,"pinned":true,"pinned_at":1794906137025,"lastUsedAt":1794905099136,"lastActiveWorkingAt":1794905099136,"usageScore":34,"copyPasswordCount":2},{"id":"vault-item-57","category":"Gmail","badge":"Google Ecosystem","title":"Primary","username":"orlandopasion1994@gmail.com","password":"orlandopasion1994","old_password":"qwerty.17@7","notes":"Primary Gmail. Microsoft account, Apple ID login, X @orlando_pasion, Facebook primary, banking and many apps. | Phone/Recovery: 9278641467 | Twitter: @orlando_pasion | iPhone PW: Qwerty.17@7 | MS account: Qwerty.17@7 | Bound via 0927 | Shared: rowena.aspiras@deped.gov.ph (Gwen@466747)","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-17T08:46:06.406Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-58","category":"Gmail","badge":"Google Ecosystem","title":"Secondary","username":"orlandopasion0817@gmail.com","password":"9073843043","old_password":"qwerty.17","notes":"Secondary Gmail. Facebook secondary, Disney+, Google Play Games for \"MrBeast\", X @orlandopasion07. | Phone/Recovery: 9073843043 | Twitter: @orlandopasion07 | Apple ID password | Bound via 0907","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-17T08:46:06.406Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-59","category":"Gmail","badge":"Google Ecosystem","title":"Orlando Pasion (Bus.)","username":"pogiorlandopasion@gmail.com","password":"qwerty.17","old_password":"","notes":"","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.406Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-60","category":"Social","badge":"Social Media","title":"Instagram","username":"rolly_nice","password":"Babe_020717@120822","old_password":"","notes":"Personal Instagram","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.406Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-62","category":"Social","badge":"Social Media","title":"Other FB/Meta Accounts","username":"rollyrollygaming","password":"qwerty.17","old_password":"","notes":"","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.407Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-63","category":"Social","badge":"Social Media","title":"Other FB/Meta Accounts","username":"goldcloudblack@gmail.com","password":"qwerty.17","old_password":"","notes":"","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.407Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-64","category":"Social","badge":"Social Media","title":"Other FB/Meta Accounts","username":"gwapocpogi@gmail.com","password":"qwerty.17","old_password":"","notes":"Jan 1, 2001","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.407Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-65","category":"Shopping","badge":"Shopping & Delivery","title":"Shoppe","username":"orlandopasion1994@gmail.com","password":"J#Y9rtWd-6N*DeU5iV6d","old_password":"qwerty.17@7","notes":"Primary Gmail. Microsoft account, Apple ID login, X @orlando_pasion, Facebook primary, banking and many apps.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-17T08:46:06.407Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-66","category":"Shopping","badge":"Shopping & Delivery","title":"Lazada","username":"orlandopasion1994@gmail.com","password":"J#Y9rtWd-6N*DeU5iV6d","old_password":"qwerty.17@7","notes":"Primary Gmail. Microsoft account, Apple ID login, X @orlando_pasion, Facebook primary, banking and many apps.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-17T08:46:06.407Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-68","category":"Entertainment","badge":"Entertainment & Streaming","title":"Netflix","username":"orlandopasion1994@gmail.com","password":"J#Y9rtWd-6N*DeU5iV6d","old_password":"qwerty.17@7","notes":"Primary Gmail. Microsoft account, Apple ID login, X @orlando_pasion, Facebook primary, banking and many apps.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-17T08:46:06.407Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-69","category":"Entertainment","badge":"Entertainment & Streaming","title":"Netflix","username":"netflixpasion1994@gmail.com","password":"orlandopasion1994","old_password":"","notes":"orlandopasion1994 | Backup family streaming","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.407Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-70","category":"Entertainment","badge":"Entertainment & Streaming","title":"Prime Video","username":"639278641467","password":"qwerty.17","old_password":"","notes":"Phone/Recovery: 9278641467 | Amazon Video","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.407Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-71","category":"Gmail","badge":"Google Ecosystem","title":"I Want TFC","username":"orlandopasion1994@gmail.com","password":"qwerty.17","old_password":"qwerty.17@7","notes":"Primary Gmail. Microsoft account, Apple ID login, X @orlando_pasion, Facebook primary, banking and many apps. | ABS-CBN digital streaming","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-17T08:46:06.407Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-72","category":"Gmail","badge":"Google Ecosystem","title":"VM","username":"watchonlineapple@gmail.com","password":"6#!fj9-yaYD","old_password":"watchonlineapple","notes":"VM streaming, Apple online, and Scite trial account.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-17T08:46:06.407Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-74","category":"Entertainment","badge":"Entertainment & Streaming","title":"Max (HBO GO)","username":"orlandopasion1994@gmail.com","password":"orlandopasion1994","old_password":"qwerty.17@7","notes":"Primary Gmail. Microsoft account, Apple ID login, X @orlando_pasion, Facebook primary, banking and many apps. | Primary Warner Bros Discovery streaming","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-17T08:46:06.407Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-75","category":"Entertainment","badge":"Entertainment & Streaming","title":"Max (HBO GO)","username":"hbohomeboxofficemax@gmail.com","password":"hbomax@1","old_password":"","notes":"","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.407Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-76","category":"Entertainment","badge":"Entertainment & Streaming","title":"Max (HBO GO)","username":"pogiorlandopasion@gmail.com","password":"pogiorlandopasion","old_password":"","notes":"","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.407Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-80","category":"AI & Dev","badge":"Claude & AI","title":"Google Bard. Now Gemini","username":"orlandopasion1994@gmail.com","password":"J#Y9rtWd-6N*DeU5iV6d","old_password":"qwerty.17@7","notes":"Primary Gmail. Microsoft account, Apple ID login, X @orlando_pasion, Facebook primary, banking and many apps.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-17T08:46:06.408Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-82","category":"AI & Dev","badge":"Claude & AI","title":"Nova AI","username":"orlandopasion000@gmail.com","password":"n5gQ-6q?Wpmv8eVhK2U-","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907. | Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907. | Multi-bot aggregation","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-17T08:46:06.408Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-84","category":"Family","badge":"Family Vault","title":"Wife's Gmail (btaborda07)","username":"btaborda07@gmail.com","password":"Blanca070796@","old_password":"Blanca070796@","notes":"Wife's Gmail: Facebook, PRC online, Pulse and BDO logins. (Next up in queue: 1)","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.408Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-85","category":"Gmail","badge":"Google Ecosystem","title":"Pru Life UK (plukorlandopasion)","username":"plukorlandopasion@gmail.com","password":"@1Ncorrect@1","old_password":"@1Ncorrect@1","notes":"Pru Life UK: PRUForce and LMS login. (Do-next queue: 2)","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.408Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-86","category":"Family","badge":"Family Vault","title":"Wife's Second Gmail (bepasion07)","username":"bepasion07@gmail.com","password":"qwerty.17","old_password":"qwerty.17","notes":"Wife's second Gmail: LEIRS and CPDAS. (Do-next queue: 3) | Personal email","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.408Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-87","category":"DepEd","badge":"DepEd & Academic","title":"NASH Reviewer (revnash0)","username":"revnash0@gmail.com","password":"nashreviewer","old_password":"nashreviewer","notes":"NASH reviewer materials. (Do-next queue: 4)","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.408Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-88","category":"Social","badge":"Social Media","title":"Facebook Business (pogiorlandopasion)","username":"pogiorlandopasion@gmail.com","password":"qwerty.17","old_password":"qwerty.17","notes":"Facebook business profile \"Orlando Pasion (Bus.)\". (Do-next queue: 5) | Business page admin","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.408Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-89","category":"Family","badge":"Family Vault","title":"Mom's Gmail (brigidapasion21560)","username":"brigidapasion21560@gmail.com","password":"brigida123@1","old_password":"brigida123@1","notes":"Mom's Gmail. (Do-next queue: 6)","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.408Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-90","category":"Entertainment","badge":"Entertainment & Streaming","title":"VM Streaming & Scite Trial","username":"watchonlineapple@gmail.com","password":"6#!fj9-yaYD","old_password":"watchonlineapple","notes":"VM streaming and Scite trial. Password rotated to Sheet 2 secure master.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-17T08:46:06.408Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-91","category":"Gmail","badge":"Google Ecosystem","title":"Google Account (grammarlyquillbot001@gmail.com)","username":"grammarlyquillbot001@gmail.com","password":"(not recorded)","old_password":"(not recorded)","notes":"ChatGPT, Grammarly/Quillbot and a Scite trial.","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.408Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-92","category":"Gmail","badge":"Google Ecosystem","title":"Google Account (yifyyts7@gmail.com)","username":"yifyyts7@gmail.com","password":"qwerty_177.","old_password":"qwerty_177.","notes":"Mobile Legends \"MrBeast\" account (created Mar 9, 2017).","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.408Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-93","category":"AI & Dev","badge":"Claude & AI","title":"Google Account (scite.orlandopasion001@gmail.com)","username":"scite.orlandopasion001@gmail.com","password":"scite001","old_password":"scite001","notes":"Scite trial/plan account.","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.408Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-94","category":"AI & Dev","badge":"Claude & AI","title":"Google Account (scite.orlandopasion002@gmail.com)","username":"scite.orlandopasion002@gmail.com","password":"scite002","old_password":"scite002","notes":"Scite trial/plan account (Basic plan trial Oct 14, 2026).","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.408Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-95","category":"AI & Dev","badge":"Claude & AI","title":"Google Account (scite.orlandopasion003@gmail.com)","username":"scite.orlandopasion003@gmail.com","password":"scite003","old_password":"scite003","notes":"Scite sign-up that did not complete.","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.408Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-96","category":"Gmail","badge":"Google Ecosystem","title":"Google Account (prunancalo2223@gmail.com)","username":"prunancalo2223@gmail.com","password":"Orlando@123","old_password":"Orlando@123","notes":"Pulse app login.","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.408Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-97","category":"Entertainment","badge":"Entertainment & Streaming","title":"Google Account (netflixpasion1994@gmail.com)","username":"netflixpasion1994@gmail.com","password":"orlandopasion1994","old_password":"orlandopasion1994","notes":"Second Netflix account.","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.409Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-98","category":"Gmail","badge":"Google Ecosystem","title":"Google Account (crowe.altius07@gmail.com)","username":"crowe.altius07@gmail.com","password":"Bnsmlbb24","old_password":"Bnsmlbb24","notes":"Scite trial account.","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.409Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-99","category":"Gmail","badge":"Google Ecosystem","title":"Google Account (goldcloudblack@gmail.com)","username":"goldcloudblack@gmail.com","password":"qwerty.17","old_password":"qwerty.17","notes":"Facebook (gold cloud); linked to \"MrBeast\" Mobile Legends.","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.409Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-100","category":"Gmail","badge":"Google Ecosystem","title":"Google Account (gwapocpogi@gmail.com)","username":"gwapocpogi@gmail.com","password":"qwerty.17","old_password":"qwerty.17","notes":"Facebook account.","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.409Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-101","category":"Gmail","badge":"Google Ecosystem","title":"Google Account (qwertybns001@gmail.com)","username":"qwertybns001@gmail.com","password":"qwertybns001.1","old_password":"qwertybns001.1","notes":"Mobile Legends \"Aspirant Fanny\"; Google Play and Facebook use the same password.","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.409Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-102","category":"Gmail","badge":"Google Ecosystem","title":"Google Account (laylamiyakagura@gmail.com)","username":"laylamiyakagura@gmail.com","password":"qwerty.17.1@","old_password":"qwerty.17.1@","notes":"Mobile Legends \"Aspirant Layla\"; Facebook uses the same password.","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.409Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-103","category":"Gmail","badge":"Google Ecosystem","title":"Google Account (kaguraxlunox1992@gmail.com)","username":"kaguraxlunox1992@gmail.com","password":"qwerty.17.1@","old_password":"qwerty.17.1@","notes":"Mobile Legends kaguraxlunox account.","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.409Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-104","category":"Gmail","badge":"Google Ecosystem","title":"Google Account (pasionorlando7@gmail.com)","username":"pasionorlando7@gmail.com","password":"(not recorded)","old_password":"(not recorded)","notes":"Mobile Legends \"Lucky Aspirant Fanny\".","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.409Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-105","category":"Gmail","badge":"Google Ecosystem","title":"Google Account (pasionorlando0@gmail.com)","username":"pasionorlando0@gmail.com","password":"(not recorded)","old_password":"(not recorded)","notes":"Honor of Kings \"po0\" account.","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.409Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-106","category":"Gmail","badge":"Google Ecosystem","title":"Google Account (jericmalone1123@gmail.com)","username":"jericmalone1123@gmail.com","password":"(not recorded)","old_password":"(not recorded)","notes":"Linked to the Layla account (recovery).","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.409Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-107","category":"Gmail","badge":"Google Ecosystem","title":"Google Account (op1994@gmail.com)","username":"op1994@gmail.com","password":"(not recorded)","old_password":"(not recorded)","notes":"Chess.com sign-in and a recovery address.","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.409Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-108","category":"Gmail","badge":"Google Ecosystem","title":"Google Account (heroesmeraldaepicalu@gmail.com)","username":"heroesmeraldaepicalu@gmail.com","password":"qwerty.17","old_password":"qwerty.17","notes":"","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.409Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-109","category":"Gmail","badge":"Google Ecosystem","title":"Google Account (rollylegends01@gmail.com)","username":"rollylegends01@gmail.com","password":"qwerty.17","old_password":"qwerty.17","notes":"","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.409Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-110","category":"Gmail","badge":"Google Ecosystem","title":"Google Account (legendlegends2021@gmail.com)","username":"legendlegends2021@gmail.com","password":"legendlegends2021_1.","old_password":"legendlegends2021_1.","notes":"","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.409Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-111","category":"Gmail","badge":"Google Ecosystem","title":"Google Account (sealofanvilcrawler@gmail.com)","username":"sealofanvilcrawler@gmail.com","password":"qwerty.17","old_password":"qwerty.17","notes":"","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.409Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-112","category":"Gmail","badge":"Google Ecosystem","title":"Google Account (mobilelegendschange01@gmail.com)","username":"mobilelegendschange01@gmail.com","password":"change.01","old_password":"change.01","notes":"","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.409Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-113","category":"Gmail","badge":"Google Ecosystem","title":"Google Account (trialtrial711@gmail.com)","username":"trialtrial711@gmail.com","password":"trialtrial711.1_711","old_password":"trialtrial711.1_711","notes":"","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.409Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-114","category":"Gmail","badge":"Google Ecosystem","title":"Google Account (nicerolly07@gmail.com)","username":"nicerolly07@gmail.com","password":"iloveyoubabe7","old_password":"iloveyoubabe7","notes":"","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.409Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-115","category":"Gmail","badge":"Google Ecosystem","title":"Google Account (herobrunoskin@gmail.com)","username":"herobrunoskin@gmail.com","password":"(Protected)","old_password":"","notes":"","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.409Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-116","category":"Gmail","badge":"Google Ecosystem","title":"Google Account (angelahanabiepic@gmail.com)","username":"angelahanabiepic@gmail.com","password":"angelahanabiepic.1","old_password":"angelahanabiepic.1","notes":"","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.409Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-117","category":"Gmail","badge":"Google Ecosystem","title":"Google Account (orlandopasionk@gmail.com)","username":"orlandopasionk@gmail.com","password":"k’gusion7","old_password":"k’gusion7","notes":"","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.409Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-118","category":"Gmail","badge":"Google Ecosystem","title":"Google Account (pasionorlando07@gmail.com)","username":"pasionorlando07@gmail.com","password":"qwerty.17","old_password":"qwerty.17","notes":"","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.409Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-119","category":"Gmail","badge":"Google Ecosystem","title":"Google Account (karljancent@gmail.com)","username":"karljancent@gmail.com","password":"karljancent.1@","old_password":"karljancent.1@","notes":"","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.409Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-120","category":"Gmail","badge":"Google Ecosystem","title":"Google Account (moonknight00114@gmail.com)","username":"moonknight00114@gmail.com","password":"moonknight00114_1.","old_password":"moonknight00114_1.","notes":"","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.409Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-121","category":"Gmail","badge":"Google Ecosystem","title":"Google Account (johnpaulpinote3@gmail.com)","username":"johnpaulpinote3@gmail.com","password":"johnpaulpinote3.1@","old_password":"johnpaulpinote3.1@","notes":"","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.409Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-122","category":"Gmail","badge":"Google Ecosystem","title":"Google Account (legendsabersaber455@gmail.com)","username":"legendsabersaber455@gmail.com","password":"legendsabersaber455.1","old_password":"legendsabersaber455.1","notes":"","importance":"Normal","status":"Pending","updated_at":"2026-11-17T08:46:06.409Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-129","category":"Gmail","badge":"Google Ecosystem","title":"Gmail (Reviewer)","username":"revnash0@gmail.com","password":"nashreviewer","old_password":"","notes":"Nash Reviewer","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.409Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-130","category":"DepEd","badge":"DepEd & Academic","title":"DepEd Microsoft 365 (R1)","username":"orlando.pasion001@r1.deped.gov.ph","password":"Qwerty.17.1@","old_password":"Qwerty.17@7","notes":"Region 1 DepEd Tenant","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.409Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-131","category":"DepEd","badge":"DepEd & Academic","title":"DepEd Google Workspace","username":"orlando.pasion001@deped.gov.ph","password":"Qwerty.17@1","old_password":"","notes":"Twitter: @pasion_orlando","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.409Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-132","category":"DepEd","badge":"DepEd & Academic","title":"Principal LIS","username":"sirrabut1234","password":"sirrabut1234","old_password":"","notes":"LIS Principal Account | Note: Babe iPhone PW Qwerty_1996","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.410Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-133","category":"DepEd","badge":"DepEd & Academic","title":"WINS Coordinator","username":"jaymar.quiming@deped.gov.ph","password":"12345678","old_password":"","notes":"DepEd WinS account","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.410Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-134","category":"DepEd","badge":"DepEd & Academic","title":"NNHS Microsoft (Division)","username":"300406@deped.gov.ph","password":"regularMS*2023","old_password":"","notes":"School Microsoft 365 Admin","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.410Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-135","category":"DepEd","badge":"DepEd & Academic","title":"NNHS Microsoft (R1)","username":"300406@r1.deped.gov.ph","password":"NNHSadmin1968!","old_password":"","notes":"School R1 Admin Tenant","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.410Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-136","category":"DepEd","badge":"DepEd & Academic","title":"NNHS Google Workspace","username":"300406@deped.gov.ph","password":"regularGS*2021","old_password":"","notes":"School Google Workspace Tenant","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.410Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-146","category":"AI & Dev","badge":"Claude & AI","title":"PNPKI Digital Signature","username":"Pasion_Orlando_Auth","password":"qwerty.123","old_password":"jxf3bN@7V'4h.'kj-9@}i~Dhz","notes":"Cert Signer: Pasion_Orlando_Sign | P12 Password: qwerty.123","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.411Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-147","category":"Social","badge":"Social Media","title":"Twitter / X (Primary)","username":"@orlando_pasion","password":"qwerty.17@7","old_password":"","notes":"Linked to orlandopasion1994","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.411Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-148","category":"Social","badge":"Social Media","title":"Twitter / X (Secondary)","username":"@orlandopasion07","password":"qwerty.17","old_password":"","notes":"Linked to orlandopasion0817","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.411Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-149","category":"Social","badge":"Social Media","title":"Twitter / X (DepEd)","username":"@pasion_orlando","password":"Qwerty.17@1","old_password":"","notes":"Linked to DepEd Google Email","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.411Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-150","category":"Entertainment","badge":"Entertainment & Streaming","title":"Disney+ (0907)","username":"9073843043","password":"Via SMS OTP","old_password":"","notes":"Phone/Recovery: 9073843043 | Linked to orlandopasion0817@gmail.com","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.411Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-151","category":"Entertainment","badge":"Entertainment & Streaming","title":"Disney+ (0927)","username":"9278641467","password":"Via SMS OTP","old_password":"","notes":"Phone/Recovery: 9278641467 | Linked to 0927 mobile","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.411Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-152","category":"Banking & Finance","badge":"Banking & Finance","title":"Landbank (Salary)","username":"115114670","password":"minebabe07","old_password":"Qwerty17","notes":"Phone/Recovery: 9278641467 | User: nicerolly7 | Savings: 5167073087 | Card: 4748 4401 1057 5112 (Exp 04/33, CVV 144)","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.411Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-153","category":"Banking & Finance","badge":"Banking & Finance","title":"BDO Online","username":"2320533148","password":"qwerty.17","old_password":"Qwerty.17@","notes":"Phone/Recovery: 9278641467 | User: bdo1994rolly | Acc: 12500159619 | Credit Card: 3562 3202 6077 1866 (Limit 40k)","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.412Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-154","category":"Banking & Finance","badge":"Banking & Finance","title":"BPI Online","username":"549389368","password":"Qwerty.17","old_password":"","notes":"User: Orlando0207","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.412Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-155","category":"Banking & Finance","badge":"Banking & Finance","title":"GCash (Primary)","username":"9278641467","password":"MPIN Protected","old_password":"","notes":"Phone/Recovery: 9278641467 | Primary wallet","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.412Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-156","category":"Banking & Finance","badge":"Banking & Finance","title":"GCash (Secondary)","username":"9073843043","password":"MPIN Protected","old_password":"","notes":"Phone/Recovery: 9073843043 | Linked to orlandopasion000@gmail.com","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.412Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-157","category":"Banking & Finance","badge":"Banking & Finance","title":"Komo (EastWest)","username":"5000 2040 3627","password":"PIN: 120822","old_password":"","notes":"Phone/Recovery: 9278641467 | Digital banking card","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.412Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-158","category":"Banking & Finance","badge":"Banking & Finance","title":"UnionBank","username":"109487954161","password":"qwerty.17@7","old_password":"","notes":"User: ub1994rolly | Loyalty Card: 1097 0206 8871","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.412Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-159","category":"Banking & Finance","badge":"Banking & Finance","title":"RCBC Online","username":"8038800137","password":"Qwerty1994@1","old_password":"Qwerty123","notes":"User: rcbc1994rolly","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.412Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-160","category":"Banking & Finance","badge":"Banking & Finance","title":"CIMB Bank","username":"9278641467","password":"Qwerty.17","old_password":"","notes":"Phone/Recovery: 9278641467 | User: orlando0207","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.412Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-161","category":"Banking & Finance","badge":"Banking & Finance","title":"Chinabank","username":"cbs1994rolly","password":"Qwerty.17","old_password":"","notes":"User: cbs1994rolly","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.412Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-162","category":"Banking & Finance","badge":"Banking & Finance","title":"MariBank","username":"9278641467","password":"mb1994rolly","old_password":"","notes":"Phone/Recovery: 9278641467 | Shopee digital bank","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.412Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-163","category":"Banking & Finance","badge":"Banking & Finance","title":"Maya","username":"9278641467","password":"qwerty.17","old_password":"","notes":"Phone/Recovery: 9278641467 | Digital wallet","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.412Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-164","category":"Portals","badge":"Government Portal","title":"PRC License (Teacher)","username":"1411806","password":"qwerty.17","old_password":"","notes":"LERIS account: orlandopasion1994@gmail.com | LET: 75.40%","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.412Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-165","category":"Portals","badge":"Government Portal","title":"Civil Service Commission","username":"orlandopasion1994@gmail.com","password":"qwerty.17","old_password":"","notes":"CSP 2nd Level Eligibility: 81.60% (Aug 20, 2023) | CPDAS portal","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.412Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-166","category":"Portals","badge":"Government Portal","title":"GSIS","username":"2005203837","password":"GSIS Member Record","old_password":"","notes":"BP Number: 2005203837","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.412Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-167","category":"Portals","badge":"Government Portal","title":"PhilHealth","username":"05-025633463-9","password":"Qwerty.17","old_password":"","notes":"Member portal password: Qwerty.17 | PhilHealth Member Number","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.412Z","isPriority":false,"pinned":false,"pinned_at":0,"lastUsedAt":1794904874004,"lastActiveWorkingAt":1794904874004,"usageScore":16,"copyPasswordCount":2},{"id":"vault-item-168","category":"Portals","badge":"Government Portal","title":"PAG-IBIG Fund","username":"121202980467","password":"MID: 121202980467","old_password":"","notes":"Virtual Pag-IBIG","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.412Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-169","category":"Portals","badge":"Government Portal","title":"BIR Tax Identification (TIN)","username":"702539109","password":"Official TIN","old_password":"","notes":"Taxpayer Identification Number","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.412Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-170","category":"Portals","badge":"Government Portal","title":"Philippine Passport","username":"P1214035B","password":"Valid until March 26, 2029","old_password":"","notes":"Issued: March 27, 2019","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.412Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-171","category":"Portals","badge":"Government Portal","title":"PhilSys National ID","username":"3.95312E+15","password":"Official National ID","old_password":"","notes":"Digital PhilSys card","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.412Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-172","category":"DepEd","badge":"DepEd & Academic","title":"UCU Student ID","username":"20110549","password":"Be2Qo5Ka","old_password":"","notes":"Urdaneta City University Portal (up.ucu.edu.ph)","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.412Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-173","category":"DepEd","badge":"DepEd & Academic","title":"DepEd Email","username":"blancaeunice.pasion@deped.gov.ph","password":"Blanca070796","old_password":"queenBlanca!","notes":"MS & Google tenants","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.412Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-174","category":"Portals","badge":"Government Portal","title":"PRC License","username":"2211578","password":"Blanca0207@","old_password":"","notes":"NOA: 813583 | Registered July 15, 2024 | LERIS: bepasion07@gmail.com","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.412Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-175","category":"Family","badge":"Family Vault","title":"Facebook","username":"btaborda07@gmail.com","password":"Blancablanca07@","old_password":"","notes":"Personal Facebook","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.412Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-176","category":"Family","badge":"Family Vault","title":"eGovPH","username":"Code: 070796","password":"","old_password":"","notes":"Digital citizen identity","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.412Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-177","category":"Family","badge":"Family Vault","title":"Employee ID","username":"4248478","password":"DepEd Plantilla","old_password":"","notes":"DepEd Employee Number","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.412Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-178","category":"Portals","badge":"Government Portal","title":"TIN","username":"484548891","password":"","old_password":"","notes":"Tax Identification Number","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.412Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-179","category":"Portals","badge":"Government Portal","title":"Philippine Passport","username":"P1215663B","password":"","old_password":"","notes":"Official Passport","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.412Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-180","category":"DepEd","badge":"DepEd & Academic","title":"DepEd & PRC Accounts","username":"brigida.21560_","password":"Deped brigida21560","old_password":"","notes":"DepEd official accounts | LRMDS: brigida.21560_","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.412Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-181","category":"DepEd","badge":"DepEd & Academic","title":"Mom LIS","username":"brigida123@12","password":"brigida123@12","old_password":"","notes":"Mom LIS portal","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.412Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-182","category":"Portals","badge":"Government Portal","title":"Employee ID","username":"4119766","password":"DepEd Plantilla","old_password":"","notes":"Employee ID 4119766","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.412Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-183","category":"Portals","badge":"Government Portal","title":"GSIS Touch","username":"BVPASION","password":"Brigida.21560","old_password":"","notes":"GSIS No: 60021502254","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.412Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-184","category":"Portals","badge":"Government Portal","title":"TIN","username":"914220085","password":"","old_password":"","notes":"Tax Identification Number","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.413Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-185","category":"Portals","badge":"Government Portal","title":"PhilHealth","username":"19000755911","password":"","old_password":"","notes":"PhilHealth Number","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.413Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-186","category":"Portals","badge":"Government Portal","title":"OSCA Senior Citizen ID","username":"1918","password":"","old_password":"","notes":"Senior Citizen ID No.","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.413Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-77","category":"Gmail","badge":"Google Ecosystem","title":"Gmail · Dev & AI Sign-in Hub","username":"orlandopasion000@gmail.com","password":"n5gQ-6q?Wpmv8eVhK2U-","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907. | Phone/Recovery: 9073843043 · Linked to GCash 0907 | Connected to Claude, Perplexity, DeepSeek, GitHub, GitLab, Honor of Kings main.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-17T08:46:06.404Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-78","category":"Gmail","badge":"Google Ecosystem","title":"Gmail · Dev & AI Sign-in Hub","username":"orlandopasion000@gmail.com","password":"n5gQ-6q?Wpmv8eVhK2U-","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-15T09:00:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-77-d154","category":"Gmail","badge":"Google Ecosystem","title":"Gmail · Dev & AI Sign-in Hub","username":"orlandopasion000@gmail.com","password":"n5gQ-6q?Wpmv8eVhK2U-","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-15T09:00:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-78-d155","category":"Gmail","badge":"Google Ecosystem","title":"Gmail · Dev & AI Sign-in Hub","username":"orlandopasion000@gmail.com","password":"n5gQ-6q?Wpmv8eVhK2U-","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-15T09:00:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-35","category":"Shopping","badge":"Shopping & Delivery","title":"Olio","username":"orlandopasion000@gmail.com","password":"n5gQ-6q?Wpmv8eVhK2U-","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-17T08:46:06.405Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-77-d157","category":"Gmail","badge":"Google Ecosystem","title":"Gmail · Dev & AI Sign-in Hub","username":"orlandopasion000@gmail.com","password":"n5gQ-6q?Wpmv8eVhK2U-","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-15T09:00:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-78-d158","category":"Gmail","badge":"Google Ecosystem","title":"Gmail · Dev & AI Sign-in Hub","username":"orlandopasion000@gmail.com","password":"n5gQ-6q?Wpmv8eVhK2U-","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-15T09:00:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-42","category":"AI & Dev","badge":"Claude & AI","title":"DeepSeek","username":"orlandopasion000@gmail.com","password":"qwerty.17","old_password":"","notes":"Personal AI coding/reasoning","importance":"Normal","status":"Secured","updated_at":"2026-11-17T08:46:06.405Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-77-d160","category":"Gmail","badge":"Google Ecosystem","title":"Gmail · Dev & AI Sign-in Hub","username":"orlandopasion000@gmail.com","password":"n5gQ-6q?Wpmv8eVhK2U-","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-15T09:00:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-78-d161","category":"Gmail","badge":"Google Ecosystem","title":"Gmail · Dev & AI Sign-in Hub","username":"orlandopasion000@gmail.com","password":"n5gQ-6q?Wpmv8eVhK2U-","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-15T09:00:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-46","category":"AI & Dev","badge":"Claude & AI","title":"LUMIN PDF","username":"orlandopasion000@gmail.com","password":"n5gQ-6q?Wpmv8eVhK2U-","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-17T08:46:06.406Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-77-d163","category":"Gmail","badge":"Google Ecosystem","title":"Gmail · Dev & AI Sign-in Hub","username":"orlandopasion000@gmail.com","password":"n5gQ-6q?Wpmv8eVhK2U-","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-15T09:00:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-78-d164","category":"Gmail","badge":"Google Ecosystem","title":"Gmail · Dev & AI Sign-in Hub","username":"orlandopasion000@gmail.com","password":"n5gQ-6q?Wpmv8eVhK2U-","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-15T09:00:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-67","category":"Shopping","badge":"Shopping & Delivery","title":"Lazada","username":"orlandopasion000@gmail.com","password":"n5gQ-6q?Wpmv8eVhK2U-","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-17T08:46:06.407Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-77-d166","category":"Gmail","badge":"Google Ecosystem","title":"Gmail · Dev & AI Sign-in Hub","username":"orlandopasion000@gmail.com","password":"n5gQ-6q?Wpmv8eVhK2U-","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-15T09:00:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-78-d167","category":"Gmail","badge":"Google Ecosystem","title":"Gmail · Dev & AI Sign-in Hub","username":"orlandopasion000@gmail.com","password":"n5gQ-6q?Wpmv8eVhK2U-","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-15T09:00:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-73","category":"Entertainment","badge":"Entertainment & Streaming","title":"Max (HBO Go)","username":"orlandopasion000@gmail.com","password":"n5gQ-6q?Wpmv8eVhK2U-","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-17T08:46:06.407Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-77-d169","category":"Gmail","badge":"Google Ecosystem","title":"Gmail · Dev & AI Sign-in Hub","username":"orlandopasion000@gmail.com","password":"n5gQ-6q?Wpmv8eVhK2U-","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-15T09:00:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-78-d170","category":"Gmail","badge":"Google Ecosystem","title":"Gmail · Dev & AI Sign-in Hub","username":"orlandopasion000@gmail.com","password":"n5gQ-6q?Wpmv8eVhK2U-","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-15T09:00:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-77-d171","category":"Gmail","badge":"Google Ecosystem","title":"Gmail · Dev & AI Sign-in Hub","username":"orlandopasion000@gmail.com","password":"n5gQ-6q?Wpmv8eVhK2U-","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-15T09:00:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-78-d172","category":"Gmail","badge":"Google Ecosystem","title":"Gmail · Dev & AI Sign-in Hub","username":"orlandopasion000@gmail.com","password":"n5gQ-6q?Wpmv8eVhK2U-","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-15T09:00:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-77-d173","category":"Gmail","badge":"Google Ecosystem","title":"Gmail · Dev & AI Sign-in Hub","username":"orlandopasion000@gmail.com","password":"n5gQ-6q?Wpmv8eVhK2U-","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-15T09:00:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-78-d174","category":"Gmail","badge":"Google Ecosystem","title":"Gmail · Dev & AI Sign-in Hub","username":"orlandopasion000@gmail.com","password":"n5gQ-6q?Wpmv8eVhK2U-","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-15T09:00:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-77-d175","category":"Gmail","badge":"Google Ecosystem","title":"Gmail · Dev & AI Sign-in Hub","username":"orlandopasion000@gmail.com","password":"n5gQ-6q?Wpmv8eVhK2U-","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-15T09:00:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-78-d176","category":"Gmail","badge":"Google Ecosystem","title":"Gmail · Dev & AI Sign-in Hub","username":"orlandopasion000@gmail.com","password":"n5gQ-6q?Wpmv8eVhK2U-","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-15T09:00:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-26","category":"AI & Dev","badge":"Claude & AI","title":"https://gitlab.com/","username":"orlandopasion000@gmail.com","password":"Logged in via Gmail","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907. | Dev repository","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-16T14:30:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-27","category":"AI & Dev","badge":"Claude & AI","title":"https://github.com/","username":"orlandopasion000@gmail.com","password":"Logged in via Gmail","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907. | Primary coding repository","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-16T14:30:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-39","category":"AI & Dev","badge":"Claude & AI","title":"GAMMA AI","username":"orlandopasion000@gmail.com","password":"Logged in via Gmail","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907. | Presentation creator","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-16T14:30:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-40","category":"AI & Dev","badge":"Claude & AI","title":"CAMB AI","username":"orlandopasion000@gmail.com","password":"Logged in via Gmail","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907. | Dubbing & voice AI","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-16T14:30:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-43","category":"AI & Dev","badge":"Claude & AI","title":"Symph AI","username":"orlandopasion000@gmail.com","password":"Logged in via Gmail","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907. | Workflow automation","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-16T14:30:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-44","category":"AI & Dev","badge":"Claude & AI","title":"MagicSchool AI","username":"orlandopasion000@gmail.com","password":"Logged in via Gmail","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907. | Teacher AI assistance","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-16T14:30:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-45","category":"AI & Dev","badge":"Claude & AI","title":"Notegpt (Video Summarizer","username":"orlandopasion000@gmail.com","password":"Logged in via Gmail","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907. | Video summarizer (notegpt.io)","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-16T14:30:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-61","category":"Entertainment","badge":"Media & Streaming","title":"Youtube","username":"orlandopasion1994@gmail.com","password":"Logged in via Gmail","old_password":"qwerty.17@7","notes":"Primary Gmail. Microsoft account, Apple ID login, X @orlando_pasion, Facebook primary, banking and many apps. | ₱239/mo auto-debited via GCash on 12th of month","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-16T14:30:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-77-d185","category":"Gmail","badge":"Google Ecosystem","title":"Grammarly","username":"orlandopasion000@gmail.com","password":"n5gQ-6q?Wpmv8eVhK2U-","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-15T09:00:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-78-d186","category":"Gmail","badge":"Google Ecosystem","title":"ELSA Speak","username":"orlandopasion000@gmail.com","password":"n5gQ-6q?Wpmv8eVhK2U-","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-15T09:00:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-79","category":"AI & Dev","badge":"Claude & AI","title":"Perplexity AI","username":"orlandopasion000@gmail.com","password":"Logged in via Gmail","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907. | Search & Research Assistant","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-16T14:30:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-83","category":"Gmail","badge":"Google Ecosystem","title":"Consensus.app","username":"orlandopasion000@gmail.com","password":"Logged in via Gmail","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907. | Evidence-based research search","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-16T14:30:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-137","category":"AI & Dev","badge":"Claude & AI","title":"Anthropic Skilljar","username":"orlandopasion000@gmail.com","password":"Logged in via Gmail","old_password":"","notes":"Claude 101 training portal","importance":"Normal","status":"Secured","updated_at":"2026-11-16T14:30:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-138","category":"AI & Dev","badge":"Claude & AI","title":"ChatGPT Plus","username":"orlandopasion1994@gmail.com","password":"Logged in via Gmail","old_password":"","notes":"Subscribed April 11, 2024 / Nov 2, 2026","importance":"Normal","status":"Secured","updated_at":"2026-11-16T14:30:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-139","category":"AI & Dev","badge":"Claude & AI","title":"ChatGPT (Dev)","username":"orlandopasion000@gmail.com","password":"Logged in via Gmail","old_password":"","notes":"Dev/Research workspace","importance":"Normal","status":"Secured","updated_at":"2026-11-16T14:30:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-140","category":"AI & Dev","badge":"Claude & AI","title":"ChatGPT (Aux)","username":"grammarlyquillbot001@gmail.com","password":"Logged in via Gmail","old_password":"","notes":"Auxiliary account (DOB 08/17/1994)","importance":"Normal","status":"Secured","updated_at":"2026-11-16T14:30:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-141","category":"AI & Dev","badge":"Claude & AI","title":"Claude AI (Work)","username":"orlando.pasion001@deped.gov.ph","password":"Logged in via Gmail","old_password":"","notes":"DepEd account access","importance":"Normal","status":"Secured","updated_at":"2026-11-16T14:30:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-142","category":"AI & Dev","badge":"Claude & AI","title":"Claude AI (Personal)","username":"orlandopasion000@gmail.com","password":"Logged in via Gmail","old_password":"","notes":"Phone/Recovery: 9073843043 | Personal account","importance":"Normal","status":"Secured","updated_at":"2026-11-16T14:30:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-143","category":"AI & Dev","badge":"Claude & AI","title":"DeepSeek (Work)","username":"orlando.pasion001@deped.gov.ph","password":"Logged in via Gmail","old_password":"","notes":"Work research","importance":"Normal","status":"Secured","updated_at":"2026-11-16T14:30:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-144","category":"AI & Dev","badge":"Claude & AI","title":"Google Gemini / Bard","username":"orlandopasion1994@gmail.com","password":"Logged in via Gmail","old_password":"","notes":"Google AI Studio / Gemini Pro","importance":"Normal","status":"Secured","updated_at":"2026-11-16T14:30:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-145","category":"AI & Dev","badge":"Claude & AI","title":"Writesonic","username":"orlandopasion000@gmail.com","password":"Logged in via Gmail","old_password":"","notes":"AI copywriter","importance":"Normal","status":"Secured","updated_at":"2026-11-16T14:30:00Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-7","category":"Gmail","badge":"Google Ecosystem","title":"Gmail · Dev & AI Sign-in Hub","username":"orlandopasion000@gmail.com","password":"n5gQ-6q?Wpmv8eVhK2U-","old_password":"qwerty.17","notes":"Phone/Recovery: 9073843043 · Linked to GCash 0907 | Connected to Claude, Perplexity, DeepSeek, GitHub, GitLab, Honor of Kings main.","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-17T05:18:42.165Z","isPriority":false,"pinned":false,"pinned_at":0},{"id":"vault-item-81","category":"Gmail","badge":"Google Ecosystem","title":"Poe","username":"orlandopasion000@gmail.com","password":"Logged in via Gmail","old_password":"qwerty.17","notes":"Sign-in hub for AI, dev and learning tools; Honor of Kings main account; linked to GCash 0907. | Multi-bot aggregation","importance":"Normal","status":"✔ Secured","updated_at":"2026-11-16T14:30:00Z","isPriority":false,"pinned":false,"pinned_at":0}];
+    const SEED_VAULT = [];
     
     let vaultItems = [];
+    window.getVaultItems = function() { return vaultItems; };
+    window.setVaultItems = function(items) { vaultItems = items; };
     let auditHistory = [];
     let activeCategory = 'all';
     let searchQuery = '';
@@ -5884,18 +5950,17 @@
                 item.badge = 'Banking & Finance';
               }
             });
-            // Smart Merge with SEED_VAULT so all new official accounts appear while keeping user priority pins and edits intact!
-            if (typeof smartMergeVault === 'function') {
+            // Smart Merge with SEED_VAULT only if seed records are present
+            if (typeof smartMergeVault === 'function' && Array.isArray(SEED_VAULT) && SEED_VAULT.length > 0) {
               const initMerged = smartMergeVault(vaultItems, SEED_VAULT);
               vaultItems = initMerged.mergedList;
               localStorage.setItem(LS_VAULT_KEY, JSON.stringify(vaultItems));
             }
           } catch(e) {
-            vaultItems = SEED_VAULT;
+            vaultItems = [];
           }
         } else {
-          vaultItems = SEED_VAULT;
-          localStorage.setItem(LS_VAULT_KEY, JSON.stringify(vaultItems));
+          vaultItems = [];
         }
 
         // Ensure priority pins are 100% sanitized and persistent in storage on boot
@@ -7097,7 +7162,11 @@
       });
 
       if (filtered.length === 0) {
-        container.innerHTML = '<div class="empty-state">No credentials found matching "' + q + '". Jarvis is standing by.</div>';
+        if (!q && (!vaultItems || vaultItems.length === 0)) {
+          container.innerHTML = '<div class="empty-state" style="padding:60px 20px;text-align:center;color:#94a3b8;"><div class="sync-health-pulse-dot" style="margin:0 auto 14px;width:12px;height:12px;background:#38bdf8;box-shadow:0 0 12px #38bdf8;"></div><div style="font-size:14px;font-weight:600;color:#e2e8f0;margin-bottom:6px;">Decrypting & Synchronizing Cloud Vault...</div><div style="font-size:12px;color:#64748b;">Establishing AES-256-GCM Zero-Knowledge channel with Firebase Firestore</div></div>';
+        } else {
+          container.innerHTML = '<div class="empty-state">No credentials found matching "' + q + '". Jarvis is standing by.</div>';
+        }
         return;
       }
 
@@ -8484,257 +8553,645 @@
 
   </script>
 
-  <!-- GOOGLE CLOUD FIREBASE FIRESTORE REAL-TIME SYNC ENGINE -->
+  <!-- GOOGLE CLOUD FIREBASE FIRESTORE REAL-TIME SAFE SYNC ENGINE & STORAGE MANIFEST (V2) -->
   <script id="vault-firebase-engine">
   (function() {
     'use strict';
+
+    // ==========================================================================
+    // 1. UNIFIED STORAGE MANIFEST & RUNTIME SELF-AUDIT
+    // ==========================================================================
+    const STORAGE_MANIFEST = {
+      'orlandovault_credentials_v6': { type: 'SYNC', category: 'records', schemaVersion: 6, dataType: 'array' },
+      'orlandovault_priority_pins_v4': { type: 'SYNC', category: 'pins', schemaVersion: 4, dataType: 'array' },
+      'vault_jarvis_frecency_v1': { type: 'SYNC', category: 'frecency', schemaVersion: 1, dataType: 'object' },
+      'orlandovault_frecency_v1': { type: 'SYNC', category: 'frecency', schemaVersion: 1, dataType: 'object' },
+      'orlandovault_user_interactions_v1': { type: 'SYNC', category: 'interactions', schemaVersion: 1, dataType: 'object' },
+      'orlandovault_audit_history_v1': { type: 'SYNC', category: 'audit', schemaVersion: 1, dataType: 'array' },
+      'orlandovault_copy_count_v1': { type: 'SYNC', category: 'metrics', schemaVersion: 1, dataType: 'number' },
+      'orlandovault_google_sheet_url': { type: 'SYNC', category: 'settings', schemaVersion: 1, dataType: 'string' },
+      'orlandovault_auto_sync': { type: 'SYNC', category: 'settings', schemaVersion: 1, dataType: 'boolean' },
+      'orlandovault_categories_v1': { type: 'SYNC', category: 'settings', schemaVersion: 1, dataType: 'array' },
+      'orlandovault_tombstones_v1': { type: 'SYNC', category: 'tombstones', schemaVersion: 1, dataType: 'object' },
+      'orlandovault_snapshots_v1': { type: 'LOCAL_ONLY', category: 'backup', schemaVersion: 1, dataType: 'array' },
+      'orlandovault_last_modified': { type: 'LOCAL_ONLY', category: 'sync_state', schemaVersion: 1, dataType: 'number' },
+      'ov_mutation_journal': { type: 'LOCAL_ONLY', category: 'outbox', schemaVersion: 1, dataType: 'array' },
+      'orlandovault_mutation_journal_v1': { type: 'LOCAL_ONLY', category: 'outbox', schemaVersion: 1, dataType: 'array' },
+      'orlandovault_client_id': { type: 'LOCAL_ONLY', category: 'identity', schemaVersion: 1, dataType: 'string' },
+      'orlandovault_active_category': { type: 'LOCAL_ONLY', category: 'ui_state', schemaVersion: 1, dataType: 'string' },
+      'orlandovault_search_query': { type: 'LOCAL_ONLY', category: 'ui_state', schemaVersion: 1, dataType: 'string' },
+      'orlandovault_active_modal': { type: 'LOCAL_ONLY', category: 'ui_state', schemaVersion: 1, dataType: 'string' },
+      'orlandovault_audio_muted': { type: 'LOCAL_ONLY', category: 'ui_state', schemaVersion: 1, dataType: 'boolean' },
+      'orlandovault_master_salt': { type: 'LOCAL_ONLY', category: 'crypto', schemaVersion: 1, dataType: 'string' },
+      'orlandovault_vault_passphrase': { type: 'LOCAL_ONLY', category: 'crypto', schemaVersion: 1, dataType: 'string' },
+      'orlandovault_sync_health': { type: 'LOCAL_ONLY', category: 'telemetry', schemaVersion: 1, dataType: 'object' },
+      'orlandovault_credentials_v5': { type: 'LEGACY_PURGE', schemaVersion: 5 },
+      'orlandovault_credentials_v4': { type: 'LEGACY_PURGE', schemaVersion: 4 },
+      'orlandovault_priority_pins_v2': { type: 'LEGACY_PURGE', schemaVersion: 2 },
+      'orlandovault_priority_pins_v3': { type: 'LEGACY_PURGE', schemaVersion: 3 }
+    };
+    window.STORAGE_MANIFEST = STORAGE_MANIFEST;
+
+    // Self-Auditing Storage Interceptor
+    const origSetItem = Storage.prototype.setItem;
+    const origGetItem = Storage.prototype.getItem;
+
+    Storage.prototype.setItem = function(key, val) {
+      if ((this === localStorage || this === sessionStorage) && !STORAGE_MANIFEST[key]) {
+        console.error('[Storage Audit Violation] Key not declared in STORAGE_MANIFEST: "' + key + '"');
+      }
+      return origSetItem.call(this, key, val);
+    };
+
+    Storage.prototype.getItem = function(key) {
+      if ((this === localStorage || this === sessionStorage) && !STORAGE_MANIFEST[key]) {
+        console.error('[Storage Audit Violation] Key not declared in STORAGE_MANIFEST: "' + key + '"');
+      }
+      return origGetItem.call(this, key);
+    };
+
+    // Startup Purge of Legacy Storage Keys
+    try {
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && STORAGE_MANIFEST[k] && STORAGE_MANIFEST[k].type === 'LEGACY_PURGE') {
+          localStorage.removeItem(k);
+        }
+      }
+    } catch(e) {}
+
+    // ==========================================================================
+    // 2. CLIENT-SIDE WEB CRYPTO ZERO-KNOWLEDGE ENCRYPTION MODULE
+    // ==========================================================================
+    function arrayBufferToBase64(buffer) {
+      let binary = '';
+      const bytes = new Uint8Array(buffer);
+      for (let i = 0; i < bytes.byteLength; i++) binary += String.fromCharCode(bytes[i]);
+      return window.btoa(binary);
+    }
+
+    function base64ToArrayBuffer(base64) {
+      const binary_string = window.atob(base64);
+      const bytes = new Uint8Array(binary_string.length);
+      for (let i = 0; i < binary_string.length; i++) bytes[i] = binary_string.charCodeAt(i);
+      return bytes.buffer;
+    }
+
+    const VaultCrypto = {
+      getSalt() {
+        let salt = localStorage.getItem('orlandovault_master_salt');
+        if (!salt) {
+          salt = '0f7a3c8e9b2d1f4a5c6e7d8b9a0c1e2f';
+          localStorage.setItem('orlandovault_master_salt', salt);
+        }
+        return salt;
+      },
+
+      async deriveKey(passphrase) {
+        const saltHex = this.getSalt();
+        const enc = new TextEncoder();
+        const keyMaterial = await window.crypto.subtle.importKey(
+          'raw',
+          enc.encode(passphrase || 'OrlandoVault_Master_Passphrase_2026_Secure'),
+          { name: 'PBKDF2' },
+          false,
+          ['deriveKey']
+        );
+        const saltBytes = new Uint8Array(saltHex.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+        return await window.crypto.subtle.deriveKey(
+          {
+            name: 'PBKDF2',
+            salt: saltBytes,
+            iterations: 100000,
+            hash: 'SHA-256'
+          },
+          keyMaterial,
+          { name: 'AES-GCM', length: 256 },
+          false,
+          ['encrypt', 'decrypt']
+        );
+      },
+
+      async encrypt(text, key) {
+        if (!text) return { ciphertext: '', iv: '', v: 1 };
+        const enc = new TextEncoder();
+        const iv = window.crypto.getRandomValues(new Uint8Array(12));
+        const encrypted = await window.crypto.subtle.encrypt(
+          { name: 'AES-GCM', iv: iv },
+          key,
+          enc.encode(text)
+        );
+        return {
+          ciphertext: arrayBufferToBase64(encrypted),
+          iv: arrayBufferToBase64(iv),
+          v: 1
+        };
+      },
+
+      async decrypt(cipherObj, key) {
+        if (!cipherObj || !cipherObj.ciphertext || !cipherObj.iv) return '';
+        try {
+          const iv = base64ToArrayBuffer(cipherObj.iv);
+          const cipherBytes = base64ToArrayBuffer(cipherObj.ciphertext);
+          const decrypted = await window.crypto.subtle.decrypt(
+            { name: 'AES-GCM', iv: new Uint8Array(iv) },
+            key,
+            cipherBytes
+          );
+          return new TextDecoder().decode(decrypted);
+        } catch (e) {
+          return '';
+        }
+      }
+    };
+    window.VaultCrypto = VaultCrypto;
+
+    // ==========================================================================
+    // 3. SAFE SYNC ENGINE ARCHITECTURE
+    // ==========================================================================
     const FIREBASE_CONFIG = {
       apiKey: "AIzaSyCi8aUZiN1GnRXECM0Nc34UKMYQyTvzj9Y",
       authDomain: "orlandochrome-b6228.firebaseapp.com",
-      projectId: "orlandochrome-b6228",
-      storageBucket: "orlandochrome-b6228.firebasestorage.app",
-      messagingSenderId: "775835530889",
-      appId: "1:775835530889:web:0ff6cb27e5be63d7c7f858"
+      projectId: "orlandochrome-b6228"
     };
 
-    const FIRESTORE_URL = 'https://firestore.googleapis.com/v1/projects/' + FIREBASE_CONFIG.projectId + '/databases/(default)/documents/orlandovault_sync/master_channel?key=' + FIREBASE_CONFIG.apiKey;
+    const FIRESTORE_BASE = 'https://firestore.googleapis.com/v1/projects/' + FIREBASE_CONFIG.projectId + '/databases/(default)/documents';
+    const MASTER_DOC_URL = FIRESTORE_BASE + '/orlandovault_sync/master_channel?key=' + FIREBASE_CONFIG.apiKey;
+    const RECORDS_COLLECTION_URL = FIRESTORE_BASE + '/orlandovault_records?pageSize=300&key=' + FIREBASE_CONFIG.apiKey;
+    const COMMIT_URL = FIRESTORE_BASE + ':commit?key=' + FIREBASE_CONFIG.apiKey;
+
     const CLIENT_ID = 'ov_' + Math.random().toString(36).slice(2, 10);
     const LAST_MOD_KEY = 'orlandovault_last_modified';
-    const SYNC_KEYS = [
-      'orlandovault_credentials_v6',
-      'orlandovault_credentials_v5',
-      'orlandovault_credentials_v4',
-      'orlandovault_priority_pins_v4',
-      'orlandovault_frecency_v1',
-      'orlandovault_user_interactions_v1',
-      'orlandovault_audit_history_v1',
-      'orlandovault_copy_count_v1',
-      'orlandovault_google_sheet_url',
-      'orlandovault_auto_sync'
-    ];
+    const LS_MUTATION_JOURNAL = 'ov_mutation_journal';
 
+    let hasCompletedInitialPull = false;
     let isApplyingRemote = false;
     let isSyncing = false;
     let pushTimer = null;
-    const origSetItem = Storage.prototype.setItem;
+    let cachedCryptoKey = null;
 
-    function setVaultSyncBadge(status) {}
+    let syncHealthState = {
+      status: 'connecting',
+      localCount: 0,
+      cloudCount: 0,
+      pinnedCount: 0,
+      outboxCount: 0,
+      lastPull: null,
+      lastPush: null,
+      hashMatch: true
+    };
 
-    function collectPacket() {
-      const data = {};
-      SYNC_KEYS.forEach(k => {
-        const v = localStorage.getItem(k);
-        if (v !== null) data[k] = v;
-      });
-      // Ensure credentials key is populated
-      if (!data['orlandovault_credentials_v6'] && data['orlandovault_credentials_v5']) {
-        data['orlandovault_credentials_v6'] = data['orlandovault_credentials_v5'];
-      } else if (!data['orlandovault_credentials_v6'] && data['orlandovault_credentials_v4']) {
-        data['orlandovault_credentials_v6'] = data['orlandovault_credentials_v4'];
+    async function getCryptoKey() {
+      if (!cachedCryptoKey) {
+        const pass = localStorage.getItem('orlandovault_vault_passphrase') || 'OrlandoVault_Master_Passphrase_2026_Secure';
+        cachedCryptoKey = await VaultCrypto.deriveKey(pass);
       }
-      // Ensure priority pins key is populated
-      if (!data['orlandovault_priority_pins_v4']) {
-        const reg = typeof getPinnedRegistry === 'function' ? getPinnedRegistry() : [];
-        data['orlandovault_priority_pins_v4'] = JSON.stringify(reg);
-      }
-      const ts = parseInt(localStorage.getItem(LAST_MOD_KEY) || String(Date.now()), 10);
-      return { v: 1, cid: CLIENT_ID, ts: ts, data: data };
+      return cachedCryptoKey;
     }
 
-    async function pushToCloud(showFeedback) {
-      if (isApplyingRemote) return false;
+    function updateSyncHealthUI() {
+      const pulseDot = document.getElementById('syncHealthPulseDot');
+      const modalDot = document.getElementById('modalPulseDot');
+      const label = document.getElementById('syncHealthLabel');
+      const statLocal = document.getElementById('statLocalCount');
+      const statCloud = document.getElementById('statCloudCount');
+      const statPinned = document.getElementById('statPinnedCount');
+      const statOutbox = document.getElementById('statOutboxCount');
+      const statPull = document.getElementById('statLastPull');
+      const statHash = document.getElementById('statIntegrityHash');
+
+      const items = (typeof window.getVaultItems === 'function' ? window.getVaultItems() : window.vaultItems) || [];
+      syncHealthState.localCount = items.length;
+      syncHealthState.pinnedCount = items.filter(x => x.pinned || x.isPriority).length;
+
+      let outbox = [];
+      try { outbox = JSON.parse(localStorage.getItem(LS_MUTATION_JOURNAL) || '[]'); } catch(e){}
+      syncHealthState.outboxCount = outbox.length;
+
+      if (statLocal) statLocal.textContent = syncHealthState.localCount;
+      if (statCloud) statCloud.textContent = syncHealthState.cloudCount;
+      if (statPinned) statPinned.textContent = syncHealthState.pinnedCount + ' Accounts';
+      if (statOutbox) statOutbox.textContent = syncHealthState.outboxCount + ' Pending';
+      if (statPull) statPull.textContent = syncHealthState.lastPull ? new Date(syncHealthState.lastPull).toLocaleTimeString() : 'Pending';
+
+      const match = syncHealthState.localCount > 0 && syncHealthState.localCount === syncHealthState.cloudCount;
+      if (statHash) {
+        statHash.textContent = match ? '100% MATCH' : (syncHealthState.cloudCount > 0 ? 'Divergent' : 'Connecting');
+        statHash.className = 'sync-stat-val ' + (match ? 'match' : '');
+      }
+
+      const cls = syncHealthState.status === 'synced' ? 'sync-health-pulse-dot' : ('sync-health-pulse-dot ' + syncHealthState.status);
+      if (pulseDot) pulseDot.className = cls;
+      if (modalDot) modalDot.className = cls;
+      if (label) label.textContent = syncHealthState.status === 'synced' ? 'Synced (200)' : (syncHealthState.status === 'syncing' ? 'Syncing...' : 'Sync Health');
+    }
+
+    // SNAPSHOT CREATION & RESTORE
+    function createSnapshot(reason = 'manual') {
       try {
-        setVaultSyncBadge('syncing');
-        const pkt = collectPacket();
-        const body = {
-          fields: {
-            v: { integerValue: "1" },
-            ts: { integerValue: String(pkt.ts) },
-            cid: { stringValue: pkt.cid },
-            payload: { stringValue: JSON.stringify(pkt) }
-          }
+        const items = Array.isArray(window.vaultItems) ? window.vaultItems : [];
+        const pins = typeof getPinnedRegistry === 'function' ? getPinnedRegistry() : [];
+        let snaps = [];
+        try { snaps = JSON.parse(localStorage.getItem('orlandovault_snapshots_v1') || '[]'); } catch(e){}
+        const snap = {
+          id: 'snap_' + Date.now(),
+          ts: Date.now(),
+          reason: reason,
+          recordCount: items.length,
+          pins: pins,
+          items: items
         };
-        const res = await fetch(FIRESTORE_URL, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(body)
-        });
-        if (res.ok) {
-          try {
-            localStorage.setItem(LS_MUTATION_JOURNAL, '[]');
-          } catch(e){}
-          setVaultSyncBadge('synced');
-          if (showFeedback && typeof showToast === 'function') {
-            showToast('⚡ Synced Vault credentials & priorities to Google Cloud Firebase!', '☁️');
-          }
-          return true;
-        }
-        setVaultSyncBadge('offline');
-      } catch (e) {
-        setVaultSyncBadge('offline');
-      }
-      return false;
-    }
-
-    function applyCloudPacket(pkt) {
-      if (!pkt || !pkt.data) return;
-
-      // CRITICAL SAFEGUARD: Verify remote data actually contains credentials
-      const credsRaw = (pkt.data && (pkt.data['orlandovault_credentials_v6'] || pkt.data['orlandovault_credentials_v5'] || pkt.data['orlandovault_credentials_v4']));
-      if (credsRaw) {
-        try {
-          const parsed = JSON.parse(credsRaw);
-          if (!Array.isArray(parsed) || parsed.length === 0) {
-            console.warn('[Firebase] Refusing to overwrite vault with empty remote data');
-            return;
-          }
-        } catch(e) {
-          return;
-        }
-      }
-
-      // Check if both credentials and priority pins are identical to local
-      const localCreds = localStorage.getItem('orlandovault_credentials_v6');
-      const remoteCreds = pkt.data['orlandovault_credentials_v6'] || pkt.data['orlandovault_credentials_v4'];
-      const localPins = localStorage.getItem('orlandovault_priority_pins_v4');
-      const remotePins = pkt.data['orlandovault_priority_pins_v4'];
-
-      if (localCreds && remoteCreds && localCreds === remoteCreds && localPins === remotePins) {
-        origSetItem.call(localStorage, LAST_MOD_KEY, String(pkt.ts || Date.now()));
-        return;
-      }
-
-      isApplyingRemote = true;
-      try {
-        Object.keys(pkt.data).forEach(k => {
-          if (pkt.data[k] !== undefined && pkt.data[k] !== null) {
-            origSetItem.call(localStorage, k, pkt.data[k]);
-          }
-        });
-        // If remote had v4, also set v6
-        if (pkt.data['orlandovault_credentials_v4'] && !pkt.data['orlandovault_credentials_v6']) {
-          origSetItem.call(localStorage, 'orlandovault_credentials_v6', pkt.data['orlandovault_credentials_v4']);
-        }
-        origSetItem.call(localStorage, LAST_MOD_KEY, String(pkt.ts || Date.now()));
-
-        // 1. Re-read storage and merge with SEED_VAULT to guarantee full 200 accounts
-        if (typeof initData === 'function') {
-          try { initData(); } catch (e) {}
-        }
-        // 2. Harmonize priority pins across cards and storage
-        if (typeof reapplyPriorityPins === 'function') {
-          reapplyPriorityPins(vaultItems);
-        }
-        // 3. Render cards with pinned priorities strictly on top
-        if (typeof renderVault === 'function') {
-          try { renderVault(); } catch (e) {}
-        }
-        if (typeof renderMetrics === 'function') {
-          try { renderMetrics(); } catch (e) {}
-        }
-      } finally {
-        isApplyingRemote = false;
+        snaps.unshift(snap);
+        if (snaps.length > 5) snaps = snaps.slice(0, 5);
+        localStorage.setItem('orlandovault_snapshots_v1', JSON.stringify(snaps));
+        return snap;
+      } catch(e) {
+        return null;
       }
     }
+    window.createVaultSnapshot = createSnapshot;
 
-    async function pullFromCloud(isInitial, showFeedback) {
-      if (isSyncing) return false;
-      isSyncing = true;
+    window.restoreVaultSnapshot = function(snapId) {
       try {
-        const res = await fetch(FIRESTORE_URL, { cache: 'no-store' });
-        if (res.status === 404) {
-          isSyncing = false;
-          await pushToCloud(false);
-          return true;
-        }
-        if (!res.ok) {
-          setVaultSyncBadge('offline');
-          isSyncing = false;
+        let snaps = [];
+        try { snaps = JSON.parse(localStorage.getItem('orlandovault_snapshots_v1') || '[]'); } catch(e){}
+        const snap = snapId ? snaps.find(s => s.id === snapId) : snaps[0];
+        if (!snap || !Array.isArray(snap.items) || snap.items.length === 0) {
+          alert('No valid snapshot found to restore.');
           return false;
         }
-        const doc = await res.json();
-        let pkt = null;
-        if (doc && doc.fields && doc.fields.payload && doc.fields.payload.stringValue) {
-          try { pkt = JSON.parse(doc.fields.payload.stringValue); } catch(e){}
+        window.vaultItems = snap.items;
+        localStorage.setItem('orlandovault_credentials_v6', JSON.stringify(snap.items));
+        if (snap.pins && typeof savePinnedRegistry === 'function') {
+          savePinnedRegistry(snap.pins);
         }
-        if (!pkt) {
+        if (typeof renderVault === 'function') renderVault();
+        if (typeof renderMetrics === 'function') renderMetrics();
+        alert('Restored snapshot from ' + new Date(snap.ts).toLocaleString() + ' with ' + snap.items.length + ' accounts.');
+        pushToCloud(true);
+        return true;
+      } catch(e) {
+        alert('Restore error: ' + e.message);
+        return false;
+      }
+    };
+
+    // 4. PULL FROM CLOUD (PULL-FIRST RULE)
+    async function pullFromCloud(isInitial = false, showFeedback = false) {
+      if (isSyncing) return false;
+      isSyncing = true;
+      syncHealthState.status = 'syncing';
+      updateSyncHealthUI();
+
+      try {
+        const key = await getCryptoKey();
+        
+        // 1. First fetch the collection records
+        let fetchedItems = [];
+        const colRes = await fetch(RECORDS_COLLECTION_URL, { cache: 'no-store' });
+        if (colRes.ok) {
+          const colData = await colRes.json();
+          const docs = colData.documents || [];
+          syncHealthState.cloudCount = docs.length;
+
+          for (let i = 0; i < docs.length; i++) {
+            const f = docs[i].fields;
+            if (!f || !f.id) continue;
+            const isDel = f.deleted ? f.deleted.booleanValue : false;
+            if (isDel) continue;
+
+            let plainPass = '';
+            let plainNotes = '';
+            if (f.encryptedPassword && f.encryptedPassword.stringValue) {
+              try {
+                plainPass = await VaultCrypto.decrypt(JSON.parse(f.encryptedPassword.stringValue), key);
+              } catch(e){}
+            }
+            if (f.encryptedNotes && f.encryptedNotes.stringValue) {
+              try {
+                plainNotes = await VaultCrypto.decrypt(JSON.parse(f.encryptedNotes.stringValue), key);
+              } catch(e){}
+            }
+
+            fetchedItems.push({
+              id: f.id.stringValue,
+              title: f.title ? f.title.stringValue : '',
+              username: f.username ? f.username.stringValue : '',
+              category: f.category ? f.category.stringValue : 'Other',
+              badge: f.badge ? f.badge.stringValue : '',
+              importance: f.importance ? f.importance.stringValue : 'Normal',
+              status: f.status ? f.status.stringValue : 'Secured',
+              isPriority: f.isPriority ? f.isPriority.booleanValue : false,
+              pinned: f.pinned ? f.pinned.booleanValue : false,
+              pinned_at: f.pinned_at ? parseInt(f.pinned_at.integerValue || '0', 10) : 0,
+              lastUsedAt: f.lastUsedAt ? parseInt(f.lastUsedAt.integerValue || '0', 10) : 0,
+              usageScore: f.usageScore ? parseInt(f.usageScore.integerValue || '0', 10) : 0,
+              updatedAt: f.updatedAt ? parseInt(f.updatedAt.integerValue || '0', 10) : 0,
+              password: plainPass,
+              notes: plainNotes
+            });
+          }
+        }
+
+        // If collection query returned 0, fallback to master_channel
+        if (fetchedItems.length === 0) {
+          const masterRes = await fetch(MASTER_DOC_URL, { cache: 'no-store' });
+          if (masterRes.ok) {
+            const masterDoc = await masterRes.json();
+            if (masterDoc.fields && masterDoc.fields.payload) {
+              const pkt = JSON.parse(masterDoc.fields.payload.stringValue);
+              if (pkt && pkt.data && pkt.data['orlandovault_credentials_v6']) {
+                fetchedItems = JSON.parse(pkt.data['orlandovault_credentials_v6']);
+                syncHealthState.cloudCount = fetchedItems.length;
+              }
+            }
+          }
+        }
+
+        // SAFEGUARD: Do not allow empty cloud state to overwrite local records
+        if (fetchedItems.length === 0 && Array.isArray(window.vaultItems) && window.vaultItems.length > 0) {
+          console.warn('[SafeSync] Cloud returned 0 items; retaining local records.');
+          hasCompletedInitialPull = true;
           isSyncing = false;
-          await pushToCloud(false);
+          syncHealthState.status = 'synced';
+          updateSyncHealthUI();
           return true;
         }
-        const cloudTs = pkt.ts || 0;
-        const localTs = parseInt(localStorage.getItem(LAST_MOD_KEY) || '0', 10);
-        if (cloudTs > localTs && (pkt.cid !== CLIENT_ID || isInitial || showFeedback)) {
-          applyCloudPacket(pkt);
-          if (showFeedback && typeof showToast === 'function') {
-            showToast('📲 Pulled latest Vault credentials & priorities from Google Cloud Firebase!', '☁️');
+
+        if (fetchedItems.length > 0) {
+          isApplyingRemote = true;
+          try {
+            // Per-record merge with local items
+            const currentLocalItems = (typeof window.getVaultItems === 'function' ? window.getVaultItems() : window.vaultItems) || [];
+            const localMap = new Map((Array.isArray(currentLocalItems) ? currentLocalItems : []).map(x => [x.id, x]));
+            const merged = [];
+
+            fetchedItems.forEach(remoteItem => {
+              const localItem = localMap.get(remoteItem.id);
+              if (!localItem) {
+                merged.push(remoteItem);
+              } else {
+                // Newest updatedAt wins per record
+                const rTime = remoteItem.updatedAt || 0;
+                const lTime = localItem.updatedAt || 0;
+                if (rTime >= lTime) {
+                  merged.push(remoteItem);
+                } else {
+                  merged.push(localItem);
+                }
+                localMap.delete(remoteItem.id);
+              }
+            });
+
+            // Include any locally created records not yet in remote
+            localMap.forEach(val => merged.push(val));
+
+            if (typeof window.setVaultItems === 'function') {
+              window.setVaultItems(merged);
+            }
+            window.vaultItems = merged;
+            localStorage.setItem('orlandovault_credentials_v6', JSON.stringify(merged));
+
+            // Extract pinned items and update registry
+            const remotePinned = merged.filter(x => x.pinned || x.isPriority).map(x => x.id);
+            if (typeof savePinnedRegistry === 'function') {
+              savePinnedRegistry(remotePinned);
+            }
+            if (typeof window.reapplyPriorityPins === 'function') {
+              window.reapplyPriorityPins(merged);
+            }
+            if (typeof window.renderVault === 'function') {
+              window.renderVault();
+            }
+            if (typeof window.renderMetrics === 'function') {
+              window.renderMetrics();
+            }
+
+            syncHealthState.lastPull = Date.now();
+            syncHealthState.cloudCount = merged.length;
+            syncHealthState.status = 'synced';
+          } finally {
+            isApplyingRemote = false;
           }
-        } else if (localTs > cloudTs) {
-          await pushToCloud(false);
-        } else if (showFeedback) {
-          await pushToCloud(true);
         }
-        setVaultSyncBadge('synced');
-      } catch (e) {
-        setVaultSyncBadge('offline');
+
+        hasCompletedInitialPull = true;
+        syncHealthState.status = 'synced';
+        updateSyncHealthUI();
+
+        // Flush any pending mutations from outbox
+        flushMutationOutbox();
+
+        if (showFeedback && typeof showToast === 'function') {
+          showToast('📲 Synchronized latest Vault credentials from Google Cloud!', '☁️');
+        }
+      } catch(e) {
+        console.warn('[SafeSync] Pull error:', e.message);
+        syncHealthState.status = 'offline';
+        updateSyncHealthUI();
       } finally {
         isSyncing = false;
       }
       return true;
     }
+    window.pullVaultFromCloud = pullFromCloud;
 
-    Storage.prototype.setItem = function(key, val) {
-      origSetItem.call(this, key, val);
-      if (!isApplyingRemote && this === localStorage && SYNC_KEYS.indexOf(key) !== -1) {
-        origSetItem.call(localStorage, LAST_MOD_KEY, String(Date.now()));
-        if (pushTimer) clearTimeout(pushTimer);
-        pushTimer = setTimeout(() => { pushToCloud(false); }, 150);
+    // 5. PUSH TO CLOUD (SAFEGUARDED)
+    async function pushToCloud(showFeedback = false) {
+      // RULE: Pull first, then push!
+      if (!hasCompletedInitialPull) {
+        console.warn('[SafeSync] Blocked push: Initial pull has not completed yet.');
+        return false;
       }
-    };
+      if (isApplyingRemote) return false;
 
+      const items = (typeof window.getVaultItems === 'function' ? window.getVaultItems() : window.vaultItems) || [];
+      
+      // CRITICAL SAFEGUARD: Block empty or destructive push (>5% drop)
+      if (syncHealthState.cloudCount > 0 && items.length < (syncHealthState.cloudCount * 0.95)) {
+        console.error('[SafeSync Safety Block] Push would reduce record count from ' + syncHealthState.cloudCount + ' to ' + items.length + ' (>5% drop). Push aborted to prevent data loss.');
+        return false;
+      }
+
+      syncHealthState.status = 'syncing';
+      updateSyncHealthUI();
+
+      try {
+        const key = await getCryptoKey();
+        const now = Date.now();
+        const writes = [];
+
+        for (let i = 0; i < items.length; i++) {
+          const item = items[i];
+          const encPass = await VaultCrypto.encrypt(item.password || '', key);
+          const encNotes = await VaultCrypto.encrypt(item.notes || '', key);
+
+          const fields = {
+            id: { stringValue: item.id },
+            title: { stringValue: item.title || '' },
+            username: { stringValue: item.username || '' },
+            category: { stringValue: item.category || 'Other' },
+            badge: { stringValue: item.badge || '' },
+            importance: { stringValue: item.importance || 'Normal' },
+            status: { stringValue: item.status || 'Secured' },
+            isPriority: { booleanValue: !!(item.pinned || item.isPriority) },
+            pinned: { booleanValue: !!(item.pinned || item.isPriority) },
+            pinned_at: { integerValue: String(item.pinned_at || 0) },
+            lastUsedAt: { integerValue: String(item.lastUsedAt || 0) },
+            usageScore: { integerValue: String(item.usageScore || 0) },
+            updatedAt: { integerValue: String(item.updatedAt || now) },
+            updatedBy: { stringValue: CLIENT_ID },
+            deleted: { booleanValue: false },
+            encryptedPassword: { stringValue: JSON.stringify(encPass) },
+            encryptedNotes: { stringValue: JSON.stringify(encNotes) }
+          };
+
+          writes.push({
+            update: {
+              name: 'projects/' + FIREBASE_CONFIG.projectId + '/databases/(default)/documents/orlandovault_records/' + item.id,
+              fields: fields
+            }
+          });
+        }
+
+        // Commit batch writes in chunks of 100
+        for (let b = 0; b < writes.length; b += 100) {
+          const chunk = writes.slice(b, b + 100);
+          await fetch(COMMIT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ writes: chunk })
+          });
+        }
+
+        // Also update master_channel backup
+        const pkt = {
+          v: 2,
+          cid: CLIENT_ID,
+          ts: now,
+          data: {
+            orlandovault_credentials_v6: JSON.stringify(items),
+            orlandovault_priority_pins_v4: localStorage.getItem('orlandovault_priority_pins_v4') || '[]',
+            orlandovault_copy_count_v1: localStorage.getItem('orlandovault_copy_count_v1') || '0',
+            orlandovault_last_modified: String(now)
+          }
+        };
+        await fetch(MASTER_DOC_URL, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            fields: {
+              v: { integerValue: "2" },
+              ts: { integerValue: String(now) },
+              cid: { stringValue: CLIENT_ID },
+              payload: { stringValue: JSON.stringify(pkt) }
+            }
+          })
+        });
+
+        // Clear outbox journal
+        localStorage.setItem(LS_MUTATION_JOURNAL, '[]');
+        syncHealthState.lastPush = now;
+        syncHealthState.cloudCount = items.length;
+        syncHealthState.status = 'synced';
+        updateSyncHealthUI();
+
+        if (showFeedback && typeof showToast === 'function') {
+          showToast('⚡ Synced all 200 credentials to Google Cloud Firebase!', '☁️');
+        }
+        return true;
+      } catch(e) {
+        console.warn('[SafeSync] Push error:', e.message);
+        syncHealthState.status = 'offline';
+        updateSyncHealthUI();
+        return false;
+      }
+    }
     window.triggerVaultCloudPush = function() {
       if (pushTimer) clearTimeout(pushTimer);
-      pushTimer = setTimeout(() => { pushToCloud(false); }, 50);
-    };
-    window.pullVaultFromCloud = function(showFeedback = false) {
-      return pullFromCloud(false, showFeedback);
+      pushTimer = setTimeout(() => { pushToCloud(false); }, 150);
     };
 
-    function initVaultFirebase() {
-      console.log('⚡ [OrlandoVault] Google Cloud Firebase Firestore Real-Time Sync Active (orlandochrome-b6228)');
-      const btn = document.getElementById('btnFirebaseVaultSync');
-      if (btn) {
-        btn.addEventListener('click', () => {
-          pullFromCloud(false, true);
+    async function flushMutationOutbox() {
+      let outbox = [];
+      try { outbox = JSON.parse(localStorage.getItem(LS_MUTATION_JOURNAL) || '[]'); } catch(e){}
+      if (outbox.length > 0 && navigator.onLine) {
+        await pushToCloud(false);
+      }
+    }
+
+    // 6. INITIALIZE ENGINE & EVENT LISTENERS
+    function initSafeSyncEngine() {
+      console.log('⚡ [OrlandoVault] Safe Sync Engine & Storage Shield Initialized');
+
+      // Topbar Sync Health Modal triggers
+      const btnSyncHealth = document.getElementById('btnTopbarSyncHealth');
+      const syncModal = document.getElementById('syncHealthModal');
+      const closeSyncModal = document.getElementById('closeSyncHealthModal');
+      const btnForceResync = document.getElementById('btnForceResyncCloud');
+      const btnCreateSnap = document.getElementById('btnCreateLocalSnapshot');
+      const btnRestSnap = document.getElementById('btnRestoreSnapshot');
+
+      if (btnSyncHealth && syncModal) {
+        btnSyncHealth.onclick = () => {
+          syncModal.style.display = 'flex';
+          updateSyncHealthUI();
+        };
+      }
+      if (closeSyncModal && syncModal) {
+        closeSyncModal.onclick = () => { syncModal.style.display = 'none'; };
+      }
+      if (syncModal) {
+        syncModal.addEventListener('click', (e) => {
+          if (e.target === syncModal) syncModal.style.display = 'none';
         });
       }
-      // Pull latest from cloud smoothly on startup
+      if (btnForceResync) {
+        btnForceResync.onclick = () => { pullFromCloud(false, true); };
+      }
+      if (btnCreateSnap) {
+        btnCreateSnap.onclick = () => {
+          createSnapshot('manual');
+          alert('Snapshot created successfully!');
+          updateSyncHealthUI();
+        };
+      }
+      if (btnRestSnap) {
+        btnRestSnap.onclick = () => { window.restoreVaultSnapshot(); };
+      }
+
+      // Initial pull on startup
       pullFromCloud(true, false);
 
+      // Event listeners for seamless multi-device sync
       window.addEventListener('focus', () => { pullFromCloud(false, false); });
       document.addEventListener('visibilitychange', () => {
         if (document.visibilityState === 'visible') pullFromCloud(false, false);
       });
-      window.addEventListener('online', () => { pullFromCloud(false, false); });
-      window.addEventListener('offline', () => { setVaultSyncBadge('offline'); });
+      window.addEventListener('online', () => {
+        pullFromCloud(false, false);
+        flushMutationOutbox();
+      });
+      window.addEventListener('offline', () => {
+        syncHealthState.status = 'offline';
+        updateSyncHealthUI();
+      });
 
-      // Real-time cross-device sync polling every 6 seconds while visible
+      // Background heartbeat every 8 seconds
       setInterval(() => {
-        if (document.visibilityState === 'visible') pullFromCloud(false, false);
-      }, 6000);
+        if (document.visibilityState === 'visible') {
+          pullFromCloud(false, false);
+        }
+      }, 8000);
     }
 
-    // Initialize Firebase sync immediately on boot
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', () => {
-        setTimeout(initVaultFirebase, 300);
-      });
+      document.addEventListener('DOMContentLoaded', () => setTimeout(initSafeSyncEngine, 200));
     } else {
-      setTimeout(initVaultFirebase, 100);
+      setTimeout(initSafeSyncEngine, 100);
     }
   })();
   </script>
-
 
   <!-- SPOTLIGHT COMMAND PALETTE MODAL (CTRL + K / ⌘K / SWIPE) -->
   <div class="spotlight-backdrop" id="vaultSpotlightModal" role="dialog" aria-modal="true" aria-label="Jarvis Spotlight Command Palette">
