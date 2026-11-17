@@ -3075,8 +3075,81 @@ body.universe-game-active .qgame-fs-exit {
 .sched-head-left {
   display: flex;
   align-items: center;
+  gap: 14px;
   flex: 1 1 0;
   min-width: 180px;
+}
+/* Windows 11 Notifications Master Toggle Switch */
+.win-master-toggle-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  user-select: none;
+  cursor: pointer;
+  padding: 3px 6px;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+.win-master-toggle-wrap:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+.win-toggle-status {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  min-width: 25px;
+  text-align: right;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+}
+.win-toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 22px;
+  cursor: pointer;
+  margin: 0;
+}
+.win-toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+.win-toggle-slider {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 999px;
+  transition: all 0.2s cubic-bezier(0.1, 0.9, 0.2, 1);
+  box-sizing: border-box;
+}
+.win-toggle-slider::before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
+  background-color: #d1d5db;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  transition: all 0.2s cubic-bezier(0.1, 0.9, 0.2, 1);
+}
+/* Windows 11 Active State: Exact #4cc2ff with #000000 knob */
+.win-toggle-switch input:checked + .win-toggle-slider {
+  background-color: #4cc2ff;
+  border-color: #4cc2ff;
+}
+.win-toggle-switch input:checked + .win-toggle-slider::before {
+  transform: translateX(22px);
+  background-color: #000000;
+}
+.win-toggle-switch:focus-within .win-toggle-slider {
+  outline: 2px solid rgba(76, 194, 255, 0.55);
+  outline-offset: 2px;
 }
 .sched-head-center {
   display: flex;
@@ -3121,50 +3194,51 @@ body.universe-game-active .qgame-fs-exit {
     gap: 10px;
   }
 }
-h2{font-size:clamp(1.5rem,2.6vw,2.1rem);font-weight:700;display:flex;align-items:center;gap:14px;text-shadow:var(--glow-w);margin:0}
+h2{font-size:clamp(1.12rem,1.65vw,1.38rem);font-weight:700;display:flex;align-items:center;gap:10px;text-shadow:var(--glow-w);margin:0;letter-spacing:-0.01em;}
 .sched-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 
-/* Legend & Tactical HUD Command Chips */
+/* Legend & Tactical HUD Command Chips (Refined, Appropriately Smaller) */
 .legend {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 16px;
+  gap: 6px;
+  margin-bottom: 14px;
 }
 .cat-pill {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   background: rgba(14, 14, 20, 0.70);
   border: 1px solid rgba(255, 255, 255, 0.08);
   color: var(--dim);
-  border-radius: 10px;
-  padding: 6px 12px;
-  font-size: 0.80rem;
+  border-radius: 7px;
+  padding: 3.5px 9px;
+  font-size: 0.70rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: all 0.22s ease;
   font-family: var(--sans);
   backdrop-filter: blur(8px);
 }
 .cat-pill .cat-chip-icon {
-  font-size: 0.88rem;
+  font-size: 0.75rem;
   color: var(--c);
   line-height: 1;
 }
 .cat-pill .cat-chip-label {
   font-weight: 700;
+  font-size: 0.70rem;
 }
 .cat-pill .cat-chip-count {
   font-family: var(--font-clock, sans-serif);
-  font-size: 0.72rem;
+  font-size: 0.62rem;
   font-weight: 800;
   background: rgba(255, 255, 255, 0.06);
   color: var(--mute);
-  padding: 1px 6px;
-  border-radius: 5px;
+  padding: 1px 5px;
+  border-radius: 4px;
   margin-left: 2px;
 }
 .cat-pill:hover {
@@ -4830,6 +4904,14 @@ body.light-theme .highlight-card .dist-icon{
   <div class="sched-head">
     <div class="sched-head-left">
       <h2>Today's Schedule</h2>
+      <!-- Windows 11 Style Master Notifications Toggle -->
+      <div class="win-master-toggle-wrap" id="winMasterToggleWrap" title="Master Notification Switch: Enable or completely turn off all notifications and alarms">
+        <span class="win-toggle-status" id="winMasterToggleStatus">On</span>
+        <label class="win-toggle-switch" for="winMasterToggleCheckbox" aria-label="Master Notifications Toggle">
+          <input type="checkbox" id="winMasterToggleCheckbox" checked>
+          <span class="win-toggle-slider"></span>
+        </label>
+      </div>
     </div>
     <div class="sched-head-center">
       <!-- Play Music: Next-Gen Futuristic Interactive Button & Particle Dancing Suite -->
@@ -6375,7 +6457,17 @@ function renderList(){
         '<label class="sw"><input type="checkbox" aria-label="Alarm at '+fmt(s[0],s[1])+'"><i></i></label>'+
         '<div class="card-progress-bar"><div class="card-progress-fill" id="progFill'+i+'"></div></div>';
       var cb=li.querySelector("input");cb.checked=!off[i];
-      cb.onchange=function(){if(cb.checked)delete off[i];else off[i]=1;save()};
+      cb.onchange=function(){
+        if(cb.checked){
+          delete off[i];
+          armed=true;
+          setStatus();
+        } else {
+          off[i]=1;
+        }
+        save();
+        updateMasterToggleUI();
+      };
     } else {
       // In-Place Edit Mode: direct inputs in the row
       var timeVal=p2(s[0])+":"+p2(s[1]);
@@ -6423,6 +6515,7 @@ function renderList(){
     list.appendChild(li);
   });
   try{ updatePresetSelectorUI(); }catch(e){}
+  try{ updateMasterToggleUI(); }catch(e){}
 }
 
 /* Edit Mode Controls (Save & Cancel buttons next to Today's Schedule) */
@@ -7039,6 +7132,79 @@ document.addEventListener("keydown",function(e){
   else { handleOvUnmute(); }
 });
 
+/* ───────── WINDOWS 11 STYLE MASTER NOTIFICATIONS TOGGLE CONTROLLER ───────── */
+function updateMasterToggleUI(){
+  var masterCb = $("winMasterToggleCheckbox");
+  var masterStatus = $("winMasterToggleStatus");
+  if (!masterCb) return;
+
+  var anyOn = false;
+  if (armed && S && S.length > 0) {
+    for (var i = 0; i < S.length; i++) {
+      if (!off[i]) { anyOn = true; break; }
+    }
+  }
+
+  var isMasterOn = anyOn && armed;
+  masterCb.checked = isMasterOn;
+  if (masterStatus) {
+    masterStatus.textContent = isMasterOn ? "On" : "Off";
+    masterStatus.style.color = isMasterOn ? "#ffffff" : "#94a3b8";
+  }
+}
+
+function initMasterNotificationToggle(){
+  var masterCb = $("winMasterToggleCheckbox");
+  var masterStatus = $("winMasterToggleStatus");
+  if (!masterCb) return;
+
+  masterCb.onchange = function(){
+    var turnOn = masterCb.checked;
+    if (masterStatus) {
+      masterStatus.textContent = turnOn ? "On" : "Off";
+      masterStatus.style.color = turnOn ? "#ffffff" : "#94a3b8";
+    }
+
+    if (turnOn) {
+      armed = true;
+      off = {}; // Enable all alarms
+      save();
+      renderList();
+      setStatus();
+      unlock();
+      requestWakeLock();
+      try {
+        if (window.Notification && Notification.permission === "default") {
+          Notification.requestPermission();
+        }
+      } catch(e) {}
+      showToast("All notifications & alarms enabled (ON)", "🔔");
+      if ($("status")) $("status").textContent = "✓ All notifications and alarms are enabled.";
+    } else {
+      armed = false;
+      for (var i = 0; i < S.length; i++) {
+        off[i] = 1; // Mark all disabled
+      }
+      save();
+      renderList();
+      setStatus();
+      releaseWakeLock();
+      stopAudioKeepAlive();
+      showToast("All notifications & alarms turned OFF", "🔕");
+      if ($("status")) $("status").textContent = "All notifications and alarms are completely turned off.";
+    }
+    tick();
+  };
+
+  if (masterStatus) {
+    masterStatus.onclick = function(e){
+      e.preventDefault();
+      masterCb.checked = !masterCb.checked;
+      masterCb.dispatchEvent(new Event("change"));
+    };
+  }
+}
+
 /* ───────── CONTROLS ───────── */
 function setStatus(){
   if ($("arm")) {
@@ -7057,6 +7223,7 @@ function setStatus(){
     }
   }
   updateAudioBadge();
+  updateMasterToggleUI();
 }
 $("arm").onclick=function(){
   armed=!armed;
@@ -8819,6 +8986,8 @@ try { showSong(); } catch(e){}
 try { setStatus(); } catch(e){}
 try { updatePresetSelectorUI(); } catch(e){}
 try { updatePresetDaysBadge(); } catch(e){}
+try { initMasterNotificationToggle(); } catch(e){}
+try { updateMasterToggleUI(); } catch(e){}
 try {
   if (armed) {
     requestWakeLock();
