@@ -4774,6 +4774,148 @@
       border-radius: 999px;
     }
 
+    /* ==========================================================================
+       EXECUTIVE COMPACT DENSITY & PURE OLED CONTRAST REFINEMENTS
+       ========================================================================== */
+    /* 1. Pure OLED Black Background & Reduced Card Glow */
+    .vault-card,
+    .vault-card.brand-aura-google,
+    .vault-card.brand-aura-microsoft,
+    .vault-card.brand-aura-meta,
+    .vault-card.brand-aura-netflix,
+    .vault-card.brand-aura-spotify,
+    .vault-card.brand-aura-discord,
+    .vault-card.brand-aura-instagram,
+    .vault-card.brand-aura-x,
+    .vault-card.brand-aura-disney,
+    .vault-card.brand-aura-claude,
+    .vault-card.brand-aura-openai,
+    .vault-card.brand-aura-github,
+    .vault-card.brand-aura-gcash,
+    .vault-card.brand-aura-maya,
+    .vault-card.brand-aura-landbank,
+    .vault-card.brand-aura-bdo,
+    .vault-card.brand-aura-deped,
+    .vault-card.brand-aura-portals,
+    .vault-card[class*="cat-"] {
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.85), inset 0 1px 1px rgba(255, 255, 255, 0.08) !important;
+      border-width: 1px !important;
+      padding: 13px 15px !important;
+      gap: 9px !important;
+      border-radius: 12px !important;
+    }
+
+    .vault-card:hover {
+      transform: translateY(-2px) !important;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.9), 0 0 10px rgba(56, 189, 248, 0.22) !important;
+    }
+
+    .vault-card::before {
+      height: 2px !important;
+      box-shadow: none !important;
+      opacity: 0.85 !important;
+    }
+
+    /* 2. Reduced Logo Glow & Compact Brand Squircle */
+    .brand-squircle {
+      width: 34px !important;
+      height: 34px !important;
+      border-radius: 9px !important;
+      padding: 5px !important;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.12) !important;
+    }
+
+    .sq-google,
+    .sq-microsoft,
+    .sq-meta,
+    .sq-netflix,
+    .sq-spotify,
+    .sq-discord,
+    .sq-instagram,
+    .sq-x,
+    .sq-disney,
+    .sq-claude,
+    .sq-openai,
+    .sq-github,
+    .sq-gcash,
+    .sq-maya,
+    .sq-landbank,
+    .sq-bdo,
+    .sq-deped,
+    .sq-portals,
+    .sq-generic {
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.6) !important;
+    }
+
+    /* 3. Appropriately Smaller "Open Main Web App" Button */
+    .btn-topbar-desktop {
+      padding: 5px 12px !important;
+      gap: 6px !important;
+      font-size: 11px !important;
+      letter-spacing: 0.03em !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), 0 0 8px rgba(217, 185, 92, 0.18) !important;
+    }
+    .btn-topbar-desktop .desktop-btn-label {
+      font-size: 11px !important;
+    }
+    .btn-topbar-desktop .desktop-btn-icon,
+    .btn-topbar-desktop .futuristic-launch-svg,
+    .btn-topbar-desktop .futuristic-portal-svg {
+      width: 14px !important;
+      height: 14px !important;
+    }
+    .btn-kinetic-aura {
+      padding: 1px !important;
+      opacity: 0.6 !important;
+    }
+
+    /* 4. Appropriately Wider Search Bar */
+    .btn-topbar-search {
+      min-width: 215px !important;
+      padding: 5px 13px !important;
+      justify-content: space-between !important;
+      font-size: 12px !important;
+      gap: 8px !important;
+    }
+    .spotlight-box {
+      max-width: 740px !important;
+    }
+
+    /* 5. High-Density Compact Grid (See More Cards on Screen) */
+    .vault-grid {
+      grid-template-columns: repeat(auto-fill, minmax(285px, 1fr)) !important;
+      gap: 13px !important;
+    }
+
+    .card-account-title {
+      font-size: 1rem !important;
+    }
+    .card-username-row {
+      padding: 6px 10px !important;
+      font-size: 0.86rem !important;
+      border-radius: 7px !important;
+    }
+    .password-quantum-deck {
+      padding: 6px 10px !important;
+      border-radius: 7px !important;
+    }
+    .btn-copy-instant {
+      padding: 4px 10px !important;
+      font-size: 10.5px !important;
+    }
+    .btn-copy-user {
+      padding: 2px 7px !important;
+      font-size: 10.5px !important;
+    }
+    .card-metadata-tray {
+      margin-top: 1px !important;
+      padding: 5px 9px !important;
+      font-size: 11px !important;
+    }
+    .card-brand-header-left {
+      gap: 10px !important;
+    }
+
 </style>
 </head>
 <body>
@@ -6292,13 +6434,6 @@
             </div>
 
             ${renderSmartMetadata(item.metadata, item.notes)}
-
-            <div class="card-footer">
-              <span class="card-status-pill"><span class="status-live-beacon">●</span> STATUS: ${item.status || 'SECURED'}${item.lastUsedAt ? ` · <span class="vault-used-time" data-relative-time="${item.lastUsedAt}" data-relative-prefix="Used " data-relative-format="compact">${window.formatRelativeTime ? window.formatRelativeTime(item.lastUsedAt, {compact:true}) : 'just now'}</span>` : ''}</span>
-              <button type="button" class="btn-rotate-mark" onclick="markPasswordRotated('${item.id}')" title="Click to update password rotation date">
-                ↺ Rotated <span data-relative-time="${item.updated_at || Date.now()}" data-relative-compact="true">${rotationLabel}</span>
-              </button>
-            </div>
           </article>
         `;
       }).join('');
