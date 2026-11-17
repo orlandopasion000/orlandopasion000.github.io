@@ -7063,32 +7063,8 @@ function ring(i,snoozed){
   }, 750);
 }
 function notify(title,body){
-  try{
-    if(!window.Notification) return;
-    if(Notification.permission === "default"){
-      Notification.requestPermission();
-    }
-    if(Notification.permission !== "granted") return;
-    var opt={
-      body: body,
-      tag: "dra-" + Date.now(),
-      renotify: true,
-      requireInteraction: true,
-      icon: "assets/recharge-icon-192.png",
-      badge: "assets/recharge-icon-192.png",
-      vibrate: [500,250,500,250,500],
-      actions: [
-        { action: "snooze", title: "Snooze 5 min" },
-        { action: "dismiss", title: "Dismiss" }
-      ]
-    };
-    if(swReg && swReg.showNotification){
-      swReg.showNotification(title, opt);
-    } else {
-      delete opt.actions;
-      new Notification(title, opt);
-    }
-  }catch(e){}
+  // Notifications removed per user request (zero delays, zero popups)
+  return;
 }
 function clearNotes(){
   if(swReg&&swReg.getNotifications){
@@ -7184,12 +7160,8 @@ function initMasterNotificationToggle(){
       setStatus();
       unlock();
       requestWakeLock();
-      try {
-        if (window.Notification && Notification.permission === "default") {
-          Notification.requestPermission();
-        }
-      } catch(e) {}
-      showToast("All notifications & alarms enabled (ON)", "🔔");
+      
+      
       if ($("status")) $("status").textContent = "✓ All notifications and alarms are enabled.";
     } else {
       armed = false;
@@ -7201,7 +7173,7 @@ function initMasterNotificationToggle(){
       setStatus();
       releaseWakeLock();
       stopAudioKeepAlive();
-      showToast("All notifications & alarms turned OFF", "🔕");
+      
       if ($("status")) $("status").textContent = "All notifications and alarms are completely turned off.";
     }
     tick();
@@ -7242,7 +7214,7 @@ $("arm").onclick=function(){
   if(armed){
     unlock();
     requestWakeLock();
-    try{if(window.Notification&&Notification.permission==="default")Notification.requestPermission()}catch(e){}
+    
     // alarms armed
   } else {
     releaseWakeLock();
@@ -14217,7 +14189,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   <script>
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v83', { scope: './' }).catch(function() {});
+        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v84', { scope: './' }).catch(function() {});
       });
     }
   </script>
