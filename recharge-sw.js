@@ -1,5 +1,5 @@
 /* OrlandoRecharge · Offline-First Service Worker (PWA Ready) */
-var CACHE_NAME = 'recharge-v79';
+var CACHE_NAME = 'recharge-v80';
 var ASSETS = [
   './',
   './index.html',

@@ -9219,6 +9219,7 @@ try { checkUrlHashRoutine(); } catch(e){}
     var plasmaSprite = null;
     var emberSprite = null;
     var electricSparkSprite = null;
+    var electricVioletSparkSprite = null;
     var helixCyanSparkSprite = null;
     var helixMagentaSparkSprite = null;
     var flameWispSprite = null;
@@ -9237,6 +9238,7 @@ try { checkUrlHashRoutine(); } catch(e){}
         plasmaSprite = generatePlasmaCanvas(64);
         emberSprite = generateEmberCanvas(24);
         electricSparkSprite = generateElectricSparkCanvas(24);
+        electricVioletSparkSprite = generateElectricVioletSparkCanvas(24);
         helixCyanSparkSprite = generateHelixSparkCanvas(24, false);
         helixMagentaSparkSprite = generateHelixSparkCanvas(24, true);
         flameWispSprite = generateFlameWispCanvas(64, 96);
@@ -9602,6 +9604,48 @@ try { checkUrlHashRoutine(); } catch(e){}
       return canvas;
     }
 
+    // High-Voltage Townsend Violet Plasma Spark Sprite for Quantum Dynamo Tail Discharges
+    function generateElectricVioletSparkCanvas(size) {
+      var canvas = document.createElement("canvas");
+      canvas.width = size;
+      canvas.height = size;
+      var ctx = canvas.getContext("2d");
+      if (!ctx) return canvas;
+
+      var cx = size * 0.5;
+      var cy = size * 0.5;
+      var r = size * 0.46;
+
+      var g = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+      g.addColorStop(0.0, "rgba(255, 255, 255, 1.0)");
+      g.addColorStop(0.18, "rgba(245, 208, 254, 0.98)");
+      g.addColorStop(0.45, "rgba(192, 132, 252, 0.72)");
+      g.addColorStop(0.75, "rgba(168, 85, 247, 0.32)");
+      g.addColorStop(1.0, "rgba(126, 34, 206, 0.0)");
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.fill();
+
+      // High-Frequency 8-Point Starlight Electric Spikes
+      ctx.strokeStyle = "rgba(250, 245, 255, 0.96)";
+      ctx.lineWidth = 0.95;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy - r * 0.94); ctx.lineTo(cx, cy + r * 0.94);
+      ctx.moveTo(cx - r * 0.94, cy); ctx.lineTo(cx + r * 0.94, cy);
+      var dRe = r * 0.56;
+      ctx.moveTo(cx - dRe, cy - dRe); ctx.lineTo(cx + dRe, cy + dRe);
+      ctx.moveTo(cx - dRe, cy + dRe); ctx.lineTo(cx + dRe, cy - dRe);
+      ctx.stroke();
+
+      ctx.fillStyle = "#ffffff";
+      ctx.beginPath();
+      ctx.arc(cx, cy, size * 0.13, 0, Math.PI * 2);
+      ctx.fill();
+
+      return canvas;
+    }
+
     // High-Intensity Incandescent Burning Ember Spark (Hyper-Realistic Thermal Corona & 8-Point Starlight Flares)
     function generateEmberCanvas(size) {
       var canvas = document.createElement("canvas");
@@ -9743,6 +9787,10 @@ try { checkUrlHashRoutine(); } catch(e){}
       getElectricSpark: function() {
         if (!initialized) init();
         return electricSparkSprite;
+      },
+      getElectricVioletSpark: function() {
+        if (!initialized) init();
+        return electricVioletSparkSprite;
       },
       getHelixSpark: function(isMagenta) {
         if (!initialized) init();
@@ -10591,7 +10639,8 @@ try { checkUrlHashRoutine(); } catch(e){}
             targetCtx.fillStyle = "hsla(" + Math.round(p.hue) + ", 95%, 72%, " + (tr.alpha * p.fadeProgress).toFixed(2) + ")";
             targetCtx.fill();
           } else {
-            p.trail.splice(tIdx, 1);
+            p.trail[tIdx] = p.trail[p.trail.length - 1];
+            p.trail.pop();
           }
         }
       }
@@ -11126,18 +11175,18 @@ try { checkUrlHashRoutine(); } catch(e){}
         }
 
         // Fiery Incandescent Cinder Sparks into p.stardust (Matching Image 1 Ember Storm)
-        var emberSpawnRate = tier === 3 ? 0.68 : (tier === 2 ? 0.48 : 0.32);
-        var emberMaxStardust = tier === 3 ? 14 : (tier === 2 ? 10 : 6);
+        var emberSpawnRate = tier === 3 ? 0.52 : (tier === 2 ? 0.36 : (isGameMode ? 0.10 : 0.20));
+        var emberMaxStardust = tier === 3 ? 8 : (tier === 2 ? 6 : (isGameMode ? 2 : 4));
         if (Math.random() < emberSpawnRate) {
           if (!p.stardust) p.stardust = [];
           if (p.stardust.length < emberMaxStardust) {
             var emSpineIdx = Math.min(K - 1, 1 + ((Math.random() * (K - 1)) | 0));
             p.stardust.push({
-              x: _ptsX[emSpineIdx] + (Math.random() - 0.5) * (headR * 1.6),
-              y: _ptsY[emSpineIdx] + (Math.random() - 0.5) * (headR * 1.6),
+              x: _ptsX[emSpineIdx] + (Math.random() - 0.5) * (headR * 1.5),
+              y: _ptsY[emSpineIdx] + (Math.random() - 0.5) * (headR * 1.5),
               alpha: 0.98,
-              r: 0.70 + Math.random() * (tier === 3 ? 1.50 : 1.15),
-              hue: 22 + Math.random() * 26 // 22 (crimson orange) to 48 (golden amber)
+              r: 0.70 + Math.random() * (tier === 3 ? 1.40 : 1.10),
+              isEmber: true
             });
           }
         }
@@ -11352,47 +11401,49 @@ try { checkUrlHashRoutine(); } catch(e){}
             }
 
           } else {
-            // Quantum Dynamo: Faraday Magnetic Induction Loops with Cyclotron Relativistic Electron Gyration
-            var bSpin = p.heading + spinAngle;
-            var bSpinPerp = p.heading - spinAngle * 0.85 + Math.PI * 0.5;
+            // Quantum Dynamo: Faraday Magnetic Induction Loops with Cyclotron Relativistic Electron Gyration (Tier 2 & 3 Flagship Centers)
+            if (tier >= 2) {
+              var bSpin = p.heading + spinAngle;
+              var bSpinPerp = p.heading - spinAngle * 0.85 + Math.PI * 0.5;
 
-            // Loop 1: Equatorial Magnetic Induction Ring (Electric Cyan)
-            targetCtx.beginPath();
-            targetCtx.ellipse(px0, py0, orbBaseR * 1.15, orbBaseR * 0.65, bSpin, 0, Math.PI * 2);
-            targetCtx.strokeStyle = "rgba(56, 189, 248, " + (ringAlpha * 0.44).toFixed(2) + ")";
-            targetCtx.lineWidth = tier === 3 ? 1.35 : 1.0;
-            targetCtx.stroke();
+              // Loop 1: Equatorial Magnetic Induction Ring (Electric Cyan)
+              targetCtx.beginPath();
+              targetCtx.ellipse(px0, py0, orbBaseR * 1.15, orbBaseR * 0.65, bSpin, 0, Math.PI * 2);
+              targetCtx.strokeStyle = "rgba(56, 189, 248, " + (ringAlpha * 0.44).toFixed(2) + ")";
+              targetCtx.lineWidth = tier === 3 ? 1.35 : 1.0;
+              targetCtx.stroke();
 
-            // Loop 2: Poloidal Magnetic Dipole Flux Ellipse (Townsend Nitrogen Violet)
-            targetCtx.beginPath();
-            targetCtx.ellipse(px0, py0, orbBaseR * 1.38, orbBaseR * 0.72, bSpinPerp, 0, Math.PI * 2);
-            targetCtx.strokeStyle = "rgba(168, 85, 247, " + (ringAlpha * 0.38).toFixed(2) + ")";
-            targetCtx.lineWidth = tier === 3 ? 1.20 : 0.95;
-            targetCtx.stroke();
+              // Loop 2: Poloidal Magnetic Dipole Flux Ellipse (Townsend Nitrogen Violet)
+              targetCtx.beginPath();
+              targetCtx.ellipse(px0, py0, orbBaseR * 1.38, orbBaseR * 0.72, bSpinPerp, 0, Math.PI * 2);
+              targetCtx.strokeStyle = "rgba(168, 85, 247, " + (ringAlpha * 0.38).toFixed(2) + ")";
+              targetCtx.lineWidth = tier === 3 ? 1.20 : 0.95;
+              targetCtx.stroke();
 
-            // Cyclotron Relativistic Electron Gyration Node 1 (Equatorial)
-            var qNode1X = px0 + Math.cos(bSpin) * orbBaseR * 1.15;
-            var qNode1Y = py0 + Math.sin(bSpin) * orbBaseR * 1.15;
-            targetCtx.beginPath();
-            targetCtx.arc(qNode1X, qNode1Y, tier === 3 ? 2.2 : 1.5, 0, Math.PI * 2);
-            targetCtx.fillStyle = "rgba(255, 255, 255, " + (ringAlpha * 0.98).toFixed(2) + ")";
-            targetCtx.fill();
-            targetCtx.beginPath();
-            targetCtx.arc(qNode1X, qNode1Y, tier === 3 ? 4.2 : 3.0, 0, Math.PI * 2);
-            targetCtx.fillStyle = "rgba(56, 189, 248, " + (ringAlpha * 0.48).toFixed(2) + ")";
-            targetCtx.fill();
+              // Cyclotron Relativistic Electron Gyration Node 1 (Equatorial)
+              var qNode1X = px0 + Math.cos(bSpin) * orbBaseR * 1.15;
+              var qNode1Y = py0 + Math.sin(bSpin) * orbBaseR * 1.15;
+              targetCtx.beginPath();
+              targetCtx.arc(qNode1X, qNode1Y, tier === 3 ? 2.2 : 1.5, 0, Math.PI * 2);
+              targetCtx.fillStyle = "rgba(255, 255, 255, " + (ringAlpha * 0.98).toFixed(2) + ")";
+              targetCtx.fill();
+              targetCtx.beginPath();
+              targetCtx.arc(qNode1X, qNode1Y, tier === 3 ? 4.2 : 3.0, 0, Math.PI * 2);
+              targetCtx.fillStyle = "rgba(56, 189, 248, " + (ringAlpha * 0.48).toFixed(2) + ")";
+              targetCtx.fill();
 
-            // Cyclotron Relativistic Electron Gyration Node 2 (Poloidal Dipole Node)
-            var qNode2X = px0 + Math.cos(bSpinPerp + Math.PI) * orbBaseR * 1.38;
-            var qNode2Y = py0 + Math.sin(bSpinPerp + Math.PI) * orbBaseR * 1.38;
-            targetCtx.beginPath();
-            targetCtx.arc(qNode2X, qNode2Y, tier === 3 ? 2.0 : 1.4, 0, Math.PI * 2);
-            targetCtx.fillStyle = "rgba(255, 255, 255, " + (ringAlpha * 0.98).toFixed(2) + ")";
-            targetCtx.fill();
-            targetCtx.beginPath();
-            targetCtx.arc(qNode2X, qNode2Y, tier === 3 ? 3.8 : 2.8, 0, Math.PI * 2);
-            targetCtx.fillStyle = "rgba(192, 132, 252, " + (ringAlpha * 0.42).toFixed(2) + ")";
-            targetCtx.fill();
+              // Cyclotron Relativistic Electron Gyration Node 2 (Poloidal Dipole Node)
+              var qNode2X = px0 + Math.cos(bSpinPerp + Math.PI) * orbBaseR * 1.38;
+              var qNode2Y = py0 + Math.sin(bSpinPerp + Math.PI) * orbBaseR * 1.38;
+              targetCtx.beginPath();
+              targetCtx.arc(qNode2X, qNode2Y, tier === 3 ? 2.0 : 1.4, 0, Math.PI * 2);
+              targetCtx.fillStyle = "rgba(255, 255, 255, " + (ringAlpha * 0.98).toFixed(2) + ")";
+              targetCtx.fill();
+              targetCtx.beginPath();
+              targetCtx.arc(qNode2X, qNode2Y, tier === 3 ? 3.8 : 2.8, 0, Math.PI * 2);
+              targetCtx.fillStyle = "rgba(192, 132, 252, " + (ringAlpha * 0.42).toFixed(2) + ")";
+              targetCtx.fill();
+            }
           }
 
           // Target Synchronized Aura: Extra resonant dual-harmonic orbital rings around locked particle
@@ -11406,27 +11457,28 @@ try { checkUrlHashRoutine(); } catch(e){}
           }
         }
 
-        // Additive Electric Wake Sparks along Quantum Dynamo tail (parallel to Meteor Ember Storm)
-        var dynamoSpawnRate = tier === 3 ? 0.68 : (tier === 2 ? 0.48 : 0.32);
-        var dynamoMaxStardust = tier === 3 ? 14 : (tier === 2 ? 10 : 6);
+        // Additive Electric Wake Sparks along Quantum Dynamo tail (Ionization Afterglow Beads)
+        var dynamoSpawnRate = tier === 3 ? 0.55 : (tier === 2 ? 0.38 : (isGameMode ? 0.08 : 0.18));
+        var dynamoMaxStardust = tier === 3 ? 9 : (tier === 2 ? 6 : (isGameMode ? 2 : 4));
         if (!isHelix && K >= 3 && Math.random() < dynamoSpawnRate) {
           if (!p.stardust) p.stardust = [];
           if (p.stardust.length < dynamoMaxStardust) {
             var eSpineIdx = Math.min(K - 1, 1 + ((Math.random() * (K - 1)) | 0));
+            var isViolet = Math.random() >= 0.72;
             p.stardust.push({
-              x: _ptsX[eSpineIdx] + (Math.random() - 0.5) * (headR * 1.95),
-              y: _ptsY[eSpineIdx] + (Math.random() - 0.5) * (headR * 1.95),
+              x: _ptsX[eSpineIdx] + (Math.random() - 0.5) * (headR * 1.7),
+              y: _ptsY[eSpineIdx] + (Math.random() - 0.5) * (headR * 1.7),
               alpha: 0.98,
-              r: 0.80 + Math.random() * (tier === 3 ? 1.50 : 1.15),
-              hue: Math.random() < 0.76 ? (190 + Math.random() * 24) : (258 + Math.random() * 22),
+              r: 0.85 + Math.random() * (tier === 3 ? 1.35 : 1.05),
+              isViolet: isViolet,
               electric: true
             });
           }
         }
 
         // Additive Bi-Chromatic Nucleotide Spores along Quantum Helix DNA Strands (Cyan & Royal Magenta)
-        var helixSpawnRate = tier === 3 ? 0.45 : (tier === 2 ? 0.30 : 0.18);
-        var helixMaxStardust = tier === 3 ? 8 : (tier === 2 ? 5 : 3);
+        var helixSpawnRate = tier === 3 ? 0.40 : (tier === 2 ? 0.25 : (isGameMode ? 0.06 : 0.14));
+        var helixMaxStardust = tier === 3 ? 7 : (tier === 2 ? 5 : (isGameMode ? 2 : 3));
         if (isHelix && K >= 3 && Math.random() < helixSpawnRate) {
           if (!p.stardust) p.stardust = [];
           if (p.stardust.length < helixMaxStardust) {
@@ -11435,48 +11487,50 @@ try { checkUrlHashRoutine(); } catch(e){}
             var baseX = useStrandB ? _ribbon2X[hSpineIdx] : _ribbon1X[hSpineIdx];
             var baseY = useStrandB ? _ribbon2Y[hSpineIdx] : _ribbon1Y[hSpineIdx];
             p.stardust.push({
-              x: baseX + (Math.random() - 0.5) * (headR * 1.45),
-              y: baseY + (Math.random() - 0.5) * (headR * 1.45),
+              x: baseX + (Math.random() - 0.5) * (headR * 1.35),
+              y: baseY + (Math.random() - 0.5) * (headR * 1.35),
               alpha: 0.98,
-              r: 0.80 + Math.random() * (tier === 3 ? 1.50 : 1.15),
-              hue: useStrandB ? (294 + Math.random() * 30) : (186 + Math.random() * 16),
+              r: 0.85 + Math.random() * (tier === 3 ? 1.35 : 1.05),
+              isStrandB: useStrandB,
               helix: true
             });
           }
         }
       }
 
-      // Render Micro-Stardust Quantum Sparks, Electric Wake Lights & Helix Nucleotide Spores in World Coordinates
+      // Render Micro-Stardust Quantum Sparks, Electric Wake Lights & Helix Nucleotide Spores (Ultra-Fast Hardware GPU Blit)
       if (p.stardust && p.stardust.length > 0) {
+        var eCyan = MeteorVFXEngine.getElectricSpark();
+        var eViolet = MeteorVFXEngine.getElectricVioletSpark();
+        var hCyan = MeteorVFXEngine.getHelixSpark(false);
+        var hMag = MeteorVFXEngine.getHelixSpark(true);
+        var mEmber = MeteorVFXEngine.getEmber();
+
         for (var si = p.stardust.length - 1; si >= 0; si--) {
           var spk = p.stardust[si];
-          var isWakeOrb = !!(spk.electric || spk.helix);
-          spk.alpha *= isWakeOrb ? 0.90 : (isMeteor ? 0.88 : 0.80);
-          if (spk.alpha > 0.05) {
-            if ((spk.electric && !isMeteor && !isHelix) || (spk.helix && isHelix)) {
-              targetCtx.beginPath();
-              targetCtx.arc(spk.x, spk.y, spk.r * 2.30, 0, Math.PI * 2);
-              targetCtx.fillStyle = "hsla(" + Math.round(spk.hue) + ", 100%, 66%, " + (spk.alpha * 0.28).toFixed(2) + ")";
-              targetCtx.fill();
+          spk.alpha *= (isGameMode ? 0.84 : 0.88);
+          if (spk.alpha > 0.04) {
+            var sAlpha = spk.alpha * renderAlpha;
+            targetCtx.globalAlpha = sAlpha > 1.0 ? 1.0 : sAlpha;
+            var sSprite = null;
+            if (isMeteor) {
+              sSprite = mEmber;
+            } else if (isHelix) {
+              sSprite = spk.isStrandB ? hMag : hCyan;
+            } else {
+              sSprite = spk.isViolet ? eViolet : eCyan;
             }
-            targetCtx.beginPath();
-            targetCtx.arc(spk.x, spk.y, spk.r, 0, Math.PI * 2);
-            targetCtx.fillStyle = isMeteor
-              ? ("rgba(255, " + Math.round(135 + (spk.hue || 24) * 2.2) + ", 60, " + spk.alpha.toFixed(2) + ")")
-              : (isWakeOrb
-                ? ("hsla(" + Math.round(spk.hue) + ", 100%, 76%, " + spk.alpha.toFixed(2) + ")")
-                : ("hsla(" + Math.round(spk.hue) + ", 100%, 82%, " + spk.alpha.toFixed(2) + ")"));
-            targetCtx.fill();
-            if ((isMeteor || isWakeOrb) && spk.alpha > 0.35 && spk.r > 0.80) {
-              targetCtx.beginPath();
-              targetCtx.arc(spk.x, spk.y, spk.r * 0.46, 0, Math.PI * 2);
-              targetCtx.fillStyle = "rgba(255, 255, 255, " + spk.alpha.toFixed(2) + ")";
-              targetCtx.fill();
+            if (sSprite) {
+              var sDiameter = Math.max(2.6, spk.r * 2.8);
+              targetCtx.drawImage(sSprite, spk.x - sDiameter * 0.5, spk.y - sDiameter * 0.5, sDiameter, sDiameter);
             }
           } else {
-            p.stardust.splice(si, 1);
+            // High-speed O(1) swap-and-pop: zero GC churn
+            p.stardust[si] = p.stardust[p.stardust.length - 1];
+            p.stardust.pop();
           }
         }
+        targetCtx.globalAlpha = 1.0;
       }
     }
     // ── 4. MICRO-CONSTELLATION FILAMENTS (On Background Canvas - Batched High Speed) ──
