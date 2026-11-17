@@ -5218,6 +5218,12 @@
       box-shadow: 0 0 24px rgba(255, 215, 0, 0.7);
       transform: translateY(-1px);
     }
+    .btn-focus-copy-pwd.copied {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+      border-color: #34d399 !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 22px rgba(16, 185, 129, 0.65) !important;
+    }
 
     /* Make grid cards interactive cursor */
     .vault-card {
@@ -6612,6 +6618,37 @@
       playJarvisSound('reveal');
     }
 
+    function copyPasswordSilently(text) {
+      if (!text) return;
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).catch(() => {
+            fallbackCopyText(text);
+          });
+        } else {
+          fallbackCopyText(text);
+        }
+      } catch (e) {
+        fallbackCopyText(text);
+      }
+    }
+
+    function fallbackCopyText(text) {
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        ta.style.top = '-9999px';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      } catch(e) {}
+    }
+
     async function copyToClipboard(text, accountTitle, btnElement, itemId) {
       if (!text) {
         showToast('⚠️ No password stored for this account');
@@ -7174,7 +7211,7 @@
                 <button type="button" class="btn-pwd-action" onclick="toggleReveal('${item.id}')" title="Toggle Show/Hide Password">
                   <svg width="15" height="15" id="eyeIcon-${item.id}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                 </button>
-                <button type="button" class="btn-copy-instant" onclick="copyToClipboard('${safePwd}', '${safeTitle}', this, '${item.id}')" title="1-Click Copy Password">
+                <button type="button" class="btn-copy-instant" onclick="openAccountFocusModal('${item.id}', false); copyToClipboard('${safePwd}', '${safeTitle}', this, '${item.id}');" title="1-Click Copy Password & Focus">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                   COPY
                 </button>
@@ -8904,6 +8941,19 @@
       openedFromSpotlight = !!isFromSpotlight;
       focusPwdRevealed = false;
 
+      // =========================================================================
+      // INSTANT AUTOMATIC PASSWORD CLIPBOARD COPY
+      // Whenever an account pops up (from search, spotlight, or grid browsing),
+      // the password is automatically placed into the clipboard immediately so
+      // the user can immediately switch apps and press Ctrl+V.
+      // =========================================================================
+      if (item.password) {
+        copyPasswordSilently(item.password);
+        if (typeof playJarvisSound === 'function') playJarvisSound('copy');
+        if (typeof trackCardUsage === 'function') trackCardUsage(item.id, 'copy_password', 2.0);
+        if (typeof logAudit === 'function') logAudit('AUTO_COPIED_PASSWORD', 'Auto-copied password on pop-up for: ' + (item.title || itemId));
+      }
+
       if (openedFromSpotlight) {
         const spotInput = document.getElementById('vaultSpotlightInput');
         if (spotInput && spotInput.value) {
@@ -9033,12 +9083,35 @@
 
       const btnCopyPwd = document.getElementById('btnFocusCopyPwd');
       if (btnCopyPwd) {
+        const origBtnHtml = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> COPY PASSWORD';
+        
+        // Show immediate visual confirmation that password is auto-copied and ready for Ctrl+V
+        if (item.password) {
+          btnCopyPwd.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> PASSWORD AUTO-COPIED (READY TO CTRL+V)';
+          btnCopyPwd.classList.add('copied');
+          setTimeout(() => {
+            if (btnCopyPwd) {
+              btnCopyPwd.innerHTML = origBtnHtml;
+              btnCopyPwd.classList.remove('copied');
+            }
+          }, 2400);
+        } else {
+          btnCopyPwd.innerHTML = origBtnHtml;
+          btnCopyPwd.classList.remove('copied');
+        }
+
         btnCopyPwd.onclick = () => {
-          if (navigator.clipboard) {
-            navigator.clipboard.writeText(item.password).then(() => {
-              if (typeof showToast === 'function') showToast(`🔐 Copied password for ${item.title}!`, '📋');
-              if (typeof playJarvisSound === 'function') playJarvisSound('copy');
-            }).catch(() => {});
+          if (item.password) {
+            copyPasswordSilently(item.password);
+            if (typeof playJarvisSound === 'function') playJarvisSound('copy');
+            btnCopyPwd.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> COPIED!';
+            btnCopyPwd.classList.add('copied');
+            setTimeout(() => {
+              if (btnCopyPwd) {
+                btnCopyPwd.innerHTML = origBtnHtml;
+                btnCopyPwd.classList.remove('copied');
+              }
+            }, 2000);
           }
         };
       }
