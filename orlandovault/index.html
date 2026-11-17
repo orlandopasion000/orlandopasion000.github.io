@@ -5166,7 +5166,7 @@
               } else if (t.includes('shoppe') || t.includes('lazada') || t.includes('zalora') || t.includes('grab') || t.includes('mcdo') || t.includes('jollibee') || t.includes('klook') || t.includes('agoda') || c.includes('shop')) {
                 item.category = 'Shopping';
                 item.badge = 'Shopping & Delivery';
-              } else if (t.includes('claude') || t.includes('chatgpt') || t.includes('deepseek') || t.includes('gemini') || t.includes('bard') || t.includes('github') || t.includes('gitlab') || t.includes('anthropic') || t.includes('magicschool') || t.includes('gamma') || t.includes('camb') || c.includes('ai')) {
+              } else if (t.includes('claude') || t.includes('chatgpt') || t.includes('deepseek') || t.includes('gemini') || t.includes('bard') || t.includes('github') || t.includes('gitlab') || t.includes('anthropic') || t.includes('magicschool') || t.includes('gamma') || t.includes('camb') || c === 'ai' || c === 'ai & dev' || c.includes('claude') || c.includes('openai') || c.includes('anthropic')) {
                 item.category = 'AI & Dev';
                 item.badge = 'Claude & AI';
               } else if (t.includes('prulife') || t.includes('landbank') || t.includes('bdo') || t.includes('bpi') || t.includes('gcash') || t.includes('maya') || t.includes('komo') || t.includes('unionbank') || t.includes('rcbc') || t.includes('cimb') || c.includes('bank') || c.includes('finance')) {
@@ -6127,14 +6127,15 @@
         const safePwd = escapeHtml(item.password);
 
         let catClass = 'cat-portals';
-        const cat = (item.category || '').toLowerCase();
-        if (cat.includes('deped') || cat.includes('academic')) catClass = 'cat-deped';
+        const cat = (item.category || '').toLowerCase().trim();
+        // Exact checks first so 'gmail' never matches 'ai'
+        if (cat === 'gmail' || cat.includes('google')) catClass = 'cat-gmail';
+        else if (cat.includes('deped') || cat.includes('academic')) catClass = 'cat-deped';
         else if (cat.includes('social')) catClass = 'cat-social';
-        else if (cat.includes('ai') || cat.includes('claude') || cat.includes('dev')) catClass = 'cat-ai';
+        else if (cat === 'ai' || cat === 'ai & dev' || cat.includes('claude') || cat.includes('dev') || cat.includes('openai') || cat.includes('anthropic')) catClass = 'cat-ai';
         else if (cat.includes('bank') || cat.includes('finance')) catClass = 'cat-banking';
         else if (cat.includes('entertain') || cat.includes('stream') || cat.includes('media')) catClass = 'cat-entertainment';
         else if (cat.includes('shop') || cat.includes('delivery')) catClass = 'cat-shopping';
-        else if (cat.includes('gmail') || cat.includes('google')) catClass = 'cat-gmail';
         else if (cat.includes('micro') || cat.includes('office') || cat.includes('azure')) catClass = 'cat-microsoft';
         else if (cat.includes('fam')) catClass = 'cat-family';
         else if (cat.includes('system') || cat.includes('device')) catClass = 'cat-system';
@@ -6146,10 +6147,12 @@
         const rotationLabel = daysAgo <= 0 ? 'Today' : `${daysAgo}d ago`;
 
                 const brand = getServiceBrandInfo(item);
-        const effectiveBrandClass = brand.brandClass || catClass;
+        // Brand Aura takes absolute priority over generic category glow!
+        // If brand has its own official aura (e.g. brand-aura-meta, brand-aura-google), use it exclusively so category colors never override it!
+        const visualAuraClass = brand.brandClass ? brand.brandClass : catClass;
 
         return `
-          <article class="vault-card ${effectiveBrandClass} ${catClass} ${isPinned ? 'is-priority-pinned' : ''} ${isCritical ? 'is-critical-account' : ''}" id="card-${item.id}">
+          <article class="vault-card ${visualAuraClass} ${isPinned ? 'is-priority-pinned' : ''} ${isCritical ? 'is-critical-account' : ''}" data-cat="${catClass}" id="card-${item.id}">
             <div class="card-header">
               <div class="card-brand-header-left">
                 <div class="brand-squircle ${brand.squircleClass}">${brand.logoSvg}</div>
@@ -6890,7 +6893,7 @@
         } else if (rawCatL.includes('microsoft') || titleLower.includes('microsoft') || titleLower.includes('365')) {
           category = 'Microsoft';
           badge = 'Microsoft 365';
-        } else if (rawCatL.includes('dev') || rawCatL.includes('ai') || titleLower.includes('claude') || titleLower.includes('gpt') || titleLower.includes('gemini') || titleLower.includes('deepseek') || titleLower.includes('perplexity') || titleLower.includes('gamma') || titleLower.includes('github') || titleLower.includes('gitlab')) {
+        } else if (rawCatL.includes('dev') || rawCatL === 'ai' || rawCatL === 'ai & dev' || titleLower.includes('claude') || titleLower.includes('gpt') || titleLower.includes('gemini') || titleLower.includes('deepseek') || titleLower.includes('perplexity') || titleLower.includes('gamma') || titleLower.includes('github') || titleLower.includes('gitlab')) {
           category = 'AI & Dev';
           badge = 'Claude & AI';
         } else if (rawCatL.includes('bank') || rawCatL.includes('finance') || titleLower.includes('landbank') || titleLower.includes('bdo') || titleLower.includes('bpi') || titleLower.includes('gcash') || titleLower.includes('komo') || titleLower.includes('unionbank') || titleLower.includes('rcbc') || titleLower.includes('cimb') || titleLower.includes('chinabank') || titleLower.includes('maribank') || titleLower.includes('maya')) {
