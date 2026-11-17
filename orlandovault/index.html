@@ -608,6 +608,34 @@
       color: #ffffff;
     }
 
+    
+    /* Strict Viewport Boundary Guard (Zero Sideways Scrolling) */
+    html, body {
+      max-width: 100vw;
+      overflow-x: hidden !important;
+    }
+    .vault-topbar {
+      max-width: 100vw;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+    .vault-layout {
+      max-width: 100vw;
+      box-sizing: border-box;
+      overflow-x: hidden !important;
+      min-width: 0 !important;
+    }
+    .controls-panel {
+      min-width: 0 !important;
+      max-width: 100% !important;
+      overflow: hidden !important;
+    }
+    .filter-pills-row {
+      max-width: 100% !important;
+      overflow-x: auto !important;
+      -webkit-overflow-scrolling: touch;
+    }
+
     .filter-pills-row {
       display: flex;
       align-items: center;
@@ -5267,12 +5295,10 @@
     }
     body {
       min-height: 100dvh;
+      margin: 0;
+      padding: 0;
       overflow-x: hidden;
       -webkit-tap-highlight-color: transparent;
-      padding-top: env(safe-area-inset-top, 0px);
-      padding-bottom: env(safe-area-inset-bottom, 0px);
-      padding-left: env(safe-area-inset-left, 0px);
-      padding-right: env(safe-area-inset-right, 0px);
     }
 
     /* Input mode indicators */
@@ -5289,17 +5315,36 @@
       }
     }
 
-    /* Responsive Top Bar */
+    /* Responsive Top Bar: Snug fit under Dynamic Island / notch without double padding */
     .vault-topbar {
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
-      gap: 10px;
-      padding: max(10px, env(safe-area-inset-top, 10px)) max(14px, env(safe-area-inset-right, 14px)) 10px max(14px, env(safe-area-inset-left, 14px));
+      gap: 8px;
+      padding-top: max(8px, env(safe-area-inset-top, 8px)) !important;
+      padding-bottom: 8px !important;
+      padding-left: max(12px, env(safe-area-inset-left, 12px)) !important;
+      padding-right: max(12px, env(safe-area-inset-right, 12px)) !important;
       width: 100%;
       max-width: 100vw;
       box-sizing: border-box;
+    }
+
+    /* Fluid Layouts & Media Queries (Phone, Tablet, Laptop) */
+    img, svg, table {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .vault-layout {
+      padding: 6px max(14px, env(safe-area-inset-right, 14px)) calc(80px + env(safe-area-inset-bottom, 0px)) max(14px, env(safe-area-inset-left, 14px)) !important;
+      gap: 10px !important;
+    }
+
+    .filter-microbar-wrapper {
+      margin-bottom: 4px !important;
+      padding: 4px 0 !important;
     }
 
     .topbar-actions {
@@ -5412,28 +5457,54 @@
 
     @media (max-width: 768px) {
       .vault-topbar {
-        padding: calc(6px + env(safe-area-inset-top, 0px)) 10px 8px 10px;
+        padding-top: max(8px, env(safe-area-inset-top, 8px)) !important;
+        padding-bottom: 6px !important;
+        padding-left: max(10px, env(safe-area-inset-left, 10px)) !important;
+        padding-right: max(10px, env(safe-area-inset-right, 10px)) !important;
+        flex-wrap: nowrap !important;
+        min-height: 48px !important;
+        height: auto !important;
+        gap: 8px !important;
+      }
+      .brand-cluster {
+        gap: 10px !important;
+        flex-shrink: 0 !important;
       }
       .brand-meta h1 {
-        font-size: 14px;
+        font-size: 14px !important;
+        letter-spacing: 1px !important;
       }
       .topbar-actions {
-        gap: 6px;
-      }
-      .btn-topbar-tool span:not(.sync-health-pulse-dot) {
-        display: none;
+        flex-wrap: nowrap !important;
+        gap: 6px !important;
+        flex-shrink: 0 !important;
       }
       .btn-topbar-tool {
-        padding: 0 10px;
-      }
-      .btn-topbar-search span, .btn-topbar-search kbd {
-        display: none;
-      }
-      .btn-topbar-search {
-        padding: 0 12px;
+        display: none !important;
       }
       .btn-topbar-desktop {
-        display: none;
+        display: none !important;
+      }
+      .btn-topbar-search {
+        max-width: 140px !important;
+        padding: 0 12px !important;
+        min-height: 38px !important;
+        gap: 6px !important;
+      }
+      .btn-topbar-search span {
+        display: inline !important;
+        font-size: 13px !important;
+      }
+      .btn-topbar-search kbd {
+        display: none !important;
+      }
+      .vault-layout {
+        padding: 4px max(10px, env(safe-area-inset-right, 10px)) calc(80px + env(safe-area-inset-bottom, 0px)) max(10px, env(safe-area-inset-left, 10px)) !important;
+        gap: 8px !important;
+      }
+      .filter-microbar-wrapper {
+        margin: 2px 0 6px 0 !important;
+        padding: 2px 0 !important;
       }
     }
 
@@ -10720,7 +10791,8 @@
         document.getElementById('cardEditModal'),
         document.getElementById('sheetSyncModal'),
         document.getElementById('qrModal'),
-        document.getElementById('historyModal')
+        document.getElementById('historyModal'),
+        document.getElementById('syncHealthModal')
       ];
       for (let i = 0; i < candidates.length; i++) {
         const m = candidates[i];
@@ -10748,6 +10820,8 @@
         window.closeVaultQrModal();
       } else if (m.id === 'historyModal' && typeof window.closeAuditModal === 'function') {
         window.closeAuditModal();
+      } else if (m.id === 'syncHealthModal') {
+        m.style.display = 'none';
       } else {
         m.classList.remove('open', 'active');
       }
@@ -10841,12 +10915,16 @@
       }
     }
 
-    // Touch Event Handlers with Real-Time Spring Translation
-    document.addEventListener('touchstart', function(e) {
-      if (e.touches.length !== 1) return;
-      const touch = e.touches[0];
-      touchStartX = touch.clientX;
-      touchStartY = touch.clientY;
+    // Unified Pointer & Touch Gesture Engine with Bidirectional Dismissal
+    let activePointerId = null;
+    let usingPointer = false;
+
+    function handleDragStart(clientX, clientY, target) {
+      if (target && target.closest('input, textarea, select, button, a, .btn-pwd-action, .btn-focus-copy-user-inline, .btn-card-pin, .btn-card-edit')) {
+        return false;
+      }
+      touchStartX = clientX;
+      touchStartY = clientY;
       touchStartTime = Date.now();
       isHorizontalGesture = false;
       isVerticalGesture = false;
@@ -10860,13 +10938,13 @@
       } else {
         activeDragBox = null;
       }
-    }, { passive: true });
+      return true;
+    }
 
-    document.addEventListener('touchmove', function(e) {
-      if (e.touches.length !== 1) return;
-      const touch = e.touches[0];
-      const dx = touch.clientX - touchStartX;
-      const dy = touch.clientY - touchStartY;
+    function handleDragMove(clientX, clientY) {
+      if (!touchStartTime) return;
+      const dx = clientX - touchStartX;
+      const dy = clientY - touchStartY;
       const absX = Math.abs(dx);
       const absY = Math.abs(dy);
 
@@ -10881,59 +10959,73 @@
       }
 
       if (activeDragModal && activeDragBox) {
-        if (isHorizontalGesture && dx > 0) {
+        if (isHorizontalGesture) {
+          // Allow both swipe-left and swipe-right translation
           activeDragBox.style.transform = 'translateX(' + dx + 'px)';
-          activeDragModal.style.opacity = String(Math.max(0.2, 1 - dx / 400));
+          activeDragModal.style.opacity = String(Math.max(0.15, 1 - Math.abs(dx) / 350));
         } else if (isVerticalGesture && dy > 0) {
-          const scrollable = activeDragModal.querySelector('.spotlight-results, .card-edit-form, .modal-body') || activeDragBox;
+          // Allow swipe-down translation
+          const scrollable = activeDragModal.querySelector('.spotlight-results, .card-edit-form, .modal-body, .focus-hud-box') || activeDragBox;
           if (!scrollable || scrollable.scrollTop <= 2) {
             activeDragBox.style.transform = 'translateY(' + dy + 'px)';
-            activeDragModal.style.opacity = String(Math.max(0.2, 1 - dy / 400));
+            activeDragModal.style.opacity = String(Math.max(0.15, 1 - dy / 350));
           }
         }
       }
-    }, { passive: true });
+    }
 
-    document.addEventListener('touchend', function(e) {
+    function handleDragEnd(clientX, clientY) {
+      if (!touchStartTime) return;
       const dt = Math.max(1, Date.now() - touchStartTime);
-      const changedTouch = e.changedTouches[0];
-      if (!changedTouch) return;
-
-      const dx = changedTouch.clientX - touchStartX;
-      const dy = changedTouch.clientY - touchStartY;
+      const dx = clientX - touchStartX;
+      const dy = clientY - touchStartY;
       const absX = Math.abs(dx);
       const absY = Math.abs(dy);
       const vx = absX / dt;
       const vy = absY / dt;
 
       if (activeDragModal && activeDragBox) {
-        activeDragBox.style.transition = 'transform 0.28s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.28s ease';
-        activeDragModal.style.transition = 'opacity 0.28s ease';
+        activeDragBox.style.transition = 'transform 0.26s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.26s ease';
+        activeDragModal.style.transition = 'opacity 0.26s ease';
 
-        const shouldDismissHorizontal = isHorizontalGesture && dx > 55 && (dx > 95 || vx > 0.32);
-        const shouldDismissVertical = isVerticalGesture && dy > 55 && (dy > 100 || vy > 0.32);
+        const shouldDismissHorizontal = isHorizontalGesture && absX > 50 && (absX > 80 || vx > 0.22);
+        const shouldDismissVertical = isVerticalGesture && dy > 50 && (dy > 80 || vy > 0.22);
 
         if (shouldDismissHorizontal) {
-          activeDragBox.style.transform = 'translateX(' + window.innerWidth + 'px)';
+          // Slide off smoothly in the exact direction of the horizontal swipe (left or right)
+          const targetX = dx > 0 ? (window.innerWidth + 80) : -(window.innerWidth + 80);
+          activeDragBox.style.transform = 'translateX(' + targetX + 'px)';
           activeDragModal.style.opacity = '0';
           setTimeout(function() {
             closeActiveModal();
-            activeDragBox.style.transform = '';
-            activeDragBox.style.opacity = '';
-            activeDragModal.style.opacity = '';
-          }, 240);
+            if (activeDragBox) {
+              activeDragBox.style.transform = '';
+              activeDragBox.style.opacity = '';
+            }
+            if (activeDragModal) activeDragModal.style.opacity = '';
+          }, 220);
+          touchStartTime = 0;
+          activeDragModal = null;
+          activeDragBox = null;
           return;
         } else if (shouldDismissVertical) {
-          activeDragBox.style.transform = 'translateY(' + window.innerHeight + 'px)';
+          // Slide off smoothly in the downward direction
+          activeDragBox.style.transform = 'translateY(' + (window.innerHeight + 80) + 'px)';
           activeDragModal.style.opacity = '0';
           setTimeout(function() {
             closeActiveModal();
-            activeDragBox.style.transform = '';
-            activeDragBox.style.opacity = '';
-            activeDragModal.style.opacity = '';
-          }, 240);
+            if (activeDragBox) {
+              activeDragBox.style.transform = '';
+              activeDragBox.style.opacity = '';
+            }
+            if (activeDragModal) activeDragModal.style.opacity = '';
+          }, 220);
+          touchStartTime = 0;
+          activeDragModal = null;
+          activeDragBox = null;
           return;
         } else {
+          // Snap back with spring transition
           activeDragBox.style.transform = '';
           activeDragModal.style.opacity = '';
         }
@@ -10948,8 +11040,64 @@
         }
       }
 
+      touchStartTime = 0;
       activeDragModal = null;
       activeDragBox = null;
+    }
+
+    // Pointer Events for unified desktop & mobile touch/mouse/pen drag gestures
+    document.addEventListener('pointerdown', function(e) {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      usingPointer = true;
+      activePointerId = e.pointerId;
+      handleDragStart(e.clientX, e.clientY, e.target);
+    }, { passive: true });
+
+    document.addEventListener('pointermove', function(e) {
+      if (!usingPointer || e.pointerId !== activePointerId) return;
+      handleDragMove(e.clientX, e.clientY);
+    }, { passive: true });
+
+    document.addEventListener('pointerup', function(e) {
+      if (!usingPointer || e.pointerId !== activePointerId) return;
+      handleDragEnd(e.clientX, e.clientY);
+      usingPointer = false;
+      activePointerId = null;
+    }, { passive: true });
+
+    document.addEventListener('pointercancel', function(e) {
+      if (!usingPointer || e.pointerId !== activePointerId) return;
+      if (activeDragBox) {
+        activeDragBox.style.transform = '';
+        if (activeDragModal) activeDragModal.style.opacity = '';
+      }
+      usingPointer = false;
+      activePointerId = null;
+      touchStartTime = 0;
+      activeDragModal = null;
+      activeDragBox = null;
+    }, { passive: true });
+
+    // Touch fallback for native iOS touch devices
+    document.addEventListener('touchstart', function(e) {
+      if (usingPointer) return;
+      if (e.touches.length !== 1) return;
+      const touch = e.touches[0];
+      handleDragStart(touch.clientX, touch.clientY, e.target);
+    }, { passive: true });
+
+    document.addEventListener('touchmove', function(e) {
+      if (usingPointer) return;
+      if (e.touches.length !== 1) return;
+      const touch = e.touches[0];
+      handleDragMove(touch.clientX, touch.clientY);
+    }, { passive: true });
+
+    document.addEventListener('touchend', function(e) {
+      if (usingPointer) return;
+      const changedTouch = e.changedTouches[0];
+      if (!changedTouch) return;
+      handleDragEnd(changedTouch.clientX, changedTouch.clientY);
     }, { passive: true });
 
     window.closeActiveVaultModal = closeActiveModal;
