@@ -4777,21 +4777,8 @@ body.light-theme .highlight-card .dist-icon{
   <!-- 2. RECHARGE COMMAND CONSOLE (Compressed, Transparent, Collapsible) -->
   <div class="command-console minimized" id="controlsConsole">
     <!-- Console Status Header (Always Visible, 38px, High-Tech Micro-Bar) -->
-    <div class="console-head" id="consoleHead">
+        <div class="console-head" id="consoleHead">
       <div class="console-quick-stats">
-        <button class="console-mini-pill live" id="consoleArmBadge" title="Toggle Alarms On/Off">
-          <span class="status-dot"></span>
-          <span id="consoleArmText">✓ Alarms Active</span>
-        </button>
-        <button class="console-mini-pill" id="audioBadge" title="Browser Audio Status">
-          <svg class="modern-icon modern-icon-emerald" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
-          <span id="audioBadgeText">Sound Ready</span>
-        </button>
-        <span class="console-divider">|</span>
-        <button class="console-mini-pill" id="consoleDaysBadge" title="Current Active Days">
-          <svg class="modern-icon modern-icon-cyan" viewBox="0 0 24 24"><path d="M4 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12.5l-4.5 4.5H6a2 2 0 0 1-2-2V4z"></path><line x1="8" y1="1" x2="8" y2="4"></line><line x1="16" y1="1" x2="16" y2="4"></line><line x1="4" y1="8.5" x2="20" y2="8.5"></line><line x1="7.5" y1="12.5" x2="9.5" y2="12.5"></line><line x1="12.5" y1="12.5" x2="16.5" y2="12.5"></line><line x1="7.5" y1="16" x2="11.5" y2="16"></line><circle cx="14.5" cy="16" r="1" fill="currentColor"></circle></svg>
-          <span id="consoleDaysText">Mon — Fri</span>
-        </button>
         <button class="console-mini-pill" id="consoleThemeBadge" title="Cycle Clock Font & Visual Appearance">
           <svg class="modern-icon modern-icon-gold" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a10 10 0 0 0-4 19.19V17a3 3 0 0 1 3-3h1a2 2 0 0 0 2-2 2 2 0 0 0-2-2z"></path></svg>
           <b id="consoleThemeLabel">Titanium Obsidian Noir</b>
@@ -4822,9 +4809,13 @@ body.light-theme .highlight-card .dist-icon{
             <svg class="modern-icon modern-icon-emerald" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
             <span>Add Alarm</span>
           </button>
-          <button class="ghost" id="resetSchedBtn" title="Reset to Sir Orlando's authentic 23-block routine">
+                    <button class="ghost" id="resetSchedBtn" title="Reset to Sir Orlando's authentic 23-block routine">
             <svg class="modern-icon" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
             <span>Reset Default</span>
+          </button>
+          <button class="ghost console-days-btn" id="consoleDaysBadge" title="Current Active Routine Days (Click to scroll to active days)">
+            <svg class="modern-icon modern-icon-cyan" viewBox="0 0 24 24"><path d="M4 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12.5l-4.5 4.5H6a2 2 0 0 1-2-2V4z"></path><line x1="8" y1="1" x2="8" y2="4"></line><line x1="16" y1="1" x2="16" y2="4"></line><line x1="4" y1="8.5" x2="20" y2="8.5"></line><line x1="7.5" y1="12.5" x2="9.5" y2="12.5"></line><line x1="12.5" y1="12.5" x2="16.5" y2="12.5"></line><line x1="7.5" y1="16" x2="11.5" y2="16"></line><circle cx="14.5" cy="16" r="1" fill="currentColor"></circle></svg>
+            <span id="consoleDaysText">Mon — Fri</span>
           </button>
         </div>
 
@@ -6031,9 +6022,11 @@ function updateAudioBadge(){
   text.textContent="Sound Ready";
   badge.title="Sound is active and ready to play alarms";
 }
-$("audioBadge").onclick=function(){
-  unlock();
-};
+if ($("audioBadge")) {
+  $("audioBadge").onclick=function(){
+    unlock();
+  };
+}
 
 // Sound status initialized for user gesture activation
 updateAudioBadge();
@@ -14224,7 +14217,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   <script>
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v82', { scope: './' }).catch(function() {});
+        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v83', { scope: './' }).catch(function() {});
       });
     }
   </script>
