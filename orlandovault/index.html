@@ -1317,7 +1317,409 @@
       pointer-events: none;
     }
 
-        /* ==========================================================================
+        
+    /* ==========================================================================
+       HYBRID #1 + #5 BRAND SQUIR渡しCLE & ADAPTIVE CHROMATIC AURAS
+       ========================================================================== */
+    .brand-squircle {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      padding: 8px;
+      background: rgba(0, 0, 0, 0.65);
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.18);
+    }
+    .brand-squircle svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .vault-card:hover .brand-squircle {
+      transform: scale(1.05);
+    }
+
+    .card-brand-header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex: 1;
+      min-width: 0;
+    }
+    .card-brand-microbar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 2px;
+    }
+    .card-badge-verified {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      color: #38bdf8;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .card-badge-cat-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 600;
+      color: #94a3b8;
+    }
+    .card-badge-org {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: 4px;
+      background: rgba(16, 185, 129, 0.18);
+      border: 1px solid rgba(16, 185, 129, 0.6);
+      color: #34d399;
+      letter-spacing: 0.5px;
+    }
+    .card-badge-critical-micro {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: 4px;
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid rgba(239, 68, 68, 0.7);
+      color: #f87171;
+    }
+    .card-badge-priority-micro {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: 4px;
+      background: rgba(245, 158, 11, 0.2);
+      border: 1px solid rgba(245, 158, 11, 0.7);
+      color: #fbbf24;
+    }
+
+    /* --------------------------------------------------------------------------
+       SPECTRUM AURA #1: GOOGLE / GMAIL (4-Color Rainbow Halo & Beam)
+       -------------------------------------------------------------------------- */
+    .vault-card.brand-aura-google {
+      border: 1.5px solid transparent !important;
+      background: radial-gradient(circle at 0% 0%, rgba(234, 67, 53, 0.32) 0%, transparent 50%),
+                  radial-gradient(circle at 100% 100%, rgba(66, 133, 244, 0.32) 0%, transparent 55%),
+                  radial-gradient(circle at 100% 0%, rgba(251, 188, 4, 0.22) 0%, transparent 50%),
+                  radial-gradient(circle at 0% 100%, rgba(52, 168, 83, 0.22) 0%, transparent 50%),
+                  linear-gradient(135deg, rgba(16, 18, 26, 0.96), rgba(8, 10, 14, 0.98)) padding-box,
+                  conic-gradient(from 210deg, #ea4335, #fbbc04, #34a853, #4285f4, #ea4335) border-box !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8),
+                  -12px -6px 30px rgba(234, 67, 53, 0.35),
+                  12px -6px 30px rgba(251, 188, 4, 0.28),
+                  -12px 10px 30px rgba(52, 168, 83, 0.28),
+                  12px 10px 30px rgba(66, 133, 244, 0.35),
+                  inset 0 1px 2px rgba(255, 255, 255, 0.2) !important;
+    }
+    .vault-card.brand-aura-google::before {
+      background: linear-gradient(90deg, #ea4335 0% 25%, #fbbc04 25% 50%, #34a853 50% 75%, #4285f4 75% 100%) !important;
+      box-shadow: 0 0 14px rgba(255, 255, 255, 0.4) !important;
+      opacity: 1 !important;
+    }
+    .vault-card.brand-aura-google .card-badge-verified {
+      color: #ea4335;
+    }
+    .sq-google {
+      border-color: rgba(255, 255, 255, 0.3) !important;
+      box-shadow: -4px 0 12px rgba(234, 67, 53, 0.45), 4px 0 12px rgba(251, 188, 4, 0.4), 0 4px 12px rgba(66, 133, 244, 0.45) !important;
+    }
+
+    /* --------------------------------------------------------------------------
+       SPECTRUM AURA #2: MICROSOFT 365 (4-Color Metro Tile Halo & Beam)
+       -------------------------------------------------------------------------- */
+    .vault-card.brand-aura-microsoft {
+      border: 1.5px solid transparent !important;
+      background: radial-gradient(circle at 0% 0%, rgba(242, 80, 34, 0.32) 0%, transparent 50%),
+                  radial-gradient(circle at 100% 100%, rgba(0, 164, 239, 0.32) 0%, transparent 55%),
+                  radial-gradient(circle at 100% 0%, rgba(127, 186, 0, 0.24) 0%, transparent 50%),
+                  radial-gradient(circle at 0% 100%, rgba(255, 185, 0, 0.22) 0%, transparent 50%),
+                  linear-gradient(135deg, rgba(14, 18, 28, 0.96), rgba(6, 10, 16, 0.98)) padding-box,
+                  conic-gradient(from 210deg, #f25022, #7fba00, #00a4ef, #ffb900, #f25022) border-box !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8),
+                  -12px -6px 30px rgba(242, 80, 34, 0.35),
+                  12px -6px 30px rgba(127, 186, 0, 0.28),
+                  -12px 10px 30px rgba(255, 185, 0, 0.28),
+                  12px 10px 30px rgba(0, 164, 239, 0.35),
+                  inset 0 1px 2px rgba(255, 255, 255, 0.2) !important;
+    }
+    .vault-card.brand-aura-microsoft::before {
+      background: linear-gradient(90deg, #f25022 0% 25%, #7fba00 25% 50%, #00a4ef 50% 75%, #ffb900 75% 100%) !important;
+      box-shadow: 0 0 14px rgba(255, 255, 255, 0.4) !important;
+      opacity: 1 !important;
+    }
+    .vault-card.brand-aura-microsoft .card-badge-verified {
+      color: #00a4ef;
+    }
+    .sq-microsoft {
+      border-color: rgba(255, 255, 255, 0.3) !important;
+      box-shadow: -4px 0 12px rgba(242, 80, 34, 0.45), 4px 0 12px rgba(127, 186, 0, 0.4), 0 4px 12px rgba(0, 164, 239, 0.45) !important;
+    }
+
+    /* --------------------------------------------------------------------------
+       SOLID BRAND AURAS
+       -------------------------------------------------------------------------- */
+    /* Meta / Facebook */
+    .vault-card.brand-aura-meta {
+      border: 1.5px solid rgba(24, 119, 242, 0.85) !important;
+      background: radial-gradient(circle at 0% 0%, rgba(24, 119, 242, 0.30) 0%, transparent 60%),
+                  linear-gradient(135deg, rgba(12, 18, 30, 0.96), rgba(6, 10, 18, 0.98)) !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 30px rgba(24, 119, 242, 0.5), 0 0 70px rgba(24, 119, 242, 0.2), inset 0 1px 2px rgba(255, 255, 255, 0.2) !important;
+    }
+    .vault-card.brand-aura-meta::before {
+      background: linear-gradient(90deg, transparent, #1877f2, #38bdf8, transparent) !important;
+      box-shadow: 0 0 14px #1877f2 !important;
+      opacity: 1 !important;
+    }
+    .vault-card.brand-aura-meta .card-badge-verified { color: #1877f2; }
+    .sq-meta { border-color: rgba(24, 119, 242, 0.8) !important; box-shadow: 0 0 16px rgba(24, 119, 242, 0.5) !important; }
+
+    /* Netflix */
+    .vault-card.brand-aura-netflix {
+      border: 1.5px solid rgba(229, 9, 20, 0.85) !important;
+      background: radial-gradient(circle at 0% 0%, rgba(229, 9, 20, 0.30) 0%, transparent 60%),
+                  linear-gradient(135deg, rgba(28, 12, 14, 0.96), rgba(12, 6, 8, 0.98)) !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 30px rgba(229, 9, 20, 0.5), 0 0 70px rgba(229, 9, 20, 0.2), inset 0 1px 2px rgba(255, 255, 255, 0.2) !important;
+    }
+    .vault-card.brand-aura-netflix::before {
+      background: linear-gradient(90deg, transparent, #e50914, #ff4d5a, transparent) !important;
+      box-shadow: 0 0 14px #e50914 !important;
+      opacity: 1 !important;
+    }
+    .vault-card.brand-aura-netflix .card-badge-verified { color: #ff4d5a; }
+    .sq-netflix { border-color: rgba(229, 9, 20, 0.8) !important; box-shadow: 0 0 16px rgba(229, 9, 20, 0.5) !important; }
+
+    /* Spotify */
+    .vault-card.brand-aura-spotify {
+      border: 1.5px solid rgba(29, 185, 84, 0.85) !important;
+      background: radial-gradient(circle at 0% 0%, rgba(29, 185, 84, 0.30) 0%, transparent 60%),
+                  linear-gradient(135deg, rgba(12, 26, 18, 0.96), rgba(6, 12, 8, 0.98)) !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 30px rgba(29, 185, 84, 0.5), 0 0 70px rgba(29, 185, 84, 0.2), inset 0 1px 2px rgba(255, 255, 255, 0.2) !important;
+    }
+    .vault-card.brand-aura-spotify::before {
+      background: linear-gradient(90deg, transparent, #1db954, #4ade80, transparent) !important;
+      box-shadow: 0 0 14px #1db954 !important;
+      opacity: 1 !important;
+    }
+    .vault-card.brand-aura-spotify .card-badge-verified { color: #1db954; }
+    .sq-spotify { border-color: rgba(29, 185, 84, 0.8) !important; box-shadow: 0 0 16px rgba(29, 185, 84, 0.5) !important; }
+
+    /* Discord */
+    .vault-card.brand-aura-discord {
+      border: 1.5px solid rgba(88, 101, 242, 0.85) !important;
+      background: radial-gradient(circle at 0% 0%, rgba(88, 101, 242, 0.30) 0%, transparent 60%),
+                  linear-gradient(135deg, rgba(18, 20, 36, 0.96), rgba(8, 10, 18, 0.98)) !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 30px rgba(88, 101, 242, 0.5), 0 0 70px rgba(88, 101, 242, 0.2), inset 0 1px 2px rgba(255, 255, 255, 0.2) !important;
+    }
+    .vault-card.brand-aura-discord::before {
+      background: linear-gradient(90deg, transparent, #5865f2, #818cf8, transparent) !important;
+      box-shadow: 0 0 14px #5865f2 !important;
+      opacity: 1 !important;
+    }
+    .vault-card.brand-aura-discord .card-badge-verified { color: #818cf8; }
+    .sq-discord { border-color: rgba(88, 101, 242, 0.8) !important; box-shadow: 0 0 16px rgba(88, 101, 242, 0.5) !important; }
+
+    /* Instagram */
+    .vault-card.brand-aura-instagram {
+      border: 1.5px solid rgba(225, 48, 108, 0.85) !important;
+      background: radial-gradient(circle at 0% 0%, rgba(225, 48, 108, 0.30) 0%, transparent 60%),
+                  linear-gradient(135deg, rgba(28, 16, 26, 0.96), rgba(12, 8, 14, 0.98)) !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 30px rgba(225, 48, 108, 0.5), 0 0 70px rgba(225, 48, 108, 0.2), inset 0 1px 2px rgba(255, 255, 255, 0.2) !important;
+    }
+    .vault-card.brand-aura-instagram::before {
+      background: linear-gradient(90deg, transparent, #e1306c, #f43f5e, transparent) !important;
+      box-shadow: 0 0 14px #e1306c !important;
+      opacity: 1 !important;
+    }
+    .vault-card.brand-aura-instagram .card-badge-verified { color: #f43f5e; }
+    .sq-instagram { border-color: rgba(225, 48, 108, 0.8) !important; box-shadow: 0 0 16px rgba(225, 48, 108, 0.5) !important; }
+
+    /* X / Twitter */
+    .vault-card.brand-aura-x {
+      border: 1.5px solid rgba(255, 255, 255, 0.6) !important;
+      background: radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.20) 0%, transparent 60%),
+                  linear-gradient(135deg, rgba(20, 24, 30, 0.96), rgba(10, 12, 16, 0.98)) !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 255, 255, 0.35), 0 0 65px rgba(56, 189, 248, 0.15), inset 0 1px 2px rgba(255, 255, 255, 0.2) !important;
+    }
+    .vault-card.brand-aura-x::before {
+      background: linear-gradient(90deg, transparent, #ffffff, #cbd5e1, transparent) !important;
+      box-shadow: 0 0 14px #ffffff !important;
+      opacity: 1 !important;
+    }
+    .vault-card.brand-aura-x .card-badge-verified { color: #ffffff; }
+    .sq-x { border-color: rgba(255, 255, 255, 0.8) !important; box-shadow: 0 0 16px rgba(255, 255, 255, 0.4) !important; }
+
+    /* Disney+ */
+    .vault-card.brand-aura-disney {
+      border: 1.5px solid rgba(17, 60, 207, 0.85) !important;
+      background: radial-gradient(circle at 0% 0%, rgba(17, 60, 207, 0.30) 0%, transparent 60%),
+                  linear-gradient(135deg, rgba(10, 16, 32, 0.96), rgba(5, 8, 18, 0.98)) !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 30px rgba(17, 60, 207, 0.5), 0 0 70px rgba(17, 60, 207, 0.2), inset 0 1px 2px rgba(255, 255, 255, 0.2) !important;
+    }
+    .vault-card.brand-aura-disney::before {
+      background: linear-gradient(90deg, transparent, #113ccf, #38bdf8, transparent) !important;
+      box-shadow: 0 0 14px #113ccf !important;
+      opacity: 1 !important;
+    }
+    .vault-card.brand-aura-disney .card-badge-verified { color: #38bdf8; }
+    .sq-disney { border-color: rgba(17, 60, 207, 0.8) !important; box-shadow: 0 0 16px rgba(17, 60, 207, 0.5) !important; }
+
+    /* Claude / Anthropic */
+    .vault-card.brand-aura-claude {
+      border: 1.5px solid rgba(217, 119, 6, 0.85) !important;
+      background: radial-gradient(circle at 0% 0%, rgba(217, 119, 6, 0.30) 0%, transparent 60%),
+                  linear-gradient(135deg, rgba(28, 20, 14, 0.96), rgba(14, 10, 6, 0.98)) !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 30px rgba(217, 119, 6, 0.5), 0 0 70px rgba(217, 119, 6, 0.2), inset 0 1px 2px rgba(255, 255, 255, 0.2) !important;
+    }
+    .vault-card.brand-aura-claude::before {
+      background: linear-gradient(90deg, transparent, #d97706, #fbbf24, transparent) !important;
+      box-shadow: 0 0 14px #d97706 !important;
+      opacity: 1 !important;
+    }
+    .vault-card.brand-aura-claude .card-badge-verified { color: #fbbf24; }
+    .sq-claude { border-color: rgba(217, 119, 6, 0.8) !important; box-shadow: 0 0 16px rgba(217, 119, 6, 0.5) !important; }
+
+    /* OpenAI / ChatGPT */
+    .vault-card.brand-aura-openai {
+      border: 1.5px solid rgba(16, 163, 127, 0.85) !important;
+      background: radial-gradient(circle at 0% 0%, rgba(16, 163, 127, 0.30) 0%, transparent 60%),
+                  linear-gradient(135deg, rgba(12, 26, 22, 0.96), rgba(6, 14, 12, 0.98)) !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 30px rgba(16, 163, 127, 0.5), 0 0 70px rgba(16, 163, 127, 0.2), inset 0 1px 2px rgba(255, 255, 255, 0.2) !important;
+    }
+    .vault-card.brand-aura-openai::before {
+      background: linear-gradient(90deg, transparent, #10a37f, #34d399, transparent) !important;
+      box-shadow: 0 0 14px #10a37f !important;
+      opacity: 1 !important;
+    }
+    .vault-card.brand-aura-openai .card-badge-verified { color: #34d399; }
+    .sq-openai { border-color: rgba(16, 163, 127, 0.8) !important; box-shadow: 0 0 16px rgba(16, 163, 127, 0.5) !important; }
+
+    /* GitHub */
+    .vault-card.brand-aura-github {
+      border: 1.5px solid rgba(137, 87, 229, 0.85) !important;
+      background: radial-gradient(circle at 0% 0%, rgba(137, 87, 229, 0.30) 0%, transparent 60%),
+                  linear-gradient(135deg, rgba(22, 16, 32, 0.96), rgba(10, 8, 16, 0.98)) !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 30px rgba(137, 87, 229, 0.5), 0 0 70px rgba(137, 87, 229, 0.2), inset 0 1px 2px rgba(255, 255, 255, 0.2) !important;
+    }
+    .vault-card.brand-aura-github::before {
+      background: linear-gradient(90deg, transparent, #8957e5, #c084fc, transparent) !important;
+      box-shadow: 0 0 14px #8957e5 !important;
+      opacity: 1 !important;
+    }
+    .vault-card.brand-aura-github .card-badge-verified { color: #c084fc; }
+    .sq-github { border-color: rgba(137, 87, 229, 0.8) !important; box-shadow: 0 0 16px rgba(137, 87, 229, 0.5) !important; }
+
+    /* GCash */
+    .vault-card.brand-aura-gcash {
+      border: 1.5px solid rgba(0, 92, 230, 0.85) !important;
+      background: radial-gradient(circle at 0% 0%, rgba(0, 92, 230, 0.30) 0%, transparent 60%),
+                  linear-gradient(135deg, rgba(10, 18, 32, 0.96), rgba(5, 9, 18, 0.98)) !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 92, 230, 0.5), 0 0 70px rgba(0, 92, 230, 0.2), inset 0 1px 2px rgba(255, 255, 255, 0.2) !important;
+    }
+    .vault-card.brand-aura-gcash::before {
+      background: linear-gradient(90deg, transparent, #005ce6, #38bdf8, transparent) !important;
+      box-shadow: 0 0 14px #005ce6 !important;
+      opacity: 1 !important;
+    }
+    .vault-card.brand-aura-gcash .card-badge-verified { color: #38bdf8; }
+    .sq-gcash { border-color: rgba(0, 92, 230, 0.8) !important; box-shadow: 0 0 16px rgba(0, 92, 230, 0.5) !important; }
+
+    /* Maya */
+    .vault-card.brand-aura-maya {
+      border: 1.5px solid rgba(34, 197, 94, 0.85) !important;
+      background: radial-gradient(circle at 0% 0%, rgba(34, 197, 94, 0.30) 0%, transparent 60%),
+                  linear-gradient(135deg, rgba(12, 28, 18, 0.96), rgba(6, 14, 8, 0.98)) !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 30px rgba(34, 197, 94, 0.5), 0 0 70px rgba(34, 197, 94, 0.2), inset 0 1px 2px rgba(255, 255, 255, 0.2) !important;
+    }
+    .vault-card.brand-aura-maya::before {
+      background: linear-gradient(90deg, transparent, #22c55e, #86efac, transparent) !important;
+      box-shadow: 0 0 14px #22c55e !important;
+      opacity: 1 !important;
+    }
+    .vault-card.brand-aura-maya .card-badge-verified { color: #22c55e; }
+    .sq-maya { border-color: rgba(34, 197, 94, 0.8) !important; box-shadow: 0 0 16px rgba(34, 197, 94, 0.5) !important; }
+
+    /* Landbank */
+    .vault-card.brand-aura-landbank {
+      border: 1.5px solid rgba(0, 102, 51, 0.85) !important;
+      background: radial-gradient(circle at 0% 0%, rgba(0, 102, 51, 0.30) 0%, transparent 60%),
+                  linear-gradient(135deg, rgba(10, 24, 16, 0.96), rgba(5, 12, 8, 0.98)) !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 102, 51, 0.5), 0 0 70px rgba(0, 102, 51, 0.2), inset 0 1px 2px rgba(255, 255, 255, 0.2) !important;
+    }
+    .vault-card.brand-aura-landbank::before {
+      background: linear-gradient(90deg, transparent, #006633, #34d399, transparent) !important;
+      box-shadow: 0 0 14px #006633 !important;
+      opacity: 1 !important;
+    }
+    .vault-card.brand-aura-landbank .card-badge-verified { color: #34d399; }
+    .sq-landbank { border-color: rgba(0, 102, 51, 0.8) !important; box-shadow: 0 0 16px rgba(0, 102, 51, 0.5) !important; }
+
+    /* BDO */
+    .vault-card.brand-aura-bdo {
+      border: 1.5px solid rgba(0, 51, 153, 0.85) !important;
+      background: radial-gradient(circle at 0% 0%, rgba(0, 51, 153, 0.30) 0%, transparent 60%),
+                  linear-gradient(135deg, rgba(8, 16, 32, 0.96), rgba(4, 8, 18, 0.98)) !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 51, 153, 0.5), 0 0 70px rgba(255, 204, 0, 0.15), inset 0 1px 2px rgba(255, 255, 255, 0.2) !important;
+    }
+    .vault-card.brand-aura-bdo::before {
+      background: linear-gradient(90deg, transparent, #003399, #ffcc00, transparent) !important;
+      box-shadow: 0 0 14px #003399 !important;
+      opacity: 1 !important;
+    }
+    .vault-card.brand-aura-bdo .card-badge-verified { color: #ffcc00; }
+    .sq-bdo { border-color: rgba(0, 51, 153, 0.8) !important; box-shadow: 0 0 16px rgba(0, 51, 153, 0.5) !important; }
+
+    /* DepEd Official */
+    .vault-card.brand-aura-deped {
+      border: 1.5px solid rgba(16, 185, 129, 0.85) !important;
+      background: radial-gradient(circle at 0% 0%, rgba(16, 185, 129, 0.30) 0%, transparent 60%),
+                  linear-gradient(135deg, rgba(12, 28, 22, 0.96), rgba(6, 14, 10, 0.98)) !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 30px rgba(16, 185, 129, 0.5), 0 0 70px rgba(16, 185, 129, 0.2), inset 0 1px 2px rgba(255, 255, 255, 0.2) !important;
+    }
+    .vault-card.brand-aura-deped::before {
+      background: linear-gradient(90deg, transparent, #10b981, #34d399, transparent) !important;
+      box-shadow: 0 0 14px #10b981 !important;
+      opacity: 1 !important;
+    }
+    .vault-card.brand-aura-deped .card-badge-verified { color: #34d399; }
+    .sq-deped { border-color: rgba(16, 185, 129, 0.8) !important; box-shadow: 0 0 16px rgba(16, 185, 129, 0.5) !important; }
+
+    /* Government Portals */
+    .vault-card.brand-aura-portals {
+      border: 1.5px solid rgba(0, 240, 255, 0.85) !important;
+      background: radial-gradient(circle at 0% 0%, rgba(0, 240, 255, 0.30) 0%, transparent 60%),
+                  linear-gradient(135deg, rgba(10, 24, 34, 0.96), rgba(5, 12, 18, 0.98)) !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 240, 255, 0.5), 0 0 70px rgba(0, 240, 255, 0.2), inset 0 1px 2px rgba(255, 255, 255, 0.2) !important;
+    }
+    .vault-card.brand-aura-portals::before {
+      background: linear-gradient(90deg, transparent, #0284c7, #00f0ff, transparent) !important;
+      box-shadow: 0 0 14px #00f0ff !important;
+      opacity: 1 !important;
+    }
+    .vault-card.brand-aura-portals .card-badge-verified { color: #00f0ff; }
+    .sq-portals { border-color: rgba(0, 240, 255, 0.8) !important; box-shadow: 0 0 16px rgba(0, 240, 255, 0.5) !important; }
+
+    /* Generic Fallback */
+    .sq-generic {
+      border-color: rgba(255, 255, 255, 0.2) !important;
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.2) !important;
+      background: rgba(15, 23, 42, 0.8) !important;
+    }
+
+
+    /* ==========================================================================
        CATEGORY DYNAMIC LUMINOUS NEON GLOWS, CYBER BEAMS & BADGES (360° RADIANT)
        ========================================================================== */
     .vault-card {
@@ -5421,6 +5823,275 @@
       return html;
     }
 
+    
+    // ==========================================================================
+    // ORLANDOVAULT HYBRID #1 + #5 BRAND ICON & CHROMATIC AURA RESOLVER
+    // ==========================================================================
+    const BRAND_SVGS = {
+      google: '<svg viewBox="52 42 88 66" width="100%" height="100%"><path fill="#4285f4" d="M58 108h14V74L52 59v43c0 3.32 2.69 6 6 6"/><path fill="#34a853" d="M120 108h14c3.32 0 6-2.69 6-6V59l-20 15"/><path fill="#fbbc04" d="M120 48v26l20-15v-8c0-7.42-8.47-11.65-14.4-7.2"/><path fill="#ea4335" d="M72 74V48l24 18 24-18v26L96 92"/><path fill="#c5221f" d="M52 51v8l20 15V48l-5.6-4.2c-5.94-4.45-14.4-.22-14.4 7.2"/></svg>',
+      microsoft: '<svg viewBox="0 0 23 23" width="100%" height="100%"><rect x="1" y="1" width="10" height="10" fill="#f25022"/><rect x="12" y="1" width="10" height="10" fill="#7fba00"/><rect x="1" y="12" width="10" height="10" fill="#00a4ef"/><rect x="12" y="12" width="10" height="10" fill="#ffb900"/></svg>',
+      meta: '<svg viewBox="0 0 24 24" width="100%" height="100%"><path fill="#1877F2" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/><path fill="#fff" d="M16.671 15.457l.532-3.47h-3.328v-2.25c0-.949.465-1.874 1.956-1.874h1.503V4.91s-1.374-.235-2.686-.235c-2.741 0-4.533 1.662-4.533 4.669v2.258H7.078v3.47h3.039v8.385a12.164 12.164 0 003.864 0v-8.385h2.69z"/></svg>',
+      instagram: '<svg viewBox="0 0 24 24" width="100%" height="100%"><path fill="#E1306C" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>',
+      x: '<svg viewBox="0 0 24 24" width="100%" height="100%"><path fill="#FFFFFF" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>',
+      discord: '<svg viewBox="0 0 24 24" width="100%" height="100%"><path fill="#5865F2" d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>',
+      netflix: '<svg viewBox="0 0 24 24" width="100%" height="100%"><path fill="#B1060F" d="M5.398 0v24c1.196-.27 2.45-.615 3.655-.95V0H5.398zm9.549 0v18.077c1.393-.395 2.723-.84 3.655-1.18V0h-3.655z"/><path fill="#E50914" d="M5.398 0h3.655l9.549 22.95c-1.2.42-2.4.75-3.655 1.05z"/></svg>',
+      disney: '<svg viewBox="0 0 24 24" width="100%" height="100%"><path fill="#113CCF" d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm1 14.5c-3 0-5.5-2-5.5-4.5s2.5-4.5 5.5-4.5 5.5 2 5.5 4.5-2.5 4.5-5.5 4.5z"/><path fill="#fff" d="M14 9.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm-4 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z"/></svg>',
+      spotify: '<svg viewBox="0 0 24 24" width="100%" height="100%"><path fill="#1DB954" d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>',
+      claude: '<svg viewBox="0 0 24 24" width="100%" height="100%"><path fill="#D97706" d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z"/></svg>',
+      openai: '<svg viewBox="0 0 24 24" width="100%" height="100%"><path fill="#10A37F" d="M22.282 9.821a5.985 5.985 0 0 0-.516-4.91 6.046 6.046 0 0 0-6.51-2.9A6.065 6.065 0 0 0 4.981 4.18a5.985 5.985 0 0 0-3.998 2.9 6.046 6.046 0 0 0 .743 7.097 5.98 5.98 0 0 0 .51 4.911 6.051 6.051 0 0 0 6.515 2.9A5.985 5.985 0 0 0 13.26 24a6.056 6.056 0 0 0 5.772-4.206 5.99 5.99 0 0 0 3.997-2.9 6.056 6.056 0 0 0-.747-7.073zM13.26 22.43a4.476 4.476 0 0 1-2.876-1.04l.141-.081 4.779-2.758a.795.795 0 0 0 .392-.681v-6.737l2.02 1.168a.071.071 0 0 1 .038.052v5.583a4.504 4.504 0 0 1-4.494 4.494zM3.6 18.304a4.47 4.47 0 0 1-.535-3.014l.142.085 4.783 2.759a.771.771 0 0 0 .78 0l5.843-3.369v2.332a.08.08 0 0 1-.033.062L9.74 19.95a4.5 4.5 0 0 1-6.14-1.646zM2.34 8.783a4.485 4.485 0 0 1 2.37-2.055v5.71a.79.79 0 0 0 .388.681l5.843 3.368-2.02 1.168a.076.076 0 0 1-.071 0L4.01 14.88a4.505 4.505 0 0 1-1.67-6.097zm10.7-1.782l-4.78-2.76a.777.777 0 0 0-.783 0L1.634 7.61a4.496 4.496 0 0 1 7.214-4.227l-.14.081-4.78 2.76a.79.79 0 0 0-.391.681v6.737l-2.02-1.168a.076.076 0 0 1-.038-.052V6.85a4.504 4.504 0 0 1 4.494-4.494c1.077 0 2.09.38 2.876 1.04zm4.35 4.673l-5.844-3.37 2.02-1.168a.076.076 0 0 1 .071 0l4.839 2.79a4.5 4.5 0 0 1 1.67 6.097 4.48 4.48 0 0 1-2.37 2.056v-5.71a.79.79 0 0 0-.386-.695zm2.74-2.884l-.14-.085-4.782-2.759a.77.77 0 0 0-.78 0L8.585 9.326V6.994a.08.08 0 0 1 .033-.062L13.46 4.14a4.5 4.5 0 0 1 6.14 1.646 4.47 4.47 0 0 1 .535 3.014zM12 14.398l-3.368-1.944 3.368-1.944 3.368 1.944L12 14.398z"/></svg>',
+      github: '<svg viewBox="0 0 24 24" width="100%" height="100%"><path fill="#8957E5" d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>',
+      gcash: '<svg viewBox="0 0 24 24" width="100%" height="100%"><circle cx="12" cy="12" r="10" fill="#005CE6"/><path fill="#fff" d="M12 6a6 6 0 0 0-6 6c0 3.314 2.686 6 6 6 2.4 0 4.4-1.4 5.3-3.5h-2.3c-.7 1.2-1.8 1.8-3 1.8-2.2 0-4-1.8-4-4s1.8-4 4-4c1.4 0 2.6.7 3.2 1.8H12v2h6V12C18 8.686 15.314 6 12 6z"/></svg>',
+      maya: '<svg viewBox="0 0 24 24" width="100%" height="100%"><rect width="24" height="24" rx="6" fill="#0A0E17"/><path fill="#22C55E" d="M4 7l8 8 8-8v10h-3v-5l-5 5-5-5v5H4V7z"/></svg>',
+      landbank: '<svg viewBox="0 0 24 24" width="100%" height="100%"><circle cx="12" cy="12" r="10" fill="#006633"/><path fill="#fff" d="M12 5l-7 4v2h14V9l-7-4zm-5 8h2v5H7v-5zm4 0h2v5h-2v-5zm4 0h2v5h-2v-5zM5 19h14v2H5v-2z"/></svg>',
+      bdo: '<svg viewBox="0 0 24 24" width="100%" height="100%"><rect width="24" height="24" rx="5" fill="#003399"/><text x="12" y="16" fill="#FFCC00" font-family="Arial,sans-serif" font-weight="900" font-size="9" text-anchor="middle">BDO</text></svg>',
+      deped: '<svg viewBox="0 0 24 24" width="100%" height="100%"><circle cx="12" cy="12" r="10" fill="#047857"/><path fill="#FDE047" d="M12 4l1.5 3.5H17l-3 2.5 1 4-3-2.5-3 2.5 1-4-3-2.5h3.5z"/><path fill="#fff" d="M8 15h8v2H8z M10 18h4v2h-4z"/></svg>',
+      portals: '<svg viewBox="0 0 24 24" width="100%" height="100%"><circle cx="12" cy="12" r="10" fill="#0369A1"/><path fill="#38BDF8" d="M12 5l6 3v4c0 4-3 6.5-6 8-3-1.5-6-4-6-8V8l6-3z"/><path fill="#fff" d="M11 10h2v5h-2zm0-3h2v2h-2z"/></svg>'
+    };
+
+    function getServiceBrandInfo(item) {
+      const t = (item.title || '').toLowerCase();
+      const u = (item.username || '').toLowerCase();
+      const c = (item.category || '').toLowerCase();
+      const n = (item.notes || '').toLowerCase();
+
+      // Check if Educational or Official Institutional Org
+      const isOrg = u.includes('@deped.gov.ph') || u.includes('.edu.ph') || u.includes('deped') || t.includes('deped') || t.includes('school') || t.includes('300406') || (item.metadata && item.metadata.includes('300406'));
+
+      // 1. SPECTRUM AURA 4-COLOR BRANDS
+      // Google / Gmail Ecosystem
+      if (t.includes('gmail') || t.includes('google') || t.includes('youtube') || (t.includes('primary') && u.includes('gmail')) || (t.includes('honor of kings') && u.includes('gmail')) || c === 'gmail') {
+        return {
+          logoSvg: BRAND_SVGS.google,
+          brandClass: 'brand-aura-google',
+          squircleClass: 'sq-google',
+          brandTag: 'GOOGLE',
+          isSpectrum: true,
+          isOrg
+        };
+      }
+
+      // Microsoft 365 Ecosystem
+      if (t.includes('microsoft') || t.includes('office') || t.includes('outlook') || t.includes('onedrive') || t.includes('azure') || t.includes('teams') || c === 'microsoft') {
+        return {
+          logoSvg: BRAND_SVGS.microsoft,
+          brandClass: 'brand-aura-microsoft',
+          squircleClass: 'sq-microsoft',
+          brandTag: 'MICROSOFT',
+          isSpectrum: true,
+          isOrg
+        };
+      }
+
+      // 2. SOLID BRAND AURAS
+      // Facebook & Meta
+      if (t.includes('facebook') || t.includes('meta') || u.includes('sirorlandovpasionjr') || t.includes('pogiorlandopasion')) {
+        return {
+          logoSvg: BRAND_SVGS.meta,
+          brandClass: 'brand-aura-meta',
+          squircleClass: 'sq-meta',
+          brandTag: 'META',
+          isSpectrum: false,
+          isOrg
+        };
+      }
+
+      // Instagram
+      if (t.includes('instagram') || u.includes('rolly_nice')) {
+        return {
+          logoSvg: BRAND_SVGS.instagram,
+          brandClass: 'brand-aura-instagram',
+          squircleClass: 'sq-instagram',
+          brandTag: 'INSTAGRAM',
+          isSpectrum: false,
+          isOrg
+        };
+      }
+
+      // Twitter / X
+      if (t.includes('twitter') || t.includes(' x ') || t.startsWith('x ') || t.endsWith(' x') || t.includes('/ x') || u.includes('@pasion_orlando') || u.includes('@orlando_pasion')) {
+        return {
+          logoSvg: BRAND_SVGS.x,
+          brandClass: 'brand-aura-x',
+          squircleClass: 'sq-x',
+          brandTag: 'X / TWITTER',
+          isSpectrum: false,
+          isOrg
+        };
+      }
+
+      // Discord
+      if (t.includes('discord')) {
+        return {
+          logoSvg: BRAND_SVGS.discord,
+          brandClass: 'brand-aura-discord',
+          squircleClass: 'sq-discord',
+          brandTag: 'DISCORD',
+          isSpectrum: false,
+          isOrg
+        };
+      }
+
+      // Netflix
+      if (t.includes('netflix')) {
+        return {
+          logoSvg: BRAND_SVGS.netflix,
+          brandClass: 'brand-aura-netflix',
+          squircleClass: 'sq-netflix',
+          brandTag: 'NETFLIX',
+          isSpectrum: false,
+          isOrg
+        };
+      }
+
+      // Disney+
+      if (t.includes('disney')) {
+        return {
+          logoSvg: BRAND_SVGS.disney,
+          brandClass: 'brand-aura-disney',
+          squircleClass: 'sq-disney',
+          brandTag: 'DISNEY+',
+          isSpectrum: false,
+          isOrg
+        };
+      }
+
+      // Spotify
+      if (t.includes('spotify')) {
+        return {
+          logoSvg: BRAND_SVGS.spotify,
+          brandClass: 'brand-aura-spotify',
+          squircleClass: 'sq-spotify',
+          brandTag: 'SPOTIFY',
+          isSpectrum: false,
+          isOrg
+        };
+      }
+
+      // Claude & Anthropic
+      if (t.includes('claude') || t.includes('anthropic')) {
+        return {
+          logoSvg: BRAND_SVGS.claude,
+          brandClass: 'brand-aura-claude',
+          squircleClass: 'sq-claude',
+          brandTag: 'ANTHROPIC',
+          isSpectrum: false,
+          isOrg
+        };
+      }
+
+      // ChatGPT / OpenAI
+      if (t.includes('chatgpt') || t.includes('openai')) {
+        return {
+          logoSvg: BRAND_SVGS.openai,
+          brandClass: 'brand-aura-openai',
+          squircleClass: 'sq-openai',
+          brandTag: 'OPENAI',
+          isSpectrum: false,
+          isOrg
+        };
+      }
+
+      // GitHub
+      if (t.includes('github') || t.includes('gitlab')) {
+        return {
+          logoSvg: BRAND_SVGS.github,
+          brandClass: 'brand-aura-github',
+          squircleClass: 'sq-github',
+          brandTag: 'GITHUB',
+          isSpectrum: false,
+          isOrg
+        };
+      }
+
+      // GCash
+      if (t.includes('gcash')) {
+        return {
+          logoSvg: BRAND_SVGS.gcash,
+          brandClass: 'brand-aura-gcash',
+          squircleClass: 'sq-gcash',
+          brandTag: 'GCASH',
+          isSpectrum: false,
+          isOrg
+        };
+      }
+
+      // Maya
+      if (t.includes('maya') || t.includes('paymaya')) {
+        return {
+          logoSvg: BRAND_SVGS.maya,
+          brandClass: 'brand-aura-maya',
+          squircleClass: 'sq-maya',
+          brandTag: 'MAYA',
+          isSpectrum: false,
+          isOrg
+        };
+      }
+
+      // Landbank
+      if (t.includes('landbank')) {
+        return {
+          logoSvg: BRAND_SVGS.landbank,
+          brandClass: 'brand-aura-landbank',
+          squircleClass: 'sq-landbank',
+          brandTag: 'LANDBANK',
+          isSpectrum: false,
+          isOrg
+        };
+      }
+
+      // BDO
+      if (t.includes('bdo')) {
+        return {
+          logoSvg: BRAND_SVGS.bdo,
+          brandClass: 'brand-aura-bdo',
+          squircleClass: 'sq-bdo',
+          brandTag: 'BDO',
+          isSpectrum: false,
+          isOrg
+        };
+      }
+
+      // DepEd Official & Academic Portals
+      if (t.includes('deped') || t.includes('lis') || t.includes('ebeis') || t.includes('ucu') || t.includes('urdaneta') || c === 'deped') {
+        return {
+          logoSvg: BRAND_SVGS.deped,
+          brandClass: 'brand-aura-deped',
+          squircleClass: 'sq-deped',
+          brandTag: 'DEPED OFFICIAL',
+          isSpectrum: false,
+          isOrg: true
+        };
+      }
+
+      // Government Portals (PRC, SSS, GSIS, PhilHealth, BIR)
+      if (t.includes('prc') || t.includes('sss') || t.includes('gsis') || t.includes('philhealth') || t.includes('bir') || t.includes('pag-ibig') || t.includes('lto') || t.includes('dfa') || c === 'portals') {
+        const pTag = t.includes('prc') ? 'PRC' : (t.includes('sss') ? 'SSS' : (t.includes('gsis') ? 'GSIS' : (t.includes('philhealth') ? 'PHILHEALTH' : (t.includes('bir') ? 'BIR' : 'GOV PORTAL'))));
+        return {
+          logoSvg: BRAND_SVGS.portals,
+          brandClass: 'brand-aura-portals',
+          squircleClass: 'sq-portals',
+          brandTag: pTag,
+          isSpectrum: false,
+          isOrg: true
+        };
+      }
+
+      // 3. GENERIC / FALLBACK MONOGRAM SQUIRCLE
+      const cleanTitle = (item.title || 'VAULT').replace(/[^a-zA-Z0-9]/g, '');
+      const initials = (cleanTitle.slice(0, 2) || 'VA').toUpperCase();
+      const fallbackSvg = `<svg viewBox="0 0 24 24" width="100%" height="100%"><text x="12" y="16.5" fill="#e2e8f0" font-family="'JetBrains Mono',monospace" font-weight="800" font-size="10" text-anchor="middle">${initials}</text></svg>`;
+
+      return {
+        logoSvg: fallbackSvg,
+        brandClass: '', // uses base category aura
+        squircleClass: 'sq-generic',
+        brandTag: (item.category || 'ACCOUNT').toUpperCase(),
+        isSpectrum: false,
+        isOrg
+      };
+    }
+
+
     function renderVault() {
       const container = document.getElementById('vaultGridContainer');
       if (!container) return;
@@ -5474,15 +6145,24 @@
         const daysAgo = Math.floor((Date.now() - updatedDate.getTime()) / (1000 * 60 * 60 * 24));
         const rotationLabel = daysAgo <= 0 ? 'Today' : `${daysAgo}d ago`;
 
+                const brand = getServiceBrandInfo(item);
+        const effectiveBrandClass = brand.brandClass || catClass;
+
         return `
-          <article class="vault-card ${catClass} ${isPinned ? 'is-priority-pinned' : ''} ${isCritical ? 'is-critical-account' : ''}" id="card-${item.id}">
+          <article class="vault-card ${effectiveBrandClass} ${catClass} ${isPinned ? 'is-priority-pinned' : ''} ${isCritical ? 'is-critical-account' : ''}" id="card-${item.id}">
             <div class="card-header">
-              <div class="card-title-group">
-                <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-                  <span class="card-badge card-badge-category">${item.category || 'ACCOUNT'}</span>${isCritical ? ' <span class="card-badge card-badge-critical"><span class="badge-glyph">⚡</span> CRITICAL</span>' : ''}
-                  ${isPinned ? '<span class="card-badge card-badge-priority"><span class="badge-glyph">★</span> TOP PRIORITY</span>' : ''}
+              <div class="card-brand-header-left">
+                <div class="brand-squircle ${brand.squircleClass}">${brand.logoSvg}</div>
+                <div class="card-title-group">
+                  <div class="card-brand-microbar">
+                    <span class="card-badge-verified">✓ ${brand.brandTag}</span>
+                    <span class="card-badge-cat-tag">· ${item.category || 'ACCOUNT'}</span>
+                    ${brand.isOrg ? '<span class="card-badge-org">ORG</span>' : ''}
+                    ${isCritical ? '<span class="card-badge-critical-micro">⚡ CRITICAL</span>' : ''}
+                    ${isPinned ? '<span class="card-badge-priority-micro">★ TOP</span>' : ''}
+                  </div>
+                  <h3 class="card-account-title">${safeTitle}</h3>
                 </div>
-                <h3 class="card-account-title">${safeTitle}</h3>
               </div>
               <div class="card-header-actions">
                 <button type="button" class="btn-card-pin ${isPinned ? 'pinned' : ''}" onclick="toggleCardPriority('${item.id}')" title="${isPinned ? 'Top Priority Pinned (Click to unpin)' : 'Pin to Top (Priority)'}" aria-label="Toggle Priority">
