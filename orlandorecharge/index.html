@@ -3073,11 +3073,21 @@ body.universe-game-active .qgame-fs-exit {
   position: relative;
 }
 .sched-head-left {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 14px;
-  flex: 1 1 0;
-  min-width: 180px;
+  gap: 12px;
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+.sched-head-left h2 {
+  font-size: clamp(0.92rem, 1.25vw, 1.15rem);
+  font-weight: 700;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 /* Windows 11 Notifications Master Toggle Switch */
 .win-master-toggle-wrap {
@@ -3167,14 +3177,22 @@ body.universe-game-active .qgame-fs-exit {
 }
 @media (min-width: 769px) {
   .sched-head {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    display: flex;
     align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
     gap: 16px;
   }
-  .sched-head-left { justify-self: start; min-width: auto; }
-  .sched-head-center { justify-self: center; }
-  .sched-head-right { justify-self: end; min-width: auto; }
+  .sched-head-left {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+  .sched-head-center {
+    flex: 0 0 auto;
+  }
+  .sched-head-right {
+    flex: 0 0 auto;
+  }
 }
 @media (max-width: 768px) {
   .sched-head {
@@ -3212,10 +3230,10 @@ h2{font-size:clamp(1.12rem,1.65vw,1.38rem);font-weight:700;display:flex;align-it
   border: 1px solid rgba(255, 255, 255, 0.08);
   color: var(--dim);
   border-radius: 7px;
-  padding: 3.5px 9px;
-  font-size: 0.70rem;
-  font-weight: 700;
-  letter-spacing: 0.03em;
+  padding: 3px 8.5px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.025em;
   text-transform: uppercase;
   cursor: pointer;
   transition: all 0.22s ease;
@@ -14206,7 +14224,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   <script>
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v73', { scope: './' }).catch(function() {});
+        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v82', { scope: './' }).catch(function() {});
       });
     }
   </script>
