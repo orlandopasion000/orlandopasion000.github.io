@@ -5221,6 +5221,65 @@
       cursor: pointer;
     }
 
+
+    /* Sleek Semi-Transparent Cyber Action Buttons in Topbar */
+    .btn-topbar-tool {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 30px;
+      padding: 0 11px;
+      background: rgba(15, 23, 42, 0.45);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 7px;
+      color: #94a3b8;
+      font-family: var(--font-mono, monospace);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      white-space: nowrap;
+      text-transform: uppercase;
+    }
+    .btn-topbar-tool:hover {
+      transform: translateY(-1px);
+    }
+    .btn-topbar-tool:active {
+      transform: translateY(0);
+    }
+    .btn-topbar-tool svg {
+      flex-shrink: 0;
+      transition: transform 0.2s ease;
+    }
+    .btn-topbar-tool:hover svg {
+      transform: scale(1.12);
+    }
+    .btn-topbar-tool.btn-tool-qr {
+      background: rgba(0, 240, 255, 0.05);
+      border-color: rgba(0, 240, 255, 0.22);
+      color: #7dd3fc;
+    }
+    .btn-topbar-tool.btn-tool-qr:hover {
+      background: rgba(0, 240, 255, 0.12);
+      border-color: rgba(0, 240, 255, 0.55);
+      color: #e0f2fe;
+      box-shadow: 0 0 14px rgba(0, 240, 255, 0.3);
+    }
+    .btn-topbar-tool.btn-tool-sheets {
+      background: rgba(16, 185, 129, 0.05);
+      border-color: rgba(16, 185, 129, 0.22);
+      color: #6ee7b7;
+    }
+    .btn-topbar-tool.btn-tool-sheets:hover {
+      background: rgba(16, 185, 129, 0.12);
+      border-color: rgba(16, 185, 129, 0.55);
+      color: #ecfdf5;
+      box-shadow: 0 0 14px rgba(16, 185, 129, 0.3);
+    }
+
 </style>
 </head>
 <body>
@@ -5242,6 +5301,31 @@
         <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <span>Search</span>
         <kbd class="topbar-kbd">Ctrl K</kbd>
+      </button>
+
+      <!-- Holographic Phone QR Suite Trigger -->
+      <button type="button" class="btn-topbar-tool btn-tool-qr" id="btnTopbarHoloQr" title="Holographic Phone QR Scanner & Device Sync">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#00f0ff" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
+          <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
+          <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
+          <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
+          <circle cx="6.5" cy="6.5" r="1.2" fill="#00f0ff"></circle>
+          <circle cx="17.5" cy="6.5" r="1.2" fill="#00f0ff"></circle>
+          <circle cx="17.5" cy="17.5" r="1.2" fill="#00f0ff"></circle>
+          <circle cx="6.5" cy="17.5" r="1.2" fill="#00f0ff"></circle>
+        </svg>
+        <span>Holo QR</span>
+      </button>
+
+      <!-- Google Sheets Live Sync Suite Trigger -->
+      <button type="button" class="btn-topbar-tool btn-tool-sheets" id="btnTopbarSheetsSync" title="Google Sheets Live Sync Engine & Cloud Backup">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#10b981" stroke-width="2">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+          <line x1="4" y1="10" x2="20" y2="10"></line>
+          <line x1="10" y1="4" x2="10" y2="20"></line>
+        </svg>
+        <span>Sheets Sync</span>
       </button>
       <!-- 24K Swiss Gold Quantum Pill Launcher -->
       <button type="button" class="btn-topbar-desktop" id="btnTopbarLaunchApp" title="Open OrlandoVault in Dedicated Standalone Desktop App" aria-label="Open Main Web App">
@@ -5309,7 +5393,7 @@
 
     
     <!-- DISTRIBUTION & CROSS-DEVICE LIVE SYNC SUITE -->
-    <section class="dist-drawer-wrapper" id="distDrawerWrapper">
+    <section class="dist-drawer-wrapper" id="distDrawerWrapper" style="display:none !important;">
       <div class="dist-grid">
         <!-- Card 1: Holographic QR & Phone Scanner (1:1 with OrlandoRecharge) -->
         <div class="dist-card dist-card-holo" id="cardHoloQr" style="cursor:pointer;" title="Click to Open Holographic QR Scanner">
@@ -7134,10 +7218,22 @@
     window.closeSheetSyncModal = closeSheetSyncModal;
     window.exportVaultBackupFile = exportVaultBackupFile;
 
-    document.addEventListener('DOMContentLoaded', () => {
+    // ZERO-LATENCY INSTANT SYNCHRONOUS BOOT (0ms delay)
+    let isInitialBootRendered = false;
+    try {
       initData();
       renderVault();
       renderMetrics();
+      isInitialBootRendered = true;
+    } catch(e) {}
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!isInitialBootRendered) {
+        initData();
+        renderVault();
+        renderMetrics();
+        isInitialBootRendered = true;
+      }
       updateLaunchButtonState();
       
       
@@ -8137,6 +8233,21 @@
 
     function bindVaultGlobalEvents() {
       // Holographic QR open triggers
+      const btnTopbarHoloQr = document.getElementById('btnTopbarHoloQr');
+      if (btnTopbarHoloQr) {
+        btnTopbarHoloQr.onclick = function(e) {
+          if (e) e.stopPropagation();
+          openVaultQrModal();
+        };
+      }
+      const btnTopbarSheetsSync = document.getElementById('btnTopbarSheetsSync');
+      if (btnTopbarSheetsSync) {
+        btnTopbarSheetsSync.onclick = function(e) {
+          if (e) e.stopPropagation();
+          openSheetSyncModal();
+        };
+      }
+
       const openQrBtn = document.getElementById('openQrBtn');
       const cardHoloQr = document.getElementById('cardHoloQr');
       const shareAppBtn = document.getElementById('shareAppBtn');
@@ -8387,6 +8498,14 @@
         }
       }
 
+      // Content Equality Guard: if incoming cloud credentials match local, do NOT reflicker/re-render!
+      const localCreds = localStorage.getItem('orlandovault_credentials_v6');
+      const remoteCreds = pkt.data && (pkt.data['orlandovault_credentials_v6'] || pkt.data['orlandovault_credentials_v4']);
+      if (localCreds && remoteCreds && localCreds === remoteCreds) {
+        origSetItem.call(localStorage, LAST_MOD_KEY, String(pkt.ts || Date.now()));
+        return;
+      }
+
       isApplyingRemote = true;
       try {
         Object.keys(pkt.data).forEach(k => {
@@ -8494,7 +8613,7 @@
     // Initialize Firebase sync after main vault render
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', () => {
-        setTimeout(initVaultFirebase, 200);
+        setTimeout(initVaultFirebase, 2500);
       });
     } else {
       setTimeout(initVaultFirebase, 200);

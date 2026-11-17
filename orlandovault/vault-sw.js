@@ -1,5 +1,5 @@
 /* OrlandoVault · Offline-First Jarvis Security Service Worker */
-var CACHE_NAME = 'vault-jarvis-v45';
+var CACHE_NAME = 'vault-jarvis-v46';
 var ASSETS = [
   './',
   './index.html',
@@ -45,9 +45,10 @@ self.addEventListener('fetch', function(e) {
   if (!url.startsWith('http://') && !url.startsWith('https://')) return;
   if (url.indexOf('firestore.googleapis.com') !== -1 || url.indexOf('docs.google.com') !== -1 || url.indexOf('ntfy.sh') !== -1) return;
 
+  // Stale-While-Revalidate: Instant 0ms load from disk cache, revalidate in background
   e.respondWith(
-    fetch(e.request)
-      .then(function(networkResponse) {
+    caches.match(e.request).then(function(cachedResponse) {
+      var networkFetch = fetch(e.request).then(function(networkResponse) {
         if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
           var responseToCache = networkResponse.clone();
           caches.open(CACHE_NAME).then(function(cache) {
@@ -55,9 +56,9 @@ self.addEventListener('fetch', function(e) {
           });
         }
         return networkResponse;
-      })
-      .catch(function() {
-        return caches.match(e.request);
-      })
+      }).catch(function() {});
+
+      return cachedResponse || networkFetch;
+    })
   );
 });
