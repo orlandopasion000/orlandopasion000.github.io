@@ -4690,6 +4690,90 @@
       }
     }
 
+
+    /* ==========================================================================
+       SUPERPOWER SEARCH & SPOTLIGHT HUD (CTRL + K)
+       ========================================================================== */
+    .spotlight-mark {
+      background: rgba(0, 240, 255, 0.28) !important;
+      color: #00f0ff !important;
+      font-weight: 800;
+      padding: 0 3px;
+      border-radius: 3px;
+      border: 1px solid rgba(0, 240, 255, 0.4);
+    }
+    .spotlight-squircle {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      padding: 6px;
+      background: rgba(0, 0, 0, 0.7);
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+      transition: all 0.2s ease;
+    }
+    .spotlight-squircle svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .spotlight-item:hover .spotlight-squircle, .spotlight-item.selected .spotlight-squircle {
+      transform: scale(1.08);
+      border-color: #00f0ff;
+      box-shadow: 0 0 14px rgba(0, 240, 255, 0.4);
+    }
+    .spotlight-tag-pill {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      font-weight: 800;
+      padding: 1px 5px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+      display: inline-flex;
+      align-items: center;
+      vertical-align: middle;
+      margin-left: 6px;
+    }
+    .tag-app-match {
+      background: rgba(0, 240, 255, 0.15);
+      border: 1px solid rgba(0, 240, 255, 0.5);
+      color: #38bdf8;
+    }
+    .tag-user-match {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.5);
+      color: #34d399;
+    }
+    .tag-notes-match {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.5);
+      color: #fbbf24;
+    }
+    .tag-meta-match {
+      background: rgba(168, 85, 247, 0.15);
+      border: 1px solid rgba(168, 85, 247, 0.5);
+      color: #c084fc;
+    }
+    .spotlight-results {
+      max-height: 480px !important;
+      overflow-y: auto !important;
+      padding: 8px !important;
+    }
+    .spotlight-results::-webkit-scrollbar {
+      width: 6px;
+    }
+    .spotlight-results::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.3);
+    }
+    .spotlight-results::-webkit-scrollbar-thumb {
+      background: rgba(0, 240, 255, 0.3);
+      border-radius: 999px;
+    }
+
 </style>
 </head>
 <body>
@@ -7922,55 +8006,269 @@
     }
     window.navigateToVaultCard = navigateToVaultCard;
 
+// ==========================================================================
+    // SUPERPOWER INTELLIGENT SEARCH ENGINE & MULTI-TIER RELEVANCE RANKING
+    // ==========================================================================
+    // ==========================================================================
+    // SUPERPOWER INTELLIGENT SEARCH ENGINE & MULTI-TIER RELEVANCE RANKING
+    // ==========================================================================
+    // ==========================================================================
+    // SUPERPOWER INTELLIGENT SEARCH ENGINE & MULTI-TIER RELEVANCE RANKING
+    // ==========================================================================
+    function highlightSearchSnippet(text, query) {
+      if (!text || !query) return escapeHtml(text || '');
+      const escaped = escapeHtml(text);
+      const tokens = query.trim().split(/\s+/).filter(Boolean);
+      if (!tokens.length) return escaped;
+      const pattern = new RegExp('(' + tokens.map(t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|') + ')', 'gi');
+      return escaped.replace(pattern, '<mark class="spotlight-mark">$1</mark>');
+    }
+
+    function extractContextSnippet(text, query, maxLen = 65) {
+      if (!text) return '';
+      const tokens = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
+      let matchIdx = -1;
+      const lower = text.toLowerCase();
+      for (const t of tokens) {
+        const idx = lower.indexOf(t);
+        if (idx !== -1 && (matchIdx === -1 || idx < matchIdx)) {
+          matchIdx = idx;
+        }
+      }
+      if (matchIdx === -1) {
+        return text.length > maxLen ? text.slice(0, maxLen) + '…' : text;
+      }
+      const start = Math.max(0, matchIdx - 18);
+      const end = Math.min(text.length, matchIdx + maxLen - 18);
+      let snippet = text.slice(start, end);
+      if (start > 0) snippet = '…' + snippet;
+      if (end < text.length) snippet = snippet + '…';
+      return snippet;
+    }
+
     function renderSpotlightResults(query) {
       if (!spotlightResults) return;
       const q = (query || '').toLowerCase().trim();
       spotlightMatches = [];
 
-      // 1. Match Vault Credentials
-      const creds = Array.isArray(vaultItems) ? vaultItems : [];
-      const credMatches = creds.filter(item => {
-        if (!q) return false;
-        return (item.title || '').toLowerCase().includes(q) ||
-               (item.username || '').toLowerCase().includes(q) ||
-               (item.category || '').toLowerCase().includes(q) ||
-               (item.metadata || '').toLowerCase().includes(q) ||
-               (item.notes || '').toLowerCase().includes(q);
-      }).slice(0, 8); // Top 8 credentials
+      if (!q) {
+        // When empty, show all System Commands & Top Priority Accounts
+        const creds = Array.isArray(vaultItems) ? vaultItems : [];
+        const topPinned = creds.filter(c => c.isPriority || c.pinned).slice(0, 4);
 
-      credMatches.forEach(item => {
-        spotlightMatches.push({
-          type: 'credential',
-          itemId: item.id,
-          cat: 'Vault Credentials',
-          icon: '🔑',
-          title: item.title,
-          desc: item.username + (item.notes ? (' · ' + item.notes) : ''),
-          badge: '↵ Copy Password',
-          badgeAction: true,
-          action: () => {
-            if (navigator.clipboard) {
-              navigator.clipboard.writeText(item.password).then(() => {
-                if (typeof showToast === 'function') showToast(`🔐 Password copied for ${item.title}!`, '📋');
-                if (typeof playJarvisSound === 'function') playJarvisSound('copy');
-              }).catch(() => {});
+        if (topPinned.length > 0) {
+          topPinned.forEach(item => {
+            const brand = typeof getServiceBrandInfo === 'function' ? getServiceBrandInfo(item) : { logoSvg: '🔑', brandTag: item.category };
+            spotlightMatches.push({
+              type: 'credential',
+              itemId: item.id,
+              cat: '★ TOP PRIORITY CREDENTIALS',
+              iconSvg: brand.logoSvg,
+              title: item.title,
+              rawTitle: item.title,
+              desc: item.username + (item.notes ? (' · ' + item.notes) : ''),
+              badge: '↵ Copy Password',
+              badgeAction: true,
+              action: () => {
+                if (navigator.clipboard) {
+                  navigator.clipboard.writeText(item.password).then(() => {
+                    if (typeof showToast === 'function') showToast(`🔐 Password copied for ${item.title}!`, '📋');
+                    if (typeof playJarvisSound === 'function') playJarvisSound('copy');
+                  }).catch(() => {});
+                }
+              }
+            });
+          });
+        }
+
+        SYSTEM_COMMANDS.forEach(cmd => spotlightMatches.push(cmd));
+      } else {
+        // Multi-Token Intelligent Scoring
+        const tokens = q.split(/\s+/).filter(Boolean);
+        const aliases = {
+          'fb': 'facebook',
+          'ig': 'instagram',
+          'yt': 'youtube',
+          'm365': 'microsoft',
+          'o365': 'microsoft',
+          'gpt': 'chatgpt',
+          'net': 'netflix',
+          'stream': 'streaming'
+        };
+
+        const creds = Array.isArray(vaultItems) ? vaultItems : [];
+        const scoredCreds = [];
+
+        creds.forEach(item => {
+          const t = (item.title || '').toLowerCase();
+          const u = (item.username || '').toLowerCase();
+          const c = (item.category || '').toLowerCase();
+          const m = (item.metadata || '').toLowerCase();
+          const n = (item.notes || '').toLowerCase();
+          const p = (item.password || '').toLowerCase();
+
+          let totalScore = 0;
+          let matchedWhere = '';
+
+          for (const token of tokens) {
+            let tokenScore = 0;
+            const resolvedAlias = aliases[token];
+
+            // 1. Title Match (HIGHEST WEIGHT)
+            if (t === token || (resolvedAlias && t === resolvedAlias)) {
+              tokenScore += 1200;
+              matchedWhere = 'title';
+            } else if (t.startsWith(token) || (resolvedAlias && t.startsWith(resolvedAlias))) {
+              tokenScore += 700;
+              matchedWhere = 'title';
+            } else if (new RegExp('\\b' + token + '\\b', 'i').test(t) || (resolvedAlias && new RegExp('\\b' + resolvedAlias + '\\b', 'i').test(t))) {
+              tokenScore += 500;
+              matchedWhere = 'title';
+            } else if (t.includes(token) || (resolvedAlias && t.includes(resolvedAlias))) {
+              tokenScore += 300;
+              matchedWhere = 'title';
             }
+
+            // 2. Username Match
+            if (u === token) {
+              tokenScore += 400;
+              if (matchedWhere !== 'title') matchedWhere = 'user';
+            } else if (u.startsWith(token)) {
+              tokenScore += 250;
+              if (matchedWhere !== 'title') matchedWhere = 'user';
+            } else if (u.includes(token)) {
+              tokenScore += 150;
+              if (matchedWhere !== 'title') matchedWhere = 'user';
+            }
+
+            // 3. Category Match
+            if (c === token) {
+              tokenScore += 200;
+              if (!matchedWhere) matchedWhere = 'category';
+            } else if (c.includes(token)) {
+              tokenScore += 100;
+              if (!matchedWhere) matchedWhere = 'category';
+            }
+
+            // 4. Metadata / Links / Phone Match
+            if (m.includes(token)) {
+              tokenScore += 120;
+              if (!matchedWhere || matchedWhere === 'notes') matchedWhere = 'meta';
+            }
+
+            // 5. Notes Match (LOWER WEIGHT)
+            if (new RegExp('\\b' + token + '\\b', 'i').test(n)) {
+              tokenScore += 60;
+              if (!matchedWhere) matchedWhere = 'notes';
+            } else if (n.includes(token)) {
+              tokenScore += 30;
+              if (!matchedWhere) matchedWhere = 'notes';
+            }
+
+            // 6. Partial password lookup if searching a snippet
+            if (p.includes(token) && token.length >= 4) {
+              tokenScore += 50;
+              if (!matchedWhere) matchedWhere = 'pass';
+            }
+
+            if (tokenScore === 0) {
+              totalScore = 0;
+              break;
+            }
+            totalScore += tokenScore;
+          }
+
+          if (totalScore > 0) {
+            if (item.isPriority || item.pinned) totalScore += 15;
+            scoredCreds.push({
+              item,
+              score: totalScore,
+              matchedWhere: matchedWhere || 'notes'
+            });
           }
         });
-      });
 
-      // 2. Match System Commands & Sub-Apps
-      const sysMatches = SYSTEM_COMMANDS.filter(cmd => {
-        if (!q) return true; // Show all when empty
-        return cmd.title.toLowerCase().includes(q) ||
-               cmd.desc.toLowerCase().includes(q) ||
-               cmd.cat.toLowerCase().includes(q);
-      });
+        // Sort by score descending (Title matches ALWAYS come first!)
+        scoredCreds.sort((a, b) => b.score - a.score);
 
-      sysMatches.forEach(item => spotlightMatches.push(item));
+        // Separate into Direct Matches vs Mentions in Notes / Metadata
+        const directMatches = scoredCreds.filter(s => s.matchedWhere === 'title' || s.matchedWhere === 'user' || s.matchedWhere === 'category');
+        const noteMatches = scoredCreds.filter(s => s.matchedWhere === 'notes' || s.matchedWhere === 'meta' || s.matchedWhere === 'pass');
+
+        // Add Direct Matches (up to 15)
+        directMatches.slice(0, 15).forEach(({ item, score, matchedWhere }) => {
+          const brand = typeof getServiceBrandInfo === 'function' ? getServiceBrandInfo(item) : { logoSvg: '🔑', brandTag: item.category };
+          let tagHtml = '<span class="spotlight-tag-pill tag-app-match">APP MATCH</span>';
+          if (matchedWhere === 'user') tagHtml = '<span class="spotlight-tag-pill tag-user-match">USER MATCH</span>';
+          else if (matchedWhere === 'category') tagHtml = '<span class="spotlight-tag-pill tag-app-match">CATEGORY</span>';
+
+          spotlightMatches.push({
+            type: 'credential',
+            itemId: item.id,
+            cat: 'DIRECT APP & CREDENTIAL MATCHES (' + directMatches.length + ')',
+            iconSvg: brand.logoSvg,
+            title: item.title,
+            rawTitle: item.title,
+            tagHtml: tagHtml,
+            desc: item.username + (item.metadata ? (' · ' + item.metadata) : ''),
+            highlightSnippet: highlightSearchSnippet(item.username + (item.metadata ? (' · ' + item.metadata) : ''), q),
+            badge: '↵ Copy Password',
+            badgeAction: true,
+            action: () => {
+              if (navigator.clipboard) {
+                navigator.clipboard.writeText(item.password).then(() => {
+                  if (typeof showToast === 'function') showToast(`🔐 Password copied for ${item.title}!`, '📋');
+                  if (typeof playJarvisSound === 'function') playJarvisSound('copy');
+                }).catch(() => {});
+              }
+            }
+          });
+        });
+
+        // Add Mentions in Notes (up to 8)
+        if (noteMatches.length > 0) {
+          noteMatches.slice(0, 8).forEach(({ item, score, matchedWhere }) => {
+            const brand = typeof getServiceBrandInfo === 'function' ? getServiceBrandInfo(item) : { logoSvg: '🔑', brandTag: item.category };
+            const snippet = extractContextSnippet(item.notes || item.metadata || '', q);
+            let noteTag = '<span class="spotlight-tag-pill tag-notes-match">IN NOTES</span>';
+            if (matchedWhere === 'meta') noteTag = '<span class="spotlight-tag-pill tag-meta-match">LINK / PHONE</span>';
+
+            spotlightMatches.push({
+              type: 'credential',
+              itemId: item.id,
+              cat: 'FOUND IN RECOVERY NOTES & METADATA (' + noteMatches.length + ')',
+              iconSvg: brand.logoSvg,
+              title: item.title,
+              rawTitle: item.title,
+              tagHtml: noteTag,
+              desc: item.username + ' · ' + snippet,
+              highlightSnippet: highlightSearchSnippet(item.username + ' · ' + snippet, q),
+              badge: '↵ Copy Password',
+              badgeAction: true,
+              action: () => {
+                if (navigator.clipboard) {
+                  navigator.clipboard.writeText(item.password).then(() => {
+                    if (typeof showToast === 'function') showToast(`🔐 Password copied for ${item.title}!`, '📋');
+                    if (typeof playJarvisSound === 'function') playJarvisSound('copy');
+                  }).catch(() => {});
+                }
+              }
+            });
+          });
+        }
+
+        // 3. Match System Commands
+        const sysMatches = SYSTEM_COMMANDS.filter(cmd => {
+          return cmd.title.toLowerCase().includes(q) ||
+                 cmd.desc.toLowerCase().includes(q) ||
+                 cmd.cat.toLowerCase().includes(q);
+        });
+
+        sysMatches.forEach(item => spotlightMatches.push(item));
+      }
 
       if (spotlightMatches.length === 0) {
-        spotlightResults.innerHTML = '<div style="padding:28px;text-align:center;color:#64748b;font-size:13px;font-family:var(--font-tech);">No credentials or commands matching "' + escapeHtml(query) + '". Type "DepEd", "Microsoft", "Sheets", or "QR".</div>';
+        spotlightResults.innerHTML = '<div style="padding:32px;text-align:center;color:#64748b;font-size:13px;font-family:var(--font-tech);">No credentials or commands matching "<span style="color:#00f0ff;">' + escapeHtml(query) + '</span>". Try searching by App Name, Email, Phone, or URL.</div>';
         return;
       }
 
@@ -7985,12 +8283,16 @@
         }
         const isSel = idx === spotlightIndex;
         const isCred = item.type === 'credential';
+        const displayTitle = item.rawTitle ? highlightSearchSnippet(item.rawTitle, q) : escapeHtml(item.title);
+        const displayDesc = item.highlightSnippet ? item.highlightSnippet : escapeHtml(item.desc || '');
+        const iconContent = item.iconSvg ? item.iconSvg : (item.icon || '🔑');
+
         html += '<div class="spotlight-item ' + (isSel ? 'selected' : '') + (isCred ? ' is-credential-item' : '') + '" data-index="' + idx + '">';
-        html += '  <div class="spotlight-item-left" title="' + (isCred ? 'Click to open and view this card in Vault' : 'Click to select') + '">';
-        html += '    <div class="spotlight-item-icon">' + item.icon + '</div>';
+        html += '  <div class="spotlight-item-left" title="' + (isCred ? 'Click to open and spotlight this card in Vault' : 'Click to select') + '">';
+        html += '    <div class="spotlight-squircle">' + iconContent + '</div>';
         html += '    <div class="spotlight-item-info">';
-        html += '      <div class="spotlight-item-title">' + escapeHtml(item.title) + '</div>';
-        html += '      <div class="spotlight-item-desc">' + escapeHtml(item.desc) + '</div>';
+        html += '      <div class="spotlight-item-title">' + displayTitle + (item.tagHtml || '') + '</div>';
+        html += '      <div class="spotlight-item-desc">' + displayDesc + '</div>';
         html += '    </div>';
         html += '  </div>';
         html += '  <button type="button" class="spotlight-item-badge ' + (item.badgeAction ? 'badge-action' : '') + '" title="' + (isCred ? '1-Click Copy Password' : '') + '">' + item.badge + '</button>';
@@ -8041,6 +8343,7 @@
         };
       });
     }
+
 
     function executeSpotlightIndex(idx) {
       const match = spotlightMatches[idx];
