@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>OrlandoVault · Personal Jarvis Security Engine</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="apple-touch-icon" href="assets/vault-icon-192.png">
@@ -5252,6 +5252,361 @@
       box-shadow: 0 0 14px rgba(16, 185, 129, 0.3);
     }
 
+
+    /* ==========================================================================
+       PART A & B: RESPONSIVE WEB DESIGN, TOUCH COMFORT & INPUT HYBRID STYLES
+       ========================================================================== */
+    html {
+      height: 100%;
+      min-height: 100dvh;
+      -webkit-text-size-adjust: 100%;
+      box-sizing: border-box;
+    }
+    *, *:before, *:after {
+      box-sizing: inherit;
+    }
+    body {
+      min-height: 100dvh;
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+      padding-left: env(safe-area-inset-left, 0px);
+      padding-right: env(safe-area-inset-right, 0px);
+    }
+
+    /* Input mode indicators */
+    html[data-input="touch"] * {
+      /* Prevent sticky hover states on touch */
+    }
+    @media (hover: none) and (pointer: coarse) {
+      .vault-card:hover {
+        transform: none !important;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4) !important;
+      }
+      .btn-card-pin:hover, .btn-card-edit:hover, .btn-pwd-action:hover, .btn-copy-instant:hover {
+        transform: none !important;
+      }
+    }
+
+    /* Responsive Top Bar */
+    .vault-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: max(10px, env(safe-area-inset-top, 10px)) max(14px, env(safe-area-inset-right, 14px)) 10px max(14px, env(safe-area-inset-left, 14px));
+      width: 100%;
+      max-width: 100vw;
+      box-sizing: border-box;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      max-width: 100%;
+    }
+
+    /* 44x44px Touch Targets */
+    button, a, .filter-pill, .btn-topbar-tool, .btn-card-pin, .btn-card-edit, .btn-pwd-action, .btn-copy-user, .btn-copy-instant {
+      touch-action: manipulation;
+    }
+
+    .filter-pill {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 16px;
+    }
+
+    .btn-topbar-tool {
+      min-height: 44px;
+      min-width: 44px;
+      padding: 0 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-topbar-search {
+      min-height: 44px;
+      padding: 0 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-topbar-desktop {
+      min-height: 44px;
+      padding: 0 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Card Action Touch Hit Target Expansion */
+    .btn-card-pin, .btn-card-edit {
+      min-width: 44px;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .btn-copy-user, .btn-pwd-action {
+      min-height: 44px;
+      min-width: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-copy-instant {
+      min-height: 44px;
+      min-width: 76px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* High Performance 200 Cards Virtual Containment */
+    .vault-card {
+      content-visibility: auto;
+      contain-intrinsic-size: auto 170px;
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .vault-card .card-account-title,
+    .vault-card .card-username-row span,
+    .vault-card .card-metadata-text {
+      user-select: text;
+      -webkit-user-select: text;
+    }
+
+    /* Ensure iOS does not zoom in on focus: 16px inputs */
+    input, select, textarea, .spotlight-input, .edit-form-input, .manual-input-group input, .manual-input-group select {
+      font-size: 16px !important;
+    }
+
+    /* Breakpoint adaptations */
+    @media (max-width: 900px) {
+      .btn-topbar-desktop .desktop-btn-label {
+        display: none;
+      }
+      .btn-topbar-desktop {
+        padding: 0 12px;
+      }
+      .btn-topbar-desktop::after {
+        content: "App";
+        font-size: 12px;
+        font-weight: 700;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .vault-topbar {
+        padding: calc(6px + env(safe-area-inset-top, 0px)) 10px 8px 10px;
+      }
+      .brand-meta h1 {
+        font-size: 14px;
+      }
+      .topbar-actions {
+        gap: 6px;
+      }
+      .btn-topbar-tool span:not(.sync-health-pulse-dot) {
+        display: none;
+      }
+      .btn-topbar-tool {
+        padding: 0 10px;
+      }
+      .btn-topbar-search span, .btn-topbar-search kbd {
+        display: none;
+      }
+      .btn-topbar-search {
+        padding: 0 12px;
+      }
+      .btn-topbar-desktop {
+        display: none;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .vault-grid {
+        grid-template-columns: 1fr !important;
+        gap: 14px !important;
+        padding: 10px 10px calc(80px + env(safe-area-inset-bottom, 0px)) 10px !important;
+      }
+      .filter-microbar-wrapper {
+        padding: 8px 10px !important;
+      }
+    }
+
+    /* Executive Focus HUD iOS Container Overrides */
+    .focus-hud-box {
+      overscroll-behavior: contain !important;
+      touch-action: pan-y !important;
+      max-height: calc(100dvh - 40px) !important;
+    }
+
+    /* Accessibility Focus Visible */
+    .vault-card:focus-visible, button:focus-visible, a:focus-visible {
+      outline: 2px solid #38bdf8 !important;
+      outline-offset: 2px !important;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *:before, *:after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    /* ==========================================================================
+       MANUAL CREDENTIAL REGISTRATION SECTION (AT THE BOTTOM OF GRID)
+       ========================================================================== */
+    .manual-creator-container {
+      grid-column: 1 / -1;
+      width: 100%;
+      margin: 24px 0 40px 0;
+    }
+    .manual-creator-card {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(6, 11, 19, 0.95) 100%);
+      border: 1px solid rgba(0, 240, 255, 0.28);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6), 0 0 24px rgba(0, 240, 255, 0.08);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .manual-creator-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 14px;
+    }
+    .manual-creator-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(0, 240, 255, 0.12);
+      border: 1px solid rgba(0, 240, 255, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: #38bdf8;
+      box-shadow: 0 0 14px rgba(0, 240, 255, 0.25);
+    }
+    .manual-creator-title {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      color: #f8fafc;
+      text-transform: uppercase;
+      font-family: var(--font-inter, sans-serif);
+    }
+    .manual-creator-sub {
+      margin: 4px 0 0 0;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+    .manual-creator-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .manual-input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .manual-input-group.manual-full-width {
+      grid-column: 1 / -1;
+    }
+    .manual-input-group label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #7dd3fc;
+    }
+    .manual-input-group input, .manual-input-group select {
+      background: rgba(10, 16, 26, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: #f8fafc;
+      font-size: 16px !important;
+      outline: none;
+      transition: all 0.2s ease;
+      min-height: 44px;
+    }
+    .manual-input-group input:focus, .manual-input-group select:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.3);
+      background: rgba(15, 23, 42, 0.95);
+    }
+    .manual-creator-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .manual-priority-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #fde047;
+      cursor: pointer;
+      min-height: 44px;
+    }
+    .manual-priority-toggle input {
+      width: 18px;
+      height: 18px;
+      accent-color: #eab308;
+      cursor: pointer;
+    }
+    .btn-manual-submit {
+      min-height: 44px;
+      padding: 0 24px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.3) 0%, rgba(5, 150, 105, 0.45) 100%);
+      border: 1px solid rgba(52, 211, 153, 0.6);
+      color: #a7f3d0;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 0 16px rgba(16, 185, 129, 0.25);
+      transition: all 0.2s ease;
+    }
+    .btn-manual-submit:hover {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.5) 0%, rgba(5, 150, 105, 0.7) 100%);
+      box-shadow: 0 0 24px rgba(16, 185, 129, 0.45);
+      transform: translateY(-1px);
+    }
+
 </style>
 </head>
 <body>
@@ -7208,7 +7563,7 @@
         const visualAuraClass = brand.brandClass ? brand.brandClass : catClass;
 
         return `
-          <article class="vault-card ${visualAuraClass} ${isPinned ? 'is-priority-pinned' : ''} ${isCritical ? 'is-critical-account' : ''}" data-cat="${catClass}" id="card-${item.id}" onclick="if(!event.target.closest('button,a,input,textarea,select'))openAccountFocusModal('${item.id}',false);">
+          <article class="vault-card ${visualAuraClass} ${isPinned ? 'is-priority-pinned' : ''} ${isCritical ? 'is-critical-account' : ''}" data-cat="${catClass}" data-card-id="${item.id}" id="card-${item.id}" tabindex="0" role="button" aria-label="${safeTitle} account details">
             <div class="card-header">
               <div class="card-brand-header-left">
                 <div class="brand-squircle ${brand.squircleClass}">${brand.logoSvg}</div>
@@ -7271,6 +7626,120 @@
       if (window.updateRelativeTimestamps) {
         window.updateRelativeTimestamps(container);
       }
+
+      // Append Manual Credential Creator Workspace at the very bottom
+      container.innerHTML += `
+        <div class="manual-creator-container" id="manualCreatorSection">
+          <div class="manual-creator-card">
+            <div class="manual-creator-header">
+              <div class="manual-creator-icon">➕</div>
+              <div>
+                <h3 class="manual-creator-title">MANUAL CREDENTIAL REGISTRATION</h3>
+                <p class="manual-creator-sub">Add a new account directly into your encrypted cloud vault.</p>
+              </div>
+            </div>
+            <div class="manual-creator-grid">
+              <div class="manual-input-group">
+                <label for="manualTitle">Account / Service Title</label>
+                <input type="text" id="manualTitle" placeholder="e.g. GitHub, Claude, Landbank" autocomplete="off">
+              </div>
+              <div class="manual-input-group">
+                <label for="manualCategory">Category</label>
+                <select id="manualCategory">
+                  <option value="Google">Google / Gmail</option>
+                  <option value="DepEd">DepEd Official</option>
+                  <option value="Social">Social Media</option>
+                  <option value="AI & Dev">AI & Development</option>
+                  <option value="Banking & Finance">Banking & Finance</option>
+                  <option value="Portals">Government & Portals</option>
+                  <option value="Entertainment">Entertainment & Streaming</option>
+                  <option value="Shopping">Shopping & Retail</option>
+                  <option value="Microsoft">Microsoft</option>
+                  <option value="Other" selected>Other</option>
+                </select>
+              </div>
+              <div class="manual-input-group">
+                <label for="manualUser">Username / Email / ID</label>
+                <input type="text" id="manualUser" placeholder="e.g. orlandopasion1994@gmail.com" autocomplete="off">
+              </div>
+              <div class="manual-input-group">
+                <label for="manualPassword">Password</label>
+                <input type="text" id="manualPassword" placeholder="Enter password" autocomplete="off">
+              </div>
+              <div class="manual-input-group manual-full-width">
+                <label for="manualNotes">Recovery Notes / Metadata</label>
+                <input type="text" id="manualNotes" placeholder="e.g. Linked phone number, secondary email, backup codes" autocomplete="off">
+              </div>
+            </div>
+            <div class="manual-creator-footer">
+              <label class="manual-priority-toggle">
+                <input type="checkbox" id="manualIsPriority">
+                <span>⭐ Mark as Top Priority Pin</span>
+              </label>
+              <button type="button" class="btn-manual-submit" id="btnManualSubmitCard">
+                <span>⚡ Save Card to OrlandoVault</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Attach listener for manual card creator
+      const btnSubmit = document.getElementById('btnManualSubmitCard');
+      if (btnSubmit) {
+        btnSubmit.onclick = function() {
+          const title = (document.getElementById('manualTitle')?.value || '').trim();
+          const cat = document.getElementById('manualCategory')?.value || 'Other';
+          const user = (document.getElementById('manualUser')?.value || '').trim();
+          const pwd = document.getElementById('manualPassword')?.value || '';
+          const notes = (document.getElementById('manualNotes')?.value || '').trim();
+          const isPri = !!document.getElementById('manualIsPriority')?.checked;
+
+          if (!title) {
+            alert('Please enter an account or service title.');
+            document.getElementById('manualTitle')?.focus();
+            return;
+          }
+
+          const newId = 'vault-item-' + Date.now();
+          const now = Date.now();
+          const newCard = {
+            id: newId,
+            title: title,
+            username: user,
+            password: pwd,
+            category: cat,
+            badge: cat,
+            notes: notes,
+            importance: isPri ? 'Critical' : 'Normal',
+            status: 'Secured',
+            isPriority: isPri,
+            pinned: isPri,
+            pinned_at: isPri ? now : 0,
+            lastUsedAt: now,
+            usageScore: 10,
+            updatedAt: now,
+            updatedBy: 'ov_manual_creator'
+          };
+
+          const items = (typeof window.getVaultItems === 'function' ? window.getVaultItems() : vaultItems) || [];
+          items.unshift(newCard);
+          if (typeof window.setVaultItems === 'function') window.setVaultItems(items);
+          localStorage.setItem('orlandovault_credentials_v6', JSON.stringify(items));
+
+          if (isPri && typeof savePinnedRegistry === 'function') {
+            const reg = typeof getPinnedRegistry === 'function' ? getPinnedRegistry() : [];
+            if (!reg.includes(newId)) reg.unshift(newId);
+            savePinnedRegistry(reg);
+          }
+
+          renderVault();
+          renderMetrics();
+          if (window.triggerVaultCloudPush) window.triggerVaultCloudPush();
+          if (typeof showToast === 'function') showToast('✅ Added "' + title + '" to OrlandoVault!', '💾');
+        };
+      }
+
     }
 
     function toggleReveal(id) {
@@ -9199,7 +9668,7 @@
       <div class="ios-grabber-bar" aria-label="Swipe down or right to dismiss"></div>
       <div class="spotlight-header">
         <svg class="spotlight-icon-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" class="spotlight-input" id="vaultSpotlightInput" placeholder="Search 138+ credentials, system commands, or sub-apps..." autocomplete="off" spellcheck="false">
+        <input type="text" class="spotlight-input" id="vaultSpotlightInput" placeholder="Search 200+ credentials, system commands, or sub-apps..." autocomplete="off" spellcheck="false">
         <button type="button" class="btn-spotlight-touch-close" id="btnCloseSpotlight" aria-label="Close Spotlight Palette" title="Close (or Swipe Right / Down)">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           <span class="desktop-esc-hint">CLOSE</span>
@@ -9388,7 +9857,10 @@
       spotlightModal.classList.add('open');
       if (spotlightInput) {
         spotlightInput.value = '';
-        spotlightInput.focus();
+        // Only auto-focus on mouse/desktop; avoid forcing mobile keyboard open on touch devices
+        if (document.documentElement.getAttribute('data-input') === 'mouse') {
+          spotlightInput.focus();
+        }
       }
       renderSpotlightResults('');
       if (typeof playJarvisSound === 'function') playJarvisSound('reveal');
@@ -10097,10 +10569,15 @@
       });
     }
 
-    // Input & Navigation Listeners
+    // Input & Navigation Listeners (Debounced 120ms for buttery 60fps performance)
+    let spotlightSearchDebounceTimer = null;
     if (spotlightInput) {
       spotlightInput.addEventListener('input', (e) => {
-        renderSpotlightResults(e.target.value);
+        const val = e.target.value;
+        if (spotlightSearchDebounceTimer) clearTimeout(spotlightSearchDebounceTimer);
+        spotlightSearchDebounceTimer = setTimeout(() => {
+          renderSpotlightResults(val);
+        }, 120);
       });
 
       spotlightInput.addEventListener('keydown', (e) => {
@@ -10297,21 +10774,29 @@
       }
     });
 
-    // Automatically push history state whenever any modal opens
+    // Automatically push history state and lock background scrolling whenever any modal opens
     function setupModalHistoryPush(modalId) {
       const m = document.getElementById(modalId);
       if (!m) return;
       const obs = new MutationObserver(function() {
-        if (m.classList.contains('open') || m.classList.contains('active')) {
+        const isOpen = m.classList.contains('open') || m.classList.contains('active') || m.style.display === 'flex';
+        if (isOpen) {
           try {
             history.pushState({ modalOpen: modalId }, '');
           } catch(e){}
+          if (typeof window.lockPageScroll === 'function') window.lockPageScroll();
+        } else {
+          // If no other modal is open, restore background scroll smoothly
+          const anyActive = document.querySelector('.modal-backdrop.open, .modal-backdrop.active, .spotlight-backdrop.open');
+          if (!anyActive && typeof window.unlockPageScroll === 'function') {
+            window.unlockPageScroll();
+          }
         }
       });
-      obs.observe(m, { attributes: true, attributeFilter: ['class'] });
+      obs.observe(m, { attributes: true, attributeFilter: ['class', 'style'] });
     }
 
-    ['vaultSpotlightModal', 'accountFocusModal', 'cardEditModal', 'sheetSyncModal', 'qrModal', 'historyModal'].forEach(setupModalHistoryPush);
+    ['vaultSpotlightModal', 'accountFocusModal', 'cardEditModal', 'sheetSyncModal', 'qrModal', 'historyModal', 'syncHealthModal'].forEach(setupModalHistoryPush);
 
     function showEdgeIndicator(dir, text) {
       const el = dir === 'left' ? document.getElementById('appleEdgeIndicatorLeft') : document.getElementById('appleEdgeIndicatorRight');
@@ -10468,6 +10953,156 @@
     }, { passive: true });
 
     window.closeActiveVaultModal = closeActiveModal;
+  })();
+  </script>
+
+
+  <!-- UNIFIED INPUT HYBRID & SAFE TAP POINTER ENGINE -->
+  <script id="vault-input-safe-tap-engine">
+  (function() {
+    'use strict';
+
+    // 1. DEVICE INPUT DETECTION (Live Hybrid Switching)
+    let currentInputMode = 'mouse';
+    function setInputMode(mode) {
+      if (currentInputMode !== mode) {
+        currentInputMode = mode;
+        document.documentElement.setAttribute('data-input', mode);
+      }
+    }
+
+    if (window.matchMedia('(pointer: coarse) or (hover: none)').matches || (navigator.maxTouchPoints && navigator.maxTouchPoints > 0)) {
+      setInputMode('touch');
+    } else {
+      setInputMode('mouse');
+    }
+
+    window.addEventListener('pointerdown', function(e) {
+      if (e.pointerType === 'touch' || e.pointerType === 'pen') {
+        setInputMode('touch');
+      } else if (e.pointerType === 'mouse') {
+        setInputMode('mouse');
+      }
+    }, { passive: true, capture: true });
+
+    // 2. SAFE TAP ENGINE FOR VAULT CARDS
+    let tapState = {
+      cardId: null,
+      startX: 0,
+      startY: 0,
+      startTime: 0,
+      canceled: false,
+      pointerId: null
+    };
+
+    const grid = document.getElementById('vaultGridContainer');
+    if (grid) {
+      grid.addEventListener('pointerdown', function(e) {
+        const card = e.target.closest('.vault-card');
+        if (!card) return;
+        if (e.target.closest('button, a, input, select, textarea')) return;
+
+        tapState.cardId = card.getAttribute('data-card-id');
+        tapState.startX = e.clientX;
+        tapState.startY = e.clientY;
+        tapState.startTime = Date.now();
+        tapState.canceled = false;
+        tapState.pointerId = e.pointerId;
+      }, { passive: true });
+
+      grid.addEventListener('pointermove', function(e) {
+        if (!tapState.cardId || tapState.pointerId !== e.pointerId) return;
+        const dist = Math.hypot(e.clientX - tapState.startX, e.clientY - tapState.startY);
+        if (dist > 8) {
+          tapState.canceled = true; // User is scrolling!
+        }
+      }, { passive: true });
+
+      grid.addEventListener('pointercancel', function() {
+        tapState.canceled = true;
+        tapState.cardId = null;
+      }, { passive: true });
+
+      grid.addEventListener('pointerup', function(e) {
+        if (!tapState.cardId || tapState.canceled) {
+          tapState.cardId = null;
+          return;
+        }
+        const dt = Date.now() - tapState.startTime;
+        const cardId = tapState.cardId;
+        tapState.cardId = null;
+
+        // On touch: enforce safe tap constraints (< 8px displacement and < 500ms duration)
+        if (e.pointerType === 'touch' || e.pointerType === 'pen') {
+          if (dt > 500) return; // Held too long (e.g. text selection intent)
+        }
+
+        const items = (typeof window.getVaultItems === 'function' ? window.getVaultItems() : window.vaultItems) || [];
+        const item = items.find(x => x.id === cardId);
+        if (item) {
+          // Synchronous silent password copy inside user gesture
+          if (item.password && typeof copyPasswordSilently === 'function') {
+            copyPasswordSilently(item.password);
+          }
+          if (typeof openAccountFocusModal === 'function') {
+            openAccountFocusModal(item.id, false);
+          }
+        }
+      });
+    }
+
+    // 3. KEYBOARD ACCESSIBILITY: TAB & ENTER NAVIGATION
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        const focusedCard = document.activeElement ? document.activeElement.closest('.vault-card') : null;
+        if (focusedCard && !e.target.closest('button, a, input, select, textarea')) {
+          e.preventDefault();
+          const cardId = focusedCard.getAttribute('data-card-id');
+          const items = (typeof window.getVaultItems === 'function' ? window.getVaultItems() : window.vaultItems) || [];
+          const item = items.find(x => x.id === cardId);
+          if (item) {
+            if (item.password && typeof copyPasswordSilently === 'function') {
+              copyPasswordSilently(item.password);
+            }
+            if (typeof openAccountFocusModal === 'function') {
+              openAccountFocusModal(item.id, false);
+            }
+          }
+        }
+      } else if (e.key === 'Escape') {
+        if (typeof window.closeActiveVaultModal === 'function') {
+          window.closeActiveVaultModal();
+        }
+      }
+    });
+
+    // 4. IOS-SAFE BACKGROUND SCROLL LOCK ENGINE
+    let lockedScrollY = 0;
+    window.lockPageScroll = function() {
+      lockedScrollY = window.pageYOffset || document.documentElement.scrollTop;
+      document.body.style.position = 'fixed';
+      document.body.style.top = '-' + lockedScrollY + 'px';
+      document.body.style.width = '100%';
+      document.body.style.overflow = 'hidden';
+    };
+
+    window.unlockPageScroll = function() {
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      document.body.style.overflow = '';
+      window.scrollTo(0, lockedScrollY);
+    };
+
+    // 5. DEBOUNCED SEARCH ENGINE (120ms)
+    let spotlightSearchTimer = null;
+    window.debounceSpotlightSearch = function(query, callback) {
+      if (spotlightSearchTimer) clearTimeout(spotlightSearchTimer);
+      spotlightSearchTimer = setTimeout(function() {
+        callback(query);
+      }, 120);
+    };
+
   })();
   </script>
 
