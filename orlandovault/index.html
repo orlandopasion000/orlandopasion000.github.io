@@ -7404,7 +7404,19 @@
       }
 
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v32', { scope: '/orlandovault/' }).catch(err => {
+        // Auto-purge any stale legacy caches immediately
+        if (window.caches) {
+          caches.keys().then(keys => {
+            keys.forEach(k => {
+              if (k.startsWith('vault-') && k !== 'vault-jarvis-v52') {
+                caches.delete(k);
+              }
+            });
+          });
+        }
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v52', { scope: '/orlandovault/' }).then(reg => {
+          if (reg && reg.update) reg.update();
+        }).catch(err => {
           console.warn('Vault SW registration error:', err);
         });
       }

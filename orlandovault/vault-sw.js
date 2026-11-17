@@ -1,5 +1,5 @@
 /* OrlandoVault · Offline-First Jarvis Security Service Worker */
-var CACHE_NAME = 'vault-jarvis-v51';
+var CACHE_NAME = 'vault-jarvis-v52';
 var ASSETS = [
   './',
   './index.html',
@@ -45,7 +45,31 @@ self.addEventListener('fetch', function(e) {
   if (!url.startsWith('http://') && !url.startsWith('https://')) return;
   if (url.indexOf('firestore.googleapis.com') !== -1 || url.indexOf('docs.google.com') !== -1 || url.indexOf('ntfy.sh') !== -1) return;
 
-  // Stale-While-Revalidate: Instant 0ms load from disk cache, revalidate in background
+  // HTML / Navigation requests: Network-First so all updates appear immediately online!
+  // Automatically falls back to offline cache only if network is unavailable.
+  var isHtml = e.request.mode === 'navigate' ||
+               url.endsWith('/') ||
+               url.endsWith('/index.html') ||
+               (e.request.headers.get('accept') && e.request.headers.get('accept').indexOf('text/html') !== -1);
+
+  if (isHtml) {
+    e.respondWith(
+      fetch(e.request).then(function(networkResponse) {
+        if (networkResponse && networkResponse.status === 200) {
+          var copy = networkResponse.clone();
+          caches.open(CACHE_NAME).then(function(cache) {
+            cache.put(e.request, copy).catch(function() {});
+          });
+        }
+        return networkResponse;
+      }).catch(function() {
+        return caches.match(e.request);
+      })
+    );
+    return;
+  }
+
+  // Stale-While-Revalidate for static sub-assets (icons, scripts, styles): Instant 0ms load, revalidate in background
   e.respondWith(
     caches.match(e.request).then(function(cachedResponse) {
       var networkFetch = fetch(e.request).then(function(networkResponse) {
