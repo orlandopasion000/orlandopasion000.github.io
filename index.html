@@ -327,8 +327,8 @@
       box-shadow: 0 0 6px rgba(16, 185, 129, 0.7);
     }
     .oc-live-badge-dot.pending {
-      background: #f5c451;
-      box-shadow: 0 0 10px rgba(245, 196, 81, 0.95), 0 0 4px rgba(56, 189, 248, 0.8);
+      background: #00f0ff;
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.95), 0 0 4px rgba(16, 185, 129, 0.8);
       animation: ocDotPulse 1.5s infinite ease-in-out;
     }
     @keyframes ocDotPulse {
@@ -336,17 +336,22 @@
       50% { transform: scale(1.35); opacity: 0.75; }
     }
     .btn-oc-hero.has-pending-badge {
-      border-color: #f5c451 !important;
-      box-shadow: 0 8px 32px rgba(56, 189, 248, 0.45), 0 0 16px rgba(212, 168, 83, 0.45) !important;
+      border-color: #00f0ff !important;
+      box-shadow: 0 8px 32px rgba(0, 240, 255, 0.45), 0 0 16px rgba(16, 185, 129, 0.45) !important;
       animation: ocHeroPulse 2.4s infinite ease-in-out;
     }
     @keyframes ocHeroPulse {
-      0%, 100% { box-shadow: 0 8px 30px rgba(56, 189, 248, 0.35); }
-      50% { box-shadow: 0 12px 42px rgba(212, 168, 83, 0.6), 0 0 22px rgba(56, 189, 248, 0.5); }
+      0%, 100% { box-shadow: 0 8px 30px rgba(0, 240, 255, 0.35); }
+      50% { box-shadow: 0 12px 42px rgba(0, 240, 255, 0.6), 0 0 22px rgba(16, 185, 129, 0.5); }
     }
     .hub-card.is-orlandochrome.has-pending-card {
-      border-color: rgba(212, 168, 83, 0.72) !important;
-      box-shadow: 0 12px 36px rgba(56, 189, 248, 0.25), 0 0 20px rgba(212, 168, 83, 0.22) !important;
+      border-color: rgba(0, 240, 255, 0.75) !important;
+      box-shadow: 0 12px 36px rgba(0, 240, 255, 0.35), 0 0 20px rgba(16, 185, 129, 0.25) !important;
+    }
+    .hub-card.is-orlandochrome.has-pending-card .hub-card-badge {
+      border-color: rgba(0, 240, 255, 0.65) !important;
+      color: #38bdf8 !important;
+      box-shadow: 0 0 14px rgba(0, 240, 255, 0.3) !important;
     }
     .nav-oc-link.has-pending-badge {
       text-shadow: 0 0 12px rgba(56, 189, 248, 0.9) !important;
@@ -2133,7 +2138,7 @@
           if (badge) {
             var timeHtml = ' <span class="hub-sync-time" data-relative-time="' + Date.now() + '" data-relative-prefix="· " data-relative-format="compact">just now</span>';
             if (pending > 0) {
-              badge.innerHTML = '★ FLAGSHIP APP · <span class="oc-live-badge-dot pending"></span> <strong>' + pending + ' PENDING</strong>' + timeHtml;
+              badge.innerHTML = '★ FLAGSHIP APP · <span class="oc-live-badge-dot pending"></span> <strong style="color:#00f0ff;text-shadow:0 0 8px rgba(0,240,255,0.6);">' + pending + ' PENDING</strong>' + timeHtml;
               card.classList.add('has-pending-card');
             } else {
               badge.innerHTML = '★ FLAGSHIP APP · <span class="oc-live-badge-dot synced"></span> <strong>22 PROFILES · LIVE SYNCED</strong>' + timeHtml;
