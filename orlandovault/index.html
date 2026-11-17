@@ -1151,7 +1151,12 @@
       color: #ffffff;
     }
 
-    .hud-toast-banner {
+    .hud-toast-banner,
+    #hudToast {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
       position: fixed;
       bottom: calc(24px + var(--safe-bottom));
       right: 24px;
@@ -1160,12 +1165,10 @@
       box-shadow: 0 0 30px var(--cyan-glow);
       border-radius: 10px;
       padding: 14px 22px;
-      display: flex;
       align-items: center;
       gap: 12px;
       z-index: 10000;
       transform: translateY(120px);
-      opacity: 0;
       transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -6033,15 +6036,9 @@
 
     let toastTimeout = null;
     function showToast(message) {
-      const toast = document.getElementById('hudToast');
-      const text = document.getElementById('toastMessage');
-      if (!toast || !text) return;
-      text.textContent = message;
-      toast.classList.add('show');
-      if (toastTimeout) clearTimeout(toastTimeout);
-      toastTimeout = setTimeout(() => {
-        toast.classList.remove('show');
-      }, 3500);
+      // Pop-up toast notifications permanently disabled per user instruction.
+      // Audio feedback and inline status indicators are used instead.
+      return;
     }
 
     /* ==========================================================================
@@ -9467,22 +9464,16 @@
 
       spotlightResults.innerHTML = html;
 
-      // Item click binding with dual left/right actions
+      // Item click binding with seamless auto-copy and Focus HUD navigation
       spotlightResults.querySelectorAll('.spotlight-item').forEach(el => {
         const idx = parseInt(el.getAttribute('data-index'), 10);
-        const match = spotlightMatches[idx];
 
         // 1. Right side click (badge / copy button)
         const badgeBtn = el.querySelector('.spotlight-item-badge');
         if (badgeBtn) {
           badgeBtn.onclick = function(e) {
             e.stopPropagation();
-            if (match && match.type === 'credential') {
-              if (match.action) match.action();
-              closeSpotlight();
-            } else if (match && match.action) {
-              executeSpotlightIndex(idx);
-            }
+            executeSpotlightIndex(idx);
           };
         }
 
@@ -9491,21 +9482,13 @@
         if (leftSide) {
           leftSide.onclick = function(e) {
             e.stopPropagation();
-            if (match && match.type === 'credential' && match.itemId) {
-              navigateToVaultCard(match.itemId);
-            } else if (match && match.action) {
-              executeSpotlightIndex(idx);
-            }
+            executeSpotlightIndex(idx);
           };
         }
 
-        // Fallback row click
+        // 3. Fallback entire row click
         el.onclick = function() {
-          if (match && match.type === 'credential' && match.itemId) {
-            navigateToVaultCard(match.itemId);
-          } else if (match && match.action) {
-            executeSpotlightIndex(idx);
-          }
+          executeSpotlightIndex(idx);
         };
       });
     }
@@ -9513,7 +9496,33 @@
 
     function executeSpotlightIndex(idx) {
       const match = spotlightMatches[idx];
-      if (match && match.action) {
+      if (!match) return;
+
+      if (match.type === 'credential' && match.itemId) {
+        const creds = Array.isArray(vaultItems) ? vaultItems : [];
+        const item = creds.find(x => x.id === match.itemId);
+        if (item) {
+          // 1. Automatically copy password to clipboard
+          if (navigator.clipboard && item.password) {
+            navigator.clipboard.writeText(item.password).catch(() => {});
+          }
+          // 2. Play subtle cyber feedback sound
+          if (typeof playJarvisSound === 'function') playJarvisSound('copy');
+
+          // 3. Track search query affinity & recency interaction
+          const spotInput = document.getElementById('vaultSpotlightInput');
+          const curQ = spotInput ? spotInput.value.trim() : '';
+          if (typeof recordAccountInteraction === 'function') {
+            recordAccountInteraction(item.id, curQ, 'enter_focus', 8);
+          }
+
+          // 4. Open the account card pop-up (Executive Focus HUD modal)
+          openAccountFocusModal(match.itemId, true);
+          return;
+        }
+      }
+
+      if (match.action) {
         closeSpotlight();
         match.action();
       }
