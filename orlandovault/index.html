@@ -5953,6 +5953,12 @@
           localStorage.setItem(LS_VAULT_KEY, JSON.stringify(vaultItems));
         }
 
+        // Ensure priority pins are 100% sanitized and persistent in storage on boot
+        reapplyPriorityPins(vaultItems);
+        try {
+          localStorage.setItem(LS_VAULT_KEY, JSON.stringify(vaultItems));
+        } catch(e) {}
+
         const storedAudit = localStorage.getItem(LS_AUDIT_KEY);
         auditHistory = storedAudit ? JSON.parse(storedAudit) : [];
 
@@ -6069,23 +6075,40 @@
 
     
     // ==========================================================================
-    // DEDICATED PRIORITY PIN PERSISTENCE SHIELD
-    // Protects marked priorities from being overwritten by Google Sheets or Cloud sync
+    // DEDICATED PRIORITY PIN PERSISTENCE SHIELD (V3)
+    // Protects marked priorities from being overwritten by Google Sheets or Cloud sync.
+    // STRICT RULE: Registry stores ONLY unique card IDs (e.g. 'vault-item-5').
+    // NEVER store email addresses or usernames in the registry, because in a personal vault
+    // dozens of accounts share the same email address (orlandopasion1994@gmail.com).
     // ==========================================================================
-    const LS_PINNED_REGISTRY_KEY = 'orlandovault_priority_pins_v2';
+    const LS_PINNED_REGISTRY_KEY = 'orlandovault_priority_pins_v3';
 
     function getPinnedRegistry() {
       try {
+        // Purge legacy contaminated v2 registry
+        if (localStorage.getItem('orlandovault_priority_pins_v2')) {
+          localStorage.removeItem('orlandovault_priority_pins_v2');
+        }
         const raw = localStorage.getItem(LS_PINNED_REGISTRY_KEY);
-        if (raw) return JSON.parse(raw);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) {
+            // Strictly filter out any string that contains '@' (email addresses) or whitespace
+            const clean = parsed.filter(x => typeof x === 'string' && !x.includes('@') && x.trim().length > 0);
+            if (clean.length > 0) return clean;
+          }
+        }
       } catch(e) {}
-      // Default immortal priority: Primary Gmail
-      return ['vault-item-5', 'orlandopasion1994@gmail.com'];
+      // Default authoritative priority: Primary Gmail alone
+      return ['vault-item-5'];
     }
 
     function savePinnedRegistry(registry) {
       try {
-        localStorage.setItem(LS_PINNED_REGISTRY_KEY, JSON.stringify(registry));
+        const clean = Array.isArray(registry)
+          ? registry.filter(x => typeof x === 'string' && !x.includes('@') && x.trim().length > 0)
+          : ['vault-item-5'];
+        localStorage.setItem(LS_PINNED_REGISTRY_KEY, JSON.stringify(clean));
       } catch(e) {}
     }
 
@@ -6093,16 +6116,20 @@
       if (!Array.isArray(items)) return;
       const registry = getPinnedRegistry();
       items.forEach(item => {
-        const u = (item.username || '').toLowerCase().trim();
-        const t = (item.title || '').trim();
-        const shouldPin = registry.includes(item.id) || 
-                          (u && registry.includes(u)) || 
-                          (t && registry.includes(t)) || 
-                          !!(item.isPriority || item.pinned);
-        if (shouldPin) {
+        // An account is priority IF AND ONLY IF its unique card ID is in the registry,
+        // or it is explicitly the unique Primary Gmail card.
+        const isExplicitTarget = registry.includes(item.id) || 
+                                 (item.id === 'vault-item-5' && item.title === 'Primary Gmail') ||
+                                 (item.title === 'Primary Gmail' && item.category === 'Gmail');
+        if (isExplicitTarget) {
           item.isPriority = true;
           item.pinned = true;
-          if (!item.pinned_at) item.pinned_at = Date.now();
+          if (!item.pinned_at) item.pinned_at = 1700000000000;
+        } else {
+          // Strictly strip false priority tags so they NEVER persist or spread to other accounts
+          item.isPriority = false;
+          item.pinned = false;
+          item.pinned_at = 0;
         }
       });
     }
@@ -6123,14 +6150,12 @@
         item.usageScore = (parseFloat(item.usageScore) || 0) + 5;
       }
 
-      // Sync with dedicated Priority Registry Shield
+      // Sync strictly with unique item.id ONLY (NEVER store item.username/email!)
       let registry = getPinnedRegistry();
-      const u = (item.username || '').toLowerCase().trim();
       if (item.isPriority) {
         if (!registry.includes(item.id)) registry.push(item.id);
-        if (u && !registry.includes(u)) registry.push(u);
       } else {
-        registry = registry.filter(x => x !== item.id && x !== u && x !== item.title);
+        registry = registry.filter(x => x !== item.id);
       }
       savePinnedRegistry(registry);
 
@@ -6141,7 +6166,6 @@
       renderVault();
       playJarvisSound('copy');
       logAudit(item.isPriority ? 'PINNED_PRIORITY' : 'UNPINNED_PRIORITY', (item.isPriority ? 'Pinned to top: ' : 'Unpinned: ') + item.title);
-      showToast(item.isPriority ? `★ "${item.title}" is now Priority pinned to top!` : `"${item.title}" unpinned.`);
       recordVaultMutation('CARD_PRIORITY_TOGGLE', { id: itemId, isPriority: item.isPriority, title: item.title });
     }
 
@@ -9666,6 +9690,18 @@
           }
           return;
         }
+      }
+
+      // Quick Shortcut: Ctrl+1 / Cmd+1 to instantly copy Top #1 Priority account password & pop up Focus HUD
+      if ((e.ctrlKey || e.metaKey) && e.key === '1') {
+        e.preventDefault();
+        const topItem = (Array.isArray(vaultItems) && vaultItems.length > 0)
+          ? (vaultItems.find(x => x.isPriority || x.pinned) || vaultItems[0])
+          : null;
+        if (topItem) {
+          openAccountFocusModal(topItem.id, false);
+        }
+        return;
       }
 
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
