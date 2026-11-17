@@ -4916,6 +4916,311 @@
       gap: 10px !important;
     }
 
+
+    /* ==========================================================================
+       EXECUTIVE FOCUS HUD: ENLARGED ACCOUNT INSPECTION THEATER
+       ========================================================================== */
+    .focus-hud-box {
+      background: radial-gradient(circle at 50% 0%, rgba(2, 132, 199, 0.16) 0%, transparent 70%),
+                  linear-gradient(180deg, #0a0e17 0%, #030509 100%);
+      border: 1.5px solid rgba(56, 189, 248, 0.45);
+      border-radius: 20px;
+      padding: clamp(16px, 3vw, 24px);
+      width: 95%;
+      max-width: 580px;
+      max-height: min(90vh, calc(100dvh - 32px));
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.98), 0 0 35px rgba(0, 240, 255, 0.15);
+      position: relative;
+      color: #f3f4f6;
+    }
+
+    .focus-hud-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .btn-focus-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.14);
+      border: 1.5px solid rgba(56, 189, 248, 0.45);
+      color: #38bdf8;
+      font-family: var(--font-tech), sans-serif;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      touch-action: manipulation;
+    }
+    .btn-focus-back:hover {
+      background: rgba(56, 189, 248, 0.25);
+      border-color: #38bdf8;
+      color: #ffffff;
+      transform: translateX(-2px);
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.4);
+    }
+
+    .focus-kbd {
+      font-family: var(--font-mono), monospace;
+      font-size: 9px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #7dd3fc;
+    }
+
+    .focus-hud-badge-tag {
+      font-family: var(--font-tech), sans-serif;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      color: #64748b;
+      text-transform: uppercase;
+    }
+
+    .btn-focus-close {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #94a3b8;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+    .btn-focus-close:hover {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: #ef4444;
+      color: #ffffff;
+      transform: scale(1.05);
+    }
+
+    /* Hero Row */
+    .focus-hero-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 4px 0;
+    }
+    .focus-hero-squircle {
+      width: 54px;
+      height: 54px;
+      border-radius: 14px;
+      padding: 10px;
+      background: rgba(4, 6, 10, 0.9);
+      border: 1.5px solid rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+    }
+    .focus-hero-squircle svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .focus-hero-details {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .focus-hero-microbar {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      flex-wrap: wrap;
+    }
+    .focus-hero-title {
+      font-family: var(--font-inter), sans-serif;
+      font-size: 1.35rem;
+      font-weight: 900;
+      letter-spacing: -0.015em;
+      line-height: 1.25;
+      color: #ffffff;
+      word-break: break-word;
+    }
+
+    /* Focus Field Deck */
+    .focus-deck-card {
+      background: rgba(14, 20, 32, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .focus-deck-label {
+      font-family: var(--font-tech), sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .focus-deck-val-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .focus-deck-value {
+      font-family: var(--font-inter), sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #e2e8f0;
+      word-break: break-all;
+    }
+
+    /* Large Password Deck */
+    .focus-pwd-deck {
+      background: rgba(4, 7, 12, 0.95);
+      border: 1.5px solid rgba(217, 185, 92, 0.4);
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .focus-pwd-display {
+      font-family: var(--font-mono), monospace;
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: #ffd700;
+      word-break: break-all;
+      user-select: all;
+    }
+    .focus-pwd-display.masked {
+      letter-spacing: 0.28em;
+      color: #94a3b8;
+    }
+
+    /* Notes Tray */
+    .focus-notes-deck {
+      background: rgba(10, 14, 22, 0.75);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .focus-notes-text {
+      font-family: var(--font-inter), sans-serif;
+      font-size: 0.92rem;
+      line-height: 1.55;
+      color: #cbd5e1;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    /* Action Footer */
+    .focus-hud-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      flex-wrap: wrap;
+    }
+    .focus-hud-footer-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-focus-edit {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 9px;
+      color: #94a3b8;
+      font-family: var(--font-tech), sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-focus-edit:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: #ffffff;
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+    .btn-focus-copy-user {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 9px;
+      color: #38bdf8;
+      font-family: var(--font-tech), sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-focus-copy-user:hover {
+      background: rgba(56, 189, 248, 0.22);
+      border-color: #38bdf8;
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+    .btn-focus-copy-pwd {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 18px;
+      background: linear-gradient(135deg, #ffd700 0%, #f59e0b 100%);
+      border: 1px solid #ffd700;
+      border-radius: 9px;
+      color: #000000;
+      font-family: var(--font-tech), sans-serif;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 0 16px rgba(255, 215, 0, 0.45);
+      transition: all 0.2s ease;
+    }
+    .btn-focus-copy-pwd:hover {
+      background: linear-gradient(135deg, #ffffff 0%, #ffd700 100%);
+      box-shadow: 0 0 24px rgba(255, 215, 0, 0.7);
+      transform: translateY(-1px);
+    }
+
+    /* Make grid cards interactive cursor */
+    .vault-card {
+      cursor: pointer;
+    }
+
 </style>
 </head>
 <body>
@@ -5108,6 +5413,50 @@
 
   <!-- GOOGLE SHEETS LIVE SYNC MODAL -->
   
+  
+  <!-- EXECUTIVE FOCUS HUD: ENLARGED ACCOUNT INSPECTION THEATER -->
+  <div class="modal-backdrop" id="accountFocusModal" role="dialog" aria-modal="true" aria-label="Executive Account Focus">
+    <div class="focus-hud-box">
+      <div class="ios-grabber-bar" aria-label="Swipe down to dismiss"></div>
+      
+      <!-- Topbar Header / Back to Search -->
+      <div class="focus-hud-topbar">
+        <button type="button" class="btn-focus-back" id="btnFocusBackToSearch" style="display:none;" title="Back to Search Results (Esc / Backspace)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          <span id="btnFocusBackLabel">Back to Search</span>
+          <kbd class="focus-kbd">esc</kbd>
+        </button>
+        <div class="focus-hud-badge-tag" id="focusHudOriginLabel">EXECUTIVE FOCUS</div>
+        <button type="button" class="btn-focus-close" id="btnFocusClose" title="Close Focus Theater (Esc)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <!-- Main Dynamic Card Area -->
+      <div class="focus-hud-content" id="focusHudContent">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <!-- Quick Action Footer -->
+      <div class="focus-hud-footer">
+        <button type="button" class="btn-focus-edit" id="btnFocusOpenEditor" title="Edit this account in Card Editor">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M11 4H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h13a2 2 0 0 0 2-2v-6"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          <span>Edit Account</span>
+        </button>
+        <div class="focus-hud-footer-right">
+          <button type="button" class="btn-focus-copy-user" id="btnFocusCopyUser">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span>Copy User</span>
+          </button>
+          <button type="button" class="btn-focus-copy-pwd" id="btnFocusCopyPwd">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span>COPY PASSWORD</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- CREDENTIAL CARD QUICK-EDITOR MODAL -->
   <div class="modal-backdrop" id="cardEditModal" role="dialog" aria-modal="true" aria-label="Edit Credential Card">
     <div class="card-editor-modal">
@@ -6378,7 +6727,7 @@
         const visualAuraClass = brand.brandClass ? brand.brandClass : catClass;
 
         return `
-          <article class="vault-card ${visualAuraClass} ${isPinned ? 'is-priority-pinned' : ''} ${isCritical ? 'is-critical-account' : ''}" data-cat="${catClass}" id="card-${item.id}">
+          <article class="vault-card ${visualAuraClass} ${isPinned ? 'is-priority-pinned' : ''} ${isCritical ? 'is-critical-account' : ''}" data-cat="${catClass}" id="card-${item.id}" onclick="if(!event.target.closest('button,a,input,textarea,select'))openAccountFocusModal('${item.id}',false);">
             <div class="card-header">
               <div class="card-brand-header-left">
                 <div class="brand-squircle ${brand.squircleClass}">${brand.logoSvg}</div>
@@ -8099,7 +8448,193 @@
       if (spotlightModal) spotlightModal.classList.remove('open');
     }
 
+    
+    // ==========================================================================
+    // EXECUTIVE FOCUS HUD & SPOTLIGHT DRILLDOWN ENGINE
+    // ==========================================================================
+    let lastSpotlightQuery = '';
+    let openedFromSpotlight = false;
+    let currentFocusItem = null;
+    let focusPwdRevealed = false;
+
+    function openAccountFocusModal(itemId, isFromSpotlight = false) {
+      const item = Array.isArray(vaultItems) ? vaultItems.find(x => x.id === itemId) : null;
+      if (!item) return;
+
+      currentFocusItem = item;
+      openedFromSpotlight = !!isFromSpotlight;
+      focusPwdRevealed = false;
+
+      const modal = document.getElementById('accountFocusModal');
+      const content = document.getElementById('focusHudContent');
+      const btnBack = document.getElementById('btnFocusBackToSearch');
+      const btnBackLabel = document.getElementById('btnFocusBackLabel');
+      const originLabel = document.getElementById('focusHudOriginLabel');
+      if (!modal || !content) return;
+
+      if (openedFromSpotlight) {
+        const spotInput = document.getElementById('vaultSpotlightInput');
+        lastSpotlightQuery = spotInput ? spotInput.value : '';
+        if (typeof closeSpotlight === 'function') closeSpotlight(false); // don't wipe query
+        if (btnBack) {
+          btnBack.style.display = 'inline-flex';
+          if (btnBackLabel) btnBackLabel.textContent = lastSpotlightQuery ? ('Back to "' + (lastSpotlightQuery.length > 12 ? lastSpotlightQuery.slice(0, 12) + '…' : lastSpotlightQuery) + '"') : 'Back to Search';
+        }
+        if (originLabel) originLabel.textContent = 'SEARCH RESULT';
+      } else {
+        if (btnBack) btnBack.style.display = 'none';
+        if (originLabel) originLabel.textContent = 'EXECUTIVE ACCOUNT FOCUS';
+      }
+
+      // Render Dynamic Card Content
+      const brand = typeof getServiceBrandInfo === 'function' ? getServiceBrandInfo(item) : { logoSvg: '🔑', brandTag: item.category, brandClass: '' };
+      const safeTitle = escapeHtml(item.title || 'Untitled');
+      const safeUser = escapeHtml(item.username || '');
+      const safePwd = escapeHtml(item.password || '');
+      const maskedPwd = '•'.repeat(Math.max(8, Math.min(safePwd.length, 16)));
+      const isCritical = item.importance === 'Critical' || item.isCritical;
+      const isPinned = item.isPriority || item.pinned;
+
+      content.innerHTML = `
+        <div class="focus-hero-row">
+          <div class="focus-hero-squircle ${brand.squircleClass || ''}">
+            ${brand.logoSvg}
+          </div>
+          <div class="focus-hero-details">
+            <div class="focus-hero-microbar">
+              <span class="card-badge-verified">✓ ${brand.brandTag}</span>
+              <span class="card-badge-cat-tag">· ${escapeHtml(item.category || 'ACCOUNT')}</span>
+              ${brand.isOrg ? '<span class="card-badge-org">ORG</span>' : ''}
+              ${isCritical ? '<span class="card-badge-critical-micro">⚡ CRITICAL</span>' : ''}
+              ${isPinned ? '<span class="card-badge-priority-micro">★ TOP</span>' : ''}
+            </div>
+            <h2 class="focus-hero-title">${safeTitle}</h2>
+          </div>
+        </div>
+
+        <div class="focus-deck-card">
+          <div class="focus-deck-label">
+            <span>Username / Email</span>
+            <span style="color:#38bdf8;">1-Tap Copyable</span>
+          </div>
+          <div class="focus-deck-val-row">
+            <div class="focus-deck-value">${safeUser}</div>
+          </div>
+        </div>
+
+        <div class="focus-pwd-deck">
+          <div class="focus-deck-label">
+            <span style="color:#ffd700;">Encrypted Password</span>
+            <span id="focusPwdEntropyLabel" style="color:#94a3b8;font-size:9.5px;">${safePwd.length} characters</span>
+          </div>
+          <div class="focus-deck-val-row">
+            <div class="focus-pwd-display masked" id="focusPwdDisplay" data-raw="${safePwd}" data-masked="${maskedPwd}">${maskedPwd}</div>
+            <button type="button" class="btn-pwd-action" id="btnFocusToggleReveal" title="Toggle Show/Hide" style="padding:6px 12px;border-radius:8px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#ffffff;cursor:pointer;">
+              <svg width="15" height="15" id="focusEyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+
+        ${(item.notes || item.metadata) ? `
+          <div class="focus-notes-deck">
+            <div class="focus-deck-label">
+              <span>Recovery Notes & Metadata</span>
+            </div>
+            <div class="focus-notes-text">${escapeHtml(item.notes || '')}</div>
+            ${typeof renderSmartMetadata === 'function' ? renderSmartMetadata(item.metadata, '') : ''}
+          </div>
+        ` : ''}
+      `;
+
+      // Wire up toggle reveal
+      const btnEye = document.getElementById('btnFocusToggleReveal');
+      if (btnEye) {
+        btnEye.onclick = () => {
+          focusPwdRevealed = !focusPwdRevealed;
+          const disp = document.getElementById('focusPwdDisplay');
+          const eye = document.getElementById('focusEyeIcon');
+          if (disp) {
+            if (focusPwdRevealed) {
+              disp.textContent = disp.getAttribute('data-raw');
+              disp.classList.remove('masked');
+            } else {
+              disp.textContent = disp.getAttribute('data-masked');
+              disp.classList.add('masked');
+            }
+          }
+          if (eye) {
+            eye.innerHTML = focusPwdRevealed
+              ? '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>'
+              : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+          }
+          if (typeof playJarvisSound === 'function') playJarvisSound(focusPwdRevealed ? 'reveal' : 'tap');
+        };
+      }
+
+      // Wire up footer buttons
+      const btnCopyUser = document.getElementById('btnFocusCopyUser');
+      if (btnCopyUser) {
+        btnCopyUser.onclick = () => {
+          if (navigator.clipboard) {
+            navigator.clipboard.writeText(item.username).then(() => {
+              if (typeof showToast === 'function') showToast(`📧 Copied user: ${item.username}`, '📋');
+              if (typeof playJarvisSound === 'function') playJarvisSound('copy');
+            }).catch(() => {});
+          }
+        };
+      }
+
+      const btnCopyPwd = document.getElementById('btnFocusCopyPwd');
+      if (btnCopyPwd) {
+        btnCopyPwd.onclick = () => {
+          if (navigator.clipboard) {
+            navigator.clipboard.writeText(item.password).then(() => {
+              if (typeof showToast === 'function') showToast(`🔐 Copied password for ${item.title}!`, '📋');
+              if (typeof playJarvisSound === 'function') playJarvisSound('copy');
+            }).catch(() => {});
+          }
+        };
+      }
+
+      const btnEdit = document.getElementById('btnFocusOpenEditor');
+      if (btnEdit) {
+        btnEdit.onclick = () => {
+          closeAccountFocusModal(false);
+          if (typeof openCardEditor === 'function') openCardEditor(item.id);
+        };
+      }
+
+      modal.classList.add('active', 'open');
+      if (typeof playJarvisSound === 'function') playJarvisSound('reveal');
+    }
+
+    function closeAccountFocusModal(returnToSearch = false) {
+      const modal = document.getElementById('accountFocusModal');
+      if (modal) modal.classList.remove('active', 'open');
+
+      if (returnToSearch && openedFromSpotlight) {
+        const spotModal = document.getElementById('vaultSpotlightModal');
+        const spotInput = document.getElementById('vaultSpotlightInput');
+        if (spotModal) {
+          spotModal.classList.add('open', 'active');
+          if (spotInput) {
+            spotInput.value = lastSpotlightQuery;
+            spotInput.focus();
+            if (typeof renderSpotlightResults === 'function') renderSpotlightResults(lastSpotlightQuery);
+          }
+        }
+      }
+      openedFromSpotlight = false;
+      currentFocusItem = null;
+    }
+
+    window.openAccountFocusModal = openAccountFocusModal;
+    window.closeAccountFocusModal = closeAccountFocusModal;
+
+
     function navigateToVaultCard(itemId) {
+      openAccountFocusModal(itemId, true);
+      return;
       closeSpotlight();
       const item = vaultItems.find(x => x.id === itemId);
       if (!item) return;
@@ -8527,6 +9062,34 @@
 
     // Keyboard Shortcut (Ctrl + K / ⌘K and /)
     window.addEventListener('keydown', (e) => {
+      if (accountFocusModal && (accountFocusModal.classList.contains('open') || accountFocusModal.classList.contains('active'))) {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          closeAccountFocusModal(openedFromSpotlight);
+          return;
+        } else if (e.key === 'Backspace' && openedFromSpotlight && document.activeElement && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+          e.preventDefault();
+          closeAccountFocusModal(true);
+          return;
+        } else if ((e.key === 'c' || e.key === 'C') && !e.ctrlKey && !e.metaKey && document.activeElement && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+          if (currentFocusItem && navigator.clipboard) {
+            navigator.clipboard.writeText(currentFocusItem.password).then(() => {
+              if (typeof showToast === 'function') showToast('🔐 Password copied!', '📋');
+              if (typeof playJarvisSound === 'function') playJarvisSound('copy');
+            });
+          }
+          return;
+        } else if ((e.key === 'u' || e.key === 'U') && !e.ctrlKey && !e.metaKey && document.activeElement && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+          if (currentFocusItem && navigator.clipboard) {
+            navigator.clipboard.writeText(currentFocusItem.username).then(() => {
+              if (typeof showToast === 'function') showToast('📧 Username copied!', '📋');
+              if (typeof playJarvisSound === 'function') playJarvisSound('copy');
+            });
+          }
+          return;
+        }
+      }
+
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
         if (spotlightModal && spotlightModal.classList.contains('open')) closeSpotlight();
@@ -8538,6 +9101,22 @@
         closeSpotlight();
       }
     });
+
+    
+    const btnFocusClose = document.getElementById('btnFocusClose');
+    if (btnFocusClose) {
+      btnFocusClose.onclick = () => closeAccountFocusModal(false);
+    }
+    const btnFocusBack = document.getElementById('btnFocusBackToSearch');
+    if (btnFocusBack) {
+      btnFocusBack.onclick = () => closeAccountFocusModal(true);
+    }
+    const focusModalBackdrop = document.getElementById('accountFocusModal');
+    if (focusModalBackdrop) {
+      focusModalBackdrop.onclick = (e) => {
+        if (e.target === focusModalBackdrop) closeAccountFocusModal(false);
+      };
+    }
 
     // Button triggers
     if (btnTrigger1) btnTrigger1.onclick = openSpotlight;
@@ -8609,6 +9188,8 @@
 
       if (m.id === 'vaultSpotlightModal' && typeof window.closeVaultSpotlight === 'function') {
         window.closeVaultSpotlight();
+      } else if (m.id === 'accountFocusModal') {
+        window.closeAccountFocusModal(false);
       } else if (m.id === 'cardEditModal' && typeof window.closeCardEditor === 'function') {
         window.closeCardEditor();
       } else if (m.id === 'sheetSyncModal' && typeof window.closeSheetSyncModal === 'function') {
@@ -8657,7 +9238,7 @@
       obs.observe(m, { attributes: true, attributeFilter: ['class'] });
     }
 
-    ['vaultSpotlightModal', 'cardEditModal', 'sheetSyncModal', 'qrModal', 'historyModal'].forEach(setupModalHistoryPush);
+    ['vaultSpotlightModal', 'accountFocusModal', 'cardEditModal', 'sheetSyncModal', 'qrModal', 'historyModal'].forEach(setupModalHistoryPush);
 
     function showEdgeIndicator(dir, text) {
       const el = dir === 'left' ? document.getElementById('appleEdgeIndicatorLeft') : document.getElementById('appleEdgeIndicatorRight');
@@ -8714,7 +9295,7 @@
 
       activeDragModal = getActiveModal();
       if (activeDragModal) {
-        activeDragBox = activeDragModal.querySelector('.spotlight-box, .card-editor-modal, .qr-suite-container, .modal-box') || activeDragModal;
+        activeDragBox = activeDragModal.querySelector('.spotlight-box, .focus-hud-box, .card-editor-modal, .qr-suite-container, .modal-box') || activeDragModal;
         if (activeDragBox) {
           activeDragBox.style.transition = 'none';
         }
