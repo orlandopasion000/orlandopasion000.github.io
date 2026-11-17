@@ -3063,31 +3063,50 @@ body.universe-game-active .qgame-fs-exit {
 .preset-cluster-right button{padding:5px 10px;font-size:.78rem;font-weight:600;white-space:nowrap;border-radius:8px}
 
 /* Schedule Section Header & 3-Column Symmetrical Layout (Centered Play Music) */
+/* Choice 1: Executive Split Dock */
 .sched-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 14px;
-  margin-bottom: 14px;
+  gap: 16px;
+  margin-bottom: 16px;
   position: relative;
 }
-.sched-head-left {
+.sched-head-left.sched-title-card {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 7px 16px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
   flex: 0 0 auto;
-  white-space: nowrap;
 }
-.sched-head-left h2 {
-  font-size: clamp(0.92rem, 1.25vw, 1.15rem);
-  font-weight: 700;
+.sched-head-left.sched-title-card h2 {
+  font-size: 1.12rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
   white-space: nowrap;
   letter-spacing: -0.01em;
-  margin: 0;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+}
+.sched-title-divider {
+  width: 1px;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.2);
+  display: inline-block;
+}
+.sched-head-right.sched-actions-dock {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+  flex: 0 0 auto;
 }
 /* Windows 11 Notifications Master Toggle Switch */
 .win-master-toggle-wrap {
@@ -3194,22 +3213,20 @@ body.universe-game-active .qgame-fs-exit {
     flex: 0 0 auto;
   }
 }
-@media (max-width: 768px) {
+@media (max-width: 820px) {
   .sched-head {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
     gap: 12px;
-    text-align: center;
   }
-  .sched-head-left, .sched-head-center, .sched-head-right {
+  .sched-head-left.sched-title-card {
+    justify-content: space-between;
+    width: 100%;
+  }
+  .sched-head-right.sched-actions-dock {
     justify-content: center;
     width: 100%;
-    min-width: auto;
-  }
-  .sched-head-center {
-    flex-wrap: wrap;
-    gap: 10px;
   }
 }
 h2{font-size:clamp(1.12rem,1.65vw,1.38rem);font-weight:700;display:flex;align-items:center;gap:10px;text-shadow:var(--glow-w);margin:0;letter-spacing:-0.01em;}
@@ -4911,8 +4928,9 @@ body.light-theme .highlight-card .dist-icon{
 
   <!-- 7. SCHEDULE SECTION -->
   <div class="sched-head">
-    <div class="sched-head-left">
+    <div class="sched-head-left sched-title-card">
       <h2>Today's Schedule</h2>
+      <span class="sched-title-divider" aria-hidden="true"></span>
       <!-- Windows 11 Style Master Notifications Toggle -->
       <div class="win-master-toggle-wrap" id="winMasterToggleWrap" title="Master Notification Switch: Enable or completely turn off all notifications and alarms">
         <span class="win-toggle-status" id="winMasterToggleStatus">On</span>
@@ -4922,7 +4940,7 @@ body.light-theme .highlight-card .dist-icon{
         </label>
       </div>
     </div>
-    <div class="sched-head-center">
+    <div class="sched-head-right sched-actions-dock" id="schedActionsNormal">
       <!-- Play Music: Next-Gen Futuristic Interactive Button & Particle Dancing Suite -->
       <button class="ghost play-music-btn" id="test" title="Play Curated Alarm Music & Antigravity Beats" aria-label="Play Music">
         <span class="pm-bg-aurora"></span>
@@ -4958,7 +4976,6 @@ body.light-theme .highlight-card .dist-icon{
           <canvas class="pm-particle-canvas" id="pmParticleCanvas"></canvas>
         </span>
       </button>
-
       <!-- Rest Mode: Tranquil, relaxing, non-distracting serene button -->
       <button class="ghost rest-mode-btn" id="restBtn" title="Enter serene, full-screen clock rest mode" aria-label="Rest Mode">
         <span class="rest-moon-icon">
@@ -4968,7 +4985,6 @@ body.light-theme .highlight-card .dist-icon{
         </span>
         <span class="rest-btn-label">Rest Mode</span>
       </button>
-
       <!-- Open Main Web App Window / PWA Button -->
 
       <button type="button" class="btn-topbar-desktop" id="btnTopbarLaunchApp" title="Open OrlandoRecharge (Main Web App)" aria-label="Open Main Web App">
@@ -4995,8 +5011,6 @@ body.light-theme .highlight-card .dist-icon{
         <span class="desktop-btn-label" id="topbarLaunchLabel">Open Main Web App</span>
         <span class="btn-portal-dot" aria-hidden="true"></span>
       </button>
-    </div>
-    <div class="sched-head-right" id="schedActionsNormal">
       <div id="schedActionsEdit" style="display:none;gap:8px;align-items:center;">
         <button class="btn-save" id="saveScheduleBtn">💾 Save Changes</button>
         <button class="btn-cancel" id="cancelScheduleBtn">✕ Cancel Edit</button>
@@ -14189,7 +14203,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   <script>
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v84', { scope: './' }).catch(function() {});
+        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v85', { scope: './' }).catch(function() {});
       });
     }
   </script>
