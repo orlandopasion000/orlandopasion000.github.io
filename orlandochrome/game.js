@@ -101,6 +101,14 @@
       });
     }
 
+    _vibrate(pattern) {
+      try {
+        if (navigator.vibrate && (!('userActivation' in navigator) || navigator.userActivation?.hasBeenActive)) {
+          navigator.vibrate(pattern);
+        }
+      } catch(e) {}
+    }
+
     // Recommendation 5: Mode-Specific Multi-Harmonic Audio & Micro-Haptics
     playDynamoCapture(combo = 1) {
       if (this.isMuted) return;
@@ -108,7 +116,7 @@
       const freq = 480 * Math.min(2.2, 1 + (combo - 1) * 0.08);
       this.playTone(freq, 'sawtooth', 0.10, 0.22);
       setTimeout(() => this.playTone(freq * 1.5, 'sine', 0.16, 0.20), 35);
-      try { if (navigator.vibrate) navigator.vibrate(8); } catch(e){}
+      this._vibrate(8);
     }
 
     playHelixCapture(combo = 1) {
@@ -118,7 +126,7 @@
       const pitch = pentatonic[(combo - 1) % pentatonic.length];
       this.playTone(pitch, 'sine', 0.16, 0.24);
       setTimeout(() => this.playTone(pitch * 1.25, 'triangle', 0.20, 0.18), 45);
-      try { if (navigator.vibrate) navigator.vibrate([10, 15, 10]); } catch(e){}
+      this._vibrate([10, 15, 10]);
     }
 
     playMeteorCapture(combo = 1) {
@@ -140,7 +148,7 @@
       } catch(e) {
         this.playTone(65, 'triangle', 0.25, 0.30);
       }
-      try { if (navigator.vibrate) navigator.vibrate(28); } catch(e){}
+      this._vibrate(28);
     }
 
     playOverdriveFanfare() {
@@ -150,7 +158,7 @@
       notes.forEach((f, idx) => {
         setTimeout(() => this.playTone(f, 'sine', 0.35, 0.25), idx * 55);
       });
-      try { if (navigator.vibrate) navigator.vibrate([30, 40, 30, 40, 60]); } catch(e){}
+      this._vibrate([30, 40, 30, 40, 60]);
     }
 
     // Perfect-Center Precision & Chain Audio
@@ -161,7 +169,7 @@
       const mult = Math.min(2.4, 1 + (combo - 1) * 0.10);
       this.playTone(baseFreq * mult, 'sine', 0.22, 0.25);
       setTimeout(() => this.playTone(baseFreq * mult * 1.5, 'sine', 0.28, 0.28), 50);
-      try { if (navigator.vibrate) navigator.vibrate([12, 12, 18]); } catch(e){}
+      this._vibrate([12, 12, 18]);
     }
 
     playGrazeCatch(combo = 1) {
@@ -169,7 +177,7 @@
       this.init();
       const baseFreq = 440.00;
       this.playTone(baseFreq, 'sine', 0.10, 0.16);
-      try { if (navigator.vibrate) navigator.vibrate(6); } catch(e){}
+      this._vibrate(6);
     }
 
     playHazardExplosion() {
@@ -177,7 +185,7 @@
       this.init();
       this.playTone(110.00, 'sawtooth', 0.40, 0.35);
       setTimeout(() => this.playTone(73.42, 'sawtooth', 0.45, 0.40), 60);
-      try { if (navigator.vibrate) navigator.vibrate([50, 40, 60]); } catch(e){}
+      this._vibrate([50, 40, 60]);
     }
 
     playMissileHit() {
@@ -188,7 +196,7 @@
       chord.forEach((f, idx) => {
         setTimeout(() => this.playTone(f, 'triangle', 0.22, 0.14), idx * 22);
       });
-      try { if (navigator.vibrate) navigator.vibrate(14); } catch(e){}
+      this._vibrate(14);
     }
 
     playPulseCharged() {
@@ -198,7 +206,7 @@
       chord.forEach((f, idx) => {
         setTimeout(() => this.playTone(f, 'sine', 0.25, 0.22), idx * 45);
       });
-      try { if (navigator.vibrate) navigator.vibrate([15, 20, 25]); } catch(e){}
+      this._vibrate([15, 20, 25]);
     }
 
     playFluxPulseUnleashed() {
@@ -219,7 +227,7 @@
       } catch(e) {
         this.playTone(120, 'triangle', 0.4, 0.5);
       }
-      try { if (navigator.vibrate) navigator.vibrate([40, 30, 40, 30, 80]); } catch(e){}
+      this._vibrate([40, 30, 40, 30, 80]);
     }
 
     playPhaseSwitch() {
@@ -227,7 +235,7 @@
       this.init();
       this.playTone(659.25, 'sine', 0.12, 0.15);
       setTimeout(() => this.playTone(880.00, 'sine', 0.16, 0.15), 40);
-      try { if (navigator.vibrate) navigator.vibrate(8); } catch(e){}
+      this._vibrate(8);
     }
   }
 
