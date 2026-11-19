@@ -1150,46 +1150,46 @@
 
   ['dynamo', 'helix', 'meteor'].forEach((m) => {
     LayeredT4Assets.halo[m].onload = () => { LayeredT4Assets.loaded.halo[m] = true; };
-    LayeredT4Assets.halo[m].src = `assets/layer-${m}-halo.png?v=arcade357`;
+    LayeredT4Assets.halo[m].src = `assets/layer-${m}-halo.png?v=arcade358`;
 
     LayeredT4Assets.wingRight[m].onload = () => {
       LayeredT4Assets.loaded.wingRight[m] = true;
     };
-    LayeredT4Assets.wingRight[m].src = `assets/layer-${m}-wing-right.png?v=arcade357`;
+    LayeredT4Assets.wingRight[m].src = `assets/layer-${m}-wing-right.png?v=arcade358`;
   });
 
   LayeredT4Assets.coreBase.dynamo.onload = () => { LayeredT4Assets.loaded.coreBase.dynamo = true; };
-  LayeredT4Assets.coreBase.dynamo.src = 'assets/layer-dynamo-nucleus.png?v=arcade357';
+  LayeredT4Assets.coreBase.dynamo.src = 'assets/layer-dynamo-nucleus.png?v=arcade358';
 
   LayeredT4Assets.coreBase.helix.onload = () => { LayeredT4Assets.loaded.coreBase.helix = true; };
-  LayeredT4Assets.coreBase.helix.src = 'assets/layer-helix-shell.png?v=arcade357';
+  LayeredT4Assets.coreBase.helix.src = 'assets/layer-helix-shell.png?v=arcade358';
 
   LayeredT4Assets.coreBase.meteor.onload = () => { LayeredT4Assets.loaded.coreBase.meteor = true; };
-  LayeredT4Assets.coreBase.meteor.src = 'assets/layer-meteor-caldera.png?v=arcade357';
+  LayeredT4Assets.coreBase.meteor.src = 'assets/layer-meteor-caldera.png?v=arcade358';
 
   LayeredT4Assets.nodeShell.dynamo.onload = () => { LayeredT4Assets.loaded.nodeShell.dynamo = true; };
-  LayeredT4Assets.nodeShell.dynamo.src = 'assets/layer-node-dynamo-shell.png?v=arcade357';
+  LayeredT4Assets.nodeShell.dynamo.src = 'assets/layer-node-dynamo-shell.png?v=arcade358';
 
   LayeredT4Assets.nodeShell.helix.onload = () => { LayeredT4Assets.loaded.nodeShell.helix = true; };
-  LayeredT4Assets.nodeShell.helix.src = 'assets/layer-node-helix-shell.png?v=arcade357';
+  LayeredT4Assets.nodeShell.helix.src = 'assets/layer-node-helix-shell.png?v=arcade358';
 
   LayeredT4Assets.nodeShell.meteor.onload = () => { LayeredT4Assets.loaded.nodeShell.meteor = true; };
-  LayeredT4Assets.nodeShell.meteor.src = 'assets/layer-node-meteor-rock.png?v=arcade357';
+  LayeredT4Assets.nodeShell.meteor.src = 'assets/layer-node-meteor-rock.png?v=arcade358';
 
   LayeredT4Assets.hazard.dynamoCore.onload = () => { LayeredT4Assets.loaded.hazard.dynamoCore = true; };
-  LayeredT4Assets.hazard.dynamoCore.src = 'assets/layer-hazard-dynamo-core.png?v=arcade357';
+  LayeredT4Assets.hazard.dynamoCore.src = 'assets/layer-hazard-dynamo-core.png?v=arcade358';
 
   LayeredT4Assets.hazard.dynamoGlitch.onload = () => { LayeredT4Assets.loaded.hazard.dynamoGlitch = true; };
-  LayeredT4Assets.hazard.dynamoGlitch.src = 'assets/layer-hazard-dynamo-glitch.png?v=arcade357';
+  LayeredT4Assets.hazard.dynamoGlitch.src = 'assets/layer-hazard-dynamo-glitch.png?v=arcade358';
 
   LayeredT4Assets.hazard.helixClean.onload = () => { LayeredT4Assets.loaded.hazard.helixClean = true; };
-  LayeredT4Assets.hazard.helixClean.src = 'assets/layer-hazard-helix-clean.png?v=arcade357';
+  LayeredT4Assets.hazard.helixClean.src = 'assets/layer-hazard-helix-clean.png?v=arcade358';
 
   LayeredT4Assets.hazard.meteorBlades.onload = () => { LayeredT4Assets.loaded.hazard.meteorBlades = true; };
-  LayeredT4Assets.hazard.meteorBlades.src = 'assets/layer-hazard-meteor-blades.png?v=arcade357';
+  LayeredT4Assets.hazard.meteorBlades.src = 'assets/layer-hazard-meteor-blades.png?v=arcade358';
 
   LayeredT4Assets.hazard.meteorCenter.onload = () => { LayeredT4Assets.loaded.hazard.meteorCenter = true; };
-  LayeredT4Assets.hazard.meteorCenter.src = 'assets/layer-hazard-meteor-center.png?v=arcade357';
+  LayeredT4Assets.hazard.meteorCenter.src = 'assets/layer-hazard-meteor-center.png?v=arcade358';
 
   // Helper: Identifies any hazard trap or anomaly archetype
   function isHazardNode(nodeClass) {
@@ -2417,7 +2417,7 @@
         p.lastStreakEmit = now;
 
         if (mode === 'dynamo' || mode === 'realm') {
-          // Chrome Dynamo: Tiny electric cyan/white sparks breaking free where plasma touches orb's upper rim (Zero purple!)
+          // Chrome Dynamo: Tiny violet-white sparks breaking free where plasma touches orb's upper rim
           const rimAng = -Math.PI * 0.5 + (Math.random() - 0.5) * 0.95;
           const spawnX = p.x + Math.cos(rimAng) * targetR * 0.92;
           const spawnY = p.y + Math.sin(rimAng) * targetR * 0.92;
@@ -2433,7 +2433,7 @@
             maxLife: 32 + Math.random() * 12
           });
         } else if (mode === 'helix') {
-          // Chrome Helix: Cyan and mint-emerald flecks that briefly glint as they turn above the glass DNA orb
+          // Chrome Helix: Cyan and lilac flecks that briefly glint as they turn above the glass DNA orb
           const spawnX = p.x + (Math.random() - 0.5) * targetR * 0.55;
           const spawnY = p.y - targetR * (0.80 + Math.random() * 0.22);
           this.worldStreaks.push({
@@ -2552,7 +2552,7 @@
         if (st.type === 'ember') {
           // ─── EMBER DRIFT PARTICLES ───
           if (st.kind === 'dynamoSpark') {
-            // Tiny electric cyan-white spark with diamond glint
+            // Tiny violet-white spark with diamond glint
             ctx.save();
             ctx.translate(st.x, st.y);
             ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.95})`;
@@ -2562,7 +2562,7 @@
 
             // Diamond cross glint
             const glintLen = st.size * 2.2 * (1.0 - prog * 0.5);
-            ctx.strokeStyle = `rgba(56, 189, 248, ${alpha * 0.85})`;
+            ctx.strokeStyle = `rgba(216, 180, 254, ${alpha * 0.85})`;
             ctx.lineWidth = 1.0;
             ctx.beginPath();
             ctx.moveTo(-glintLen, 0); ctx.lineTo(glintLen, 0);
@@ -2571,7 +2571,7 @@
             ctx.restore();
 
           } else if (st.kind === 'helixFleck') {
-            // Cyan & mint flecks that briefly glint as they turn
+            // Cyan & lilac flecks that briefly glint as they turn
             st.rot += (st.vRot || 0.08) * dt;
             const turnGlint = Math.pow(Math.abs(Math.cos(st.rot)), 3.0);
             ctx.save();
@@ -2579,7 +2579,8 @@
             ctx.rotate(st.rot);
             const curW = st.size * Math.abs(Math.cos(st.rot));
             const curH = st.size * 0.6;
-            ctx.fillStyle = `rgba(56, 189, 248, ${alpha * 0.75})`;
+            const isLilac = (Math.floor(st.x * 0.1) % 2 === 0);
+            ctx.fillStyle = isLilac ? `rgba(216, 180, 254, ${alpha * 0.80})` : `rgba(56, 189, 248, ${alpha * 0.75})`;
             ctx.beginPath();
             ctx.ellipse(0, 0, Math.max(0.8, curW), curH, 0, 0, Math.PI * 2);
             ctx.fill();
@@ -2994,7 +2995,7 @@
 
       const isCyan = (a % 2 === 0);
       ctx.strokeStyle = (!isCore)
-        ? (isCyan ? `rgba(103, 232, 249, ${0.92 * fadeAlpha})` : `rgba(255, 255, 255, ${0.90 * fadeAlpha})`)
+        ? (isCyan ? `rgba(103, 232, 249, ${0.92 * fadeAlpha})` : `rgba(232, 121, 249, ${0.90 * fadeAlpha})`)
         : (isCyan ? `rgba(103, 232, 249, ${0.90 * fadeAlpha})` : `rgba(147, 197, 253, ${0.88 * fadeAlpha})`);
       ctx.lineWidth = Math.max(1.2, maxR * 0.050);
       ctx.stroke();
@@ -3174,7 +3175,7 @@
         } else {
           ctx.strokeStyle = (pulseBoost > 0.45 && frontPass)
             ? `rgba(254, 240, 138, ${alpha})`
-            : (!isCore ? `rgba(110, 231, 183, ${alpha})` : `rgba(232, 121, 249, ${alpha})`);
+            : `rgba(232, 121, 249, ${alpha})`;
         }
         ctx.stroke();
       }
@@ -3202,7 +3203,7 @@
       rg.addColorStop(0.5, pulseIntensity > 0.35
         ? `rgba(254, 249, 195, ${0.98 * baseAlpha})`
         : `rgba(255, 255, 255, ${0.75 * baseAlpha})`);
-      rg.addColorStop(1.0, !isCore ? `rgba(110, 231, 183, ${baseAlpha})` : `rgba(232, 121, 249, ${baseAlpha})`);
+      rg.addColorStop(1.0, `rgba(232, 121, 249, ${baseAlpha})`);
 
       ctx.beginPath();
       ctx.moveTo(xA, yPx);
@@ -3883,25 +3884,10 @@
 
       if (!isHazard) {
         if (mode === 'dynamo' || mode === 'realm') {
-          // Pure Electric Cyan & Deep Azure Quantum Plasma Sphere (Zero Purple/Pink - Safe & Distinct!)
-          const dGlow = ctx.createRadialGradient(0, 0, targetR * 0.15, 0, 0, targetR * 0.95);
-          dGlow.addColorStop(0.0, 'rgba(240, 249, 255, 0.95)');
-          dGlow.addColorStop(0.35, 'rgba(56, 189, 248, 0.85)');
-          dGlow.addColorStop(0.75, 'rgba(14, 165, 233, 0.65)');
-          dGlow.addColorStop(0.95, 'rgba(2, 132, 199, 0.80)');
-          dGlow.addColorStop(1.0, 'rgba(3, 105, 161, 0.0)');
-          ctx.fillStyle = dGlow;
-          ctx.beginPath();
-          ctx.arc(0, 0, targetR * 0.95, 0, Math.PI * 2);
-          ctx.fill();
-
-          // Luminous Outer Rim Reflection
-          ctx.beginPath();
-          ctx.arc(0, 0, targetR * 0.95, 0, Math.PI * 2);
-          ctx.strokeStyle = 'rgba(224, 242, 254, 0.75)';
-          ctx.lineWidth = 1.6 * scale;
-          ctx.stroke();
-
+          // Iconic Quantum Plasma Purple Orb with internal branching electric filaments & amber crescent
+          if (LayeredT4Assets.loaded.nodeShell.dynamo) {
+            ctx.drawImage(LayeredT4Assets.nodeShell.dynamo, -60 * scale, -60 * scale, 120 * scale, 120 * scale);
+          }
           drawInternalPlasmaArcs(ctx, 0, 0, targetR * 0.86, now, animPhase, false, 4);
         } else if (mode === 'helix') {
           if (LayeredT4Assets.loaded.nodeShell.helix) {
@@ -3922,9 +3908,10 @@
           drawMeteorMagmaFissuresAndPlates(ctx, targetR, now, animPhase, rockAngle, 4);
         }
 
-        // BESPOKE 3D RENDERING FOR COLLECTIBLE ARCHE TYPES (Zero Purple/Violet - Safe, Welcoming & Radiant):
+        // BESPOKE 3D RENDERING FOR COLLECTIBLE ARCHETYPES:
         if (p.nodeClass === 'cluster') {
-          // BIFURCATION FLUX NODE (CLUSTER DOUBLER): Twin orbiting satellite motes + emerald/cyan resonance rings
+          // BIFURCATION FLUX NODE (CLUSTER DOUBLER / 2X DUP):
+          // Thin circle line around the sphere replaced with Electric Cyan & Starlight Gold resonance rings (Zero Violet Ring Line!)
           const orbitR = targetR * 1.35;
           const orbitAngle = now * 0.005 + animPhase;
           ctx.save();
@@ -3936,20 +3923,27 @@
           ctx.arc(mx1, my1, 5.5 * scale, 0, Math.PI * 2);
           ctx.fillStyle = '#00f0ff';
           ctx.fill();
-          // Orbiting Mote 2 (Mint Emerald - Safe & Friendly, Zero Purple!)
+          // Orbiting Mote 2 (Starlight Gold - Safe, Welcoming & Friendly!)
           const mx2 = -mx1;
           const my2 = -my1;
           ctx.beginPath();
           ctx.arc(mx2, my2, 5.5 * scale, 0, Math.PI * 2);
-          ctx.fillStyle = '#34d399';
+          ctx.fillStyle = '#fef08a';
           ctx.fill();
 
-          // Pulsing Double-Ring in Mint Emerald
+          // Pulsing Double Orbital Ring (Electric Cyan & Starlight Gold - Replaces the thin violet circle line!)
           const pulseR = targetR * (1.1 + 0.15 * Math.sin(now * 0.008 + animPhase));
           ctx.beginPath();
           ctx.arc(0, 0, pulseR, 0, Math.PI * 2);
-          ctx.strokeStyle = 'rgba(52, 211, 153, 0.85)';
-          ctx.lineWidth = 2.0;
+          ctx.strokeStyle = 'rgba(56, 189, 248, 0.85)';
+          ctx.lineWidth = 2.0 * scale;
+          ctx.stroke();
+
+          // Inner gold harmonic ring
+          ctx.beginPath();
+          ctx.arc(0, 0, pulseR * 0.94, 0, Math.PI * 2);
+          ctx.strokeStyle = 'rgba(254, 240, 138, 0.45)';
+          ctx.lineWidth = 1.0 * scale;
           ctx.stroke();
 
           // '2X' Badge
@@ -4217,7 +4211,7 @@
         const badges = {
           shield: { text: '🛡️ SHIELD', color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.28)', border: '#fbbf24' },
           missiles: { text: '🚀 MISSILES', color: '#38bdf8', bg: 'rgba(14, 165, 233, 0.28)', border: '#38bdf8' },
-          cluster: { text: '✨ 2X DUP', color: '#34d399', bg: 'rgba(52, 211, 153, 0.28)', border: '#34d399' },
+          cluster: { text: '✨ 2X DUP', color: '#38bdf8', bg: 'rgba(14, 165, 233, 0.28)', border: '#38bdf8' },
           supercharge: { text: '⚡ HYPER', color: '#fbbf24', bg: 'rgba(251, 191, 36, 0.28)', border: '#fef08a' },
           chronos: { text: '⏳ STASIS', color: '#22d3ee', bg: 'rgba(34, 211, 238, 0.28)', border: '#67e8f9' },
           singularity: { text: '🌌 VORTEX', color: '#38bdf8', bg: 'rgba(56, 189, 248, 0.28)', border: '#7dd3fc' },
@@ -4458,7 +4452,7 @@
           ctx.restore();
 
         } else if (p.nodeClass === 'vortex') {
-          // VORTEX NULL-WELL: Ethereal gravitational void distortion spirals
+          // VORTEX NULL-WELL: Ethereal gravitational void distortion spirals (Hazard Red/Crimson)
           ctx.save();
           ctx.globalCompositeOperation = 'lighter';
           const vRingAngle = now * 0.005;
@@ -4466,7 +4460,7 @@
             const va = (v === 0 ? vRingAngle : -vRingAngle) + v * Math.PI;
             ctx.beginPath();
             ctx.arc(0, 0, targetR * (1.18 + v * 0.16), va, va + Math.PI * 0.95);
-            ctx.strokeStyle = (v === 0) ? 'rgba(239, 68, 68, 0.65)' : 'rgba(168, 85, 247, 0.65)';
+            ctx.strokeStyle = (v === 0) ? 'rgba(239, 68, 68, 0.85)' : 'rgba(225, 29, 72, 0.75)';
             ctx.lineWidth = 2.2 * scale;
             ctx.lineCap = 'round';
             ctx.stroke();
