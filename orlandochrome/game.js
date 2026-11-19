@@ -1158,46 +1158,46 @@
 
   ['dynamo', 'helix', 'meteor'].forEach((m) => {
     LayeredT4Assets.halo[m].onload = () => { LayeredT4Assets.loaded.halo[m] = true; };
-    LayeredT4Assets.halo[m].src = `assets/layer-${m}-halo.png?v=arcade358`;
+    LayeredT4Assets.halo[m].src = `assets/layer-${m}-halo.png?v=arcade359`;
 
     LayeredT4Assets.wingRight[m].onload = () => {
       LayeredT4Assets.loaded.wingRight[m] = true;
     };
-    LayeredT4Assets.wingRight[m].src = `assets/layer-${m}-wing-right.png?v=arcade358`;
+    LayeredT4Assets.wingRight[m].src = `assets/layer-${m}-wing-right.png?v=arcade359`;
   });
 
   LayeredT4Assets.coreBase.dynamo.onload = () => { LayeredT4Assets.loaded.coreBase.dynamo = true; };
-  LayeredT4Assets.coreBase.dynamo.src = 'assets/layer-dynamo-nucleus.png?v=arcade358';
+  LayeredT4Assets.coreBase.dynamo.src = 'assets/layer-dynamo-nucleus.png?v=arcade359';
 
   LayeredT4Assets.coreBase.helix.onload = () => { LayeredT4Assets.loaded.coreBase.helix = true; };
-  LayeredT4Assets.coreBase.helix.src = 'assets/layer-helix-shell.png?v=arcade358';
+  LayeredT4Assets.coreBase.helix.src = 'assets/layer-helix-shell.png?v=arcade359';
 
   LayeredT4Assets.coreBase.meteor.onload = () => { LayeredT4Assets.loaded.coreBase.meteor = true; };
-  LayeredT4Assets.coreBase.meteor.src = 'assets/layer-meteor-caldera.png?v=arcade358';
+  LayeredT4Assets.coreBase.meteor.src = 'assets/layer-meteor-caldera.png?v=arcade359';
 
   LayeredT4Assets.nodeShell.dynamo.onload = () => { LayeredT4Assets.loaded.nodeShell.dynamo = true; };
-  LayeredT4Assets.nodeShell.dynamo.src = 'assets/layer-node-dynamo-shell.png?v=arcade358';
+  LayeredT4Assets.nodeShell.dynamo.src = 'assets/layer-node-dynamo-shell.png?v=arcade359';
 
   LayeredT4Assets.nodeShell.helix.onload = () => { LayeredT4Assets.loaded.nodeShell.helix = true; };
-  LayeredT4Assets.nodeShell.helix.src = 'assets/layer-node-helix-shell.png?v=arcade358';
+  LayeredT4Assets.nodeShell.helix.src = 'assets/layer-node-helix-shell.png?v=arcade359';
 
   LayeredT4Assets.nodeShell.meteor.onload = () => { LayeredT4Assets.loaded.nodeShell.meteor = true; };
-  LayeredT4Assets.nodeShell.meteor.src = 'assets/layer-node-meteor-rock.png?v=arcade358';
+  LayeredT4Assets.nodeShell.meteor.src = 'assets/layer-node-meteor-rock.png?v=arcade359';
 
   LayeredT4Assets.hazard.dynamoCore.onload = () => { LayeredT4Assets.loaded.hazard.dynamoCore = true; };
-  LayeredT4Assets.hazard.dynamoCore.src = 'assets/layer-hazard-dynamo-core.png?v=arcade358';
+  LayeredT4Assets.hazard.dynamoCore.src = 'assets/layer-hazard-dynamo-core.png?v=arcade359';
 
   LayeredT4Assets.hazard.dynamoGlitch.onload = () => { LayeredT4Assets.loaded.hazard.dynamoGlitch = true; };
-  LayeredT4Assets.hazard.dynamoGlitch.src = 'assets/layer-hazard-dynamo-glitch.png?v=arcade358';
+  LayeredT4Assets.hazard.dynamoGlitch.src = 'assets/layer-hazard-dynamo-glitch.png?v=arcade359';
 
   LayeredT4Assets.hazard.helixClean.onload = () => { LayeredT4Assets.loaded.hazard.helixClean = true; };
-  LayeredT4Assets.hazard.helixClean.src = 'assets/layer-hazard-helix-clean.png?v=arcade358';
+  LayeredT4Assets.hazard.helixClean.src = 'assets/layer-hazard-helix-clean.png?v=arcade359';
 
   LayeredT4Assets.hazard.meteorBlades.onload = () => { LayeredT4Assets.loaded.hazard.meteorBlades = true; };
-  LayeredT4Assets.hazard.meteorBlades.src = 'assets/layer-hazard-meteor-blades.png?v=arcade358';
+  LayeredT4Assets.hazard.meteorBlades.src = 'assets/layer-hazard-meteor-blades.png?v=arcade359';
 
   LayeredT4Assets.hazard.meteorCenter.onload = () => { LayeredT4Assets.loaded.hazard.meteorCenter = true; };
-  LayeredT4Assets.hazard.meteorCenter.src = 'assets/layer-hazard-meteor-center.png?v=arcade358';
+  LayeredT4Assets.hazard.meteorCenter.src = 'assets/layer-hazard-meteor-center.png?v=arcade359';
 
   // Helper: Identifies any hazard trap or anomaly archetype
   function isHazardNode(nodeClass) {
@@ -1457,75 +1457,56 @@
       };
       const pal = thrusterColors[mode] || thrusterColors.dynamo;
 
-      // Calculate directional exhaust angle strictly counter to movement vector
-      let exhaustAngle, exhaustSpeed, spawnOffX, spawnOffY;
-      if (isMoving) {
-        const normVx = this.vx / speed2D;
-        const normVy = this.vy / speed2D;
-        exhaustAngle = Math.atan2(-normVy, -normVx);
-        exhaustSpeed = Math.min(8.5, 2.8 + speed2D * 0.45);
-        // Spawn from the rear perimeter of the core sphere
-        spawnOffX = -normVx * 32;
-        spawnOffY = -normVy * 32;
-      } else {
-        // Soft downward hover exhaust when hovering
-        exhaustAngle = Math.PI * 0.5;
-        exhaustSpeed = 2.4;
-        spawnOffX = 0;
-        spawnOffY = 28;
+      // 9. Ultra-Smooth Micro-Ion Trail (Lightweight, Tiny, Zero-Lag Architecture)
+      if (isMoving && speed2D > 0.8) {
+        if (!this.lastPlumeEmitTime || (now - this.lastPlumeEmitTime) > 34) {
+          this.lastPlumeEmitTime = now;
+          const normVx = this.vx / speed2D;
+          const normVy = this.vy / speed2D;
+          const exhaustAngle = Math.atan2(-normVy, -normVx) + (Math.random() - 0.5) * 0.35;
+          const pSpd = Math.min(2.8, 1.2 + speed2D * 0.20);
+          
+          this.thrusterPlumes.push({
+            x: catcherPixelX - normVx * 26 + (Math.random() - 0.5) * 4,
+            y: catcherPixelY - normVy * 26 + (Math.random() - 0.5) * 4,
+            vx: Math.cos(exhaustAngle) * pSpd,
+            vy: Math.sin(exhaustAngle) * pSpd,
+            color: pal[Math.floor(Math.random() * pal.length)],
+            size: 0.9 + Math.random() * 0.5, // Ultra-tiny subtle micro-mote
+            life: 0,
+            maxLife: 8 + Math.random() * 4 // Snappy ~150ms fade
+          });
+
+          // Delicate single wingtip stardust glint on high-velocity turns
+          if (this.continuousTier >= 2.0 && speed2D > 3.2 && Math.random() < 0.45) {
+            const spanDist = (0.24 + Math.min(0.20, (this.continuousTier - 2.0) * 0.10)) * 320;
+            const wingYOff = this.tipY * 0.32;
+            const isLeft = (Math.random() < 0.5);
+            this.thrusterPlumes.push({
+              x: catcherPixelX + (isLeft ? -spanDist : spanDist) + (Math.random() - 0.5) * 3,
+              y: catcherPixelY + wingYOff + (Math.random() - 0.5) * 3,
+              vx: -this.vx * 0.12,
+              vy: -this.vy * 0.12,
+              color: pal[0],
+              isWingtip: true,
+              size: 0.85,
+              life: 0,
+              maxLife: 8
+            });
+          }
+        }
       }
 
-      const emitCount = speed2D > 3.0 ? 3 : (speed2D > 0.4 ? 2 : 1);
-      for (let k = 0; k < emitCount; k++) {
-        const spreadAng = exhaustAngle + (Math.random() - 0.5) * (isMoving ? 0.45 : 1.2);
-        const pSpd = exhaustSpeed * (0.8 + Math.random() * 0.4);
-        this.thrusterPlumes.push({
-          x: catcherPixelX + spawnOffX + (Math.random() - 0.5) * 8,
-          y: catcherPixelY + spawnOffY + (Math.random() - 0.5) * 8,
-          vx: Math.cos(spreadAng) * pSpd,
-          vy: Math.sin(spreadAng) * pSpd,
-          color: pal[Math.floor(Math.random() * pal.length)],
-          size: 2.4 + Math.random() * 2.6,
-          life: 0,
-          maxLife: 16 + Math.random() * 12
-        });
-      }
-
-      // Twin Wingtip Vortex Stardust (when wings are active at Tier II+)
-      if (this.continuousTier >= 2.0 && isMoving) {
-        const spanDist = (0.24 + Math.min(0.22, (this.continuousTier - 2.0) * 0.11)) * 320;
-        const wingYOff = this.tipY * 0.35;
-        // Left Wingtip
-        this.thrusterPlumes.push({
-          x: catcherPixelX - spanDist + (Math.random() - 0.5) * 4,
-          y: catcherPixelY + wingYOff + (Math.random() - 0.5) * 4,
-          vx: -this.vx * 0.25 + (Math.random() - 0.5) * 0.8,
-          vy: -this.vy * 0.25 + (Math.random() - 0.5) * 0.8,
-          color: pal[0],
-          isWingtip: true,
-          size: 2.2,
-          life: 0,
-          maxLife: 20 + Math.random() * 8
-        });
-        // Right Wingtip
-        this.thrusterPlumes.push({
-          x: catcherPixelX + spanDist + (Math.random() - 0.5) * 4,
-          y: catcherPixelY + wingYOff + (Math.random() - 0.5) * 4,
-          vx: -this.vx * 0.25 + (Math.random() - 0.5) * 0.8,
-          vy: -this.vy * 0.25 + (Math.random() - 0.5) * 0.8,
-          color: pal[0],
-          isWingtip: true,
-          size: 2.2,
-          life: 0,
-          maxLife: 20 + Math.random() * 8
-        });
+      // Hard-cap plume array to max 10 tiny particles for absolute zero CPU/GPU overhead
+      if (this.thrusterPlumes.length > 10) {
+        this.thrusterPlumes.splice(0, this.thrusterPlumes.length - 10);
       }
 
       for (let i = this.thrusterPlumes.length - 1; i >= 0; i--) {
         const tp = this.thrusterPlumes[i];
         tp.x += tp.vx * dt;
         tp.y += tp.vy * dt;
-        tp.size = Math.max(0.3, tp.size * 0.94);
+        tp.size = Math.max(0.2, tp.size * 0.92);
         tp.life += dt;
         if (tp.life >= tp.maxLife) this.thrusterPlumes.splice(i, 1);
       }
@@ -1963,22 +1944,22 @@
               audio.playMissileHit();
 
               if (pt.nodeClass === 'cluster') {
-                state.activeBuff = { type: 'cluster', name: '2X CLUSTER', color: '#c084fc', expiresAt: now + 5000 };
+                state.applyBuff('cluster', '2X CLUSTER', '#38bdf8', '✨', 5000, now);
               } else if (pt.nodeClass === 'supercharge') {
-                state.activeBuff = { type: 'hyper', name: 'HYPER SURGE', color: '#fbbf24', expiresAt: now + 5000 };
+                state.applyBuff('hyper', 'HYPER SURGE', '#fbbf24', '⚡', 5000, now);
               } else if (pt.nodeClass === 'chronos') {
-                state.activeBuff = { type: 'chronos', name: 'CHRONOS STASIS', color: '#22d3ee', expiresAt: now + 4500 };
+                state.applyBuff('chronos', 'CHRONOS STASIS', '#22d3ee', '⏳', 4500, now);
               } else if (pt.nodeClass === 'singularity') {
-                state.activeBuff = { type: 'singularity', name: 'GRAVITON VORTEX', color: '#a855f7', expiresAt: now + 3500 };
+                state.applyBuff('singularity', 'GRAVITON VORTEX', '#38bdf8', '🌌', 3500, now);
               } else if (pt.nodeClass === 'catalyst') {
                 state.coreTier = Math.min(4, state.coreTier + 1);
                 state.reflexLives = Math.min(10, state.reflexLives + 1);
                 renderReflexShields();
-                state.activeBuff = { type: 'catalyst', name: 'ASCENSION CATALYST', color: '#f472b6', expiresAt: now + 6000 };
+                state.applyBuff('catalyst', 'ASCENSION CATALYST', '#38bdf8', '💎', 6000, now);
               } else if (pt.nodeClass === 'shield') {
-                state.activeBuff = { type: 'shield', name: 'AEGIS SHIELD', color: '#f59e0b', expiresAt: now + 5000 };
+                state.applyBuff('shield', 'AEGIS SHIELD', '#f59e0b', '🛡️', 5000, now);
               } else if (pt.nodeClass === 'missiles') {
-                state.activeBuff = { type: 'missiles', name: 'ALLIED MISSILES', color: '#38bdf8', expiresAt: now + 4000 };
+                state.applyBuff('missiles', 'ALLIED MISSILES', '#38bdf8', '🚀', 4000, now);
                 this.fireMissiles(m.x, m.y, now, state.particles, mMode);
               }
             }
@@ -2302,28 +2283,14 @@
       if (this.thrusterPlumes.length === 0) return;
       ctx.save();
       ctx.globalCompositeOperation = 'lighter';
-      for (let tp of this.thrusterPlumes) {
+      for (let i = 0; i < this.thrusterPlumes.length; i++) {
+        const tp = this.thrusterPlumes[i];
         const alpha = Math.max(0, 1.0 - tp.life / tp.maxLife);
-        if (tp.isWingtip) {
-          // Delicate diamond wingtip vortex sparkle
-          ctx.beginPath();
-          ctx.arc(tp.x, tp.y, tp.size * 0.7, 0, Math.PI * 2);
-          ctx.fillStyle = '#ffffff';
-          ctx.globalAlpha = alpha * 0.95;
-          ctx.fill();
-
-          ctx.beginPath();
-          ctx.arc(tp.x, tp.y, tp.size * 1.5, 0, Math.PI * 2);
-          ctx.fillStyle = tp.color;
-          ctx.globalAlpha = alpha * 0.45;
-          ctx.fill();
-        } else {
-          ctx.beginPath();
-          ctx.arc(tp.x, tp.y, tp.size, 0, Math.PI * 2);
-          ctx.fillStyle = tp.color;
-          ctx.globalAlpha = alpha * 0.85;
-          ctx.fill();
-        }
+        ctx.beginPath();
+        ctx.arc(tp.x, tp.y, tp.size, 0, Math.PI * 2);
+        ctx.fillStyle = tp.color;
+        ctx.globalAlpha = alpha * 0.70;
+        ctx.fill();
       }
       ctx.restore();
     },
@@ -2539,6 +2506,9 @@
 
     updateAndDrawWorldStreaks(ctx, dtScale) {
       if (this.worldStreaks.length === 0) return;
+      if (this.worldStreaks.length > 40) {
+        this.worldStreaks.splice(0, this.worldStreaks.length - 40);
+      }
       const dt = Math.max(0.25, Math.min(2.5, dtScale));
       ctx.save();
       ctx.globalCompositeOperation = 'lighter';
@@ -3826,9 +3796,10 @@
       // 1:1 Tactical Crosshair Reticle around Core Cursor
       CoreKinematics.drawCursorReticle(ctx, 0, 0, u, now);
 
-      // Mode-Specific 5-Second Aegis Spherical Geodesic Forcefield
-      if (state.activeBuff && state.activeBuff.type === 'shield' && state.activeBuff.expiresAt > now) {
-        CoreKinematics.drawAegisForcefield(ctx, 0, 0, u, now, state.activeBuff.expiresAt - now, mode);
+      // Mode-Specific 5-Second Aegis Spherical Geodesic Forcefield (Simultaneous with all active power-ups!)
+      const activeShield = state.getBuff ? state.getBuff('shield', now) : (state.activeBuff?.type === 'shield' ? state.activeBuff : null);
+      if (activeShield && activeShield.expiresAt > now) {
+        CoreKinematics.drawAegisForcefield(ctx, 0, 0, u, now, activeShield.expiresAt - now, mode);
       }
 
       ctx.restore(); // End core translate
@@ -4511,6 +4482,38 @@
     targetMultiple: 7, // Chosen multiple for Reflex Numbers Blitz (1 to 9)
     isChoosingMultiple: false, // True until player chooses 1-9
     floatingTexts: [],
+    activeBuffs: {}, // Simultaneous active buffs: { [type]: { type, name, color, icon, expiresAt } }
+    activeBuff: null,
+
+    applyBuff(type, name, color, icon, durationMs, now) {
+      if (!this.activeBuffs) this.activeBuffs = {};
+      const expiresAt = now + durationMs;
+      this.activeBuffs[type] = { type, name, color, icon, expiresAt, duration: durationMs };
+      this.activeBuff = this.activeBuffs[type];
+    },
+
+    hasBuff(type, now) {
+      if (!this.activeBuffs) return false;
+      const b = this.activeBuffs[type];
+      return !!(b && b.expiresAt > now);
+    },
+
+    getBuff(type, now) {
+      if (!this.activeBuffs) return null;
+      const b = this.activeBuffs[type];
+      return (b && b.expiresAt > now) ? b : null;
+    },
+
+    getAllActiveBuffs(now) {
+      if (!this.activeBuffs) return [];
+      const list = [];
+      for (const k in this.activeBuffs) {
+        if (this.activeBuffs[k] && this.activeBuffs[k].expiresAt > now) {
+          list.push(this.activeBuffs[k]);
+        }
+      }
+      return list.sort((a, b) => b.expiresAt - a.expiresAt);
+    },
 
     // Math Overdrive State
     mathLevel: 1,
@@ -4751,12 +4754,18 @@
     const activeBuffPillEl = dom.buffPill;
     if (activeBuffEl) {
       const curNow = performance.now();
-      if (state.activeBuff && state.activeBuff.expiresAt > curNow) {
-        const rem = Math.max(0, (state.activeBuff.expiresAt - curNow) / 1000).toFixed(1);
-        activeBuffEl.textContent = `${state.activeBuff.name} ${rem}s`;
-        activeBuffEl.style.color = state.activeBuff.color || '#38bdf8';
+      const activeBuffs = state.getAllActiveBuffs ? state.getAllActiveBuffs(curNow) : [];
+      if (activeBuffs.length > 0) {
+        // Render all simultaneous active buffs (e.g. "🛡️ 4.2s  🚀 3.1s  ✨ 2.5s")
+        const buffStrs = activeBuffs.map(b => {
+          const rem = Math.max(0, (b.expiresAt - curNow) / 1000).toFixed(1);
+          return `${b.icon || ''} ${rem}s`;
+        });
+        activeBuffEl.textContent = buffStrs.join('  ');
+        const primary = activeBuffs[0];
+        activeBuffEl.style.color = primary.color || '#38bdf8';
         if (activeBuffPillEl) {
-          activeBuffPillEl.className = `game-stat-pill buff-pill buff-active buff-${state.activeBuff.type}`;
+          activeBuffPillEl.className = `game-stat-pill buff-pill buff-active buff-${primary.type}`;
         }
       } else {
         state.activeBuff = null;
@@ -4956,6 +4965,7 @@
     state.consecutivePerfects = 0;
     state.pulseMeter = 0; // 0 to 100
     state.isPulseReady = false;
+    state.activeBuffs = {};
     state.activeBuff = null; // Active Celestial Surge / Power Buff
     state.resonanceChain = 0;
 
@@ -5813,10 +5823,10 @@
 
         // Active Buffs: Bullet-Time (Chronos) & Graviton Vacuum (Singularity)
         let globalSpeedMultiplier = 1.0;
-        if (state.activeBuff && (state.activeBuff.type === 'chronos' || state.activeBuff.type === 'stasis') && state.activeBuff.expiresAt > now) {
+        if (state.hasBuff('chronos', now) || state.hasBuff('stasis', now)) {
           globalSpeedMultiplier = 0.40; // 60% slow motion bullet-time!
         }
-        if (state.activeBuff && state.activeBuff.type === 'singularity' && state.activeBuff.expiresAt > now) {
+        if (state.hasBuff('singularity', now)) {
           if (!isHazardNode(p.nodeClass)) {
             const dxSing = catcherPixelX - p.x;
             const dySing = catcherPixelY - p.y;
@@ -5898,8 +5908,8 @@
         if (distToCore < effectiveHitRadius) {
           // Check if player caught a Hazard Trap!
           if (isHazard) {
-            // Check if 5-Second Aegis Shield is active!
-            if (state.activeBuff && state.activeBuff.type === 'shield' && state.activeBuff.expiresAt > now) {
+            // Check if 5-Second Aegis Shield is active (independent of any simultaneous power-ups!)
+            if (state.hasBuff('shield', now)) {
               // Complete Invulnerability: Shield deflects and vaporizes the hazard!
               state.score += 300;
               CoreKinematics.triggerShieldDeflect(catcherPixelX, catcherPixelY, now);
@@ -5943,7 +5953,7 @@
 
           // Recommendation 4: Archetype Multipliers & Active Buff Powers
           let classMultiplier = 1.0;
-          let clusterBonus = (state.activeBuff && state.activeBuff.type === 'cluster' && state.activeBuff.expiresAt > now) ? 2.0 : 1.0;
+          let clusterBonus = state.hasBuff('cluster', now) ? 2.0 : 1.0;
 
           if (p.nodeClass === 'cluster') {
             // DUPLICATE ALL NON-HAZARD NODES ON SCREEN!
@@ -5963,7 +5973,7 @@
               for (let j = 0; j < 8; j++) n.spine.push({ x: n.x, y: n.y - j * 8.5 });
               state.particles.push(n);
             }
-            state.activeBuff = { type: 'cluster', name: '2X CLUSTER', color: '#c084fc', expiresAt: now + 5000 };
+            state.applyBuff('cluster', '2X CLUSTER', '#38bdf8', '✨', 5000, now);
             audio.playOverdriveFanfare();
             classMultiplier = 2.0;
 
@@ -5971,15 +5981,15 @@
             classMultiplier = 8.0;
             state.pulseMeter = Math.min(100, (state.pulseMeter || 0) + 50);
             if (state.pulseMeter >= 100) { state.isPulseReady = true; audio.playPulseCharged(); }
-            state.activeBuff = { type: 'hyper', name: 'HYPER SURGE', color: '#fbbf24', expiresAt: now + 5000 };
+            state.applyBuff('hyper', 'HYPER SURGE', '#fbbf24', '⚡', 5000, now);
             audio.playOverdriveFanfare();
 
           } else if (p.nodeClass === 'chronos') {
-            state.activeBuff = { type: 'chronos', name: 'CHRONOS STASIS', color: '#22d3ee', expiresAt: now + 4500 };
+            state.applyBuff('chronos', 'CHRONOS STASIS', '#22d3ee', '⏳', 4500, now);
             audio.playPhaseSwitch();
 
           } else if (p.nodeClass === 'singularity') {
-            state.activeBuff = { type: 'singularity', name: 'GRAVITON VORTEX', color: '#a855f7', expiresAt: now + 3500 };
+            state.applyBuff('singularity', 'GRAVITON VORTEX', '#38bdf8', '🌌', 3500, now);
             audio.playPulseCharged();
 
           } else if (p.nodeClass === 'catalyst') {
@@ -5989,26 +5999,26 @@
             const prevLives = state.reflexLives;
             state.reflexLives = Math.min(10, state.reflexLives + 1);
             renderReflexShields();
-            state.activeBuff = { type: 'catalyst', name: 'ASCENSION CATALYST', color: '#f472b6', expiresAt: now + 6000 };
+            state.applyBuff('catalyst', 'ASCENSION CATALYST', '#38bdf8', '💎', 6000, now);
             audio.playOverdriveFanfare();
             state.floatingTexts.push({
               x: p.x,
               y: p.y - 20,
               text: state.reflexLives > prevLives ? '💎 ASCENSION TIER +1 · SHIELD +1' : '💎 ASCENSION TIER +1 (OVERDRIVE)',
-              color: '#f472b6',
+              color: '#38bdf8',
               alpha: 1.0,
               startTime: now
             });
 
           } else if (p.nodeClass === 'shield') {
-            state.activeBuff = { type: 'shield', name: 'AEGIS SHIELD', color: '#f59e0b', expiresAt: now + 5000 };
+            state.applyBuff('shield', 'AEGIS SHIELD', '#f59e0b', '🛡️', 5000, now);
             CoreKinematics.triggerShieldDeflect(catcherPixelX, catcherPixelY, now);
             audio.playPulseCharged();
             classMultiplier = 3.0;
 
           } else if (p.nodeClass === 'missiles') {
             const mColor = (state.catcherType === 'meteor') ? '#f97316' : ((state.catcherType === 'helix') ? '#22d3ee' : '#38bdf8');
-            state.activeBuff = { type: 'missiles', name: 'ALLIED MISSILES', color: mColor, expiresAt: now + 4000 };
+            state.applyBuff('missiles', 'ALLIED MISSILES', mColor, '🚀', 4000, now);
             CoreKinematics.fireMissiles(catcherPixelX, catcherPixelY, now, state.particles, state.catcherType || 'dynamo');
             audio.playOverdriveFanfare();
             classMultiplier = 4.0;
