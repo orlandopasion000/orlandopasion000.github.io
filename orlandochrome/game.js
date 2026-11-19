@@ -1158,46 +1158,46 @@
 
   ['dynamo', 'helix', 'meteor'].forEach((m) => {
     LayeredT4Assets.halo[m].onload = () => { LayeredT4Assets.loaded.halo[m] = true; };
-    LayeredT4Assets.halo[m].src = `assets/layer-${m}-halo.png?v=arcade359`;
+    LayeredT4Assets.halo[m].src = `assets/layer-${m}-halo.png?v=arcade360`;
 
     LayeredT4Assets.wingRight[m].onload = () => {
       LayeredT4Assets.loaded.wingRight[m] = true;
     };
-    LayeredT4Assets.wingRight[m].src = `assets/layer-${m}-wing-right.png?v=arcade359`;
+    LayeredT4Assets.wingRight[m].src = `assets/layer-${m}-wing-right.png?v=arcade360`;
   });
 
   LayeredT4Assets.coreBase.dynamo.onload = () => { LayeredT4Assets.loaded.coreBase.dynamo = true; };
-  LayeredT4Assets.coreBase.dynamo.src = 'assets/layer-dynamo-nucleus.png?v=arcade359';
+  LayeredT4Assets.coreBase.dynamo.src = 'assets/layer-dynamo-nucleus.png?v=arcade360';
 
   LayeredT4Assets.coreBase.helix.onload = () => { LayeredT4Assets.loaded.coreBase.helix = true; };
-  LayeredT4Assets.coreBase.helix.src = 'assets/layer-helix-shell.png?v=arcade359';
+  LayeredT4Assets.coreBase.helix.src = 'assets/layer-helix-shell.png?v=arcade360';
 
   LayeredT4Assets.coreBase.meteor.onload = () => { LayeredT4Assets.loaded.coreBase.meteor = true; };
-  LayeredT4Assets.coreBase.meteor.src = 'assets/layer-meteor-caldera.png?v=arcade359';
+  LayeredT4Assets.coreBase.meteor.src = 'assets/layer-meteor-caldera.png?v=arcade360';
 
   LayeredT4Assets.nodeShell.dynamo.onload = () => { LayeredT4Assets.loaded.nodeShell.dynamo = true; };
-  LayeredT4Assets.nodeShell.dynamo.src = 'assets/layer-node-dynamo-shell.png?v=arcade359';
+  LayeredT4Assets.nodeShell.dynamo.src = 'assets/layer-node-dynamo-shell.png?v=arcade360';
 
   LayeredT4Assets.nodeShell.helix.onload = () => { LayeredT4Assets.loaded.nodeShell.helix = true; };
-  LayeredT4Assets.nodeShell.helix.src = 'assets/layer-node-helix-shell.png?v=arcade359';
+  LayeredT4Assets.nodeShell.helix.src = 'assets/layer-node-helix-shell.png?v=arcade360';
 
   LayeredT4Assets.nodeShell.meteor.onload = () => { LayeredT4Assets.loaded.nodeShell.meteor = true; };
-  LayeredT4Assets.nodeShell.meteor.src = 'assets/layer-node-meteor-rock.png?v=arcade359';
+  LayeredT4Assets.nodeShell.meteor.src = 'assets/layer-node-meteor-rock.png?v=arcade360';
 
   LayeredT4Assets.hazard.dynamoCore.onload = () => { LayeredT4Assets.loaded.hazard.dynamoCore = true; };
-  LayeredT4Assets.hazard.dynamoCore.src = 'assets/layer-hazard-dynamo-core.png?v=arcade359';
+  LayeredT4Assets.hazard.dynamoCore.src = 'assets/layer-hazard-dynamo-core.png?v=arcade360';
 
   LayeredT4Assets.hazard.dynamoGlitch.onload = () => { LayeredT4Assets.loaded.hazard.dynamoGlitch = true; };
-  LayeredT4Assets.hazard.dynamoGlitch.src = 'assets/layer-hazard-dynamo-glitch.png?v=arcade359';
+  LayeredT4Assets.hazard.dynamoGlitch.src = 'assets/layer-hazard-dynamo-glitch.png?v=arcade360';
 
   LayeredT4Assets.hazard.helixClean.onload = () => { LayeredT4Assets.loaded.hazard.helixClean = true; };
-  LayeredT4Assets.hazard.helixClean.src = 'assets/layer-hazard-helix-clean.png?v=arcade359';
+  LayeredT4Assets.hazard.helixClean.src = 'assets/layer-hazard-helix-clean.png?v=arcade360';
 
   LayeredT4Assets.hazard.meteorBlades.onload = () => { LayeredT4Assets.loaded.hazard.meteorBlades = true; };
-  LayeredT4Assets.hazard.meteorBlades.src = 'assets/layer-hazard-meteor-blades.png?v=arcade359';
+  LayeredT4Assets.hazard.meteorBlades.src = 'assets/layer-hazard-meteor-blades.png?v=arcade360';
 
   LayeredT4Assets.hazard.meteorCenter.onload = () => { LayeredT4Assets.loaded.hazard.meteorCenter = true; };
-  LayeredT4Assets.hazard.meteorCenter.src = 'assets/layer-hazard-meteor-center.png?v=arcade359';
+  LayeredT4Assets.hazard.meteorCenter.src = 'assets/layer-hazard-meteor-center.png?v=arcade360';
 
   // Helper: Identifies any hazard trap or anomaly archetype
   function isHazardNode(nodeClass) {
@@ -2381,53 +2381,51 @@
     },
 
     emitNodeWorldStreaks(p, targetR, mode, isHazard, dtScale, now) {
-      if (!p.lastStreakEmit) p.lastStreakEmit = now - Math.random() * 50;
+      if (!p.lastStreakEmit) p.lastStreakEmit = now - Math.random() * 100;
 
       if (!isHazard) {
-        // ─── GOOD COLLECTIBLE NODES: EMBER DRIFT EFFECT ───
-        // Particles linger where released in world space and fade independently as node plunges downward.
-        // Clean gaps between emissions (~75ms) ensure clear readability of fast-fall paths and badges.
-        const emitInterval = 75;
+        // ─── GOOD COLLECTIBLE NODES: SUBTLE EMBER DRIFT (ULTRA-LEAN & LAG-FREE) ───
+        // Particles linger where released and fade snappily (~160ms). Wide emission intervals
+        // (260ms) guarantee crisp readability of falling nodes, badges, and zero particle clutter.
+        const emitInterval = 260;
         if (now - p.lastStreakEmit < emitInterval) return;
         p.lastStreakEmit = now;
 
         if (mode === 'dynamo' || mode === 'realm') {
-          // Chrome Dynamo: Tiny violet-white sparks breaking free where plasma touches orb's upper rim
-          const rimAng = -Math.PI * 0.5 + (Math.random() - 0.5) * 0.95;
-          const spawnX = p.x + Math.cos(rimAng) * targetR * 0.92;
-          const spawnY = p.y + Math.sin(rimAng) * targetR * 0.92;
+          // Chrome Dynamo: Micro violet-white spark breaking free at the orb's upper plasma rim
+          const rimAng = -Math.PI * 0.5 + (Math.random() - 0.5) * 0.85;
+          const spawnX = p.x + Math.cos(rimAng) * targetR * 0.90;
+          const spawnY = p.y + Math.sin(rimAng) * targetR * 0.90;
           this.worldStreaks.push({
             type: 'ember',
             kind: 'dynamoSpark',
             x: spawnX,
             y: spawnY,
-            vx: (Math.random() - 0.5) * 0.35,
-            vy: -0.22 - Math.random() * 0.25, // buoyant gentle upward float
-            size: 1.8 + Math.random() * 1.6,
+            vx: (Math.random() - 0.5) * 0.20,
+            vy: -0.14 - Math.random() * 0.12, // gentle buoyant micro-drift
+            size: 0.75 + Math.random() * 0.35,
             life: 0,
-            maxLife: 32 + Math.random() * 12
+            maxLife: 10 + Math.random() * 4
           });
         } else if (mode === 'helix') {
-          // Chrome Helix: Cyan and lilac flecks that briefly glint as they turn above the glass DNA orb
-          const spawnX = p.x + (Math.random() - 0.5) * targetR * 0.55;
-          const spawnY = p.y - targetR * (0.80 + Math.random() * 0.22);
+          // Chrome Helix: Micro cyan/lilac fleck turning above the glass DNA orb
+          const spawnX = p.x + (Math.random() - 0.5) * targetR * 0.45;
+          const spawnY = p.y - targetR * (0.80 + Math.random() * 0.15);
           this.worldStreaks.push({
             type: 'ember',
             kind: 'helixFleck',
             x: spawnX,
             y: spawnY,
-            vx: (Math.random() - 0.5) * 0.38,
-            vy: -0.18 - Math.random() * 0.22,
-            size: 2.2 + Math.random() * 1.8,
-            rot: Math.random() * Math.PI * 2,
-            vRot: (Math.random() - 0.5) * 0.12,
+            vx: (Math.random() - 0.5) * 0.22,
+            vy: -0.12 - Math.random() * 0.12,
+            size: 0.85 + Math.random() * 0.35,
             life: 0,
-            maxLife: 36 + Math.random() * 14
+            maxLife: 10 + Math.random() * 4
           });
         } else {
-          // Chrome Meteor: Shed orange cinders from glowing cracks in basalt that cool to dark red
+          // Chrome Meteor: Micro orange cinder from glowing fissures cooling to dark red
           const crackAng = Math.random() * Math.PI * 2;
-          const crackDist = targetR * (0.40 + Math.random() * 0.45);
+          const crackDist = targetR * (0.45 + Math.random() * 0.35);
           const spawnX = p.x + Math.cos(crackAng) * crackDist;
           const spawnY = p.y + Math.sin(crackAng) * crackDist;
           this.worldStreaks.push({
@@ -2435,79 +2433,71 @@
             kind: 'meteorCinder',
             x: spawnX,
             y: spawnY,
-            vx: (Math.random() - 0.5) * 0.40,
-            vy: -0.12 - Math.random() * 0.25,
-            size: 2.0 + Math.random() * 2.2,
+            vx: (Math.random() - 0.5) * 0.22,
+            vy: -0.10 - Math.random() * 0.12,
+            size: 0.85 + Math.random() * 0.35,
             life: 0,
-            maxLife: 38 + Math.random() * 16
+            maxLife: 10 + Math.random() * 4
           });
         }
 
       } else {
-        // ─── BAD HAZARD NODES: ZERO BLURRY GLOW, BESPOKE ATMOSPHERIC EFFECTS ───
-        const emitInterval = 55;
+        // ─── BAD HAZARD NODES: ULTRA-LEAN ATMOSPHERIC SIGNATURES (ZERO BLURRY CLUTTER) ───
+        const emitInterval = 280;
         if (now - p.lastStreakEmit < emitInterval) return;
         p.lastStreakEmit = now;
 
         if (mode === 'dynamo' || mode === 'realm') {
-          // Broken Arc segment spark released along recent path
+          // Broken Arc: Short, clean magenta micro-discharge flickering along recent path
           this.worldStreaks.push({
             type: 'hazard',
             kind: 'brokenArcSpark',
-            x: p.x + (Math.random() - 0.5) * targetR * 0.4,
-            y: p.y - targetR * (0.95 + Math.random() * 0.65),
-            vx: (Math.random() - 0.5) * 0.45,
-            vy: -0.35 - Math.random() * 0.3,
-            len: 8 + Math.random() * 12,
-            angle: -Math.PI * 0.5 + (Math.random() - 0.5) * 0.6,
+            x: p.x + (Math.random() - 0.5) * targetR * 0.35,
+            y: p.y - targetR * (0.85 + Math.random() * 0.45),
+            vx: (Math.random() - 0.5) * 0.25,
+            vy: -0.18 - Math.random() * 0.15,
+            len: 4 + Math.random() * 4,
+            angle: -Math.PI * 0.5 + (Math.random() - 0.5) * 0.5,
             life: 0,
-            maxLife: 24 + Math.random() * 10
+            maxLife: 10 + Math.random() * 4
           });
         } else if (mode === 'helix') {
-          // Facet Dust: fine ruby grains and small angular chips tumbling behind the crystal
-          for (let fd = 0; fd < 2; fd++) {
-            this.worldStreaks.push({
-              type: 'hazard',
-              kind: 'facetDust',
-              x: p.x + (Math.random() - 0.5) * targetR * 0.6,
-              y: p.y - targetR * (0.4 + Math.random() * 0.6),
-              vx: (Math.random() - 0.5) * 0.5,
-              vy: -0.2 - Math.random() * 0.3,
-              size: (fd === 0) ? (1.4 + Math.random() * 1.2) : (2.8 + Math.random() * 1.8),
-              isChip: fd === 1,
-              rot: Math.random() * Math.PI * 2,
-              vRot: (Math.random() - 0.5) * 0.16,
-              life: 0,
-              maxLife: 32 + Math.random() * 12
-            });
-          }
+          // Facet Dust: Single micro ruby grain behind the crystal
+          this.worldStreaks.push({
+            type: 'hazard',
+            kind: 'facetDust',
+            x: p.x + (Math.random() - 0.5) * targetR * 0.45,
+            y: p.y - targetR * (0.4 + Math.random() * 0.4),
+            vx: (Math.random() - 0.5) * 0.25,
+            vy: -0.15 - Math.random() * 0.15,
+            size: 0.85 + Math.random() * 0.35,
+            life: 0,
+            maxLife: 10 + Math.random() * 4
+          });
         } else {
-          // Ash Flakes: thin charcoal flakes peeling away from rotating purple spikes
-          for (let af = 0; af < 2; af++) {
-            const flakeAng = Math.random() * Math.PI * 2;
-            const flakeDist = targetR * (0.8 + Math.random() * 0.3);
-            this.worldStreaks.push({
-              type: 'hazard',
-              kind: 'ashFlake',
-              x: p.x + Math.cos(flakeAng) * flakeDist,
-              y: p.y + Math.sin(flakeAng) * flakeDist,
-              vx: (Math.random() - 0.5) * 0.45,
-              vy: -0.25 - Math.random() * 0.3,
-              size: 2.6 + Math.random() * 2.6,
-              rot: Math.random() * Math.PI * 2,
-              vRot: (Math.random() - 0.5) * 0.14,
-              life: 0,
-              maxLife: 35 + Math.random() * 14
-            });
-          }
+          // Ash Flakes: Single micro charcoal flake from rotating basalt spikes
+          const flakeAng = Math.random() * Math.PI * 2;
+          const flakeDist = targetR * (0.7 + Math.random() * 0.25);
+          this.worldStreaks.push({
+            type: 'hazard',
+            kind: 'ashFlake',
+            x: p.x + Math.cos(flakeAng) * flakeDist,
+            y: p.y + Math.sin(flakeAng) * flakeDist,
+            vx: (Math.random() - 0.5) * 0.25,
+            vy: -0.15 - Math.random() * 0.15,
+            size: 1.2 + Math.random() * 0.6,
+            life: 0,
+            maxLife: 10 + Math.random() * 4
+          });
         }
       }
     },
 
     updateAndDrawWorldStreaks(ctx, dtScale) {
       if (this.worldStreaks.length === 0) return;
-      if (this.worldStreaks.length > 40) {
-        this.worldStreaks.splice(0, this.worldStreaks.length - 40);
+      // High-refresh performance guard: hard-cap total world streaks to 12 particles max
+      if (this.worldStreaks.length > 12) {
+        this.worldStreaks.splice(0, this.worldStreaks.length - 12);
       }
       const dt = Math.max(0.25, Math.min(2.5, dtScale));
       ctx.save();
@@ -2524,145 +2514,58 @@
         }
 
         const prog = st.life / st.maxLife;
-        const alpha = Math.sin(prog * Math.PI); // bell curve
-        if (alpha <= 0.02) continue;
+        const alpha = Math.sin(prog * Math.PI); // smooth bell fade
+        if (alpha <= 0.03) continue;
 
         if (st.type === 'ember') {
-          // ─── EMBER DRIFT PARTICLES ───
+          // ─── EMBER DRIFT PARTICLES (DIRECT ZERO-ALLOC RENDERING) ───
           if (st.kind === 'dynamoSpark') {
-            // Tiny violet-white spark with diamond glint
-            ctx.save();
-            ctx.translate(st.x, st.y);
-            ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.95})`;
+            // Ultra-delicate violet-white micro-spark
             ctx.beginPath();
-            ctx.arc(0, 0, st.size * (1.0 - prog * 0.4), 0, Math.PI * 2);
+            ctx.arc(st.x, st.y, st.size * (1.0 - prog * 0.4), 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.88})`;
             ctx.fill();
-
-            // Diamond cross glint
-            const glintLen = st.size * 2.2 * (1.0 - prog * 0.5);
-            ctx.strokeStyle = `rgba(216, 180, 254, ${alpha * 0.85})`;
-            ctx.lineWidth = 1.0;
-            ctx.beginPath();
-            ctx.moveTo(-glintLen, 0); ctx.lineTo(glintLen, 0);
-            ctx.moveTo(0, -glintLen); ctx.lineTo(0, glintLen);
-            ctx.stroke();
-            ctx.restore();
 
           } else if (st.kind === 'helixFleck') {
-            // Cyan & lilac flecks that briefly glint as they turn
-            st.rot += (st.vRot || 0.08) * dt;
-            const turnGlint = Math.pow(Math.abs(Math.cos(st.rot)), 3.0);
-            ctx.save();
-            ctx.translate(st.x, st.y);
-            ctx.rotate(st.rot);
-            const curW = st.size * Math.abs(Math.cos(st.rot));
-            const curH = st.size * 0.6;
-            const isLilac = (Math.floor(st.x * 0.1) % 2 === 0);
-            ctx.fillStyle = isLilac ? `rgba(216, 180, 254, ${alpha * 0.80})` : `rgba(56, 189, 248, ${alpha * 0.75})`;
+            // Micro cyan / lilac fleck
+            const isLilac = (Math.floor(st.x) % 2 === 0);
             ctx.beginPath();
-            ctx.ellipse(0, 0, Math.max(0.8, curW), curH, 0, 0, Math.PI * 2);
+            ctx.arc(st.x, st.y, st.size * (1.0 - prog * 0.4), 0, Math.PI * 2);
+            ctx.fillStyle = isLilac ? `rgba(216, 180, 254, ${alpha * 0.80})` : `rgba(56, 189, 248, ${alpha * 0.78})`;
             ctx.fill();
-
-            if (turnGlint > 0.45) {
-              ctx.fillStyle = `rgba(255, 255, 255, ${alpha * turnGlint * 0.95})`;
-              ctx.beginPath();
-              ctx.arc(0, 0, st.size * 0.75, 0, Math.PI * 2);
-              ctx.fill();
-            }
-            ctx.restore();
 
           } else if (st.kind === 'meteorCinder') {
-            // Orange cinders that cool to dark red
-            const rCol = Math.round(251 - prog * 120); // 251 -> 131
-            const gCol = Math.round(146 - prog * 115); // 146 -> 31
-            const bCol = Math.round(60 - prog * 45);   // 60 -> 15
+            // Micro orange cinder
             ctx.beginPath();
-            ctx.arc(st.x, st.y, st.size * (1.0 - prog * 0.35), 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(${rCol}, ${gCol}, ${bCol}, ${alpha * 0.90})`;
+            ctx.arc(st.x, st.y, st.size * (1.0 - prog * 0.4), 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(249, 115, 22, ${alpha * 0.82})`;
             ctx.fill();
-            // Tiny incandescent white core when young
-            if (prog < 0.35) {
-              ctx.beginPath();
-              ctx.arc(st.x, st.y, st.size * 0.45 * (1.0 - prog / 0.35), 0, Math.PI * 2);
-              ctx.fillStyle = `rgba(254, 240, 138, ${alpha * 0.85})`;
-              ctx.fill();
-            }
           }
 
         } else if (st.type === 'hazard') {
-          // ─── HAZARD PARTICLES ───
+          // ─── HAZARD PARTICLES (LIGHTWEIGHT VECTOR RENDER) ───
           if (st.kind === 'brokenArcSpark') {
-            // Disconnected broken arc segment lingering and fading
-            ctx.save();
-            ctx.translate(st.x, st.y);
-            ctx.rotate(st.angle || 0);
-            ctx.strokeStyle = `rgba(244, 63, 94, ${alpha * 0.90})`;
-            ctx.lineWidth = 2.4;
+            // Short clean magenta micro-arc segment
             ctx.beginPath();
-            ctx.moveTo(0, -st.len * 0.5);
-            ctx.lineTo((Math.random() - 0.5) * 3, 0);
-            ctx.lineTo(0, st.len * 0.5);
+            ctx.moveTo(st.x, st.y);
+            ctx.lineTo(st.x + Math.sin(st.angle || 0) * (st.len * 0.5), st.y + Math.cos(st.angle || 0) * (st.len * 0.5));
+            ctx.strokeStyle = `rgba(244, 63, 94, ${alpha * 0.82})`;
+            ctx.lineWidth = 1.2;
             ctx.stroke();
-
-            ctx.strokeStyle = `rgba(255, 255, 255, ${alpha * 0.85})`;
-            ctx.lineWidth = 1.0;
-            ctx.stroke();
-            ctx.restore();
 
           } else if (st.kind === 'facetDust') {
-            // Ruby grains and angular chips catching amber light
-            st.rot += (st.vRot || 0.1) * dt;
-            const amberGlint = Math.pow(Math.max(0, Math.sin(st.rot * 2)), 3.0);
-            ctx.save();
-            ctx.translate(st.x, st.y);
-            ctx.rotate(st.rot);
-
-            if (st.isChip) {
-              // Triangular angular ruby chip
-              ctx.beginPath();
-              ctx.moveTo(0, -st.size);
-              ctx.lineTo(st.size * 0.8, st.size * 0.7);
-              ctx.lineTo(-st.size * 0.8, st.size * 0.7);
-              ctx.closePath();
-              ctx.fillStyle = `rgba(225, 29, 72, ${alpha * 0.85})`;
-              ctx.fill();
-
-              if (amberGlint > 0.4) {
-                ctx.fillStyle = `rgba(254, 240, 138, ${alpha * amberGlint * 0.95})`;
-                ctx.beginPath();
-                ctx.arc(0, 0, st.size * 0.55, 0, Math.PI * 2);
-                ctx.fill();
-              }
-            } else {
-              // Fine ruby grain
-              ctx.beginPath();
-              ctx.arc(0, 0, st.size, 0, Math.PI * 2);
-              ctx.fillStyle = `rgba(190, 18, 60, ${alpha * 0.80})`;
-              ctx.fill();
-            }
-            ctx.restore();
-
-          } else if (st.kind === 'ashFlake') {
-            // Charcoal flake tumbling in 3D and flashing silver-violet
-            st.rot += (st.vRot || 0.1) * dt;
-            const turnCos = Math.cos(st.rot);
-            const edgeFlash = Math.pow(1.0 - Math.abs(turnCos), 3.0);
-            ctx.save();
-            ctx.translate(st.x, st.y);
-            ctx.rotate(st.rot * 0.5);
+            // Micro ruby dust grain
             ctx.beginPath();
-            ctx.ellipse(0, 0, Math.max(0.6, st.size * Math.abs(turnCos)), st.size * 0.5, 0, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(51, 65, 85, ${alpha * 0.85})`; // dark charcoal
+            ctx.arc(st.x, st.y, st.size, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(225, 29, 72, ${alpha * 0.78})`;
             ctx.fill();
 
-            if (edgeFlash > 0.45) {
-              // Silver-violet flash
-              ctx.fillStyle = `rgba(192, 132, 252, ${alpha * edgeFlash * 0.90})`;
-              ctx.beginPath();
-              ctx.ellipse(0, 0, Math.max(0.5, st.size * 0.8 * Math.abs(turnCos)), st.size * 0.35, 0, 0, Math.PI * 2);
-              ctx.fill();
-            }
-            ctx.restore();
+          } else if (st.kind === 'ashFlake') {
+            // Micro charcoal ash flake
+            ctx.beginPath();
+            ctx.arc(st.x, st.y, st.size * 0.75, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(71, 85, 105, ${alpha * 0.78})`;
+            ctx.fill();
           }
         }
       }
@@ -5855,16 +5758,6 @@
 
         // Advance Node using Delta-Time
         p.y += p.speed * dtScale * speedFactor * globalSpeedMultiplier;
-
-        // Update spine IK
-        if (p.spine && p.spine.length > 0) {
-          p.spine[0].x = p.x;
-          p.spine[0].y = p.y;
-          for (let j = 1; j < p.spine.length; j++) {
-            p.spine[j].y = p.y - j * 8.5;
-            p.spine[j].x = p.x + Math.sin(timestamp * 0.005 + j * 0.6) * (j * 1.1);
-          }
-        }
 
         // Render Celestial Flux Node / Hazard
         ctx.save();
