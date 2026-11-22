@@ -10141,56 +10141,55 @@ try { checkUrlHashRoutine(); } catch(e){}
       ctx.fill();
 
       // 3. Dense Radiating Royal-Purple & Magenta Fractal Lightning Dendrites
-      var numBolts = 16;
+      var numBolts = 22;
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
       for (var b = 0; b < numBolts; b++) {
-        var baseAng = (b / numBolts) * Math.PI * 2 + phase * 0.25;
-        var steps = 6;
+        var baseAng = (b / numBolts) * Math.PI * 2 + phase * 0.25 + Math.sin(b * 2.3) * 0.08;
+        var steps = 8;
         var pts = [{ x: coreX, y: coreY }];
-        var curX = coreX, curY = coreY;
         for (var s = 1; s <= steps; s++) {
           var t = s / steps;
-          var targetX = cx + Math.cos(baseAng) * (r * 0.96);
-          var targetY = cy + Math.sin(baseAng) * (r * 0.96);
+          var targetX = cx + Math.cos(baseAng) * (r * 0.94);
+          var targetY = cy + Math.sin(baseAng) * (r * 0.94);
           var nx = coreX + (targetX - coreX) * t;
           var ny = coreY + (targetY - coreY) * t;
           var env = Math.sin(t * Math.PI);
-          var jit = Math.sin(b * 3.7 + s * 4.9 + phase * 2.0) * (r * 0.16) * env;
+          var jit = (Math.sin(b * 3.7 + s * 4.9 + phase * 2.0) * 0.11 + Math.cos(b * 5.3 + s * 7.1) * 0.06) * r * env;
           nx += -Math.sin(baseAng) * jit;
           ny += Math.cos(baseAng) * jit;
           pts.push({ x: nx, y: ny });
         }
 
-        // Pass 1: Wide Royal Purple Corona
+        // Pass 1: Soft Royal Purple Corona
         ctx.beginPath();
         ctx.moveTo(pts[0].x, pts[0].y);
         for (var k = 1; k < pts.length; k++) ctx.lineTo(pts[k].x, pts[k].y);
-        ctx.strokeStyle = "rgba(168, 85, 247, 0.55)";
-        ctx.lineWidth = 4.2;
+        ctx.strokeStyle = "rgba(168, 85, 247, 0.38)";
+        ctx.lineWidth = 3.2;
         ctx.stroke();
 
         // Pass 2: Electric Magenta-Violet Core
-        ctx.strokeStyle = "rgba(217, 70, 239, 0.92)";
-        ctx.lineWidth = 2.0;
+        ctx.strokeStyle = "rgba(192, 38, 211, 0.85)";
+        ctx.lineWidth = 1.45;
         ctx.stroke();
 
-        // Pass 3: Searing White-Lavender Filament
-        ctx.strokeStyle = "rgba(245, 208, 254, 0.96)";
-        ctx.lineWidth = 0.9;
+        // Pass 3: Razor-Fine White-Lavender Filament
+        ctx.strokeStyle = "rgba(245, 208, 254, 0.92)";
+        ctx.lineWidth = 0.65;
         ctx.stroke();
 
-        // Sub-branch fork
-        var midPt = pts[3];
-        var forkAng = baseAng + ((b % 2 === 0) ? 0.52 : -0.52);
-        var forkEndX = midPt.x + Math.cos(forkAng) * (r * 0.34);
-        var forkEndY = midPt.y + Math.sin(forkAng) * (r * 0.34);
+        // Sub-branch fork 1 & 2
+        var midPt = pts[4];
+        var forkAng = baseAng + ((b % 2 === 0) ? 0.48 : -0.48);
+        var forkEndX = midPt.x + Math.cos(forkAng) * (r * 0.30);
+        var forkEndY = midPt.y + Math.sin(forkAng) * (r * 0.30);
         ctx.beginPath();
         ctx.moveTo(midPt.x, midPt.y);
-        ctx.lineTo((midPt.x + forkEndX) * 0.5 + Math.sin(b) * 3, (midPt.y + forkEndY) * 0.5 - Math.cos(b) * 3);
+        ctx.lineTo((midPt.x + forkEndX) * 0.5 + Math.sin(b * 3.1) * 2.5, (midPt.y + forkEndY) * 0.5 - Math.cos(b * 3.1) * 2.5);
         ctx.lineTo(forkEndX, forkEndY);
-        ctx.strokeStyle = "rgba(217, 70, 239, 0.78)";
-        ctx.lineWidth = 1.3;
+        ctx.strokeStyle = "rgba(217, 70, 239, 0.72)";
+        ctx.lineWidth = 0.95;
         ctx.stroke();
       }
 
@@ -10269,35 +10268,35 @@ try { checkUrlHashRoutine(); } catch(e){}
       ctx.fillRect(0, 0, size, size);
 
       // Swirling Cyan & Magenta Nebula Vortex Ribbons inside the Orb (Matches Reference Image 2 & 5)
-      for (var arm = 0; arm < 8; arm++) {
+      for (var arm = 0; arm < 10; arm++) {
         var isCyan = (arm % 2 === 0);
-        var armBase = (arm / 8) * Math.PI * 2 + phase * 0.5;
+        var armBase = (arm / 10) * Math.PI * 2 + phase * 0.5;
         ctx.beginPath();
-        for (var st = 0; st <= 24; st++) {
-          var t = st / 24;
-          var spiralR = r * (0.10 + t * 0.82);
-          var spiralAng = armBase + t * 2.6 + Math.sin(t * Math.PI * 2 + phase) * 0.25;
+        for (var st = 0; st <= 26; st++) {
+          var t = st / 26;
+          var spiralR = r * (0.06 + t * 0.86);
+          var spiralAng = armBase + t * 3.1 + Math.sin(t * Math.PI * 2 + phase) * 0.28;
           var sx = cx + Math.cos(spiralAng) * spiralR;
           var sy = cy + Math.sin(spiralAng) * spiralR;
           if (st === 0) ctx.moveTo(sx, sy);
           else ctx.lineTo(sx, sy);
         }
-        ctx.strokeStyle = isCyan ? "rgba(34, 211, 238, 0.42)" : "rgba(232, 121, 249, 0.42)";
-        ctx.lineWidth = 5.5;
+        ctx.strokeStyle = isCyan ? "rgba(34, 211, 238, 0.55)" : "rgba(232, 121, 249, 0.55)";
+        ctx.lineWidth = 6.2;
         ctx.lineCap = "round";
         ctx.stroke();
 
-        ctx.strokeStyle = isCyan ? "rgba(165, 243, 252, 0.85)" : "rgba(245, 208, 254, 0.85)";
-        ctx.lineWidth = 1.6;
+        ctx.strokeStyle = isCyan ? "rgba(165, 243, 252, 0.94)" : "rgba(245, 208, 254, 0.94)";
+        ctx.lineWidth = 1.9;
         ctx.stroke();
       }
 
-      // Inscribed 3D Double-Helix DNA Structure Inside the Crystal Sphere (Matches Reference Image 5)
+      // Subtle Translucent Inscribed 3D Double-Helix DNA Accent Inside the Crystal Sphere
       ctx.save();
       ctx.translate(cx, cy);
       ctx.rotate(-0.35);
-      var hLen = r * 1.68;
-      var hAmp = r * 0.36;
+      var hLen = r * 1.62;
+      var hAmp = r * 0.34;
       var numRungs = 9;
       for (var ri = 0; ri < numRungs; ri++) {
         var rn = -1 + (2 * (ri + 0.5)) / numRungs;
@@ -10309,15 +10308,9 @@ try { checkUrlHashRoutine(); } catch(e){}
         ctx.beginPath();
         ctx.moveTo(rx, ry1);
         ctx.lineTo(rx, ry2);
-        ctx.strokeStyle = "rgba(224, 242, 254, 0.72)";
-        ctx.lineWidth = 1.3;
+        ctx.strokeStyle = "rgba(224, 242, 254, 0.42)";
+        ctx.lineWidth = 1.1;
         ctx.stroke();
-
-        // Glowing base-pair midpoint bead
-        ctx.fillStyle = "#ffffff";
-        ctx.beginPath();
-        ctx.arc(rx, (ry1 + ry2) * 0.5, 1.4, 0, Math.PI * 2);
-        ctx.fill();
       }
 
       // 3D Cylindrical Helix Strand 1 (Cyan) & Strand 2 (Magenta)
@@ -10333,29 +10326,22 @@ try { checkUrlHashRoutine(); } catch(e){}
           if (si === 0) ctx.moveTo(sx, sy);
           else ctx.lineTo(sx, sy);
         }
-        ctx.strokeStyle = (pass === 0) ? "rgba(6, 182, 212, 0.55)" : "rgba(217, 70, 239, 0.55)";
-        ctx.lineWidth = 5.2;
-        ctx.stroke();
-
-        ctx.strokeStyle = (pass === 0) ? "#22d3ee" : "#e879f9";
-        ctx.lineWidth = 2.8;
-        ctx.stroke();
-
-        ctx.strokeStyle = "#ffffff";
-        ctx.lineWidth = 1.0;
+        ctx.strokeStyle = (pass === 0) ? "rgba(34, 211, 238, 0.48)" : "rgba(232, 121, 249, 0.48)";
+        ctx.lineWidth = 2.4;
         ctx.stroke();
       }
       ctx.restore();
 
-      // Radiant White-Pink Central Star Core (Matches Reference Image 2)
-      var coreGlow = ctx.createRadialGradient(cx, cy, 0, cx, cy, r * 0.42);
-      coreGlow.addColorStop(0.0, "rgba(255, 255, 255, 0.98)");
-      coreGlow.addColorStop(0.28, "rgba(245, 208, 254, 0.85)");
-      coreGlow.addColorStop(0.60, "rgba(217, 70, 239, 0.35)");
+      // Radiant White-Pink Central Star Core (Matches Reference Image 2 & 5)
+      var coreGlow = ctx.createRadialGradient(cx, cy, 0, cx, cy, r * 0.56);
+      coreGlow.addColorStop(0.0, "#ffffff");
+      coreGlow.addColorStop(0.22, "rgba(255, 255, 255, 0.96)");
+      coreGlow.addColorStop(0.45, "rgba(245, 208, 254, 0.88)");
+      coreGlow.addColorStop(0.72, "rgba(217, 70, 239, 0.42)");
       coreGlow.addColorStop(1.0, "rgba(217, 70, 239, 0)");
       ctx.fillStyle = coreGlow;
       ctx.beginPath();
-      ctx.arc(cx, cy, r * 0.42, 0, Math.PI * 2);
+      ctx.arc(cx, cy, r * 0.56, 0, Math.PI * 2);
       ctx.fill();
 
       // Inner Glass Caustic Fresnel Shadow & Highlight
@@ -10537,6 +10523,25 @@ try { checkUrlHashRoutine(); } catch(e){}
       ctx.strokeStyle = "rgba(254, 240, 138, 0.98)";
       ctx.lineWidth = 0.95;
       ctx.stroke();
+
+      // Blazing White-Hot Magma Triple-Junction Nodes at Fault Intersections
+      for (var flIdxN = 0; flIdxN < faultLines.length; flIdxN++) {
+        var fChainN = faultLines[flIdxN];
+        for (var kN = 1; kN < fChainN.length - 1; kN++) {
+          var xN = fChainN[kN][0] * cosF - fChainN[kN][1] * sinF;
+          var yN = fChainN[kN][0] * sinF + fChainN[kN][1] * cosF;
+          var nxP = cx + xN * r;
+          var nyP = cy + yN * r;
+          var nodeGlow = ctx.createRadialGradient(nxP, nyP, 0, nxP, nyP, 4.5);
+          nodeGlow.addColorStop(0.0, "#ffffff");
+          nodeGlow.addColorStop(0.45, "rgba(254, 240, 138, 0.95)");
+          nodeGlow.addColorStop(1.0, "rgba(249, 115, 22, 0)");
+          ctx.fillStyle = nodeGlow;
+          ctx.beginPath();
+          ctx.arc(nxP, nyP, 4.5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
 
       // Dark Craggy Basalt Plate Interior Shadows (Accentuates 3D Chunky Volcanic Crust Relief)
       for (var rp = 0; rp < 18; rp++) {
@@ -11988,47 +11993,65 @@ try { checkUrlHashRoutine(); } catch(e){}
             if (isComet && tier >= 2) {
               for (var sBolt = -1; sBolt <= 1; sBolt += 2) {
                 targetCtx.beginPath();
-                targetCtx.moveTo(_ptsX[0] + (-sinH) * sBolt * headR * 0.58, _ptsY[0] + cosH * sBolt * headR * 0.58);
+                targetCtx.moveTo(_ptsX[0] + (-sinH) * sBolt * headR * 0.65, _ptsY[0] + cosH * sBolt * headR * 0.65);
                 for (var ej = 1; ej < K; ej++) {
-                  var bEnv = Math.pow(1 - (ej * invKm1), 0.85);
-                  var bJit = Math.sin(eTick * 2.9 + ej * 5.3 + sBolt * 2.1 + i) * (arcAmp * 0.72) * bEnv;
-                  var bxS = _ptsX[ej] + (-sinH) * (sBolt * headR * 0.48 * bEnv + bJit);
-                  var byS = _ptsY[ej] + cosH * (sBolt * headR * 0.48 * bEnv + bJit);
+                  var bEnv = Math.pow(1 - (ej * invKm1), 0.78);
+                  var bJit = Math.sin(eTick * 2.9 + ej * 5.3 + sBolt * 2.1 + i) * (arcAmp * 0.60) * bEnv;
+                  var bxS = _ptsX[ej] + (-sinH) * (sBolt * headR * 0.58 * bEnv + bJit);
+                  var byS = _ptsY[ej] + cosH * (sBolt * headR * 0.58 * bEnv + bJit);
+                  if (ej < K - 1) {
+                    var mSubJit = Math.cos(eTick * 3.8 + ej * 6.7 + sBolt) * (arcAmp * 0.45) * bEnv;
+                    var mxS = (_ptsX[ej - 1] + bxS) * 0.5 + (-sinH) * mSubJit;
+                    var myS = (_ptsY[ej - 1] + byS) * 0.5 + cosH * mSubJit;
+                    targetCtx.lineTo(mxS, myS);
+                  }
                   targetCtx.lineTo(bxS, byS);
                 }
-                targetCtx.strokeStyle = "rgba(147, 197, 253, " + (eAlpha * 0.65).toFixed(2) + ")";
-                targetCtx.lineWidth = Math.max(1.1, headR * 0.20);
+                targetCtx.strokeStyle = "rgba(139, 92, 246, " + (eAlpha * 0.48).toFixed(2) + ")";
+                targetCtx.lineWidth = Math.max(2.2, headR * 0.36);
                 targetCtx.stroke();
-                targetCtx.strokeStyle = "rgba(255, 255, 255, " + (eAlpha * 0.88).toFixed(2) + ")";
-                targetCtx.lineWidth = 0.75;
+                targetCtx.strokeStyle = "rgba(147, 197, 253, " + (eAlpha * 0.82).toFixed(2) + ")";
+                targetCtx.lineWidth = Math.max(1.1, headR * 0.18);
+                targetCtx.stroke();
+                targetCtx.strokeStyle = "rgba(255, 255, 255, " + (eAlpha * 0.94).toFixed(2) + ")";
+                targetCtx.lineWidth = 0.70;
                 targetCtx.stroke();
               }
             }
 
-            // Secondary Branched Lightning Bolts (Dendritic Side Forks)
+            // Secondary Branched Lightning Bolts (Multi-Tier Dendritic Side Forks)
             if (isComet || tier >= 2 || dopplerBoost > 0.18) {
               var branchSide = ((eTick + i) & 1) ? 1 : -1;
-              var branchLen = headR * (isComet ? 2.15 : (tier === 3 ? 1.70 : 1.30));
-              var bx1 = forkPtX + (forkDirX * branchSide - cosH * 0.65) * (branchLen * 0.55);
-              var by1 = forkPtY + (forkDirY * branchSide - sinH * 0.65) * (branchLen * 0.55);
-              var bx2 = bx1 + (forkDirX * branchSide * 0.7 - cosH * 0.85) * (branchLen * 0.55);
-              var by2 = by1 + (forkDirY * branchSide * 0.7 - sinH * 0.85) * (branchLen * 0.55);
+              var branchLen = headR * (isComet ? 2.40 : (tier === 3 ? 1.70 : 1.30));
+              var bx1 = forkPtX + (forkDirX * branchSide - cosH * 0.65) * (branchLen * 0.45);
+              var by1 = forkPtY + (forkDirY * branchSide - sinH * 0.65) * (branchLen * 0.45);
+              var bx2 = bx1 + (forkDirX * branchSide * 0.85 - cosH * 0.85) * (branchLen * 0.55);
+              var by2 = by1 + (forkDirY * branchSide * 0.85 - sinH * 0.85) * (branchLen * 0.55);
               targetCtx.beginPath();
               targetCtx.moveTo(forkPtX, forkPtY);
               targetCtx.lineTo(bx1, by1);
               targetCtx.lineTo(bx2, by2);
               if (isComet && K >= 6) {
                 var b2Side = -branchSide;
-                var b2x1 = forkPt2X + (forkDirX * b2Side - cosH * 0.7) * (branchLen * 0.48);
-                var b2y1 = forkPt2Y + (forkDirY * b2Side - sinH * 0.7) * (branchLen * 0.48);
+                var b2x1 = forkPt2X + (forkDirX * b2Side - cosH * 0.65) * (branchLen * 0.42);
+                var b2y1 = forkPt2Y + (forkDirY * b2Side - sinH * 0.65) * (branchLen * 0.42);
+                var b2x2 = b2x1 + (forkDirX * b2Side * 0.75 - cosH * 0.85) * (branchLen * 0.42);
+                var b2y2 = b2y1 + (forkDirY * b2Side * 0.75 - sinH * 0.85) * (branchLen * 0.42);
                 targetCtx.moveTo(forkPt2X, forkPt2Y);
                 targetCtx.lineTo(b2x1, b2y1);
+                targetCtx.lineTo(b2x2, b2y2);
+                // Third distal fork near tail mid-section
+                var forkPt3X = _ptsX[Math.min(K - 1, 6)], forkPt3Y = _ptsY[Math.min(K - 1, 6)];
+                var b3x1 = forkPt3X + (forkDirX * branchSide - cosH * 0.75) * (branchLen * 0.46);
+                var b3y1 = forkPt3Y + (forkDirY * branchSide - sinH * 0.75) * (branchLen * 0.46);
+                targetCtx.moveTo(forkPt3X, forkPt3Y);
+                targetCtx.lineTo(b3x1, b3y1);
               }
-              targetCtx.strokeStyle = "hsla(" + eHue + ", 100%, 74%, " + (eAlpha * 0.48).toFixed(2) + ")";
-              targetCtx.lineWidth = Math.max(1.4, headR * 0.36);
+              targetCtx.strokeStyle = isComet ? ("rgba(139, 92, 246, " + (eAlpha * 0.52).toFixed(2) + ")") : ("hsla(" + eHue + ", 100%, 74%, " + (eAlpha * 0.48).toFixed(2) + ")");
+              targetCtx.lineWidth = Math.max(1.4, headR * 0.34);
               targetCtx.stroke();
               targetCtx.strokeStyle = "rgba(240, 249, 255, " + (eAlpha * 0.92).toFixed(2) + ")";
-              targetCtx.lineWidth = 0.90;
+              targetCtx.lineWidth = 0.80;
               targetCtx.stroke();
             }
 
