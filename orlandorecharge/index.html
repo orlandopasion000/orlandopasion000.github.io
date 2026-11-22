@@ -1862,40 +1862,23 @@ body.light-theme .rest-mode-btn:hover {
   white-space: nowrap;
 }
 
-@media (min-width: 1181px) {
-  .fs-toggle-btn {
-    width: auto;
-    min-width: 140px;
-  }
-  .qgame-btn-launch,
-  .qgame-btn-exit {
-    width: auto;
-    min-width: 136px;
-  }
+.fs-toggle-btn,
+.qgame-btn-launch,
+.qgame-btn-exit,
+.qgame-btn-music {
+  width: auto !important;
+  min-width: 0 !important;
+  height: 28px !important;
+  padding: 0 8px 0 5px !important;
+  font-size: 0.58rem !important;
+  gap: 4px !important;
 }
 
-@media (min-width: 821px) and (max-width: 1180px) {
-  .or-header-right {
-    gap: 8px !important;
-  }
-  .fs-toggle-btn {
-    width: auto !important;
-    min-width: 116px !important;
-    height: 30px !important;
-    padding: 0 9px !important;
-    font-size: 0.60rem !important;
-  }
-  .qgame-btn-launch,
-  .qgame-btn-exit,
-  .qgame-btn-music {
-    width: auto !important;
-    min-width: 114px !important;
-    height: 30px !important;
-    padding: 0 9px !important;
-    font-size: 0.60rem !important;
-  }
-  .qgame-btn-music {
-    min-width: 0 !important;
+@media (max-width: 1700px) {
+  .qg-word-quantum,
+  .fs-word-enter,
+  .qg-word-sub {
+    display: none !important;
   }
 }
 
@@ -4484,17 +4467,25 @@ body.light-theme .highlight-card .dist-icon{
   .or-header-right {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     width: 100%;
-    gap: 6px;
+    gap: 4px;
     flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 2px 0;
     margin: 0 !important;
+  }
+  .or-header-right::-webkit-scrollbar {
+    display: none;
   }
   .or-header-right .fs-toggle-btn {
     flex-shrink: 0;
-    width: 34px !important;
-    min-width: 34px !important;
-    height: 34px !important;
+    width: 28px !important;
+    min-width: 28px !important;
+    height: 28px !important;
     padding: 0 !important;
     border-radius: 9999px !important;
     justify-content: center !important;
@@ -4503,15 +4494,16 @@ body.light-theme .highlight-card .dist-icon{
     display: none !important;
   }
   .or-header-right .qgame-btn-launch {
-    flex: 1;
-    height: 34px !important;
+    flex: 0 0 auto !important;
+    height: 28px !important;
     min-width: 0 !important;
-    padding: 0 8px !important;
-    font-size: 0.68rem !important;
+    padding: 0 8px 0 4px !important;
+    font-size: 0.58rem !important;
     justify-content: center !important;
     gap: 4px !important;
   }
-  .qg-word-quantum {
+  .qg-word-quantum,
+  .qg-word-sub {
     display: none !important;
   }
 }
@@ -4578,12 +4570,14 @@ body.light-theme .highlight-card .dist-icon{
 
 /* ───────── FUTURISTIC QUANTUM LAUNCHER BUTTON ("OPEN MAIN WEB APP") ───────── */
 .or-header-right {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 12px;
-  margin: 6px 0 0 0;
-  padding: 0;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 5px !important;
+  margin: 4px 0 0 0 !important;
+  padding: 0 !important;
+  flex-wrap: wrap !important;
+  max-width: 100% !important;
 }
 .btn-topbar-desktop {
   position: relative;
@@ -4776,7 +4770,7 @@ body.light-theme .highlight-card .dist-icon{
             <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
           </svg>
         </span>
-        <span class="fs-btn-label">ENTER FULL SCREEN</span>
+        <span class="fs-btn-label"><span class="fs-word-enter">ENTER </span>FULL<span class="fs-word-screen">SCREEN</span></span>
       </button>
 
       <!-- Enter Quantum Dynamo Game Mode (Game 1: High-Voltage Tesla Arcs & Faraday Induction Core) -->
@@ -4898,7 +4892,7 @@ body.light-theme .highlight-card .dist-icon{
         <span class="game-btn-media-core" aria-hidden="true">
           <img src="assets/btn-plasma-storm-comet-icon.png" alt="">
         </span>
-        <span class="game-btn-label"><span class="qg-word-sub">PLASMA STORM </span>COMET</span>
+        <span class="game-btn-label"><span class="qg-word-sub">PLASMA </span>COMET</span>
       </button>
 
       <!-- 5. Helix Crystal Orb (Game 5) -->
@@ -4906,7 +4900,7 @@ body.light-theme .highlight-card .dist-icon{
         <span class="game-btn-media-core" aria-hidden="true">
           <img src="assets/btn-helix-crystal-orb-icon.png" alt="">
         </span>
-        <span class="game-btn-label"><span class="qg-word-sub">HELIX CRYSTAL </span>ORB</span>
+        <span class="game-btn-label"><span class="qg-word-sub">HELIX </span>ORB</span>
       </button>
 
       <!-- 6. Molten Core Meteor (Game 6) -->
@@ -4914,7 +4908,7 @@ body.light-theme .highlight-card .dist-icon{
         <span class="game-btn-media-core" aria-hidden="true">
           <img src="assets/btn-molten-core-meteor-icon.png" alt="">
         </span>
-        <span class="game-btn-label"><span class="qg-word-sub">MOLTEN CORE </span>METEOR</span>
+        <span class="game-btn-label">MOLTEN<span class="qg-word-sub"> CORE</span></span>
       </button>
     </div>
   </header>
@@ -5325,7 +5319,7 @@ body.light-theme .highlight-card .dist-icon{
               <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
             </svg>
           </span>
-          <span class="fs-btn-label">ENTER FULL SCREEN</span>
+          <span class="fs-btn-label"><span class="fs-word-enter">ENTER </span>FULL<span class="fs-word-screen">SCREEN</span></span>
         </button>
 
         <button type="button" class="qgame-btn-exit" id="btnExitGame" title="Return to OrlandoRecharge Horizon (Esc)" aria-label="Exit Game Mode">
@@ -14404,7 +14398,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   <script>
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v87', { scope: './' }).catch(function() {});
+        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v88', { scope: './' }).catch(function() {});
       });
     }
   </script>

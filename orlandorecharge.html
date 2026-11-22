@@ -1862,40 +1862,23 @@ body.light-theme .rest-mode-btn:hover {
   white-space: nowrap;
 }
 
-@media (min-width: 1181px) {
-  .fs-toggle-btn {
-    width: auto;
-    min-width: 140px;
-  }
-  .qgame-btn-launch,
-  .qgame-btn-exit {
-    width: auto;
-    min-width: 136px;
-  }
+.fs-toggle-btn,
+.qgame-btn-launch,
+.qgame-btn-exit,
+.qgame-btn-music {
+  width: auto !important;
+  min-width: 0 !important;
+  height: 28px !important;
+  padding: 0 8px 0 5px !important;
+  font-size: 0.58rem !important;
+  gap: 4px !important;
 }
 
-@media (min-width: 821px) and (max-width: 1180px) {
-  .or-header-right {
-    gap: 8px !important;
-  }
-  .fs-toggle-btn {
-    width: auto !important;
-    min-width: 116px !important;
-    height: 30px !important;
-    padding: 0 9px !important;
-    font-size: 0.60rem !important;
-  }
-  .qgame-btn-launch,
-  .qgame-btn-exit,
-  .qgame-btn-music {
-    width: auto !important;
-    min-width: 114px !important;
-    height: 30px !important;
-    padding: 0 9px !important;
-    font-size: 0.60rem !important;
-  }
-  .qgame-btn-music {
-    min-width: 0 !important;
+@media (max-width: 1700px) {
+  .qg-word-quantum,
+  .fs-word-enter,
+  .qg-word-sub {
+    display: none !important;
   }
 }
 
@@ -2166,7 +2149,7 @@ body.light-theme .qgame-btn-helix:hover {
 }
 
 .qgame-btn-moltencore:hover {
-  background: linear-gradient(135deg, rgba(110, 32, 10, 0.85) 0%, rgba(68, 18, 6, 0.72) 100%),
+  background: linear-gradient(135deg, rgba(110, 32, 10, 0.85) 0%, rgba(68, 18, 6, 0.80) 100%),
               url('assets/game-molten-core-meteor-hd.jpg') center / cover no-repeat !important;
   background-blend-mode: overlay;
   border-color: #f97316 !important;
@@ -2185,7 +2168,6 @@ body.light-theme .qgame-btn-helix:hover {
     display: none !important;
   }
 }
-
 
 .qgame-btn-launch:hover,
 .qgame-btn-exit:hover,
@@ -4485,17 +4467,25 @@ body.light-theme .highlight-card .dist-icon{
   .or-header-right {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     width: 100%;
-    gap: 6px;
+    gap: 4px;
     flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 2px 0;
     margin: 0 !important;
+  }
+  .or-header-right::-webkit-scrollbar {
+    display: none;
   }
   .or-header-right .fs-toggle-btn {
     flex-shrink: 0;
-    width: 34px !important;
-    min-width: 34px !important;
-    height: 34px !important;
+    width: 28px !important;
+    min-width: 28px !important;
+    height: 28px !important;
     padding: 0 !important;
     border-radius: 9999px !important;
     justify-content: center !important;
@@ -4504,15 +4494,16 @@ body.light-theme .highlight-card .dist-icon{
     display: none !important;
   }
   .or-header-right .qgame-btn-launch {
-    flex: 1;
-    height: 34px !important;
+    flex: 0 0 auto !important;
+    height: 28px !important;
     min-width: 0 !important;
-    padding: 0 8px !important;
-    font-size: 0.68rem !important;
+    padding: 0 8px 0 4px !important;
+    font-size: 0.58rem !important;
     justify-content: center !important;
     gap: 4px !important;
   }
-  .qg-word-quantum {
+  .qg-word-quantum,
+  .qg-word-sub {
     display: none !important;
   }
 }
@@ -4579,12 +4570,14 @@ body.light-theme .highlight-card .dist-icon{
 
 /* ───────── FUTURISTIC QUANTUM LAUNCHER BUTTON ("OPEN MAIN WEB APP") ───────── */
 .or-header-right {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 12px;
-  margin: 6px 0 0 0;
-  padding: 0;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 5px !important;
+  margin: 4px 0 0 0 !important;
+  padding: 0 !important;
+  flex-wrap: wrap !important;
+  max-width: 100% !important;
 }
 .btn-topbar-desktop {
   position: relative;
@@ -4777,7 +4770,7 @@ body.light-theme .highlight-card .dist-icon{
             <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
           </svg>
         </span>
-        <span class="fs-btn-label">ENTER FULL SCREEN</span>
+        <span class="fs-btn-label"><span class="fs-word-enter">ENTER </span>FULL<span class="fs-word-screen">SCREEN</span></span>
       </button>
 
       <!-- Enter Quantum Dynamo Game Mode (Game 1: High-Voltage Tesla Arcs & Faraday Induction Core) -->
@@ -4899,7 +4892,7 @@ body.light-theme .highlight-card .dist-icon{
         <span class="game-btn-media-core" aria-hidden="true">
           <img src="assets/btn-plasma-storm-comet-icon.png" alt="">
         </span>
-        <span class="game-btn-label"><span class="qg-word-sub">PLASMA STORM </span>COMET</span>
+        <span class="game-btn-label"><span class="qg-word-sub">PLASMA </span>COMET</span>
       </button>
 
       <!-- 5. Helix Crystal Orb (Game 5) -->
@@ -4907,7 +4900,7 @@ body.light-theme .highlight-card .dist-icon{
         <span class="game-btn-media-core" aria-hidden="true">
           <img src="assets/btn-helix-crystal-orb-icon.png" alt="">
         </span>
-        <span class="game-btn-label"><span class="qg-word-sub">HELIX CRYSTAL </span>ORB</span>
+        <span class="game-btn-label"><span class="qg-word-sub">HELIX </span>ORB</span>
       </button>
 
       <!-- 6. Molten Core Meteor (Game 6) -->
@@ -4915,7 +4908,7 @@ body.light-theme .highlight-card .dist-icon{
         <span class="game-btn-media-core" aria-hidden="true">
           <img src="assets/btn-molten-core-meteor-icon.png" alt="">
         </span>
-        <span class="game-btn-label"><span class="qg-word-sub">MOLTEN CORE </span>METEOR</span>
+        <span class="game-btn-label">MOLTEN<span class="qg-word-sub"> CORE</span></span>
       </button>
     </div>
   </header>
@@ -5326,7 +5319,7 @@ body.light-theme .highlight-card .dist-icon{
               <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
             </svg>
           </span>
-          <span class="fs-btn-label">ENTER FULL SCREEN</span>
+          <span class="fs-btn-label"><span class="fs-word-enter">ENTER </span>FULL<span class="fs-word-screen">SCREEN</span></span>
         </button>
 
         <button type="button" class="qgame-btn-exit" id="btnExitGame" title="Return to OrlandoRecharge Horizon (Esc)" aria-label="Exit Game Mode">
@@ -12446,6 +12439,21 @@ try { checkUrlHashRoutine(); } catch(e){}
     return hitR + particleHeadR;
   }
 
+  
+  // 4K Master HD Core Assets (Dynamo, Helix, Meteor)
+  var CoreAssets = {
+    dynamo: new Image(),
+    helix: new Image(),
+    meteor: new Image(),
+    loaded: { dynamo: false, helix: false, meteor: false }
+  };
+  CoreAssets.dynamo.onload = function() { CoreAssets.loaded.dynamo = true; };
+  CoreAssets.dynamo.src = 'assets/core-dynamo-hd.jpg';
+  CoreAssets.helix.onload = function() { CoreAssets.loaded.helix = true; };
+  CoreAssets.helix.src = 'assets/core-helix-hd.jpg';
+  CoreAssets.meteor.onload = function() { CoreAssets.loaded.meteor = true; };
+  CoreAssets.meteor.src = 'assets/core-meteor-hd.jpg';
+
   var audioCtx = null;
   var lockOsc = null;
   var lockGain = null;
@@ -12710,11 +12718,14 @@ try { checkUrlHashRoutine(); } catch(e){}
     hasDeliberateMove = true;
     lastCursorMoveTime = performance.now();
 
-    // Exact location, true value: where the user touches IS where the atom is!
+    // Touch Comfort: Offset atom 64px ABOVE finger on touch so finger never covers it!
+    var touchOffsetY = (deviceInputMode === "touch") ? 64 : 0;
+    cursor.touchRealX = e.clientX;
+    cursor.touchRealY = e.clientY;
     cursor.x = e.clientX;
-    cursor.y = e.clientY;
+    cursor.y = e.clientY - touchOffsetY;
     cursor.targetX = e.clientX;
-    cursor.targetY = e.clientY;
+    cursor.targetY = e.clientY - touchOffsetY;
     lastSampleCursorX = e.clientX;
     lastSampleCursorY = e.clientY;
 
@@ -12738,11 +12749,12 @@ try { checkUrlHashRoutine(); } catch(e){}
     var events = (typeof e.getCoalescedEvents === "function") ? e.getCoalescedEvents() : [e];
     var lastEv = events[events.length - 1] || e;
 
-    // Exact 1:1 tracking for both mouse & touch: 0ms latency, responds immediately at full hardware speed
-    cursor.x = lastEv.clientX;
-    cursor.y = lastEv.clientY;
+    // Touch Comfort: Offset atom 64px ABOVE touch point with lerp smoothing
+    var touchOffsetY = (deviceInputMode === "touch") ? 64 : 0;
+    cursor.touchRealX = lastEv.clientX;
+    cursor.touchRealY = lastEv.clientY;
     cursor.targetX = lastEv.clientX;
-    cursor.targetY = lastEv.clientY;
+    cursor.targetY = lastEv.clientY - touchOffsetY;
 
     cursor.active = true;
     hasDeliberateMove = true;
@@ -13073,8 +13085,9 @@ try { checkUrlHashRoutine(); } catch(e){}
 
     // Direct 1:1 true value for both mouse and touch (zero lag, matches fast hardware DPI)
     if (cursor.active && hasDeliberateMove && typeof cursor.targetX === "number" && cursor.targetX > -1000) {
-      cursor.x = cursor.targetX;
-      cursor.y = cursor.targetY;
+      var lerpFactor = (deviceInputMode === "touch") ? 0.35 : 0.22;
+      cursor.x += (cursor.targetX - cursor.x) * lerpFactor;
+      cursor.y += (cursor.targetY - cursor.y) * lerpFactor;
     }
 
     // Damp cursor velocity when idle
@@ -13238,6 +13251,26 @@ try { checkUrlHashRoutine(); } catch(e){}
   }
 
   function drawQuantumAtomicCursor(cx, cy, now, progress) {
+    if (deviceInputMode === "touch" && isTouchDown && typeof cursor.touchRealX === "number") {
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cursor.touchRealX, cursor.touchRealY);
+      ctx.strokeStyle = "rgba(56, 189, 248, 0.3)";
+      ctx.lineWidth = 1.2;
+      ctx.setLineDash([3, 3]);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(cursor.touchRealX, cursor.touchRealY, 20, 0, Math.PI * 2);
+      ctx.strokeStyle = "rgba(212, 168, 83, 0.55)";
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([]);
+      ctx.stroke();
+      ctx.fillStyle = "rgba(56, 189, 248, 0.12)";
+      ctx.fill();
+      ctx.restore();
+    }
     ctx.save();
     ctx.translate(cx, cy);
 
@@ -14303,7 +14336,8 @@ try { checkUrlHashRoutine(); } catch(e){}
   if (btnLaunchMeteor) {
     btnLaunchMeteor.onclick = function() {
       launchGame("meteor");
-    }
+    };
+  }
   if (btnLaunchComet) {
     btnLaunchComet.onclick = function() {
       launchGame("meteor");
@@ -14318,7 +14352,6 @@ try { checkUrlHashRoutine(); } catch(e){}
     btnLaunchMoltenCore.onclick = function() {
       launchGame("meteor");
     };
-  };
   }
   btnExit.onclick = exitGame;
   if (btnReturn) btnReturn.onclick = exitGame;
@@ -14365,7 +14398,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   <script>
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v85', { scope: './' }).catch(function() {});
+        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v88', { scope: './' }).catch(function() {});
       });
     }
   </script>
