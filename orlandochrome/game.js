@@ -6235,6 +6235,37 @@
       const isCoreLockedOn = state.particles.some(pt => !isHazardNode(pt.nodeClass) && Math.hypot(catcherPixelX - pt.x, catcherPixelY - pt.y) < gravRadiusPre);
 
       // ─────────────────────────────────────────────────────────────
+      // TEST HARNESS: LIVE HAZARD & MISSILE SHOWCASE (?test_hazards=1, ?test_missiles=1)
+      // ─────────────────────────────────────────────────────────────
+      if (window.location.search.includes('test_hazards=1')) {
+        if (!state._testedHazards) {
+          state._testedHazards = true;
+          const pMode = (state.catcherType === 'realm') ? 'dynamo' : (state.catcherType || 'dynamo');
+          state.particles = [
+            { type: pMode, nodeClass: 'tachyon_fracture', x: w * 0.25, y: h * 0.40, vx: 0, speed: 0, headR: 32, spine: [], stardust: [] },
+            { type: pMode, nodeClass: 'emp_glitch', x: w * 0.50, y: h * 0.40, vx: 0, speed: 0, headR: 30, spine: [], stardust: [] },
+            { type: pMode, nodeClass: 'plasma_flare', x: w * 0.75, y: h * 0.40, vx: 0, speed: 0, headR: 32, spine: [], stardust: [] }
+          ];
+          state.lastSpawnTime = now + 999999;
+        }
+      }
+
+      if (window.location.search.includes('test_missiles=1')) {
+        if (!state._testedMissiles) {
+          state._testedMissiles = true;
+          const pMode = (state.catcherType === 'realm') ? 'dynamo' : (state.catcherType || 'dynamo');
+          state.particles = [
+            { type: pMode, nodeClass: 'standard', x: w * 0.50, y: h * 0.40, vx: 0, speed: 0, headR: 26, spine: [], stardust: [] },
+            { type: pMode, nodeClass: 'tachyon_fracture', x: w * 0.28, y: h * 0.38, vx: 0, speed: 0, headR: 32, spine: [], stardust: [] }
+          ];
+          setTimeout(() => {
+            CoreKinematics.fireMissiles(catcherPixelX, catcherPixelY, performance.now(), state.particles, pMode);
+          }, 400);
+          state.lastSpawnTime = now + 999999;
+        }
+      }
+
+      // ─────────────────────────────────────────────────────────────
       // OPTIONAL LIVE SHOWCASE RECORDER (?capture=1)
       // Automatically executes the choreographed test (2s still, sweep left,
       // reverse sharply right, capture node + hazard passing nearby) & streams frames

@@ -2067,6 +2067,126 @@ body.light-theme .qgame-btn-helix:hover {
   color: #6b21a8 !important;
 }
 
+/* ───────── 3 NEW COMPRESSED GAME BUTTONS (Plasma Storm Comet, Helix Crystal Orb, Molten Core Meteor) ───────── */
+.game-btn-media-core {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.7);
+  position: relative;
+  z-index: 2;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+}
+
+.game-btn-media-core img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* 1. Plasma Storm Comet */
+.qgame-btn-comet {
+  background: linear-gradient(135deg, rgba(8, 28, 56, 0.75) 0%, rgba(15, 23, 42, 0.70) 100%),
+              url('assets/game-plasma-storm-comet-hd.jpg') center / cover no-repeat !important;
+  background-blend-mode: overlay;
+  border: 1px solid rgba(56, 189, 248, 0.40) !important;
+  color: #e0f2fe !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.28), 0 0 10px rgba(56, 189, 248, 0.18) !important;
+}
+
+.qgame-btn-comet .game-btn-media-core {
+  border: 1.5px solid #38bdf8;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.75);
+}
+
+.qgame-btn-comet:hover {
+  background: linear-gradient(135deg, rgba(14, 45, 85, 0.85) 0%, rgba(20, 32, 58, 0.80) 100%),
+              url('assets/game-plasma-storm-comet-hd.jpg') center / cover no-repeat !important;
+  background-blend-mode: overlay;
+  border-color: #38bdf8 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45), 0 0 18px rgba(56, 189, 248, 0.50) !important;
+  transform: translateY(-1px);
+}
+
+.qgame-btn-comet:hover .game-btn-media-core {
+  transform: scale(1.18) rotate(-8deg);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.95);
+}
+
+/* 2. Helix Crystal Orb */
+.qgame-btn-helixorb {
+  background: linear-gradient(135deg, rgba(46, 16, 70, 0.75) 0%, rgba(24, 12, 38, 0.70) 100%),
+              url('assets/game-helix-crystal-orb-hd.jpg') center / cover no-repeat !important;
+  background-blend-mode: overlay;
+  border: 1px solid rgba(217, 70, 239, 0.40) !important;
+  color: #fae8ff !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.28), 0 0 10px rgba(217, 70, 239, 0.18) !important;
+}
+
+.qgame-btn-helixorb .game-btn-media-core {
+  border: 1.5px solid #d946ef;
+  box-shadow: 0 0 8px rgba(217, 70, 239, 0.75);
+}
+
+.qgame-btn-helixorb:hover {
+  background: linear-gradient(135deg, rgba(74, 25, 112, 0.85) 0%, rgba(42, 18, 68, 0.80) 100%),
+              url('assets/game-helix-crystal-orb-hd.jpg') center / cover no-repeat !important;
+  background-blend-mode: overlay;
+  border-color: #d946ef !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45), 0 0 18px rgba(217, 70, 239, 0.50) !important;
+  transform: translateY(-1px);
+}
+
+.qgame-btn-helixorb:hover .game-btn-media-core {
+  transform: scale(1.18) rotate(8deg);
+  box-shadow: 0 0 12px rgba(217, 70, 239, 0.95);
+}
+
+/* 3. Molten Core Meteor */
+.qgame-btn-moltencore {
+  background: linear-gradient(135deg, rgba(70, 22, 8, 0.75) 0%, rgba(40, 12, 4, 0.70) 100%),
+              url('assets/game-molten-core-meteor-hd.jpg') center / cover no-repeat !important;
+  background-blend-mode: overlay;
+  border: 1px solid rgba(249, 115, 22, 0.42) !important;
+  color: #ffedd5 !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.28), 0 0 10px rgba(249, 115, 22, 0.20) !important;
+}
+
+.qgame-btn-moltencore .game-btn-media-core {
+  border: 1.5px solid #f97316;
+  box-shadow: 0 0 8px rgba(249, 115, 22, 0.75);
+}
+
+.qgame-btn-moltencore:hover {
+  background: linear-gradient(135deg, rgba(110, 32, 10, 0.85) 0%, rgba(68, 18, 6, 0.72) 100%),
+              url('assets/game-molten-core-meteor-hd.jpg') center / cover no-repeat !important;
+  background-blend-mode: overlay;
+  border-color: #f97316 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45), 0 0 18px rgba(249, 115, 22, 0.52) !important;
+  transform: translateY(-1px);
+}
+
+.qgame-btn-moltencore:hover .game-btn-media-core {
+  transform: scale(1.18) rotate(-8deg);
+  box-shadow: 0 0 12px rgba(249, 115, 22, 0.95);
+}
+
+@media (max-width: 1400px) {
+  .or-header-right .qg-word-sub {
+    display: none !important;
+  }
+}
+
+
 .qgame-btn-launch:hover,
 .qgame-btn-exit:hover,
 .fs-toggle-btn:hover {
@@ -4772,6 +4892,30 @@ body.light-theme .highlight-card .dist-icon{
           </svg>
         </span>
         <span class="game-btn-label"><span class="qg-word-quantum">QUANTUM </span>METEOR</span>
+      </button>
+
+      <!-- 4. Plasma Storm Comet (Game 4) -->
+      <button type="button" class="qgame-btn-launch qgame-btn-comet" id="btnLaunchCometGame" title="Enter Plasma Storm Comet Game" aria-label="Launch Plasma Storm Comet Game">
+        <span class="game-btn-media-core" aria-hidden="true">
+          <img src="assets/btn-plasma-storm-comet-icon.png" alt="">
+        </span>
+        <span class="game-btn-label"><span class="qg-word-sub">PLASMA STORM </span>COMET</span>
+      </button>
+
+      <!-- 5. Helix Crystal Orb (Game 5) -->
+      <button type="button" class="qgame-btn-launch qgame-btn-helixorb" id="btnLaunchHelixOrbGame" title="Enter Helix Crystal Orb Game" aria-label="Launch Helix Crystal Orb Game">
+        <span class="game-btn-media-core" aria-hidden="true">
+          <img src="assets/btn-helix-crystal-orb-icon.png" alt="">
+        </span>
+        <span class="game-btn-label"><span class="qg-word-sub">HELIX CRYSTAL </span>ORB</span>
+      </button>
+
+      <!-- 6. Molten Core Meteor (Game 6) -->
+      <button type="button" class="qgame-btn-launch qgame-btn-moltencore" id="btnLaunchMoltenCoreGame" title="Enter Molten Core Meteor Game" aria-label="Launch Molten Core Meteor Game">
+        <span class="game-btn-media-core" aria-hidden="true">
+          <img src="assets/btn-molten-core-meteor-icon.png" alt="">
+        </span>
+        <span class="game-btn-label"><span class="qg-word-sub">MOLTEN CORE </span>METEOR</span>
       </button>
     </div>
   </header>
@@ -12159,6 +12303,9 @@ try { checkUrlHashRoutine(); } catch(e){}
   var btnLaunch = document.getElementById("btnLaunchGame");
   var btnLaunchHelix = document.getElementById("btnLaunchHelixGame");
   var btnLaunchMeteor = document.getElementById("btnLaunchMeteorGame");
+  var btnLaunchComet = document.getElementById("btnLaunchCometGame");
+  var btnLaunchHelixOrb = document.getElementById("btnLaunchHelixOrbGame");
+  var btnLaunchMoltenCore = document.getElementById("btnLaunchMoltenCoreGame");
   var btnExit = document.getElementById("btnExitGame");
   var btnPlayAgain = document.getElementById("btnGamePlayAgain");
   var btnReturn = document.getElementById("btnGameReturn");
@@ -14156,7 +14303,22 @@ try { checkUrlHashRoutine(); } catch(e){}
   if (btnLaunchMeteor) {
     btnLaunchMeteor.onclick = function() {
       launchGame("meteor");
+    }
+  if (btnLaunchComet) {
+    btnLaunchComet.onclick = function() {
+      launchGame("meteor");
     };
+  }
+  if (btnLaunchHelixOrb) {
+    btnLaunchHelixOrb.onclick = function() {
+      launchGame("meteor");
+    };
+  }
+  if (btnLaunchMoltenCore) {
+    btnLaunchMoltenCore.onclick = function() {
+      launchGame("meteor");
+    };
+  };
   }
   btnExit.onclick = exitGame;
   if (btnReturn) btnReturn.onclick = exitGame;
