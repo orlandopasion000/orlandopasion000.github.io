@@ -2304,7 +2304,9 @@ body.universe-game-active .qgame-victory-actions * {
 body.universe-game-active main {
   opacity: 0 !important;
   pointer-events: none !important;
-  transition: opacity 1.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1) !important;
+  will-change: opacity;
+  contain: layout style paint;
 }
 
 body.universe-game-active .modal-wrap:not(#qGameVictoryModal) {
@@ -2330,7 +2332,7 @@ body.universe-game-active .antigravity-front-canvas {
   pointer-events: none;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 1.35s cubic-bezier(0.4, 0, 0.2, 1), visibility 1.35s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.65s cubic-bezier(0.22, 1, 0.36, 1);
   background: transparent !important;
   user-select: none;
   will-change: opacity;
@@ -2483,6 +2485,83 @@ body.universe-game-active .qgame-left-hud {
 }
 .qgame-btn-music.is-playing .qg-bar.b3 {
   animation: qgEqBar 0.72s 0.32s infinite ease-in-out alternate;
+}
+.qgame-top-btns-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.qgame-btn-skill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 32px;
+  box-sizing: border-box;
+  margin-top: 6px;
+  padding: 0 11px;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.22) 0%, rgba(56, 189, 248, 0.16) 100%);
+  border: 1px solid rgba(192, 132, 252, 0.55);
+  border-radius: 9999px;
+  color: #f8fafc;
+  font-family: 'Lexend', var(--sans);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25), 0 0 12px rgba(168, 85, 247, 0.22);
+  transition: all 0.25s ease;
+  user-select: none;
+  white-space: nowrap;
+}
+.qgame-btn-skill:hover:not(.on-cooldown) {
+  border-color: #fbbf24;
+  color: #fef08a;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35), 0 0 16px rgba(251, 191, 36, 0.40);
+  transform: translateY(-1px);
+}
+.qgame-btn-skill.on-cooldown {
+  opacity: 0.48;
+  border-color: rgba(148, 163, 184, 0.28);
+  cursor: default;
+}
+.qgame-skill-key {
+  display: inline-block;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.14);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.52rem;
+  color: #fef08a;
+}
+.qgame-combo-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 22px;
+  padding: 0 9px;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.22) 0%, rgba(217, 70, 239, 0.22) 100%);
+  border: 1px solid rgba(251, 191, 36, 0.55);
+  color: #fef08a;
+  font-family: 'Chakra Petch', monospace;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  box-shadow: 0 0 12px rgba(251, 191, 36, 0.28);
+  margin-left: 6px;
+}
+/* Dashboard Prestige Overcharge Aura on Hero Clock after Gold/Diamond Victory */
+body[data-quantum-overcharge="comet"] #clock {
+  filter: drop-shadow(0 0 18px rgba(56, 189, 248, 0.55)) drop-shadow(0 0 34px rgba(168, 85, 247, 0.45));
+}
+body[data-quantum-overcharge="helixorb"] #clock {
+  filter: drop-shadow(0 0 18px rgba(34, 211, 238, 0.55)) drop-shadow(0 0 34px rgba(232, 121, 249, 0.45));
+}
+body[data-quantum-overcharge="moltencore"] #clock {
+  filter: drop-shadow(0 0 18px rgba(251, 191, 36, 0.60)) drop-shadow(0 0 34px rgba(234, 88, 12, 0.48));
 }
 @keyframes qgEqBar {
   0% { height: 3px; background: #38bdf8; }
@@ -5277,24 +5356,34 @@ body.light-theme .highlight-card .dist-icon{
   <!-- Top Game HUD Bar -->
   <header class="qgame-hud-top">
     <div class="qgame-hud-inner">
-      <!-- Upper Left: Music Controller & Countdown Timer Cluster -->
+      <!-- Upper Left: Music Controller, Tactical Skill & Countdown Timer Cluster -->
       <div class="qgame-left-hud">
-        <!-- In-Game Play Music Button -->
-        <button type="button" class="qgame-btn-music" id="btnGamePlayMusic" title="Play Curated Alarm Music & Antigravity Beats" aria-label="Play Music in Game">
-          <span class="qgame-music-glyph" id="qGameMusicGlyph">▶</span>
-          <span class="qgame-music-text" id="qGameMusicText">Play Music</span>
-          <span class="qgame-music-bars" id="qGameMusicBars" aria-hidden="true">
-            <span class="qg-bar b1"></span>
-            <span class="qg-bar b2"></span>
-            <span class="qg-bar b3"></span>
-          </span>
-        </button>
+        <div class="qgame-top-btns-row">
+          <!-- In-Game Play Music Button -->
+          <button type="button" class="qgame-btn-music" id="btnGamePlayMusic" title="Play Curated Alarm Music & Antigravity Beats" aria-label="Play Music in Game">
+            <span class="qgame-music-glyph" id="qGameMusicGlyph">▶</span>
+            <span class="qgame-music-text" id="qGameMusicText">Play Music</span>
+            <span class="qgame-music-bars" id="qGameMusicBars" aria-hidden="true">
+              <span class="qg-bar b1"></span>
+              <span class="qg-bar b2"></span>
+              <span class="qg-bar b3"></span>
+            </span>
+          </button>
+
+          <!-- Elemental Tactical Skill Button (Space / Right-Click / Tap) -->
+          <button type="button" class="qgame-btn-skill" id="btnGameTacticalSkill" title="Trigger Elemental Tactical Ability (Spacebar or Right-Click)" aria-label="Trigger Elemental Tactical Ability">
+            <span id="qGameSkillIcon">⚡</span>
+            <span id="qGameSkillLabel">EMP PULSE</span>
+            <span class="qgame-skill-key" id="qGameSkillKey">SPACE</span>
+          </button>
+        </div>
 
         <!-- Futuristic Countdown Timer -->
         <div class="qgame-timer-hud" id="qGameTimerHud">
           <div class="qgame-hud-tag">
             <span class="qgame-tag-dot"></span>
             <span class="qgame-tag-text">QUANTUM HARMONY COUNTDOWN</span>
+            <span class="qgame-combo-badge" id="qGameComboBadge" style="display:none;">1× CHAIN</span>
           </div>
           <div class="qgame-timer-display" id="qGameTimerDisplay">
             <span class="qgame-digits" id="qGameDigits">60.00</span><span class="qgame-unit">s</span>
@@ -8526,7 +8615,7 @@ function loadSnoozes() {
     var saved = localStorage.getItem("dra-snoozes");
     if (saved) {
       var parsed = JSON.parse(saved);
-      var now = Date.now();
+      var now = (typeof performance !== "undefined" && performance.now) ? performance.now() : Date.now();
       snoozes = parsed.filter(function(item){ return item.at > now; });
     }
   } catch(e) { snoozes = []; }
@@ -9408,8 +9497,8 @@ try { checkUrlHashRoutine(); } catch(e){}
   var backCanvas = document.getElementById("antigravityCanvas");
   var frontCanvas = document.getElementById("antigravityFrontCanvas");
   if (!backCanvas) return;
-  var backCtx = backCanvas.getContext("2d");
-  var frontCtx = frontCanvas ? frontCanvas.getContext("2d") : null;
+  var backCtx = backCanvas.getContext("2d", { desynchronized: true }) || backCanvas.getContext("2d");
+  var frontCtx = frontCanvas ? (frontCanvas.getContext("2d", { desynchronized: true }) || frontCanvas.getContext("2d")) : null;
   if (!backCtx) return;
 
   var enabled = true;
@@ -9539,11 +9628,11 @@ try { checkUrlHashRoutine(); } catch(e){}
       try {
         for (var i = 0; i < ASTEROID_COUNT; i++) {
           asteroidSprites.push(generateAsteroidCanvas(i, 96, false));
-          moltenCoreSphereSprites.push(generateMoltenCoreSphereCanvas(i, 128));
+          moltenCoreSphereSprites.push(generateMoltenCoreSphereCanvas(i, 160));
         }
         for (var f = 0; f < LUXURY_FRAME_COUNT; f++) {
-          cometSphereSprites.push(generateCometSphereCanvas(f, 128));
-          helixOrbSphereSprites.push(generateHelixOrbSphereCanvas(f, 128));
+          cometSphereSprites.push(generateCometSphereCanvas(f, 160));
+          helixOrbSphereSprites.push(generateHelixOrbSphereCanvas(f, 160));
         }
         cursorAsteroidSprite = generateAsteroidCanvas(0, 144, true);
         smokeSprite = generateSmokeCanvas(64);
@@ -9558,6 +9647,15 @@ try { checkUrlHashRoutine(); } catch(e){}
         initialized = true;
       } catch (e) {
         console.error("MeteorVFXEngine initialization error:", e);
+      }
+    }
+
+    // Schedule non-blocking pre-warm during browser idle frames so clicking any game button has 0ms sprite generation lag
+    if (typeof window !== "undefined") {
+      if ("requestIdleCallback" in window) {
+        window.requestIdleCallback(function() { if (!initialized) init(); }, { timeout: 900 });
+      } else {
+        setTimeout(function() { if (!initialized) init(); }, 350);
       }
     }
 
@@ -10206,24 +10304,62 @@ try { checkUrlHashRoutine(); } catch(e){}
 
       ctx.restore();
 
-      // 4. Razor-Crisp Dual Fresnel Containment Rim (Electric Cyan Front + Golden Rear)
-      ctx.lineWidth = 2.6;
+      // 4. Razor-Crisp Dual Fresnel Containment Rim (Electric Cyan Front + Golden Rear + Leading Anamorphic Starburst Flare)
+      ctx.lineWidth = 2.8;
       ctx.strokeStyle = "#38bdf8";
       ctx.beginPath();
       ctx.arc(cx, cy, r - 0.5, -Math.PI * 0.65, Math.PI * 0.65);
       ctx.stroke();
 
-      ctx.lineWidth = 1.2;
+      ctx.lineWidth = 1.4;
       ctx.strokeStyle = "#e0f2fe";
       ctx.beginPath();
       ctx.arc(cx, cy, r - 0.5, -Math.PI * 0.55, Math.PI * 0.55);
       ctx.stroke();
 
-      ctx.lineWidth = 2.4;
+      ctx.lineWidth = 2.6;
       ctx.strokeStyle = "#fbbf24";
       ctx.beginPath();
       ctx.arc(cx, cy, r - 0.5, Math.PI * 0.65, Math.PI * 1.35);
       ctx.stroke();
+
+      // Glass Specular Highlight Arc on Upper-Left Containment Shell
+      ctx.lineWidth = 2.2;
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.85)";
+      ctx.beginPath();
+      ctx.arc(cx, cy, r * 0.90, -Math.PI * 0.48, -Math.PI * 0.18);
+      ctx.stroke();
+
+      // Leading-Edge 8-Ray Anamorphic Starburst Glint (Matches Reference Image 3 & 4)
+      var glintX = cx + Math.cos(-0.38) * (r - 0.5);
+      var glintY = cy + Math.sin(-0.38) * (r - 0.5);
+      var glintGrad = ctx.createRadialGradient(glintX, glintY, 0, glintX, glintY, r * 0.36);
+      glintGrad.addColorStop(0.0, "#ffffff");
+      glintGrad.addColorStop(0.28, "rgba(254, 240, 138, 0.95)");
+      glintGrad.addColorStop(0.60, "rgba(56, 189, 248, 0.45)");
+      glintGrad.addColorStop(1.0, "rgba(56, 189, 248, 0)");
+      ctx.fillStyle = glintGrad;
+      ctx.beginPath();
+      ctx.arc(glintX, glintY, r * 0.36, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.save();
+      ctx.translate(glintX, glintY);
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.95)";
+      ctx.lineWidth = 1.2;
+      var spikeL = r * 0.42;
+      ctx.beginPath();
+      ctx.moveTo(-spikeL, 0); ctx.lineTo(spikeL, 0);
+      ctx.moveTo(0, -spikeL); ctx.lineTo(0, spikeL);
+      ctx.stroke();
+      ctx.strokeStyle = "rgba(254, 240, 138, 0.80)";
+      ctx.lineWidth = 0.85;
+      var dSpike = spikeL * 0.65;
+      ctx.beginPath();
+      ctx.moveTo(-dSpike, -dSpike); ctx.lineTo(dSpike, dSpike);
+      ctx.moveTo(-dSpike, dSpike); ctx.lineTo(dSpike, -dSpike);
+      ctx.stroke();
+      ctx.restore();
 
       return canvas;
     }
@@ -10356,28 +10492,66 @@ try { checkUrlHashRoutine(); } catch(e){}
       ctx.fill();
 
       // Top-Right Curved Glass Specular Reflection Crescent
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.92)";
-      ctx.lineWidth = 3.2;
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.96)";
+      ctx.lineWidth = 3.6;
       ctx.lineCap = "round";
       ctx.beginPath();
       ctx.arc(cx, cy, r * 0.88, -Math.PI * 0.42, -Math.PI * 0.12);
       ctx.stroke();
 
+      // Soft Glass Window Highlight Patch (3D Lens Refraction)
+      ctx.save();
+      ctx.translate(cx + r * 0.42, cy - r * 0.46);
+      ctx.rotate(Math.PI * 0.25);
+      var winGrad = ctx.createRadialGradient(0, 0, 0, 0, 0, r * 0.28);
+      winGrad.addColorStop(0.0, "rgba(255, 255, 255, 0.72)");
+      winGrad.addColorStop(0.5, "rgba(224, 242, 254, 0.28)");
+      winGrad.addColorStop(1.0, "rgba(255, 255, 255, 0)");
+      ctx.fillStyle = winGrad;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, r * 0.26, r * 0.11, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
       // Bottom-Left Secondary Glass Caustic Reflection
-      ctx.strokeStyle = "rgba(165, 243, 252, 0.70)";
-      ctx.lineWidth = 1.8;
+      ctx.strokeStyle = "rgba(165, 243, 252, 0.78)";
+      ctx.lineWidth = 2.0;
       ctx.beginPath();
       ctx.arc(cx, cy, r * 0.90, Math.PI * 0.58, Math.PI * 0.88);
       ctx.stroke();
 
       ctx.restore();
 
-      // 3. Outer Diamond-Glass Rim Border
-      ctx.strokeStyle = "rgba(226, 232, 240, 0.92)";
-      ctx.lineWidth = 1.8;
+      // 3. Outer Diamond-Glass Rim Border with Chromatic Dispersion & Diamond Starburst Glint
+      ctx.strokeStyle = "rgba(34, 211, 238, 0.75)";
+      ctx.lineWidth = 2.8;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r + 0.6, -Math.PI * 0.75, Math.PI * 0.25);
+      ctx.stroke();
+
+      ctx.strokeStyle = "rgba(232, 121, 249, 0.75)";
+      ctx.lineWidth = 2.8;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r + 0.6, Math.PI * 0.25, Math.PI * 1.25);
+      ctx.stroke();
+
+      ctx.strokeStyle = "rgba(241, 245, 249, 0.96)";
+      ctx.lineWidth = 1.6;
       ctx.beginPath();
       ctx.arc(cx, cy, r - 0.5, 0, Math.PI * 2);
       ctx.stroke();
+
+      // Upper-Right Diamond Specular Starburst Glint on Glass Rim
+      var orbGlintX = cx + Math.cos(-Math.PI * 0.27) * (r - 1.0);
+      var orbGlintY = cy + Math.sin(-Math.PI * 0.27) * (r - 1.0);
+      var orbGlintG = ctx.createRadialGradient(orbGlintX, orbGlintY, 0, orbGlintX, orbGlintY, r * 0.32);
+      orbGlintG.addColorStop(0.0, "#ffffff");
+      orbGlintG.addColorStop(0.35, "rgba(245, 208, 254, 0.85)");
+      orbGlintG.addColorStop(1.0, "rgba(34, 211, 238, 0)");
+      ctx.fillStyle = orbGlintG;
+      ctx.beginPath();
+      ctx.arc(orbGlintX, orbGlintY, r * 0.32, 0, Math.PI * 2);
+      ctx.fill();
 
       return canvas;
     }
@@ -10543,30 +10717,50 @@ try { checkUrlHashRoutine(); } catch(e){}
         }
       }
 
-      // Dark Craggy Basalt Plate Interior Shadows (Accentuates 3D Chunky Volcanic Crust Relief)
-      for (var rp = 0; rp < 18; rp++) {
+      // Dark Craggy Basalt Plate Interior Shadows & Sunlit Basalt Ridge Highlights (Accentuates 3D Chunky Volcanic Crust Relief)
+      for (var rp = 0; rp < 22; rp++) {
         var rpAng = rp * 2.39996 + rotFault;
-        var rpDist = (0.20 + (rp % 4) * 0.19) * r;
+        var rpDist = (0.18 + (rp % 4) * 0.19) * r;
         var rpx = cx + Math.cos(rpAng) * rpDist;
         var rpy = cy + Math.sin(rpAng) * rpDist;
-        ctx.fillStyle = "rgba(12, 6, 4, 0.55)";
+        var rpR = 4.2 + (rp % 3) * 1.6;
+        ctx.fillStyle = "rgba(8, 3, 2, 0.65)";
         ctx.beginPath();
-        ctx.arc(rpx, rpy, 3.8 + (rp % 3) * 1.4, 0, Math.PI * 2);
+        ctx.arc(rpx, rpy, rpR, 0, Math.PI * 2);
         ctx.fill();
+        // Sunlit upper-right mineral ridge bevel on each basalt plate
+        ctx.strokeStyle = "rgba(92, 62, 46, 0.52)";
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.arc(rpx, rpy, rpR * 0.85, -Math.PI * 0.45, Math.PI * 0.15);
+        ctx.stroke();
       }
 
-      // Trailing Left Hemisphere Intense Fire-Engulfed Inner Rim Glow (Matches Reference Image 1)
-      var rearFire = ctx.createRadialGradient(cx + r * 0.25, cy, r * 0.55, cx, cy, r * 1.02);
+      // Trailing Left Hemisphere Intense Fire-Engulfed Inner Rim Glow (Matches Reference Image 1 & 6)
+      var rearFire = ctx.createRadialGradient(cx + r * 0.25, cy, r * 0.52, cx, cy, r * 1.02);
       rearFire.addColorStop(0.0, "rgba(0, 0, 0, 0)");
-      rearFire.addColorStop(0.75, "rgba(234, 88, 12, 0.25)");
-      rearFire.addColorStop(0.92, "rgba(251, 191, 36, 0.82)");
-      rearFire.addColorStop(1.0, "rgba(255, 255, 240, 0.96)");
+      rearFire.addColorStop(0.72, "rgba(234, 88, 12, 0.28)");
+      rearFire.addColorStop(0.90, "rgba(251, 191, 36, 0.88)");
+      rearFire.addColorStop(1.0, "rgba(255, 255, 240, 0.98)");
       ctx.fillStyle = rearFire;
       ctx.beginPath();
       ctx.arc(cx, cy, r, 0, Math.PI * 2);
       ctx.fill();
 
       ctx.restore();
+
+      // Crisp Incandescent Molten Perimeter Rim & Trailing Bow-Wave Collar
+      ctx.strokeStyle = "rgba(251, 146, 60, 0.85)";
+      ctx.lineWidth = 2.0;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r - 0.5, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.strokeStyle = "rgba(255, 255, 240, 0.96)";
+      ctx.lineWidth = 2.6;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r - 0.5, Math.PI * 0.55, Math.PI * 1.45);
+      ctx.stroke();
 
       return canvas;
     }
@@ -10634,10 +10828,18 @@ try { checkUrlHashRoutine(); } catch(e){}
   var INFLUENCE_RADIUS = 168;
 
   var isGameMode = false;
-  var gameParticleStyle = "helix"; // "classic" | "helix" | "meteor"
+  var gameParticleStyle = "helix"; // "classic" | "helix" | "meteor" | "comet" | "helixorb" | "moltencore"
   var gameGlowProgress = 0.0;
   var isVictoryDancing = false;
   var victoryDanceStartTime = 0;
+  var activeTacticalPulse = {
+    active: false,
+    type: "", // "emp" | "decoy" | "gravity"
+    x: 0,
+    y: 0,
+    startTime: 0,
+    duration: 2600
+  };
 
   var mouse = {
     x: -9999,
@@ -10857,7 +11059,7 @@ try { checkUrlHashRoutine(); } catch(e){}
         mouse.y = cy;
       }
       mouse.active = true;
-      mouse.lastActiveTime = Date.now();
+      mouse.lastActiveTime = (typeof performance !== "undefined" && performance.now) ? performance.now() : Date.now();
     }
   }
 
@@ -10917,12 +11119,12 @@ try { checkUrlHashRoutine(); } catch(e){}
     backCtx.clearRect(0, 0, width, height);
     if (frontCtx) frontCtx.clearRect(0, 0, width, height);
 
-    var now = Date.now();
+    var now = (typeof performance !== "undefined" && performance.now) ? performance.now() : Date.now();
     if (!isGameMode) updateGravitonRects();
 
-    // Smooth ~1.35s universe illumination transition curve matching surroundings S-curve
+    // Smooth ~0.65s universe illumination transition curve matching surroundings S-curve
     var targetGameGlow = isGameMode ? 1.0 : 0.0;
-    gameGlowProgress += (targetGameGlow - gameGlowProgress) * 0.028;
+    gameGlowProgress += (targetGameGlow - gameGlowProgress) * 0.065;
 
     // ── Kinetic Jet Cursor Velocity Calculation ──
     if (mouse.active) {
@@ -11196,7 +11398,32 @@ try { checkUrlHashRoutine(); } catch(e){}
 
             var isMouseStationary = !p.isLocked && (precisionPin < 0.75) && (now - mouse.lastActiveTime > 170);
             var evadeMultiplier = isMouseStationary ? 2.4 : 1.0;
-            var evadeForce = Math.pow(norm, 1.2) * 4.65 * evadeMultiplier * (1 - precisionPin * 0.18);
+            var tacticalDamp = 1.0;
+            if (activeTacticalPulse.active) {
+              var tpElapsed = now - activeTacticalPulse.startTime;
+              if (tpElapsed < activeTacticalPulse.duration) {
+                var tpDist = Math.hypot(p.x - activeTacticalPulse.x, p.y - activeTacticalPulse.y);
+                if (activeTacticalPulse.type === "emp" && tpDist < 245) {
+                  // Plasma Storm Comet EMP Arc Tether: slows evasion by 65%
+                  tacticalDamp = 0.35;
+                } else if (activeTacticalPulse.type === "decoy" && tpDist < 265) {
+                  // Helix Crystal Orb Prismatic Decoy Lens: pulls particles gently toward the crystal hologram
+                  tacticalDamp = 0.30;
+                  var dAng = Math.atan2(activeTacticalPulse.y - p.y, activeTacticalPulse.x - p.x);
+                  p.vx += Math.cos(dAng) * 0.48;
+                  p.vy += Math.sin(dAng) * 0.48;
+                } else if (activeTacticalPulse.type === "gravity" && tpDist < 255) {
+                  // Molten Core Meteor Magma Gravity Well: pulls fleeing meteors inward toward cursor
+                  tacticalDamp = 0.25;
+                  var gAng = Math.atan2(my - p.y, mx - p.x);
+                  p.vx += Math.cos(gAng) * 0.56;
+                  p.vy += Math.sin(gAng) * 0.56;
+                }
+              } else {
+                activeTacticalPulse.active = false;
+              }
+            }
+            var evadeForce = Math.pow(norm, 1.2) * 4.65 * evadeMultiplier * (1 - precisionPin * 0.18) * tacticalDamp;
 
             // In corners, tanW (1.88) > radW (1.50) by default so particles slip out along the wall unless precisionPin > 0.65!
             var radW = 1.92 - inCornerPocket * 0.42;
@@ -12713,7 +12940,7 @@ try { checkUrlHashRoutine(); } catch(e){}
     },
     startVictoryDance: function(targetParticle, hitX, hitY) {
       isVictoryDancing = true;
-      victoryDanceStartTime = Date.now();
+      victoryDanceStartTime = (typeof performance !== "undefined" && performance.now) ? performance.now() : Date.now();
       var centerX = (typeof hitX === "number" && hitX > 0) ? hitX : (width * 0.5);
       var centerY = (typeof hitY === "number" && hitY > 0) ? hitY : (height * 0.5);
       if (mouse.x <= 0) {
@@ -12746,6 +12973,23 @@ try { checkUrlHashRoutine(); } catch(e){}
     },
     setAfterRenderHook: function(fn) {
       afterRenderHook = fn;
+    },
+    triggerTacticalPulse: function(type, x, y, duration) {
+      activeTacticalPulse.active = true;
+      activeTacticalPulse.type = type || "emp";
+      activeTacticalPulse.x = (typeof x === "number" && x > 0) ? x : (width * 0.5);
+      activeTacticalPulse.y = (typeof y === "number" && y > 0) ? y : (height * 0.5);
+      activeTacticalPulse.startTime = (typeof performance !== "undefined" && performance.now) ? performance.now() : Date.now();
+      activeTacticalPulse.duration = duration || 2600;
+    },
+    clearTacticalPulse: function() {
+      activeTacticalPulse.active = false;
+    },
+    getTacticalPulse: function() {
+      return activeTacticalPulse;
+    },
+    getBeatKickImpulse: function() {
+      return beatKickImpulse;
     }
   };
 })();
@@ -13064,6 +13308,11 @@ try { checkUrlHashRoutine(); } catch(e){}
   var btnGamePlayMusic = document.getElementById("btnGamePlayMusic");
   var qGameMusicGlyph = document.getElementById("qGameMusicGlyph");
   var qGameMusicText = document.getElementById("qGameMusicText");
+  var btnTacticalSkill = document.getElementById("btnGameTacticalSkill");
+  var qGameSkillIcon = document.getElementById("qGameSkillIcon");
+  var qGameSkillLabel = document.getElementById("qGameSkillLabel");
+  var qGameSkillKey = document.getElementById("qGameSkillKey");
+  var qGameComboBadge = document.getElementById("qGameComboBadge");
   var digitsEl = document.getElementById("qGameDigits");
   var fillEl = document.getElementById("qGameTimerFill");
   var missionText = document.getElementById("qGameMissionText");
@@ -13088,7 +13337,7 @@ try { checkUrlHashRoutine(); } catch(e){}
 
   if (!overlay || !canvas || !btnLaunch) return;
 
-  var ctx = canvas.getContext("2d");
+  var ctx = canvas.getContext("2d", { desynchronized: true }) || canvas.getContext("2d");
   if (!ctx) return;
 
   var isActive = false;
@@ -13104,7 +13353,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   var gameStartTime = 0;
   var lastDisplayedDigits = "";
   var lastFillTime = 0;
-  var WARMUP_MS = 1400; // 1.4s smooth entrance grace period matching 1.35s fade: prevents false locks or instant wins on start
+  var WARMUP_MS = 650; // 0.65s snappy entrance grace period matching 0.65s fade: instant responsiveness on launch
   var hasDeliberateMove = false;
 
   var deviceInputMode = "mouse"; // "mouse" | "touch"
@@ -13128,6 +13377,80 @@ try { checkUrlHashRoutine(); } catch(e){}
   var lastTouchContactTime = 0;
   var REQUIRED_CONTACT = 2.0; // 2 seconds continuous
   var STRICT_HIT_RADIUS = 13.0; // Base cursor central nucleus radius (desktop: 13.0px, tablet: 14.5px, mobile: 16.5px)
+
+  // ── Market-Benchmarked Tactical Skill, Combo Multiplier, Audio-Sync & Mastery State ──
+  var SKILL_COOLDOWN_MS = 8000;
+  var lastSkillTriggerTime = -99999;
+  var isBeatSyncLock = false;
+  var currentComboMultiplier = 1;
+  var bestTimesStore = {};
+  try {
+    bestTimesStore = JSON.parse(localStorage.getItem("dra-quantum-best-times") || "{}") || {};
+  } catch (e) { bestTimesStore = {}; }
+
+  function getSkillMeta(variant) {
+    if (variant === "comet" || variant === "classic") {
+      return { type: "emp", icon: "⚡", label: "EMP ARC", color: "#38bdf8" };
+    } else if (variant === "helixorb" || variant === "helix") {
+      return { type: "decoy", icon: "☍", label: "PRISM LENS", color: "#e879f9" };
+    } else {
+      return { type: "gravity", icon: "☄", label: "GRAVITY WELL", color: "#f97316" };
+    }
+  }
+
+  function syncSkillButtonUI(nowMs) {
+    if (!btnTacticalSkill) return;
+    var meta = getSkillMeta(currentGameVariant);
+    if (qGameSkillIcon) qGameSkillIcon.textContent = meta.icon;
+    var elapsed = nowMs - lastSkillTriggerTime;
+    if (elapsed < SKILL_COOLDOWN_MS) {
+      var rem = Math.ceil((SKILL_COOLDOWN_MS - elapsed) / 1000);
+      btnTacticalSkill.classList.add("on-cooldown");
+      if (qGameSkillLabel) qGameSkillLabel.textContent = meta.label + " (" + rem + "s)";
+    } else {
+      btnTacticalSkill.classList.remove("on-cooldown");
+      if (qGameSkillLabel) qGameSkillLabel.textContent = meta.label;
+    }
+  }
+
+  function triggerElementalTacticalSkill() {
+    if (!isActive || isWon || isGameOver) return;
+    var nowMs = performance.now();
+    if (nowMs - lastSkillTriggerTime < SKILL_COOLDOWN_MS) return;
+    lastSkillTriggerTime = nowMs;
+    var meta = getSkillMeta(currentGameVariant);
+    var tx = (cursor.active && cursor.x > 0) ? cursor.x : (width * 0.5);
+    var ty = (cursor.active && cursor.y > 0) ? cursor.y : (height * 0.5);
+    if (window.antigravityFX && typeof window.antigravityFX.triggerTacticalPulse === "function") {
+      window.antigravityFX.triggerTacticalPulse(meta.type, tx, ty, 2600);
+    }
+    // Play crisp WebAudio tactical activation chime
+    initAudioCtx();
+    if (audioCtx) {
+      try {
+        var sOsc = audioCtx.createOscillator();
+        var sGain = audioCtx.createGain();
+        sOsc.type = "triangle";
+        sOsc.frequency.setValueAtTime(380, audioCtx.currentTime);
+        sOsc.frequency.exponentialRampToValueAtTime(760, audioCtx.currentTime + 0.18);
+        sGain.gain.setValueAtTime(0.14, audioCtx.currentTime);
+        sGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.22);
+        sOsc.connect(sGain);
+        sGain.connect(audioCtx.destination);
+        sOsc.start();
+        sOsc.stop(audioCtx.currentTime + 0.24);
+      } catch (e) {}
+    }
+    syncSkillButtonUI(nowMs);
+  }
+
+  function getMasteryMedal(remSec, tier) {
+    var effectiveScore = remSec + (tier === 3 ? 1.5 : (tier === 2 ? 0.5 : 0));
+    if (effectiveScore >= 53.0) return { rank: "COSMIC DIAMOND 💎", overcharge: true };
+    if (effectiveScore >= 47.0) return { rank: "24K ROYAL GOLD 🥇", overcharge: true };
+    if (effectiveScore >= 38.0) return { rank: "STERLING SILVER 🥈", overcharge: false };
+    return { rank: "BRONZE RESONANCE 🥉", overcharge: false };
+  }
 
   // Device Capability Detection using matchMedia & pointer capabilities
   function detectDeviceCapabilities() {
@@ -13456,16 +13779,28 @@ try { checkUrlHashRoutine(); } catch(e){}
           resultIcon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" class="qgame-victory-svg"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="url(#vicGoldGrad)" stroke="#ffffff" stroke-width="1.2"/><defs><linearGradient id="vicGoldGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#38bdf8"/><stop offset="50%" stop-color="#ffd700"/><stop offset="100%" stop-color="#a855f7"/></linearGradient></defs></svg>';
         }
       }
-      if (statLabel1) statLabel1.textContent = "FINAL TIME PRESERVED";
+      var lockedTier = (lockedParticle && lockedParticle.lumiTier) ? lockedParticle.lumiTier : 1;
+      var remTimeNum = parseFloat(preservedTimeStr) || 0;
+      var medalObj = getMasteryMedal(remTimeNum, lockedTier);
+      var prevBest = bestTimesStore[currentGameVariant] || 0;
+      var isNewRecord = remTimeNum > prevBest;
+      if (isNewRecord) {
+        bestTimesStore[currentGameVariant] = remTimeNum;
+        try { localStorage.setItem("dra-quantum-best-times", JSON.stringify(bestTimesStore)); } catch (e) {}
+      }
+      if (medalObj.overcharge) {
+        document.body.setAttribute("data-quantum-overcharge", currentGameVariant);
+      }
+      if (statLabel1) statLabel1.textContent = isNewRecord ? "FINAL TIME (★ NEW BEST)" : ("FINAL TIME (BEST " + Math.max(remTimeNum, prevBest).toFixed(2) + "s)");
       if (preservedTimeEl) {
         preservedTimeEl.textContent = preservedTimeStr + "s";
         preservedTimeEl.className = "qgame-stat-val highlight";
       }
-      if (statLabel2) statLabel2.textContent = "LOCK DURATION";
-      if (statLock) statLock.textContent = "2.00s CONTINUOUS";
-      if (statLabel3) statLabel3.textContent = "SYSTEM STATUS";
+      if (statLabel2) statLabel2.textContent = "MASTERY RANK";
+      if (statLock) statLock.textContent = medalObj.rank;
+      if (statLabel3) statLabel3.textContent = "TIER & COMBO";
       if (statStatus) {
-        statStatus.textContent = "CELEBRATION DANCE";
+        statStatus.textContent = "TIER " + lockedTier + " (" + currentComboMultiplier + "×)" + (isBeatSyncLock ? " ⚡BEAT" : "");
         statStatus.className = "qgame-stat-val success";
       }
       if (actionIcon) actionIcon.textContent = "⚡";
@@ -13657,7 +13992,15 @@ try { checkUrlHashRoutine(); } catch(e){}
       if (typeof window.antigravityFX.stopVictoryDance === "function") {
         window.antigravityFX.stopVictoryDance();
       }
+      if (typeof window.antigravityFX.clearTacticalPulse === "function") {
+        window.antigravityFX.clearTacticalPulse();
+      }
     }
+    lastSkillTriggerTime = -99999;
+    isBeatSyncLock = false;
+    currentComboMultiplier = 1;
+    if (qGameComboBadge) qGameComboBadge.style.display = "none";
+    syncSkillButtonUI(performance.now());
   }
 
   function launchGame(variant) {
@@ -13727,9 +14070,19 @@ try { checkUrlHashRoutine(); } catch(e){}
     if (window.antigravityFX && typeof window.antigravityFX.setGameMode === "function") {
       window.antigravityFX.setGameMode(true, currentGameVariant);
       window.antigravityFX.stopVictoryDance();
+      if (typeof window.antigravityFX.clearTacticalPulse === "function") {
+        window.antigravityFX.clearTacticalPulse();
+      }
     }
+    lastSkillTriggerTime = -99999;
+    isBeatSyncLock = false;
+    currentComboMultiplier = 1;
+    if (qGameComboBadge) qGameComboBadge.style.display = "none";
+    syncSkillButtonUI(performance.now());
 
-    if (!animId) {
+    if (window.antigravityFX && typeof window.antigravityFX.setAfterRenderHook === "function") {
+      window.antigravityFX.setAfterRenderHook(gameLoop);
+    } else if (!animId) {
       animId = requestAnimationFrame(gameLoop);
     }
   }
@@ -13756,6 +14109,12 @@ try { checkUrlHashRoutine(); } catch(e){}
     lockedParticle = null;
     contactDuration = 0.0;
 
+    if (window.antigravityFX && typeof window.antigravityFX.setAfterRenderHook === "function") {
+      window.antigravityFX.setAfterRenderHook(null);
+      if (typeof window.antigravityFX.clearTacticalPulse === "function") {
+        window.antigravityFX.clearTacticalPulse();
+      }
+    }
     if (animId) {
       cancelAnimationFrame(animId);
       animId = null;
@@ -13894,7 +14253,9 @@ try { checkUrlHashRoutine(); } catch(e){}
 
   function gameLoop(now) {
     if (!isActive) return;
-    animId = requestAnimationFrame(gameLoop);
+    if (!window.antigravityFX || typeof window.antigravityFX.setAfterRenderHook !== "function") {
+      animId = requestAnimationFrame(gameLoop);
+    }
 
     var dt = (now - lastFrameTime) * 0.001;
     lastFrameTime = now;
@@ -13902,9 +14263,9 @@ try { checkUrlHashRoutine(); } catch(e){}
 
     ctx.clearRect(0, 0, width, height);
 
-    // Direct 1:1 true value for both mouse and touch (zero lag, matches fast hardware DPI)
+    // Direct 1:1 true value for mouse (zero lag, matches fast hardware DPI; smooth offset on touch)
     if (cursor.active && hasDeliberateMove && typeof cursor.targetX === "number" && cursor.targetX > -1000) {
-      var lerpFactor = (deviceInputMode === "touch") ? 0.35 : 0.22;
+      var lerpFactor = (deviceInputMode === "touch") ? 0.45 : 0.72;
       cursor.x += (cursor.targetX - cursor.x) * lerpFactor;
       cursor.y += (cursor.targetY - cursor.y) * lerpFactor;
     }
@@ -13923,6 +14284,50 @@ try { checkUrlHashRoutine(); } catch(e){}
     }
 
     var isWarmingUp = (now - gameStartTime < WARMUP_MS);
+    syncSkillButtonUI(now);
+
+    // Render Active Elemental Tactical Pulse Field on Game Overlay Canvas
+    if (window.antigravityFX && typeof window.antigravityFX.getTacticalPulse === "function") {
+      var tp = window.antigravityFX.getTacticalPulse();
+      if (tp && tp.active) {
+        var tpAge = now - tp.startTime;
+        if (tpAge < tp.duration) {
+          var tpNorm = tpAge / tp.duration;
+          var tpAlpha = (1 - tpNorm) * 0.65;
+          ctx.save();
+          if (tp.type === "emp") {
+            var empR = 45 + tpNorm * 200;
+            ctx.beginPath();
+            ctx.arc(tp.x, tp.y, empR, 0, Math.PI * 2);
+            ctx.strokeStyle = "rgba(56, 189, 248, " + tpAlpha.toFixed(2) + ")";
+            ctx.lineWidth = 2.2;
+            ctx.setLineDash([6, 4]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+          } else if (tp.type === "decoy") {
+            var decR = 26 + Math.sin(now * 0.012) * 4;
+            ctx.beginPath();
+            ctx.arc(tp.x, tp.y, decR, 0, Math.PI * 2);
+            ctx.strokeStyle = "rgba(232, 121, 249, " + (tpAlpha * 1.2).toFixed(2) + ")";
+            ctx.lineWidth = 2.4;
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.arc(tp.x, tp.y, decR * 2.8, 0, Math.PI * 2);
+            ctx.strokeStyle = "rgba(34, 211, 238, " + (tpAlpha * 0.55).toFixed(2) + ")";
+            ctx.lineWidth = 1.2;
+            ctx.stroke();
+          } else if (tp.type === "gravity") {
+            var gravR = 190 * (1 - tpNorm * 0.65);
+            ctx.beginPath();
+            ctx.arc(cursor.x > 0 ? cursor.x : tp.x, cursor.y > 0 ? cursor.y : tp.y, gravR, 0, Math.PI * 2);
+            ctx.strokeStyle = "rgba(249, 115, 22, " + tpAlpha.toFixed(2) + ")";
+            ctx.lineWidth = 2.2;
+            ctx.stroke();
+          }
+          ctx.restore();
+        }
+      }
+    }
 
     // ── Update Countdown Timer & Mission Telemetry ──
     if (!isWon && !isGameOver) {
@@ -13984,8 +14389,15 @@ try { checkUrlHashRoutine(); } catch(e){}
           if (dist <= exactTouchR) {
             isPhysicallyTouching = true;
             lastTouchContactTime = now;
-            contactDuration += dt;
+            var beatMult = isBeatSyncLock ? 1.25 : 1.0;
+            contactDuration += dt * beatMult;
             var progress = Math.min(1.0, contactDuration / REQUIRED_CONTACT);
+            var tierMult = (lockedParticle.lumiTier === 3) ? 4 : ((lockedParticle.lumiTier === 2) ? 2 : 1);
+            currentComboMultiplier = tierMult * (isBeatSyncLock ? 2 : 1);
+            if (qGameComboBadge) {
+              qGameComboBadge.style.display = "inline-flex";
+              qGameComboBadge.textContent = currentComboMultiplier + "× TIER-" + (lockedParticle.lumiTier || 1) + (isBeatSyncLock ? " ⚡BEAT" : "");
+            }
             startLockAudio();
             updateLockAudio(progress);
 
@@ -14006,7 +14418,8 @@ try { checkUrlHashRoutine(); } catch(e){}
                   ? "MOLTEN CORE"
                   : ((currentGameVariant === "meteor") ? "METEOR" : "QUANTUM")));
             var contactActionText = (deviceInputMode === "touch") ? "HOLD CONTACT" : "MAINTAIN CONTACT";
-            missionText.textContent = glyph + " " + lockLabel + " LOCK ACTIVE: " + (progress * 100).toFixed(0) + "% · " + contactActionText + " " + glyph;
+            var beatTag = isBeatSyncLock ? " · ⚡BEAT SYNC 1.25×" : "";
+            missionText.textContent = glyph + " " + lockLabel + " LOCK ACTIVE: " + (progress * 100).toFixed(0) + "% (" + currentComboMultiplier + "×)" + beatTag + " · " + contactActionText + " " + glyph;
 
             if (contactDuration >= REQUIRED_CONTACT) {
               lockedParticle.isLocked = false;
@@ -14018,6 +14431,8 @@ try { checkUrlHashRoutine(); } catch(e){}
               lockedParticle.isLocked = false;
               contactDuration = 0.0;
               lockedParticle = null;
+              isBeatSyncLock = false;
+              if (qGameComboBadge) qGameComboBadge.style.display = "none";
               stopLockAudio();
               missionText.textContent = getTargetInstructionText();
             } else {
@@ -14047,6 +14462,9 @@ try { checkUrlHashRoutine(); } catch(e){}
           isPhysicallyTouching = true;
           lastTouchContactTime = now;
           contactDuration = 0.0;
+          var curBeatImpulse = (window.antigravityFX && typeof window.antigravityFX.getBeatKickImpulse === "function") ? window.antigravityFX.getBeatKickImpulse() : 0;
+          var audTel = (typeof getAudioBeatTelemetry === "function") ? getAudioBeatTelemetry() : null;
+          isBeatSyncLock = (curBeatImpulse > 0.16) || !!(audTel && audTel.active && audTel.bass > 0.28);
           startLockAudio();
         }
       }
@@ -15456,6 +15874,25 @@ try { checkUrlHashRoutine(); } catch(e){}
   if (btnPlayAgain) {
     btnPlayAgain.onclick = restartGame;
   }
+  if (btnTacticalSkill) {
+    btnTacticalSkill.onclick = function(e) {
+      if (e) e.stopPropagation();
+      triggerElementalTacticalSkill();
+    };
+  }
+  window.addEventListener("keydown", function(e) {
+    if (!isActive || isWon || isGameOver) return;
+    if (e.code === "Space" || e.key === " ") {
+      e.preventDefault();
+      triggerElementalTacticalSkill();
+    }
+  });
+  window.addEventListener("contextmenu", function(e) {
+    if (isActive && !isWon && !isGameOver) {
+      e.preventDefault();
+      triggerElementalTacticalSkill();
+    }
+  });
   if (btnGamePlayMusic) {
     btnGamePlayMusic.onclick = function(e) {
       if (e) e.stopPropagation();
@@ -15496,7 +15933,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   <script>
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v88', { scope: './' }).catch(function() {});
+        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v91', { scope: './' }).catch(function() {});
       });
     }
   </script>
