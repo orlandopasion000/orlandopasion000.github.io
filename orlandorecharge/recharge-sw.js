@@ -1,5 +1,5 @@
 /* OrlandoRecharge · Offline-First Service Worker (PWA Ready) */
-var CACHE_NAME = 'recharge-v91';
+var CACHE_NAME = 'recharge-v92';
 var ASSETS = [
   './',
   './index.html',
@@ -9,17 +9,7 @@ var ASSETS = [
   './assets/recharge-icon-maskable.png',
   './assets/recharge-apple-touch.png',
   './assets/app-icon.ico',
-  './favicon.ico',
-  './music/palagi.mp3',
-  './music/na-para-bang.mp3',
-  './music/what-if-i-miss-you.mp3',
-  './music/okay.mp3',
-  './music/training-season.mp3',
-  './music/stop-the-wedding.mp3',
-  './music/malibu-nights.mp3',
-  './music/enchanted.mp3',
-  './music/the-man-who-cant-be-moved.mp3',
-  './music/youre-still-the-one.mp3'
+  './favicon.ico'
 ];
 
 self.addEventListener('install', function (event) {
@@ -27,7 +17,7 @@ self.addEventListener('install', function (event) {
     caches.open(CACHE_NAME).then(function (cache) {
       return Promise.all(
         ASSETS.map(function (url) {
-          return cache.add(url);
+          return cache.add(url).catch(function () {});
         })
       );
     }).then(function () {
@@ -52,8 +42,11 @@ self.addEventListener('fetch', function (event) {
   if (event.request.method !== 'GET') return;
   var url = event.request.url || '';
   
-  // 1. Never cache non-HTTP schemes (e.g. chrome-extension://, devtools://, data:, blob:)
+  // 1. Never intercept non-HTTP schemes or Range/Audio media streams (prevents ERR_CACHE_OPERATION_NOT_SUPPORTED on MP3s)
   if (!url.startsWith('http://') && !url.startsWith('https://')) return;
+  if (event.request.headers.get('range') || url.indexOf('.mp3') !== -1 || event.request.destination === 'audio') {
+    return;
+  }
 
   event.respondWith(
     fetch(event.request)
