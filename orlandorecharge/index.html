@@ -9532,10 +9532,15 @@ try { checkUrlHashRoutine(); } catch(e){}
 
   var width = window.innerWidth;
   var height = window.innerHeight;
-  var dpr = Math.min(window.devicePixelRatio || 1, 2);
+  // Hardware Capability Profiler: automatically caps DPR on low-end/integrated GPUs to avoid 4x pixel fill-rate lag
+  var hwCores = (typeof navigator !== "undefined" && navigator.hardwareConcurrency) ? navigator.hardwareConcurrency : 4;
+  var hwMem = (typeof navigator !== "undefined" && navigator.deviceMemory) ? navigator.deviceMemory : 4;
+  var isLowEndDevice = (hwCores <= 4) || (hwMem <= 4);
+  var maxSafeDpr = isLowEndDevice ? 1.25 : 1.75;
+  var dpr = Math.min(window.devicePixelRatio || 1, maxSafeDpr);
 
   function resize() {
-    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    dpr = Math.min(window.devicePixelRatio || 1, maxSafeDpr);
     width = window.innerWidth;
     height = window.innerHeight;
 
@@ -9634,42 +9639,49 @@ try { checkUrlHashRoutine(); } catch(e){}
     var cursorAsteroidSprite = null;
     var initialized = false;
 
-    function init() {
+    var initStep = 0;
+    function initStepTick() {
       if (initialized) return;
       try {
-        for (var i = 0; i < ASTEROID_COUNT; i++) {
-          asteroidSprites.push(generateAsteroidCanvas(i, 96, false));
-          moltenCoreSphereSprites.push(generateMoltenCoreSphereCanvas(i, 160));
+        if (initStep < ASTEROID_COUNT) {
+          asteroidSprites.push(generateAsteroidCanvas(initStep, 96, false));
+          moltenCoreSphereSprites.push(generateMoltenCoreSphereCanvas(initStep, 144));
+          initStep++;
+        } else if (initStep < ASTEROID_COUNT + LUXURY_FRAME_COUNT) {
+          var f = initStep - ASTEROID_COUNT;
+          cometSphereSprites.push(generateCometSphereCanvas(f, 144));
+          helixOrbSphereSprites.push(generateHelixOrbSphereCanvas(f, 144));
+          dynamoSphereSprites.push(generateDynamoSphereCanvas(f, 128));
+          classicHelixSphereSprites.push(generateClassicHelixSphereCanvas(f, 128));
+          initStep++;
+        } else {
+          cursorAsteroidSprite = generateAsteroidCanvas(0, 128, true);
+          smokeSprite = generateSmokeCanvas(56);
+          plasmaSprite = generatePlasmaCanvas(56);
+          emberSprite = generateEmberCanvas(24);
+          electricSparkSprite = generateElectricSparkCanvas(24);
+          electricVioletSparkSprite = generateElectricVioletSparkCanvas(24);
+          helixCyanSparkSprite = generateHelixSparkCanvas(24, false);
+          helixMagentaSparkSprite = generateHelixSparkCanvas(24, true);
+          flameWispSprite = generateFlameWispCanvas(56, 84);
+          flamePuffSprite = generateFlamePuffCanvas(56);
+          initialized = true;
+          return;
         }
-        for (var f = 0; f < LUXURY_FRAME_COUNT; f++) {
-          cometSphereSprites.push(generateCometSphereCanvas(f, 160));
-          helixOrbSphereSprites.push(generateHelixOrbSphereCanvas(f, 160));
-          dynamoSphereSprites.push(generateDynamoSphereCanvas(f, 144));
-          classicHelixSphereSprites.push(generateClassicHelixSphereCanvas(f, 144));
-        }
-        cursorAsteroidSprite = generateAsteroidCanvas(0, 144, true);
-        smokeSprite = generateSmokeCanvas(64);
-        plasmaSprite = generatePlasmaCanvas(64);
-        emberSprite = generateEmberCanvas(24);
-        electricSparkSprite = generateElectricSparkCanvas(24);
-        electricVioletSparkSprite = generateElectricVioletSparkCanvas(24);
-        helixCyanSparkSprite = generateHelixSparkCanvas(24, false);
-        helixMagentaSparkSprite = generateHelixSparkCanvas(24, true);
-        flameWispSprite = generateFlameWispCanvas(64, 96);
-        flamePuffSprite = generateFlamePuffCanvas(64);
-        initialized = true;
-      } catch (e) {
-        console.error("MeteorVFXEngine initialization error:", e);
+        setTimeout(initStepTick, 12);
+      } catch (e) {}
+    }
+
+    function init() {
+      if (initialized) return;
+      while (!initialized) {
+        initStepTick();
       }
     }
 
-    // Schedule non-blocking pre-warm during browser idle frames so clicking any game button has 0ms sprite generation lag
+    // Schedule time-sliced non-blocking pre-warm (~3ms per slice) so low-end CPUs experience zero main-thread stutter
     if (typeof window !== "undefined") {
-      if ("requestIdleCallback" in window) {
-        window.requestIdleCallback(function() { if (!initialized) init(); }, { timeout: 900 });
-      } else {
-        setTimeout(function() { if (!initialized) init(); }, 350);
-      }
+      setTimeout(initStepTick, 120);
     }
 
     function generateAsteroidCanvas(type, size, isCursor) {
@@ -11094,9 +11106,10 @@ try { checkUrlHashRoutine(); } catch(e){}
     }
   }, { passive: true });
 
-  // Dual-Layer Population: Device-scaled ambient swarm + Dedicated 3D Weaver Dancers (Tuned for silky 60-120fps)
-  var AMBIENT_COUNT = width < 600 ? 38 : (width < 900 ? 55 : (width < 1200 ? 85 : 115));
-  var WEAVER_COUNT = width < 600 ? 8 : (width < 768 ? 10 : 14); // Evenly distributed in depth: exactly ~5-7 are in front at any moment!
+  // Dual-Layer Population: Device & GPU-scaled ambient swarm + Dedicated 3D Weaver Dancers (Tuned for silky 60-120fps even on low-end devices)
+  var baseAmbCount = width < 600 ? 32 : (width < 900 ? 46 : (width < 1200 ? 64 : 82));
+  var AMBIENT_COUNT = isLowEndDevice ? Math.round(baseAmbCount * 0.72) : baseAmbCount;
+  var WEAVER_COUNT = width < 600 ? 8 : (width < 768 ? 10 : 12); // Evenly distributed in depth: ~5-6 are in front at any moment!
 
   function createParticle(isWeaver, phaseOffset) {
     var minSpawnX = 40, maxSpawnX = width - 40;
@@ -11272,6 +11285,9 @@ try { checkUrlHashRoutine(); } catch(e){}
   var isTabActive = true;
   var prevBassEnergy = 0;
   var beatKickImpulse = 0;
+  var lastLoopNow = 0;
+  var avgFrameDtMs = 16.67;
+  var isFastRenderMode = isLowEndDevice; // Automatically engages zero-gradient ultra-fast path on low-FPS or low-end devices
 
   // Pre-allocated typed buffers for zero-GC 60fps wavepacket spine & ribbon contour rendering
   var _ptsX = new Float32Array(24);
@@ -11307,11 +11323,19 @@ try { checkUrlHashRoutine(); } catch(e){}
     if (frontCtx) frontCtx.clearRect(0, 0, width, height);
 
     var now = (typeof performance !== "undefined" && performance.now) ? performance.now() : Date.now();
+    var rawLoopDt = (lastLoopNow > 0) ? (now - lastLoopNow) : 16.67;
+    lastLoopNow = now;
+    var clampedLoopDt = Math.max(6.0, Math.min(48.0, rawLoopDt));
+    var dtScale = clampedLoopDt / 16.667; // Frame-rate independent physics multiplier (1.0 at 60Hz, 2.0 at 30Hz, 0.5 at 120Hz)
+    avgFrameDtMs = avgFrameDtMs * 0.92 + clampedLoopDt * 0.08;
+    if (avgFrameDtMs > 21.0) isFastRenderMode = true;
+    else if (!isLowEndDevice && avgFrameDtMs < 17.5) isFastRenderMode = false;
+
     if (!isGameMode) updateGravitonRects();
 
     // Smooth ~0.65s universe illumination transition curve matching surroundings S-curve
     var targetGameGlow = isGameMode ? 1.0 : 0.0;
-    gameGlowProgress += (targetGameGlow - gameGlowProgress) * 0.065;
+    gameGlowProgress += (targetGameGlow - gameGlowProgress) * Math.min(0.25, 0.065 * dtScale);
 
     // ── Kinetic Jet Cursor Velocity Calculation ──
     if (mouse.active) {
@@ -11806,15 +11830,17 @@ try { checkUrlHashRoutine(); } catch(e){}
         }
       }
 
-      // Natural damping & restoration (less drag in game mode so evading particles sustain higher speed)
-      var dampRate = isGameMode ? 0.974 : (isIdle ? 0.978 : 0.965);
+      // Natural damping & restoration (frame-rate independent via dtScale so 30Hz, 60Hz, and 120Hz screens move at identical real-world speed)
+      var dampBase = isGameMode ? 0.974 : (isIdle ? 0.978 : 0.965);
+      var dampRate = (dtScale > 0.92 && dtScale < 1.08) ? dampBase : Math.pow(dampBase, dtScale);
+      var restoreRate = (isIdle ? 0.012 : 0.022) * Math.min(1.6, dtScale);
       p.vx *= dampRate;
       p.vy *= dampRate;
-      p.vx += (p.baseVx - p.vx) * (isIdle ? 0.012 : 0.022);
-      p.vy += (p.baseVy - p.vy) * (isIdle ? 0.012 : 0.022);
+      p.vx += (p.baseVx - p.vx) * restoreRate;
+      p.vy += (p.baseVy - p.vy) * restoreRate;
 
-      p.x += p.vx;
-      p.y += p.vy;
+      p.x += p.vx * dtScale;
+      p.y += p.vy * dtScale;
 
       // ── LINE-OF-SIGHT SCREEN CONTAINMENT (Aerodynamic / Hydrodynamic Curving Perimeter - Zero Hard Bounces) ──
       // Full perimeter cushion along walls; yields only slightly (28% max) under razor-sharp diagonal corner pin
@@ -12084,15 +12110,19 @@ try { checkUrlHashRoutine(); } catch(e){}
             targetCtx.restore();
           }
 
-          // B. Aerodynamic Taper Envelope with Real Fire Combustion Gradient
-          var meteorBodyGrad = targetCtx.createLinearGradient(tailTipX, tailTipY, headPtX, headPtY);
-          meteorBodyGrad.addColorStop(0.0, "rgba(153, 27, 27, 0.0)");
-          meteorBodyGrad.addColorStop(0.22, "rgba(185, 28, 28, " + (renderAlpha * (isMoltenCore ? 0.58 : 0.42)).toFixed(2) + ")");
-          meteorBodyGrad.addColorStop(0.50, "rgba(234, 88, 12, " + (renderAlpha * (isMoltenCore ? 0.88 : 0.78)).toFixed(2) + ")");
-          meteorBodyGrad.addColorStop(0.76, "rgba(249, 115, 22, " + (renderAlpha * 0.95).toFixed(2) + ")");
-          meteorBodyGrad.addColorStop(0.92, "rgba(254, 240, 138, " + (renderAlpha * 0.98).toFixed(2) + ")");
-          meteorBodyGrad.addColorStop(1.0, "rgba(255, 255, 255, " + (renderAlpha * 0.98).toFixed(2) + ")");
-          targetCtx.fillStyle = meteorBodyGrad;
+          // B. Aerodynamic Taper Envelope with Real Fire Combustion (Uses ultra-fast solid RGBA on Tier 1 or low-end devices)
+          if (tier >= 2 && !isFastRenderMode) {
+            var meteorBodyGrad = targetCtx.createLinearGradient(tailTipX, tailTipY, headPtX, headPtY);
+            meteorBodyGrad.addColorStop(0.0, "rgba(153, 27, 27, 0.0)");
+            meteorBodyGrad.addColorStop(0.22, "rgba(185, 28, 28, " + (renderAlpha * (isMoltenCore ? 0.58 : 0.42)).toFixed(2) + ")");
+            meteorBodyGrad.addColorStop(0.50, "rgba(234, 88, 12, " + (renderAlpha * (isMoltenCore ? 0.88 : 0.78)).toFixed(2) + ")");
+            meteorBodyGrad.addColorStop(0.76, "rgba(249, 115, 22, " + (renderAlpha * 0.95).toFixed(2) + ")");
+            meteorBodyGrad.addColorStop(0.92, "rgba(254, 240, 138, " + (renderAlpha * 0.98).toFixed(2) + ")");
+            meteorBodyGrad.addColorStop(1.0, "rgba(255, 255, 255, " + (renderAlpha * 0.98).toFixed(2) + ")");
+            targetCtx.fillStyle = meteorBodyGrad;
+          } else {
+            targetCtx.fillStyle = "rgba(249, 115, 22, " + (renderAlpha * (isMoltenCore ? 0.68 : 0.54)).toFixed(2) + ")";
+          }
 
           targetCtx.beginPath();
           targetCtx.moveTo(_leftX[0], _leftY[0]);
@@ -12115,13 +12145,19 @@ try { checkUrlHashRoutine(); } catch(e){}
           // C. Real Fire Inner Core Tongue (In Molten Core Mode: 3 Roaring Turbulent Flame Tongues)
           var flameEndIdx = Math.min(K - 1, Math.max(2, (K * (isMoltenCore ? 0.88 : (tier === 3 ? 0.75 : 0.65))) | 0));
           if (flameEndIdx >= 2) {
-            var innerFlameGrad = targetCtx.createLinearGradient(_ptsX[flameEndIdx], _ptsY[flameEndIdx], headPtX, headPtY);
-            innerFlameGrad.addColorStop(0.0, "rgba(234, 88, 12, 0.0)");
-            innerFlameGrad.addColorStop(0.32, "rgba(249, 115, 22, " + (renderAlpha * 0.76).toFixed(2) + ")");
-            innerFlameGrad.addColorStop(0.68, "rgba(254, 240, 138, " + (renderAlpha * 0.96).toFixed(2) + ")");
-            innerFlameGrad.addColorStop(1.0, "rgba(255, 255, 255, " + (renderAlpha * 0.98).toFixed(2) + ")");
+            var innerFlameStyle;
+            if (tier >= 2 && !isFastRenderMode) {
+              var innerFlameGrad = targetCtx.createLinearGradient(_ptsX[flameEndIdx], _ptsY[flameEndIdx], headPtX, headPtY);
+              innerFlameGrad.addColorStop(0.0, "rgba(234, 88, 12, 0.0)");
+              innerFlameGrad.addColorStop(0.32, "rgba(249, 115, 22, " + (renderAlpha * 0.76).toFixed(2) + ")");
+              innerFlameGrad.addColorStop(0.68, "rgba(254, 240, 138, " + (renderAlpha * 0.96).toFixed(2) + ")");
+              innerFlameGrad.addColorStop(1.0, "rgba(255, 255, 255, " + (renderAlpha * 0.98).toFixed(2) + ")");
+              innerFlameStyle = innerFlameGrad;
+            } else {
+              innerFlameStyle = "rgba(254, 240, 138, " + (renderAlpha * 0.86).toFixed(2) + ")";
+            }
 
-            targetCtx.strokeStyle = innerFlameGrad;
+            targetCtx.strokeStyle = innerFlameStyle;
             targetCtx.lineWidth = Math.max(1.4, headR * (isMoltenCore ? 0.85 : (tier === 3 ? 0.62 : (tier === 2 ? 0.52 : 0.44))));
             targetCtx.lineCap = "round";
             targetCtx.lineJoin = "round";
@@ -12149,7 +12185,7 @@ try { checkUrlHashRoutine(); } catch(e){}
                   var fyT = _ptsY[sj] * (1 - 0.55 * spreadW) + (ft > 0 ? _leftY[sj] : _rightY[sj]) * (0.55 * spreadW) + cosH * fTurb;
                   targetCtx.lineTo(fxT, fyT);
                 }
-                targetCtx.strokeStyle = innerFlameGrad;
+                targetCtx.strokeStyle = innerFlameStyle;
                 targetCtx.lineWidth = Math.max(1.2, headR * 0.42);
                 targetCtx.stroke();
               }
@@ -12247,18 +12283,24 @@ try { checkUrlHashRoutine(); } catch(e){}
 
         } else {
           // ── QUANTUM DYNAMO & PLASMA STORM COMET: ELECTROMAGNETIC WAVEPACKET & MULTI-BOLT LIGHTNING STORM ──
-          var bodyGrad = targetCtx.createLinearGradient(tailTipX, tailTipY, headPtX, headPtY);
-          if (isComet) {
-            bodyGrad.addColorStop(0.0, "rgba(30, 27, 75, 0.0)");
-            bodyGrad.addColorStop(0.35, "rgba(37, 99, 235, " + (renderAlpha * 0.34).toFixed(2) + ")");
-            bodyGrad.addColorStop(0.75, "rgba(109, 40, 217, " + (renderAlpha * 0.58).toFixed(2) + ")");
-            bodyGrad.addColorStop(1.0, "rgba(168, 85, 247, " + (renderAlpha * 0.85).toFixed(2) + ")");
+          if (tier >= 2 && !isFastRenderMode) {
+            var bodyGrad = targetCtx.createLinearGradient(tailTipX, tailTipY, headPtX, headPtY);
+            if (isComet) {
+              bodyGrad.addColorStop(0.0, "rgba(30, 27, 75, 0.0)");
+              bodyGrad.addColorStop(0.35, "rgba(37, 99, 235, " + (renderAlpha * 0.34).toFixed(2) + ")");
+              bodyGrad.addColorStop(0.75, "rgba(109, 40, 217, " + (renderAlpha * 0.58).toFixed(2) + ")");
+              bodyGrad.addColorStop(1.0, "rgba(168, 85, 247, " + (renderAlpha * 0.85).toFixed(2) + ")");
+            } else {
+              bodyGrad.addColorStop(0.0, "hsla(" + fTailHue + ", " + p.sat + "%, " + fTailLit.toFixed(1) + "%, " + (renderAlpha * 0.10).toFixed(2) + ")");
+              bodyGrad.addColorStop(0.48, "hsla(" + midHue + ", " + p.sat + "%, " + ((fTailLit + fHeadLit) * 0.5).toFixed(1) + "%, " + (renderAlpha * 0.60).toFixed(2) + ")");
+              bodyGrad.addColorStop(1.0, "hsla(" + fHeadHue + ", 100%, " + fHeadLit.toFixed(1) + "%, " + (renderAlpha * 0.95).toFixed(2) + ")");
+            }
+            targetCtx.fillStyle = bodyGrad;
           } else {
-            bodyGrad.addColorStop(0.0, "hsla(" + fTailHue + ", " + p.sat + "%, " + fTailLit.toFixed(1) + "%, " + (renderAlpha * 0.10).toFixed(2) + ")");
-            bodyGrad.addColorStop(0.48, "hsla(" + midHue + ", " + p.sat + "%, " + ((fTailLit + fHeadLit) * 0.5).toFixed(1) + "%, " + (renderAlpha * 0.60).toFixed(2) + ")");
-            bodyGrad.addColorStop(1.0, "hsla(" + fHeadHue + ", 100%, " + fHeadLit.toFixed(1) + "%, " + (renderAlpha * 0.95).toFixed(2) + ")");
+            targetCtx.fillStyle = isComet
+              ? ("rgba(124, 58, 237, " + (renderAlpha * 0.45).toFixed(2) + ")")
+              : ("hsla(" + midHue + ", " + p.sat + "%, " + ((fTailLit + fHeadLit) * 0.5).toFixed(1) + "%, " + (renderAlpha * 0.52).toFixed(2) + ")");
           }
-          targetCtx.fillStyle = bodyGrad;
 
           targetCtx.beginPath();
           targetCtx.moveTo(_leftX[0], _leftY[0]);
@@ -12414,34 +12456,35 @@ try { checkUrlHashRoutine(); } catch(e){}
 
         // 1. Incandescent Molten Magma Corona / Plasma Aura
         if (plasmaCanvas) {
-          targetCtx.save();
-          targetCtx.globalAlpha = renderAlpha * (tier === 3 ? 0.85 : (tier === 2 ? 0.70 : 0.55));
           var coronaR = rockR * (isMoltenCore ? 1.45 : 1.60);
+          targetCtx.globalAlpha = renderAlpha * (tier === 3 ? 0.85 : (tier === 2 ? 0.70 : 0.55));
           targetCtx.drawImage(plasmaCanvas, px0 - coronaR, py0 - coronaR, coronaR * 2, coronaR * 2);
-          targetCtx.restore();
         }
 
         // 2. Soft Volumetric Real Fire Combustion Glow (Shifted slightly toward tail in Molten Core mode)
-        if (flamePuffCanvas) {
-          targetCtx.save();
-          targetCtx.globalAlpha = renderAlpha * (isMoltenCore ? 0.78 : (tier === 3 ? 0.65 : (tier === 2 ? 0.50 : 0.38)));
+        if (flamePuffCanvas && (tier >= 2 || !isFastRenderMode)) {
           var pfHeadR = rockR * 1.30;
           var pfOffX = isMoltenCore ? (-cosH * rockR * 0.25) : 0;
           var pfOffY = isMoltenCore ? (-sinH * rockR * 0.25) : 0;
+          targetCtx.globalAlpha = renderAlpha * (isMoltenCore ? 0.78 : (tier === 3 ? 0.65 : (tier === 2 ? 0.50 : 0.38)));
           targetCtx.drawImage(flamePuffCanvas, px0 + pfOffX - pfHeadR, py0 + pfOffY - pfHeadR, pfHeadR * 2, pfHeadR * 2);
-          targetCtx.restore();
         }
 
-        // 3. 3D Procedural Asteroid / Spherical Tectonic Magma Planetoid Sprite
+        // 3. 3D Procedural Asteroid / Spherical Tectonic Magma Planetoid Sprite (Axis-Aligned Fast Blit on Spheres; Rotated only on Tier 2/3 Irregular Classic Asteroids)
         if (astCanvas) {
-          targetCtx.save();
-          targetCtx.translate(px0, py0);
-          targetCtx.rotate(p.heading);
           targetCtx.globalAlpha = renderAlpha;
           var drawR = isMoltenCore ? (rockR * 1.22) : rockR;
-          targetCtx.drawImage(astCanvas, -drawR, -drawR, drawR * 2, drawR * 2);
-          targetCtx.restore();
+          if (!isMoltenCore && tier >= 2 && !isFastRenderMode) {
+            targetCtx.save();
+            targetCtx.translate(px0, py0);
+            targetCtx.rotate(p.heading);
+            targetCtx.drawImage(astCanvas, -drawR, -drawR, drawR * 2, drawR * 2);
+            targetCtx.restore();
+          } else {
+            targetCtx.drawImage(astCanvas, px0 - drawR, py0 - drawR, drawR * 2, drawR * 2);
+          }
         }
+        targetCtx.globalAlpha = 1.0;
 
         // 4. Precessing Fiery Molten Ember Orbits (Classic Meteor only; Molten Core Meteor keeps pure photorealistic fire sphere silhouette)
         if (renderAsBrightest && !isMoltenCore) {
@@ -12492,18 +12535,15 @@ try { checkUrlHashRoutine(); } catch(e){}
         }
 
       } else if (isComet) {
-        // ── LUXURY GAME 4 HEAD: PLASMA STORM COMET 3D CONTAINMENT SPHERE (Matches Reference Image 3 & 4) ──
+        // ── LUXURY GAME 4 HEAD: PLASMA STORM COMET 3D CONTAINMENT SPHERE (Zero-Matrix Direct Axis-Aligned Hardware Blit) ──
         var cometR = headR * (tier === 3 ? 2.15 : (tier === 2 ? 1.70 : 1.35));
         var cFrameIdx = (((now * 0.012) | 0) + i) % 4;
         var cometCanvas = MeteorVFXEngine.getCometSphere(cFrameIdx);
         if (cometCanvas) {
-          targetCtx.save();
-          targetCtx.translate(px0, py0);
-          targetCtx.rotate(p.heading);
-          targetCtx.globalAlpha = renderAlpha;
           var cDrawR = cometR * 1.22;
-          targetCtx.drawImage(cometCanvas, -cDrawR, -cDrawR, cDrawR * 2, cDrawR * 2);
-          targetCtx.restore();
+          targetCtx.globalAlpha = renderAlpha;
+          targetCtx.drawImage(cometCanvas, px0 - cDrawR, py0 - cDrawR, cDrawR * 2, cDrawR * 2);
+          targetCtx.globalAlpha = 1.0;
         }
         if (isTargetLocked) {
           var syncRatioC = (typeof contactDuration === "number") ? Math.min(1.0, contactDuration / 2.0) : 0.6;
@@ -12532,18 +12572,15 @@ try { checkUrlHashRoutine(); } catch(e){}
         }
 
       } else if (isHelixOrb) {
-        // ── LUXURY GAME 5 HEAD: HELIX CRYSTAL ORB 3D REFRACTIVE GLASS SPHERE (Matches Reference Image 2 & 5) ──
+        // ── LUXURY GAME 5 HEAD: HELIX CRYSTAL ORB 3D REFRACTIVE GLASS SPHERE (Zero-Matrix Direct Axis-Aligned Hardware Blit) ──
         var orbR = headR * (tier === 3 ? 2.15 : (tier === 2 ? 1.70 : 1.35));
         var hFrameIdx = (((now * 0.010) | 0) + i) % 4;
         var orbCanvas = MeteorVFXEngine.getHelixOrbSphere(hFrameIdx);
         if (orbCanvas) {
-          targetCtx.save();
-          targetCtx.translate(px0, py0);
-          targetCtx.rotate(p.heading);
-          targetCtx.globalAlpha = renderAlpha;
           var oDrawR = orbR * 1.22;
-          targetCtx.drawImage(orbCanvas, -oDrawR, -oDrawR, oDrawR * 2, oDrawR * 2);
-          targetCtx.restore();
+          targetCtx.globalAlpha = renderAlpha;
+          targetCtx.drawImage(orbCanvas, px0 - oDrawR, py0 - oDrawR, oDrawR * 2, oDrawR * 2);
+          targetCtx.globalAlpha = 1.0;
         }
         if (isTargetLocked) {
           var syncRatioHO = (typeof contactDuration === "number") ? Math.min(1.0, contactDuration / 2.0) : 0.6;
@@ -12573,32 +12610,26 @@ try { checkUrlHashRoutine(); } catch(e){}
         }
 
       } else {
-        // ── CLASSIC QUANTUM DYNAMO & QUANTUM HELIX HEAD RENDERING (Pre-Rendered 144x144 3D Hardware Sprites — Zero Per-Frame Vector Loops) ──
+        // ── CLASSIC QUANTUM DYNAMO & QUANTUM HELIX HEAD RENDERING (Zero-Matrix Direct Axis-Aligned 3D Hardware Sprites) ──
         if (isHelix) {
           var clHelixR = headR * (tier === 3 ? 1.85 : (tier === 2 ? 1.50 : 1.25));
           var clHFrame = (((now * 0.010) | 0) + i) % 4;
           var clHelixCanvas = MeteorVFXEngine.getClassicHelixSphere(clHFrame);
           if (clHelixCanvas) {
-            targetCtx.save();
-            targetCtx.translate(px0, py0);
-            targetCtx.rotate(p.heading);
-            targetCtx.globalAlpha = renderAlpha;
             var clHDrawR = clHelixR * 1.18;
-            targetCtx.drawImage(clHelixCanvas, -clHDrawR, -clHDrawR, clHDrawR * 2, clHDrawR * 2);
-            targetCtx.restore();
+            targetCtx.globalAlpha = renderAlpha;
+            targetCtx.drawImage(clHelixCanvas, px0 - clHDrawR, py0 - clHDrawR, clHDrawR * 2, clHDrawR * 2);
+            targetCtx.globalAlpha = 1.0;
           }
         } else {
           var clDynR = headR * (tier === 3 ? 1.85 : (tier === 2 ? 1.50 : 1.25));
           var clDFrame = (((now * 0.012) | 0) + i) % 4;
           var clDynCanvas = MeteorVFXEngine.getDynamoSphere(clDFrame);
           if (clDynCanvas) {
-            targetCtx.save();
-            targetCtx.translate(px0, py0);
-            targetCtx.rotate(p.heading);
-            targetCtx.globalAlpha = renderAlpha;
             var clDDrawR = clDynR * 1.18;
-            targetCtx.drawImage(clDynCanvas, -clDDrawR, -clDDrawR, clDDrawR * 2, clDDrawR * 2);
-            targetCtx.restore();
+            targetCtx.globalAlpha = renderAlpha;
+            targetCtx.drawImage(clDynCanvas, px0 - clDDrawR, py0 - clDDrawR, clDDrawR * 2, clDDrawR * 2);
+            targetCtx.globalAlpha = 1.0;
           }
         }
         if (isTargetLocked) {
@@ -13041,16 +13072,18 @@ try { checkUrlHashRoutine(); } catch(e){}
       p.hx2 = p.hx1; p.hy2 = p.hy1;
       p.hx1 = px;    p.hy1 = py;
 
-      // Draw particle core & diamond highlight
+      // Draw particle core & diamond highlight (Zero shadowBlur for low-end GPU smoothness)
       var pSize = p.size * (1 + beatPulse * 0.45);
       var curAlpha = Math.min(1.0, p.alpha * (0.85 + Math.sin(p.phase + timestamp * 0.004) * 0.15) + beatPulse * 0.3);
 
-      ctx.save();
+      ctx.beginPath();
+      ctx.arc(px, py, pSize * 1.85, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(" + p.color.r + "," + p.color.g + "," + p.color.b + "," + (curAlpha * 0.25).toFixed(3) + ")";
+      ctx.fill();
+
       ctx.beginPath();
       ctx.arc(px, py, pSize, 0, Math.PI * 2);
       ctx.fillStyle = "rgba(" + p.color.r + "," + p.color.g + "," + p.color.b + "," + curAlpha.toFixed(3) + ")";
-      ctx.shadowColor = "rgba(" + p.color.r + "," + p.color.g + "," + p.color.b + ", 0.85)";
-      ctx.shadowBlur = 10 + beatPulse * 12;
       ctx.fill();
 
       // Diamond hot-spot core
@@ -13058,7 +13091,6 @@ try { checkUrlHashRoutine(); } catch(e){}
       ctx.arc(px, py, Math.max(1, pSize * 0.35), 0, Math.PI * 2);
       ctx.fillStyle = "rgba(255,255,255," + (curAlpha * 0.95).toFixed(3) + ")";
       ctx.fill();
-      ctx.restore();
     }
 
     animId = requestAnimationFrame(render);
@@ -13635,7 +13667,10 @@ try { checkUrlHashRoutine(); } catch(e){}
   }
 
   function resize() {
-    dpr = window.devicePixelRatio || 1;
+    var hwC = (typeof navigator !== "undefined" && navigator.hardwareConcurrency) ? navigator.hardwareConcurrency : 4;
+    var hwM = (typeof navigator !== "undefined" && navigator.deviceMemory) ? navigator.deviceMemory : 4;
+    var maxDpr = (hwC <= 4 || hwM <= 4) ? 1.25 : 1.75;
+    dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
     width = window.innerWidth;
     height = window.innerHeight;
     canvas.width = Math.floor(width * dpr);
@@ -14089,11 +14124,16 @@ try { checkUrlHashRoutine(); } catch(e){}
 
     ctx.clearRect(0, 0, width, height);
 
-    // Direct 1:1 true value for mouse (zero lag, matches fast hardware DPI; smooth offset on touch)
+    // Direct 1:1 instant hardware mouse alignment (zero lerp lag on mouse; smooth offset on touch)
     if (cursor.active && hasDeliberateMove && typeof cursor.targetX === "number" && cursor.targetX > -1000) {
-      var lerpFactor = (deviceInputMode === "touch") ? 0.45 : 0.72;
-      cursor.x += (cursor.targetX - cursor.x) * lerpFactor;
-      cursor.y += (cursor.targetY - cursor.y) * lerpFactor;
+      if (deviceInputMode === "mouse") {
+        cursor.x = cursor.targetX;
+        cursor.y = cursor.targetY;
+      } else {
+        var touchLerp = Math.min(1.0, 0.55 * (dt / 0.01667));
+        cursor.x += (cursor.targetX - cursor.x) * touchLerp;
+        cursor.y += (cursor.targetY - cursor.y) * touchLerp;
+      }
     }
 
     // Damp cursor velocity when idle
@@ -15413,7 +15453,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   <script>
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v92', { scope: './' }).catch(function() {});
+        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v93', { scope: './' }).catch(function() {});
       });
     }
   </script>
