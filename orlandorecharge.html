@@ -9645,6 +9645,61 @@ try { checkUrlHashRoutine(); } catch(e){}
     var cursorAsteroidSprite = null;
     var initialized = false;
 
+    // Real Macro-Photography Reference Textures (Extracted with Edge-Aware Alpha Masks)
+    var macroRefTextures = {
+      blueDynamo: null,
+      moltenMeteor: null,
+      spiralHelix: null,
+      violetComet: null,
+      orbitalMeteor: null,
+      prismHelix: null,
+      loadedCount: 0
+    };
+
+    function rebuildMacroComposites() {
+      try {
+        asteroidSprites = [];
+        moltenCoreSphereSprites = [];
+        cometSphereSprites = [];
+        helixOrbSphereSprites = [];
+        dynamoSphereSprites = [];
+        classicHelixSphereSprites = [];
+        for (var i = 0; i < ASTEROID_COUNT; i++) {
+          asteroidSprites.push(generateAsteroidCanvas(i, 128, false));
+          moltenCoreSphereSprites.push(generateMoltenCoreSphereCanvas(i, 144));
+        }
+        for (var f = 0; f < LUXURY_FRAME_COUNT; f++) {
+          cometSphereSprites.push(generateCometSphereCanvas(f, 144));
+          helixOrbSphereSprites.push(generateHelixOrbSphereCanvas(f, 144));
+          dynamoSphereSprites.push(generateDynamoSphereCanvas(f, 144));
+          classicHelixSphereSprites.push(generateClassicHelixSphereCanvas(f, 144));
+        }
+        cursorAsteroidSprite = generateAsteroidCanvas(0, 144, true);
+      } catch (e) {}
+    }
+
+    if (typeof Image !== "undefined") {
+      var macroDefs = [
+        { key: "blueDynamo", src: "assets/vfx-macro-blue-dynamo.webp" },
+        { key: "moltenMeteor", src: "assets/vfx-macro-molten-meteor.webp" },
+        { key: "spiralHelix", src: "assets/vfx-macro-spiral-helix.webp" },
+        { key: "violetComet", src: "assets/vfx-macro-violet-comet.webp" },
+        { key: "orbitalMeteor", src: "assets/vfx-macro-orbital-meteor.webp" },
+        { key: "prismHelix", src: "assets/vfx-macro-prism-helix.webp" }
+      ];
+      macroDefs.forEach(function(def) {
+        var img = new Image();
+        img.onload = function() {
+          macroRefTextures[def.key] = img;
+          macroRefTextures.loadedCount++;
+          if (initialized) {
+            rebuildMacroComposites();
+          }
+        };
+        img.src = def.src;
+      });
+    }
+
     var initStep = 0;
     function initStepTick() {
       if (initialized) return;
@@ -10015,6 +10070,17 @@ try { checkUrlHashRoutine(); } catch(e){}
         ctx.stroke();
       }
 
+      // Blend extracted real macro angular rock texture for authentic mineral micro-pitting & stone grain
+      if (macroRefTextures.orbitalMeteor) {
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(type * 1.047);
+        ctx.globalAlpha = 0.88;
+        var texR = baseR * 1.38;
+        ctx.drawImage(macroRefTextures.orbitalMeteor, -texR, -texR, texR * 2, texR * 2);
+        ctx.restore();
+      }
+
       ctx.restore();
       return canvas;
     }
@@ -10305,7 +10371,7 @@ try { checkUrlHashRoutine(); } catch(e){}
       ctx.closePath();
       ctx.clip();
 
-      // 1. Deep Dark Transparent Obsidian-Violet Glass Interior (No neon perimeter fill)
+      // 1. Deep Dark Transparent Obsidian-Violet Glass Interior + Real Macro Plasma Texture Layer
       var voidGrad = ctx.createRadialGradient(cx, cy, r * 0.02, cx, cy, r);
       voidGrad.addColorStop(0.0, "rgba(245, 208, 254, 0.95)");
       voidGrad.addColorStop(0.10, "rgba(147, 51, 234, 0.65)");
@@ -10314,6 +10380,16 @@ try { checkUrlHashRoutine(); } catch(e){}
       voidGrad.addColorStop(1.0, "rgba(3, 1, 8, 0.96)");
       ctx.fillStyle = voidGrad;
       ctx.fillRect(0, 0, size, size);
+
+      if (macroRefTextures.violetComet) {
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(phase * 0.25);
+        ctx.globalAlpha = 0.82;
+        var vcR = r * 1.16;
+        ctx.drawImage(macroRefTextures.violetComet, -vcR, -vcR, vcR * 2, vcR * 2);
+        ctx.restore();
+      }
 
       // 2. Soft Volumetric Purple Plasma Clouds inside the dark globe
       for (var w = 0; w < 5; w++) {
@@ -10432,7 +10508,7 @@ try { checkUrlHashRoutine(); } catch(e){}
       ctx.closePath();
       ctx.clip();
 
-      // 1. Deep Dark Optical Glass Interior Base
+      // 1. Deep Dark Optical Glass Interior Base + Real Macro Fluid Vortex Texture Layer
       var bgGrad = ctx.createRadialGradient(cx, cy, r * 0.04, cx, cy, r);
       bgGrad.addColorStop(0.0, "#3b1d5e");
       bgGrad.addColorStop(0.38, "#0c192c");
@@ -10440,6 +10516,16 @@ try { checkUrlHashRoutine(); } catch(e){}
       bgGrad.addColorStop(1.0, "#020409");
       ctx.fillStyle = bgGrad;
       ctx.fillRect(0, 0, size, size);
+
+      if (macroRefTextures.spiralHelix) {
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(phase * 0.25);
+        ctx.globalAlpha = 0.88;
+        var shR = r * 1.15;
+        ctx.drawImage(macroRefTextures.spiralHelix, -shR, -shR, shR * 2, shR * 2);
+        ctx.restore();
+      }
 
       // 2. Fluid Spiral Vortex with Differential Rotation Shear (Center rotates at 1.5x phase, outer edge lags at 0.35x phase)
       var numArms = 8;
@@ -10559,7 +10645,7 @@ try { checkUrlHashRoutine(); } catch(e){}
       ctx.closePath();
       ctx.clip();
 
-      // 2. Rough Scorched Charcoal-Rust Basalt Crust Shading (Matching Reference 2)
+      // 2. Rough Scorched Charcoal-Rust Basalt Crust Shading + Real Macro Pitted Volcanic Texture Layer
       var rockGrad = ctx.createRadialGradient(cx - r * 0.15, cy - r * 0.25, r * 0.08, cx, cy, r * 1.08);
       rockGrad.addColorStop(0.0, "#4a3326"); // Warm oxidized iron-basalt highland
       rockGrad.addColorStop(0.42, "#291a12"); // Deep scorched charcoal-brown crust
@@ -10567,6 +10653,16 @@ try { checkUrlHashRoutine(); } catch(e){}
       rockGrad.addColorStop(1.0, "#090504"); // Deep limb shadow
       ctx.fillStyle = rockGrad;
       ctx.fillRect(0, 0, size, size);
+
+      if (macroRefTextures.moltenMeteor) {
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(typeIdx * 1.047);
+        ctx.globalAlpha = 0.90;
+        var mmR = r * 1.18;
+        ctx.drawImage(macroRefTextures.moltenMeteor, -mmR, -mmR, mmR * 2, mmR * 2);
+        ctx.restore();
+      }
 
       // 3. Dense Vesicular Pits, Rough Regolith Clasts & Pitted Craters Across Entire Crust
       for (var mb = 0; mb < 64; mb++) {
@@ -10673,7 +10769,7 @@ try { checkUrlHashRoutine(); } catch(e){}
       ctx.closePath();
       ctx.clip();
 
-      // 1. Dark Transparent Glass Interior (Deep black-navy void near glass wall, localized icy blue center glow)
+      // 1. Dark Transparent Glass Interior + Real Macro Blue Corona Filament Texture Layer
       var bgGrad = ctx.createRadialGradient(cx, cy, r * 0.02, cx, cy, r);
       bgGrad.addColorStop(0.0, "rgba(224, 242, 254, 0.96)");
       bgGrad.addColorStop(0.14, "rgba(56, 189, 248, 0.72)");
@@ -10682,6 +10778,16 @@ try { checkUrlHashRoutine(); } catch(e){}
       bgGrad.addColorStop(1.0, "rgba(2, 4, 10, 0.96)");
       ctx.fillStyle = bgGrad;
       ctx.fillRect(0, 0, size, size);
+
+      if (macroRefTextures.blueDynamo) {
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(phase * 0.25);
+        ctx.globalAlpha = 0.86;
+        var bdR = r * 1.15;
+        ctx.drawImage(macroRefTextures.blueDynamo, -bdR, -bdR, bdR * 2, bdR * 2);
+        ctx.restore();
+      }
 
       // 2. Three Internal 3D Elliptical Magnetic Corona Loops Inside the Glass Globe (Matching Ref 1's figure-8 / atomic plasma loops)
       for (var lp = 0; lp < 3; lp++) {
@@ -10783,7 +10889,7 @@ try { checkUrlHashRoutine(); } catch(e){}
       ctx.closePath();
       ctx.clip();
 
-      // 1. Dark Clear Optical Glass Base with Focused Cyan Center Singularity (Matching Reference 6)
+      // 1. Dark Clear Optical Glass Base with Focused Cyan Center Singularity + Real Macro Prism Texture Layer
       var spGrad = ctx.createRadialGradient(cx, cy, r * 0.01, cx, cy, r);
       spGrad.addColorStop(0.0, "#ffffff");
       spGrad.addColorStop(0.08, "rgba(165, 243, 252, 0.96)");
@@ -10793,6 +10899,16 @@ try { checkUrlHashRoutine(); } catch(e){}
       spGrad.addColorStop(1.0, "rgba(2, 5, 12, 0.96)");
       ctx.fillStyle = spGrad;
       ctx.fillRect(0, 0, size, size);
+
+      if (macroRefTextures.prismHelix) {
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(phase * 0.15);
+        ctx.globalAlpha = 0.85;
+        var phR = r * 1.38;
+        ctx.drawImage(macroRefTextures.prismHelix, -phR, -phR, phR * 2, phR * 2);
+        ctx.restore();
+      }
 
       // 2. Shifting Internal Caustic Light Cusps (Shift with viewing angle/phase inside lower-right hemisphere, matching Ref 6)
       var caustX = cx + Math.cos(0.65 + phase * 0.25) * (r * 0.48);
@@ -15238,7 +15354,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   <script>
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v94', { scope: './' }).catch(function() {});
+        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v95', { scope: './' }).catch(function() {});
       });
     }
   </script>
