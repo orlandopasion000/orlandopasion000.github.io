@@ -5678,6 +5678,534 @@
       transform: translateY(-1px);
     }
 
+
+    /* ==========================================================================
+       WINDOWS-INSPIRED VIEW MODES & DENSITY SYSTEM (LARGE, COMPACT, DETAILS, LIST)
+       ========================================================================== */
+    .vault-view-subbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 8px 12px;
+      background: rgba(10, 15, 24, 0.75);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 12px;
+      backdrop-filter: blur(12px);
+      margin-bottom: 8px;
+    }
+
+    .view-mode-selector {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .btn-view-mode {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      min-height: 34px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #94a3b8;
+      font-family: var(--font-tech);
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+    }
+
+    .btn-view-mode:hover {
+      background: rgba(56, 189, 248, 0.1);
+      border-color: rgba(56, 189, 248, 0.4);
+      color: #e2e8f0;
+      transform: translateY(-1px);
+    }
+
+    .btn-view-mode.active {
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.3) 0%, rgba(14, 165, 233, 0.15) 100%);
+      border-color: #38bdf8;
+      color: #38bdf8;
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.3);
+    }
+
+    .btn-view-mode svg {
+      flex-shrink: 0;
+    }
+
+    .view-options-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-view-option {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      min-height: 34px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #94a3b8;
+      font-family: var(--font-tech);
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-view-option:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #f1f5f9;
+    }
+
+    .btn-view-option.active {
+      background: rgba(217, 185, 92, 0.18);
+      border-color: #ffd700;
+      color: #ffd700;
+      box-shadow: 0 0 12px rgba(255, 215, 0, 0.25);
+    }
+
+    /* -------------------------------------------------------------
+       MODE 2: COMPACT / MEDIUM ICONS (.vault-card-compact)
+       ------------------------------------------------------------- */
+    .vault-grid.mode-compact {
+      display: grid !important;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)) !important;
+      gap: 12px !important;
+    }
+
+    .vault-card-compact {
+      background: radial-gradient(circle at 100% 0%, rgba(0, 240, 255, 0.06) 0%, transparent 60%),
+                  linear-gradient(145deg, rgba(16, 21, 32, 0.95) 0%, rgba(8, 11, 17, 0.98) 100%);
+      border: 1.5px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+      user-select: none;
+    }
+
+    .vault-card-compact:hover {
+      border-color: rgba(56, 189, 248, 0.65);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.65), 0 0 16px rgba(56, 189, 248, 0.2);
+    }
+
+    .vault-card-compact.is-priority-pinned {
+      border-color: rgba(255, 215, 0, 0.5);
+      background: radial-gradient(circle at 100% 0%, rgba(255, 215, 0, 0.12) 0%, transparent 65%),
+                  linear-gradient(145deg, rgba(22, 26, 36, 0.95) 0%, rgba(12, 14, 20, 0.98) 100%);
+    }
+
+    .compact-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .compact-brand-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .compact-squircle {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .compact-title-col {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .compact-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #f8fafc;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin: 0;
+    }
+
+    .compact-cat-tag {
+      font-size: 9.5px;
+      color: #94a3b8;
+      font-family: var(--font-tech);
+      letter-spacing: 0.5px;
+    }
+
+    .compact-actions {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .compact-username-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 4px 8px;
+      font-size: 11px;
+      color: #cbd5e1;
+    }
+
+    .compact-user-val {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+    }
+
+    .compact-btn-copy-user {
+      background: none;
+      border: none;
+      color: #38bdf8;
+      padding: 2px 4px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .compact-btn-copy-user:hover {
+      background: rgba(56, 189, 248, 0.2);
+    }
+
+    .compact-pwd-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .compact-pwd-masked {
+      flex: 1;
+      font-family: monospace;
+      letter-spacing: 2px;
+      font-size: 12px;
+      color: #64748b;
+      padding: 5px 8px;
+      background: rgba(0, 0, 0, 0.45);
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .compact-btn-copy-pwd {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 10px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(217, 185, 92, 0.25) 0%, rgba(245, 158, 11, 0.35) 100%);
+      border: 1px solid rgba(255, 215, 0, 0.6);
+      color: #ffd700;
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .compact-btn-copy-pwd:hover {
+      background: #ffd700;
+      color: #030509;
+      box-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
+    }
+
+    /* -------------------------------------------------------------
+       MODE 3: DETAILS TABLE (.vault-table-container)
+       ------------------------------------------------------------- */
+    .vault-table-container {
+      width: 100%;
+      overflow-x: auto;
+      border-radius: 14px;
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      background: rgba(8, 12, 19, 0.9);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(16px);
+      margin-bottom: 24px;
+    }
+
+    .vault-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    .vault-table th {
+      padding: 12px 14px;
+      background: rgba(14, 20, 32, 0.95);
+      color: #94a3b8;
+      font-family: var(--font-tech);
+      font-weight: 700;
+      letter-spacing: 1px;
+      font-size: 11px;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.25);
+      cursor: pointer;
+      user-select: none;
+      transition: color 0.15s ease;
+    }
+
+    .vault-table th:hover {
+      color: #38bdf8;
+    }
+
+    .vault-table th.sorted {
+      color: #38bdf8;
+    }
+
+    .vault-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: #cbd5e1;
+      vertical-align: middle;
+    }
+
+    .vault-table-row {
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .vault-table-row:hover {
+      background: rgba(56, 189, 248, 0.08);
+    }
+
+    .vault-table-row.is-priority-pinned {
+      background: rgba(255, 215, 0, 0.04);
+    }
+
+    .vault-table-row.is-priority-pinned:hover {
+      background: rgba(255, 215, 0, 0.1);
+    }
+
+    .table-service-cell {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .table-service-name {
+      font-weight: 700;
+      color: #f1f5f9;
+    }
+
+    .table-pwd-mask {
+      font-family: monospace;
+      letter-spacing: 2px;
+      color: #64748b;
+    }
+
+    .table-action-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: #38bdf8;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .table-action-pill:hover {
+      background: #38bdf8;
+      color: #030509;
+    }
+
+    /* -------------------------------------------------------------
+       MODE 4: LIST / COMMAND INDEX (.vault-list-container)
+       ------------------------------------------------------------- */
+    .vault-list-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .vault-list-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      background: rgba(14, 20, 32, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+    }
+
+    .vault-list-chip:hover {
+      border-color: #38bdf8;
+      background: rgba(56, 189, 248, 0.1);
+      transform: translateX(2px);
+    }
+
+    .vault-list-chip.is-priority-pinned {
+      border-color: rgba(255, 215, 0, 0.45);
+      background: rgba(255, 215, 0, 0.06);
+    }
+
+    .chip-squircle {
+      width: 26px;
+      height: 26px;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .chip-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #f1f5f9;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex: 1;
+    }
+
+    .chip-cat-badge {
+      font-size: 9px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.06);
+      color: #94a3b8;
+    }
+
+    .chip-copy-icon {
+      color: #38bdf8;
+      opacity: 0.6;
+      transition: opacity 0.15s;
+    }
+
+    .vault-list-chip:hover .chip-copy-icon {
+      opacity: 1;
+    }
+
+    /* -------------------------------------------------------------
+       GROUPED SHELVES / ACCORDIONS (.category-shelf)
+       ------------------------------------------------------------- */
+    .category-shelf {
+      margin-bottom: 20px;
+      width: 100%;
+    }
+
+    .category-shelf-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: linear-gradient(90deg, rgba(15, 23, 42, 0.85) 0%, rgba(10, 15, 26, 0.6) 100%);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 10px;
+      cursor: pointer;
+      user-select: none;
+      margin-bottom: 12px;
+      transition: all 0.2s ease;
+    }
+
+    .category-shelf-header:hover {
+      border-color: rgba(56, 189, 248, 0.5);
+      background: rgba(56, 189, 248, 0.1);
+    }
+
+    .category-shelf-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-tech);
+      font-size: 12.5px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: #e2e8f0;
+    }
+
+    .category-shelf-count {
+      font-size: 10.5px;
+      padding: 2px 7px;
+      border-radius: 12px;
+      background: rgba(56, 189, 248, 0.2);
+      color: #38bdf8;
+      font-weight: 700;
+    }
+
+    .category-shelf-chevron {
+      transition: transform 0.22s ease;
+      color: #94a3b8;
+    }
+
+    .category-shelf.collapsed .category-shelf-chevron {
+      transform: rotate(-90deg);
+    }
+
+    .category-shelf.collapsed .category-shelf-body {
+      display: none !important;
+    }
+
+    @media (max-width: 768px) {
+      .vault-view-subbar {
+        padding: 6px 8px;
+        gap: 6px;
+      }
+      .btn-view-mode {
+        padding: 5px 8px;
+        font-size: 10.5px;
+      }
+      .btn-view-mode span {
+        display: none; /* Show clear icons on phone */
+      }
+      .btn-view-option {
+        padding: 5px 8px;
+        font-size: 10.5px;
+      }
+      .vault-grid.mode-compact {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 8px !important;
+      }
+      .vault-card-compact {
+        padding: 9px;
+      }
+      .compact-title {
+        font-size: 12px;
+      }
+    }
+
 </style>
 </head>
 <body>
@@ -5790,7 +6318,36 @@
         <button type="button" class="filter-pill" data-cat="Critical">CRITICAL ONLY</button>
         <button type="button" class="filter-pill btn-pill-add" id="btnAddNewAccount" title="Add New Credential Card" onclick="openNewCardEditor()">+ NEW ACCOUNT</button>
       </div>
-    </section>
+    
+      <!-- WINDOWS-INSPIRED VIEW CONTROLS & DENSITY SUBBAR -->
+      <div class="vault-view-subbar" id="vaultViewSubbar">
+        <div class="view-mode-selector" role="radiogroup" aria-label="View Modes">
+          <button type="button" class="btn-view-mode active" id="btnViewLarge" data-view="large" title="Large Icons / Cards (Ctrl+Shift+2)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
+            <span>Large icons</span>
+          </button>
+          <button type="button" class="btn-view-mode" id="btnViewCompact" data-view="compact" title="Medium Icons / Compact Grid (Ctrl+Shift+3)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="4" height="4" rx="1"/><rect x="10" y="3" width="4" height="4" rx="1"/><rect x="17" y="3" width="4" height="4" rx="1"/><rect x="3" y="10" width="4" height="4" rx="1"/><rect x="10" y="10" width="4" height="4" rx="1"/><rect x="17" y="10" width="4" height="4" rx="1"/><rect x="3" y="17" width="4" height="4" rx="1"/><rect x="10" y="17" width="4" height="4" rx="1"/><rect x="17" y="17" width="4" height="4" rx="1"/></svg>
+            <span>Medium icons</span>
+          </button>
+          <button type="button" class="btn-view-mode" id="btnViewDetails" data-view="details" title="Details Table (Ctrl+Shift+6)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            <span>Details</span>
+          </button>
+          <button type="button" class="btn-view-mode" id="btnViewList" data-view="list" title="Compact List (Ctrl+Shift+4)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="1.5" fill="currentColor"/><circle cx="4" cy="12" r="1.5" fill="currentColor"/><circle cx="4" cy="18" r="1.5" fill="currentColor"/></svg>
+            <span>List</span>
+          </button>
+        </div>
+
+        <div class="view-options-group">
+          <button type="button" class="btn-view-option" id="btnToggleGroupBy" title="Group by Category (Ctrl+Shift+G)">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+            <span id="groupByToggleLabel">Group by Category</span>
+          </button>
+        </div>
+      </div>
+</section>
 
     <section class="vault-grid" id="vaultGridContainer">
     </section>
@@ -7570,9 +8127,317 @@
     }
 
 
+    
+    // ==========================================================================
+    // WINDOWS-INSPIRED MULTI-MODE VIEW ENGINE (STATE & CONTROLLERS)
+    // ==========================================================================
+    
+    function formatRelativeTime(ts) {
+      if (!ts) return 'Never';
+      const diff = Date.now() - Number(ts);
+      if (diff < 60000) return 'Just now';
+      if (diff < 3600000) return Math.floor(diff / 60000) + 'm ago';
+      if (diff < 86400000) return Math.floor(diff / 3600000) + 'h ago';
+      const days = Math.floor(diff / 86400000);
+      return days === 1 ? 'Yesterday' : days + 'd ago';
+    }
+
+    let currentViewMode = localStorage.getItem('orlandovault_view_mode') || 'large';
+    let currentGroupBy = localStorage.getItem('orlandovault_group_by') === 'true';
+    let tableSortKey = 'default';
+    let tableSortAsc = true;
+
+    window.setViewMode = function(mode) {
+      currentViewMode = mode;
+      localStorage.setItem('orlandovault_view_mode', mode);
+      document.querySelectorAll('.btn-view-mode').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-view') === mode);
+      });
+      renderVault();
+    };
+
+    window.toggleGroupBy = function() {
+      currentGroupBy = !currentGroupBy;
+      localStorage.setItem('orlandovault_group_by', String(currentGroupBy));
+      const btn = document.getElementById('btnToggleGroupBy');
+      const lbl = document.getElementById('groupByToggleLabel');
+      if (btn) btn.classList.toggle('active', currentGroupBy);
+      if (lbl) lbl.textContent = currentGroupBy ? '✓ Grouped by Category' : 'Group by Category';
+      renderVault();
+    };
+
+    window.sortTableBy = function(key) {
+      if (tableSortKey === key) {
+        tableSortAsc = !tableSortAsc;
+      } else {
+        tableSortKey = key;
+        tableSortAsc = true;
+      }
+      renderVault();
+    };
+
+    window.toggleShelfCollapse = function(shelfId) {
+      const shelf = document.getElementById(shelfId);
+      if (shelf) shelf.classList.toggle('collapsed');
+    };
+
+    // Helper: Render a single Large Card
+    function renderLargeCardHtml(item) {
+      const isPinned = !!(item.isPriority || item.pinned);
+      const isCritical = (item.importance || '').toLowerCase() === 'critical';
+      const maskedPwd = '•'.repeat(Math.min(12, (item.password || '').length || 10));
+      const safeTitle = escapeHtml(item.title);
+      const safeUser = escapeHtml(item.username);
+      const safeNotes = item.notes ? escapeHtml(item.notes) : '';
+      const safePwd = escapeHtml(item.password);
+
+      let catClass = 'cat-portals';
+      const cat = (item.category || '').toLowerCase().trim();
+      if (cat === 'gmail' || cat.includes('google')) catClass = 'cat-gmail';
+      else if (cat.includes('deped') || cat.includes('academic')) catClass = 'cat-deped';
+      else if (cat.includes('social')) catClass = 'cat-social';
+      else if (cat === 'ai' || cat === 'ai & dev' || cat.includes('claude') || cat.includes('dev') || cat.includes('openai') || cat.includes('anthropic')) catClass = 'cat-ai';
+      else if (cat.includes('bank') || cat.includes('finance')) catClass = 'cat-banking';
+      else if (cat.includes('entertain') || cat.includes('stream') || cat.includes('media')) catClass = 'cat-entertainment';
+      else if (cat.includes('shop') || cat.includes('delivery')) catClass = 'cat-shopping';
+      else if (cat.includes('micro') || cat.includes('office') || cat.includes('azure')) catClass = 'cat-microsoft';
+      else if (cat.includes('fam')) catClass = 'cat-family';
+      else if (cat.includes('system') || cat.includes('device')) catClass = 'cat-system';
+      else catClass = 'cat-portals';
+
+      const brand = getServiceBrandInfo(item);
+      const visualAuraClass = brand.brandClass ? brand.brandClass : catClass;
+
+      return `
+        <article class="vault-card ${visualAuraClass} ${isPinned ? 'is-priority-pinned' : ''} ${isCritical ? 'is-critical-account' : ''}" data-cat="${catClass}" data-card-id="${item.id}" id="card-${item.id}" tabindex="0" role="button" aria-label="${safeTitle} account details">
+          <div class="card-header">
+            <div class="card-brand-header-left">
+              <div class="brand-squircle ${brand.squircleClass}">${brand.logoSvg}</div>
+              <div class="card-title-group">
+                <div class="card-brand-microbar">
+                  <span class="card-badge-verified">✓ ${brand.brandTag}</span>
+                  <span class="card-badge-cat-tag">· ${item.category || 'ACCOUNT'}</span>
+                  ${brand.isOrg ? '<span class="card-badge-org">ORG</span>' : ''}
+                  ${isCritical ? '<span class="card-badge-critical-micro">⚡ CRITICAL</span>' : ''}
+                  ${isPinned ? '<span class="card-badge-priority-micro">★ TOP</span>' : ''}
+                  ${(!isPinned && (Date.now() - (item.lastActiveWorkingAt || item.lastUsedAt || 0) < 30 * 60 * 1000) && (item.lastActiveWorkingAt || item.lastUsedAt)) ? '<span class="card-badge-priority-micro" style="background:rgba(14,165,233,0.22);border-color:#38bdf8;color:#bae6fd;font-weight:700;">⚡ JUST ACCESSED</span>' : ''}
+                </div>
+                <h3 class="card-account-title">${safeTitle}</h3>
+              </div>
+            </div>
+            <div class="card-header-actions">
+              <button type="button" class="btn-card-pin ${isPinned ? 'pinned' : ''}" onclick="toggleCardPriority('${item.id}')" title="${isPinned ? 'Top Priority Pinned (Click to unpin)' : 'Pin to Top (Priority)'}" aria-label="Toggle Priority">
+                <svg viewBox="0 0 24 24" class="hud-reticle-star">
+                  <circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="2 2" opacity="0.6"/>
+                  <path d="M12 3.2l2.4 4.8 5.3.8-3.8 3.7.9 5.3-4.8-2.5-4.8 2.5.9-5.3-3.8-3.7 5.3-.8z" fill="${isPinned ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.6"/>
+                </svg>
+              </button>
+              <button type="button" class="btn-card-edit" onclick="openCardEditor('${item.id}')" title="Edit Card Anatomy" aria-label="Edit Card Anatomy">
+                <svg viewBox="0 0 24 24" class="hud-reticle-edit">
+                  <circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="2 2" opacity="0.6"/>
+                  <path d="M11 4H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h13a2 2 0 0 0 2-2v-6" fill="none" stroke="currentColor" stroke-width="1.8"/>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="card-username-row">
+            <span title="${safeUser}">${safeUser}</span>
+            <button type="button" class="btn-copy-user" onclick="copyUsername('${safeUser}', this, '${item.id}')" title="Copy Username / Email">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              Copy
+            </button>
+          </div>
+
+          <div class="password-quantum-deck">
+            <div class="pwd-display-box masked" id="pwdBox-${item.id}" data-raw="${safePwd}" data-masked="${maskedPwd}">
+              ${maskedPwd}
+            </div>
+            <div class="pwd-action-cluster">
+              <button type="button" class="btn-pwd-action" onclick="toggleReveal('${item.id}')" title="Toggle Show/Hide Password">
+                <svg width="15" height="15" id="eyeIcon-${item.id}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+              <button type="button" class="btn-copy-instant" onclick="openAccountFocusModal('${item.id}', false); copyToClipboard('${safePwd}', '${safeTitle}', this, '${item.id}');" title="1-Click Copy Password & Focus">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                COPY
+              </button>
+            </div>
+          </div>
+
+          ${renderSmartMetadata(item.metadata, item.notes)}
+        </article>
+      `;
+    }
+
+    // Helper: Render a single Compact Card (Medium Icons)
+    function renderCompactCardHtml(item) {
+      const isPinned = !!(item.isPriority || item.pinned);
+      const safeTitle = escapeHtml(item.title);
+      const safeUser = escapeHtml(item.username);
+      const safePwd = escapeHtml(item.password);
+      const maskedPwd = '•'.repeat(Math.min(10, (item.password || '').length || 8));
+      const brand = getServiceBrandInfo(item);
+
+      return `
+        <div class="vault-card-compact ${isPinned ? 'is-priority-pinned' : ''}" data-card-id="${item.id}" id="card-${item.id}" tabindex="0" role="button" aria-label="${safeTitle} compact card">
+          <div class="compact-header">
+            <div class="compact-brand-group">
+              <div class="compact-squircle ${brand.squircleClass}">${brand.logoSvg}</div>
+              <div class="compact-title-col">
+                <h4 class="compact-title" title="${safeTitle}">${safeTitle}</h4>
+                <div class="compact-cat-tag">${item.category || 'Account'} ${isPinned ? '★' : ''}</div>
+              </div>
+            </div>
+            <div class="compact-actions">
+              <button type="button" class="btn-card-pin ${isPinned ? 'pinned' : ''}" style="width:26px;height:26px;" onclick="toggleCardPriority('${item.id}')" title="Pin Priority">
+                <svg viewBox="0 0 24 24" style="width:13px;height:13px;"><path d="M12 3.2l2.4 4.8 5.3.8-3.8 3.7.9 5.3-4.8-2.5-4.8 2.5.9-5.3-3.8-3.7 5.3-.8z" fill="${isPinned ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.6"/></svg>
+              </button>
+              <button type="button" class="btn-card-edit" style="width:26px;height:26px;" onclick="openCardEditor('${item.id}')" title="Edit">
+                <svg viewBox="0 0 24 24" style="width:13px;height:13px;"><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="compact-username-row">
+            <span class="compact-user-val" title="${safeUser}">${safeUser}</span>
+            <button type="button" class="compact-btn-copy-user" onclick="copyUsername('${safeUser}', this, '${item.id}')">Copy</button>
+          </div>
+
+          <div class="compact-pwd-row">
+            <div class="compact-pwd-masked">${maskedPwd}</div>
+            <button type="button" class="compact-btn-copy-pwd" onclick="openAccountFocusModal('${item.id}', false); copyToClipboard('${safePwd}', '${safeTitle}', this, '${item.id}');" title="1-Click Copy Password">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              COPY
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // Helper: Render Details Table
+    function renderDetailsTableHtml(items) {
+      // Handle sorting
+      let sorted = [...items];
+      if (tableSortKey === 'service') {
+        sorted.sort((a,b) => tableSortAsc ? (a.title||'').localeCompare(b.title||'') : (b.title||'').localeCompare(a.title||''));
+      } else if (tableSortKey === 'category') {
+        sorted.sort((a,b) => tableSortAsc ? (a.category||'').localeCompare(b.category||'') : (b.category||'').localeCompare(a.category||''));
+      } else if (tableSortKey === 'username') {
+        sorted.sort((a,b) => tableSortAsc ? (a.username||'').localeCompare(b.username||'') : (b.username||'').localeCompare(a.username||''));
+      } else if (tableSortKey === 'lastUsed') {
+        sorted.sort((a,b) => tableSortAsc ? ((a.lastUsedAt||0) - (b.lastUsedAt||0)) : ((b.lastUsedAt||0) - (a.lastUsedAt||0)));
+      }
+
+      return `
+        <div class="vault-table-container">
+          <table class="vault-table">
+            <thead>
+              <tr>
+                <th style="width:40px;text-align:center;">★</th>
+                <th onclick="sortTableBy('service')" class="${tableSortKey==='service'?'sorted':''}">
+                  SERVICE / ACCOUNT ${tableSortKey==='service' ? (tableSortAsc ? '▲' : '▼') : ''}
+                </th>
+                <th onclick="sortTableBy('category')" class="${tableSortKey==='category'?'sorted':''}">
+                  CATEGORY ${tableSortKey==='category' ? (tableSortAsc ? '▲' : '▼') : ''}
+                </th>
+                <th onclick="sortTableBy('username')" class="${tableSortKey==='username'?'sorted':''}">
+                  USERNAME / EMAIL ${tableSortKey==='username' ? (tableSortAsc ? '▲' : '▼') : ''}
+                </th>
+                <th>PASSWORD</th>
+                <th onclick="sortTableBy('lastUsed')" class="${tableSortKey==='lastUsed'?'sorted':''}">
+                  LAST ACCESSED ${tableSortKey==='lastUsed' ? (tableSortAsc ? '▲' : '▼') : ''}
+                </th>
+                <th style="text-align:right;">ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${sorted.map(item => {
+                const isPinned = !!(item.isPriority || item.pinned);
+                const safeTitle = escapeHtml(item.title);
+                const safeUser = escapeHtml(item.username);
+                const safePwd = escapeHtml(item.password);
+                const maskedPwd = '••••••••••••';
+                const brand = getServiceBrandInfo(item);
+                const lastUsedStr = item.lastUsedAt ? formatRelativeTime(item.lastUsedAt) : 'Never';
+
+                return `
+                  <tr class="vault-table-row ${isPinned ? 'is-priority-pinned' : ''}" data-card-id="${item.id}" id="card-${item.id}" tabindex="0">
+                    <td style="text-align:center;" onclick="event.stopPropagation(); toggleCardPriority('${item.id}');">
+                      <span style="color:${isPinned ? '#ffd700' : 'rgba(255,255,255,0.2)'};font-size:14px;cursor:pointer;">★</span>
+                    </td>
+                    <td>
+                      <div class="table-service-cell">
+                        <div class="compact-squircle ${brand.squircleClass}" style="width:24px;height:24px;border-radius:6px;">${brand.logoSvg}</div>
+                        <span class="table-service-name">${safeTitle}</span>
+                      </div>
+                    </td>
+                    <td><span class="card-badge-cat-tag">${item.category || 'General'}</span></td>
+                    <td>
+                      <span style="font-family:monospace;color:#93c5fd;cursor:pointer;" onclick="event.stopPropagation(); copyUsername('${safeUser}', this, '${item.id}');" title="Click to copy username">${safeUser}</span>
+                    </td>
+                    <td>
+                      <span class="table-pwd-mask">${maskedPwd}</span>
+                    </td>
+                    <td style="color:#64748b;font-size:11px;">${lastUsedStr}</td>
+                    <td style="text-align:right;">
+                      <button type="button" class="table-action-pill" onclick="event.stopPropagation(); openAccountFocusModal('${item.id}', false); copyToClipboard('${safePwd}', '${safeTitle}', this, '${item.id}');" title="Copy Password">
+                        COPY
+                      </button>
+                      <button type="button" class="btn-card-edit" style="width:26px;height:26px;display:inline-flex;" onclick="event.stopPropagation(); openCardEditor('${item.id}');" title="Edit">
+                        <svg viewBox="0 0 24 24" style="width:12px;height:12px;"><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+                      </button>
+                    </td>
+                  </tr>
+                `;
+              }).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    // Helper: Render List View (Command Index Chips)
+    function renderListChipsHtml(items) {
+      return `
+        <div class="vault-list-container">
+          ${items.map(item => {
+            const isPinned = !!(item.isPriority || item.pinned);
+            const safeTitle = escapeHtml(item.title);
+            const safePwd = escapeHtml(item.password);
+            const brand = getServiceBrandInfo(item);
+
+            return `
+              <div class="vault-list-chip ${isPinned ? 'is-priority-pinned' : ''}" data-card-id="${item.id}" id="card-${item.id}" tabindex="0" role="button" aria-label="${safeTitle} chip">
+                <div class="chip-squircle ${brand.squircleClass}">${brand.logoSvg}</div>
+                <div class="chip-title">${safeTitle}</div>
+                <div class="chip-cat-badge">${item.category || 'App'}</div>
+                ${isPinned ? '<span style="color:#ffd700;font-size:12px;">★</span>' : ''}
+                <div class="chip-copy-icon" title="1-Click Copy Password">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
     function renderVault() {
       const container = document.getElementById('vaultGridContainer');
       if (!container) return;
+
+      // Update Subbar buttons state
+      document.querySelectorAll('.btn-view-mode').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-view') === currentViewMode);
+      });
+      const btnGrp = document.getElementById('btnToggleGroupBy');
+      const lblGrp = document.getElementById('groupByToggleLabel');
+      if (btnGrp) btnGrp.classList.toggle('active', currentGroupBy);
+      if (lblGrp) lblGrp.textContent = currentGroupBy ? '✓ Grouped by Category' : 'Group by Category';
+
+      // Update grid container class
+      container.className = 'vault-grid mode-' + currentViewMode;
 
       const q = searchQuery.toLowerCase().trim();
       const filtered = vaultItems.filter(item => {
@@ -7599,104 +8464,83 @@
       // Priority Pinned on Top, followed by Usage Rank
       const sortedCards = sortVaultCards(filtered);
 
-      container.innerHTML = sortedCards.map(item => {
-        const isPinned = !!(item.isPriority || item.pinned);
-        const isCritical = (item.importance || '').toLowerCase() === 'critical';
-        const maskedPwd = '•'.repeat(Math.min(12, (item.password || '').length || 10));
-        const safeTitle = escapeHtml(item.title);
-        const safeUser = escapeHtml(item.username);
-        const safeNotes = item.notes ? escapeHtml(item.notes) : '';
-        const safePwd = escapeHtml(item.password);
+      let mainHtml = '';
 
-        let catClass = 'cat-portals';
-        const cat = (item.category || '').toLowerCase().trim();
-        // Exact checks first so 'gmail' never matches 'ai'
-        if (cat === 'gmail' || cat.includes('google')) catClass = 'cat-gmail';
-        else if (cat.includes('deped') || cat.includes('academic')) catClass = 'cat-deped';
-        else if (cat.includes('social')) catClass = 'cat-social';
-        else if (cat === 'ai' || cat === 'ai & dev' || cat.includes('claude') || cat.includes('dev') || cat.includes('openai') || cat.includes('anthropic')) catClass = 'cat-ai';
-        else if (cat.includes('bank') || cat.includes('finance')) catClass = 'cat-banking';
-        else if (cat.includes('entertain') || cat.includes('stream') || cat.includes('media')) catClass = 'cat-entertainment';
-        else if (cat.includes('shop') || cat.includes('delivery')) catClass = 'cat-shopping';
-        else if (cat.includes('micro') || cat.includes('office') || cat.includes('azure')) catClass = 'cat-microsoft';
-        else if (cat.includes('fam')) catClass = 'cat-family';
-        else if (cat.includes('system') || cat.includes('device')) catClass = 'cat-system';
-        else catClass = 'cat-portals';
+      if (currentGroupBy) {
+        // Group by Category shelves
+        const groups = {};
+        const priGroup = [];
 
-        // Calculate rotation recency
-        const updatedDate = item.updated_at ? new Date(item.updated_at) : new Date();
-        const daysAgo = Math.floor((Date.now() - updatedDate.getTime()) / (1000 * 60 * 60 * 24));
-        const rotationLabel = daysAgo <= 0 ? 'Today' : `${daysAgo}d ago`;
+        sortedCards.forEach(item => {
+          if (item.isPriority || item.pinned) {
+            priGroup.push(item);
+          } else {
+            const cat = item.category || 'Other';
+            if (!groups[cat]) groups[cat] = [];
+            groups[cat].push(item);
+          }
+        });
 
-                const brand = getServiceBrandInfo(item);
-        // Brand Aura takes absolute priority over generic category glow!
-        // If brand has its own official aura (e.g. brand-aura-meta, brand-aura-google), use it exclusively so category colors never override it!
-        const visualAuraClass = brand.brandClass ? brand.brandClass : catClass;
-
-        return `
-          <article class="vault-card ${visualAuraClass} ${isPinned ? 'is-priority-pinned' : ''} ${isCritical ? 'is-critical-account' : ''}" data-cat="${catClass}" data-card-id="${item.id}" id="card-${item.id}" tabindex="0" role="button" aria-label="${safeTitle} account details">
-            <div class="card-header">
-              <div class="card-brand-header-left">
-                <div class="brand-squircle ${brand.squircleClass}">${brand.logoSvg}</div>
-                <div class="card-title-group">
-                  <div class="card-brand-microbar">
-                    <span class="card-badge-verified">✓ ${brand.brandTag}</span>
-                    <span class="card-badge-cat-tag">· ${item.category || 'ACCOUNT'}</span>
-                    ${brand.isOrg ? '<span class="card-badge-org">ORG</span>' : ''}
-                    ${isCritical ? '<span class="card-badge-critical-micro">⚡ CRITICAL</span>' : ''}
-                    ${isPinned ? '<span class="card-badge-priority-micro">★ TOP</span>' : ''}
-                    ${(!isPinned && (Date.now() - (item.lastActiveWorkingAt || item.lastUsedAt || 0) < 30 * 60 * 1000) && (item.lastActiveWorkingAt || item.lastUsedAt)) ? '<span class="card-badge-priority-micro" style="background:rgba(14,165,233,0.22);border-color:#38bdf8;color:#bae6fd;font-weight:700;">⚡ JUST ACCESSED</span>' : ''}
-                  </div>
-                  <h3 class="card-account-title">${safeTitle}</h3>
+        // 1. Priority Shelf
+        if (priGroup.length > 0) {
+          mainHtml += `
+            <div class="category-shelf" id="shelf-priority">
+              <div class="category-shelf-header" onclick="toggleShelfCollapse('shelf-priority')">
+                <div class="category-shelf-title">
+                  <span style="color:#ffd700;">★</span>
+                  <span>TOP PRIORITY PINS</span>
+                  <span class="category-shelf-count" style="background:rgba(255,215,0,0.2);color:#ffd700;">${priGroup.length}</span>
                 </div>
+                <div class="category-shelf-chevron">▼</div>
               </div>
-              <div class="card-header-actions">
-                <button type="button" class="btn-card-pin ${isPinned ? 'pinned' : ''}" onclick="toggleCardPriority('${item.id}')" title="${isPinned ? 'Top Priority Pinned (Click to unpin)' : 'Pin to Top (Priority)'}" aria-label="Toggle Priority">
-                  <svg viewBox="0 0 24 24" class="hud-reticle-star">
-                    <circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="2 2" opacity="0.6"/>
-                    <path d="M12 3.2l2.4 4.8 5.3.8-3.8 3.7.9 5.3-4.8-2.5-4.8 2.5.9-5.3-3.8-3.7 5.3-.8z" fill="${isPinned ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.6"/>
-                  </svg>
-                </button>
-                <button type="button" class="btn-card-edit" onclick="openCardEditor('${item.id}')" title="Edit Card Anatomy" aria-label="Edit Card Anatomy">
-                  <svg viewBox="0 0 24 24" class="hud-reticle-edit">
-                    <circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="2 2" opacity="0.6"/>
-                    <path d="M11 4H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h13a2 2 0 0 0 2-2v-6" fill="none" stroke="currentColor" stroke-width="1.8"/>
-                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" fill="none" stroke="currentColor" stroke-width="1.8"/>
-                  </svg>
-                </button>
+              <div class="category-shelf-body">
+                ${renderItemsInCurrentMode(priGroup)}
               </div>
             </div>
+          `;
+        }
 
-            <div class="card-username-row">
-              <span title="${safeUser}">${safeUser}</span>
-              <button type="button" class="btn-copy-user" onclick="copyUsername('${safeUser}', this, '${item.id}')" title="Copy Username / Email">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                Copy
-              </button>
-            </div>
-
-            <div class="password-quantum-deck">
-              <div class="pwd-display-box masked" id="pwdBox-${item.id}" data-raw="${safePwd}" data-masked="${maskedPwd}">
-                ${maskedPwd}
+        // 2. Category Shelves
+        const catKeys = Object.keys(groups).sort();
+        catKeys.forEach((catKey, idx) => {
+          const list = groups[catKey];
+          const shelfId = 'shelf-cat-' + idx;
+          mainHtml += `
+            <div class="category-shelf" id="${shelfId}">
+              <div class="category-shelf-header" onclick="toggleShelfCollapse('${shelfId}')">
+                <div class="category-shelf-title">
+                  <span>📁</span>
+                  <span>${escapeHtml(catKey.toUpperCase())}</span>
+                  <span class="category-shelf-count">${list.length}</span>
+                </div>
+                <div class="category-shelf-chevron">▼</div>
               </div>
-              <div class="pwd-action-cluster">
-                <button type="button" class="btn-pwd-action" onclick="toggleReveal('${item.id}')" title="Toggle Show/Hide Password">
-                  <svg width="15" height="15" id="eyeIcon-${item.id}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                </button>
-                <button type="button" class="btn-copy-instant" onclick="openAccountFocusModal('${item.id}', false); copyToClipboard('${safePwd}', '${safeTitle}', this, '${item.id}');" title="1-Click Copy Password & Focus">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                  COPY
-                </button>
+              <div class="category-shelf-body">
+                ${renderItemsInCurrentMode(list)}
               </div>
             </div>
-
-            ${renderSmartMetadata(item.metadata, item.notes)}
-          </article>
-        `;
-      }).join('');
-      if (window.updateRelativeTimestamps) {
-        window.updateRelativeTimestamps(container);
+          `;
+        });
+      } else {
+        // Flat List in chosen mode
+        mainHtml = renderItemsInCurrentMode(sortedCards);
       }
+
+      function renderItemsInCurrentMode(items) {
+        if (currentViewMode === 'large') {
+          return '<div class="vault-grid mode-large" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(285px, 1fr));gap:13px;width:100%;">' + items.map(renderLargeCardHtml).join('') + '</div>';
+        } else if (currentViewMode === 'compact') {
+          return '<div class="vault-grid mode-compact">' + items.map(renderCompactCardHtml).join('') + '</div>';
+        } else if (currentViewMode === 'details') {
+          return renderDetailsTableHtml(items);
+        } else if (currentViewMode === 'list') {
+          return renderListChipsHtml(items);
+        }
+        return items.map(renderLargeCardHtml).join('');
+      }
+
+      container.innerHTML = mainHtml;
+
 
       // Append Manual Credential Creator Workspace at the very bottom
       container.innerHTML += `
@@ -9111,6 +9955,8 @@
       'orlandovault_copy_count_v1': { type: 'SYNC', category: 'metrics', schemaVersion: 1, dataType: 'number' },
       'orlandovault_google_sheet_url': { type: 'SYNC', category: 'settings', schemaVersion: 1, dataType: 'string' },
       'orlandovault_auto_sync': { type: 'SYNC', category: 'settings', schemaVersion: 1, dataType: 'boolean' },
+      'orlandovault_view_mode': { type: 'SYNC', category: 'settings', schemaVersion: 1, dataType: 'string' },
+      'orlandovault_group_by': { type: 'SYNC', category: 'settings', schemaVersion: 1, dataType: 'boolean' },
       'orlandovault_categories_v1': { type: 'SYNC', category: 'settings', schemaVersion: 1, dataType: 'array' },
       'orlandovault_tombstones_v1': { type: 'SYNC', category: 'tombstones', schemaVersion: 1, dataType: 'object' },
       'orlandovault_snapshots_v1': { type: 'LOCAL_ONLY', category: 'backup', schemaVersion: 1, dataType: 'array' },
@@ -10182,6 +11028,16 @@
     }
 
     window.openAccountFocusModal = openAccountFocusModal;
+
+    // Initialize Windows View Mode Subbar
+    setTimeout(() => {
+      document.getElementById('btnViewLarge')?.addEventListener('click', () => window.setViewMode('large'));
+      document.getElementById('btnViewCompact')?.addEventListener('click', () => window.setViewMode('compact'));
+      document.getElementById('btnViewDetails')?.addEventListener('click', () => window.setViewMode('details'));
+      document.getElementById('btnViewList')?.addEventListener('click', () => window.setViewMode('list'));
+      document.getElementById('btnToggleGroupBy')?.addEventListener('click', () => window.toggleGroupBy());
+    }, 50);
+
     window.closeAccountFocusModal = closeAccountFocusModal;
 
 
@@ -11146,7 +12002,7 @@
     const grid = document.getElementById('vaultGridContainer');
     if (grid) {
       grid.addEventListener('pointerdown', function(e) {
-        const card = e.target.closest('.vault-card');
+        const card = e.target.closest('.vault-card, .vault-card-compact, .vault-table-row, .vault-list-chip');
         if (!card) return;
         if (e.target.closest('button, a, input, select, textarea')) return;
 
@@ -11201,8 +12057,88 @@
 
     // 3. KEYBOARD ACCESSIBILITY: TAB & ENTER NAVIGATION
     document.addEventListener('keydown', function(e) {
+      // Windows Explorer View Shortcuts: Ctrl+Shift+1..6 and Ctrl+Shift+G
+      if (e.ctrlKey && e.shiftKey) {
+        if (e.key === '!' || e.key === '1' || e.key === '@' || e.key === '2') {
+          e.preventDefault();
+          window.setViewMode('large');
+          return;
+        } else if (e.key === '#' || e.key === '3') {
+          e.preventDefault();
+          window.setViewMode('compact');
+          return;
+        } else if (e.key === '
       if (e.key === 'Enter') {
-        const focusedCard = document.activeElement ? document.activeElement.closest('.vault-card') : null;
+        const focusedCard = document.activeElement ? document.activeElement.closest('.vault-card, .vault-card-compact, .vault-table-row, .vault-list-chip') : null;
+        if (focusedCard && !e.target.closest('button, a, input, select, textarea')) {
+          e.preventDefault();
+          const cardId = focusedCard.getAttribute('data-card-id');
+          const items = (typeof window.getVaultItems === 'function' ? window.getVaultItems() : window.vaultItems) || [];
+          const item = items.find(x => x.id === cardId);
+          if (item) {
+            if (item.password && typeof copyPasswordSilently === 'function') {
+              copyPasswordSilently(item.password);
+            }
+            if (typeof openAccountFocusModal === 'function') {
+              openAccountFocusModal(item.id, false);
+            }
+          }
+        }
+      } else if (e.key === 'Escape') {
+        if (typeof window.closeActiveVaultModal === 'function') {
+          window.closeActiveVaultModal();
+        }
+      }
+    });
+
+    // 4. IOS-SAFE BACKGROUND SCROLL LOCK ENGINE
+    let lockedScrollY = 0;
+    window.lockPageScroll = function() {
+      lockedScrollY = window.pageYOffset || document.documentElement.scrollTop;
+      document.body.style.position = 'fixed';
+      document.body.style.top = '-' + lockedScrollY + 'px';
+      document.body.style.width = '100%';
+      document.body.style.overflow = 'hidden';
+    };
+
+    window.unlockPageScroll = function() {
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      document.body.style.overflow = '';
+      window.scrollTo(0, lockedScrollY);
+    };
+
+    // 5. DEBOUNCED SEARCH ENGINE (120ms)
+    let spotlightSearchTimer = null;
+    window.debounceSpotlightSearch = function(query, callback) {
+      if (spotlightSearchTimer) clearTimeout(spotlightSearchTimer);
+      spotlightSearchTimer = setTimeout(function() {
+        callback(query);
+      }, 120);
+    };
+
+  })();
+  </script>
+
+</body>
+</html> || e.key === '4') {
+          e.preventDefault();
+          window.setViewMode('list');
+          return;
+        } else if (e.key === '%' || e.key === '5' || e.key === '^' || e.key === '6') {
+          e.preventDefault();
+          window.setViewMode('details');
+          return;
+        } else if (e.key.toLowerCase() === 'g') {
+          e.preventDefault();
+          window.toggleGroupBy();
+          return;
+        }
+      }
+
+      if (e.key === 'Enter') {
+        const focusedCard = document.activeElement ? document.activeElement.closest('.vault-card, .vault-card-compact, .vault-table-row, .vault-list-chip') : null;
         if (focusedCard && !e.target.closest('button, a, input, select, textarea')) {
           e.preventDefault();
           const cardId = focusedCard.getAttribute('data-card-id');
