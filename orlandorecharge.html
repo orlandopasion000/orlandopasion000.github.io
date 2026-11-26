@@ -1939,57 +1939,66 @@ body.light-theme .rest-mode-btn:hover {
   }
 }
 
-/* Quantum Meteor Button Special Styling (Fiery Molten Asteroid & Blazing Flame Aura) */
+/* Quantum Meteor Button Special Styling (4K Volcanic Card + 3D Molten Core Media Badge) */
 .qgame-btn-meteor {
-  background: linear-gradient(135deg, rgba(124, 45, 18, 0.22) 0%, rgba(67, 20, 7, 0.16) 100%) !important;
-  border: 1px solid rgba(249, 115, 22, 0.35) !important;
-  color: rgba(254, 215, 170, 0.72) !important;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.22), 0 0 10px rgba(249, 115, 22, 0.14) !important;
+  background: linear-gradient(135deg, rgba(68, 20, 6, 0.72) 0%, rgba(36, 10, 4, 0.68) 100%),
+              url('assets/game-quantum-meteor-hd.jpg') center / cover no-repeat !important;
+  background-blend-mode: overlay;
+  border: 1px solid rgba(251, 146, 60, 0.48) !important;
+  color: #ffedd5 !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.30), 0 0 12px rgba(249, 115, 22, 0.22) !important;
+}
+
+.qgame-btn-meteor .game-btn-media-core {
+  border: 1.5px solid #fb923c;
+  box-shadow: 0 0 9px rgba(249, 115, 22, 0.85);
 }
 
 .qgame-btn-meteor:hover {
-  background: linear-gradient(135deg, rgba(194, 65, 12, 0.45) 0%, rgba(154, 52, 18, 0.32) 100%) !important;
-  border-color: rgba(251, 146, 60, 0.80) !important;
-  color: #fff7ed !important;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.38), 0 0 18px rgba(249, 115, 22, 0.45) !important;
+  background: linear-gradient(135deg, rgba(110, 32, 10, 0.82) 0%, rgba(58, 16, 6, 0.76) 100%),
+              url('assets/game-quantum-meteor-hd.jpg') center / cover no-repeat !important;
+  background-blend-mode: overlay;
+  border-color: #fb923c !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45), 0 0 18px rgba(249, 115, 22, 0.55) !important;
   transform: translateY(-1px);
 }
 
-.qgame-btn-meteor .game-btn-glyph {
-  color: rgba(251, 146, 60, 0.95) !important;
-  filter: drop-shadow(0 0 5px rgba(249, 115, 22, 0.65)) !important;
+.qgame-btn-meteor:hover .game-btn-media-core {
+  transform: scale(1.18) rotate(-8deg);
+  box-shadow: 0 0 14px rgba(251, 146, 60, 0.98);
 }
 
-.qgame-btn-meteor:hover .game-btn-glyph {
-  color: #fed7aa !important;
-  transform: scale(1.22) rotate(-10deg) !important;
-}
-
-.qgame-btn-meteor .game-btn-glyph-meteor svg {
-  width: 14px;
-  height: 14px;
-  display: block;
-  overflow: visible;
-  transition: transform 0.3s ease;
-}
-
-/* Quantum Dynamo Button Special Styling (High-Voltage Electric Cyan & Tesla Plasma Aura) */
-.qgame-btn-realm .game-btn-glyph {
-  color: rgba(56, 189, 248, 0.95) !important;
-  filter: drop-shadow(0 0 5px rgba(56, 189, 248, 0.65)) !important;
-}
-
-.qgame-btn-realm:hover .game-btn-glyph {
+/* Quantum Dynamo Button Special Styling (4K Faraday Singularity Card + 3D Plasma Sphere Media Badge) */
+.qgame-btn-realm {
+  background: linear-gradient(135deg, rgba(12, 24, 58, 0.72) 0%, rgba(28, 12, 54, 0.68) 100%),
+              url('assets/game-quantum-dynamo-hd.jpg') center / cover no-repeat !important;
+  background-blend-mode: overlay;
+  border: 1px solid rgba(56, 189, 248, 0.48) !important;
   color: #e0f2fe !important;
-  transform: scale(1.22) rotate(-10deg) !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.30), 0 0 12px rgba(56, 189, 248, 0.24) !important;
 }
 
-.qgame-btn-realm .game-btn-glyph-dynamo svg {
-  width: 14px;
-  height: 14px;
-  display: block;
-  overflow: visible;
-  transition: transform 0.3s ease;
+.qgame-btn-realm .game-btn-media-core {
+  border: 1.5px solid #38bdf8;
+  box-shadow: 0 0 9px rgba(56, 189, 248, 0.88);
+}
+
+.qgame-btn-realm:hover {
+  background: linear-gradient(135deg, rgba(18, 38, 86, 0.82) 0%, rgba(44, 18, 82, 0.76) 100%),
+              url('assets/game-quantum-dynamo-hd.jpg') center / cover no-repeat !important;
+  background-blend-mode: overlay;
+  border-color: #38bdf8 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45), 0 0 18px rgba(56, 189, 248, 0.55) !important;
+  transform: translateY(-1px);
+}
+
+.qgame-btn-realm:hover .game-btn-media-core {
+  transform: scale(1.18) rotate(-8deg);
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.98);
 }
 
 body.light-theme .qgame-btn-meteor {
@@ -2004,38 +2013,35 @@ body.light-theme .qgame-btn-meteor:hover {
   color: #9a3412 !important;
 }
 
-/* Quantum Helix Button Special Styling (Cyan and Violet Double-Helix Aura) */
+/* Quantum Helix Button Special Styling (4K Prism Double-Helix Card + 3D Helix Sphere Media Badge) */
 .qgame-btn-helix {
-  background: linear-gradient(135deg, rgba(88, 28, 135, 0.20) 0%, rgba(6, 182, 212, 0.14) 100%) !important;
-  border: 1px solid rgba(34, 211, 238, 0.32) !important;
-  color: rgba(224, 242, 254, 0.75) !important;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18), 0 0 10px rgba(34, 211, 238, 0.14) !important;
+  background: linear-gradient(135deg, rgba(32, 14, 64, 0.72) 0%, rgba(8, 36, 56, 0.68) 100%),
+              url('assets/game-quantum-helix-hd.jpg') center / cover no-repeat !important;
+  background-blend-mode: overlay;
+  border: 1px solid rgba(34, 211, 238, 0.48) !important;
+  color: #ecfeff !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.30), 0 0 12px rgba(34, 211, 238, 0.22) !important;
+}
+
+.qgame-btn-helix .game-btn-media-core {
+  border: 1.5px solid #22d3ee;
+  box-shadow: 0 0 9px rgba(34, 211, 238, 0.88);
 }
 
 .qgame-btn-helix:hover {
-  background: linear-gradient(135deg, rgba(126, 34, 206, 0.32) 0%, rgba(8, 145, 178, 0.26) 100%) !important;
-  border-color: rgba(103, 232, 249, 0.70) !important;
-  color: #f0fdf4 !important;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.32), 0 0 16px rgba(34, 211, 238, 0.35) !important;
+  background: linear-gradient(135deg, rgba(54, 22, 98, 0.82) 0%, rgba(12, 56, 82, 0.76) 100%),
+              url('assets/game-quantum-helix-hd.jpg') center / cover no-repeat !important;
+  background-blend-mode: overlay;
+  border-color: #67e8f9 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45), 0 0 18px rgba(34, 211, 238, 0.55) !important;
   transform: translateY(-1px);
 }
 
-.qgame-btn-helix .game-btn-glyph {
-  color: rgba(34, 211, 238, 0.90) !important;
-  filter: drop-shadow(0 0 5px rgba(34, 211, 238, 0.45)) !important;
-}
-
-.qgame-btn-helix:hover .game-btn-glyph {
-  color: #e0e7ff !important;
-  transform: rotate(180deg) scale(1.20) !important;
-}
-
-.qgame-btn-helix .game-btn-glyph-helix svg {
-  width: 14px;
-  height: 14px;
-  display: block;
-  overflow: visible;
-  transition: transform 0.3s ease;
+.qgame-btn-helix:hover .game-btn-media-core {
+  transform: scale(1.18) rotate(8deg);
+  box-shadow: 0 0 14px rgba(103, 232, 249, 0.98);
 }
 
 body.light-theme .qgame-btn-helix {
@@ -4854,114 +4860,24 @@ body.light-theme .highlight-card .dist-icon{
 
       <!-- Enter Quantum Dynamo Game Mode (Game 1: High-Voltage Tesla Arcs & Faraday Induction Core) -->
       <button type="button" class="qgame-btn-launch qgame-btn-realm" id="btnLaunchGame" title="Enter Quantum Dynamo Game (High-Voltage Tesla Arcs &amp; Electromagnetic Induction Core)" aria-label="Launch Quantum Dynamo Game">
-        <span class="game-btn-glyph game-btn-glyph-dynamo" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="none">
-            <defs>
-              <linearGradient id="dynTailGrad" x1="2" y1="22" x2="16.5" y2="7.5" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#a855f7" stop-opacity="0.2"/>
-                <stop offset="35%" stop-color="#38bdf8" stop-opacity="0.9"/>
-                <stop offset="100%" stop-color="#ffffff"/>
-              </linearGradient>
-              <radialGradient id="dynHeadGrad" cx="16.5" cy="7.5" r="7" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#ffffff"/>
-                <stop offset="32%" stop-color="#38bdf8"/>
-                <stop offset="70%" stop-color="#0284c7" stop-opacity="0.9"/>
-                <stop offset="100%" stop-color="#a855f7" stop-opacity="0.4"/>
-              </radialGradient>
-              <filter id="dynGlow" x="-40%" y="-40%" width="180%" height="180%">
-                <feGaussianBlur stdDeviation="0.7" result="blur"/>
-                <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-              </filter>
-            </defs>
-            <ellipse cx="16.5" cy="7.5" rx="7.2" ry="3.8" transform="rotate(-26 16.5 7.5)" stroke="#c084fc" stroke-width="1.1" opacity="0.8" stroke-dasharray="2 1.2"/>
-            <ellipse cx="16.5" cy="7.5" rx="7.0" ry="3.5" transform="rotate(38 16.5 7.5)" stroke="#38bdf8" stroke-width="1.2" opacity="0.9"/>
-            <circle cx="21.5" cy="5.2" r="1.3" fill="#ffffff" filter="url(#dynGlow)"/>
-            <circle cx="21.5" cy="5.2" r="2.2" fill="#38bdf8" opacity="0.7"/>
-            <circle cx="11.5" cy="9.8" r="1.0" fill="#c084fc"/>
-            <path d="M2 22 L6.5 17.5 L5 15 L10 12.5 L8.5 10 L13.5 8" stroke="#38bdf8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" opacity="0.45" filter="url(#dynGlow)"/>
-            <path d="M2 22 L6.5 17.5 L5 15 L10 12.5 L8.5 10 L13.5 8" stroke="url(#dynTailGrad)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M2 22 L6.5 17.5 L5 15 L10 12.5 L8.5 10 L13.5 8" stroke="#ffffff" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle cx="16.5" cy="7.5" r="5.6" fill="url(#dynHeadGrad)"/>
-            <path d="M16.5 3.5 L16.5 11.5 M12.5 7.5 L20.5 7.5 M13.7 4.7 L19.3 10.3 M13.7 10.3 L19.3 4.7" stroke="#ffffff" stroke-width="0.8" opacity="0.9"/>
-            <circle cx="16.5" cy="7.5" r="2.2" fill="#ffffff" filter="url(#dynGlow)"/>
-          </svg>
+        <span class="game-btn-media-core" aria-hidden="true">
+          <img src="assets/btn-quantum-dynamo-icon.png" alt="">
         </span>
         <span class="game-btn-label"><span class="qg-word-quantum">QUANTUM </span>DYNAMO</span>
       </button>
 
       <!-- Enter Quantum Helix Game Mode (Game 2: Cyan & Violet Intertwined Double-Helix) -->
       <button type="button" class="qgame-btn-launch qgame-btn-helix" id="btnLaunchHelixGame" title="Enter Quantum Helix Game (Cyan and violet strands twist around each other along the original sweeping paths)" aria-label="Launch Quantum Helix Game">
-        <span class="game-btn-glyph game-btn-glyph-helix" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="none">
-            <defs>
-              <filter id="helGlow" x="-40%" y="-40%" width="180%" height="180%">
-                <feGaussianBlur stdDeviation="0.7" result="blur"/>
-                <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-              </filter>
-              <linearGradient id="helGradA" x1="2" y1="22" x2="16.5" y2="7.5" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.3"/>
-                <stop offset="40%" stop-color="#22d3ee" stop-opacity="0.85"/>
-                <stop offset="100%" stop-color="#22d3ee"/>
-              </linearGradient>
-              <linearGradient id="helGradB" x1="2" y1="22" x2="16.5" y2="7.5" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#d946ef" stop-opacity="0.3"/>
-                <stop offset="40%" stop-color="#d946ef" stop-opacity="0.85"/>
-                <stop offset="100%" stop-color="#d946ef"/>
-              </linearGradient>
-            </defs>
-            <line x1="2.5" y1="21.5" x2="16.5" y2="7.5" stroke="#ffffff" stroke-width="0.8" stroke-dasharray="1.2 1.8" opacity="0.75"/>
-            <line x1="4.8" y1="16.8" x2="7.2" y2="19.2" stroke="#ffffff" stroke-width="1.3" stroke-linecap="round" opacity="0.95"/>
-            <line x1="8.6" y1="13.0" x2="11.0" y2="15.4" stroke="#ffffff" stroke-width="1.3" stroke-linecap="round" opacity="0.95"/>
-            <line x1="12.4" y1="9.2" x2="14.8" y2="11.6" stroke="#ffffff" stroke-width="1.3" stroke-linecap="round" opacity="0.95"/>
-            <circle cx="4.8" cy="16.8" r="0.9" fill="#22d3ee"/>
-            <circle cx="7.2" cy="19.2" r="0.9" fill="#d946ef"/>
-            <circle cx="8.6" cy="13.0" r="0.9" fill="#d946ef"/>
-            <circle cx="11.0" cy="15.4" r="0.9" fill="#22d3ee"/>
-            <path d="M2.5 22.5 Q 6.5 17 6.5 14.5 T 12 11.5 T 16.5 7.5" stroke="url(#helGradB)" stroke-width="2.2" stroke-linecap="round" filter="url(#helGlow)"/>
-            <path d="M2.5 22.5 Q 6.5 17 6.5 14.5 T 12 11.5 T 16.5 7.5" stroke="#fbcfe8" stroke-width="0.8" stroke-linecap="round" opacity="0.7"/>
-            <path d="M4 21 Q 4 17.5 8.5 15.5 T 13.5 9.5 T 16.5 7.5" stroke="url(#helGradA)" stroke-width="2.2" stroke-linecap="round" filter="url(#helGlow)"/>
-            <path d="M4 21 Q 4 17.5 8.5 15.5 T 13.5 9.5 T 16.5 7.5" stroke="#ffffff" stroke-width="0.8" stroke-linecap="round" opacity="0.85"/>
-            <circle cx="16.5" cy="7.5" r="4.6" fill="#0891b2" opacity="0.55"/>
-            <circle cx="16.5" cy="7.5" r="3.4" fill="#22d3ee" filter="url(#helGlow)"/>
-            <circle cx="16.5" cy="7.5" r="1.6" fill="#ffffff"/>
-          </svg>
+        <span class="game-btn-media-core" aria-hidden="true">
+          <img src="assets/btn-quantum-helix-icon.png" alt="">
         </span>
         <span class="game-btn-label"><span class="qg-word-quantum">QUANTUM </span>HELIX</span>
       </button>
 
       <!-- Enter Quantum Meteor Game Mode (Game 3: Fiery Meteors & Molten Asteroids) -->
       <button type="button" class="qgame-btn-launch qgame-btn-meteor" id="btnLaunchMeteorGame" title="Enter Quantum Meteor Game (Fiery Meteors &amp; Molten Asteroids)" aria-label="Launch Quantum Meteor Game">
-        <span class="game-btn-glyph game-btn-glyph-meteor" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="none">
-            <defs>
-              <filter id="metGlow" x="-40%" y="-40%" width="180%" height="180%">
-                <feGaussianBlur stdDeviation="0.8" result="blur"/>
-                <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-              </filter>
-              <linearGradient id="metFireGrad" x1="1" y1="23" x2="16.5" y2="7.5" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#b91c1c" stop-opacity="0.0"/>
-                <stop offset="25%" stop-color="#dc2626" stop-opacity="0.75"/>
-                <stop offset="55%" stop-color="#ea580c"/>
-                <stop offset="85%" stop-color="#f59e0b"/>
-                <stop offset="100%" stop-color="#fef08a"/>
-              </linearGradient>
-              <radialGradient id="metRockGrad" cx="16.5" cy="7.5" r="4.8" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#ffffff"/>
-                <stop offset="28%" stop-color="#fed7aa"/>
-                <stop offset="60%" stop-color="#c2410c"/>
-                <stop offset="100%" stop-color="#7c2d12"/>
-              </radialGradient>
-            </defs>
-            <circle cx="4.5" cy="14.5" r="1.0" fill="#f59e0b" filter="url(#metGlow)"/>
-            <circle cx="7.8" cy="19.2" r="0.8" fill="#ef4444"/>
-            <circle cx="10.2" cy="9.8" r="0.9" fill="#fef08a" filter="url(#metGlow)"/>
-            <path d="M1 23 Q 6.5 19.5 9 15.5 Q 11.5 11.5 14.8 11 L 18.2 7.8 L 13.2 4.8 Q 8.8 8 5.2 13 Q 2.2 17.5 1 23 Z" fill="url(#metFireGrad)" filter="url(#metGlow)"/>
-            <path d="M3.5 20.5 L 9.5 14.5 L 15.5 8.5" stroke="#ffffff" stroke-width="1.3" stroke-linecap="round" opacity="0.95"/>
-            <circle cx="16.5" cy="7.5" r="4.5" fill="url(#metRockGrad)"/>
-            <circle cx="15.2" cy="6.2" r="1.1" fill="#451a03" opacity="0.7"/>
-            <circle cx="17.8" cy="8.6" r="0.9" fill="#451a03" opacity="0.6"/>
-            <path d="M13.8 3.8 Q 18 4.2 20.2 8.4" stroke="#ffffff" stroke-width="1.4" stroke-linecap="round" filter="url(#metGlow)"/>
-          </svg>
+        <span class="game-btn-media-core" aria-hidden="true">
+          <img src="assets/btn-quantum-meteor-icon.png" alt="">
         </span>
         <span class="game-btn-label"><span class="qg-word-quantum">QUANTUM </span>METEOR</span>
       </button>
@@ -5375,6 +5291,13 @@ body.light-theme .highlight-card .dist-icon{
             <span id="qGameSkillIcon">⚡</span>
             <span id="qGameSkillLabel">EMP PULSE</span>
             <span class="qgame-skill-key" id="qGameSkillKey">SPACE</span>
+          </button>
+
+          <!-- Tier I -> Tier VI 3D Evolution & Grand Transformation Button (E / 1-6 / Click) -->
+          <button type="button" class="qgame-btn-skill" id="btnGameTierEvolution" title="Evolve 3D Character Tier I → VI (Click or Press E / 1–6)" aria-label="Evolve 3D Character Tier">
+            <span id="qGameTierIcon">👑</span>
+            <span id="qGameTierLabel">TIER I · CORE</span>
+            <span class="qgame-skill-key" id="qGameTierKey">E / 6</span>
           </button>
         </div>
 
@@ -9800,80 +9723,103 @@ try { checkUrlHashRoutine(); } catch(e){}
       ctx.stroke();
 
       if (mode === "blue") {
-        // Ref 1 (Blue Dynamo): Secondary small bottom-right studio catchlight & subtle cool rim
+        // Ref 1 (Blue Dynamo): High-Contrast Dual-Polarity Electric Cyan Cathode & 24K Gold Anode Fresnel Rim + Secondary Catchlight
+        ctx.strokeStyle = "rgba(56, 189, 248, 0.85)";
+        ctx.lineWidth = 2.6;
+        ctx.beginPath();
+        ctx.arc(cx, cy, r * 0.96, -Math.PI * 0.45, Math.PI * 0.48);
+        ctx.stroke();
+
+        ctx.strokeStyle = "rgba(251, 191, 36, 0.78)";
+        ctx.lineWidth = 2.4;
+        ctx.beginPath();
+        ctx.arc(cx, cy, r * 0.96, Math.PI * 0.56, Math.PI * 1.44);
+        ctx.stroke();
+
+        ctx.strokeStyle = "rgba(192, 132, 252, 0.65)";
+        ctx.lineWidth = 1.4;
+        ctx.beginPath();
+        ctx.arc(cx, cy, r * 0.92, 0, Math.PI * 2);
+        ctx.stroke();
+
         ctx.save();
         ctx.translate(cx + r * 0.54, cy + r * 0.46);
         ctx.rotate(-Math.PI * 0.26);
-        var brG = ctx.createRadialGradient(0, 0, 0, 0, 0, r * 0.16);
-        brG.addColorStop(0.0, "rgba(255, 255, 255, 0.82)");
-        brG.addColorStop(0.5, "rgba(186, 230, 253, 0.36)");
+        var brG = ctx.createRadialGradient(0, 0, 0, 0, 0, r * 0.18);
+        brG.addColorStop(0.0, "rgba(255, 255, 255, 0.94)");
+        brG.addColorStop(0.5, "rgba(186, 230, 253, 0.52)");
         brG.addColorStop(1.0, "rgba(255, 255, 255, 0)");
         ctx.fillStyle = brG;
         ctx.beginPath();
-        ctx.ellipse(0, 0, r * 0.15, r * 0.055, 0, 0, Math.PI * 2);
+        ctx.ellipse(0, 0, r * 0.16, r * 0.065, 0, 0, Math.PI * 2);
         ctx.fill();
         ctx.restore();
       } else if (mode === "violet_amber") {
-        // Ref 4 (Violet Plasma Comet): Localized warm amber reflection on right hemisphere (~2 to 4 o'clock)
+        // Ref 4 (Violet Plasma Comet): Localized warm amber reflection on right hemisphere + vivid violet-cyan Fresnel rim
         var ambX = cx + r * 0.68;
         var ambY = cy + r * 0.06;
-        var ambG = ctx.createRadialGradient(ambX, ambY, 1, ambX, ambY, r * 0.42);
-        ambG.addColorStop(0.0, "rgba(255, 247, 237, 0.95)");
-        ambG.addColorStop(0.24, "rgba(251, 191, 36, 0.78)");
-        ambG.addColorStop(0.55, "rgba(217, 119, 6, 0.32)");
+        var ambG = ctx.createRadialGradient(ambX, ambY, 1, ambX, ambY, r * 0.44);
+        ambG.addColorStop(0.0, "rgba(255, 247, 237, 0.98)");
+        ambG.addColorStop(0.28, "rgba(251, 191, 36, 0.85)");
+        ambG.addColorStop(0.58, "rgba(217, 119, 6, 0.42)");
         ambG.addColorStop(1.0, "rgba(120, 53, 15, 0)");
         ctx.fillStyle = ambG;
         ctx.beginPath();
-        ctx.ellipse(ambX, ambY, r * 0.18, r * 0.36, 0.12, 0, Math.PI * 2);
+        ctx.ellipse(ambX, ambY, r * 0.20, r * 0.38, 0.12, 0, Math.PI * 2);
         ctx.fill();
 
-        // Subtle warm golden top-right glass thickness edge reflection
-        ctx.strokeStyle = "rgba(251, 191, 36, 0.34)";
-        ctx.lineWidth = 1.6;
-        ctx.beginPath();
-        ctx.arc(cx, cy, r * 0.95, -Math.PI * 0.25, Math.PI * 0.28);
-        ctx.stroke();
-      } else if (mode === "spiral_caustic") {
-        // Ref 3 (Spiral Helix): Cyan top-left tint, magenta top-right tint, and bottom glass caustic web mesh
-        ctx.strokeStyle = "rgba(103, 232, 249, 0.62)";
-        ctx.lineWidth = 2.2;
-        ctx.beginPath();
-        ctx.arc(cx, cy, r * 0.94, -Math.PI * 0.80, -Math.PI * 0.56);
-        ctx.stroke();
-
-        ctx.strokeStyle = "rgba(244, 114, 182, 0.65)";
+        ctx.strokeStyle = "rgba(251, 191, 36, 0.78)";
         ctx.lineWidth = 2.4;
         ctx.beginPath();
-        ctx.arc(cx, cy, r * 0.94, -Math.PI * 0.34, -Math.PI * 0.10);
+        ctx.arc(cx, cy, r * 0.95, -Math.PI * 0.35, Math.PI * 0.38);
+        ctx.stroke();
+
+        ctx.strokeStyle = "rgba(192, 132, 252, 0.82)";
+        ctx.lineWidth = 2.4;
+        ctx.beginPath();
+        ctx.arc(cx, cy, r * 0.95, Math.PI * 0.48, Math.PI * 1.55);
+        ctx.stroke();
+      } else if (mode === "spiral_caustic") {
+        // Ref 3 (Spiral Helix): High-visibility cyan top-left & magenta-gold right rim + bottom glass caustic lattice
+        ctx.strokeStyle = "rgba(103, 232, 249, 0.88)";
+        ctx.lineWidth = 2.6;
+        ctx.beginPath();
+        ctx.arc(cx, cy, r * 0.95, -Math.PI * 0.95, -Math.PI * 0.15);
+        ctx.stroke();
+
+        ctx.strokeStyle = "rgba(244, 114, 182, 0.88)";
+        ctx.lineWidth = 2.6;
+        ctx.beginPath();
+        ctx.arc(cx, cy, r * 0.95, -Math.PI * 0.10, Math.PI * 0.85);
         ctx.stroke();
 
         // Bottom caustic refraction lattice (focused light lines at base of glass sphere)
-        ctx.strokeStyle = "rgba(165, 243, 252, 0.38)";
-        ctx.lineWidth = 1.0;
+        ctx.strokeStyle = "rgba(165, 243, 252, 0.55)";
+        ctx.lineWidth = 1.25;
         for (var cw = -2; cw <= 2; cw++) {
           ctx.beginPath();
           ctx.arc(cx + cw * r * 0.14, cy + r * 0.42, r * 0.44, Math.PI * 0.22, Math.PI * 0.78);
           ctx.stroke();
         }
       } else if (mode === "prism_dispersion") {
-        // Ref 6 (Prism Helix): Subtle rainbow chromatic dispersion along left & bottom-right inner glass rim + brushed micro-glint
+        // Ref 6 (Prism Helix): Crisp rainbow chromatic dispersion & high-contrast cyan-magenta glass rim
         var dispAngles = [
-          { a1: Math.PI * 0.72, a2: Math.PI * 1.15, rOff: 0.93 },
-          { a1: -Math.PI * 0.28, a2: Math.PI * 0.22, rOff: 0.93 }
+          { a1: Math.PI * 0.62, a2: Math.PI * 1.32, rOff: 0.95 },
+          { a1: -Math.PI * 0.38, a2: Math.PI * 0.35, rOff: 0.95 }
         ];
         var rainbowCols = [
-          "rgba(239, 68, 68, 0.26)",
-          "rgba(245, 158, 11, 0.26)",
-          "rgba(34, 211, 238, 0.32)",
-          "rgba(168, 85, 247, 0.28)"
+          "rgba(34, 211, 238, 0.82)",
+          "rgba(244, 114, 182, 0.76)",
+          "rgba(250, 204, 21, 0.65)",
+          "rgba(168, 85, 247, 0.72)"
         ];
         for (var da = 0; da < dispAngles.length; da++) {
           var seg = dispAngles[da];
           for (var rc = 0; rc < rainbowCols.length; rc++) {
             ctx.strokeStyle = rainbowCols[rc];
-            ctx.lineWidth = 1.1;
+            ctx.lineWidth = 1.6;
             ctx.beginPath();
-            ctx.arc(cx, cy, r * (seg.rOff - rc * 0.018), seg.a1, seg.a2);
+            ctx.arc(cx, cy, r * (seg.rOff - rc * 0.022), seg.a1, seg.a2);
             ctx.stroke();
           }
         }
@@ -9881,13 +9827,13 @@ try { checkUrlHashRoutine(); } catch(e){}
         ctx.save();
         ctx.translate(cx + r * 0.42, cy - r * 0.42);
         ctx.rotate(Math.PI * 0.24);
-        var pg = ctx.createRadialGradient(0, 0, 0, 0, 0, r * 0.18);
-        pg.addColorStop(0.0, "rgba(255, 255, 255, 0.78)");
-        pg.addColorStop(0.5, "rgba(207, 250, 254, 0.28)");
+        var pg = ctx.createRadialGradient(0, 0, 0, 0, 0, r * 0.20);
+        pg.addColorStop(0.0, "rgba(255, 255, 255, 0.92)");
+        pg.addColorStop(0.5, "rgba(207, 250, 254, 0.45)");
         pg.addColorStop(1.0, "rgba(255, 255, 255, 0)");
         ctx.fillStyle = pg;
         ctx.beginPath();
-        ctx.ellipse(0, 0, r * 0.17, r * 0.07, 0, 0, Math.PI * 2);
+        ctx.ellipse(0, 0, r * 0.18, r * 0.08, 0, 0, Math.PI * 2);
         ctx.fill();
         ctx.restore();
       }
@@ -10034,19 +9980,43 @@ try { checkUrlHashRoutine(); } catch(e){}
         ctx.stroke();
       }
 
-      // 5. Sparse Hairline Internal Magma Cracks & Left-Edge Ember Catchlight (Matching Reference 5)
-      var warmEdge = ctx.createRadialGradient(cx - baseR * 0.75, cy - baseR * 0.15, 1, cx - baseR * 0.55, cy, baseR * 0.75);
-      warmEdge.addColorStop(0.0, "rgba(251, 146, 60, 0.72)");
-      warmEdge.addColorStop(0.35, "rgba(185, 28, 28, 0.32)");
+      // 5. High-Visibility Incandescent Magma Caldera Fissures, Internal Core Glow & Solar Bow-Shock Rim
+      if (macroRefTextures.orbitalMeteor) {
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(type * 1.047);
+        ctx.globalAlpha = 0.72;
+        var texR = baseR * 1.38;
+        ctx.drawImage(macroRefTextures.orbitalMeteor, -texR, -texR, texR * 2, texR * 2);
+        ctx.restore();
+      }
+
+      // Sub-surface molten core radiance (ensures the meteor sphere is always unmistakably visible in 3D)
+      var coreHeat = ctx.createRadialGradient(cx - baseR * 0.08, cy + baseR * 0.04, 0, cx, cy, baseR * 0.92);
+      coreHeat.addColorStop(0.0, "rgba(254, 240, 138, 0.85)");
+      coreHeat.addColorStop(0.26, "rgba(249, 115, 22, 0.62)");
+      coreHeat.addColorStop(0.58, "rgba(185, 28, 28, 0.28)");
+      coreHeat.addColorStop(1.0, "rgba(0, 0, 0, 0)");
+      ctx.fillStyle = coreHeat;
+      ctx.beginPath();
+      ctx.arc(cx, cy, baseR * 0.92, 0, Math.PI * 2);
+      ctx.fill();
+
+      var warmEdge = ctx.createRadialGradient(cx - baseR * 0.68, cy - baseR * 0.15, 1, cx - baseR * 0.45, cy, baseR * 0.88);
+      warmEdge.addColorStop(0.0, "rgba(254, 240, 138, 0.92)");
+      warmEdge.addColorStop(0.32, "rgba(251, 146, 60, 0.78)");
+      warmEdge.addColorStop(0.68, "rgba(220, 38, 38, 0.38)");
       warmEdge.addColorStop(1.0, "rgba(0, 0, 0, 0)");
       ctx.fillStyle = warmEdge;
       ctx.beginPath();
-      ctx.arc(cx - baseR * 0.55, cy, baseR * 0.75, 0, Math.PI * 2);
+      ctx.arc(cx - baseR * 0.45, cy, baseR * 0.88, 0, Math.PI * 2);
       ctx.fill();
 
       var fissureDefs = [
-        [[-0.22, -0.35], [-0.14, -0.10], [0.04, 0.08], [-0.05, 0.34], [-0.12, 0.68]],
-        [[-0.62, -0.28], [-0.38, -0.18], [-0.14, -0.10]]
+        [[-0.38, -0.58], [-0.14, -0.10], [0.08, 0.12], [-0.05, 0.42], [-0.18, 0.76]],
+        [[-0.72, -0.28], [-0.38, -0.18], [-0.14, -0.10], [0.35, -0.24], [0.68, -0.12]],
+        [[0.08, 0.12], [0.38, 0.36], [0.64, 0.58]],
+        [[-0.14, -0.10], [-0.46, 0.26], [-0.68, 0.48]]
       ];
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
@@ -10057,29 +10027,34 @@ try { checkUrlHashRoutine(); } catch(e){}
         for (var j = 1; j < pts.length; j++) {
           ctx.lineTo(cx + pts[j][0] * baseR, cy + pts[j][1] * baseR);
         }
-        ctx.strokeStyle = "rgba(220, 38, 38, 0.52)";
-        ctx.lineWidth = 2.4;
+        ctx.strokeStyle = "rgba(220, 38, 38, 0.78)";
+        ctx.lineWidth = 3.6;
         ctx.stroke();
 
-        ctx.strokeStyle = "rgba(251, 146, 60, 0.92)";
-        ctx.lineWidth = 1.0;
+        ctx.strokeStyle = "rgba(251, 146, 60, 0.96)";
+        ctx.lineWidth = 1.8;
         ctx.stroke();
 
-        ctx.strokeStyle = "rgba(254, 240, 138, 0.88)";
-        ctx.lineWidth = 0.45;
+        ctx.strokeStyle = "rgba(254, 240, 138, 0.96)";
+        ctx.lineWidth = 0.85;
         ctx.stroke();
       }
 
-      // Blend extracted real macro angular rock texture for authentic mineral micro-pitting & stone grain
-      if (macroRefTextures.orbitalMeteor) {
-        ctx.save();
-        ctx.translate(cx, cy);
-        ctx.rotate(type * 1.047);
-        ctx.globalAlpha = 0.88;
-        var texR = baseR * 1.38;
-        ctx.drawImage(macroRefTextures.orbitalMeteor, -texR, -texR, texR * 2, texR * 2);
-        ctx.restore();
-      }
+      // Pinpoint white-hot caldera nucleus + high-contrast thermal Fresnel rim
+      var calG = ctx.createRadialGradient(cx, cy, 0, cx, cy, baseR * 0.26);
+      calG.addColorStop(0.0, "#ffffff");
+      calG.addColorStop(0.45, "rgba(254, 240, 138, 0.92)");
+      calG.addColorStop(1.0, "rgba(249, 115, 22, 0)");
+      ctx.fillStyle = calG;
+      ctx.beginPath();
+      ctx.arc(cx, cy, baseR * 0.26, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.strokeStyle = "rgba(251, 146, 60, 0.82)";
+      ctx.lineWidth = 2.0;
+      ctx.beginPath();
+      ctx.arc(cx, cy, baseR * 0.94, 0, Math.PI * 2);
+      ctx.stroke();
 
       ctx.restore();
       return canvas;
@@ -10749,8 +10724,7 @@ try { checkUrlHashRoutine(); } catch(e){}
       return canvas;
     }
 
-    // ── REF 1 (BLUE DYNAMO): DARK TRANSPARENT GLASS GLOBE WITH ICY BLUE-WHITE CORONA FILAMENTS & INTERNAL ELLIPTICAL PLASMA LOOPS ──
-    // Glass shell & moving specular highlights are composited as a separate independent layer!
+    // ── REF 1 (BLUE DYNAMO): HIGH-CLARITY 3D SAPPHIRE-VIOLET REFRACTIVE GLASS GLOBE WITH BRILLIANT TESLA CORONA FILAMENTS, 3D MAGNETIC LOOPS & DUAL-POLARITY FRESNEL RIM ──
     function generateDynamoSphereCanvas(phaseIdx, size) {
       var canvas = document.createElement("canvas");
       canvas.width = size;
@@ -10763,19 +10737,30 @@ try { checkUrlHashRoutine(); } catch(e){}
       var r = size * 0.40;
       var phase = (phaseIdx / LUXURY_FRAME_COUNT) * Math.PI * 2;
 
+      // 0. Outer Atmospheric Faraday Bloom Halo (Unclipped so the sphere radiates cleanly against deep space!)
+      var outerHalo = ctx.createRadialGradient(cx, cy, r * 0.72, cx, cy, r * 1.22);
+      outerHalo.addColorStop(0.0, "rgba(56, 189, 248, 0.45)");
+      outerHalo.addColorStop(0.45, "rgba(168, 85, 247, 0.26)");
+      outerHalo.addColorStop(1.0, "rgba(14, 165, 233, 0.0)");
+      ctx.fillStyle = outerHalo;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r * 1.22, 0, Math.PI * 2);
+      ctx.fill();
+
       ctx.save();
       ctx.beginPath();
       ctx.arc(cx, cy, r, 0, Math.PI * 2);
       ctx.closePath();
       ctx.clip();
 
-      // 1. Dark Transparent Glass Interior + Real Macro Blue Corona Filament Texture Layer
-      var bgGrad = ctx.createRadialGradient(cx, cy, r * 0.02, cx, cy, r);
-      bgGrad.addColorStop(0.0, "rgba(224, 242, 254, 0.96)");
-      bgGrad.addColorStop(0.14, "rgba(56, 189, 248, 0.72)");
-      bgGrad.addColorStop(0.36, "rgba(3, 105, 161, 0.38)");
-      bgGrad.addColorStop(0.68, "rgba(7, 16, 34, 0.86)");
-      bgGrad.addColorStop(1.0, "rgba(2, 4, 10, 0.96)");
+      // 1. Luminous 3D Sapphire-Amethyst Volumetric Plasma Glass Interior (Never dark or invisible!)
+      var bgGrad = ctx.createRadialGradient(cx - r * 0.16, cy - r * 0.18, r * 0.02, cx, cy, r);
+      bgGrad.addColorStop(0.0, "#ffffff");
+      bgGrad.addColorStop(0.18, "rgba(125, 211, 252, 0.98)");
+      bgGrad.addColorStop(0.42, "rgba(139, 92, 246, 0.88)");
+      bgGrad.addColorStop(0.72, "rgba(30, 58, 138, 0.92)");
+      bgGrad.addColorStop(0.92, "rgba(14, 116, 144, 0.95)");
+      bgGrad.addColorStop(1.0, "rgba(56, 189, 248, 0.98)");
       ctx.fillStyle = bgGrad;
       ctx.fillRect(0, 0, size, size);
 
@@ -10783,38 +10768,39 @@ try { checkUrlHashRoutine(); } catch(e){}
         ctx.save();
         ctx.translate(cx, cy);
         ctx.rotate(phase * 0.25);
-        ctx.globalAlpha = 0.86;
+        ctx.globalCompositeOperation = "lighter";
+        ctx.globalAlpha = 0.75;
         var bdR = r * 1.15;
         ctx.drawImage(macroRefTextures.blueDynamo, -bdR, -bdR, bdR * 2, bdR * 2);
         ctx.restore();
       }
 
-      // 2. Three Internal 3D Elliptical Magnetic Corona Loops Inside the Glass Globe (Matching Ref 1's figure-8 / atomic plasma loops)
+      // 2. Three Internal 3D Elliptical Magnetic Corona Loops Inside the Glass Globe
       for (var lp = 0; lp < 3; lp++) {
         ctx.save();
         ctx.translate(cx, cy);
         ctx.rotate((lp * Math.PI / 3) + phase * 0.25);
-        ctx.strokeStyle = "rgba(125, 211, 252, 0.24)";
-        ctx.lineWidth = 3.2;
+        ctx.strokeStyle = (lp === 0) ? "rgba(251, 191, 36, 0.55)" : "rgba(56, 189, 248, 0.52)";
+        ctx.lineWidth = 3.8;
         ctx.beginPath();
-        ctx.ellipse(0, 0, r * 0.76, r * 0.28, 0, 0, Math.PI * 2);
+        ctx.ellipse(0, 0, r * 0.78, r * 0.30, 0, 0, Math.PI * 2);
         ctx.stroke();
 
-        ctx.strokeStyle = "rgba(224, 242, 254, 0.45)";
-        ctx.lineWidth = 1.05;
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.78)";
+        ctx.lineWidth = 1.35;
         ctx.stroke();
         ctx.restore();
       }
 
-      // 3. Uneven Branching Icy Blue-White Electrical Filaments (Branch and fade independently inside the glass)
+      // 3. High-Intensity Branching Electric Cyan & Violet Filaments
       var numThreads = 14;
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
       for (var b = 0; b < numThreads; b++) {
         var threadWave = Math.sin(phase + b * 1.9);
-        if (threadWave < -0.55) continue; // Independent fade out
-        var tAlpha = 0.45 + 0.55 * (0.5 + 0.5 * threadWave);
-        var tReach = r * (0.55 + 0.36 * (0.5 + 0.5 * Math.cos(phase + b * 1.3)));
+        if (threadWave < -0.65) continue;
+        var tAlpha = 0.65 + 0.35 * (0.5 + 0.5 * threadWave);
+        var tReach = r * (0.68 + 0.28 * (0.5 + 0.5 * Math.cos(phase + b * 1.3)));
         var ang = (b / numThreads) * Math.PI * 2 + Math.sin(b * 3.1 + phaseIdx) * 0.18;
 
         var steps = 6;
@@ -10822,7 +10808,7 @@ try { checkUrlHashRoutine(); } catch(e){}
         for (var s = 1; s <= steps; s++) {
           var st = s / steps;
           var curD = tReach * st;
-          var jit = Math.sin(b * 4.7 + s * 5.3 + phase * 2.0) * (r * 0.08) * Math.sin(st * Math.PI);
+          var jit = Math.sin(b * 4.7 + s * 5.3 + phase * 2.0) * (r * 0.09) * Math.sin(st * Math.PI);
           pts.push({
             x: cx + Math.cos(ang) * curD - Math.sin(ang) * jit,
             y: cy + Math.sin(ang) * curD + Math.cos(ang) * jit
@@ -10832,45 +10818,52 @@ try { checkUrlHashRoutine(); } catch(e){}
         ctx.beginPath();
         ctx.moveTo(pts[0].x, pts[0].y);
         for (var k = 1; k < pts.length; k++) ctx.lineTo(pts[k].x, pts[k].y);
-        ctx.strokeStyle = "rgba(56, 189, 248, " + (tAlpha * 0.42).toFixed(2) + ")";
-        ctx.lineWidth = 2.6;
+        ctx.strokeStyle = (b % 2 === 0)
+          ? ("rgba(56, 189, 248, " + (tAlpha * 0.85).toFixed(2) + ")")
+          : ("rgba(192, 132, 252, " + (tAlpha * 0.85).toFixed(2) + ")");
+        ctx.lineWidth = 3.4;
         ctx.stroke();
 
-        ctx.strokeStyle = "rgba(224, 242, 254, " + (tAlpha * 0.90).toFixed(2) + ")";
-        ctx.lineWidth = 0.95;
+        ctx.strokeStyle = "rgba(255, 255, 255, " + (tAlpha * 0.98).toFixed(2) + ")";
+        ctx.lineWidth = 1.45;
         ctx.stroke();
 
-        // Bright discharge node hotspot at filament tip or mid-junction (Matches Ref 1's tiny white plasma beads)
-        if (b % 3 === 0 && threadWave > 0) {
+        // Bright discharge node hotspot at filament tip
+        if (b % 2 === 0) {
           var tipPt = pts[pts.length - 1];
-          var beadG = ctx.createRadialGradient(tipPt.x, tipPt.y, 0, tipPt.x, tipPt.y, 4.2);
+          var beadG = ctx.createRadialGradient(tipPt.x, tipPt.y, 0, tipPt.x, tipPt.y, 5.2);
           beadG.addColorStop(0.0, "#ffffff");
-          beadG.addColorStop(0.45, "rgba(186, 230, 253, 0.85)");
+          beadG.addColorStop(0.45, "rgba(125, 211, 252, 0.95)");
           beadG.addColorStop(1.0, "rgba(56, 189, 248, 0)");
           ctx.fillStyle = beadG;
           ctx.beginPath();
-          ctx.arc(tipPt.x, tipPt.y, 4.2, 0, Math.PI * 2);
+          ctx.arc(tipPt.x, tipPt.y, 5.2, 0, Math.PI * 2);
           ctx.fill();
         }
       }
 
-      // 4. Pinpoint Icy Blue-White Discharge Core
-      var cGlow = ctx.createRadialGradient(cx, cy, 0, cx, cy, r * 0.24);
+      // 4. Radiant Faraday Singularity Core + High-Contrast Dual-Polarity Rim
+      var cGlow = ctx.createRadialGradient(cx, cy, 0, cx, cy, r * 0.36);
       cGlow.addColorStop(0.0, "#ffffff");
-      cGlow.addColorStop(0.40, "rgba(186, 230, 253, 0.92)");
-      cGlow.addColorStop(0.75, "rgba(56, 189, 248, 0.45)");
-      cGlow.addColorStop(1.0, "rgba(2, 132, 199, 0)");
+      cGlow.addColorStop(0.38, "rgba(224, 242, 254, 0.98)");
+      cGlow.addColorStop(0.72, "rgba(56, 189, 248, 0.72)");
+      cGlow.addColorStop(1.0, "rgba(147, 51, 234, 0)");
       ctx.fillStyle = cGlow;
       ctx.beginPath();
-      ctx.arc(cx, cy, r * 0.24, 0, Math.PI * 2);
+      ctx.arc(cx, cy, r * 0.36, 0, Math.PI * 2);
       ctx.fill();
+
+      ctx.strokeStyle = "rgba(125, 211, 252, 0.92)";
+      ctx.lineWidth = 2.4;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r * 0.96, 0, Math.PI * 2);
+      ctx.stroke();
 
       ctx.restore();
       return canvas;
     }
 
-    // ── REF 6 (PRISM HELIX): CLEAR GLASS SPHERE WITH FOCUSED CYAN CENTER & SHIFTING INTERNAL CAUSTICS ──
-    // External cyan & violet orbital traces are rendered live with true back-to-front 3D occlusion!
+    // ── REF 6 (PRISM HELIX): HIGH-CLARITY 3D QUARTZ SPHERE WITH INTERTWINED 3D CYAN-MAGENTA DOUBLE HELIX, CAUSTICS & DIAMOND RIM ──
     function generateClassicHelixSphereCanvas(phaseIdx, size) {
       var canvas = document.createElement("canvas");
       canvas.width = size;
@@ -10883,20 +10876,29 @@ try { checkUrlHashRoutine(); } catch(e){}
       var r = size * 0.40;
       var phase = (phaseIdx / LUXURY_FRAME_COUNT) * Math.PI * 2;
 
+      // 0. Outer Bioluminescent Quartz Halo
+      var outerHalo = ctx.createRadialGradient(cx, cy, r * 0.72, cx, cy, r * 1.22);
+      outerHalo.addColorStop(0.0, "rgba(34, 211, 238, 0.42)");
+      outerHalo.addColorStop(0.50, "rgba(232, 121, 249, 0.25)");
+      outerHalo.addColorStop(1.0, "rgba(6, 182, 212, 0.0)");
+      ctx.fillStyle = outerHalo;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r * 1.22, 0, Math.PI * 2);
+      ctx.fill();
+
       ctx.save();
       ctx.beginPath();
       ctx.arc(cx, cy, r, 0, Math.PI * 2);
       ctx.closePath();
       ctx.clip();
 
-      // 1. Dark Clear Optical Glass Base with Focused Cyan Center Singularity + Real Macro Prism Texture Layer
-      var spGrad = ctx.createRadialGradient(cx, cy, r * 0.01, cx, cy, r);
+      // 1. Luminous 3D Prismatic Crystal Base
+      var spGrad = ctx.createRadialGradient(cx - r * 0.15, cy - r * 0.18, r * 0.02, cx, cy, r);
       spGrad.addColorStop(0.0, "#ffffff");
-      spGrad.addColorStop(0.08, "rgba(165, 243, 252, 0.96)");
-      spGrad.addColorStop(0.24, "rgba(6, 182, 212, 0.68)");
-      spGrad.addColorStop(0.52, "rgba(14, 58, 78, 0.42)");
-      spGrad.addColorStop(0.84, "rgba(6, 12, 24, 0.88)");
-      spGrad.addColorStop(1.0, "rgba(2, 5, 12, 0.96)");
+      spGrad.addColorStop(0.16, "rgba(165, 243, 252, 0.96)");
+      spGrad.addColorStop(0.45, "rgba(14, 116, 144, 0.85)");
+      spGrad.addColorStop(0.76, "rgba(76, 29, 149, 0.88)");
+      spGrad.addColorStop(1.0, "rgba(34, 211, 238, 0.95)");
       ctx.fillStyle = spGrad;
       ctx.fillRect(0, 0, size, size);
 
@@ -10904,36 +10906,66 @@ try { checkUrlHashRoutine(); } catch(e){}
         ctx.save();
         ctx.translate(cx, cy);
         ctx.rotate(phase * 0.15);
-        ctx.globalAlpha = 0.85;
-        var phR = r * 1.38;
+        ctx.globalCompositeOperation = "lighter";
+        ctx.globalAlpha = 0.68;
+        var phR = r * 1.32;
         ctx.drawImage(macroRefTextures.prismHelix, -phR, -phR, phR * 2, phR * 2);
         ctx.restore();
       }
 
-      // 2. Shifting Internal Caustic Light Cusps (Shift with viewing angle/phase inside lower-right hemisphere, matching Ref 6)
-      var caustX = cx + Math.cos(0.65 + phase * 0.25) * (r * 0.48);
-      var caustY = cy + Math.sin(0.65 + phase * 0.25) * (r * 0.52);
-      var cg = ctx.createRadialGradient(caustX, caustY, 0, caustX, caustY, r * 0.42);
-      cg.addColorStop(0.0, "rgba(224, 242, 254, 0.88)");
-      cg.addColorStop(0.25, "rgba(34, 211, 238, 0.52)");
-      cg.addColorStop(0.55, "rgba(245, 158, 11, 0.16)");
+      // 2. Internal 3D Rotating Cyan & Magenta DNA Double-Helix Lattice Inside the Quartz Globe!
+      var hAmp = r * 0.36;
+      var hHalfH = r * 0.72;
+      var rungs = 7;
+      ctx.lineCap = "round";
+      for (var rg = 0; rg < rungs; rg++) {
+        var f = (rg / (rungs - 1)) * 2 - 1; // -1 to +1
+        var yPos = cy + f * hHalfH;
+        var hAng = f * Math.PI * 1.35 + phase;
+        var xA = cx + Math.sin(hAng) * hAmp;
+        var xB = cx + Math.sin(hAng + Math.PI) * hAmp;
+        ctx.beginPath();
+        ctx.moveTo(xA, yPos);
+        ctx.lineTo(xB, yPos);
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.65)";
+        ctx.lineWidth = 1.6;
+        ctx.stroke();
+      }
+      for (var strand = 0; strand < 2; strand++) {
+        ctx.beginPath();
+        for (var st = 0; st <= 20; st++) {
+          var sf = (st / 20) * 2 - 1;
+          var sy = cy + sf * hHalfH;
+          var sAng = sf * Math.PI * 1.35 + phase + (strand === 1 ? Math.PI : 0);
+          var sx = cx + Math.sin(sAng) * hAmp;
+          if (st === 0) ctx.moveTo(sx, sy);
+          else ctx.lineTo(sx, sy);
+        }
+        ctx.strokeStyle = (strand === 0) ? "rgba(34, 211, 238, 0.92)" : "rgba(232, 121, 249, 0.92)";
+        ctx.lineWidth = 3.2;
+        ctx.stroke();
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+      }
+
+      // 3. Shifting Internal Caustic Light Cusps & Crisp Fresnel Rim
+      var caustX = cx + Math.cos(0.65 + phase * 0.25) * (r * 0.42);
+      var caustY = cy + Math.sin(0.65 + phase * 0.25) * (r * 0.46);
+      var cg = ctx.createRadialGradient(caustX, caustY, 0, caustX, caustY, r * 0.44);
+      cg.addColorStop(0.0, "rgba(255, 255, 255, 0.92)");
+      cg.addColorStop(0.35, "rgba(103, 232, 249, 0.62)");
+      cg.addColorStop(0.70, "rgba(232, 121, 249, 0.28)");
       cg.addColorStop(1.0, "rgba(0, 0, 0, 0)");
       ctx.fillStyle = cg;
       ctx.beginPath();
-      ctx.arc(caustX, caustY, r * 0.42, 0, Math.PI * 2);
+      ctx.arc(caustX, caustY, r * 0.44, 0, Math.PI * 2);
       ctx.fill();
 
-      // Internal Caustic Arc Filaments
-      ctx.strokeStyle = "rgba(165, 243, 252, 0.62)";
-      ctx.lineWidth = 1.25;
+      ctx.strokeStyle = "rgba(103, 232, 249, 0.90)";
+      ctx.lineWidth = 2.2;
       ctx.beginPath();
-      ctx.arc(cx + r * 0.15, cy + r * 0.18, r * 0.58, 0.15 + Math.sin(phase) * 0.12, 1.35 + Math.sin(phase) * 0.12);
-      ctx.stroke();
-
-      ctx.strokeStyle = "rgba(253, 224, 71, 0.35)";
-      ctx.lineWidth = 0.9;
-      ctx.beginPath();
-      ctx.arc(cx + r * 0.12, cy + r * 0.22, r * 0.55, 0.25 + Math.cos(phase) * 0.12, 1.15 + Math.cos(phase) * 0.12);
+      ctx.arc(cx, cy, r * 0.96, 0, Math.PI * 2);
       ctx.stroke();
 
       ctx.restore();
@@ -12287,9 +12319,7 @@ try { checkUrlHashRoutine(); } catch(e){}
 
       if (isMeteor) {
         // ── REF 5 (ORBITAL METEOR) & REF 2 (MOLTEN METEOR) MULTI-LAYER MACRO COMPOSITING ──
-        var rockR = headR * (isMoltenCore
-          ? (tier === 3 ? 2.15 : (tier === 2 ? 1.70 : 1.35))
-          : (tier === 3 ? 1.85 : (tier === 2 ? 1.50 : 1.25)));
+        var rockR = headR * (tier === 3 ? 2.35 : (tier === 2 ? 1.88 : 1.50));
         // Independent per-instance animation phase & axial rock tumble
         var instPhase = (p.pulsePhase || 0) + i * 1.37;
         var astIndex = isMoltenCore
@@ -12456,7 +12486,7 @@ try { checkUrlHashRoutine(); } catch(e){}
 
       } else if (isComet) {
         // ── REF 4 (VIOLET PLASMA COMET): LAYER 1 ROTATING/BRANCHING VIOLET LIGHTNING + LAYER 2 INDEPENDENT GLASS SHELL WITH LOCALIZED RIGHT-SIDE AMBER REFLECTION ──
-        var cometR = headR * (tier === 3 ? 2.15 : (tier === 2 ? 1.70 : 1.35));
+        var cometR = headR * (tier === 3 ? 2.35 : (tier === 2 ? 1.88 : 1.50));
         var cFrameIdx = (((now * 0.011 + i * 1.3) | 0)) % 4;
         var cometCanvas = MeteorVFXEngine.getCometSphere(cFrameIdx);
         var cDrawR = cometR * 1.22;
@@ -12503,7 +12533,7 @@ try { checkUrlHashRoutine(); } catch(e){}
 
       } else if (isHelixOrb) {
         // ── REF 3 (SPIRAL HELIX): LAYER 1 DIFFERENTIAL FLUID VORTEX & BUBBLES + LAYER 2 INDEPENDENT GLASS SHELL & CAUSTICS ──
-        var orbR = headR * (tier === 3 ? 2.15 : (tier === 2 ? 1.70 : 1.35));
+        var orbR = headR * (tier === 3 ? 2.35 : (tier === 2 ? 1.88 : 1.50));
         var hFrameIdx = (((now * 0.011 + i * 0.9) | 0)) % 4;
         var orbCanvas = MeteorVFXEngine.getHelixOrbSphere(hFrameIdx);
         var oDrawR = orbR * 1.22;
@@ -12553,7 +12583,7 @@ try { checkUrlHashRoutine(); } catch(e){}
         // ── REF 1 (BLUE DYNAMO) & REF 6 (PRISM HELIX) MULTI-LAYER MACRO COMPOSITING ──
         if (isHelix) {
           // ── REF 6 (PRISM HELIX): Fine Cyan & Violet Orbital Traces on Independent Planes with Back/Front Occlusion + Clear Sphere with Shifting Caustics & Rainbow Dispersion ──
-          var clHelixR = headR * (tier === 3 ? 1.85 : (tier === 2 ? 1.50 : 1.25));
+          var clHelixR = headR * (tier === 3 ? 2.35 : (tier === 2 ? 1.88 : 1.50));
           var clHFrame = (((now * 0.009 + i * 1.1) | 0)) % 4;
           var clHelixCanvas = MeteorVFXEngine.getClassicHelixSphere(clHFrame);
           var clHDrawR = clHelixR * 1.20;
@@ -12642,11 +12672,40 @@ try { checkUrlHashRoutine(); } catch(e){}
           }
 
         } else {
-          // ── REF 1 (BLUE DYNAMO): Dark Transparent Glass Globe + Independent Branching Icy Blue-White Filaments + Small Moving Specular Highlights ──
-          var clDynR = headR * (tier === 3 ? 1.85 : (tier === 2 ? 1.50 : 1.25));
+          // ── REF 1 (BLUE DYNAMO): High-Clarity 3D Sapphire-Violet Glass Globe + 3D Faraday Gold & Cyan Orbital Rings with Back/Front Occlusion + Branching Tesla Filaments ──
+          var clDynR = headR * (tier === 3 ? 2.35 : (tier === 2 ? 1.88 : 1.50));
           var clDFrame = (((now * 0.013 + i * 1.4) | 0)) % 4;
           var clDynCanvas = MeteorVFXEngine.getDynamoSphere(clDFrame);
-          var clDDrawR = clDynR * 1.20;
+          var clDDrawR = clDynR * 1.24;
+          var dynOrb1 = 0.58 + Math.sin(now * 0.0008 + i) * 0.16;
+          var dynOrb2 = -0.62 + Math.cos(now * 0.0007 + i * 1.3) * 0.16;
+          var dynRx = clDynR * 1.36;
+          var dynRy = clDynR * 0.38;
+
+          // PASS 1 (BEHIND SPHERE): Rear arcs (PI to 2*PI) of 24K Gold & Electric Cyan Faraday Orbital Rings
+          if (tier >= 2 || !isFastRenderMode) {
+            targetCtx.save();
+            targetCtx.translate(px0, py0);
+            targetCtx.rotate(dynOrb1);
+            targetCtx.beginPath();
+            targetCtx.ellipse(0, 0, dynRx, dynRy, 0, Math.PI, Math.PI * 2);
+            targetCtx.strokeStyle = "rgba(251, 191, 36, " + (renderAlpha * 0.42).toFixed(2) + ")";
+            targetCtx.lineWidth = tier === 3 ? 1.35 : 1.0;
+            targetCtx.stroke();
+            targetCtx.restore();
+
+            targetCtx.save();
+            targetCtx.translate(px0, py0);
+            targetCtx.rotate(dynOrb2);
+            targetCtx.beginPath();
+            targetCtx.ellipse(0, 0, dynRx * 1.04, dynRy * 0.96, 0, Math.PI, Math.PI * 2);
+            targetCtx.strokeStyle = "rgba(56, 189, 248, " + (renderAlpha * 0.42).toFixed(2) + ")";
+            targetCtx.lineWidth = tier === 3 ? 1.35 : 1.0;
+            targetCtx.stroke();
+            targetCtx.restore();
+          }
+
+          // PASS 2 (3D SAPPHIRE-VIOLET PLASMA SPHERE):
           if (clDynCanvas) {
             if (tier >= 2 && !isFastRenderMode) {
               targetCtx.save();
@@ -12660,7 +12719,7 @@ try { checkUrlHashRoutine(); } catch(e){}
               targetCtx.drawImage(clDynCanvas, px0 - clDDrawR, py0 - clDDrawR, clDDrawR * 2, clDDrawR * 2);
             }
           }
-          // Layer 2: Small Moving Specular Highlights on Dark Glass Shell (Move independently of the internal plasma threads!)
+          // PASS 3 (INDEPENDENT GLASS SHELL & DUAL-POLARITY FRESNEL SPECULAR):
           var glassBlue = MeteorVFXEngine.getGlassShell("blue");
           if (glassBlue) {
             if (tier >= 2 && !isFastRenderMode) {
@@ -12676,6 +12735,35 @@ try { checkUrlHashRoutine(); } catch(e){}
               targetCtx.drawImage(glassBlue, px0 - clDDrawR, py0 - clDDrawR, clDDrawR * 2, clDDrawR * 2);
               targetCtx.globalAlpha = 1.0;
             }
+          }
+          // PASS 4 (IN FRONT OF SPHERE): Foreground arcs (0 to PI) of 24K Gold & Electric Cyan Faraday Rings + Orbiting Electron Bead
+          targetCtx.save();
+          targetCtx.translate(px0, py0);
+          targetCtx.rotate(dynOrb1);
+          targetCtx.beginPath();
+          targetCtx.ellipse(0, 0, dynRx, dynRy, 0, 0, Math.PI);
+          targetCtx.strokeStyle = "rgba(253, 224, 71, " + (renderAlpha * 0.92).toFixed(2) + ")";
+          targetCtx.lineWidth = tier === 3 ? 1.65 : 1.25;
+          targetCtx.stroke();
+          var eU1 = (now * 0.0032 + i * 1.7) % (Math.PI * 2);
+          if (Math.sin(eU1) >= -0.15) {
+            targetCtx.beginPath();
+            targetCtx.arc(Math.cos(eU1) * dynRx, Math.sin(eU1) * dynRy, tier === 3 ? 2.1 : 1.5, 0, Math.PI * 2);
+            targetCtx.fillStyle = "#fef08a";
+            targetCtx.fill();
+          }
+          targetCtx.restore();
+
+          if (tier >= 2 || !isFastRenderMode) {
+            targetCtx.save();
+            targetCtx.translate(px0, py0);
+            targetCtx.rotate(dynOrb2);
+            targetCtx.beginPath();
+            targetCtx.ellipse(0, 0, dynRx * 1.04, dynRy * 0.96, 0, 0, Math.PI);
+            targetCtx.strokeStyle = "rgba(125, 211, 252, " + (renderAlpha * 0.92).toFixed(2) + ")";
+            targetCtx.lineWidth = tier === 3 ? 1.65 : 1.25;
+            targetCtx.stroke();
+            targetCtx.restore();
           }
         }
         if (isTargetLocked) {
@@ -13441,17 +13529,356 @@ try { checkUrlHashRoutine(); } catch(e){}
     return Math.hypot(cx - p.x, cy - p.y);
   }
 
-  // Solution 2: True Visual Circle-to-Circle Overlap (Matches exact rendered sphere radius for Luxury & Classic modes)
+  // Solution 2: True Visual Circle-to-Circle Overlap (Matches exact rendered sphere radius across all 6 games + Tier I-VI core wingspan)
   function getParticleExactTouchRadius(p) {
     var tier = (p && p.lumiTier) ? p.lumiTier : 1;
-    var isLuxury = (currentGameVariant === "comet" || currentGameVariant === "helixorb" || currentGameVariant === "moltencore");
-    var isMeteorMode = (currentGameVariant === "meteor");
-    var headScale = isLuxury
-      ? (tier === 3 ? 2.15 : (tier === 2 ? 1.70 : 1.35))
-      : (isMeteorMode ? (tier === 3 ? 1.85 : (tier === 2 ? 1.50 : 1.25)) : 1.0);
+    var headScale = (tier === 3 ? 2.35 : (tier === 2 ? 1.88 : 1.50));
     var particleHeadR = ((p && p.curSize) ? p.curSize : 3.0) * 0.54 * headScale;
-    var hitR = (deviceInputMode === "touch") ? (STRICT_HIT_RADIUS * 1.5) : STRICT_HIT_RADIUS;
+    var tierBonus = Math.max(0, (playerEvolutionTier || 1) - 1) * 4.5;
+    var hitR = ((deviceInputMode === "touch") ? (STRICT_HIT_RADIUS * 1.5) : STRICT_HIT_RADIUS) + tierBonus;
     return hitR + particleHeadR;
+  }
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // 3D TIER I -> TIER VI EVOLUTION, ARTICULATED 3D CHARACTER RIG &
+  // GRAND TIER V -> TIER VI TRANSFORMATION ENGINE (All 6 Games)
+  // ══════════════════════════════════════════════════════════════════════════
+  var btnTierEvolution = document.getElementById("btnGameTierEvolution");
+  var qGameTierIcon = document.getElementById("qGameTierIcon");
+  var qGameTierLabel = document.getElementById("qGameTierLabel");
+
+  var playerEvolutionTier = 1;
+  var continuousEvolutionTier = 1.0;
+  var maxReachedTierInRun = 1;
+  var manualTierLock = false;
+  var bodyBankAngle = 0;
+  var bodyPitchAngle = 0;
+  var cannonRecoilImpulse = 0;
+  var ascensionShockRings = [];
+  var shoulderProjectiles = [];
+
+  var TIER_ROMAN = { 1: "I", 2: "II", 3: "III", 4: "IV", 5: "V", 6: "VI" };
+  var TIER6_CHARACTER_META = {
+    classic:    { base: "dynamo", name: "DYNAMO PRINCESS",  title: "CRYSTAL TWIN-CANNON VALKYRIE", color: "#38bdf8", accent: "#e879f9", anchorX: 512, anchorY: 278, muzzleL: { x: 373, y: 19 },  muzzleR: { x: 650, y: 19 },  scaleMult: 1.12 },
+    comet:      { base: "dynamo", name: "STORM EMPRESS",    title: "VOID-LIGHTNING SOVEREIGN",     color: "#c084fc", accent: "#fbbf24", anchorX: 512, anchorY: 278, muzzleL: { x: 373, y: 19 },  muzzleR: { x: 650, y: 19 },  scaleMult: 1.14 },
+    helix:      { base: "helix",  name: "HELIX UNICORN",    title: "PEARLESCENT SPIRAL PEGASUS",   color: "#22d3ee", accent: "#f472b6", anchorX: 512, anchorY: 268, muzzleL: { x: 406, y: 148 }, muzzleR: { x: 617, y: 148 }, scaleMult: 1.10 },
+    helixorb:   { base: "helix",  name: "ASTRAL ALICORN",   title: "BIOLUMINESCENT VORTEX PEGASUS",color: "#67e8f9", accent: "#e879f9", anchorX: 512, anchorY: 268, muzzleL: { x: 406, y: 148 }, muzzleR: { x: 617, y: 148 }, scaleMult: 1.12 },
+    meteor:     { base: "meteor", name: "METEOR DRAGON",    title: "SOLAR CALDERA WYRM",           color: "#fb923c", accent: "#fef08a", anchorX: 512, anchorY: 265, muzzleL: { x: 385, y: 95 },  muzzleR: { x: 636, y: 95 },  scaleMult: 1.08 },
+    moltencore: { base: "meteor", name: "OBSIDIAN WYRM",    title: "SUPERNOVA TECTONIC DRAGON",    color: "#f97316", accent: "#fde047", anchorX: 512, anchorY: 265, muzzleL: { x: 385, y: 95 },  muzzleR: { x: 636, y: 95 },  scaleMult: 1.10 }
+  };
+
+  var Core3DAssets = {
+    coreSprites: { dynamo: {}, helix: {}, meteor: {} },
+    wingRightSprites: { dynamo: {}, helix: {}, meteor: {} },
+    wingMapsCache: {},
+    t6RigCache: {},
+    bezelT5: { dynamo: new Image(), helix: new Image() },
+    helixGlassShell: new Image(),
+    loaded: {
+      coreSprites: { dynamo: {}, helix: {}, meteor: {} },
+      wingRightSprites: { dynamo: {}, helix: {}, meteor: {} },
+      bezelT5: { dynamo: false, helix: false },
+      helixGlassShell: false
+    }
+  };
+
+  Core3DAssets.helixGlassShell.onload = function() { Core3DAssets.loaded.helixGlassShell = true; };
+  Core3DAssets.helixGlassShell.src = "assets/core-helix-glass-shell.png";
+  Core3DAssets.bezelT5.dynamo.onload = function() { Core3DAssets.loaded.bezelT5.dynamo = true; };
+  Core3DAssets.bezelT5.dynamo.src = "assets/core-dynamo-bezel-t5.png";
+  Core3DAssets.bezelT5.helix.onload = function() { Core3DAssets.loaded.bezelT5.helix = true; };
+  Core3DAssets.bezelT5.helix.src = "assets/core-helix-bezel-t5.png";
+
+  ["dynamo", "helix", "meteor"].forEach(function(m) {
+    for (var t = 1; t <= 6; t++) {
+      (function(mode, tierIdx) {
+        var cImg = new Image();
+        Core3DAssets.coreSprites[mode][tierIdx] = cImg;
+        Core3DAssets.loaded.coreSprites[mode][tierIdx] = false;
+        cImg.onload = function() { Core3DAssets.loaded.coreSprites[mode][tierIdx] = true; };
+        cImg.src = "assets/core-" + mode + "-t" + tierIdx + ".png";
+        if (tierIdx >= 2 && tierIdx <= 5) {
+          var wImg = new Image();
+          Core3DAssets.wingRightSprites[mode][tierIdx] = wImg;
+          Core3DAssets.loaded.wingRightSprites[mode][tierIdx] = false;
+          wImg.onload = function() { Core3DAssets.loaded.wingRightSprites[mode][tierIdx] = true; };
+          wImg.src = "assets/core-" + mode + "-wing-r-t" + tierIdx + ".png";
+        }
+      })(m, t);
+    }
+  });
+
+  // Pre-processed defringed wing specular & AO maps (2.5px inward-eroded specular + dark metallic AO shadow)
+  function getWingProcessedMaps(mode, tierIdx) {
+    var key = mode + "_" + tierIdx;
+    if (Core3DAssets.wingMapsCache[key]) return Core3DAssets.wingMapsCache[key];
+    var spr = Core3DAssets.wingRightSprites[mode] && Core3DAssets.wingRightSprites[mode][tierIdx];
+    var isLoaded = Core3DAssets.loaded.wingRightSprites[mode] && Core3DAssets.loaded.wingRightSprites[mode][tierIdx];
+    if (!spr || !isLoaded) return null;
+    var w = spr.naturalWidth || 1024;
+    var h = spr.naturalHeight || 576;
+
+    var specC = document.createElement("canvas");
+    specC.width = w; specC.height = h;
+    var sCtx = specC.getContext("2d");
+    if (sCtx) {
+      sCtx.drawImage(spr, 0, 0);
+      sCtx.globalCompositeOperation = "destination-in";
+      var offs = [[-2.2, 0], [2.2, 0], [0, -2.2], [0, 2.2]];
+      for (var i = 0; i < offs.length; i++) {
+        sCtx.drawImage(spr, offs[i][0], offs[i][1]);
+      }
+      sCtx.globalCompositeOperation = "source-over";
+    }
+
+    var aoC = document.createElement("canvas");
+    aoC.width = w; aoC.height = h;
+    var aCtx = aoC.getContext("2d");
+    if (aCtx) {
+      aCtx.drawImage(spr, 0, 0);
+      aCtx.globalCompositeOperation = "source-in";
+      aCtx.fillStyle = (mode === "meteor") ? "#160702" : (mode === "helix" ? "#030b1c" : "#070318");
+      aCtx.fillRect(0, 0, w, h);
+      aCtx.globalCompositeOperation = "source-over";
+    }
+
+    var entry = { base: spr, spec: specC, ao: aoC };
+    Core3DAssets.wingMapsCache[key] = entry;
+    return entry;
+  }
+
+  // Runtime Soft-Socketed 3D Anatomical Decomposition for Tier VI Characters
+  // Slices the 1024x682 Tier VI sprite into overlapping soft-edged anatomical sub-canvases:
+  // wingL, wingR, cannonL, cannonR, limbFL, limbFR, limbBL, limbBR, head, torso, tail
+  function getTier6ArticulatedRig(baseMode) {
+    if (Core3DAssets.t6RigCache[baseMode]) return Core3DAssets.t6RigCache[baseMode];
+    var spr = Core3DAssets.coreSprites[baseMode] && Core3DAssets.coreSprites[baseMode][6];
+    var isLoaded = Core3DAssets.loaded.coreSprites[baseMode] && Core3DAssets.loaded.coreSprites[baseMode][6];
+    if (!spr || !isLoaded) return null;
+
+    var W = 1024, H = 682;
+    function extractSoftRegion(polyPts, featherPx) {
+      var c = document.createElement("canvas");
+      c.width = W; c.height = H;
+      var g = c.getContext("2d");
+      if (!g) return c;
+      g.save();
+      if (featherPx > 0 && typeof g.filter === "string") {
+        g.filter = "blur(" + featherPx + "px)";
+      }
+      g.fillStyle = "#ffffff";
+      g.beginPath();
+      for (var i = 0; i < polyPts.length; i++) {
+        if (i === 0) g.moveTo(polyPts[i][0], polyPts[i][1]);
+        else g.lineTo(polyPts[i][0], polyPts[i][1]);
+      }
+      g.closePath();
+      g.fill();
+      g.restore();
+      g.globalCompositeOperation = "source-in";
+      g.drawImage(spr, 0, 0, W, H);
+      g.globalCompositeOperation = "source-over";
+      return c;
+    }
+
+    var rig = { full: spr, W: W, H: H };
+    if (baseMode === "dynamo") {
+      // Dynamo Princess (1024x682): Left/Right Crystal Wings, Twin Shoulder Spire Cannons, Head/Crown, Uplifted Arms, Flowing Braids & Royal Gown
+      rig.pivots = {
+        wingL: { x: 376, y: 245 },
+        wingR: { x: 648, y: 245 },
+        cannonL: { x: 365, y: 205 },
+        cannonR: { x: 659, y: 205 },
+        head: { x: 512, y: 235 },
+        armL: { x: 446, y: 235 },
+        armR: { x: 578, y: 235 },
+        tailMid: { x: 512, y: 345 },
+        tailTip: { x: 512, y: 475 }
+      };
+      rig.wingL = extractSoftRegion([[90, 115], [322, 175], [392, 232], [385, 345], [328, 435], [105, 425]], 8);
+      rig.wingR = extractSoftRegion([[934, 115], [702, 175], [632, 232], [639, 345], [696, 435], [919, 425]], 8);
+      rig.cannonL = extractSoftRegion([[308, 10], [422, 10], [412, 222], [318, 222]], 6);
+      rig.cannonR = extractSoftRegion([[602, 10], [716, 10], [706, 222], [612, 222]], 6);
+      rig.armL = extractSoftRegion([[405, 138], [462, 138], [462, 245], [408, 245]], 5);
+      rig.armR = extractSoftRegion([[562, 138], [619, 138], [616, 245], [562, 245]], 5);
+      rig.head = extractSoftRegion([[452, 165], [572, 165], [566, 272], [458, 272]], 6);
+      rig.tailMid = extractSoftRegion([[310, 325], [714, 325], [720, 505], [304, 505]], 10);
+      rig.tailTip = extractSoftRegion([[300, 465], [724, 465], [680, 675], [344, 675]], 10);
+      rig.torso = extractSoftRegion([[375, 215], [649, 215], [645, 395], [379, 395]], 10);
+    } else if (baseMode === "helix") {
+      // Helix Unicorn (1024x682): Left/Right Feathered Pegasus Wings, Twin Bio-Orbital Shoulder Cannons, Spiraling Cyan Horn & Head, Forelegs/Hindlegs, Swirling Pastel Tail
+      rig.pivots = {
+        wingL: { x: 432, y: 262 },
+        wingR: { x: 592, y: 262 },
+        cannonL: { x: 406, y: 222 },
+        cannonR: { x: 618, y: 222 },
+        head: { x: 512, y: 225 },
+        armL: { x: 438, y: 305 },
+        armR: { x: 586, y: 305 },
+        tailMid: { x: 512, y: 355 },
+        tailTip: { x: 512, y: 485 }
+      };
+      rig.wingL = extractSoftRegion([[75, 135], [362, 185], [438, 245], [428, 345], [85, 365]], 8);
+      rig.wingR = extractSoftRegion([[949, 135], [662, 185], [586, 245], [596, 345], [939, 365]], 8);
+      rig.cannonL = extractSoftRegion([[355, 140], [446, 140], [446, 238], [358, 238]], 6);
+      rig.cannonR = extractSoftRegion([[578, 140], [669, 140], [666, 238], [578, 238]], 6);
+      rig.head = extractSoftRegion([[448, 15], [576, 15], [568, 252], [456, 252]], 7);
+      rig.armL = extractSoftRegion([[408, 295], [462, 295], [462, 418], [408, 418]], 6);
+      rig.armR = extractSoftRegion([[562, 295], [616, 295], [616, 418], [562, 418]], 6);
+      rig.tailMid = extractSoftRegion([[418, 345], [606, 345], [596, 520], [428, 520]], 9);
+      rig.tailTip = extractSoftRegion([[425, 475], [599, 475], [585, 672], [439, 672]], 9);
+      rig.torso = extractSoftRegion([[422, 215], [602, 215], [592, 385], [432, 385]], 10);
+    } else {
+      // Meteor Dragon (1024x682): Left/Right Volcanic Membrane Wings, Twin Shoulder Volcanic Mortars, Armored Head, 4 Clawed Limbs, Magma Spine Torso & Whipping Spiked Tail
+      rig.pivots = {
+        wingL: { x: 405, y: 205 },
+        wingR: { x: 619, y: 205 },
+        cannonL: { x: 385, y: 175 },
+        cannonR: { x: 636, y: 175 },
+        head: { x: 512, y: 158 },
+        armL: { x: 418, y: 222 },
+        armR: { x: 606, y: 222 },
+        tailMid: { x: 512, y: 365 },
+        tailTip: { x: 512, y: 485 }
+      };
+      rig.wingL = extractSoftRegion([[40, 28], [342, 42], [352, 165], [408, 205], [322, 275], [295, 365], [40, 365]], 8);
+      rig.wingR = extractSoftRegion([[984, 28], [682, 42], [672, 165], [616, 205], [702, 275], [729, 365], [984, 365]], 8);
+      rig.cannonL = extractSoftRegion([[338, 82], [425, 82], [422, 198], [342, 198]], 6);
+      rig.cannonR = extractSoftRegion([[599, 82], [686, 82], [682, 198], [602, 198]], 6);
+      rig.head = extractSoftRegion([[448, 32], [576, 32], [572, 178], [452, 178]], 7);
+      rig.armL = extractSoftRegion([[314, 202], [438, 202], [432, 342], [314, 342]], 6);
+      rig.armR = extractSoftRegion([[586, 202], [710, 202], [710, 342], [592, 342]], 6);
+      rig.tailMid = extractSoftRegion([[385, 325], [639, 325], [625, 495], [399, 495]], 9);
+      rig.tailTip = extractSoftRegion([[445, 465], [579, 465], [568, 668], [456, 668]], 9);
+      rig.torso = extractSoftRegion([[412, 155], [612, 155], [596, 375], [428, 375]], 10);
+    }
+
+    Core3DAssets.t6RigCache[baseMode] = rig;
+    return rig;
+  }
+
+  // Grand Tier V -> Tier VI 3D Transformation Sequence Controller
+  var Tier6HatchController = {
+    active: false,
+    startTime: 0,
+    DURATION_MS: 1550,
+    BANNER_MS: 2200,
+    bannerUntil: 0,
+    variant: "classic",
+    wedges: [],
+    sparks: [],
+
+    trigger: function(variant, now) {
+      this.variant = variant || currentGameVariant || "classic";
+      this.active = true;
+      this.startTime = now || performance.now();
+      this.bannerUntil = this.startTime + this.BANNER_MS;
+      var angles = [-2.75, -1.96, -1.18, -0.39, 0.39, 1.18, 1.96, 2.75];
+      this.wedges = [];
+      for (var i = 0; i < angles.length; i++) {
+        var a0 = angles[i];
+        var a1 = (i < angles.length - 1) ? angles[i + 1] : (angles[0] + Math.PI * 2);
+        var mid = (a0 + a1) * 0.5;
+        this.wedges.push({
+          a0: a0,
+          a1: a1,
+          mid: mid,
+          speed: 0.82 + (i % 3) * 0.18,
+          spin: ((i % 2 === 0) ? 1 : -1) * (1.4 + (i % 4) * 0.35)
+        });
+      }
+      this.sparks = [];
+      for (var s = 0; s < 36; s++) {
+        var ang = (s / 36) * Math.PI * 2 + (s % 3) * 0.14;
+        this.sparks.push({
+          ang: ang,
+          speed: 0.65 + (s % 5) * 0.28,
+          size: 2.2 + (s % 4) * 1.1,
+          rot: s * 0.7,
+          rotSpd: ((s % 2 === 0) ? 1 : -1) * 3.8,
+          kind: s % 3
+        });
+      }
+      this.playAscensionFanfare(this.variant);
+    },
+
+    playAscensionFanfare: function(variant) {
+      initAudioCtx();
+      if (!audioCtx) return;
+      try {
+        var t0 = audioCtx.currentTime;
+        // Stage 1: Deep chrysalis compression sub-bass swell
+        var sub = audioCtx.createOscillator();
+        var subG = audioCtx.createGain();
+        sub.type = "sine";
+        sub.frequency.setValueAtTime(65, t0);
+        sub.frequency.exponentialRampToValueAtTime(180, t0 + 0.34);
+        subG.gain.setValueAtTime(0.01, t0);
+        subG.gain.linearRampToValueAtTime(0.18, t0 + 0.30);
+        subG.gain.exponentialRampToValueAtTime(0.001, t0 + 0.55);
+        sub.connect(subG); subG.connect(audioCtx.destination);
+        sub.start(t0); sub.stop(t0 + 0.58);
+
+        // Stage 2 & 3: Heroic Tier VI Royal Chord Arpeggio
+        var isMet = (variant === "meteor" || variant === "moltencore");
+        var isHel = (variant === "helix" || variant === "helixorb");
+        var root = isMet ? 220.0 : (isHel ? 261.63 : 246.94);
+        var ratios = [1.0, 1.25, 1.5, 2.0, 2.5];
+        for (var i = 0; i < ratios.length; i++) {
+          var osc = audioCtx.createOscillator();
+          var g = audioCtx.createGain();
+          var st = t0 + 0.34 + i * 0.065;
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(root * ratios[i], st);
+          g.gain.setValueAtTime(0.001, st);
+          g.gain.linearRampToValueAtTime(0.12, st + 0.03);
+          g.gain.exponentialRampToValueAtTime(0.001, st + 0.75);
+          osc.connect(g); g.connect(audioCtx.destination);
+          osc.start(st); osc.stop(st + 0.78);
+        }
+      } catch (e) {}
+    }
+  };
+
+  function syncTierEvolutionUI() {
+    if (!btnTierEvolution) return;
+    var meta = TIER6_CHARACTER_META[currentGameVariant] || TIER6_CHARACTER_META.classic;
+    var rom = TIER_ROMAN[playerEvolutionTier] || "I";
+    if (qGameTierIcon) qGameTierIcon.textContent = (playerEvolutionTier >= 6) ? "👑" : (playerEvolutionTier >= 4 ? "⭐" : "✦");
+    if (qGameTierLabel) {
+      qGameTierLabel.textContent = (playerEvolutionTier >= 6)
+        ? ("TIER VI · " + meta.name)
+        : ("TIER " + rom + (playerEvolutionTier >= 2 ? " · WINGED" : " · CORE"));
+    }
+    btnTierEvolution.style.borderColor = (playerEvolutionTier >= 6) ? meta.accent : meta.color;
+  }
+
+  function setPlayerEvolutionTier(nextTier, nowMs, isManual) {
+    var clamped = Math.max(1, Math.min(6, nextTier | 0));
+    if (isManual) manualTierLock = true;
+    if (clamped === playerEvolutionTier && !isManual) return;
+    var prev = playerEvolutionTier;
+    playerEvolutionTier = clamped;
+    if (clamped > maxReachedTierInRun) maxReachedTierInRun = clamped;
+    var meta = TIER6_CHARACTER_META[currentGameVariant] || TIER6_CHARACTER_META.classic;
+    if (clamped > prev) {
+      ascensionShockRings.push({
+        r: 22,
+        maxR: clamped === 6 ? 210 : (clamped >= 4 ? 145 : 105),
+        alpha: 1.0,
+        color: clamped === 6 ? meta.accent : meta.color,
+        lw: clamped === 6 ? 4.0 : 2.5
+      });
+      if (clamped === 6) {
+        Tier6HatchController.trigger(currentGameVariant, nowMs || performance.now());
+      }
+    }
+    syncTierEvolutionUI();
+  }
+
+  function cyclePlayerEvolutionTier() {
+    var nextT = (playerEvolutionTier >= 6) ? 1 : (playerEvolutionTier + 1);
+    setPlayerEvolutionTier(nextT, performance.now(), true);
   }
 
   
@@ -13917,8 +14344,17 @@ try { checkUrlHashRoutine(); } catch(e){}
     lastSkillTriggerTime = -99999;
     isBeatSyncLock = false;
     currentComboMultiplier = 1;
+    playerEvolutionTier = 1;
+    continuousEvolutionTier = 1.0;
+    maxReachedTierInRun = 1;
+    manualTierLock = false;
+    ascensionShockRings = [];
+    shoulderProjectiles = [];
+    Tier6HatchController.active = false;
+    Tier6HatchController.bannerUntil = 0;
     if (qGameComboBadge) qGameComboBadge.style.display = "none";
     syncSkillButtonUI(performance.now());
+    syncTierEvolutionUI();
   }
 
   function launchGame(variant) {
@@ -13995,8 +14431,17 @@ try { checkUrlHashRoutine(); } catch(e){}
     lastSkillTriggerTime = -99999;
     isBeatSyncLock = false;
     currentComboMultiplier = 1;
+    playerEvolutionTier = 1;
+    continuousEvolutionTier = 1.0;
+    maxReachedTierInRun = 1;
+    manualTierLock = false;
+    ascensionShockRings = [];
+    shoulderProjectiles = [];
+    Tier6HatchController.active = false;
+    Tier6HatchController.bannerUntil = 0;
     if (qGameComboBadge) qGameComboBadge.style.display = "none";
     syncSkillButtonUI(performance.now());
+    syncTierEvolutionUI();
 
     if (window.antigravityFX && typeof window.antigravityFX.setAfterRenderHook === "function") {
       window.antigravityFX.setAfterRenderHook(gameLoop);
@@ -14315,11 +14760,18 @@ try { checkUrlHashRoutine(); } catch(e){}
             var beatMult = isBeatSyncLock ? 1.25 : 1.0;
             contactDuration += dt * beatMult;
             var progress = Math.min(1.0, contactDuration / REQUIRED_CONTACT);
+            // Automatic Tier I -> Tier VI 3D Evolution Progression during active lock-on!
+            if (!manualTierLock) {
+              var autoTier = (progress >= 0.82) ? 6 : ((progress >= 0.64) ? 5 : ((progress >= 0.46) ? 4 : ((progress >= 0.28) ? 3 : ((progress >= 0.12) ? 2 : 1))));
+              if (autoTier > playerEvolutionTier) {
+                setPlayerEvolutionTier(autoTier, now, false);
+              }
+            }
             var tierMult = (lockedParticle.lumiTier === 3) ? 4 : ((lockedParticle.lumiTier === 2) ? 2 : 1);
-            currentComboMultiplier = tierMult * (isBeatSyncLock ? 2 : 1);
+            currentComboMultiplier = tierMult * (isBeatSyncLock ? 2 : 1) * playerEvolutionTier;
             if (qGameComboBadge) {
               qGameComboBadge.style.display = "inline-flex";
-              qGameComboBadge.textContent = currentComboMultiplier + "× TIER-" + (lockedParticle.lumiTier || 1) + (isBeatSyncLock ? " ⚡BEAT" : "");
+              qGameComboBadge.textContent = currentComboMultiplier + "× TIER-" + (TIER_ROMAN[playerEvolutionTier] || "I") + (isBeatSyncLock ? " ⚡BEAT" : "");
             }
             startLockAudio();
             updateLockAudio(progress);
@@ -14400,7 +14852,15 @@ try { checkUrlHashRoutine(); } catch(e){}
       }
     }
 
-    // ── Render Alive Cursor Across All 6 Games (3 Classic + 3 Luxury Editions) ──
+    // ── Update 3D Flight Kinematics (Roll Banking, Pitch Tilt, Continuous Tier Morph & Recoil) ──
+    var targetBank = Math.max(-0.34, Math.min(0.34, cursor.vx * 0.00055));
+    var targetPitch = Math.max(-0.22, Math.min(0.22, cursor.vy * 0.00038));
+    bodyBankAngle += (targetBank - bodyBankAngle) * Math.min(1.0, dt * 11.0);
+    bodyPitchAngle += (targetPitch - bodyPitchAngle) * Math.min(1.0, dt * 10.0);
+    continuousEvolutionTier += (playerEvolutionTier - continuousEvolutionTier) * Math.min(1.0, dt * 8.5);
+    cannonRecoilImpulse *= Math.pow(0.84, dt * 60);
+
+    // ── Render Alive 3D Tier I-VI Winged Core / Articulated Tier VI Sovereign Across All 6 Games ──
     if (!isWon && !isGameOver && cursor.active && hasDeliberateMove) {
       var lockProgress = (lockedParticle && isPhysicallyTouching && contactDuration > 0) ? (contactDuration / REQUIRED_CONTACT) : 0;
       if (currentGameVariant === "comet") {
@@ -14416,11 +14876,575 @@ try { checkUrlHashRoutine(); } catch(e){}
       } else {
         drawQuantumAtomicCursor(cursor.x, cursor.y, now, lockProgress);
       }
+      render3DPlayerEvolutionCore(cursor.x, cursor.y, now, lockProgress, dt);
     }
 
     // ── Render Active Explosion & Spark Fragments ──
     if (activeExplosion) {
       renderExplosion(now);
+    }
+  }
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // MASTER 3D TIER I-V ARTICULATED WINGED CORE & TIER VI SOVEREIGN CHARACTER
+  // RENDERER ACROSS ALL 6 GAMES (DYNAMO, HELIX, METEOR, COMET, ORB, MOLTEN)
+  // ══════════════════════════════════════════════════════════════════════════
+  function render3DPlayerEvolutionCore(cx, cy, now, lockProgress, dt) {
+    var meta = TIER6_CHARACTER_META[currentGameVariant] || TIER6_CHARACTER_META.classic;
+    var baseMode = meta.base; // "dynamo" | "helix" | "meteor"
+    var tierIdx = Math.max(1, Math.min(6, playerEvolutionTier | 0));
+    var cTier = Math.max(1.0, Math.min(6.0, continuousEvolutionTier));
+    var isMobile = (width < 600);
+    var u = isMobile ? 0.34 : 0.44;
+
+    // 1. Render Expanding Ascension Shockwave Rings
+    for (var ri = ascensionShockRings.length - 1; ri >= 0; ri--) {
+      var sr = ascensionShockRings[ri];
+      sr.r += (sr.maxR - sr.r) * 0.14;
+      sr.alpha -= 0.036;
+      if (sr.alpha <= 0.02) {
+        ascensionShockRings.splice(ri, 1);
+        continue;
+      }
+      ctx.save();
+      ctx.globalCompositeOperation = "lighter";
+      ctx.beginPath();
+      ctx.arc(cx, cy, sr.r, 0, Math.PI * 2);
+      ctx.strokeStyle = sr.color;
+      ctx.globalAlpha = sr.alpha;
+      ctx.lineWidth = sr.lw;
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // 2. Check if Grand Tier V -> Tier VI 3D Hatching Transformation is Active!
+    if (Tier6HatchController.active) {
+      var elapsedH = now - Tier6HatchController.startTime;
+      if (elapsedH < Tier6HatchController.DURATION_MS) {
+        renderTier6HatchTransformation(cx, cy, u, now, elapsedH, meta, baseMode, lockProgress);
+        renderTier6AscensionBanner(cx, cy, u, now, meta);
+        return;
+      } else {
+        Tier6HatchController.active = false;
+      }
+    }
+
+    // 3. Tier VI Playable Multi-Joint Articulated 3D Character (Dynamo Princess / Storm Empress / Helix Unicorn / Astral Alicorn / Meteor Dragon / Obsidian Wyrm)
+    if (tierIdx >= 6) {
+      drawTier6ArticulatedSovereign(cx, cy, u, now, meta, baseMode, lockProgress, 1.0);
+      renderTier6AscensionBanner(cx, cy, u, now, meta);
+      return;
+    }
+
+    // 4. Tiers II -> V Articulated 3D Winged Chrome Core Overlay (Enhances the central sphere with 3D articulated wings, royal crown bezel, and 3D orbital rings!)
+    if (tierIdx >= 2) {
+      drawTier2To5ArticulatedWingsAndBezel(cx, cy, u, now, tierIdx, cTier, meta, baseMode, lockProgress);
+    }
+  }
+
+  function drawTier2To5ArticulatedWingsAndBezel(cx, cy, u, now, tierIdx, cTier, meta, baseMode, lockProgress) {
+    var wingTier = Math.max(2, Math.min(5, tierIdx));
+    var wMaps = getWingProcessedMaps(baseMode, wingTier);
+    var coreImgScale = (68.0 / 150.0) * u;
+    var fullRefW = 1024 * coreImgScale;
+    var fullRefH = 576 * coreImgScale;
+
+    ctx.save();
+    ctx.translate(cx, cy);
+    // Split 3D Flight Banking: Wings bank at 0.55x roll angle while core banks at 1.0x roll angle!
+    ctx.rotate(bodyBankAngle * 0.55);
+
+    if (wMaps && wMaps.base) {
+      var flapFreq = 0.0046 + (wingTier - 2) * 0.0005 + (lockProgress > 0 ? 0.0025 : 0);
+      var flapPhase = now * flapFreq;
+      var flapSin = Math.sin(flapPhase);
+      var flapCos = Math.cos(flapPhase);
+      // 3D perspective wingbeat foreshortening & elevation
+      var wingScaleX = (0.88 + 0.14 * flapCos) * (0.82 + (cTier - 1) * 0.08);
+      var wingScaleY = (1.0 - Math.abs(bodyPitchAngle) * 0.22) * (0.84 + (cTier - 1) * 0.07);
+      var wingPitchRot = flapSin * 0.13 + bodyPitchAngle * 0.28;
+      var wingLiftY = -flapSin * 5.5 * u;
+
+      for (var side = -1; side <= 1; side += 2) {
+        ctx.save();
+        ctx.scale(side, 1);
+        var sideBankDiff = (side === 1) ? (-bodyBankAngle * 0.16) : (bodyBankAngle * 0.16);
+        ctx.translate(0, wingLiftY);
+        ctx.rotate(wingPitchRot + sideBankDiff);
+        ctx.scale(wingScaleX, wingScaleY);
+
+        // Pass A: Sub-feather Ambient Occlusion (AO) Shadow Underlap
+        if (wMaps.ao) {
+          ctx.save();
+          ctx.globalAlpha = 0.42;
+          ctx.drawImage(wMaps.ao, -fullRefW * 0.5 + 1.5 * u, -fullRefH * 0.5 + 3.2 * u, fullRefW, fullRefH);
+          ctx.restore();
+        }
+
+        // Pass B: Chromatically Defringed Base Wing Sprite
+        ctx.drawImage(wMaps.base, -fullRefW * 0.5, -fullRefH * 0.5, fullRefW, fullRefH);
+
+        // Pass C: Inward-Eroded 2.5px Windward 3D Specular Sheen (Zero white paper edge fringe!)
+        if (wMaps.spec) {
+          var windwardBoost = Math.max(0, (side === 1 ? -bodyBankAngle : bodyBankAngle) * 1.8) + Math.max(0, flapCos * 0.35);
+          ctx.save();
+          ctx.globalCompositeOperation = "lighter";
+          ctx.globalAlpha = Math.min(0.46, 0.14 + (wingTier - 2) * 0.05 + windwardBoost * 0.25);
+          ctx.drawImage(wMaps.spec, -fullRefW * 0.5, -fullRefH * 0.5, fullRefW, fullRefH);
+          ctx.restore();
+        }
+        ctx.restore();
+      }
+    }
+
+    // Additional 0.45x differential core bank + Tier V Royal Crown Bezel
+    ctx.rotate(bodyBankAngle * 0.45);
+    if (cTier >= 4.05 && baseMode !== "meteor" && Core3DAssets.loaded.bezelT5[baseMode]) {
+      ctx.save();
+      ctx.globalAlpha = Math.min(1.0, cTier - 4.0);
+      ctx.drawImage(Core3DAssets.bezelT5[baseMode], -fullRefW * 0.5, -fullRefH * 0.5, fullRefW, fullRefH);
+      ctx.restore();
+    }
+
+    ctx.restore();
+  }
+
+  function renderTier6HatchTransformation(cx, cy, u, now, elapsedMs, meta, baseMode, lockProgress) {
+    var dur = Tier6HatchController.DURATION_MS;
+    ctx.save();
+    ctx.translate(cx, cy);
+
+    // STAGE 1 (0 - 360ms): Dimensional Chrysalis Compression & Igniting Fissure Cracks
+    if (elapsedMs < 360) {
+      var p1 = elapsedMs / 360;
+      var contract = 1.0 - 0.14 * Math.sin(p1 * Math.PI * 0.5);
+      var jitX = Math.sin(elapsedMs * 0.11) * (1.5 + p1 * 3.5) * u;
+      var jitY = Math.cos(elapsedMs * 0.13) * (1.5 + p1 * 3.5) * u;
+      ctx.save();
+      ctx.translate(jitX, jitY);
+      ctx.scale(contract, contract);
+      drawTier2To5ArticulatedWingsAndBezel(0, 0, u * 1.08, now, 5, 5.0, meta, baseMode, lockProgress);
+
+      // Volumetric God-Rays & Igniting Chrysalis Fissures
+      ctx.globalCompositeOperation = "lighter";
+      for (var w = 0; w < Tier6HatchController.wedges.length; w++) {
+        var ang = Tier6HatchController.wedges[w].a0;
+        var reach = (28 + p1 * 95) * u;
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(Math.cos(ang) * reach * 0.5 + Math.sin(ang) * 6 * u, Math.sin(ang) * reach * 0.5 - Math.cos(ang) * 6 * u);
+        ctx.lineTo(Math.cos(ang) * reach, Math.sin(ang) * reach);
+        ctx.strokeStyle = meta.color;
+        ctx.lineWidth = 4.2 * u;
+        ctx.stroke();
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 1.6 * u;
+        ctx.stroke();
+      }
+      ctx.restore();
+      ctx.restore();
+      return;
+    }
+
+    // STAGES 2, 3 & 4 (360 - 1550ms): 3D Polyhedral Shell Shatter + Articulated 3D Sovereign Emergence & Wing Unfurl!
+    var pBreak = Math.min(1.0, (elapsedMs - 360) / 920);
+    var easeOut = 1.0 - Math.pow(1.0 - pBreak, 3);
+    var fragAlpha = Math.max(0, 1.0 - pBreak * 1.25);
+
+    // A. Dual Expanding 3D Elliptical Shockwave Halos
+    if (pBreak < 0.85) {
+      ctx.save();
+      ctx.globalCompositeOperation = "lighter";
+      var swR = (35 + easeOut * 195) * u;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, swR, swR * 0.62, bodyBankAngle * 0.4, 0, Math.PI * 2);
+      ctx.strokeStyle = meta.accent;
+      ctx.globalAlpha = (1.0 - pBreak / 0.85) * 0.9;
+      ctx.lineWidth = 3.6 * u;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(0, 0, swR * 0.82, 0, Math.PI * 2);
+      ctx.strokeStyle = meta.color;
+      ctx.lineWidth = 2.2 * u;
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // B. 8 Spinning 3D Crystalline / Volcanic Chrysalis Shell Wedges Blasting Apart
+    if (fragAlpha > 0.02) {
+      ctx.save();
+      for (var wi = 0; wi < Tier6HatchController.wedges.length; wi++) {
+        var wg = Tier6HatchController.wedges[wi];
+        var dist = (18 + easeOut * 145 * wg.speed) * u;
+        var wx = Math.cos(wg.mid) * dist;
+        var wy = Math.sin(wg.mid) * dist;
+        ctx.save();
+        ctx.translate(wx, wy);
+        ctx.rotate(wg.spin * pBreak);
+        ctx.scale(1.0 - pBreak * 0.45, Math.cos(pBreak * 2.2)); // 3D tumbling perspective foreshortening!
+        ctx.globalAlpha = fragAlpha;
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(Math.cos(wg.a0 - wg.mid) * 38 * u, Math.sin(wg.a0 - wg.mid) * 38 * u);
+        ctx.lineTo(Math.cos(wg.a1 - wg.mid) * 38 * u, Math.sin(wg.a1 - wg.mid) * 38 * u);
+        ctx.closePath();
+        ctx.fillStyle = (wi % 2 === 0) ? meta.color : meta.accent;
+        ctx.fill();
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 1.4 * u;
+        ctx.stroke();
+        ctx.restore();
+      }
+      ctx.restore();
+    }
+
+    // C. Articulated 3D Tier VI Sovereign Emergence with Dramatic 3D Wing Unfurl (460ms -> 1550ms)
+    if (elapsedMs >= 460) {
+      var pRev = Math.min(1.0, (elapsedMs - 460) / 880);
+      drawTier6ArticulatedSovereign(0, 0, u, now, meta, baseMode, lockProgress, pRev);
+    }
+
+    // D. 36 High-Velocity 3D Elemental Sparks / Feathers / Magma Clasts
+    if (pBreak < 0.95) {
+      ctx.save();
+      ctx.globalCompositeOperation = "lighter";
+      for (var si = 0; si < Tier6HatchController.sparks.length; si++) {
+        var sp = Tier6HatchController.sparks[si];
+        var sDist = (20 + easeOut * 165 * sp.speed) * u;
+        var sx = Math.cos(sp.ang) * sDist;
+        var sy = Math.sin(sp.ang) * sDist;
+        var sAlpha = Math.sin(pBreak * Math.PI) * 0.95;
+        ctx.save();
+        ctx.translate(sx, sy);
+        ctx.rotate(sp.rot + sp.rotSpd * pBreak);
+        ctx.fillStyle = (sp.kind === 0) ? "#ffffff" : (sp.kind === 1 ? meta.color : meta.accent);
+        ctx.globalAlpha = sAlpha;
+        var sr = sp.size * u;
+        ctx.beginPath();
+        ctx.moveTo(0, -sr * 1.8);
+        ctx.lineTo(sr * 0.75, 0);
+        ctx.lineTo(0, sr * 1.8);
+        ctx.lineTo(-sr * 0.75, 0);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+      }
+      ctx.restore();
+    }
+
+    ctx.restore();
+  }
+
+  function renderTier6AscensionBanner(cx, cy, u, now, meta) {
+    if (!Tier6HatchController.bannerUntil || now > Tier6HatchController.bannerUntil) return;
+    var elapsed = now - Tier6HatchController.startTime;
+    if (elapsed < 720) return;
+    var bProg = Math.min(1.0, (elapsed - 720) / (Tier6HatchController.BANNER_MS - 720));
+    var bAlpha = (bProg < 0.18) ? (bProg / 0.18) : (bProg > 0.74 ? Math.max(0, (1.0 - bProg) / 0.26) : 1.0);
+    if (bAlpha <= 0.02) return;
+
+    var riseY = -96 * u - bProg * 18 * u;
+    ctx.save();
+    ctx.globalAlpha = bAlpha;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    var fSize = Math.max(13, Math.round(18 * Math.max(0.75, u)));
+    ctx.font = "900 " + fSize + "px 'Lexend', sans-serif";
+    ctx.lineWidth = 4.0;
+    ctx.strokeStyle = "rgba(2, 6, 23, 0.94)";
+    var txt = "👑 TIER VI · " + meta.name;
+    ctx.strokeText(txt, cx, cy + riseY);
+    ctx.fillStyle = meta.accent;
+    ctx.fillText(txt, cx, cy + riseY);
+    ctx.restore();
+  }
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // MULTI-JOINT ARTICULATED 3D TIER VI SOVEREIGN CHARACTER RENDERER
+  // Independently animates:
+  //   1. Left & Right 3D Wings (3D perspective foreshortening, elevation, pitch, specular)
+  //   2. Coordinated Head / Crown / Horn + Expressive Reactive Eyes / Ocular Slits
+  //   3. Twin Gimbaled Shoulder Weapons (independent target tracking, hydraulic recoil, dual muzzle beams)
+  //   4. Articulated Forelimbs / Uplifted Arms & Hindlimbs / Armored Boots
+  //   5. Multi-Segment S-Curve Pendulum Braids, Mane, Royal Gown & Whipping Tail
+  //   6. Live Dorsal Material Energy (Traveling Dragon Magma Spine / Unicorn Horn Helix / Princess Crystal)
+  // ══════════════════════════════════════════════════════════════════════════
+  function drawTier6ArticulatedSovereign(cx, cy, u, now, meta, baseMode, lockProgress, revealProgress) {
+    var rig = getTier6ArticulatedRig(baseMode);
+    if (!rig || !rig.full) {
+      drawTier2To5ArticulatedWingsAndBezel(cx, cy, u, now, 5, 5.0, meta, baseMode, lockProgress);
+      return;
+    }
+
+    var pRev = (typeof revealProgress === "number") ? Math.max(0, Math.min(1, revealProgress)) : 1.0;
+    var easeRev = 1.0 - Math.pow(1.0 - pRev, 3);
+    var scale = (68.0 / 150.0) * u * (meta.scaleMult || 1.10);
+    var ancX = meta.anchorX;
+    var ancY = meta.anchorY;
+
+    // Flight & Breathing Kinematics
+    var hoverY = Math.sin(now * 0.0042) * 3.2 * u + (1.0 - easeRev) * 18 * u;
+    var breath = 1.0 + Math.sin(now * 0.0048) * 0.015;
+    var rollBank = bodyBankAngle * 0.45;
+    var pitchCompressY = 1.0 - Math.abs(bodyPitchAngle) * 0.16;
+    var strafeNorm = Math.max(-1.0, Math.min(1.0, cursor.vx * 0.0018));
+    var climbNorm = Math.max(-1.0, Math.min(1.0, cursor.vy * 0.0018));
+
+    // Wingbeat Cycle (accelerates during lock-on or emergence unfurl!)
+    var flapFreq = 0.0052 + (lockProgress > 0 ? 0.0028 : 0);
+    var flapPhase = now * flapFreq;
+    var flapSin = Math.sin(flapPhase);
+    var flapCos = Math.cos(flapPhase);
+    var unfurlSpread = 0.38 + 0.62 * easeRev + Math.sin(easeRev * Math.PI) * 0.12;
+    var wing3DForeshortenX = (0.87 + 0.15 * flapCos) * unfurlSpread;
+    var wingFlapRot = flapSin * 0.14 + (1.0 - easeRev) * 0.35;
+    var wingLiftY = -flapSin * 8.0;
+
+    // Independent Head Turn & Pitch toward Movement/Target Vector
+    var headYawRot = strafeNorm * 0.11 + Math.sin(now * 0.0027) * 0.025;
+    var headShiftX = strafeNorm * 9.5;
+    var headShiftY = climbNorm * 6.5;
+
+    // Independent S-Curve Pendulum Physics for Hair/Braids/Gown/Tail
+    var wave1 = Math.sin(now * 0.0055 - 0.6) * 0.065 - strafeNorm * 0.16;
+    var wave2 = Math.sin(now * 0.0055 - 1.5) * 0.115 - strafeNorm * 0.26;
+
+    // Independent Gimbal Tracking & Hydraulic Recoil for Twin Shoulder Weapons
+    var targetAimAngle = 0;
+    if (lockedParticle) {
+      var aimDx = lockedParticle.x - cx;
+      var aimDy = lockedParticle.y - cy;
+      targetAimAngle = Math.max(-0.26, Math.min(0.26, Math.atan2(aimDx, Math.max(40, -aimDy)) * 0.45));
+    }
+    var activeRecoilY = (cannonRecoilImpulse * 18.0) + (lockProgress > 0 ? Math.sin(now * 0.045) * 4.5 : 0);
+
+    // Helper: draw an anatomical sub-canvas pivoted around its exact joint socket in 1024x682 sprite space
+    function drawArticulatedPart(partCanvas, pivot, rotRad, scaleX, scaleY, offX, offY, extraAlpha) {
+      if (!partCanvas) return;
+      ctx.save();
+      var px = (pivot.x - ancX + (offX || 0)) * scale;
+      var py = (pivot.y - ancY + (offY || 0)) * scale;
+      ctx.translate(px, py);
+      if (rotRad) ctx.rotate(rotRad);
+      if (scaleX !== 1 || scaleY !== 1) ctx.scale(scaleX, scaleY);
+      if (typeof extraAlpha === "number") ctx.globalAlpha *= extraAlpha;
+      ctx.drawImage(partCanvas, -pivot.x * scale, -pivot.y * scale, rig.W * scale, rig.H * scale);
+      ctx.restore();
+    }
+
+    ctx.save();
+    ctx.translate(cx, cy + hoverY);
+    ctx.rotate(rollBank);
+    ctx.scale(breath, (2.0 - breath * 0.99) * pitchCompressY);
+    ctx.globalAlpha = Math.min(1.0, pRev * 1.65);
+
+    // Luxury Variant Chromatic Filter Tint for Games 4, 5, 6 (Comet -> Void-Amethyst Empress; Orb -> Bioluminescent Alicorn; Molten -> Supernova Obsidian Wyrm)
+    if (currentGameVariant === "comet" && typeof ctx.filter === "string") {
+      ctx.filter = "hue-rotate(28deg) saturate(1.22)";
+    } else if (currentGameVariant === "helixorb" && typeof ctx.filter === "string") {
+      ctx.filter = "hue-rotate(-18deg) saturate(1.25)";
+    } else if (currentGameVariant === "moltencore" && typeof ctx.filter === "string") {
+      ctx.filter = "saturate(1.28) contrast(1.08)";
+    }
+
+    // ── LAYER 1: 3D Volumetric Sovereign Ascension Halo Beneath Character ──
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+    var haloR = 86 * u * (0.95 + 0.05 * Math.sin(now * 0.005));
+    var hGrad = ctx.createRadialGradient(0, 0, haloR * 0.15, 0, 0, haloR);
+    hGrad.addColorStop(0.0, "rgba(255, 255, 255, 0.22)");
+    hGrad.addColorStop(0.45, meta.color + "44");
+    hGrad.addColorStop(0.78, meta.accent + "22");
+    hGrad.addColorStop(1.0, "rgba(0, 0, 0, 0)");
+    ctx.fillStyle = hGrad;
+    ctx.beginPath();
+    ctx.arc(0, 0, haloR, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Rotating 3D Perspective Royal Glyph Ring
+    ctx.save();
+    ctx.scale(1.0, 0.42);
+    ctx.rotate(now * 0.0009);
+    ctx.strokeStyle = meta.color;
+    ctx.globalAlpha = 0.42;
+    ctx.lineWidth = 1.8 * u;
+    ctx.setLineDash([8, 6]);
+    ctx.beginPath();
+    ctx.arc(0, 35 * u, haloR * 0.92, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.restore();
+    ctx.restore();
+
+    // ── LAYER 2: Independently Articulated Lower Tail / Royal Gown Train / Boots & Hindlimbs ──
+    drawArticulatedPart(rig.tailTip, rig.pivots.tailTip, wave2, 1.0, 1.0, -strafeNorm * 14.0, 0, 1.0);
+    drawArticulatedPart(rig.tailMid, rig.pivots.tailMid, wave1, 1.0, 1.0, -strafeNorm * 7.0, 0, 1.0);
+
+    // ── LAYER 3: Independently Flapping 3D Multi-Joint Left & Right Wings ──
+    var leftWingBank = -wingFlapRot + strafeNorm * 0.08;
+    var rightWingBank = wingFlapRot + strafeNorm * 0.08;
+    drawArticulatedPart(rig.wingL, rig.pivots.wingL, leftWingBank, wing3DForeshortenX, 1.0, 0, wingLiftY, 1.0);
+    drawArticulatedPart(rig.wingR, rig.pivots.wingR, rightWingBank, wing3DForeshortenX, 1.0, 0, wingLiftY, 1.0);
+
+    // Windward 3D Specular Sheen on Flapping Tier VI Wings
+    if (flapCos > 0.05) {
+      ctx.save();
+      ctx.globalCompositeOperation = "lighter";
+      var specA = flapCos * 0.22;
+      drawArticulatedPart(rig.wingL, rig.pivots.wingL, leftWingBank, wing3DForeshortenX, 1.0, 0, wingLiftY, specA);
+      drawArticulatedPart(rig.wingR, rig.pivots.wingR, rightWingBank, wing3DForeshortenX, 1.0, 0, wingLiftY, specA);
+      ctx.restore();
+    }
+
+    // ── LAYER 4: Independently Articulated Forelimbs / Uplifted Arms ──
+    var stridePhase = Math.sin(now * 0.0075);
+    var armLRot = stridePhase * 0.07 - strafeNorm * 0.09;
+    var armRRot = -stridePhase * 0.07 - strafeNorm * 0.09;
+    drawArticulatedPart(rig.armL, rig.pivots.armL, armLRot, 1.0, 1.0, 0, stridePhase * 4.5, 1.0);
+    drawArticulatedPart(rig.armR, rig.pivots.armR, armRRot, 1.0, 1.0, 0, -stridePhase * 4.5, 1.0);
+
+    // ── LAYER 5: Breathing Central Torso & Live Dorsal Material Energy ──
+    drawArticulatedPart(rig.torso, { x: ancX, y: ancY }, 0, 1.0, 1.0, 0, 0, 1.0);
+
+    // Live Dorsal Elemental Energy Overlay (Dragon Traveling Magma Spine / Unicorn Heart Core / Princess Bodice Crystal)
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+    if (baseMode === "meteor") {
+      // Traveling blue-gold plasma pulses ascending the Meteor Dragon's dorsal spine plates
+      for (var sp = 0; sp < 6; sp++) {
+        var spProg = ((now * 0.0022 + sp / 6) % 1.0);
+        var spy = (145 - spProg * 235) * scale;
+        var spR = (7.5 - spProg * 3.0) * scale;
+        var spG = ctx.createRadialGradient(0, spy, 0, 0, spy, spR * 2.2);
+        spG.addColorStop(0.0, "#ffffff");
+        spG.addColorStop(0.4, meta.accent);
+        spG.addColorStop(1.0, "rgba(249, 115, 22, 0)");
+        ctx.fillStyle = spG;
+        ctx.beginPath();
+        ctx.arc(0, spy, spR * 2.2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    } else {
+      // Pulsing dorsal heart-gem singularity on Helix Unicorn / Dynamo Princess
+      var gemY = (baseMode === "helix" ? -4 : 12) * scale;
+      var gemR = (22 + Math.sin(now * 0.009) * 5) * scale;
+      var gemG = ctx.createRadialGradient(0, gemY, 0, 0, gemY, gemR);
+      gemG.addColorStop(0.0, "#ffffff");
+      gemG.addColorStop(0.45, meta.color);
+      gemG.addColorStop(1.0, "rgba(0, 0, 0, 0)");
+      ctx.fillStyle = gemG;
+      ctx.beginPath();
+      ctx.arc(0, gemY, gemR, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+
+    // ── LAYER 6: Coordinated Head, Crown/Horn & Expressive Reactive Eyes/Optics ──
+    drawArticulatedPart(rig.head, rig.pivots.head, headYawRot, 1.0, 1.0, headShiftX, headShiftY, 1.0);
+
+    // Expressive Ocular Glint & Horn/Crown Telemetry on the Head
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+    var hPx = (rig.pivots.head.x - ancX + headShiftX) * scale;
+    var hPy = (rig.pivots.head.y - ancY + headShiftY) * scale;
+    ctx.translate(hPx, hPy);
+    ctx.rotate(headYawRot);
+    if (baseMode === "helix") {
+      // Helical bioluminescent rings traveling up the Unicorn's spiral cyan horn
+      var hornPulseY = -(115 + ((now * 0.08) % 90)) * scale;
+      var hornG = ctx.createRadialGradient(0, hornPulseY, 0, 0, hornPulseY, 18 * scale);
+      hornG.addColorStop(0.0, "#ffffff");
+      hornG.addColorStop(0.5, "#22d3ee");
+      hornG.addColorStop(1.0, "rgba(34, 211, 238, 0)");
+      ctx.fillStyle = hornG;
+      ctx.beginPath();
+      ctx.arc(0, hornPulseY, 18 * scale, 0, Math.PI * 2);
+      ctx.fill();
+    } else if (baseMode === "meteor") {
+      // Blazing lateral magma ocular slits on the Dragon's head
+      var eyeInt = 0.65 + 0.35 * Math.sin(now * 0.012) + (lockProgress > 0 ? 0.35 : 0);
+      for (var es = -1; es <= 1; es += 2) {
+        ctx.fillStyle = "rgba(254, 240, 138, " + Math.min(1, eyeInt).toFixed(2) + ")";
+        ctx.beginPath();
+        ctx.arc(es * 24 * scale, -72 * scale, 4.5 * scale, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    } else {
+      // Shimmering starlight tiara crown gem on Dynamo Princess
+      var crownG = ctx.createRadialGradient(0, -48 * scale, 0, 0, -48 * scale, 16 * scale);
+      crownG.addColorStop(0.0, "#ffffff");
+      crownG.addColorStop(0.5, meta.accent);
+      crownG.addColorStop(1.0, "rgba(0, 0, 0, 0)");
+      ctx.fillStyle = crownG;
+      ctx.beginPath();
+      ctx.arc(0, -48 * scale, 16 * scale, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+
+    // ── LAYER 7: Independently Gimbaled Twin Shoulder Weapons with Hydraulic Firing Recoil & Muzzle Flashes ──
+    var recL = activeRecoilY * (0.85 + 0.3 * Math.sin(now * 0.05));
+    var recR = activeRecoilY * (0.85 + 0.3 * Math.cos(now * 0.05));
+    drawArticulatedPart(rig.cannonL, rig.pivots.cannonL, targetAimAngle, 1.0, 1.0, 0, recL, 1.0);
+    drawArticulatedPart(rig.cannonR, rig.pivots.cannonR, targetAimAngle, 1.0, 1.0, 0, recR, 1.0);
+
+    // Twin Shoulder Cannon Muzzle Ignition & Dual Synchronized Lock-On Energy Beams!
+    var mzL = {
+      x: (meta.muzzleL.x - ancX) * scale,
+      y: (meta.muzzleL.y - ancY + recL) * scale
+    };
+    var mzR = {
+      x: (meta.muzzleR.x - ancX) * scale,
+      y: (meta.muzzleR.y - ancY + recR) * scale
+    };
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+    var mzRadius = (12 + (lockProgress > 0 ? 10 : 0) + cannonRecoilImpulse * 14) * scale;
+    [mzL, mzR].forEach(function(mz) {
+      var mg = ctx.createRadialGradient(mz.x, mz.y, 0, mz.x, mz.y, mzRadius);
+      mg.addColorStop(0.0, "#ffffff");
+      mg.addColorStop(0.45, meta.color);
+      mg.addColorStop(1.0, "rgba(0, 0, 0, 0)");
+      ctx.fillStyle = mg;
+      ctx.beginPath();
+      ctx.arc(mz.x, mz.y, mzRadius, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    ctx.restore();
+
+    if (typeof ctx.filter === "string") ctx.filter = "none";
+    ctx.restore();
+
+    // If locked onto a target particle (or firing tactical skill), fire twin 3D elemental beams from the exact world-space shoulder muzzles!
+    if (lockedParticle && lockProgress > 0) {
+      var cosR = Math.cos(rollBank), sinR = Math.sin(rollBank);
+      var worldMzL = {
+        x: cx + mzL.x * cosR - mzL.y * sinR,
+        y: (cy + hoverY) + mzL.x * sinR + mzL.y * cosR
+      };
+      var worldMzR = {
+        x: cx + mzR.x * cosR - mzR.y * sinR,
+        y: (cy + hoverY) + mzR.x * sinR + mzR.y * cosR
+      };
+      ctx.save();
+      ctx.globalCompositeOperation = "lighter";
+      ctx.lineCap = "round";
+      [worldMzL, worldMzR].forEach(function(wm, idx) {
+        ctx.beginPath();
+        ctx.moveTo(wm.x, wm.y);
+        var midX = (wm.x + lockedParticle.x) * 0.5 + Math.sin(now * 0.03 + idx * 3.1) * 8;
+        var midY = (wm.y + lockedParticle.y) * 0.5 + Math.cos(now * 0.03 + idx * 3.1) * 8;
+        ctx.quadraticCurveTo(midX, midY, lockedParticle.x, lockedParticle.y);
+        ctx.strokeStyle = meta.color;
+        ctx.globalAlpha = 0.45 + lockProgress * 0.45;
+        ctx.lineWidth = 3.2;
+        ctx.stroke();
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+      });
+      ctx.restore();
     }
   }
 
@@ -15298,14 +16322,28 @@ try { checkUrlHashRoutine(); } catch(e){}
   if (btnTacticalSkill) {
     btnTacticalSkill.onclick = function(e) {
       if (e) e.stopPropagation();
+      cannonRecoilImpulse = 1.0;
       triggerElementalTacticalSkill();
+    };
+  }
+  if (btnTierEvolution) {
+    btnTierEvolution.onclick = function(e) {
+      if (e) e.stopPropagation();
+      cyclePlayerEvolutionTier();
     };
   }
   window.addEventListener("keydown", function(e) {
     if (!isActive || isWon || isGameOver) return;
     if (e.code === "Space" || e.key === " ") {
       e.preventDefault();
+      cannonRecoilImpulse = 1.0;
       triggerElementalTacticalSkill();
+    } else if (e.key === "e" || e.key === "E") {
+      e.preventDefault();
+      cyclePlayerEvolutionTier();
+    } else if (e.key >= "1" && e.key <= "6") {
+      e.preventDefault();
+      setPlayerEvolutionTier(parseInt(e.key, 10), performance.now(), true);
     }
   });
   window.addEventListener("contextmenu", function(e) {
@@ -15338,6 +16376,9 @@ try { checkUrlHashRoutine(); } catch(e){}
     restart: restartGame,
     triggerGameOver: triggerGameOver,
     triggerVictory: triggerVictory,
+    setTier: function(t) { setPlayerEvolutionTier(t, performance.now(), true); },
+    getTier: function() { return playerEvolutionTier; },
+    triggerTier6Hatch: function() { setPlayerEvolutionTier(6, performance.now(), true); },
     getCurrentVariant: function() { return currentGameVariant; },
     isActive: function() { return isActive; },
     isWon: function() { return isWon; },
@@ -15354,7 +16395,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   <script>
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v95', { scope: './' }).catch(function() {});
+        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v96', { scope: './' }).catch(function() {});
       });
     }
   </script>
