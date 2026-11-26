@@ -1,5 +1,5 @@
 /* OrlandoRecharge · Offline-First Service Worker (PWA Ready) */
-var CACHE_NAME = 'recharge-v97';
+var CACHE_NAME = 'recharge-v98';
 var ASSETS = [
   './',
   './index.html',
@@ -9,6 +9,12 @@ var ASSETS = [
   './assets/recharge-icon-maskable.png',
   './assets/recharge-apple-touch.png',
   './assets/app-icon.ico',
+  './assets/sphere-3d-meteor.webp?v=408',
+  './assets/sphere-3d-molten.webp?v=408',
+  './assets/sphere-3d-orb.webp?v=408',
+  './assets/sphere-3d-dynamo.webp?v=408',
+  './assets/sphere-3d-helix.webp?v=408',
+  './assets/sphere-3d-comet.webp?v=408',
   './assets/vfx-macro-blue-dynamo.webp',
   './assets/vfx-macro-molten-meteor.webp',
   './assets/vfx-macro-spiral-helix.webp',
