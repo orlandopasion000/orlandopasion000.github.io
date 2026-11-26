@@ -5462,8 +5462,8 @@
       -webkit-user-select: text;
     }
 
-    /* Ensure iOS does not zoom in on focus: 16px inputs */
-    input, select, textarea, .spotlight-input, .edit-form-input, .manual-input-group input, .manual-input-group select {
+    /* Ensure iOS does not zoom in on focus: 16px inputs (excluding micro-subbar select) */
+    input, select:not(.vault-sort-select), textarea, .spotlight-input, .edit-form-input, .manual-input-group input, .manual-input-group select {
       font-size: 16px !important;
     }
 
@@ -5714,14 +5714,14 @@
       align-items: center;
       justify-content: space-between;
       flex-wrap: nowrap;
-      gap: 6px;
-      padding: 4px 8px;
-      min-height: 30px;
+      gap: 5px;
+      padding: 2px 6px;
+      min-height: 26px;
       background: rgba(10, 15, 24, 0.85);
       border: 1px solid rgba(56, 189, 248, 0.2);
-      border-radius: 8px;
+      border-radius: 6px;
       backdrop-filter: blur(14px);
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       width: 100%;
       box-sizing: border-box;
     }
@@ -5729,22 +5729,22 @@
     .view-mode-selector {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 3px;
       flex-shrink: 0;
     }
 
     .btn-view-mode {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
-      padding: 3px 8px;
-      min-height: 24px;
-      border-radius: 6px;
+      gap: 3px;
+      padding: 2px 6px;
+      min-height: 21px;
+      border-radius: 5px;
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(255, 255, 255, 0.1);
       color: #94a3b8;
       font-family: var(--font-tech);
-      font-size: 10.5px;
+      font-size: 9.5px;
       font-weight: 600;
       letter-spacing: 0.3px;
       cursor: pointer;
@@ -5764,26 +5764,26 @@
       background: linear-gradient(135deg, rgba(2, 132, 199, 0.32) 0%, rgba(14, 165, 233, 0.18) 100%);
       border-color: #38bdf8;
       color: #38bdf8;
-      box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.25);
     }
 
     .btn-view-mode svg {
-      width: 12px;
-      height: 12px;
+      width: 11px;
+      height: 11px;
       flex-shrink: 0;
     }
 
     .view-sort-group {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
       margin-left: auto;
       flex-shrink: 0;
     }
 
     .sort-label {
       font-family: var(--font-tech);
-      font-size: 9.5px;
+      font-size: 8.5px;
       font-weight: 600;
       color: #64748b;
       letter-spacing: 0.5px;
@@ -5794,29 +5794,31 @@
     .vault-sort-select {
       background: rgba(15, 23, 42, 0.95);
       border: 1px solid rgba(56, 189, 248, 0.3);
-      border-radius: 6px;
+      border-radius: 5px;
       color: #38bdf8;
       font-family: var(--font-tech);
-      font-size: 10.5px;
+      font-size: 9.5px !important;
       font-weight: 600;
-      padding: 3px 8px;
-      height: 24px;
-      min-height: 24px;
+      padding: 1px 6px;
+      height: 21px;
+      min-height: 21px;
       cursor: pointer;
       outline: none;
       transition: all 0.2s ease;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
       box-sizing: border-box;
+      line-height: 1;
     }
 
     .vault-sort-select:hover, .vault-sort-select:focus {
       border-color: #38bdf8;
-      box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+      box-shadow: 0 0 8px rgba(56, 189, 248, 0.3);
     }
 
     .vault-sort-select option {
       background: #090e17;
       color: #e2e8f0;
+      font-size: 11px;
     }
 
     /* -------------------------------------------------------------
@@ -6252,11 +6254,11 @@
         min-height: 22px !important;
       }
       .vault-view-subbar {
-        padding: 3px 5px !important;
-        margin-bottom: 6px !important;
-        gap: 3px !important;
+        padding: 2px 4px !important;
+        margin-bottom: 4px !important;
+        gap: 2px !important;
         flex-wrap: nowrap !important;
-        min-height: 26px !important;
+        min-height: 22px !important;
       }
       .view-mode-selector {
         gap: 3px !important;
