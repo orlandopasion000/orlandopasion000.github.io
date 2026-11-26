@@ -12267,7 +12267,7 @@
       }
     }, { passive: true, capture: true });
 
-    // 2. SAFE TAP ENGINE FOR VAULT CARDS
+    // 2. SAFE TAP & DIRECT CLICK ENGINE FOR VAULT CARDS
     let tapState = {
       cardId: null,
       startX: 0,
@@ -12277,12 +12277,26 @@
       pointerId: null
     };
 
+    function triggerCardActivation(cardId) {
+      if (!cardId) return;
+      const items = (typeof window.getVaultItems === 'function' ? window.getVaultItems() : window.vaultItems) || [];
+      const item = items.find(x => x.id === cardId);
+      if (item) {
+        if (item.password && typeof copyPasswordSilently === 'function') {
+          copyPasswordSilently(item.password);
+        }
+        if (typeof openAccountFocusModal === 'function') {
+          openAccountFocusModal(item.id, false);
+        }
+      }
+    }
+
     const grid = document.getElementById('vaultGridContainer');
     if (grid) {
       grid.addEventListener('pointerdown', function(e) {
         const card = e.target.closest('.vault-card, .vault-card-compact, .vault-table-row, .vault-list-chip');
         if (!card) return;
-        if (e.target.closest('button, a, input, select, textarea')) return;
+        if (e.target.closest('button, a, input, select, textarea, .btn-card-pin, .btn-card-edit, .compact-btn-copy-pwd, .compact-username-row, .btn-copy-user, .btn-pwd-action, .btn-copy-instant, .table-action-pill')) return;
 
         tapState.cardId = card.getAttribute('data-card-id');
         tapState.startX = e.clientX;
@@ -12316,19 +12330,21 @@
 
         // On touch: enforce safe tap constraints (< 8px displacement and < 500ms duration)
         if (e.pointerType === 'touch' || e.pointerType === 'pen') {
-          if (dt > 500) return; // Held too long (e.g. text selection intent)
+          if (dt > 500) return; // Held too long
         }
 
-        const items = (typeof window.getVaultItems === 'function' ? window.getVaultItems() : window.vaultItems) || [];
-        const item = items.find(x => x.id === cardId);
-        if (item) {
-          // Synchronous silent password copy inside user gesture
-          if (item.password && typeof copyPasswordSilently === 'function') {
-            copyPasswordSilently(item.password);
-          }
-          if (typeof openAccountFocusModal === 'function') {
-            openAccountFocusModal(item.id, false);
-          }
+        triggerCardActivation(cardId);
+      });
+
+      // Direct click backup for hybrid mouse / trackpad / accessibility events
+      grid.addEventListener('click', function(e) {
+        if (e.target.closest('button, a, input, select, textarea, .btn-card-pin, .btn-card-edit, .compact-btn-copy-pwd, .compact-username-row, .btn-copy-user, .btn-pwd-action, .btn-copy-instant, .table-action-pill')) return;
+        const card = e.target.closest('.vault-card, .vault-card-compact, .vault-table-row, .vault-list-chip');
+        if (!card) return;
+        const cardId = card.getAttribute('data-card-id');
+        const modal = document.getElementById('accountFocusModal');
+        if (modal && !modal.classList.contains('active')) {
+          triggerCardActivation(cardId);
         }
       });
     }
@@ -12345,62 +12361,7 @@
           e.preventDefault();
           window.setViewMode('compact');
           return;
-        } else if (e.key === '
-      if (e.key === 'Enter') {
-        const focusedCard = document.activeElement ? document.activeElement.closest('.vault-card, .vault-card-compact, .vault-table-row, .vault-list-chip') : null;
-        if (focusedCard && !e.target.closest('button, a, input, select, textarea')) {
-          e.preventDefault();
-          const cardId = focusedCard.getAttribute('data-card-id');
-          const items = (typeof window.getVaultItems === 'function' ? window.getVaultItems() : window.vaultItems) || [];
-          const item = items.find(x => x.id === cardId);
-          if (item) {
-            if (item.password && typeof copyPasswordSilently === 'function') {
-              copyPasswordSilently(item.password);
-            }
-            if (typeof openAccountFocusModal === 'function') {
-              openAccountFocusModal(item.id, false);
-            }
-          }
-        }
-      } else if (e.key === 'Escape') {
-        if (typeof window.closeActiveVaultModal === 'function') {
-          window.closeActiveVaultModal();
-        }
-      }
-    });
-
-    // 4. IOS-SAFE BACKGROUND SCROLL LOCK ENGINE
-    let lockedScrollY = 0;
-    window.lockPageScroll = function() {
-      lockedScrollY = window.pageYOffset || document.documentElement.scrollTop;
-      document.body.style.position = 'fixed';
-      document.body.style.top = '-' + lockedScrollY + 'px';
-      document.body.style.width = '100%';
-      document.body.style.overflow = 'hidden';
-    };
-
-    window.unlockPageScroll = function() {
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
-      document.body.style.overflow = '';
-      window.scrollTo(0, lockedScrollY);
-    };
-
-    // 5. DEBOUNCED SEARCH ENGINE (120ms)
-    let spotlightSearchTimer = null;
-    window.debounceSpotlightSearch = function(query, callback) {
-      if (spotlightSearchTimer) clearTimeout(spotlightSearchTimer);
-      spotlightSearchTimer = setTimeout(function() {
-        callback(query);
-      }, 120);
-    };
-
-  })();
-  </script>
-
-</body>
-</html> || e.key === '4') {
+        } else if (e.key === '$' || e.key === '4') {
           e.preventDefault();
           window.setViewMode('list');
           return;
@@ -12420,16 +12381,7 @@
         if (focusedCard && !e.target.closest('button, a, input, select, textarea')) {
           e.preventDefault();
           const cardId = focusedCard.getAttribute('data-card-id');
-          const items = (typeof window.getVaultItems === 'function' ? window.getVaultItems() : window.vaultItems) || [];
-          const item = items.find(x => x.id === cardId);
-          if (item) {
-            if (item.password && typeof copyPasswordSilently === 'function') {
-              copyPasswordSilently(item.password);
-            }
-            if (typeof openAccountFocusModal === 'function') {
-              openAccountFocusModal(item.id, false);
-            }
-          }
+          triggerCardActivation(cardId);
         }
       } else if (e.key === 'Escape') {
         if (typeof window.closeActiveVaultModal === 'function') {
