@@ -1,5 +1,5 @@
 /* OrlandoVault · Offline-First Jarvis Security Service Worker */
-var CACHE_NAME = 'vault-jarvis-v65';
+var CACHE_NAME = 'vault-jarvis-v66';
 var ASSETS = [
   './',
   './index.html',
@@ -42,7 +42,7 @@ self.addEventListener('activate', function(e) {
 self.addEventListener('fetch', function(e) {
   if (e.request.method !== 'GET') return;
   var url = e.request.url || '';
-  if (!url.startsWith('http://') && !url.startsWith('https://')) return;
+  if (!url.startsWith(self.location.origin)) return;
   if (url.indexOf('firestore.googleapis.com') !== -1 || url.indexOf('docs.google.com') !== -1 || url.indexOf('ntfy.sh') !== -1) return;
 
   // HTML / Navigation requests: Network-First so all updates appear immediately online!

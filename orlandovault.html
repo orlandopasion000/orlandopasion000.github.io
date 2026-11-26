@@ -6374,9 +6374,445 @@
         gap: 6px !important;
       }
     }
+
+    /* ==========================================================================
+       PHASE 1 ZERO-KNOWLEDGE SECURITY GATE, PRIVACY CURTAIN & MASKING STYLES
+       ========================================================================== */
+    #vaultLockOverlay {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: radial-gradient(circle at 50% 18%, rgba(15, 23, 42, 0.98), #020617 75%);
+      backdrop-filter: blur(26px);
+      -webkit-backdrop-filter: blur(26px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      overflow-y: auto;
+    }
+    #vaultLockOverlay.unlocked {
+      display: none !important;
+    }
+    .vault-gate-card {
+      width: 100%;
+      max-width: 430px;
+      background: linear-gradient(160deg, rgba(15, 23, 42, 0.96) 0%, rgba(7, 11, 22, 0.98) 100%);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 22px;
+      padding: 26px 24px 24px;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.78), 0 0 40px rgba(0, 240, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      color: #f8fafc;
+      position: relative;
+    }
+    .vault-gate-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-tech, monospace);
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      padding: 4px 10px;
+      border-radius: 999px;
+      margin-bottom: 14px;
+    }
+    .vault-gate-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .vault-gate-logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      border: 1px solid rgba(217, 185, 92, 0.45);
+      box-shadow: 0 0 18px rgba(217, 185, 92, 0.25);
+      flex-shrink: 0;
+    }
+    .vault-gate-title {
+      margin: 0;
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      color: #ffffff;
+    }
+    .vault-gate-sub {
+      margin: 3px 0 0;
+      font-size: 12px;
+      color: #94a3b8;
+      line-height: 1.45;
+    }
+    .vault-gate-user-pill {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.32);
+      border-radius: 12px;
+      padding: 8px 12px;
+      margin: 14px 0;
+      font-size: 12px;
+      color: #a7f3d0;
+    }
+    .vault-gate-user-pill button {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: #e2e8f0;
+      border-radius: 8px;
+      padding: 4px 9px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .btn-google-vault-signin {
+      width: 100%;
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 13px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      background: #ffffff;
+      color: #0f172a;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+      transition: transform 0.15s ease, box-shadow 0.2s ease;
+    }
+    .btn-google-vault-signin:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 28px rgba(56, 189, 248, 0.25);
+    }
+    .vault-gate-field {
+      margin-top: 12px;
+    }
+    .vault-gate-field label {
+      display: block;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #cbd5e1;
+      margin-bottom: 6px;
+    }
+    .vault-gate-input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .vault-gate-input {
+      width: 100%;
+      padding: 12px 42px 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(56, 189, 248, 0.32);
+      background: rgba(2, 6, 23, 0.78);
+      color: #ffffff;
+      font-size: 14px;
+      font-family: var(--font-tech, monospace);
+      outline: none;
+    }
+    .vault-gate-input:focus {
+      border-color: #00f0ff;
+      box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.16);
+    }
+    .vault-gate-eye {
+      position: absolute;
+      right: 8px;
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      padding: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .vault-strength-track {
+      height: 5px;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.2);
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    .vault-strength-fill {
+      height: 100%;
+      width: 0%;
+      background: #ef4444;
+      transition: width 0.2s ease, background 0.2s ease;
+    }
+    .vault-strength-label {
+      font-size: 11px;
+      color: #94a3b8;
+      margin-top: 4px;
+    }
+    .btn-vault-unlock-primary {
+      width: 100%;
+      margin-top: 16px;
+      padding: 13px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(0, 240, 255, 0.55);
+      background: linear-gradient(135deg, #0284c7 0%, #0ea5e9 55%, #10b981 100%);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 14px;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      box-shadow: 0 8px 26px rgba(14, 165, 233, 0.35);
+      transition: transform 0.15s ease, opacity 0.2s ease;
+    }
+    .btn-vault-unlock-primary:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+    .btn-bio-unlock {
+      width: 100%;
+      margin-top: 10px;
+      padding: 11px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(217, 185, 92, 0.45);
+      background: rgba(217, 185, 92, 0.1);
+      color: #fde68a;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .vault-gate-error {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: rgba(239, 68, 68, 0.14);
+      border: 1px solid rgba(239, 68, 68, 0.45);
+      color: #fecaca;
+      font-size: 12px;
+      line-height: 1.45;
+      display: none;
+    }
+    .vault-gate-setup-hint {
+      margin-top: 12px;
+      padding: 11px 12px;
+      border-radius: 11px;
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.45);
+      color: #fde68a;
+      font-size: 11.5px;
+      line-height: 1.5;
+      display: none;
+    }
+    .vault-gate-setup-hint a {
+      color: #38bdf8;
+      text-decoration: underline;
+      font-weight: 700;
+    }
+    #vaultPrivacyCurtain {
+      position: fixed;
+      inset: 0;
+      z-index: 99990;
+      background: rgba(2, 6, 23, 0.92);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 10px;
+      color: #e2e8f0;
+      text-align: center;
+      padding: 20px;
+    }
+    #vaultPrivacyCurtain.active {
+      display: flex;
+    }
+    .card-notes.privacy-masked {
+      filter: blur(5.5px);
+      cursor: pointer;
+      user-select: none;
+      transition: filter 0.2s ease;
+    }
+    .card-notes.privacy-masked.peeked {
+      filter: none;
+      user-select: text;
+    }
+    .meta-telemetry-chip.privacy-masked code {
+      letter-spacing: 0.04em;
+      color: #94a3b8;
+    }
+    #btnTopbarPrivacyMask.mask-active {
+      border-color: rgba(250, 204, 21, 0.55) !important;
+      color: #fde047 !important;
+      background: rgba(234, 179, 8, 0.12) !important;
+    }
+    #btnTopbarLockVault {
+      border-color: rgba(239, 68, 68, 0.42) !important;
+      color: #fca5a5 !important;
+      background: rgba(239, 68, 68, 0.1) !important;
+    }
+    #clipboardWipeBadge {
+      border-color: rgba(16, 185, 129, 0.5) !important;
+      color: #6ee7b7 !important;
+      background: rgba(16, 185, 129, 0.14) !important;
+      font-family: var(--font-tech, monospace);
+      font-size: 11px !important;
+    }
+    .btn-focus-copy-launch {
+      width: 100%;
+      margin-top: 10px;
+      padding: 11px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(16, 185, 129, 0.55);
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.22), rgba(56, 189, 248, 0.18));
+      color: #6ee7b7;
+      font-weight: 800;
+      font-size: 12.5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.15s ease, background 0.2s ease;
+    }
+    .btn-focus-copy-launch:hover {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.34), rgba(56, 189, 248, 0.28));
+      transform: translateY(-1px);
+    }
+    .sync-security-panel {
+      margin: 12px 0 14px;
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.72);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+    .sync-security-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 12px;
+      color: #cbd5e1;
+    }
+    .sync-security-row select {
+      background: #0f172a;
+      color: #f8fafc;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 8px;
+      padding: 4px 8px;
+      font-size: 12px;
+    }
+    @media (max-width: 640px) {
+      #btnTopbarPrivacyMask span,
+      #btnTopbarLockVault span {
+        display: none;
+      }
+      .vault-gate-card {
+        padding: 20px 16px;
+      }
+    }
 </style>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 </head>
 <body>
+  <!-- INSTANT PRIVACY CURTAIN ON APP/TAB BLUR -->
+  <div id="vaultPrivacyCurtain" role="dialog" aria-modal="true" aria-label="Vault Privacy Shield Active">
+    <div style="font-size:38px;">🛡️</div>
+    <div style="font-size:17px;font-weight:800;letter-spacing:0.02em;color:#38bdf8;">Privacy Shield Active</div>
+    <div style="font-size:12.5px;color:#94a3b8;max-width:300px;">Screen hidden while tab is unfocused. Tap anywhere or return focus to resume.</div>
+  </div>
+
+  <!-- ZERO-KNOWLEDGE AUTHENTICATION & MASTER PASSWORD LOCK GATE -->
+  <div id="vaultLockOverlay" role="dialog" aria-modal="true" aria-label="OrlandoVault Zero-Knowledge Lock Gate">
+    <div class="vault-gate-card">
+      <div class="vault-gate-badge" id="vaultGateModeBadge">🔐 ZERO-KNOWLEDGE VAULT · LOCKED</div>
+      <div class="vault-gate-header">
+        <img src="assets/vault-icon-128.png" alt="OrlandoVault" class="vault-gate-logo">
+        <div>
+          <h2 class="vault-gate-title" id="vaultGateTitle">Unlock OrlandoVault</h2>
+          <p class="vault-gate-sub" id="vaultGateSubtitle">Two-layer protection: authorized Google identity + local AES-256-GCM Master Password.</p>
+        </div>
+      </div>
+
+      <!-- Stage 1: Authorized Google Sign-In -->
+      <div id="lockStageGoogle">
+        <p style="font-size:12px;color:#cbd5e1;margin:10px 0 0;line-height:1.5;">
+          Authorized owners only (<code>orlandopasion1994@gmail.com</code> or <code>orlandopasion0817@gmail.com</code>).
+        </p>
+        <button type="button" class="btn-google-vault-signin" id="btnVaultGoogleSignIn">
+          <svg width="18" height="18" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+            <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.27v3.14C3.25 21.3 7.31 24 12 24z"/>
+            <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.59H1.27C.46 8.21 0 10.05 0 12s.46 3.79 1.27 5.41l4.01-3.14z"/>
+            <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.25 2.7 1.27 6.59l4.01 3.14c.95-2.83 3.6-4.93 6.72-4.93z"/>
+          </svg>
+          <span>Sign in with Google</span>
+        </button>
+        <div class="vault-gate-setup-hint" id="lockGoogleSetupHint">
+          <strong>Action Needed in Firebase Console:</strong> Enable <strong>Google</strong> under Authentication → Sign-in method, and ensure <code>orlandopasion000.github.io</code> is listed under Authorized Domains:<br>
+          <a href="https://console.firebase.google.com/project/orlandochrome-b6228/authentication/providers" target="_blank" rel="noopener noreferrer">Open Firebase Authentication Providers ↗</a>
+        </div>
+      </div>
+
+      <!-- Stage 2: Master Password Unlock / One-Time v3->v4 Migration -->
+      <div id="lockStageUnlock" style="display:none;">
+        <div class="vault-gate-user-pill">
+          <span id="lockSignedInEmail">Signed in</span>
+          <button type="button" id="btnLockSwitchGoogle">Switch</button>
+        </div>
+
+        <div id="lockMigrationNotice" style="display:none;padding:10px 12px;border-radius:11px;background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.35);font-size:11.5px;color:#bae6fd;line-height:1.5;margin-bottom:8px;">
+          <strong>One-Time Zero-Knowledge Upgrade (v3 → v4):</strong> Create your real Master Password (min 10 characters). OrlandoVault will decrypt your legacy v3 records in RAM, generate a random 256-bit salt, re-encrypt everything with 600,000 PBKDF2 rounds, and sync ciphertext back to Firebase.
+        </div>
+
+        <form id="vaultUnlockForm" autocomplete="off">
+          <div class="vault-gate-field">
+            <label for="vaultMasterPwdInput" id="vaultMasterPwdLabel">Master Password</label>
+            <div class="vault-gate-input-wrap">
+              <input type="password" id="vaultMasterPwdInput" class="vault-gate-input" placeholder="Enter your Master Password..." autocomplete="current-password" required>
+              <button type="button" class="vault-gate-eye" id="btnToggleLockPwdEye" aria-label="Show/Hide Master Password">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="vault-gate-field" id="vaultMasterStrengthBox" style="display:none;">
+            <div class="vault-strength-track"><div class="vault-strength-fill" id="vaultMasterStrengthFill"></div></div>
+            <div class="vault-strength-label" id="vaultMasterStrengthText">Use 10+ characters with mixed case, digits, or symbols.</div>
+          </div>
+
+          <div class="vault-gate-field" id="vaultMasterConfirmGroup" style="display:none;">
+            <label for="vaultMasterPwdConfirm">Confirm Master Password</label>
+            <div class="vault-gate-input-wrap">
+              <input type="password" id="vaultMasterPwdConfirm" class="vault-gate-input" placeholder="Re-enter Master Password..." autocomplete="new-password">
+            </div>
+          </div>
+
+          <button type="submit" class="btn-vault-unlock-primary" id="btnVaultUnlockSubmit">🔓 Unlock Vault</button>
+        </form>
+
+        <button type="button" class="btn-bio-unlock" id="btnVaultBioUnlock" style="display:none;">
+          <span>🧬</span>
+          <span>Unlock with Biometrics / Passkey</span>
+        </button>
+      </div>
+
+      <div class="vault-gate-error" id="vaultLockError"></div>
+    </div>
+  </div>
 
   <header class="vault-topbar">
     <a href="https://orlandopasion000.github.io/" class="brand-cluster" title="Sir Orlando V. Pasion, Jr. — Return to Master Portfolio Hub">
@@ -6426,6 +6862,23 @@
       <button type="button" class="btn-topbar-tool btn-tool-sync-health" id="btnTopbarSyncHealth" title="Vault Cloud Sync Health & Cryptographic Integrity Status">
         <span class="sync-health-pulse-dot" id="syncHealthPulseDot"></span>
         <span id="syncHealthLabel">Sync Health</span>
+      </button>
+
+      <!-- Clipboard Auto-Wipe Countdown Pill -->
+      <button type="button" class="btn-topbar-tool" id="clipboardWipeBadge" style="display:none;" title="Clipboard auto-wipe countdown — click to wipe now">
+        🧹 <span id="clipboardWipeSecs">25s</span>
+      </button>
+
+      <!-- Privacy Shield Mask Toggle (Hides Notes & Sensitive Banking Numbers on Grid) -->
+      <button type="button" class="btn-topbar-tool mask-active" id="btnTopbarPrivacyMask" title="Toggle Privacy Shield (mask card notes & banking numbers)">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+        <span id="privacyMaskLabel">Masked</span>
+      </button>
+
+      <!-- Immediate Vault Lock Button -->
+      <button type="button" class="btn-topbar-tool" id="btnTopbarLockVault" title="Lock Vault Immediately (Ctrl+Shift+L)">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <span>Lock</span>
       </button>
       <!-- 24K Swiss Gold Quantum Pill Launcher -->
       <button type="button" class="btn-topbar-desktop" id="btnTopbarLaunchApp" title="Open OrlandoVault in Dedicated Standalone Desktop App" aria-label="Open Main Web App">
@@ -6675,8 +7128,34 @@
         </div>
       </div>
 
-      <div style="font-size:11px;color:#94a3b8;margin-bottom:14px;line-height:1.5;">
-        🔒 All passwords and recovery notes are encrypted with Web Crypto AES-256-GCM using client-derived PBKDF2 keys before syncing. Firebase Firestore holds only ciphertext.
+      <div style="font-size:11px;color:#94a3b8;margin-bottom:12px;line-height:1.5;">
+        🔒 All passwords, recovery notes, and metadata are encrypted in RAM with Web Crypto AES-256-GCM (PBKDF2 600,000 iterations + per-vault random salt) before syncing. Firebase Auth &amp; Firestore hold only ciphertext.
+      </div>
+
+      <div class="sync-security-panel">
+        <div class="sync-security-row">
+          <span>Google Session: <strong id="syncAuthEmailLabel" style="color:#6ee7b7;">Not Signed In</strong></span>
+          <button type="button" class="btn-sync-action" id="btnVaultSignOut" style="padding:4px 10px;font-size:11px;">Sign Out</button>
+        </div>
+        <div class="sync-security-row">
+          <label for="selectAutoLockMinutes">Auto-Lock Idle Timeout</label>
+          <select id="selectAutoLockMinutes">
+            <option value="2">2 Minutes</option>
+            <option value="5" selected>5 Minutes</option>
+            <option value="10">10 Minutes</option>
+            <option value="15">15 Minutes</option>
+          </select>
+        </div>
+        <div class="sync-security-row">
+          <button type="button" class="btn-sync-action" id="btnSetupBiometricUnlock" style="flex:1;font-size:11.5px;">🧬 Enable Biometric / Passkey Unlock</button>
+          <button type="button" class="btn-sync-action" id="btnOpenChangeMasterPwd" style="flex:1;font-size:11.5px;">🔑 Change Master Password</button>
+        </div>
+        <div id="changeMasterPwdSection" style="display:none;flex-direction:column;gap:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.1);">
+          <input type="password" id="inputOldMasterPwd" class="vault-gate-input" placeholder="Current Master Password" autocomplete="current-password" style="padding:8px 10px;font-size:12px;">
+          <input type="password" id="inputNewMasterPwd" class="vault-gate-input" placeholder="New Master Password (min 10 chars)" autocomplete="new-password" style="padding:8px 10px;font-size:12px;">
+          <input type="password" id="inputConfirmNewMasterPwd" class="vault-gate-input" placeholder="Confirm New Master Password" autocomplete="new-password" style="padding:8px 10px;font-size:12px;">
+          <button type="button" class="btn-sync-action primary" id="btnConfirmChangeMasterPwd">Apply &amp; Re-Encrypt Cloud Vault</button>
+        </div>
       </div>
 
       <div class="sync-health-actions">
@@ -7000,186 +7479,30 @@
       }
     } catch(e) {}
 
+    function persistVaultToSecureCache() {
+      if (typeof window.persistEncryptedVaultCache === 'function') {
+        window.persistEncryptedVaultCache();
+      }
+    }
+    window.persistVaultToSecureCache = persistVaultToSecureCache;
+
     function initData() {
       try {
-        const stored = localStorage.getItem(LS_VAULT_KEY);
-        if (stored) {
-          try {
-            vaultItems = JSON.parse(stored);
-            // Strict Sanitize: filter out only invalid non-login entries
-            vaultItems = vaultItems.filter(item => {
-              const p = (item.password || '').toLowerCase();
-              const u = (item.username || '').toLowerCase();
-              const t = (item.title || '').toLowerCase();
-              if (p.includes('until oct 24') || p.includes('via code') || p.includes('can log in via')) return false;
-              if (u.includes('cancel on') || u.includes('statement date') || u.includes('not my deped') || u === 'random') return false;
-              if (t === 'email services' || t.includes('(not usable)')) return false;
-              return true;
-            });
+        // Purge all legacy plaintext storage immediately (Zero-Knowledge RAM-only architecture)
+        ['orlandovault_credentials_v6', 'orlandovault_credentials_v5', 'orlandovault_credentials_v4', 'orlandovault_snapshots_v1', 'orlandovault_vault_passphrase', 'orlandovault_master_salt'].forEach(k => {
+          try { localStorage.removeItem(k); } catch(e) {}
+        });
 
-            // ==========================================================================
-            // AUTOMATED SMART DEDUPLICATION ENGINE (GMAIL & RECOVERY MASTER SYTHESIS)
-            // ==========================================================================
-            // Auto-merge duplicate twin items (e.g. orlandopasion000-005 Gmail cards)
-            const mergeRules = [
-              {
-                keepId: 'vault-item-7',
-                removeId: 'vault-item-123',
-                title: 'Gmail · Dev & AI Sign-in Hub',
-                category: 'Gmail',
-                badge: 'Google Ecosystem',
-                notes: 'Phone/Recovery: 9073843043 · Linked to GCash 0907 | Connected to Claude, Perplexity, DeepSeek, GitHub, GitLab, Honor of Kings main.'
-              },
-              {
-                keepId: 'vault-item-8',
-                removeId: 'vault-item-124',
-                title: 'Gmail · Scite & Honor of Kings 001',
-                category: 'Gmail',
-                badge: 'Google Ecosystem',
-                notes: 'Honor of Kings (001) & Scite | Auxiliary Gmail account.'
-              },
-              {
-                keepId: 'vault-item-9',
-                removeId: 'vault-item-125',
-                title: 'Gmail · Honor of Kings 002',
-                category: 'Gmail',
-                badge: 'Google Ecosystem',
-                notes: 'Honor of Kings (002). (Do-next queue: 8) | Auxiliary Gmail account.'
-              },
-              {
-                keepId: 'vault-item-10',
-                removeId: 'vault-item-126',
-                title: 'Gmail · Honor of Kings 003',
-                category: 'Gmail',
-                badge: 'Google Ecosystem',
-                notes: 'Honor of Kings (003). (Do-next queue: 9) | Auxiliary Gmail account.'
-              },
-              {
-                keepId: 'vault-item-11',
-                removeId: 'vault-item-127',
-                title: 'Gmail · Honor of Kings 004',
-                category: 'Gmail',
-                badge: 'Google Ecosystem',
-                notes: 'Honor of Kings (004). (Do-next queue: 10) | Auxiliary Gmail account.'
-              },
-              {
-                keepId: 'vault-item-12',
-                removeId: 'vault-item-128',
-                title: 'Gmail · Honor of Kings 005',
-                category: 'Gmail',
-                badge: 'Google Ecosystem',
-                password: 'qwerty.17',
-                notes: 'Honor of Kings (005). (Do-next queue: 11) | Mom\'s phone verified.'
-              }
-            ];
-
-            let hadMerges = false;
-            mergeRules.forEach(rule => {
-              const keep = vaultItems.find(x => x.id === rule.keepId);
-              const removeIdx = vaultItems.findIndex(x => x.id === rule.removeId);
-              if (keep && removeIdx !== -1) {
-                const removed = vaultItems[removeIdx];
-                keep.title = rule.title;
-                keep.category = rule.category;
-                keep.badge = rule.badge;
-                if (rule.password) keep.password = rule.password;
-                keep.notes = rule.notes;
-                keep.usageScore = (parseFloat(keep.usageScore) || 0) + (parseFloat(removed.usageScore) || 0) + 10;
-                keep.copyPasswordCount = (keep.copyPasswordCount || 0) + (removed.copyPasswordCount || 0);
-                keep.copyUsernameCount = (keep.copyUsernameCount || 0) + (removed.copyUsernameCount || 0);
-                keep.viewPasswordCount = (keep.viewPasswordCount || 0) + (removed.viewPasswordCount || 0);
-                vaultItems.splice(removeIdx, 1);
-                hadMerges = true;
-              }
-            });
-
-            if (hadMerges) {
-              try {
-                localStorage.setItem(LS_VAULT_KEY, JSON.stringify(vaultItems));
-              } catch(e) {}
-              if (typeof logAudit === 'function') {
-                logAudit('VAULT_DEDUP_MERGE', 'Successfully synthesized identical Gmail credentials into authoritative master accounts.');
-              }
-            }
-
-            // Respect Tombstones on Boot so deleted records never resurrect from stale storage
-            const bootTombstones = getVaultTombstones();
-            vaultItems = vaultItems.filter(item => {
-              if (!item || !item.id) return false;
-              const delAt = bootTombstones[item.id];
-              if (delAt && (item.updatedAt || 0) <= delAt) return false;
-              return true;
-            });
-
-            // Sync Priority Pins on Boot
-            reapplyPriorityPins(vaultItems);
-
-            // Only backfill missing/legacy categories; never overwrite user-edited importance or chosen categories
-            const CANON_CATS = new Set(['DepEd', 'Social', 'AI & Dev', 'Banking & Finance', 'Portals', 'Entertainment', 'Shopping', 'Gmail', 'Microsoft', 'Family', 'System']);
-            vaultItems.forEach(item => {
-              if (!item.importance) item.importance = 'Normal';
-              if (!CANON_CATS.has(item.category)) {
-                const t = (item.title || '').toLowerCase();
-                const u = (item.username || '').toLowerCase();
-                const c = (item.category || '').toLowerCase();
-                if (t.includes('facebook') || t.includes('instagram') || t.includes('twitter') || t.includes('discord') || t.includes('reddit') || t.includes('tiktok') || t.includes('linkedin') || u.includes('@pasion_orlando') || u.includes('@orlando_pasion') || u.includes('rolly_nice') || u.includes('sirorlandovpasionjr') || c.includes('social')) {
-                  item.category = 'Social';
-                  item.badge = 'Social Media';
-                } else if (t.includes('netflix') || t.includes('disney+') || t.includes('prime video') || t.includes('spotify') || t.includes('vivamax') || t.includes('iwanttfc') || t.includes('sm cinema') || t.includes('max (hbo') || c.includes('entertain') || c.includes('stream')) {
-                  item.category = 'Entertainment';
-                  item.badge = 'Entertainment & Streaming';
-                } else if (t.includes('shoppe') || t.includes('lazada') || t.includes('zalora') || t.includes('grab') || t.includes('mcdo') || t.includes('jollibee') || t.includes('klook') || t.includes('agoda') || c.includes('shop')) {
-                  item.category = 'Shopping';
-                  item.badge = 'Shopping & Delivery';
-                } else if (t.includes('claude') || t.includes('chatgpt') || t.includes('deepseek') || t.includes('gemini') || t.includes('bard') || t.includes('github') || t.includes('gitlab') || t.includes('anthropic') || t.includes('magicschool') || t.includes('gamma') || t.includes('camb') || c === 'ai' || c === 'ai & dev' || c.includes('claude') || c.includes('openai') || c.includes('anthropic')) {
-                  item.category = 'AI & Dev';
-                  item.badge = 'Claude & AI';
-                } else if (t.includes('prulife') || t.includes('landbank') || t.includes('bdo') || t.includes('bpi') || t.includes('gcash') || t.includes('maya') || t.includes('komo') || t.includes('unionbank') || t.includes('rcbc') || t.includes('cimb') || c.includes('bank') || c.includes('finance')) {
-                  item.category = 'Banking & Finance';
-                  item.badge = 'Banking & Finance';
-                } else if (u.includes('@gmail.com') || t.includes('gmail')) {
-                  item.category = 'Gmail';
-                  item.badge = 'Google Ecosystem';
-                } else if (c.includes('microsoft') || t.includes('microsoft') || t.includes('365')) {
-                  item.category = 'Microsoft';
-                  item.badge = 'Microsoft 365';
-                } else if (c.includes('deped') || t.includes('deped') || u.includes('deped.gov.ph')) {
-                  item.category = 'DepEd';
-                  item.badge = 'DepEd Official';
-                } else if (c.includes('sys') || t.includes('lenovo') || t.includes('laptop')) {
-                  item.category = 'System';
-                  item.badge = 'System & Device';
-                } else {
-                  item.category = 'Portals';
-                  item.badge = 'Government & Portals';
-                }
-              }
-            });
-            // Smart Merge with SEED_VAULT only if seed records are present
-            if (typeof smartMergeVault === 'function' && Array.isArray(SEED_VAULT) && SEED_VAULT.length > 0) {
-              const initMerged = smartMergeVault(vaultItems, SEED_VAULT);
-              vaultItems = initMerged.mergedList;
-              localStorage.setItem(LS_VAULT_KEY, JSON.stringify(vaultItems));
-            }
-          } catch(e) {
-            vaultItems = [];
-          }
-        } else {
+        // Start cleanly locked with empty RAM until authenticated + unlocked via Master Password / Biometrics
+        if (!window.isVaultUnlocked || !window.isVaultUnlocked()) {
           vaultItems = [];
         }
 
-        // Ensure priority pins are 100% sanitized and persistent in storage on boot
-        reapplyPriorityPins(vaultItems);
-        try {
-          localStorage.setItem(LS_VAULT_KEY, JSON.stringify(vaultItems));
-        } catch(e) {}
-
         const storedAudit = localStorage.getItem(LS_AUDIT_KEY);
         auditHistory = storedAudit ? JSON.parse(storedAudit) : [];
-
         copyCount = parseInt(localStorage.getItem(LS_COPY_KEY) || '0', 10);
       } catch (err) {
-        vaultItems = SEED_VAULT;
+        vaultItems = [];
       }
     }
 
@@ -7284,7 +7607,7 @@
         if (eventType === 'copy_username') item.copyUsernameCount = (item.copyUsernameCount || 0) + 1;
         if (eventType === 'view_password') item.viewPasswordCount = (item.viewPasswordCount || 0) + 1;
         if (eventType === 'edit_card') item.editCount = (item.editCount || 0) + 1;
-        try { localStorage.setItem(LS_VAULT_KEY, JSON.stringify(vaultItems)); } catch(e) {}
+        try { persistVaultToSecureCache(); } catch(e) {}
       }
     }
 
@@ -7389,7 +7712,7 @@
       savePinnedRegistry(registry);
 
       try {
-        localStorage.setItem(LS_VAULT_KEY, JSON.stringify(vaultItems));
+        persistVaultToSecureCache();
         localStorage.setItem(LS_PINNED_REGISTRY_KEY, JSON.stringify(registry));
       } catch(e) {}
 
@@ -7469,7 +7792,7 @@
       saveFrecencyData();
 
       try {
-        localStorage.setItem(LS_VAULT_KEY, JSON.stringify(vaultItems));
+        persistVaultToSecureCache();
       } catch(e) {}
 
       if (typeof recordVaultMutation === 'function') {
@@ -7900,7 +8223,7 @@
       window.vaultItems = vaultItems;
 
       try {
-        localStorage.setItem(LS_VAULT_KEY, JSON.stringify(vaultItems));
+        persistVaultToSecureCache();
       } catch(e) {}
 
       renderVault();
@@ -7958,7 +8281,7 @@
       }
 
       try {
-        localStorage.setItem(LS_VAULT_KEY, JSON.stringify(vaultItems));
+        persistVaultToSecureCache();
       } catch(e) {}
 
       // 3. Close focus modal if it was open for this deleted card
@@ -8015,18 +8338,77 @@
     }
 
     let clipboardWipeTimer = null;
+    let clipboardWipeInterval = null;
+    let clipboardWipeDeadline = 0;
+    let clipboardPendingWipe = false;
+
+    function updateClipboardWipeBadge() {
+      const badge = document.getElementById('clipboardWipeBadge');
+      const secsEl = document.getElementById('clipboardWipeSecs');
+      if (!badge || !secsEl) return;
+      if (!clipboardPendingWipe) {
+        badge.style.display = 'none';
+        return;
+      }
+      badge.style.display = 'inline-flex';
+      const remaining = Math.max(0, Math.ceil((clipboardWipeDeadline - Date.now()) / 1000));
+      secsEl.textContent = remaining > 0 ? (remaining + 's') : 'Wipe on return';
+    }
+
+    function attemptClipboardWipe(force = false) {
+      if (!clipboardPendingWipe) return false;
+      if (!force && Date.now() < clipboardWipeDeadline) return false;
+      const focused = (typeof document.hasFocus === 'function') ? document.hasFocus() : true;
+      if (!focused) {
+        updateClipboardWipeBadge();
+        return false;
+      }
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText('').catch(() => {});
+        }
+      } catch(e) {}
+      clipboardPendingWipe = false;
+      clipboardWipeDeadline = 0;
+      if (clipboardWipeTimer) { clearTimeout(clipboardWipeTimer); clipboardWipeTimer = null; }
+      if (clipboardWipeInterval) { clearInterval(clipboardWipeInterval); clipboardWipeInterval = null; }
+      updateClipboardWipeBadge();
+      return true;
+    }
+
     function startClipboardAutoWipe(copiedText) {
       try {
         if (clipboardWipeTimer) clearTimeout(clipboardWipeTimer);
+        if (clipboardWipeInterval) clearInterval(clipboardWipeInterval);
+        clipboardWipeDeadline = Date.now() + 25000;
+        clipboardPendingWipe = true;
+        updateClipboardWipeBadge();
+        clipboardWipeInterval = setInterval(() => {
+          updateClipboardWipeBadge();
+          if (Date.now() >= clipboardWipeDeadline) {
+            attemptClipboardWipe(false);
+          }
+        }, 1000);
         clipboardWipeTimer = setTimeout(() => {
-          try {
-            if (document.hasFocus && document.hasFocus() && navigator.clipboard && navigator.clipboard.writeText) {
-              navigator.clipboard.writeText('').catch(() => {});
-            }
-          } catch(e) {}
-        }, 25000);
+          attemptClipboardWipe(false);
+        }, 25050);
       } catch(e) {}
     }
+
+    window.getClipboardWipeState = function() {
+      return {
+        pending: clipboardPendingWipe,
+        deadline: clipboardWipeDeadline
+      };
+    };
+    window._setClipboardWipeTestDeadline = function(ts) {
+      clipboardWipeDeadline = ts;
+    };
+    window.attemptClipboardWipe = attemptClipboardWipe;
+    window.addEventListener('focus', () => { attemptClipboardWipe(false); });
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') attemptClipboardWipe(false);
+    });
 
     function copyPasswordById(itemId, btnElement, openFocus = false) {
       const item = vaultItems.find(x => x.id === itemId);
@@ -8181,10 +8563,18 @@
       };
     }
 
-    function renderSmartMetadata(metadata, notes) {
+    function maskSensitiveChipValue(val) {
+      const s = String(val || '').trim();
+      if (!s) return '';
+      if (s.length <= 4) return '••••';
+      return '•••• ' + s.slice(-4);
+    }
+
+    function renderSmartMetadata(metadata, notes, opts = {}) {
       const chips = [];
       let notesText = notes || '';
       const metaSource = (metadata !== undefined && metadata !== null) ? metadata : '';
+      const shouldMask = !!(opts && opts.maskSensitive);
 
       if (metaSource) {
         let remainingMeta = metaSource;
@@ -8235,9 +8625,11 @@
         // Fallback for unedited legacy cards where metadata hasn't been split yet
         const split = splitLegacyNotes(notesText);
         if (split.metadata) {
-          return renderSmartMetadata(split.metadata, split.notes);
+          return renderSmartMetadata(split.metadata, split.notes, opts);
         }
       }
+
+      const sensitiveLabelRe = /\b(card|credit|savings|acc(?:ount)?|pin|tin|gsis|bp|passport|phone|mobile|sms|code|noa|employee|cvv)\b/i;
 
       let html = '';
       if (chips.length > 0) {
@@ -8247,11 +8639,13 @@
             const safeHref = escapeHtml(c.value);
             html += `<a href="${safeHref}" target="_blank" rel="noopener noreferrer" class="meta-telemetry-chip meta-chip-url" onclick="event.stopPropagation(); if(typeof playJarvisSound==='function') playJarvisSound('click');" title="Open ${safeHref}"><span>${c.icon}</span> <b>Launch Portal</b> <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>`;
           } else {
-            const escapedVal = escapeHtml(c.value);
+            const isSensitiveChip = shouldMask && sensitiveLabelRe.test(c.label || '');
+            const displayVal = isSensitiveChip ? maskSensitiveChipValue(c.value) : c.value;
+            const escapedDisplay = escapeHtml(displayVal);
             const escapedLabel = escapeHtml(c.label);
             const rawJsVal = c.value.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
             const rawJsLabel = c.label.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
-            html += `<button type="button" class="meta-telemetry-chip ${c.chipClass || 'meta-chip-id'}" onclick="copyMetaValue('${rawJsVal}', '${rawJsLabel}', event)" title="Click to copy ${escapedLabel}: ${escapedVal}"><span>${c.icon}</span> <b>${escapedLabel}:</b> <code>${escapedVal}</code></button>`;
+            html += `<button type="button" class="meta-telemetry-chip ${c.chipClass || 'meta-chip-id'} ${isSensitiveChip ? 'privacy-masked' : ''}" onclick="copyMetaValue('${rawJsVal}', '${rawJsLabel}', event)" title="Click to copy ${escapedLabel}"><span>${c.icon}</span> <b>${escapedLabel}:</b> <code>${escapedDisplay}</code></button>`;
           }
         });
         html += '</div>';
@@ -8259,7 +8653,11 @@
 
       const cleanNotes = notesText.trim();
       if (cleanNotes) {
-        html += `<div class="card-notes">${escapeHtml(cleanNotes)}</div>`;
+        if (shouldMask) {
+          html += `<div class="card-notes privacy-masked" onclick="event.stopPropagation(); this.classList.toggle('peeked');" title="Tap to peek/hide sensitive notes">${escapeHtml(cleanNotes)}</div>`;
+        } else {
+          html += `<div class="card-notes">${escapeHtml(cleanNotes)}</div>`;
+        }
       }
 
       return html;
@@ -8608,7 +9006,7 @@
             </div>
           </div>
 
-          ${renderSmartMetadata(item.metadata, item.notes)}
+          ${renderSmartMetadata(item.metadata, item.notes, { maskSensitive: window.vaultPrivacyMask !== false })}
         </article>
       `;
     }
@@ -8925,7 +9323,7 @@
           items.unshift(newCard);
           if (typeof window.setVaultItems === 'function') window.setVaultItems(items);
           window.vaultItems = items;
-          localStorage.setItem('orlandovault_credentials_v6', JSON.stringify(items));
+          persistVaultToSecureCache();
 
           if (isPri && typeof savePinnedRegistry === 'function') {
             const reg = typeof getPinnedRegistry === 'function' ? getPinnedRegistry() : [];
@@ -9140,16 +9538,24 @@
         if (window.caches) {
           caches.keys().then(keys => {
             keys.forEach(k => {
-              if (k.startsWith('vault-') && k !== 'vault-jarvis-v65') {
+              if (k.startsWith('vault-') && k !== 'vault-jarvis-v66') {
                 caches.delete(k);
               }
             });
           });
         }
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v65', { scope: '/orlandovault/' }).then(reg => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v66', { scope: '/orlandovault/' }).then(reg => {
           if (reg && reg.update) reg.update();
         }).catch(err => {
           console.warn('Vault SW registration error:', err);
+        });
+      }
+
+      const wipeBadgeBtn = document.getElementById('clipboardWipeBadge');
+      if (wipeBadgeBtn) {
+        wipeBadgeBtn.addEventListener('click', () => {
+          attemptClipboardWipe(true);
+          if (typeof showToast === 'function') showToast('🧹 Clipboard wiped manually!', '🛡️');
         });
       }
 
@@ -9748,7 +10154,7 @@
         if (parsed.length > 0) {
           const mergeResult = smartMergeVault(vaultItems, parsed);
           vaultItems = mergeResult.mergedList;
-          localStorage.setItem(LS_VAULT_KEY, JSON.stringify(vaultItems));
+          persistVaultToSecureCache();
           renderVault();
           renderMetrics();
           if (typeof window.markVaultFullPush === 'function') window.markVaultFullPush();
@@ -10252,16 +10658,20 @@
 
   </script>
 
-  <!-- GOOGLE CLOUD FIREBASE FIRESTORE REAL-TIME SAFE SYNC ENGINE & STORAGE MANIFEST (V2) -->
+  <!-- GOOGLE CLOUD FIREBASE AUTH + FIRESTORE ZERO-KNOWLEDGE V4 ENGINE -->
   <script id="vault-firebase-engine">
   (function() {
     'use strict';
 
     // ==========================================================================
-    // 1. UNIFIED STORAGE MANIFEST & RUNTIME SELF-AUDIT
+    // 1. UNIFIED STORAGE MANIFEST & RUNTIME SELF-AUDIT (ZERO PLAINTEXT VAULT)
     // ==========================================================================
     const STORAGE_MANIFEST = {
-      'orlandovault_credentials_v6': { type: 'SYNC', category: 'records', schemaVersion: 6, dataType: 'array' },
+      'orlandovault_enc_cache_v4': { type: 'LOCAL_ONLY', category: 'crypto_cache', schemaVersion: 4, dataType: 'object' },
+      'orlandovault_enc_snaps_v4': { type: 'LOCAL_ONLY', category: 'crypto_backup', schemaVersion: 4, dataType: 'array' },
+      'orlandovault_bio_wrap_v4': { type: 'LOCAL_ONLY', category: 'webauthn', schemaVersion: 4, dataType: 'object' },
+      'orlandovault_autolock_min': { type: 'LOCAL_ONLY', category: 'security', schemaVersion: 1, dataType: 'number' },
+      'orlandovault_privacy_mask_v1': { type: 'LOCAL_ONLY', category: 'security', schemaVersion: 1, dataType: 'boolean' },
       'orlandovault_priority_pins_v4': { type: 'SYNC', category: 'pins', schemaVersion: 4, dataType: 'array' },
       'vault_jarvis_frecency_v1': { type: 'SYNC', category: 'frecency', schemaVersion: 1, dataType: 'object' },
       'orlandovault_frecency_v1': { type: 'SYNC', category: 'frecency', schemaVersion: 1, dataType: 'object' },
@@ -10274,7 +10684,6 @@
       'orlandovault_sort_mode': { type: 'SYNC', category: 'settings', schemaVersion: 1, dataType: 'string' },
       'orlandovault_categories_v1': { type: 'SYNC', category: 'settings', schemaVersion: 1, dataType: 'array' },
       'orlandovault_tombstones_v1': { type: 'SYNC', category: 'tombstones', schemaVersion: 1, dataType: 'object' },
-      'orlandovault_snapshots_v1': { type: 'LOCAL_ONLY', category: 'backup', schemaVersion: 1, dataType: 'array' },
       'orlandovault_last_modified': { type: 'LOCAL_ONLY', category: 'sync_state', schemaVersion: 1, dataType: 'number' },
       'ov_mutation_journal': { type: 'LOCAL_ONLY', category: 'outbox', schemaVersion: 1, dataType: 'array' },
       'orlandovault_mutation_journal_v1': { type: 'LOCAL_ONLY', category: 'outbox', schemaVersion: 1, dataType: 'array' },
@@ -10283,47 +10692,63 @@
       'orlandovault_search_query': { type: 'LOCAL_ONLY', category: 'ui_state', schemaVersion: 1, dataType: 'string' },
       'orlandovault_active_modal': { type: 'LOCAL_ONLY', category: 'ui_state', schemaVersion: 1, dataType: 'string' },
       'orlandovault_audio_muted': { type: 'LOCAL_ONLY', category: 'ui_state', schemaVersion: 1, dataType: 'boolean' },
-      'orlandovault_master_salt': { type: 'LOCAL_ONLY', category: 'crypto', schemaVersion: 1, dataType: 'string' },
-      'orlandovault_vault_passphrase': { type: 'LOCAL_ONLY', category: 'crypto', schemaVersion: 1, dataType: 'string' },
       'orlandovault_sync_health': { type: 'LOCAL_ONLY', category: 'telemetry', schemaVersion: 1, dataType: 'object' },
+      // Legacy plaintext keys queued for immediate wipe on boot
+      'orlandovault_credentials_v6': { type: 'LEGACY_PURGE', schemaVersion: 6 },
       'orlandovault_credentials_v5': { type: 'LEGACY_PURGE', schemaVersion: 5 },
       'orlandovault_credentials_v4': { type: 'LEGACY_PURGE', schemaVersion: 4 },
+      'orlandovault_snapshots_v1': { type: 'LEGACY_PURGE', schemaVersion: 1 },
+      'orlandovault_master_salt': { type: 'LEGACY_PURGE', schemaVersion: 1 },
+      'orlandovault_vault_passphrase': { type: 'LEGACY_PURGE', schemaVersion: 1 },
       'orlandovault_priority_pins_v2': { type: 'LEGACY_PURGE', schemaVersion: 2 },
       'orlandovault_priority_pins_v3': { type: 'LEGACY_PURGE', schemaVersion: 3 }
     };
     window.STORAGE_MANIFEST = STORAGE_MANIFEST;
 
-    // Self-Auditing Storage Interceptor
+    function isAllowedStorageKey(key) {
+      if (!key) return true;
+      if (STORAGE_MANIFEST[key]) return true;
+      if (key === '__sak' || key.startsWith('firebase:') || key.startsWith('firebaseui')) return true;
+      return false;
+    }
+
     const origSetItem = Storage.prototype.setItem;
     const origGetItem = Storage.prototype.getItem;
 
     Storage.prototype.setItem = function(key, val) {
-      if ((this === localStorage || this === sessionStorage) && !STORAGE_MANIFEST[key]) {
+      if ((this === localStorage || this === sessionStorage) && !isAllowedStorageKey(key)) {
         console.error('[Storage Audit Violation] Key not declared in STORAGE_MANIFEST: "' + key + '"');
       }
       return origSetItem.call(this, key, val);
     };
 
     Storage.prototype.getItem = function(key) {
-      if ((this === localStorage || this === sessionStorage) && !STORAGE_MANIFEST[key]) {
+      if ((this === localStorage || this === sessionStorage) && !isAllowedStorageKey(key)) {
         console.error('[Storage Audit Violation] Key not declared in STORAGE_MANIFEST: "' + key + '"');
       }
       return origGetItem.call(this, key);
     };
 
-    // Startup Purge of Legacy Storage Keys
-    try {
-      for (let i = 0; i < localStorage.length; i++) {
-        const k = localStorage.key(i);
-        if (k && STORAGE_MANIFEST[k] && STORAGE_MANIFEST[k].type === 'LEGACY_PURGE') {
-          localStorage.removeItem(k);
+    function purgeLegacyPlaintextStorage() {
+      try {
+        const toDelete = [];
+        for (let i = 0; i < localStorage.length; i++) {
+          const k = localStorage.key(i);
+          if (k && STORAGE_MANIFEST[k] && STORAGE_MANIFEST[k].type === 'LEGACY_PURGE') {
+            toDelete.push(k);
+          }
         }
-      }
-    } catch(e) {}
+        toDelete.forEach(k => localStorage.removeItem(k));
+      } catch(e) {}
+    }
+    purgeLegacyPlaintextStorage();
 
     // ==========================================================================
-    // 2. CLIENT-SIDE WEB CRYPTO ZERO-KNOWLEDGE ENCRYPTION MODULE
+    // 2. TRUE ZERO-KNOWLEDGE WEB CRYPTO MODULE (V4 - 600K PBKDF2 + CANARY)
     // ==========================================================================
+    const CANARY_PLAINTEXT = 'ORLANDOVAULT_CANARY_V4';
+    const KDF_ITERATIONS_V4 = 600000;
+
     function arrayBufferToBase64(buffer) {
       let binary = '';
       const bytes = new Uint8Array(buffer);
@@ -10338,32 +10763,47 @@
       return bytes.buffer;
     }
 
+    function bytesToHex(bytes) {
+      return Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    function hexToBytes(hex) {
+      const clean = (hex || '').replace(/[^0-9a-f]/gi, '');
+      const pairs = clean.match(/.{1,2}/g) || [];
+      return new Uint8Array(pairs.map(b => parseInt(b, 16)));
+    }
+
     const VaultCrypto = {
-      getSalt() {
-        let salt = localStorage.getItem('orlandovault_master_salt');
-        if (!salt) {
-          salt = '0f7a3c8e9b2d1f4a5c6e7d8b9a0c1e2f';
-          localStorage.setItem('orlandovault_master_salt', salt);
-        }
-        return salt;
+      KDF_ITERATIONS_V4: KDF_ITERATIONS_V4,
+      CANARY_PLAINTEXT: CANARY_PLAINTEXT,
+
+      generateRandomSaltHex() {
+        const bytes = new Uint8Array(32);
+        window.crypto.getRandomValues(bytes);
+        return bytesToHex(bytes);
       },
 
-      async deriveKey(passphrase) {
-        const saltHex = this.getSalt();
+      async deriveKey(passphrase, saltHex, iterations = KDF_ITERATIONS_V4) {
+        if (!passphrase || typeof passphrase !== 'string') {
+          throw new Error('Master password is required.');
+        }
+        if (!saltHex || typeof saltHex !== 'string' || saltHex.length < 16) {
+          throw new Error('Valid cryptographic salt is required.');
+        }
         const enc = new TextEncoder();
         const keyMaterial = await window.crypto.subtle.importKey(
           'raw',
-          enc.encode(passphrase || 'OrlandoVault_Master_Passphrase_2026_Secure'),
+          enc.encode(passphrase),
           { name: 'PBKDF2' },
           false,
           ['deriveKey']
         );
-        const saltBytes = new Uint8Array(saltHex.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+        const saltBytes = hexToBytes(saltHex);
         return await window.crypto.subtle.deriveKey(
           {
             name: 'PBKDF2',
             salt: saltBytes,
-            iterations: 100000,
+            iterations: iterations,
             hash: 'SHA-256'
           },
           keyMaterial,
@@ -10374,7 +10814,8 @@
       },
 
       async encrypt(text, key) {
-        if (!text) return { ciphertext: '', iv: '', v: 1 };
+        if (!key) throw new Error('Vault is locked (no active encryption key).');
+        if (!text) return { ciphertext: '', iv: '', v: 4 };
         const enc = new TextEncoder();
         const iv = window.crypto.getRandomValues(new Uint8Array(12));
         const encrypted = await window.crypto.subtle.encrypt(
@@ -10385,36 +10826,56 @@
         return {
           ciphertext: arrayBufferToBase64(encrypted),
           iv: arrayBufferToBase64(iv),
-          v: 1
+          v: 4
         };
       },
 
-      async decrypt(cipherObj, key) {
+      async decryptStrict(cipherObj, key) {
+        if (!key) throw new Error('Vault is locked.');
         if (!cipherObj || !cipherObj.ciphertext || !cipherObj.iv) return '';
+        const iv = base64ToArrayBuffer(cipherObj.iv);
+        const cipherBytes = base64ToArrayBuffer(cipherObj.ciphertext);
+        const decrypted = await window.crypto.subtle.decrypt(
+          { name: 'AES-GCM', iv: new Uint8Array(iv) },
+          key,
+          cipherBytes
+        );
+        return new TextDecoder().decode(decrypted);
+      },
+
+      async decrypt(cipherObj, key) {
+        return await this.decryptStrict(cipherObj, key);
+      },
+
+      async createCanary(key) {
+        return await this.encrypt(CANARY_PLAINTEXT, key);
+      },
+
+      async verifyCanary(canaryObj, key) {
         try {
-          const iv = base64ToArrayBuffer(cipherObj.iv);
-          const cipherBytes = base64ToArrayBuffer(cipherObj.ciphertext);
-          const decrypted = await window.crypto.subtle.decrypt(
-            { name: 'AES-GCM', iv: new Uint8Array(iv) },
-            key,
-            cipherBytes
-          );
-          return new TextDecoder().decode(decrypted);
-        } catch (e) {
-          return '';
+          if (!canaryObj || !canaryObj.ciphertext) return false;
+          const plain = await this.decryptStrict(canaryObj, key);
+          return plain === CANARY_PLAINTEXT;
+        } catch(e) {
+          return false;
         }
       }
     };
     window.VaultCrypto = VaultCrypto;
 
     // ==========================================================================
-    // 3. SAFE SYNC ENGINE ARCHITECTURE
+    // 3. FIREBASE AUTH GATE + SAFE SYNC V4 ENGINE
     // ==========================================================================
     const FIREBASE_CONFIG = {
       apiKey: "AIzaSyCi8aUZiN1GnRXECM0Nc34UKMYQyTvzj9Y",
       authDomain: "orlandochrome-b6228.firebaseapp.com",
       projectId: "orlandochrome-b6228"
     };
+
+    const ALLOWED_VAULT_EMAILS = [
+      'orlandopasion1994@gmail.com',
+      'orlandopasion0817@gmail.com'
+    ];
 
     const FIRESTORE_BASE = 'https://firestore.googleapis.com/v1/projects/' + FIREBASE_CONFIG.projectId + '/databases/(default)/documents';
     const MASTER_DOC_URL = FIRESTORE_BASE + '/orlandovault_sync/master_channel?key=' + FIREBASE_CONFIG.apiKey;
@@ -10424,7 +10885,11 @@
     const CLIENT_ID = localStorage.getItem('orlandovault_client_id') || ('ov_' + Math.random().toString(36).slice(2, 10));
     try { localStorage.setItem('orlandovault_client_id', CLIENT_ID); } catch(e) {}
     window.VAULT_CLIENT_ID = CLIENT_ID;
-    const LAST_MOD_KEY = 'orlandovault_last_modified';
+    const LS_ENC_CACHE = 'orlandovault_enc_cache_v4';
+    const LS_ENC_SNAPS = 'orlandovault_enc_snaps_v4';
+    const LS_BIO_WRAP = 'orlandovault_bio_wrap_v4';
+    const LS_AUTOLOCK_MIN = 'orlandovault_autolock_min';
+    const LS_PRIVACY_MASK = 'orlandovault_privacy_mask_v1';
     const LS_MUTATION_JOURNAL = 'ov_mutation_journal';
 
     let hasCompletedInitialPull = false;
@@ -10432,13 +10897,19 @@
     let isSyncing = false;
     let isPushing = false;
     let pushTimer = null;
-    let cachedCryptoKey = null;
+    let activeSessionKey = null;
+    let activeVaultMeta = null; // { v: 4, saltHex, kdfIterations, keyCanary }
+    let isFirstTimeMigration = false;
+    let isAuthPopupOpen = false;
+    let lastActivityAt = Date.now();
     let lastSeenRemoteTs = 0;
     let lastRenderFingerprint = '';
     const dirtyRecordIds = new Set();
     const dirtyDeleteIds = new Set();
     let fullPushRequired = false;
 
+    window.vaultPrivacyMask = localStorage.getItem(LS_PRIVACY_MASK) !== 'false';
+    window.isVaultUnlocked = function() { return !!activeSessionKey; };
     window.markVaultRecordDirty = function(id) {
       if (id) dirtyRecordIds.add(id);
     };
@@ -10452,7 +10923,7 @@
     };
 
     let syncHealthState = {
-      status: 'connecting',
+      status: 'locked',
       localCount: 0,
       cloudCount: 0,
       pinnedCount: 0,
@@ -10462,12 +10933,541 @@
       hashMatch: true
     };
 
-    async function getCryptoKey() {
-      if (!cachedCryptoKey) {
-        const pass = localStorage.getItem('orlandovault_vault_passphrase') || 'OrlandoVault_Master_Passphrase_2026_Secure';
-        cachedCryptoKey = await VaultCrypto.deriveKey(pass);
+    function getAutoLockMs() {
+      const mins = parseInt(localStorage.getItem(LS_AUTOLOCK_MIN) || '5', 10);
+      return Math.max(1, isNaN(mins) ? 5 : mins) * 60 * 1000;
+    }
+
+    function recordUserActivity() {
+      if (activeSessionKey) lastActivityAt = Date.now();
+    }
+
+    function syncPrivacyMaskUI() {
+      const btn = document.getElementById('btnTopbarPrivacyMask');
+      const lbl = document.getElementById('privacyMaskLabel');
+      const masked = window.vaultPrivacyMask !== false;
+      if (btn) btn.classList.toggle('mask-active', masked);
+      if (lbl) lbl.textContent = masked ? 'Masked' : 'Visible';
+    }
+
+    function togglePrivacyMask() {
+      window.vaultPrivacyMask = !(window.vaultPrivacyMask !== false);
+      try { localStorage.setItem(LS_PRIVACY_MASK, window.vaultPrivacyMask ? 'true' : 'false'); } catch(e) {}
+      syncPrivacyMaskUI();
+      if (activeSessionKey && typeof window.renderVault === 'function') {
+        window.renderVault();
       }
-      return cachedCryptoKey;
+      if (typeof playJarvisSound === 'function') playJarvisSound('click');
+    }
+    window.togglePrivacyMask = togglePrivacyMask;
+
+    // Initialize Firebase Auth safely
+    let firebaseAuth = null;
+    try {
+      if (typeof firebase !== 'undefined') {
+        if (!firebase.apps || firebase.apps.length === 0) {
+          firebase.initializeApp(FIREBASE_CONFIG);
+        }
+        firebaseAuth = firebase.auth();
+      }
+    } catch(e) {
+      console.warn('[Firebase Auth Init]', e.message);
+    }
+
+    async function getAuthHeaders() {
+      const headers = {};
+      try {
+        if (firebaseAuth && firebaseAuth.currentUser) {
+          const token = await firebaseAuth.currentUser.getIdToken();
+          if (token) headers['Authorization'] = 'Bearer ' + token;
+        }
+      } catch(e) {}
+      return headers;
+    }
+
+    function setLockError(msg) {
+      const errBox = document.getElementById('vaultLockError');
+      if (!errBox) return;
+      if (msg) {
+        errBox.textContent = msg;
+        errBox.style.display = 'block';
+      } else {
+        errBox.textContent = '';
+        errBox.style.display = 'none';
+      }
+    }
+
+    function computePasswordStrength(pwd) {
+      let score = 0;
+      if (!pwd) return { pct: 0, color: '#ef4444', text: 'Use 10+ characters with mixed case, digits, or symbols.' };
+      if (pwd.length >= 10) score += 30;
+      else if (pwd.length >= 6) score += 15;
+      if (pwd.length >= 14) score += 15;
+      if (/[a-z]/.test(pwd) && /[A-Z]/.test(pwd)) score += 20;
+      if (/\d/.test(pwd)) score += 15;
+      if (/[^a-zA-Z0-9]/.test(pwd)) score += 20;
+      if (score >= 85) return { pct: 100, color: '#10b981', text: 'Strong Zero-Knowledge Master Password' };
+      if (score >= 60) return { pct: 70, color: '#38bdf8', text: 'Good — add symbols or length for maximum entropy' };
+      return { pct: Math.max(20, score), color: '#f59e0b', text: 'Too weak — aim for 10+ chars with mixed case & numbers/symbols' };
+    }
+
+    function refreshBioButtonVisibility() {
+      const bioBtn = document.getElementById('btnVaultBioUnlock');
+      const setupBtn = document.getElementById('btnSetupBiometricUnlock');
+      let hasBio = false;
+      try {
+        const raw = localStorage.getItem(LS_BIO_WRAP);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          hasBio = !!(parsed && parsed.credentialId && parsed.wrappedPwd);
+        }
+      } catch(e) {}
+      if (bioBtn) {
+        bioBtn.style.display = (!isFirstTimeMigration && hasBio) ? 'flex' : 'none';
+      }
+      if (setupBtn) {
+        setupBtn.textContent = hasBio ? '✅ Biometric Unlock Active (Click to Disable)' : '🧬 Enable Biometric / Passkey Unlock';
+      }
+    }
+
+    function readLocalEncryptedCacheEnvelope() {
+      try {
+        const raw = localStorage.getItem(LS_ENC_CACHE);
+        if (!raw) return null;
+        return JSON.parse(raw);
+      } catch(e) {
+        return null;
+      }
+    }
+
+    async function persistEncryptedVaultCache() {
+      if (!activeSessionKey || !activeVaultMeta || !activeVaultMeta.saltHex) return false;
+      try {
+        const items = (typeof window.getVaultItems === 'function' ? window.getVaultItems() : window.vaultItems) || [];
+        const pins = typeof getPinnedRegistry === 'function' ? getPinnedRegistry() : [];
+        const tombstones = typeof getVaultTombstones === 'function' ? getVaultTombstones() : {};
+        const payload = JSON.stringify({ items, pins, tombstones, ts: Date.now() });
+        const enc = await VaultCrypto.encrypt(payload, activeSessionKey);
+        const envelope = {
+          v: 4,
+          saltHex: activeVaultMeta.saltHex,
+          kdfIterations: activeVaultMeta.kdfIterations || KDF_ITERATIONS_V4,
+          keyCanary: activeVaultMeta.keyCanary,
+          encryptedData: enc,
+          updatedAt: Date.now()
+        };
+        localStorage.setItem(LS_ENC_CACHE, JSON.stringify(envelope));
+        purgeLegacyPlaintextStorage();
+        return true;
+      } catch(e) {
+        return false;
+      }
+    }
+    window.persistEncryptedVaultCache = persistEncryptedVaultCache;
+
+    async function unlockWithEncryptedCache(passphrase, explicitEnvelope = null) {
+      const env = explicitEnvelope || readLocalEncryptedCacheEnvelope();
+      if (!env || !env.saltHex || !env.keyCanary || !env.encryptedData) {
+        throw new Error('NO_ENCRYPTED_CACHE');
+      }
+      const iters = env.kdfIterations || KDF_ITERATIONS_V4;
+      const derivedKey = await VaultCrypto.deriveKey(passphrase, env.saltHex, iters);
+      const valid = await VaultCrypto.verifyCanary(env.keyCanary, derivedKey);
+      if (!valid) {
+        throw new Error('WRONG_MASTER_PASSWORD');
+      }
+      const decryptedJson = await VaultCrypto.decryptStrict(env.encryptedData, derivedKey);
+      const parsed = JSON.parse(decryptedJson || '{}');
+      activeSessionKey = derivedKey;
+      activeVaultMeta = {
+        v: 4,
+        saltHex: env.saltHex,
+        kdfIterations: iters,
+        keyCanary: env.keyCanary
+      };
+      const items = Array.isArray(parsed.items) ? parsed.items : [];
+      if (typeof window.setVaultItems === 'function') window.setVaultItems(items);
+      window.vaultItems = items;
+      if (Array.isArray(parsed.pins) && typeof savePinnedRegistry === 'function') savePinnedRegistry(parsed.pins);
+      if (parsed.tombstones && typeof saveVaultTombstones === 'function') saveVaultTombstones(parsed.tombstones);
+      if (typeof window.reapplyPriorityPins === 'function') window.reapplyPriorityPins(items);
+      lastActivityAt = Date.now();
+      showUnlockedWorkspace();
+      if (typeof window.renderVault === 'function') window.renderVault();
+      if (typeof window.renderMetrics === 'function') window.renderMetrics();
+      updateSyncHealthUI();
+      return items.length;
+    }
+    window.attemptOfflineEncryptedCacheUnlock = unlockWithEncryptedCache;
+
+    function showUnlockedWorkspace() {
+      const overlay = document.getElementById('vaultLockOverlay');
+      if (overlay) overlay.classList.add('unlocked');
+      const curtain = document.getElementById('vaultPrivacyCurtain');
+      if (curtain) curtain.classList.remove('active');
+      const pwdIn = document.getElementById('vaultMasterPwdInput');
+      const pwdConf = document.getElementById('vaultMasterPwdConfirm');
+      if (pwdIn) pwdIn.value = '';
+      if (pwdConf) pwdConf.value = '';
+      setLockError('');
+      refreshBioButtonVisibility();
+      syncPrivacyMaskUI();
+    }
+
+    function lockVault(reason = '') {
+      activeSessionKey = null;
+      hasCompletedInitialPull = false;
+      isSyncing = false;
+      isPushing = false;
+      lastRenderFingerprint = '';
+      if (pushTimer) { clearTimeout(pushTimer); pushTimer = null; }
+
+      if (typeof window.setVaultItems === 'function') window.setVaultItems([]);
+      window.vaultItems = [];
+
+      const grid = document.getElementById('vaultGridContainer');
+      if (grid) grid.innerHTML = '';
+
+      if (typeof closeActiveModal === 'function') {
+        while (closeActiveModal()) {}
+      }
+      document.querySelectorAll('.modal-backdrop, .spotlight-backdrop').forEach(el => {
+        el.classList.remove('active', 'open');
+        if (el.id === 'syncHealthModal') el.style.display = 'none';
+      });
+      if (typeof window.unlockPageScroll === 'function') {
+        try { window.unlockPageScroll(); } catch(e) {}
+      }
+
+      const curtain = document.getElementById('vaultPrivacyCurtain');
+      if (curtain) curtain.classList.remove('active');
+
+      const overlay = document.getElementById('vaultLockOverlay');
+      if (overlay) overlay.classList.remove('unlocked');
+
+      const pwdIn = document.getElementById('vaultMasterPwdInput');
+      const pwdConf = document.getElementById('vaultMasterPwdConfirm');
+      if (pwdIn) pwdIn.value = '';
+      if (pwdConf) pwdConf.value = '';
+
+      if (reason) setLockError(reason);
+      if (typeof renderMetrics === 'function') {
+        try { renderMetrics(); } catch(e) {}
+      }
+      syncHealthState.status = 'locked';
+      updateSyncHealthUI();
+      refreshBioButtonVisibility();
+    }
+    window.lockVault = lockVault;
+
+    async function decryptItemListFromRawDocs(rawDocs, key, localTombstones) {
+      const items = [];
+      for (let i = 0; i < rawDocs.length; i++) {
+        const f = rawDocs[i].fields;
+        if (!f || !f.id) continue;
+        const id = f.id.stringValue;
+        const isDel = f.deleted ? f.deleted.booleanValue : false;
+        const upTime = f.updatedAt ? parseInt(f.updatedAt.integerValue || '0', 10) : 0;
+
+        if (isDel) {
+          localTombstones[id] = Math.max(localTombstones[id] || 0, upTime || Date.now());
+          if (typeof saveVaultTombstones === 'function') saveVaultTombstones(localTombstones);
+          continue;
+        }
+        if (localTombstones[id] && upTime <= localTombstones[id]) continue;
+
+        let plainPass = '';
+        let plainOldPass = '';
+        let plainMetadata = '';
+        let plainNotes = '';
+
+        if (f.encryptedPassword && f.encryptedPassword.stringValue) {
+          plainPass = await VaultCrypto.decryptStrict(JSON.parse(f.encryptedPassword.stringValue), key);
+        }
+        if (f.encryptedOldPassword && f.encryptedOldPassword.stringValue) {
+          plainOldPass = await VaultCrypto.decryptStrict(JSON.parse(f.encryptedOldPassword.stringValue), key);
+        }
+        if (f.encryptedMetadata && f.encryptedMetadata.stringValue) {
+          plainMetadata = await VaultCrypto.decryptStrict(JSON.parse(f.encryptedMetadata.stringValue), key);
+        }
+        if (f.encryptedNotes && f.encryptedNotes.stringValue) {
+          plainNotes = await VaultCrypto.decryptStrict(JSON.parse(f.encryptedNotes.stringValue), key);
+        }
+
+        items.push({
+          id: id,
+          title: f.title ? f.title.stringValue : '',
+          username: f.username ? f.username.stringValue : '',
+          category: f.category ? f.category.stringValue : 'Portals',
+          badge: f.badge ? f.badge.stringValue : '',
+          importance: f.importance ? f.importance.stringValue : 'Normal',
+          status: f.status ? f.status.stringValue : 'Secured',
+          isPriority: f.isPriority ? f.isPriority.booleanValue : false,
+          pinned: f.pinned ? f.pinned.booleanValue : false,
+          pinned_at: f.pinned_at ? parseInt(f.pinned_at.integerValue || '0', 10) : 0,
+          lastUsedAt: f.lastUsedAt ? parseInt(f.lastUsedAt.integerValue || '0', 10) : 0,
+          usageScore: f.usageScore ? parseInt(f.usageScore.integerValue || '0', 10) : 0,
+          copyPasswordCount: f.copyPasswordCount ? parseInt(f.copyPasswordCount.integerValue || '0', 10) : 0,
+          copyUsernameCount: f.copyUsernameCount ? parseInt(f.copyUsernameCount.integerValue || '0', 10) : 0,
+          viewPasswordCount: f.viewPasswordCount ? parseInt(f.viewPasswordCount.integerValue || '0', 10) : 0,
+          updatedAt: upTime,
+          updatedBy: f.updatedBy ? f.updatedBy.stringValue : '',
+          password: plainPass,
+          old_password: plainOldPass,
+          metadata: plainMetadata,
+          notes: plainNotes
+        });
+      }
+      return items;
+    }
+
+    async function fetchAllRemoteRawDocs(authHeaders) {
+      let pageToken = '';
+      const rawDocs = [];
+      do {
+        const url = RECORDS_COLLECTION_URL + (pageToken ? ('&pageToken=' + encodeURIComponent(pageToken)) : '');
+        const colRes = await fetch(url, { cache: 'no-store', headers: authHeaders });
+        if (!colRes.ok) throw new Error('Firestore HTTP ' + colRes.status);
+        const colData = await colRes.json();
+        if (Array.isArray(colData.documents)) rawDocs.push(...colData.documents);
+        pageToken = colData.nextPageToken || '';
+      } while (pageToken);
+      return rawDocs;
+    }
+
+    // One-time v3 -> v4 zero-knowledge migration (legacy v3 secret isolated strictly inside this migration)
+    async function migrateLegacyV3ToV4(newMasterPassword) {
+      const authHeaders = await getAuthHeaders();
+      const rawDocs = await fetchAllRemoteRawDocs(authHeaders);
+      const localTombstones = typeof getVaultTombstones === 'function' ? getVaultTombstones() : {};
+
+      const LEGACY_V3_SALT = '0f7a3c8e9b2d1f4a5c6e7d8b9a0c1e2f';
+      const LEGACY_V3_PASS = 'OrlandoVault_Master_Passphrase_2026_Secure';
+      const legacyKey = await VaultCrypto.deriveKey(LEGACY_V3_PASS, LEGACY_V3_SALT, 100000);
+
+      let migratedItems = [];
+      if (rawDocs.length > 0) {
+        migratedItems = await decryptItemListFromRawDocs(rawDocs, legacyKey, localTombstones);
+      }
+
+      const newSaltHex = VaultCrypto.generateRandomSaltHex();
+      const newKey = await VaultCrypto.deriveKey(newMasterPassword, newSaltHex, KDF_ITERATIONS_V4);
+      const canary = await VaultCrypto.createCanary(newKey);
+
+      activeSessionKey = newKey;
+      activeVaultMeta = {
+        v: 4,
+        saltHex: newSaltHex,
+        kdfIterations: KDF_ITERATIONS_V4,
+        keyCanary: canary
+      };
+      isFirstTimeMigration = false;
+      hasCompletedInitialPull = true;
+      lastActivityAt = Date.now();
+
+      if (typeof window.setVaultItems === 'function') window.setVaultItems(migratedItems);
+      window.vaultItems = migratedItems;
+      if (typeof window.reapplyPriorityPins === 'function') window.reapplyPriorityPins(migratedItems);
+      await persistEncryptedVaultCache();
+
+      fullPushRequired = true;
+      await pushToCloud(true);
+
+      showUnlockedWorkspace();
+      if (typeof window.renderVault === 'function') window.renderVault();
+      if (typeof window.renderMetrics === 'function') window.renderMetrics();
+      if (typeof logAudit === 'function') logAudit('VAULT_UPGRADED_V4', 'Upgraded Zero-Knowledge Encryption to PBKDF2 600k + Random Salt + Master Password');
+    }
+
+    async function unlockVaultWithPassword(masterPassword) {
+      const env = readLocalEncryptedCacheEnvelope();
+
+      if (isFirstTimeMigration) {
+        return await migrateLegacyV3ToV4(masterPassword);
+      }
+
+      // 1. Try cloud metadata first if available, else fall back to encrypted local cache metadata
+      const authHeaders = await getAuthHeaders();
+      let meta = activeVaultMeta;
+
+      try {
+        const masterRes = await fetch(MASTER_DOC_URL, { cache: 'no-store', headers: authHeaders });
+        if (masterRes.ok) {
+          const masterDoc = await masterRes.json();
+          const mf = masterDoc.fields || {};
+          const v = mf.v ? parseInt(mf.v.integerValue || '0', 10) : 0;
+          if (v >= 4 && mf.saltHex && mf.saltHex.stringValue && mf.keyCanary && mf.keyCanary.stringValue) {
+            meta = {
+              v: v,
+              saltHex: mf.saltHex.stringValue,
+              kdfIterations: mf.kdfIterations ? parseInt(mf.kdfIterations.integerValue || String(KDF_ITERATIONS_V4), 10) : KDF_ITERATIONS_V4,
+              keyCanary: JSON.parse(mf.keyCanary.stringValue)
+            };
+          }
+        }
+      } catch(e) {}
+
+      if (meta && meta.saltHex && meta.keyCanary) {
+        const candidateKey = await VaultCrypto.deriveKey(masterPassword, meta.saltHex, meta.kdfIterations || KDF_ITERATIONS_V4);
+        const ok = await VaultCrypto.verifyCanary(meta.keyCanary, candidateKey);
+        if (!ok) throw new Error('Incorrect Master Password. Key canary verification failed.');
+
+        activeSessionKey = candidateKey;
+        activeVaultMeta = meta;
+        lastActivityAt = Date.now();
+
+        // Hydrate encrypted local cache first for instant display while syncing latest from cloud
+        if (env && env.encryptedData) {
+          try {
+            const dec = await VaultCrypto.decryptStrict(env.encryptedData, candidateKey);
+            const parsed = JSON.parse(dec || '{}');
+            if (Array.isArray(parsed.items)) {
+              if (typeof window.setVaultItems === 'function') window.setVaultItems(parsed.items);
+              window.vaultItems = parsed.items;
+              if (Array.isArray(parsed.pins) && typeof savePinnedRegistry === 'function') savePinnedRegistry(parsed.pins);
+            }
+          } catch(e) {}
+        }
+
+        showUnlockedWorkspace();
+        if (typeof window.renderVault === 'function') window.renderVault();
+        if (typeof window.renderMetrics === 'function') window.renderMetrics();
+        await pullFromCloud(true, false);
+        return;
+      }
+
+      if (env && env.encryptedData) {
+        await unlockWithEncryptedCache(masterPassword, env);
+        return;
+      }
+
+      throw new Error('Could not reach Firebase metadata and no encrypted offline cache was found on this device.');
+    }
+
+    async function changeMasterPassword(currentPwd, newPwd) {
+      if (!activeSessionKey || !activeVaultMeta) throw new Error('Unlock vault first.');
+      const curKey = await VaultCrypto.deriveKey(currentPwd, activeVaultMeta.saltHex, activeVaultMeta.kdfIterations || KDF_ITERATIONS_V4);
+      const valid = await VaultCrypto.verifyCanary(activeVaultMeta.keyCanary, curKey);
+      if (!valid) throw new Error('Current Master Password is incorrect.');
+      if (!newPwd || newPwd.length < 10) throw new Error('New Master Password must be at least 10 characters.');
+
+      const freshSalt = VaultCrypto.generateRandomSaltHex();
+      const freshKey = await VaultCrypto.deriveKey(newPwd, freshSalt, KDF_ITERATIONS_V4);
+      const freshCanary = await VaultCrypto.createCanary(freshKey);
+
+      activeSessionKey = freshKey;
+      activeVaultMeta = {
+        v: 4,
+        saltHex: freshSalt,
+        kdfIterations: KDF_ITERATIONS_V4,
+        keyCanary: freshCanary
+      };
+      try { localStorage.removeItem(LS_BIO_WRAP); } catch(e) {}
+      refreshBioButtonVisibility();
+      await persistEncryptedVaultCache();
+      fullPushRequired = true;
+      await pushToCloud(true);
+      if (typeof logAudit === 'function') logAudit('MASTER_PASSWORD_ROTATED', 'Master Password rotated & cloud vault re-encrypted.');
+    }
+
+    // Biometric / Passkey Quick-Unlock (WebAuthn PRF)
+    async function setupBiometricUnlock(masterPwdToWrap) {
+      if (!window.PublicKeyCredential || !navigator.credentials) {
+        throw new Error('WebAuthn Passkeys are not supported in this browser.');
+      }
+      if (!activeSessionKey || !activeVaultMeta) throw new Error('Vault must be unlocked first.');
+      const checkKey = await VaultCrypto.deriveKey(masterPwdToWrap, activeVaultMeta.saltHex, activeVaultMeta.kdfIterations || KDF_ITERATIONS_V4);
+      const valid = await VaultCrypto.verifyCanary(activeVaultMeta.keyCanary, checkKey);
+      if (!valid) throw new Error('Master Password verification failed.');
+
+      const prfSalt = new Uint8Array(32);
+      const challenge = new Uint8Array(32);
+      const userId = new Uint8Array(16);
+      window.crypto.getRandomValues(prfSalt);
+      window.crypto.getRandomValues(challenge);
+      window.crypto.getRandomValues(userId);
+
+      const cred = await navigator.credentials.create({
+        publicKey: {
+          challenge: challenge,
+          rp: { name: 'OrlandoVault' },
+          user: {
+            id: userId,
+            name: (firebaseAuth && firebaseAuth.currentUser && firebaseAuth.currentUser.email) || 'orlandovault@owner',
+            displayName: 'Sir Orlando V. Pasion, Jr.'
+          },
+          pubKeyCredParams: [{ alg: -7, type: 'public-key' }, { alg: -257, type: 'public-key' }],
+          authenticatorSelection: {
+            authenticatorAttachment: 'platform',
+            userVerification: 'required',
+            residentKey: 'preferred'
+          },
+          extensions: {
+            prf: { eval: { first: prfSalt } }
+          }
+        }
+      });
+
+      const ext = cred.getClientExtensionResults ? cred.getClientExtensionResults() : {};
+      let prfBytes = ext.prf && ext.prf.results && ext.prf.results.first ? new Uint8Array(ext.prf.results.first) : null;
+      if (!prfBytes) {
+        // Retrieve PRF output via immediate assertion
+        const chal2 = new Uint8Array(32);
+        window.crypto.getRandomValues(chal2);
+        const assertion = await navigator.credentials.get({
+          publicKey: {
+            challenge: chal2,
+            allowCredentials: [{ id: cred.rawId, type: 'public-key' }],
+            userVerification: 'required',
+            extensions: { prf: { eval: { first: prfSalt } } }
+          }
+        });
+        const ext2 = assertion.getClientExtensionResults ? assertion.getClientExtensionResults() : {};
+        prfBytes = ext2.prf && ext2.prf.results && ext2.prf.results.first ? new Uint8Array(ext2.prf.results.first) : null;
+      }
+
+      if (!prfBytes) {
+        throw new Error('This device/authenticator does not support WebAuthn PRF hardware key wrapping.');
+      }
+
+      const wrapDigest = await window.crypto.subtle.digest('SHA-256', prfBytes);
+      const wrapKey = await window.crypto.subtle.importKey('raw', wrapDigest, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+      const wrappedPwd = await VaultCrypto.encrypt(masterPwdToWrap, wrapKey);
+
+      localStorage.setItem(LS_BIO_WRAP, JSON.stringify({
+        credentialId: arrayBufferToBase64(cred.rawId),
+        prfSalt: arrayBufferToBase64(prfSalt),
+        wrappedPwd: wrappedPwd
+      }));
+      refreshBioButtonVisibility();
+    }
+
+    async function unlockWithBiometrics() {
+      const raw = localStorage.getItem(LS_BIO_WRAP);
+      if (!raw) throw new Error('No biometric passkey configured on this device.');
+      const saved = JSON.parse(raw);
+      const challenge = new Uint8Array(32);
+      window.crypto.getRandomValues(challenge);
+
+      const assertion = await navigator.credentials.get({
+        publicKey: {
+          challenge: challenge,
+          allowCredentials: [{ id: base64ToArrayBuffer(saved.credentialId), type: 'public-key' }],
+          userVerification: 'required',
+          extensions: {
+            prf: { eval: { first: new Uint8Array(base64ToArrayBuffer(saved.prfSalt)) } }
+          }
+        }
+      });
+
+      const ext = assertion.getClientExtensionResults ? assertion.getClientExtensionResults() : {};
+      const prfBytes = ext.prf && ext.prf.results && ext.prf.results.first ? new Uint8Array(ext.prf.results.first) : null;
+      if (!prfBytes) throw new Error('Biometric PRF assertion failed.');
+
+      const wrapDigest = await window.crypto.subtle.digest('SHA-256', prfBytes);
+      const wrapKey = await window.crypto.subtle.importKey('raw', wrapDigest, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+      const masterPassword = await VaultCrypto.decryptStrict(saved.wrappedPwd, wrapKey);
+      await unlockVaultWithPassword(masterPassword);
     }
 
     function updateSyncHealthUI() {
@@ -10497,16 +11497,19 @@
 
       const match = syncHealthState.localCount > 0 && syncHealthState.localCount === syncHealthState.cloudCount;
       if (statHash) {
-        statHash.textContent = match ? '100% MATCH' : (syncHealthState.cloudCount > 0 ? 'Divergent' : 'Connecting');
+        statHash.textContent = !activeSessionKey ? 'LOCKED' : (match ? '100% MATCH' : (syncHealthState.cloudCount > 0 ? 'Divergent' : 'Connecting'));
         statHash.className = 'sync-stat-val ' + (match ? 'match' : '');
       }
 
       const cls = syncHealthState.status === 'synced' ? 'sync-health-pulse-dot' : ('sync-health-pulse-dot ' + syncHealthState.status);
       if (pulseDot) pulseDot.className = cls;
       if (modalDot) modalDot.className = cls;
-      if (label) label.textContent = syncHealthState.status === 'synced'
-        ? ('Synced (' + syncHealthState.localCount + ')')
-        : (syncHealthState.status === 'syncing' ? 'Syncing...' : 'Sync Health');
+      if (label) {
+        if (!activeSessionKey) label.textContent = 'Locked';
+        else label.textContent = syncHealthState.status === 'synced'
+          ? ('Synced (' + syncHealthState.localCount + ')')
+          : (syncHealthState.status === 'syncing' ? 'Syncing...' : 'Sync Health');
+      }
     }
     window.updateSyncHealthUI = updateSyncHealthUI;
 
@@ -10524,24 +11527,26 @@
       return false;
     }
 
-    // SNAPSHOT CREATION & RESTORE
-    function createSnapshot(reason = 'manual') {
+    // ENCRYPTED SNAPSHOT CREATION & RESTORE
+    async function createSnapshot(reason = 'manual') {
+      if (!activeSessionKey) return null;
       try {
-        const items = Array.isArray(window.vaultItems) ? window.vaultItems : [];
+        const items = (typeof window.getVaultItems === 'function' ? window.getVaultItems() : window.vaultItems) || [];
         const pins = typeof getPinnedRegistry === 'function' ? getPinnedRegistry() : [];
         let snaps = [];
-        try { snaps = JSON.parse(localStorage.getItem('orlandovault_snapshots_v1') || '[]'); } catch(e){}
+        try { snaps = JSON.parse(localStorage.getItem(LS_ENC_SNAPS) || '[]'); } catch(e){}
+        const encSnapData = await VaultCrypto.encrypt(JSON.stringify({ pins, items }), activeSessionKey);
         const snap = {
           id: 'snap_' + Date.now(),
           ts: Date.now(),
           reason: reason,
           recordCount: items.length,
-          pins: pins,
-          items: items
+          encrypted: encSnapData
         };
         snaps.unshift(snap);
         if (snaps.length > 5) snaps = snaps.slice(0, 5);
-        localStorage.setItem('orlandovault_snapshots_v1', JSON.stringify(snaps));
+        localStorage.setItem(LS_ENC_SNAPS, JSON.stringify(snaps));
+        if (typeof showToast === 'function') showToast('💾 Created AES-256-GCM encrypted snapshot (' + items.length + ' accounts).', '🛡️');
         return snap;
       } catch(e) {
         return null;
@@ -10549,34 +11554,39 @@
     }
     window.createVaultSnapshot = createSnapshot;
 
-    window.restoreVaultSnapshot = function(snapId) {
+    window.restoreVaultSnapshot = async function(snapId) {
+      if (!activeSessionKey) return false;
       try {
         let snaps = [];
-        try { snaps = JSON.parse(localStorage.getItem('orlandovault_snapshots_v1') || '[]'); } catch(e){}
+        try { snaps = JSON.parse(localStorage.getItem(LS_ENC_SNAPS) || '[]'); } catch(e){}
         const snap = snapId ? snaps.find(s => s.id === snapId) : snaps[0];
-        if (!snap || !Array.isArray(snap.items) || snap.items.length === 0) {
-          alert('No valid snapshot found to restore.');
+        if (!snap || !snap.encrypted) {
+          if (typeof showToast === 'function') showToast('No encrypted snapshot found on this device.', '⚠️');
           return false;
         }
-        window.vaultItems = snap.items;
-        if (typeof window.setVaultItems === 'function') window.setVaultItems(snap.items);
-        localStorage.setItem('orlandovault_credentials_v6', JSON.stringify(snap.items));
-        if (snap.pins && typeof savePinnedRegistry === 'function') {
-          savePinnedRegistry(snap.pins);
-        }
+        const plain = await VaultCrypto.decryptStrict(snap.encrypted, activeSessionKey);
+        const data = JSON.parse(plain || '{}');
+        if (!Array.isArray(data.items) || data.items.length === 0) return false;
+        window.vaultItems = data.items;
+        if (typeof window.setVaultItems === 'function') window.setVaultItems(data.items);
+        if (data.pins && typeof savePinnedRegistry === 'function') savePinnedRegistry(data.pins);
+        await persistEncryptedVaultCache();
         if (typeof renderVault === 'function') renderVault();
         if (typeof renderMetrics === 'function') renderMetrics();
         fullPushRequired = true;
         pushToCloud(true);
         return true;
       } catch(e) {
-        alert('Restore error: ' + e.message);
+        if (typeof showToast === 'function') showToast('Snapshot decrypt failed: ' + e.message, '❌');
         return false;
       }
     };
 
-    // 4. PULL FROM CLOUD (PULL-FIRST RULE, TOMBSTONE-AWARE, DELTA-CHECKED)
+    // ==========================================================================
+    // 4. PULL FROM CLOUD (AUTHORIZED, ZERO-KNOWLEDGE V4)
+    // ==========================================================================
     async function pullFromCloud(isInitial = false, showFeedback = false) {
+      if (!activeSessionKey) return false;
       if (isSyncing || isPushing) return false;
       if (!isInitial && !showFeedback && (pushTimer !== null || dirtyRecordIds.size > 0 || dirtyDeleteIds.size > 0)) {
         return false;
@@ -10586,19 +11596,18 @@
       updateSyncHealthUI();
 
       try {
-        const key = await getCryptoKey();
+        const key = activeSessionKey;
+        const authHeaders = await getAuthHeaders();
         const localTombstones = typeof getVaultTombstones === 'function' ? getVaultTombstones() : {};
 
-        // 1. Lightweight master_channel metadata check first (1 read!)
-        let masterDoc = null;
         let masterTs = 0;
         let masterCredsBackup = null;
         let masterPinnedIds = null;
 
         try {
-          const masterRes = await fetch(MASTER_DOC_URL, { cache: 'no-store' });
+          const masterRes = await fetch(MASTER_DOC_URL, { cache: 'no-store', headers: authHeaders });
           if (masterRes.ok) {
-            masterDoc = await masterRes.json();
+            const masterDoc = await masterRes.json();
             const mf = masterDoc.fields || {};
             masterTs = mf.ts ? parseInt(mf.ts.integerValue || '0', 10) : 0;
 
@@ -10618,7 +11627,7 @@
             }
             if (mf.encryptedBackup && mf.encryptedBackup.stringValue) {
               try {
-                const decStr = await VaultCrypto.decrypt(JSON.parse(mf.encryptedBackup.stringValue), key);
+                const decStr = await VaultCrypto.decryptStrict(JSON.parse(mf.encryptedBackup.stringValue), key);
                 if (decStr) {
                   const pkt = JSON.parse(decStr);
                   if (pkt && pkt.data) {
@@ -10633,18 +11642,10 @@
                   }
                 }
               } catch(e) {}
-            } else if (mf.payload && mf.payload.stringValue) {
-              try {
-                const pkt = JSON.parse(mf.payload.stringValue);
-                if (pkt && pkt.data && pkt.data['orlandovault_credentials_v6']) {
-                  masterCredsBackup = JSON.parse(pkt.data['orlandovault_credentials_v6']);
-                }
-              } catch(e) {}
             }
           }
         } catch(e) {}
 
-        // On background heartbeat, skip fetching all 199 docs if cloud timestamp unchanged & counts match
         const curLocal = (typeof window.getVaultItems === 'function' ? window.getVaultItems() : window.vaultItems) || [];
         if (!isInitial && !showFeedback && hasCompletedInitialPull && masterTs > 0 && masterTs === lastSeenRemoteTs && curLocal.length === syncHealthState.cloudCount && dirtyDeleteIds.size === 0) {
           syncHealthState.lastPull = Date.now();
@@ -10653,89 +11654,13 @@
           return true;
         }
 
-        // 2. Fetch collection records (with full nextPageToken pagination)
+        const rawDocs = await fetchAllRemoteRawDocs(authHeaders);
         let fetchedItems = [];
-        let pageToken = '';
-        let colFetchOk = true;
-        const rawDocs = [];
-
-        do {
-          const url = RECORDS_COLLECTION_URL + (pageToken ? ('&pageToken=' + encodeURIComponent(pageToken)) : '');
-          const colRes = await fetch(url, { cache: 'no-store' });
-          if (!colRes.ok) {
-            colFetchOk = false;
-            break;
-          }
-          const colData = await colRes.json();
-          if (Array.isArray(colData.documents)) {
-            rawDocs.push(...colData.documents);
-          }
-          pageToken = colData.nextPageToken || '';
-        } while (pageToken);
-
-        if (colFetchOk && rawDocs.length > 0) {
-          for (let i = 0; i < rawDocs.length; i++) {
-            const f = rawDocs[i].fields;
-            if (!f || !f.id) continue;
-            const id = f.id.stringValue;
-            const isDel = f.deleted ? f.deleted.booleanValue : false;
-            const upTime = f.updatedAt ? parseInt(f.updatedAt.integerValue || '0', 10) : 0;
-
-            if (isDel) {
-              localTombstones[id] = Math.max(localTombstones[id] || 0, upTime || Date.now());
-              if (typeof saveVaultTombstones === 'function') saveVaultTombstones(localTombstones);
-              continue;
-            }
-            if (localTombstones[id] && upTime <= localTombstones[id]) {
-              continue;
-            }
-
-            let plainPass = '';
-            let plainOldPass = '';
-            let plainMetadata = '';
-            let plainNotes = '';
-
-            if (f.encryptedPassword && f.encryptedPassword.stringValue) {
-              try { plainPass = await VaultCrypto.decrypt(JSON.parse(f.encryptedPassword.stringValue), key); } catch(e){}
-            }
-            if (f.encryptedOldPassword && f.encryptedOldPassword.stringValue) {
-              try { plainOldPass = await VaultCrypto.decrypt(JSON.parse(f.encryptedOldPassword.stringValue), key); } catch(e){}
-            }
-            if (f.encryptedMetadata && f.encryptedMetadata.stringValue) {
-              try { plainMetadata = await VaultCrypto.decrypt(JSON.parse(f.encryptedMetadata.stringValue), key); } catch(e){}
-            }
-            if (f.encryptedNotes && f.encryptedNotes.stringValue) {
-              try { plainNotes = await VaultCrypto.decrypt(JSON.parse(f.encryptedNotes.stringValue), key); } catch(e){}
-            }
-
-            fetchedItems.push({
-              id: id,
-              title: f.title ? f.title.stringValue : '',
-              username: f.username ? f.username.stringValue : '',
-              category: f.category ? f.category.stringValue : 'Portals',
-              badge: f.badge ? f.badge.stringValue : '',
-              importance: f.importance ? f.importance.stringValue : 'Normal',
-              status: f.status ? f.status.stringValue : 'Secured',
-              isPriority: f.isPriority ? f.isPriority.booleanValue : false,
-              pinned: f.pinned ? f.pinned.booleanValue : false,
-              pinned_at: f.pinned_at ? parseInt(f.pinned_at.integerValue || '0', 10) : 0,
-              lastUsedAt: f.lastUsedAt ? parseInt(f.lastUsedAt.integerValue || '0', 10) : 0,
-              usageScore: f.usageScore ? parseInt(f.usageScore.integerValue || '0', 10) : 0,
-              copyPasswordCount: f.copyPasswordCount ? parseInt(f.copyPasswordCount.integerValue || '0', 10) : 0,
-              copyUsernameCount: f.copyUsernameCount ? parseInt(f.copyUsernameCount.integerValue || '0', 10) : 0,
-              viewPasswordCount: f.viewPasswordCount ? parseInt(f.viewPasswordCount.integerValue || '0', 10) : 0,
-              updatedAt: upTime,
-              updatedBy: f.updatedBy ? f.updatedBy.stringValue : '',
-              password: plainPass,
-              old_password: plainOldPass,
-              metadata: plainMetadata,
-              notes: plainNotes
-            });
-          }
+        if (rawDocs.length > 0) {
+          fetchedItems = await decryptItemListFromRawDocs(rawDocs, key, localTombstones);
           syncHealthState.cloudCount = fetchedItems.length;
         }
 
-        // Fallback to encryptedBackup if collection query returned 0
         if (fetchedItems.length === 0 && Array.isArray(masterCredsBackup) && masterCredsBackup.length > 0) {
           fetchedItems = masterCredsBackup.filter(it => {
             if (!it || !it.id) return false;
@@ -10745,9 +11670,7 @@
           syncHealthState.cloudCount = fetchedItems.length;
         }
 
-        // SAFEGUARD: Do not allow empty cloud state to overwrite non-empty local records
         if (fetchedItems.length === 0 && Array.isArray(curLocal) && curLocal.length > 0) {
-          console.warn('[SafeSync] Cloud returned 0 items; retaining local records.');
           hasCompletedInitialPull = true;
           syncHealthState.status = 'synced';
           updateSyncHealthUI();
@@ -10783,30 +11706,21 @@
               }
             });
 
-            // Include locally created records not yet in remote, unless tombstoned
             localMap.forEach(val => {
-              if (!localTombstones[val.id]) {
-                merged.push(val);
-              }
+              if (!localTombstones[val.id]) merged.push(val);
             });
 
-            if (typeof window.setVaultItems === 'function') {
-              window.setVaultItems(merged);
-            }
+            if (typeof window.setVaultItems === 'function') window.setVaultItems(merged);
             window.vaultItems = merged;
-            localStorage.setItem('orlandovault_credentials_v6', JSON.stringify(merged));
 
-            // Synchronize pinned registry from merged set (respecting masterPinnedIds if local was empty)
             let effectivePinned = merged.filter(x => x.pinned || x.isPriority).map(x => x.id);
             if (effectivePinned.length === 0 && Array.isArray(masterPinnedIds) && masterPinnedIds.length > 0) {
               effectivePinned = masterPinnedIds.filter(pid => !localTombstones[pid]);
             }
-            if (typeof savePinnedRegistry === 'function') {
-              savePinnedRegistry(effectivePinned);
-            }
-            if (typeof window.reapplyPriorityPins === 'function') {
-              window.reapplyPriorityPins(merged);
-            }
+            if (typeof savePinnedRegistry === 'function') savePinnedRegistry(effectivePinned);
+            if (typeof window.reapplyPriorityPins === 'function') window.reapplyPriorityPins(merged);
+
+            await persistEncryptedVaultCache();
 
             const newFp = buildVaultFingerprint(merged, effectivePinned);
             if ((newFp !== lastRenderFingerprint || isInitial) && !isUserTypingOrEditingModalOpen()) {
@@ -10828,11 +11742,9 @@
         syncHealthState.status = 'synced';
         updateSyncHealthUI();
 
-        // Flush pending local pushes/deletes if any queued
         if (dirtyRecordIds.size > 0 || dirtyDeleteIds.size > 0 || fullPushRequired) {
           flushMutationOutbox();
         }
-
         if (showFeedback && typeof showToast === 'function') {
           showToast('📲 Synchronized latest Vault credentials from Google Cloud!', '☁️');
         }
@@ -10852,15 +11764,13 @@
       if (!id) return;
       dirtyRecordIds.delete(id);
       dirtyDeleteIds.add(id);
-      if (typeof window.triggerVaultCloudPush === 'function') {
-        window.triggerVaultCloudPush();
-      }
+      if (typeof window.triggerVaultCloudPush === 'function') window.triggerVaultCloudPush();
     };
 
-    // 6. PUSH TO CLOUD (DELTA-OPTIMIZED & SAFEGUARDED)
+    // 6. PUSH TO CLOUD (ZERO-KNOWLEDGE V4 CIPHERTEXT + CANARY)
     async function pushToCloud(showFeedback = false) {
+      if (!activeSessionKey || !activeVaultMeta) return false;
       if (!hasCompletedInitialPull) {
-        // Attempt initial pull automatically before pushing
         const ok = await pullFromCloud(true, false);
         if (!ok && !hasCompletedInitialPull) return false;
       }
@@ -10870,26 +11780,19 @@
       const tombstones = typeof getVaultTombstones === 'function' ? getVaultTombstones() : {};
       const tombstoneCount = Object.keys(tombstones).length;
 
-      // CRITICAL SAFEGUARD: Block empty push or massive unconfirmed destructive drop (>20% drop without tombstones)
-      if (syncHealthState.cloudCount > 5 && items.length === 0) {
-        console.error('[SafeSync Safety Block] Blocked empty local state from overwriting cloud.');
-        return false;
-      }
-      if (syncHealthState.cloudCount > 10 && (items.length + tombstoneCount) < (syncHealthState.cloudCount * 0.8)) {
-        console.error('[SafeSync Safety Block] Push would reduce record count unexpectedly. Aborted.');
-        return false;
-      }
+      if (syncHealthState.cloudCount > 5 && items.length === 0) return false;
+      if (syncHealthState.cloudCount > 10 && (items.length + tombstoneCount) < (syncHealthState.cloudCount * 0.8)) return false;
 
       isPushing = true;
       syncHealthState.status = 'syncing';
       updateSyncHealthUI();
 
       try {
-        const key = await getCryptoKey();
+        const key = activeSessionKey;
+        const authHeaders = await getAuthHeaders();
         const now = Date.now();
         const writes = [];
 
-        // Only push dirty items unless fullPushRequired is set
         const targetItems = fullPushRequired
           ? items
           : items.filter(it => dirtyRecordIds.has(it.id));
@@ -10901,61 +11804,56 @@
           const encMeta = await VaultCrypto.encrypt(item.metadata || '', key);
           const encNotes = await VaultCrypto.encrypt(item.notes || '', key);
 
-          const fields = {
-            id: { stringValue: item.id },
-            title: { stringValue: item.title || '' },
-            username: { stringValue: item.username || '' },
-            category: { stringValue: item.category || 'Portals' },
-            badge: { stringValue: item.badge || '' },
-            importance: { stringValue: item.importance || 'Normal' },
-            status: { stringValue: item.status || 'Secured' },
-            isPriority: { booleanValue: !!(item.pinned || item.isPriority) },
-            pinned: { booleanValue: !!(item.pinned || item.isPriority) },
-            pinned_at: { integerValue: String(item.pinned_at || 0) },
-            lastUsedAt: { integerValue: String(item.lastUsedAt || 0) },
-            usageScore: { integerValue: String(Math.round(item.usageScore || 0)) },
-            copyPasswordCount: { integerValue: String(item.copyPasswordCount || 0) },
-            copyUsernameCount: { integerValue: String(item.copyUsernameCount || 0) },
-            viewPasswordCount: { integerValue: String(item.viewPasswordCount || 0) },
-            updatedAt: { integerValue: String(item.updatedAt || now) },
-            updatedBy: { stringValue: CLIENT_ID },
-            deleted: { booleanValue: false },
-            encryptedPassword: { stringValue: JSON.stringify(encPass) },
-            encryptedOldPassword: { stringValue: JSON.stringify(encOldPass) },
-            encryptedMetadata: { stringValue: JSON.stringify(encMeta) },
-            encryptedNotes: { stringValue: JSON.stringify(encNotes) }
-          };
-
           writes.push({
             update: {
               name: 'projects/' + FIREBASE_CONFIG.projectId + '/databases/(default)/documents/orlandovault_records/' + item.id,
-              fields: fields
+              fields: {
+                id: { stringValue: item.id },
+                title: { stringValue: item.title || '' },
+                username: { stringValue: item.username || '' },
+                category: { stringValue: item.category || 'Portals' },
+                badge: { stringValue: item.badge || '' },
+                importance: { stringValue: item.importance || 'Normal' },
+                status: { stringValue: item.status || 'Secured' },
+                isPriority: { booleanValue: !!(item.pinned || item.isPriority) },
+                pinned: { booleanValue: !!(item.pinned || item.isPriority) },
+                pinned_at: { integerValue: String(item.pinned_at || 0) },
+                lastUsedAt: { integerValue: String(item.lastUsedAt || 0) },
+                usageScore: { integerValue: String(Math.round(item.usageScore || 0)) },
+                copyPasswordCount: { integerValue: String(item.copyPasswordCount || 0) },
+                copyUsernameCount: { integerValue: String(item.copyUsernameCount || 0) },
+                viewPasswordCount: { integerValue: String(item.viewPasswordCount || 0) },
+                updatedAt: { integerValue: String(item.updatedAt || now) },
+                updatedBy: { stringValue: CLIENT_ID },
+                deleted: { booleanValue: false },
+                encryptedPassword: { stringValue: JSON.stringify(encPass) },
+                encryptedOldPassword: { stringValue: JSON.stringify(encOldPass) },
+                encryptedMetadata: { stringValue: JSON.stringify(encMeta) },
+                encryptedNotes: { stringValue: JSON.stringify(encNotes) }
+              }
             }
           });
         }
 
-        // Delete any deleted/tombstoned documents from collection
         dirtyDeleteIds.forEach(delId => {
           writes.push({
             delete: 'projects/' + FIREBASE_CONFIG.projectId + '/databases/(default)/documents/orlandovault_records/' + delId
           });
         });
 
-        // Commit batch writes in chunks of 100
         for (let b = 0; b < writes.length; b += 100) {
           const chunk = writes.slice(b, b + 100);
           const cRes = await fetch(COMMIT_URL, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: Object.assign({ 'Content-Type': 'application/json' }, authHeaders),
             body: JSON.stringify({ writes: chunk })
           });
           if (!cRes.ok) throw new Error('Firestore commit HTTP ' + cRes.status);
         }
 
-        // Update zero-knowledge encrypted master_channel v3 backup (zero plaintext!)
         const pinnedIds = items.filter(x => x.pinned || x.isPriority).map(x => x.id);
         const pkt = {
-          v: 3,
+          v: 4,
           cid: CLIENT_ID,
           ts: now,
           data: {
@@ -10970,10 +11868,13 @@
 
         const mPatchRes = await fetch(MASTER_DOC_URL, {
           method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
+          headers: Object.assign({ 'Content-Type': 'application/json' }, authHeaders),
           body: JSON.stringify({
             fields: {
-              v: { integerValue: "3" },
+              v: { integerValue: "4" },
+              kdfIterations: { integerValue: String(activeVaultMeta.kdfIterations || KDF_ITERATIONS_V4) },
+              saltHex: { stringValue: activeVaultMeta.saltHex },
+              keyCanary: { stringValue: JSON.stringify(activeVaultMeta.keyCanary) },
               ts: { integerValue: String(now) },
               cid: { stringValue: CLIENT_ID },
               recordCount: { integerValue: String(items.length) },
@@ -10985,19 +11886,19 @@
         });
         if (!mPatchRes.ok) throw new Error('Master PATCH HTTP ' + mPatchRes.status);
 
-        // Clear dirty queues & outbox journal
         dirtyRecordIds.clear();
         dirtyDeleteIds.clear();
         fullPushRequired = false;
         lastSeenRemoteTs = now;
         localStorage.setItem(LS_MUTATION_JOURNAL, '[]');
+        await persistEncryptedVaultCache();
         syncHealthState.lastPush = now;
         syncHealthState.cloudCount = items.length;
         syncHealthState.status = 'synced';
         updateSyncHealthUI();
 
         if (showFeedback && typeof showToast === 'function') {
-          showToast('⚡ Synced ' + items.length + ' credentials to Google Cloud Firebase!', '☁️');
+          showToast('⚡ Encrypted & synced ' + items.length + ' credentials to Firebase v4!', '☁️');
         }
         return true;
       } catch(e) {
@@ -11011,6 +11912,7 @@
     }
     window.pushVaultToCloud = pushToCloud;
     window.triggerVaultCloudPush = function() {
+      if (!activeSessionKey) return;
       if (pushTimer) clearTimeout(pushTimer);
       pushTimer = setTimeout(() => {
         pushTimer = null;
@@ -11019,15 +11921,94 @@
     };
 
     async function flushMutationOutbox() {
-      if (dirtyRecordIds.size > 0 || dirtyDeleteIds.size > 0 || fullPushRequired) {
+      if (activeSessionKey && (dirtyRecordIds.size > 0 || dirtyDeleteIds.size > 0 || fullPushRequired)) {
         await pushToCloud(false);
       }
     }
 
-    // 7. INITIALIZE ENGINE & EVENT LISTENERS
-    function initSafeSyncEngine() {
-      console.log('⚡ [OrlandoVault] Safe Sync V3 & Zero-Knowledge Storage Shield Initialized');
+    // 7. WIRE AUTH GATE, AUTO-LOCK, PRIVACY CURTAIN & MODALS
+    async function inspectCloudVersionForSignedInUser() {
+      isFirstTimeMigration = false;
+      activeVaultMeta = null;
+      const env = readLocalEncryptedCacheEnvelope();
+      const authHeaders = await getAuthHeaders();
 
+      try {
+        const masterRes = await fetch(MASTER_DOC_URL, { cache: 'no-store', headers: authHeaders });
+        if (masterRes.ok) {
+          const masterDoc = await masterRes.json();
+          const mf = masterDoc.fields || {};
+          const v = mf.v ? parseInt(mf.v.integerValue || '0', 10) : 0;
+          if (v >= 4 && mf.saltHex && mf.saltHex.stringValue && mf.keyCanary && mf.keyCanary.stringValue) {
+            activeVaultMeta = {
+              v: v,
+              saltHex: mf.saltHex.stringValue,
+              kdfIterations: mf.kdfIterations ? parseInt(mf.kdfIterations.integerValue || String(KDF_ITERATIONS_V4), 10) : KDF_ITERATIONS_V4,
+              keyCanary: JSON.parse(mf.keyCanary.stringValue)
+            };
+          } else {
+            isFirstTimeMigration = true;
+          }
+        } else if (env && env.saltHex && env.keyCanary) {
+          activeVaultMeta = { v: 4, saltHex: env.saltHex, kdfIterations: env.kdfIterations || KDF_ITERATIONS_V4, keyCanary: env.keyCanary };
+        }
+      } catch(e) {
+        if (env && env.saltHex && env.keyCanary) {
+          activeVaultMeta = { v: 4, saltHex: env.saltHex, kdfIterations: env.kdfIterations || KDF_ITERATIONS_V4, keyCanary: env.keyCanary };
+        }
+      }
+
+      const modeBadge = document.getElementById('vaultGateModeBadge');
+      const gateTitle = document.getElementById('vaultGateTitle');
+      const migNotice = document.getElementById('lockMigrationNotice');
+      const confirmGroup = document.getElementById('vaultMasterConfirmGroup');
+      const strengthBox = document.getElementById('vaultMasterStrengthBox');
+      const submitBtn = document.getElementById('btnVaultUnlockSubmit');
+      const pwdLabel = document.getElementById('vaultMasterPwdLabel');
+
+      if (isFirstTimeMigration) {
+        if (modeBadge) modeBadge.textContent = '🛡️ FIRST-TIME V4 SECURITY UPGRADE';
+        if (gateTitle) gateTitle.textContent = 'Create Your Master Password';
+        if (pwdLabel) pwdLabel.textContent = 'New Master Password (min 10 chars)';
+        if (migNotice) migNotice.style.display = 'block';
+        if (confirmGroup) confirmGroup.style.display = 'block';
+        if (strengthBox) strengthBox.style.display = 'block';
+        if (submitBtn) submitBtn.textContent = '🔒 Upgrade & Re-Encrypt Vault (v4)';
+      } else {
+        if (modeBadge) modeBadge.textContent = '🔐 ZERO-KNOWLEDGE VAULT · LOCKED';
+        if (gateTitle) gateTitle.textContent = 'Unlock OrlandoVault';
+        if (pwdLabel) pwdLabel.textContent = 'Master Password';
+        if (migNotice) migNotice.style.display = 'none';
+        if (confirmGroup) confirmGroup.style.display = 'none';
+        if (strengthBox) strengthBox.style.display = 'none';
+        if (submitBtn) submitBtn.textContent = '🔓 Unlock Vault';
+      }
+      refreshBioButtonVisibility();
+    }
+
+    function initSafeSyncEngine() {
+      syncPrivacyMaskUI();
+      updateSyncHealthUI();
+
+      // Auto-lock & Privacy Mask topbar bindings
+      const btnMask = document.getElementById('btnTopbarPrivacyMask');
+      if (btnMask) btnMask.onclick = togglePrivacyMask;
+
+      const btnLock = document.getElementById('btnTopbarLockVault');
+      if (btnLock) btnLock.onclick = () => { lockVault('Vault locked manually.'); };
+
+      // Auto-lock selector in Sync Health modal
+      const selAuto = document.getElementById('selectAutoLockMinutes');
+      if (selAuto) {
+        selAuto.value = localStorage.getItem(LS_AUTOLOCK_MIN) || '5';
+        selAuto.onchange = () => {
+          localStorage.setItem(LS_AUTOLOCK_MIN, selAuto.value);
+          recordUserActivity();
+          if (typeof showToast === 'function') showToast('⏱️ Auto-lock timer set to ' + selAuto.value + ' minutes.', '🛡️');
+        };
+      }
+
+      // Sync Health modal open/close & security controls
       const btnSyncHealth = document.getElementById('btnTopbarSyncHealth');
       const syncModal = document.getElementById('syncHealthModal');
       const closeSyncModal = document.getElementById('closeSyncHealthModal');
@@ -11039,57 +12020,328 @@
         btnSyncHealth.onclick = () => {
           syncModal.style.display = 'flex';
           updateSyncHealthUI();
+          refreshBioButtonVisibility();
         };
       }
-      if (closeSyncModal && syncModal) {
-        closeSyncModal.onclick = () => { syncModal.style.display = 'none'; };
-      }
+      if (closeSyncModal && syncModal) closeSyncModal.onclick = () => { syncModal.style.display = 'none'; };
       if (syncModal) {
         syncModal.addEventListener('click', (e) => {
           if (e.target === syncModal) syncModal.style.display = 'none';
         });
       }
-      if (btnForceResync) {
-        btnForceResync.onclick = () => { pullFromCloud(true, true); };
-      }
-      if (btnCreateSnap) {
-        btnCreateSnap.onclick = () => {
-          createSnapshot('manual');
-          updateSyncHealthUI();
+      if (btnForceResync) btnForceResync.onclick = () => { pullFromCloud(true, true); };
+      if (btnCreateSnap) btnCreateSnap.onclick = async () => { await createSnapshot('manual'); updateSyncHealthUI(); };
+      if (btnRestSnap) btnRestSnap.onclick = () => { window.restoreVaultSnapshot(); };
+
+      const btnSignOut = document.getElementById('btnVaultSignOut');
+      if (btnSignOut) {
+        btnSignOut.onclick = async () => {
+          lockVault('Signed out.');
+          if (firebaseAuth) { try { await firebaseAuth.signOut(); } catch(e) {} }
         };
       }
-      if (btnRestSnap) {
-        btnRestSnap.onclick = () => { window.restoreVaultSnapshot(); };
+
+      const btnSwitchGoogle = document.getElementById('btnLockSwitchGoogle');
+      if (btnSwitchGoogle) {
+        btnSwitchGoogle.onclick = async () => {
+          lockVault('');
+          if (firebaseAuth) { try { await firebaseAuth.signOut(); } catch(e) {} }
+        };
       }
 
-      // Initial pull on startup
-      pullFromCloud(true, false);
+      const btnBioSetup = document.getElementById('btnSetupBiometricUnlock');
+      if (btnBioSetup) {
+        btnBioSetup.onclick = async () => {
+          if (localStorage.getItem(LS_BIO_WRAP)) {
+            localStorage.removeItem(LS_BIO_WRAP);
+            refreshBioButtonVisibility();
+            if (typeof showToast === 'function') showToast('Biometric Quick-Unlock disabled on this device.', '🔒');
+            return;
+          }
+          const panel = btnBioSetup.closest('.sync-security-panel');
+          if (!panel) return;
+          let promptRow = document.getElementById('bioVerifyPwdRow');
+          if (!promptRow) {
+            promptRow = document.createElement('div');
+            promptRow.id = 'bioVerifyPwdRow';
+            promptRow.style.cssText = 'display:flex;gap:6px;padding-top:6px;';
+            promptRow.innerHTML = '<input type="password" id="bioSetupPwdInput" class="vault-gate-input" placeholder="Enter Master Password to bind Passkey..." style="padding:7px 10px;font-size:12px;"><button type="button" id="btnConfirmBioBind" class="btn-sync-action primary" style="white-space:nowrap;">Enroll Passkey</button>';
+            panel.appendChild(promptRow);
+            document.getElementById('btnConfirmBioBind').onclick = async () => {
+              const pwd = document.getElementById('bioSetupPwdInput').value;
+              try {
+                await setupBiometricUnlock(pwd);
+                promptRow.remove();
+                if (typeof showToast === 'function') showToast('✅ Biometric / Passkey Quick-Unlock enabled!', '🧬');
+              } catch(err) {
+                if (typeof showToast === 'function') showToast('Passkey setup failed: ' + err.message, '❌');
+              }
+            };
+          }
+        };
+      }
 
-      // Event listeners for seamless multi-device sync
-      window.addEventListener('focus', () => { pullFromCloud(false, false); });
-      document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'visible') pullFromCloud(false, false);
+      const btnToggleChangePwd = document.getElementById('btnOpenChangeMasterPwd');
+      const changePwdSec = document.getElementById('changeMasterPwdSection');
+      if (btnToggleChangePwd && changePwdSec) {
+        btnToggleChangePwd.onclick = () => {
+          changePwdSec.style.display = changePwdSec.style.display === 'none' ? 'flex' : 'none';
+        };
+      }
+      const btnConfirmPwdChange = document.getElementById('btnConfirmChangeMasterPwd');
+      if (btnConfirmPwdChange) {
+        btnConfirmPwdChange.onclick = async () => {
+          const oldP = (document.getElementById('inputOldMasterPwd') || {}).value || '';
+          const newP = (document.getElementById('inputNewMasterPwd') || {}).value || '';
+          const confP = (document.getElementById('inputConfirmNewMasterPwd') || {}).value || '';
+          if (newP !== confP) {
+            if (typeof showToast === 'function') showToast('New Master Passwords do not match.', '❌');
+            return;
+          }
+          try {
+            btnConfirmPwdChange.disabled = true;
+            await changeMasterPassword(oldP, newP);
+            document.getElementById('inputOldMasterPwd').value = '';
+            document.getElementById('inputNewMasterPwd').value = '';
+            document.getElementById('inputConfirmNewMasterPwd').value = '';
+            if (changePwdSec) changePwdSec.style.display = 'none';
+          } catch(err) {
+            if (typeof showToast === 'function') showToast('❌ ' + err.message, '⚠️');
+          } finally {
+            btnConfirmPwdChange.disabled = false;
+          }
+        };
+      }
+
+      // Google Sign-In Button
+      const btnGoogle = document.getElementById('btnVaultGoogleSignIn');
+      const setupHint = document.getElementById('lockGoogleSetupHint');
+      if (btnGoogle) {
+        btnGoogle.onclick = async () => {
+          setLockError('');
+          if (setupHint) setupHint.style.display = 'none';
+          if (!firebaseAuth || typeof firebase === 'undefined' || !firebase.auth) {
+            setLockError('Firebase Auth SDK failed to load. Check network connection.');
+            return;
+          }
+          const provider = new firebase.auth.GoogleAuthProvider();
+          provider.setCustomParameters({ prompt: 'select_account' });
+          isAuthPopupOpen = true;
+          try {
+            await firebaseAuth.signInWithPopup(provider);
+          } catch(err) {
+            if (err && (err.code === 'auth/popup-blocked' || err.code === 'auth/operation-not-supported-in-this-environment')) {
+              try {
+                await firebaseAuth.signInWithRedirect(provider);
+                return;
+              } catch(redErr) {
+                err = redErr;
+              }
+            }
+            const code = (err && err.code) || '';
+            if (code.includes('configuration-not-found') || code.includes('operation-not-allowed') || code.includes('unauthorized-domain')) {
+              if (setupHint) setupHint.style.display = 'block';
+            }
+            setLockError((err && err.message) || 'Google Sign-In failed.');
+          } finally {
+            isAuthPopupOpen = false;
+          }
+        };
+      }
+
+      // Password Strength Meter & Eye Toggle on Lock Gate
+      const masterIn = document.getElementById('vaultMasterPwdInput');
+      if (masterIn) {
+        masterIn.addEventListener('input', () => {
+          if (!isFirstTimeMigration) return;
+          const st = computePasswordStrength(masterIn.value);
+          const fill = document.getElementById('vaultMasterStrengthFill');
+          const lbl = document.getElementById('vaultMasterStrengthText');
+          if (fill) { fill.style.width = st.pct + '%'; fill.style.background = st.color; }
+          if (lbl) lbl.textContent = st.text;
+        });
+      }
+
+      const btnEyeLock = document.getElementById('btnToggleLockPwdEye');
+      if (btnEyeLock && masterIn) {
+        btnEyeLock.onclick = () => {
+          masterIn.type = masterIn.type === 'password' ? 'text' : 'password';
+        };
+      }
+
+      // Unlock / Migrate Form Submission
+      const unlockForm = document.getElementById('vaultUnlockForm');
+      if (unlockForm) {
+        unlockForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          setLockError('');
+          const pwd = (document.getElementById('vaultMasterPwdInput') || {}).value || '';
+          const conf = (document.getElementById('vaultMasterPwdConfirm') || {}).value || '';
+          const submitBtn = document.getElementById('btnVaultUnlockSubmit');
+
+          if (isFirstTimeMigration) {
+            if (pwd.length < 10) {
+              setLockError('Master Password must be at least 10 characters for strong Zero-Knowledge protection.');
+              return;
+            }
+            if (pwd !== conf) {
+              setLockError('Master Passwords do not match.');
+              return;
+            }
+          }
+
+          if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = '⏳ Deriving AES-256-GCM Key (600k PBKDF2)...';
+          }
+          try {
+            await unlockVaultWithPassword(pwd);
+          } catch(err) {
+            setLockError(err.message || 'Unlock failed.');
+          } finally {
+            if (submitBtn) {
+              submitBtn.disabled = false;
+              submitBtn.textContent = isFirstTimeMigration ? '🔒 Upgrade & Re-Encrypt Vault (v4)' : '🔓 Unlock Vault';
+            }
+          }
+        });
+      }
+
+      const bioUnlockBtn = document.getElementById('btnVaultBioUnlock');
+      if (bioUnlockBtn) {
+        bioUnlockBtn.onclick = async () => {
+          setLockError('');
+          try {
+            bioUnlockBtn.disabled = true;
+            await unlockWithBiometrics();
+          } catch(err) {
+            setLockError('Biometric unlock failed: ' + err.message);
+          } finally {
+            bioUnlockBtn.disabled = false;
+          }
+        };
+      }
+
+      // Firebase Auth State Listener
+      if (firebaseAuth) {
+        firebaseAuth.onAuthStateChanged(async (user) => {
+          const stGoogle = document.getElementById('lockStageGoogle');
+          const stUnlock = document.getElementById('lockStageUnlock');
+          const emailPill = document.getElementById('lockSignedInEmail');
+          const modalEmail = document.getElementById('syncAuthEmailLabel');
+
+          if (!user) {
+            if (stGoogle) stGoogle.style.display = 'block';
+            if (stUnlock) stUnlock.style.display = 'none';
+            if (modalEmail) modalEmail.textContent = 'Not Signed In';
+            if (activeSessionKey) lockVault('');
+            return;
+          }
+
+          const email = (user.email || '').toLowerCase();
+          if (!ALLOWED_VAULT_EMAILS.includes(email) || user.emailVerified === false) {
+            try { await firebaseAuth.signOut(); } catch(e) {}
+            if (stGoogle) stGoogle.style.display = 'block';
+            if (stUnlock) stUnlock.style.display = 'none';
+            setLockError('Access Denied: "' + (user.email || 'unknown') + '" is not an authorized owner of OrlandoVault.');
+            return;
+          }
+
+          setLockError('');
+          if (emailPill) emailPill.textContent = '✓ ' + user.email;
+          if (modalEmail) modalEmail.textContent = user.email;
+          if (stGoogle) stGoogle.style.display = 'none';
+          if (stUnlock) stUnlock.style.display = 'block';
+
+          if (!activeSessionKey) {
+            await inspectCloudVersionForSignedInUser();
+          }
+        });
+      }
+
+      // Activity & Auto-Lock / Instant Privacy Curtain
+      ['pointerdown', 'keydown', 'touchstart', 'scroll'].forEach(evt => {
+        window.addEventListener(evt, recordUserActivity, { passive: true });
       });
+
+      document.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'l') {
+          if (activeSessionKey) {
+            e.preventDefault();
+            lockVault('Locked via shortcut.');
+          }
+        }
+      });
+
+      const curtain = document.getElementById('vaultPrivacyCurtain');
+      if (curtain) {
+        curtain.addEventListener('click', () => {
+          if (!activeSessionKey) return;
+          if (Date.now() - lastActivityAt >= getAutoLockMs()) {
+            lockVault('Auto-locked after inactivity.');
+          } else {
+            curtain.classList.remove('active');
+            recordUserActivity();
+          }
+        });
+      }
+
+      window.addEventListener('blur', () => {
+        if (activeSessionKey && !isAuthPopupOpen && curtain) {
+          curtain.classList.add('active');
+        }
+      });
+
+      window.addEventListener('focus', () => {
+        if (!activeSessionKey) return;
+        if (Date.now() - lastActivityAt >= getAutoLockMs()) {
+          lockVault('Auto-locked after inactivity.');
+          return;
+        }
+        if (curtain) curtain.classList.remove('active');
+        pullFromCloud(false, false);
+      });
+
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'hidden') {
+          if (activeSessionKey && !isAuthPopupOpen && curtain) curtain.classList.add('active');
+        } else if (document.visibilityState === 'visible') {
+          if (!activeSessionKey) return;
+          if (Date.now() - lastActivityAt >= getAutoLockMs()) {
+            lockVault('Auto-locked after inactivity.');
+            return;
+          }
+          if (curtain) curtain.classList.remove('active');
+          pullFromCloud(false, false);
+        }
+      });
+
       window.addEventListener('online', () => {
-        pullFromCloud(false, false).then(() => flushMutationOutbox());
+        if (activeSessionKey) pullFromCloud(false, false).then(() => flushMutationOutbox());
       });
       window.addEventListener('offline', () => {
         syncHealthState.status = 'offline';
         updateSyncHealthUI();
       });
 
-      // Lightweight 8s heartbeat (checks 1 master_channel doc timestamp first)
+      // Idle Auto-Lock Check (5s) + Sync Heartbeat (8s)
       setInterval(() => {
-        if (document.visibilityState === 'visible') {
+        if (activeSessionKey && (Date.now() - lastActivityAt >= getAutoLockMs())) {
+          lockVault('Auto-locked after ' + Math.round(getAutoLockMs() / 60000) + ' minutes of inactivity.');
+        }
+      }, 5000);
+
+      setInterval(() => {
+        if (activeSessionKey && document.visibilityState === 'visible') {
           pullFromCloud(false, false);
         }
       }, 8000);
     }
 
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', () => setTimeout(initSafeSyncEngine, 200));
+      document.addEventListener('DOMContentLoaded', () => setTimeout(initSafeSyncEngine, 120));
     } else {
-      setTimeout(initSafeSyncEngine, 100);
+      setTimeout(initSafeSyncEngine, 60);
     }
   })();
   </script>
@@ -11313,6 +12565,34 @@
     let currentFocusItem = null;
     let focusPwdRevealed = false;
 
+    function resolveAccountPortalUrl(item) {
+      const combined = (item.metadata || '') + ' ' + (item.notes || '');
+      const m = combined.match(/https?:\/\/[^\s,;|\)]+/i);
+      if (m && m[0]) return m[0].replace(/[\.,;\)]+$/, '');
+      const t = (item.title || '').toLowerCase();
+      if (t.includes('gmail')) return 'https://mail.google.com/';
+      if (t.includes('facebook') || /\bmeta\b/.test(t)) return 'https://www.facebook.com/';
+      if (t.includes('netflix')) return 'https://www.netflix.com/login';
+      if (t.includes('disney')) return 'https://www.disneyplus.com/';
+      if (t.includes('youtube')) return 'https://www.youtube.com/';
+      if (t.includes('github')) return 'https://github.com/login';
+      if (t.includes('gitlab')) return 'https://gitlab.com/users/sign_in';
+      if (t.includes('claude')) return 'https://claude.ai/';
+      if (t.includes('chatgpt') || t.includes('openai')) return 'https://chatgpt.com/';
+      if (t.includes('gemini')) return 'https://gemini.google.com/';
+      if (t.includes('bpi')) return 'https://online.bpi.com.ph/';
+      if (t.includes('bdo')) return 'https://online.bdo.com.ph/';
+      if (t.includes('landbank')) return 'https://www.lbpiaccess.com/';
+      if (t.includes('unionbank')) return 'https://online.unionbankph.com/';
+      if (t.includes('deped') && /\blis\b/.test(t)) return 'https://lis.deped.gov.ph/';
+      if (t.includes('deped') && t.includes('microsoft')) return 'https://portal.office.com/';
+      if (/\bprc\b/.test(t)) return 'https://online.prc.gov.ph/';
+      if (t.includes('philhealth')) return 'https://memberinquiry.philhealth.gov.ph/';
+      if (t.includes('pag-ibig') || t.includes('pagibig')) return 'https://www.pagibigfundservices.com/virtualpagibig/';
+      if (/\bbir\b/.test(t) || /\btin\b/.test(t)) return 'https://orus.bir.gov.ph/';
+      return '';
+    }
+
     function openAccountFocusModal(itemId, isFromSpotlight = false) {
       const item = Array.isArray(vaultItems) ? vaultItems.find(x => x.id === itemId) : null;
       if (!item) return;
@@ -11364,6 +12644,7 @@
       const maskedPwd = '•'.repeat(Math.max(8, Math.min(safePwd.length, 16)));
       const isCritical = item.importance === 'Critical' || item.isCritical;
       const isPinned = item.isPriority || item.pinned;
+      const portalUrl = resolveAccountPortalUrl(item);
 
       content.innerHTML = `
         <div class="focus-hero-row">
@@ -11412,6 +12693,7 @@
               </button>
             </div>
           </div>
+          ${portalUrl ? `<button type="button" class="btn-focus-copy-launch" id="btnFocusCopyAndLaunch" data-portal-url="${escapeHtml(portalUrl)}" title="Copy password silently and open ${escapeHtml(portalUrl)}">⚡ Copy Password &amp; Open Portal ↗</button>` : ''}
         </div>
 
         ${(item.notes || item.metadata) ? `
@@ -11419,10 +12701,19 @@
             <div class="focus-deck-label">
               <span>Recovery Notes &amp; Metadata</span>
             </div>
-            ${typeof renderSmartMetadata === 'function' ? renderSmartMetadata(item.metadata, item.notes) : `<div class="focus-notes-text">${escapeHtml(item.notes || '')}</div>`}
+            ${typeof renderSmartMetadata === 'function' ? renderSmartMetadata(item.metadata, item.notes, { maskSensitive: false }) : `<div class="focus-notes-text">${escapeHtml(item.notes || '')}</div>`}
           </div>
         ` : ''}
       `;
+
+      // Wire up inline Copy Password & Open Portal button
+      const btnCopyLaunch = document.getElementById('btnFocusCopyAndLaunch');
+      if (btnCopyLaunch && portalUrl) {
+        btnCopyLaunch.onclick = () => {
+          if (typeof copyPasswordById === 'function') copyPasswordById(item.id, btnCopyLaunch, false);
+          try { window.open(portalUrl, '_blank', 'noopener,noreferrer'); } catch(e) {}
+        };
+      }
 
       // Wire up inline Copy Password button
       const btnCopyPwd = document.getElementById('btnFocusCopyPwdInline');
@@ -11888,11 +13179,11 @@
             badge: '↵ Copy Password',
             badgeAction: true,
             action: () => {
-              if (navigator.clipboard) {
-                navigator.clipboard.writeText(item.password).then(() => {
-                  if (typeof showToast === 'function') showToast(`🔐 Password copied for ${item.title}!`, '📋');
-                  if (typeof playJarvisSound === 'function') playJarvisSound('copy');
-                }).catch(() => {});
+              if (item.password) {
+                copyPasswordSilently(item.password);
+                if (typeof startClipboardAutoWipe === 'function') startClipboardAutoWipe(item.password);
+                if (typeof showToast === 'function') showToast(`🔐 Password copied for ${item.title}! Auto-wiping in 25s`, '📋');
+                if (typeof playJarvisSound === 'function') playJarvisSound('copy');
               }
             }
           });
@@ -11920,11 +13211,11 @@
               badge: '↵ Copy Password',
               badgeAction: true,
               action: () => {
-                if (navigator.clipboard) {
-                  navigator.clipboard.writeText(item.password).then(() => {
-                    if (typeof showToast === 'function') showToast(`🔐 Password copied for ${item.title}!`, '📋');
-                    if (typeof playJarvisSound === 'function') playJarvisSound('copy');
-                  }).catch(() => {});
+                if (item.password) {
+                  copyPasswordSilently(item.password);
+                  if (typeof startClipboardAutoWipe === 'function') startClipboardAutoWipe(item.password);
+                  if (typeof showToast === 'function') showToast(`🔐 Password copied for ${item.title}! Auto-wiping in 25s`, '📋');
+                  if (typeof playJarvisSound === 'function') playJarvisSound('copy');
                 }
               }
             });
