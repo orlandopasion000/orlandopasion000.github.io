@@ -13570,6 +13570,8 @@ try { checkUrlHashRoutine(); } catch(e){}
   var Core3DAssets = {
     coreSprites: { dynamo: {}, helix: {}, meteor: {} },
     wingRightSprites: { dynamo: {}, helix: {}, meteor: {} },
+    t6BodySprites: { dynamo: new Image(), helix: new Image(), meteor: new Image() },
+    t6GunsSprites: { dynamo: new Image(), helix: new Image(), meteor: new Image() },
     wingMapsCache: {},
     t6RigCache: {},
     bezelT5: { dynamo: new Image(), helix: new Image() },
@@ -13577,45 +13579,55 @@ try { checkUrlHashRoutine(); } catch(e){}
     loaded: {
       coreSprites: { dynamo: {}, helix: {}, meteor: {} },
       wingRightSprites: { dynamo: {}, helix: {}, meteor: {} },
+      t6BodySprites: { dynamo: false, helix: false, meteor: false },
+      t6GunsSprites: { dynamo: false, helix: false, meteor: false },
       bezelT5: { dynamo: false, helix: false },
       helixGlassShell: false
     }
   };
 
   Core3DAssets.helixGlassShell.onload = function() { Core3DAssets.loaded.helixGlassShell = true; };
-  Core3DAssets.helixGlassShell.src = "assets/core-helix-glass-shell.png";
+  Core3DAssets.helixGlassShell.src = "assets/core-helix-glass-shell.png?v=407";
   Core3DAssets.bezelT5.dynamo.onload = function() { Core3DAssets.loaded.bezelT5.dynamo = true; };
-  Core3DAssets.bezelT5.dynamo.src = "assets/core-dynamo-bezel-t5.png";
+  Core3DAssets.bezelT5.dynamo.src = "assets/core-dynamo-bezel-t5.png?v=407";
   Core3DAssets.bezelT5.helix.onload = function() { Core3DAssets.loaded.bezelT5.helix = true; };
-  Core3DAssets.bezelT5.helix.src = "assets/core-helix-bezel-t5.png";
+  Core3DAssets.bezelT5.helix.src = "assets/core-helix-bezel-t5.png?v=407";
 
   ["dynamo", "helix", "meteor"].forEach(function(m) {
+    var bImg = Core3DAssets.t6BodySprites[m];
+    bImg.onload = function() { Core3DAssets.loaded.t6BodySprites[m] = true; };
+    bImg.src = "assets/core-" + m + "-t6-body.png?v=407";
+
+    var gImg = Core3DAssets.t6GunsSprites[m];
+    gImg.onload = function() { Core3DAssets.loaded.t6GunsSprites[m] = true; };
+    gImg.src = "assets/core-" + m + "-t6-guns.png?v=407";
+
     for (var t = 1; t <= 6; t++) {
       (function(mode, tierIdx) {
         var cImg = new Image();
         Core3DAssets.coreSprites[mode][tierIdx] = cImg;
         Core3DAssets.loaded.coreSprites[mode][tierIdx] = false;
         cImg.onload = function() { Core3DAssets.loaded.coreSprites[mode][tierIdx] = true; };
-        cImg.src = "assets/core-" + mode + "-t" + tierIdx + ".png";
+        cImg.src = "assets/core-" + mode + "-t" + tierIdx + ".png?v=407";
         if (tierIdx >= 2 && tierIdx <= 5) {
           var wImg = new Image();
           Core3DAssets.wingRightSprites[mode][tierIdx] = wImg;
           Core3DAssets.loaded.wingRightSprites[mode][tierIdx] = false;
           wImg.onload = function() { Core3DAssets.loaded.wingRightSprites[mode][tierIdx] = true; };
-          wImg.src = "assets/core-" + mode + "-wing-r-t" + tierIdx + ".png";
+          wImg.src = "assets/core-" + mode + "-wing-r-t" + tierIdx + ".png?v=407";
         }
       })(m, t);
     }
   });
 
-  // Pre-processed defringed wing specular & AO maps (2.5px inward-eroded specular + dark metallic AO shadow)
+  // Pre-processed defringed wing specular & AO maps for 512x576 right-wing sprite (hingeXRef = 148, sphereCenter = (0, 288))
   function getWingProcessedMaps(mode, tierIdx) {
     var key = mode + "_" + tierIdx;
     if (Core3DAssets.wingMapsCache[key]) return Core3DAssets.wingMapsCache[key];
     var spr = Core3DAssets.wingRightSprites[mode] && Core3DAssets.wingRightSprites[mode][tierIdx];
     var isLoaded = Core3DAssets.loaded.wingRightSprites[mode] && Core3DAssets.loaded.wingRightSprites[mode][tierIdx];
     if (!spr || !isLoaded) return null;
-    var w = spr.naturalWidth || 1024;
+    var w = spr.naturalWidth || 512;
     var h = spr.naturalHeight || 576;
 
     var specC = document.createElement("canvas");
@@ -13624,7 +13636,7 @@ try { checkUrlHashRoutine(); } catch(e){}
     if (sCtx) {
       sCtx.drawImage(spr, 0, 0);
       sCtx.globalCompositeOperation = "destination-in";
-      var offs = [[-2.2, 0], [2.2, 0], [0, -2.2], [0, 2.2]];
+      var offs = [[-2.0, 0], [2.0, 0], [0, -2.0], [0, 2.0]];
       for (var i = 0; i < offs.length; i++) {
         sCtx.drawImage(spr, offs[i][0], offs[i][1]);
       }
@@ -13637,123 +13649,67 @@ try { checkUrlHashRoutine(); } catch(e){}
     if (aCtx) {
       aCtx.drawImage(spr, 0, 0);
       aCtx.globalCompositeOperation = "source-in";
-      aCtx.fillStyle = (mode === "meteor") ? "#160702" : (mode === "helix" ? "#030b1c" : "#070318");
+      aCtx.fillStyle = (mode === "meteor") ? "rgba(18, 7, 2, 0.72)" : (mode === "helix" ? "rgba(8, 12, 34, 0.70)" : "rgba(12, 8, 30, 0.72)");
       aCtx.fillRect(0, 0, w, h);
       aCtx.globalCompositeOperation = "source-over";
     }
 
-    var entry = { base: spr, spec: specC, ao: aoC };
+    var entry = { base: spr, spec: specC, ao: aoC, w: w, h: h };
     Core3DAssets.wingMapsCache[key] = entry;
     return entry;
   }
 
-  // Runtime Soft-Socketed 3D Anatomical Decomposition for Tier VI Characters
-  // Slices the 1024x682 Tier VI sprite into overlapping soft-edged anatomical sub-canvases:
-  // wingL, wingR, cannonL, cannonR, limbFL, limbFR, limbBL, limbBR, head, torso, tail
+  // Seamless 1:1 Partition Strip-Mesh 3D Tier VI Rig (Zero polygon cutout slicing across braids/claws!)
+  // Uses crisp t6-body.png + independent t6-guns.png layers calibrated to exact 1024x682 geometry.
+  var TIER6_STRIP_CONFIG = {
+    dynamo: { seamL: 356, seamR: 668, seamBotY: 408, gunPivotL: { x: 372, y: 200 }, gunPivotR: { x: 651, y: 200 }, headY: 225, flapAmp: 24, tailAmp: 15 },
+    helix:  { seamL: 426, seamR: 598, seamBotY: 390, gunPivotL: { x: 406, y: 212 }, gunPivotR: { x: 617, y: 212 }, headY: 210, flapAmp: 26, tailAmp: 16 },
+    meteor: { seamL: 412, seamR: 612, seamBotY: 395, gunPivotL: { x: 386, y: 154 }, gunPivotR: { x: 637, y: 154 }, headY: 158, flapAmp: 28, tailAmp: 16 }
+  };
+
   function getTier6ArticulatedRig(baseMode) {
-    if (Core3DAssets.t6RigCache[baseMode]) return Core3DAssets.t6RigCache[baseMode];
-    var spr = Core3DAssets.coreSprites[baseMode] && Core3DAssets.coreSprites[baseMode][6];
-    var isLoaded = Core3DAssets.loaded.coreSprites[baseMode] && Core3DAssets.loaded.coreSprites[baseMode][6];
-    if (!spr || !isLoaded) return null;
+    var mKey = (baseMode === "helix" || baseMode === "meteor") ? baseMode : "dynamo";
+    var bodySpr = Core3DAssets.t6BodySprites[mKey];
+    var gunsSpr = Core3DAssets.t6GunsSprites[mKey];
+    var bodyLoaded = Core3DAssets.loaded.t6BodySprites[mKey];
+    var gunsLoaded = Core3DAssets.loaded.t6GunsSprites[mKey];
+
+    // Fallback to composite t6 sprite if split assets are still loading
+    var fullSpr = Core3DAssets.coreSprites[mKey] && Core3DAssets.coreSprites[mKey][6];
+    var fullLoaded = Core3DAssets.loaded.coreSprites[mKey] && Core3DAssets.loaded.coreSprites[mKey][6];
+
+    if (Core3DAssets.t6RigCache[mKey] && Core3DAssets.t6RigCache[mKey].isSplitReady) {
+      return Core3DAssets.t6RigCache[mKey];
+    }
+    if (!bodyLoaded && !fullLoaded) return null;
 
     var W = 1024, H = 682;
-    function extractSoftRegion(polyPts, featherPx) {
-      var c = document.createElement("canvas");
-      c.width = W; c.height = H;
-      var g = c.getContext("2d");
-      if (!g) return c;
-      g.save();
-      if (featherPx > 0 && typeof g.filter === "string") {
-        g.filter = "blur(" + featherPx + "px)";
-      }
-      g.fillStyle = "#ffffff";
-      g.beginPath();
-      for (var i = 0; i < polyPts.length; i++) {
-        if (i === 0) g.moveTo(polyPts[i][0], polyPts[i][1]);
-        else g.lineTo(polyPts[i][0], polyPts[i][1]);
-      }
-      g.closePath();
-      g.fill();
-      g.restore();
-      g.globalCompositeOperation = "source-in";
-      g.drawImage(spr, 0, 0, W, H);
-      g.globalCompositeOperation = "source-over";
-      return c;
+    var activeBody = bodyLoaded ? bodySpr : fullSpr;
+    var scratch = (Core3DAssets.t6RigCache[mKey] && Core3DAssets.t6RigCache[mKey].bodyScratch) || document.createElement("canvas");
+    scratch.width = W; scratch.height = H;
+    var specC = document.createElement("canvas");
+    specC.width = W; specC.height = H;
+    var sCtx = specC.getContext("2d");
+    if (sCtx && activeBody) {
+      sCtx.drawImage(activeBody, 0, 0, W, H);
+      sCtx.globalCompositeOperation = "destination-in";
+      sCtx.drawImage(activeBody, -2, 0, W, H);
+      sCtx.drawImage(activeBody, 2, 0, W, H);
+      sCtx.globalCompositeOperation = "source-over";
     }
 
-    var rig = { full: spr, W: W, H: H };
-    if (baseMode === "dynamo") {
-      // Dynamo Princess (1024x682): Left/Right Crystal Wings, Twin Shoulder Spire Cannons, Head/Crown, Uplifted Arms, Flowing Braids & Royal Gown
-      rig.pivots = {
-        wingL: { x: 376, y: 245 },
-        wingR: { x: 648, y: 245 },
-        cannonL: { x: 365, y: 205 },
-        cannonR: { x: 659, y: 205 },
-        head: { x: 512, y: 235 },
-        armL: { x: 446, y: 235 },
-        armR: { x: 578, y: 235 },
-        tailMid: { x: 512, y: 345 },
-        tailTip: { x: 512, y: 475 }
-      };
-      rig.wingL = extractSoftRegion([[90, 115], [322, 175], [392, 232], [385, 345], [328, 435], [105, 425]], 8);
-      rig.wingR = extractSoftRegion([[934, 115], [702, 175], [632, 232], [639, 345], [696, 435], [919, 425]], 8);
-      rig.cannonL = extractSoftRegion([[308, 10], [422, 10], [412, 222], [318, 222]], 6);
-      rig.cannonR = extractSoftRegion([[602, 10], [716, 10], [706, 222], [612, 222]], 6);
-      rig.armL = extractSoftRegion([[405, 138], [462, 138], [462, 245], [408, 245]], 5);
-      rig.armR = extractSoftRegion([[562, 138], [619, 138], [616, 245], [562, 245]], 5);
-      rig.head = extractSoftRegion([[452, 165], [572, 165], [566, 272], [458, 272]], 6);
-      rig.tailMid = extractSoftRegion([[310, 325], [714, 325], [720, 505], [304, 505]], 10);
-      rig.tailTip = extractSoftRegion([[300, 465], [724, 465], [680, 675], [344, 675]], 10);
-      rig.torso = extractSoftRegion([[375, 215], [649, 215], [645, 395], [379, 395]], 10);
-    } else if (baseMode === "helix") {
-      // Helix Unicorn (1024x682): Left/Right Feathered Pegasus Wings, Twin Bio-Orbital Shoulder Cannons, Spiraling Cyan Horn & Head, Forelegs/Hindlegs, Swirling Pastel Tail
-      rig.pivots = {
-        wingL: { x: 432, y: 262 },
-        wingR: { x: 592, y: 262 },
-        cannonL: { x: 406, y: 222 },
-        cannonR: { x: 618, y: 222 },
-        head: { x: 512, y: 225 },
-        armL: { x: 438, y: 305 },
-        armR: { x: 586, y: 305 },
-        tailMid: { x: 512, y: 355 },
-        tailTip: { x: 512, y: 485 }
-      };
-      rig.wingL = extractSoftRegion([[75, 135], [362, 185], [438, 245], [428, 345], [85, 365]], 8);
-      rig.wingR = extractSoftRegion([[949, 135], [662, 185], [586, 245], [596, 345], [939, 365]], 8);
-      rig.cannonL = extractSoftRegion([[355, 140], [446, 140], [446, 238], [358, 238]], 6);
-      rig.cannonR = extractSoftRegion([[578, 140], [669, 140], [666, 238], [578, 238]], 6);
-      rig.head = extractSoftRegion([[448, 15], [576, 15], [568, 252], [456, 252]], 7);
-      rig.armL = extractSoftRegion([[408, 295], [462, 295], [462, 418], [408, 418]], 6);
-      rig.armR = extractSoftRegion([[562, 295], [616, 295], [616, 418], [562, 418]], 6);
-      rig.tailMid = extractSoftRegion([[418, 345], [606, 345], [596, 520], [428, 520]], 9);
-      rig.tailTip = extractSoftRegion([[425, 475], [599, 475], [585, 672], [439, 672]], 9);
-      rig.torso = extractSoftRegion([[422, 215], [602, 215], [592, 385], [432, 385]], 10);
-    } else {
-      // Meteor Dragon (1024x682): Left/Right Volcanic Membrane Wings, Twin Shoulder Volcanic Mortars, Armored Head, 4 Clawed Limbs, Magma Spine Torso & Whipping Spiked Tail
-      rig.pivots = {
-        wingL: { x: 405, y: 205 },
-        wingR: { x: 619, y: 205 },
-        cannonL: { x: 385, y: 175 },
-        cannonR: { x: 636, y: 175 },
-        head: { x: 512, y: 158 },
-        armL: { x: 418, y: 222 },
-        armR: { x: 606, y: 222 },
-        tailMid: { x: 512, y: 365 },
-        tailTip: { x: 512, y: 485 }
-      };
-      rig.wingL = extractSoftRegion([[40, 28], [342, 42], [352, 165], [408, 205], [322, 275], [295, 365], [40, 365]], 8);
-      rig.wingR = extractSoftRegion([[984, 28], [682, 42], [672, 165], [616, 205], [702, 275], [729, 365], [984, 365]], 8);
-      rig.cannonL = extractSoftRegion([[338, 82], [425, 82], [422, 198], [342, 198]], 6);
-      rig.cannonR = extractSoftRegion([[599, 82], [686, 82], [682, 198], [602, 198]], 6);
-      rig.head = extractSoftRegion([[448, 32], [576, 32], [572, 178], [452, 178]], 7);
-      rig.armL = extractSoftRegion([[314, 202], [438, 202], [432, 342], [314, 342]], 6);
-      rig.armR = extractSoftRegion([[586, 202], [710, 202], [710, 342], [592, 342]], 6);
-      rig.tailMid = extractSoftRegion([[385, 325], [639, 325], [625, 495], [399, 495]], 9);
-      rig.tailTip = extractSoftRegion([[445, 465], [579, 465], [568, 668], [456, 668]], 9);
-      rig.torso = extractSoftRegion([[412, 155], [612, 155], [596, 375], [428, 375]], 10);
-    }
-
-    Core3DAssets.t6RigCache[baseMode] = rig;
+    var rig = {
+      W: W,
+      H: H,
+      cfg: TIER6_STRIP_CONFIG[mKey],
+      body: activeBody,
+      spec: specC,
+      guns: (gunsLoaded ? gunsSpr : null),
+      bodyScratch: scratch,
+      bodyScratchCtx: scratch.getContext("2d"),
+      isSplitReady: !!(bodyLoaded && gunsLoaded)
+    };
+    Core3DAssets.t6RigCache[mKey] = rig;
     return rig;
   }
 
@@ -13872,8 +13828,24 @@ try { checkUrlHashRoutine(); } catch(e){}
       if (clamped === 6) {
         Tier6HatchController.trigger(currentGameVariant, nowMs || performance.now());
       }
+    } else if (clamped < prev) {
+      Tier6HatchController.active = false;
+      Tier6HatchController.bannerUntil = 0;
     }
     syncTierEvolutionUI();
+  }
+
+  function revertEvolutionToBaseTier(nowMs) {
+    Tier6HatchController.active = false;
+    Tier6HatchController.bannerUntil = 0;
+    manualTierLock = false;
+    isBeatSyncLock = false;
+    if (qGameComboBadge) qGameComboBadge.style.display = "none";
+    if (playerEvolutionTier !== 1) {
+      setPlayerEvolutionTier(1, nowMs || performance.now(), false);
+    } else {
+      syncTierEvolutionUI();
+    }
   }
 
   function cyclePlayerEvolutionTier() {
@@ -14182,6 +14154,10 @@ try { checkUrlHashRoutine(); } catch(e){}
   // Unified Pointer Events: 100% True-Value, Direct Alignment (Touch point IS the atom itself)
   function handlePointerDown(e) {
     if (!isActive) return;
+    var isHudTarget = !!(e && e.target && e.target.closest && e.target.closest("button, .qgame-top-bar, .qgame-hud, .qgame-modal"));
+    if (!isHudTarget && manualTierLock) {
+      manualTierLock = false;
+    }
     if (e.pointerType === "touch" || e.pointerType === "pen") {
       setDeviceMode("touch");
     } else if (e.pointerType === "mouse") {
@@ -14254,6 +14230,7 @@ try { checkUrlHashRoutine(); } catch(e){}
 
   function handlePointerUp(e) {
     if (!isActive) return;
+    var isHudTarget = !!(e && e.target && e.target.closest && e.target.closest("button, .qgame-top-bar, .qgame-hud, .qgame-modal"));
     if (e.pointerType === "touch" || e.pointerType === "pen" || deviceInputMode === "touch") {
       isTouchDown = false;
       if (lockedParticle) {
@@ -14261,14 +14238,38 @@ try { checkUrlHashRoutine(); } catch(e){}
         lockedParticle = null;
       }
       contactDuration = 0.0;
+      lastTouchContactTime = 0;
       stopLockAudio();
       updateTargetText();
+      if (!isHudTarget) {
+        revertEvolutionToBaseTier(performance.now());
+      }
+    } else if (!isHudTarget && (!lockedParticle || !manualTierLock)) {
+      if (lockedParticle) {
+        lockedParticle.isLocked = false;
+        lockedParticle = null;
+      }
+      contactDuration = 0.0;
+      lastTouchContactTime = 0;
+      stopLockAudio();
+      updateTargetText();
+      revertEvolutionToBaseTier(performance.now());
     }
   }
 
   function handlePointerLeave(e) {
+    if (!isActive) return;
     if (deviceInputMode === "touch") {
       handlePointerUp(e);
+    } else if (!manualTierLock) {
+      if (lockedParticle) {
+        lockedParticle.isLocked = false;
+        lockedParticle = null;
+      }
+      contactDuration = 0.0;
+      lastTouchContactTime = 0;
+      stopLockAudio();
+      revertEvolutionToBaseTier(performance.now());
     }
   }
 
@@ -14763,7 +14764,7 @@ try { checkUrlHashRoutine(); } catch(e){}
             // Automatic Tier I -> Tier VI 3D Evolution Progression during active lock-on!
             if (!manualTierLock) {
               var autoTier = (progress >= 0.82) ? 6 : ((progress >= 0.64) ? 5 : ((progress >= 0.46) ? 4 : ((progress >= 0.28) ? 3 : ((progress >= 0.12) ? 2 : 1))));
-              if (autoTier > playerEvolutionTier) {
+              if (autoTier !== playerEvolutionTier) {
                 setPlayerEvolutionTier(autoTier, now, false);
               }
             }
@@ -14801,7 +14802,7 @@ try { checkUrlHashRoutine(); } catch(e){}
               triggerVictory(lockedParticle);
             }
           } else {
-            // Solution 3 & 5: Separated from physical touch -> immediately stop counting & hide remote lock ring!
+            // Solution 3 & 5: Separated from physical touch -> immediately stop counting, hide lock ring, and revert to Tier I sphere!
             if (now - lastTouchContactTime > 95) {
               lockedParticle.isLocked = false;
               contactDuration = 0.0;
@@ -14810,8 +14811,12 @@ try { checkUrlHashRoutine(); } catch(e){}
               if (qGameComboBadge) qGameComboBadge.style.display = "none";
               stopLockAudio();
               missionText.textContent = getTargetInstructionText();
+              if (!manualTierLock) revertEvolutionToBaseTier(now);
             } else {
               contactDuration = Math.max(0, contactDuration - dt * 0.85);
+              if (contactDuration <= 0.01 && !manualTierLock) {
+                revertEvolutionToBaseTier(now);
+              }
             }
           }
         }
@@ -14852,30 +14857,25 @@ try { checkUrlHashRoutine(); } catch(e){}
       }
     }
 
+    // If no particle contact is active (exploded, lost touch, or idle) -> ensure core folds back to original Tier I form unless manually previewing!
+    if (!isPhysicallyTouching && (!lockedParticle || (now - lastTouchContactTime > 95)) && !manualTierLock) {
+      if (playerEvolutionTier !== 1 || Tier6HatchController.active || Tier6HatchController.bannerUntil > 0) {
+        revertEvolutionToBaseTier(now);
+      }
+    }
+
     // ── Update 3D Flight Kinematics (Roll Banking, Pitch Tilt, Continuous Tier Morph & Recoil) ──
     var targetBank = Math.max(-0.34, Math.min(0.34, cursor.vx * 0.00055));
     var targetPitch = Math.max(-0.22, Math.min(0.22, cursor.vy * 0.00038));
     bodyBankAngle += (targetBank - bodyBankAngle) * Math.min(1.0, dt * 11.0);
     bodyPitchAngle += (targetPitch - bodyPitchAngle) * Math.min(1.0, dt * 10.0);
-    continuousEvolutionTier += (playerEvolutionTier - continuousEvolutionTier) * Math.min(1.0, dt * 8.5);
+    var tierMorphSpeed = (playerEvolutionTier < continuousEvolutionTier) ? 11.5 : 8.5;
+    continuousEvolutionTier += (playerEvolutionTier - continuousEvolutionTier) * Math.min(1.0, dt * tierMorphSpeed);
     cannonRecoilImpulse *= Math.pow(0.84, dt * 60);
 
     // ── Render Alive 3D Tier I-VI Winged Core / Articulated Tier VI Sovereign Across All 6 Games ──
     if (!isWon && !isGameOver && cursor.active && hasDeliberateMove) {
       var lockProgress = (lockedParticle && isPhysicallyTouching && contactDuration > 0) ? (contactDuration / REQUIRED_CONTACT) : 0;
-      if (currentGameVariant === "comet") {
-        drawPlasmaCometCursor(cursor.x, cursor.y, now, lockProgress);
-      } else if (currentGameVariant === "helixorb") {
-        drawHelixCrystalOrbCursor(cursor.x, cursor.y, now, lockProgress);
-      } else if (currentGameVariant === "moltencore") {
-        drawMoltenCoreCursor(cursor.x, cursor.y, now, lockProgress);
-      } else if (currentGameVariant === "meteor") {
-        drawMeteorCursor(cursor.x, cursor.y, now, lockProgress);
-      } else if (currentGameVariant === "helix") {
-        drawHelixCursor(cursor.x, cursor.y, now, lockProgress);
-      } else {
-        drawQuantumAtomicCursor(cursor.x, cursor.y, now, lockProgress);
-      }
       render3DPlayerEvolutionCore(cursor.x, cursor.y, now, lockProgress, dt);
     }
 
@@ -14885,9 +14885,32 @@ try { checkUrlHashRoutine(); } catch(e){}
     }
   }
 
+  function getPlayerCoreVisualRadius(progress) {
+    var exc = (progress > 0) ? (progress * 0.35) : 0;
+    return ((width < 600) ? 20.0 : 24.0) + exc * 2.6;
+  }
+
+  function drawActiveVariantSphere(cx, cy, now, lockProgress) {
+    if (currentGameVariant === "comet") {
+      drawPlasmaCometCursor(cx, cy, now, lockProgress);
+    } else if (currentGameVariant === "helixorb") {
+      drawHelixCrystalOrbCursor(cx, cy, now, lockProgress);
+    } else if (currentGameVariant === "moltencore") {
+      drawMoltenCoreCursor(cx, cy, now, lockProgress);
+    } else if (currentGameVariant === "meteor") {
+      drawMeteorCursor(cx, cy, now, lockProgress);
+    } else if (currentGameVariant === "helix") {
+      drawHelixCursor(cx, cy, now, lockProgress);
+    } else {
+      drawQuantumAtomicCursor(cx, cy, now, lockProgress);
+    }
+  }
+
   // ══════════════════════════════════════════════════════════════════════════
   // MASTER 3D TIER I-V ARTICULATED WINGED CORE & TIER VI SOVEREIGN CHARACTER
-  // RENDERER ACROSS ALL 6 GAMES (DYNAMO, HELIX, METEOR, COMET, ORB, MOLTEN)
+  // DEPTH ORDER: 1. Rear Shockwaves -> 2. Articulated 3D Wings (BEHIND SPHERE) ->
+  //              3. Central 3D Core Sphere -> 4. Tier V Crown Bezel (IN FRONT)
+  // OR Full Tier VI Hatch / Strip-Mesh Sovereign Character!
   // ══════════════════════════════════════════════════════════════════════════
   function render3DPlayerEvolutionCore(cx, cy, now, lockProgress, dt) {
     var meta = TIER6_CHARACTER_META[currentGameVariant] || TIER6_CHARACTER_META.classic;
@@ -14895,7 +14918,7 @@ try { checkUrlHashRoutine(); } catch(e){}
     var tierIdx = Math.max(1, Math.min(6, playerEvolutionTier | 0));
     var cTier = Math.max(1.0, Math.min(6.0, continuousEvolutionTier));
     var isMobile = (width < 600);
-    var u = isMobile ? 0.34 : 0.44;
+    var u = isMobile ? 0.36 : 0.48;
 
     // 1. Render Expanding Ascension Shockwave Rings
     for (var ri = ascensionShockRings.length - 1; ri >= 0; ri--) {
@@ -14929,83 +14952,192 @@ try { checkUrlHashRoutine(); } catch(e){}
       }
     }
 
-    // 3. Tier VI Playable Multi-Joint Articulated 3D Character (Dynamo Princess / Storm Empress / Helix Unicorn / Astral Alicorn / Meteor Dragon / Obsidian Wyrm)
-    if (tierIdx >= 6) {
-      drawTier6ArticulatedSovereign(cx, cy, u, now, meta, baseMode, lockProgress, 1.0);
+    // 3. Tier VI Playable Seamless Strip-Mesh 3D Character (Dynamo Princess / Storm Empress / Helix Unicorn / Astral Alicorn / Meteor Dragon / Obsidian Wyrm)
+    if (tierIdx >= 6 || cTier >= 5.88) {
+      var t6Alpha = (tierIdx >= 6) ? Math.min(1.0, (cTier - 5.0) * 1.15) : Math.max(0, (cTier - 5.2) / 0.68);
+      if (t6Alpha < 0.99 && cTier < 5.95) {
+        ctx.save();
+        ctx.globalAlpha = 1.0 - t6Alpha * 0.95;
+        drawTier2To5WingsBehindCore(cx, cy, u, now, 5, Math.min(5.0, cTier), meta, baseMode, lockProgress);
+        drawActiveVariantSphere(cx, cy, now, lockProgress);
+        drawTier5BezelAndShellFront(cx, cy, u, now, Math.min(5.0, cTier), meta, baseMode, lockProgress);
+        ctx.restore();
+      }
+      drawTier6ArticulatedSovereign(cx, cy, u, now, meta, baseMode, lockProgress, Math.max(0.25, t6Alpha));
       renderTier6AscensionBanner(cx, cy, u, now, meta);
       return;
     }
 
-    // 4. Tiers II -> V Articulated 3D Winged Chrome Core Overlay (Enhances the central sphere with 3D articulated wings, royal crown bezel, and 3D orbital rings!)
-    if (tierIdx >= 2) {
-      drawTier2To5ArticulatedWingsAndBezel(cx, cy, u, now, tierIdx, cTier, meta, baseMode, lockProgress);
+    // 4. Tiers I -> V Depth-Ordered Composite:
+    //    Pass A: Wings strictly BEHIND sphere (when cTier > 1.02)
+    //    Pass B: opaque sphere backing + Central 3D Core Sphere ON TOP OF wing roots
+    //    Pass C: Tier V Royal Bezel Crown IN FRONT of sphere (when cTier > 4.02)
+    if (cTier > 1.02) {
+      drawTier2To5WingsBehindCore(cx, cy, u, now, tierIdx, cTier, meta, baseMode, lockProgress);
+    }
+    drawActiveVariantSphere(cx, cy, now, lockProgress);
+    if (cTier > 4.02) {
+      drawTier5BezelAndShellFront(cx, cy, u, now, cTier, meta, baseMode, lockProgress);
     }
   }
 
-  function drawTier2To5ArticulatedWingsAndBezel(cx, cy, u, now, tierIdx, cTier, meta, baseMode, lockProgress) {
-    var wingTier = Math.max(2, Math.min(5, tierIdx));
-    var wMaps = getWingProcessedMaps(baseMode, wingTier);
-    var coreImgScale = (68.0 / 150.0) * u;
-    var fullRefW = 1024 * coreImgScale;
-    var fullRefH = 576 * coreImgScale;
+  function applyVariantColorFilterIfAny() {
+    if (typeof ctx.filter !== "string") return;
+    if (currentGameVariant === "comet") {
+      ctx.filter = "hue-rotate(28deg) saturate(1.22)";
+    } else if (currentGameVariant === "helixorb") {
+      ctx.filter = "hue-rotate(-18deg) saturate(1.25)";
+    } else if (currentGameVariant === "moltencore") {
+      ctx.filter = "saturate(1.24) contrast(1.06)";
+    }
+  }
 
-    ctx.save();
-    ctx.translate(cx, cy);
-    // Split 3D Flight Banking: Wings bank at 0.55x roll angle while core banks at 1.0x roll angle!
-    ctx.rotate(bodyBankAngle * 0.55);
+  function drawTier2To5WingsBehindCore(cx, cy, u, now, tierIdx, cTier, meta, baseMode, lockProgress) {
+    var clampedC = Math.max(1.0, Math.min(5.0, cTier));
+    if (clampedC <= 1.02) return;
 
-    if (wMaps && wMaps.base) {
-      var flapFreq = 0.0046 + (wingTier - 2) * 0.0005 + (lockProgress > 0 ? 0.0025 : 0);
-      var flapPhase = now * flapFreq;
-      var flapSin = Math.sin(flapPhase);
-      var flapCos = Math.cos(flapPhase);
-      // 3D perspective wingbeat foreshortening & elevation
-      var wingScaleX = (0.88 + 0.14 * flapCos) * (0.82 + (cTier - 1) * 0.08);
-      var wingScaleY = (1.0 - Math.abs(bodyPitchAngle) * 0.22) * (0.84 + (cTier - 1) * 0.07);
-      var wingPitchRot = flapSin * 0.13 + bodyPitchAngle * 0.28;
-      var wingLiftY = -flapSin * 5.5 * u;
+    var lowTier = Math.max(2, Math.min(5, Math.floor(clampedC)));
+    var highTier = Math.max(2, Math.min(5, Math.ceil(clampedC)));
+    var blendT = (highTier > lowTier) ? Math.max(0, Math.min(1, clampedC - lowTier)) : 0;
+    // Smooth emergence & inward fold factor when morphing between Tier I <-> Tier II
+    var t12Fade = (clampedC < 2.0) ? Math.max(0, Math.min(1, (clampedC - 1.0) / 0.88)) : 1.0;
+
+    var rCore = getPlayerCoreVisualRadius(lockProgress);
+    // Exact 512x576 right-wing mapping: sphereRadiusRef = 168, hingeXRef = 148, pivotY = 288
+    // Scale sphereRadiusRef slightly larger than rCore so the sphere overlaps wing root by ~2-3px with zero gap!
+    var coreImgScale = (rCore / 152.0);
+    var wingW = 512 * coreImgScale;
+    var wingH = 576 * coreImgScale;
+    var pivotY = 288 * coreImgScale;
+    var hingeX = 148 * coreImgScale;
+
+    var normVx = Math.max(-1.0, Math.min(1.0, (cursor.vx || 0) * 0.0016));
+    var flapFreq = 0.0046 + (clampedC - 2) * 0.00045 + (lockProgress > 0 ? 0.0022 : 0);
+    var flapPhase = now * flapFreq;
+    var flapSin = Math.sin(flapPhase);
+    var flapCos = Math.cos(flapPhase);
+    var breathPhase = now * 0.0034;
+
+    // Smooth fold-back into sphere when t12Fade drops toward 0 (returning to Tier I form!)
+    var foldRot = (1.0 - t12Fade) * (-0.58);
+    var foldSpanX = 0.28 + 0.72 * t12Fade;
+    var foldScaleY = 0.42 + 0.58 * t12Fade;
+
+    function drawSingleWingTierPair(tIdx, alphaVal) {
+      if (alphaVal <= 0.01) return;
+      var wMaps = getWingProcessedMaps(baseMode, tIdx);
+      if (!wMaps || !wMaps.base) return;
 
       for (var side = -1; side <= 1; side += 2) {
-        ctx.save();
-        ctx.scale(side, 1);
-        var sideBankDiff = (side === 1) ? (-bodyBankAngle * 0.16) : (bodyBankAngle * 0.16);
-        ctx.translate(0, wingLiftY);
-        ctx.rotate(wingPitchRot + sideBankDiff);
-        ctx.scale(wingScaleX, wingScaleY);
+        var dir = side; // +1 Right wing, -1 Left wing (flipped cleanly via ctx.scale(dir, 1))
+        var dirLead = dir * normVx;
+        var asymTilt = Math.max(0, dirLead) * 0.055 + Math.min(0, dirLead) * 0.045;
+        var clampedFlap = Math.max(-0.11, Math.min(0.13, flapSin * 0.095 - bodyPitchAngle * 0.16));
+        var totalRot = dir * (clampedFlap + foldRot) + asymTilt + dir * bodyPitchAngle * 0.12;
+        var foreshortenX = (0.89 + 0.11 * flapCos) * (1.0 - dir * Math.sin(bodyBankAngle) * 0.10) * foldSpanX;
+        var pitch3D = Math.max(0.80, Math.cos(totalRot * 0.45)) * foldScaleY;
+        var breathScale = 1.0 + Math.sin(breathPhase + (side > 0 ? 0.4 : 0)) * 0.012;
 
-        // Pass A: Sub-feather Ambient Occlusion (AO) Shadow Underlap
-        if (wMaps.ao) {
+        ctx.save();
+        // Hinge strictly inside central sphere rim so wings rotate around sphere without ever detaching!
+        ctx.translate(dir * hingeX, -flapSin * 1.8 * u);
+        ctx.rotate(totalRot);
+        ctx.scale(dir * breathScale * foreshortenX, breathScale * pitch3D);
+        ctx.translate(-hingeX, 0);
+
+        // Pass 1: Subtle Under-Feather Ambient Occlusion Shadow
+        if (wMaps.ao && tIdx >= 3) {
           ctx.save();
-          ctx.globalAlpha = 0.42;
-          ctx.drawImage(wMaps.ao, -fullRefW * 0.5 + 1.5 * u, -fullRefH * 0.5 + 3.2 * u, fullRefW, fullRefH);
+          ctx.globalAlpha = alphaVal * 0.42;
+          ctx.drawImage(wMaps.ao, 0, -pivotY, wingW, wingH);
           ctx.restore();
         }
 
-        // Pass B: Chromatically Defringed Base Wing Sprite
-        ctx.drawImage(wMaps.base, -fullRefW * 0.5, -fullRefH * 0.5, fullRefW, fullRefH);
+        // Pass 2: Main Clean Right-Wing Sprite Drawn from (0, -pivotY) Outward to (wingW, +pivotY)!
+        ctx.globalAlpha = alphaVal;
+        ctx.drawImage(wMaps.base, 0, -pivotY, wingW, wingH);
 
-        // Pass C: Inward-Eroded 2.5px Windward 3D Specular Sheen (Zero white paper edge fringe!)
-        if (wMaps.spec) {
-          var windwardBoost = Math.max(0, (side === 1 ? -bodyBankAngle : bodyBankAngle) * 1.8) + Math.max(0, flapCos * 0.35);
+        // Pass 3: Subtle Windward 3D Specular Sheen
+        var specDot = Math.max(0, flapCos * 0.45 + Math.max(0, -dir * bodyBankAngle) * 1.4);
+        if (wMaps.spec && specDot > 0.08) {
           ctx.save();
           ctx.globalCompositeOperation = "lighter";
-          ctx.globalAlpha = Math.min(0.46, 0.14 + (wingTier - 2) * 0.05 + windwardBoost * 0.25);
-          ctx.drawImage(wMaps.spec, -fullRefW * 0.5, -fullRefH * 0.5, fullRefW, fullRefH);
+          ctx.globalAlpha = Math.min(0.28, specDot * 0.22 * alphaVal);
+          ctx.drawImage(wMaps.spec, 0, -pivotY, wingW, wingH);
           ctx.restore();
         }
         ctx.restore();
       }
     }
 
-    // Additional 0.45x differential core bank + Tier V Royal Crown Bezel
-    ctx.rotate(bodyBankAngle * 0.45);
-    if (cTier >= 4.05 && baseMode !== "meteor" && Core3DAssets.loaded.bezelT5[baseMode]) {
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(bodyBankAngle * 0.48);
+    applyVariantColorFilterIfAny();
+
+    // Subtle Tier III-V Ascension Glow Halo Behind Sphere & Wings
+    if (clampedC >= 2.2) {
+      var haloAlpha = Math.min(0.28, (clampedC - 2.0) * 0.09) * t12Fade;
+      var haloR = rCore * (1.85 + clampedC * 0.22);
+      var hg = ctx.createRadialGradient(0, 0, rCore * 0.4, 0, 0, haloR);
+      hg.addColorStop(0.0, meta.accent + "55");
+      hg.addColorStop(0.55, meta.color + "33");
+      hg.addColorStop(1.0, "rgba(0,0,0,0)");
       ctx.save();
-      ctx.globalAlpha = Math.min(1.0, cTier - 4.0);
-      ctx.drawImage(Core3DAssets.bezelT5[baseMode], -fullRefW * 0.5, -fullRefH * 0.5, fullRefW, fullRefH);
+      ctx.globalCompositeOperation = "lighter";
+      ctx.globalAlpha = haloAlpha;
+      ctx.fillStyle = hg;
+      ctx.beginPath();
+      ctx.arc(0, 0, haloR, 0, Math.PI * 2);
+      ctx.fill();
       ctx.restore();
     }
 
+    if (clampedC < 2.0) {
+      drawSingleWingTierPair(2, t12Fade);
+    } else if (highTier === lowTier || blendT <= 0.01) {
+      drawSingleWingTierPair(lowTier, 1.0);
+    } else {
+      drawSingleWingTierPair(lowTier, 1.0 - blendT);
+      drawSingleWingTierPair(highTier, blendT);
+    }
+
+    if (typeof ctx.filter === "string") ctx.filter = "none";
+    ctx.restore();
+  }
+
+  function drawTier5BezelAndShellFront(cx, cy, u, now, cTier, meta, baseMode, lockProgress) {
+    if (cTier <= 4.02) return;
+    var rCore = getPlayerCoreVisualRadius(lockProgress);
+    var coreImgScale = (rCore / 152.0);
+    var fullRefW = 1024 * coreImgScale;
+    var fullRefH = 576 * coreImgScale;
+    var bezelAlpha = Math.max(0, Math.min(1.0, cTier - 4.0));
+
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(bodyBankAngle * 0.90);
+    ctx.globalAlpha = bezelAlpha;
+    applyVariantColorFilterIfAny();
+
+    if (baseMode !== "meteor" && Core3DAssets.loaded.bezelT5[baseMode]) {
+      ctx.drawImage(Core3DAssets.bezelT5[baseMode], -fullRefW * 0.5, -fullRefH * 0.5, fullRefW, fullRefH);
+    } else if (baseMode === "meteor") {
+      // Volcanic Regal Tier V Gold-Magma Rim Crown for Meteor / Molten Core
+      ctx.save();
+      ctx.globalCompositeOperation = "lighter";
+      ctx.strokeStyle = "rgba(253, 224, 71, 0.72)";
+      ctx.lineWidth = Math.max(1.6, 2.2 * u);
+      ctx.beginPath();
+      ctx.arc(0, 0, rCore * 1.04, -Math.PI * 0.82, -Math.PI * 0.18);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(0, 0, rCore * 1.04, Math.PI * 0.18, Math.PI * 0.82);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    if (typeof ctx.filter === "string") ctx.filter = "none";
     ctx.restore();
   }
 
@@ -15023,7 +15155,9 @@ try { checkUrlHashRoutine(); } catch(e){}
       ctx.save();
       ctx.translate(jitX, jitY);
       ctx.scale(contract, contract);
-      drawTier2To5ArticulatedWingsAndBezel(0, 0, u * 1.08, now, 5, 5.0, meta, baseMode, lockProgress);
+      drawTier2To5WingsBehindCore(0, 0, u * 1.08, now, 5, 5.0, meta, baseMode, lockProgress);
+      drawActiveVariantSphere(0, 0, now, lockProgress);
+      drawTier5BezelAndShellFront(0, 0, u * 1.08, now, 5.0, meta, baseMode, lockProgress);
 
       // Volumetric God-Rays & Igniting Chrysalis Fissures
       ctx.globalCompositeOperation = "lighter";
@@ -15161,19 +15295,92 @@ try { checkUrlHashRoutine(); } catch(e){}
   }
 
   // ══════════════════════════════════════════════════════════════════════════
-  // MULTI-JOINT ARTICULATED 3D TIER VI SOVEREIGN CHARACTER RENDERER
-  // Independently animates:
-  //   1. Left & Right 3D Wings (3D perspective foreshortening, elevation, pitch, specular)
-  //   2. Coordinated Head / Crown / Horn + Expressive Reactive Eyes / Ocular Slits
-  //   3. Twin Gimbaled Shoulder Weapons (independent target tracking, hydraulic recoil, dual muzzle beams)
-  //   4. Articulated Forelimbs / Uplifted Arms & Hindlimbs / Armored Boots
-  //   5. Multi-Segment S-Curve Pendulum Braids, Mane, Royal Gown & Whipping Tail
-  //   6. Live Dorsal Material Energy (Traveling Dragon Magma Spine / Unicorn Horn Helix / Princess Crystal)
+  // SEAMLESS 1:1 STRIP-MESH 3D TIER VI SOVEREIGN CHARACTER RENDERER
+  // Eliminates polygon-cutout braid/claw shearing by deforming t6-body.png via a
+  // C1-continuous integer-snapped strip partition + separate gimbaled t6-guns.png!
   // ══════════════════════════════════════════════════════════════════════════
+  function renderTier6StripMeshToScratch(rig, baseMode, flapPhase, tailPhase, strafeNorm, bankAngle, easeRev) {
+    var bCtx = rig.bodyScratchCtx;
+    if (!bCtx || !rig.body) return false;
+    var W = rig.W, H = rig.H;
+    var cfg = rig.cfg;
+    var sL = cfg.seamL, sR = cfg.seamR, sBotY = cfg.seamBotY;
+    var spanL = sL, spanR = W - sR, spanTail = H - sBotY;
+    var flapSin = Math.sin(flapPhase);
+    var flapAbs = Math.abs(flapSin);
+    var ampPx = cfg.flapAmp * (0.45 + 0.55 * easeRev);
+    var unfurlSpread = 0.52 + 0.48 * easeRev + Math.sin(easeRev * Math.PI) * 0.08;
+    var stepX = 14;
+
+    bCtx.clearRect(0, 0, W, H);
+
+    // 1. Left Wing Strips (x = 0 .. sL): integer-snapped adjacent slices with C1 zero-displacement at seamL
+    var prevDx = sL;
+    var numL = Math.ceil(spanL / stepX);
+    for (var i = 0; i < numL; i++) {
+      var sx1 = Math.max(0, sL - i * stepX);
+      var sx0 = Math.max(0, sL - (i + 1) * stepX);
+      var sw = sx1 - sx0;
+      if (sw <= 0) continue;
+      var uOut = Math.min(1.0, (sL - (sx0 + sw * 0.5)) / spanL);
+      var wave = Math.sin(flapPhase - uOut * 1.15);
+      var dy = -wave * ampPx * Math.pow(uOut, 1.55) - bankAngle * 22 * uOut + (1.0 - easeRev) * 26 * uOut;
+      var fore = (1.0 - 0.095 * flapAbs * Math.pow(uOut, 1.25)) * unfurlSpread;
+      var nextDx = Math.round(sL - (sL - sx0) * fore);
+      var dw = prevDx - nextDx;
+      if (dw >= 1) {
+        bCtx.drawImage(rig.body, sx0, 0, sw, H, nextDx, dy, dw, H);
+        prevDx = nextDx;
+      }
+    }
+
+    // 2. Right Wing Strips (x = sR .. W): symmetric integer-snapped slices anchored at seamR
+    prevDx = sR;
+    var numR = Math.ceil(spanR / stepX);
+    for (var j = 0; j < numR; j++) {
+      var rx0 = sR + j * stepX;
+      var rx1 = Math.min(W, rx0 + stepX);
+      var rw = rx1 - rx0;
+      if (rw <= 0) continue;
+      var uOutR = Math.min(1.0, ((rx0 + rw * 0.5) - sR) / spanR);
+      var waveR = Math.sin(flapPhase - uOutR * 1.15);
+      var dyR = -waveR * ampPx * Math.pow(uOutR, 1.55) + bankAngle * 22 * uOutR + (1.0 - easeRev) * 26 * uOutR;
+      var foreR = (1.0 - 0.095 * flapAbs * Math.pow(uOutR, 1.25)) * unfurlSpread;
+      var nextDxR = Math.round(sR + (rx1 - sR) * foreR);
+      var dwR = nextDxR - prevDx;
+      if (dwR >= 1) {
+        bCtx.drawImage(rig.body, rx0, 0, rw, H, prevDx, dyR, dwR, H);
+        prevDx = nextDxR;
+      }
+    }
+
+    // 3. Lower Tail / Royal Gown Horizontal Strips (y = sBotY .. H, x = sL .. sR) with C1 zero-sway at y = sBotY
+    var centerW = sR - sL;
+    var stepY = 14;
+    var prevDy = sBotY;
+    var numT = Math.ceil(spanTail / stepY);
+    for (var k = 0; k < numT; k++) {
+      var sy0 = sBotY + k * stepY;
+      var sy1 = Math.min(H, sy0 + stepY);
+      var sh = sy1 - sy0;
+      if (sh <= 0) continue;
+      var vOut = Math.min(1.0, ((sy0 + sh * 0.5) - sBotY) / spanTail);
+      var tailDx = Math.sin(tailPhase - vOut * 2.1) * cfg.tailAmp * Math.pow(vOut, 1.45) - strafeNorm * 22 * Math.pow(vOut, 1.3);
+      bCtx.drawImage(rig.body, sL, sy0, centerW, sh, sL + tailDx, prevDy, centerW, sh);
+      prevDy += sh;
+    }
+
+    // 4. Rigid Central Torso, Head, Crown & Overlapping Braids (x = sL .. sR, y = 0 .. sBotY)
+    bCtx.drawImage(rig.body, sL, 0, centerW, sBotY, sL, 0, centerW, sBotY);
+    return true;
+  }
+
   function drawTier6ArticulatedSovereign(cx, cy, u, now, meta, baseMode, lockProgress, revealProgress) {
     var rig = getTier6ArticulatedRig(baseMode);
-    if (!rig || !rig.full) {
-      drawTier2To5ArticulatedWingsAndBezel(cx, cy, u, now, 5, 5.0, meta, baseMode, lockProgress);
+    if (!rig || !rig.body) {
+      drawTier2To5WingsBehindCore(cx, cy, u, now, 5, 5.0, meta, baseMode, lockProgress);
+      drawActiveVariantSphere(cx, cy, now, lockProgress);
+      drawTier5BezelAndShellFront(cx, cy, u, now, 5.0, meta, baseMode, lockProgress);
       return;
     }
 
@@ -15189,26 +15396,11 @@ try { checkUrlHashRoutine(); } catch(e){}
     var rollBank = bodyBankAngle * 0.45;
     var pitchCompressY = 1.0 - Math.abs(bodyPitchAngle) * 0.16;
     var strafeNorm = Math.max(-1.0, Math.min(1.0, cursor.vx * 0.0018));
-    var climbNorm = Math.max(-1.0, Math.min(1.0, cursor.vy * 0.0018));
 
-    // Wingbeat Cycle (accelerates during lock-on or emergence unfurl!)
     var flapFreq = 0.0052 + (lockProgress > 0 ? 0.0028 : 0);
     var flapPhase = now * flapFreq;
-    var flapSin = Math.sin(flapPhase);
     var flapCos = Math.cos(flapPhase);
-    var unfurlSpread = 0.38 + 0.62 * easeRev + Math.sin(easeRev * Math.PI) * 0.12;
-    var wing3DForeshortenX = (0.87 + 0.15 * flapCos) * unfurlSpread;
-    var wingFlapRot = flapSin * 0.14 + (1.0 - easeRev) * 0.35;
-    var wingLiftY = -flapSin * 8.0;
-
-    // Independent Head Turn & Pitch toward Movement/Target Vector
-    var headYawRot = strafeNorm * 0.11 + Math.sin(now * 0.0027) * 0.025;
-    var headShiftX = strafeNorm * 9.5;
-    var headShiftY = climbNorm * 6.5;
-
-    // Independent S-Curve Pendulum Physics for Hair/Braids/Gown/Tail
-    var wave1 = Math.sin(now * 0.0055 - 0.6) * 0.065 - strafeNorm * 0.16;
-    var wave2 = Math.sin(now * 0.0055 - 1.5) * 0.115 - strafeNorm * 0.26;
+    var tailPhase = now * 0.0055;
 
     // Independent Gimbal Tracking & Hydraulic Recoil for Twin Shoulder Weapons
     var targetAimAngle = 0;
@@ -15218,20 +15410,8 @@ try { checkUrlHashRoutine(); } catch(e){}
       targetAimAngle = Math.max(-0.26, Math.min(0.26, Math.atan2(aimDx, Math.max(40, -aimDy)) * 0.45));
     }
     var activeRecoilY = (cannonRecoilImpulse * 18.0) + (lockProgress > 0 ? Math.sin(now * 0.045) * 4.5 : 0);
-
-    // Helper: draw an anatomical sub-canvas pivoted around its exact joint socket in 1024x682 sprite space
-    function drawArticulatedPart(partCanvas, pivot, rotRad, scaleX, scaleY, offX, offY, extraAlpha) {
-      if (!partCanvas) return;
-      ctx.save();
-      var px = (pivot.x - ancX + (offX || 0)) * scale;
-      var py = (pivot.y - ancY + (offY || 0)) * scale;
-      ctx.translate(px, py);
-      if (rotRad) ctx.rotate(rotRad);
-      if (scaleX !== 1 || scaleY !== 1) ctx.scale(scaleX, scaleY);
-      if (typeof extraAlpha === "number") ctx.globalAlpha *= extraAlpha;
-      ctx.drawImage(partCanvas, -pivot.x * scale, -pivot.y * scale, rig.W * scale, rig.H * scale);
-      ctx.restore();
-    }
+    var recL = activeRecoilY * (0.85 + 0.3 * Math.sin(now * 0.05));
+    var recR = activeRecoilY * (0.85 + 0.3 * Math.cos(now * 0.05));
 
     ctx.save();
     ctx.translate(cx, cy + hoverY);
@@ -15239,14 +15419,7 @@ try { checkUrlHashRoutine(); } catch(e){}
     ctx.scale(breath, (2.0 - breath * 0.99) * pitchCompressY);
     ctx.globalAlpha = Math.min(1.0, pRev * 1.65);
 
-    // Luxury Variant Chromatic Filter Tint for Games 4, 5, 6 (Comet -> Void-Amethyst Empress; Orb -> Bioluminescent Alicorn; Molten -> Supernova Obsidian Wyrm)
-    if (currentGameVariant === "comet" && typeof ctx.filter === "string") {
-      ctx.filter = "hue-rotate(28deg) saturate(1.22)";
-    } else if (currentGameVariant === "helixorb" && typeof ctx.filter === "string") {
-      ctx.filter = "hue-rotate(-18deg) saturate(1.25)";
-    } else if (currentGameVariant === "moltencore" && typeof ctx.filter === "string") {
-      ctx.filter = "saturate(1.28) contrast(1.08)";
-    }
+    applyVariantColorFilterIfAny();
 
     // ── LAYER 1: 3D Volumetric Sovereign Ascension Halo Beneath Character ──
     ctx.save();
@@ -15262,7 +15435,6 @@ try { checkUrlHashRoutine(); } catch(e){}
     ctx.arc(0, 0, haloR, 0, Math.PI * 2);
     ctx.fill();
 
-    // Rotating 3D Perspective Royal Glyph Ring
     ctx.save();
     ctx.scale(1.0, 0.42);
     ctx.rotate(now * 0.0009);
@@ -15277,41 +15449,23 @@ try { checkUrlHashRoutine(); } catch(e){}
     ctx.restore();
     ctx.restore();
 
-    // ── LAYER 2: Independently Articulated Lower Tail / Royal Gown Train / Boots & Hindlimbs ──
-    drawArticulatedPart(rig.tailTip, rig.pivots.tailTip, wave2, 1.0, 1.0, -strafeNorm * 14.0, 0, 1.0);
-    drawArticulatedPart(rig.tailMid, rig.pivots.tailMid, wave1, 1.0, 1.0, -strafeNorm * 7.0, 0, 1.0);
+    // ── LAYER 2: Seamless 1:1 Partition Strip-Mesh 3D Body & Wings (Zero polygon slicing!) ──
+    renderTier6StripMeshToScratch(rig, baseMode, flapPhase, tailPhase, strafeNorm, rollBank, easeRev);
+    ctx.drawImage(rig.bodyScratch, -ancX * scale, -ancY * scale, rig.W * scale, rig.H * scale);
 
-    // ── LAYER 3: Independently Flapping 3D Multi-Joint Left & Right Wings ──
-    var leftWingBank = -wingFlapRot + strafeNorm * 0.08;
-    var rightWingBank = wingFlapRot + strafeNorm * 0.08;
-    drawArticulatedPart(rig.wingL, rig.pivots.wingL, leftWingBank, wing3DForeshortenX, 1.0, 0, wingLiftY, 1.0);
-    drawArticulatedPart(rig.wingR, rig.pivots.wingR, rightWingBank, wing3DForeshortenX, 1.0, 0, wingLiftY, 1.0);
-
-    // Windward 3D Specular Sheen on Flapping Tier VI Wings
-    if (flapCos > 0.05) {
+    // Subtle Windward Specular Wing Sheen on Upstroke/Downstroke Peak
+    if (flapCos > 0.12 && rig.spec) {
       ctx.save();
       ctx.globalCompositeOperation = "lighter";
-      var specA = flapCos * 0.22;
-      drawArticulatedPart(rig.wingL, rig.pivots.wingL, leftWingBank, wing3DForeshortenX, 1.0, 0, wingLiftY, specA);
-      drawArticulatedPart(rig.wingR, rig.pivots.wingR, rightWingBank, wing3DForeshortenX, 1.0, 0, wingLiftY, specA);
+      ctx.globalAlpha = Math.min(0.22, flapCos * 0.18);
+      ctx.drawImage(rig.bodyScratch, -ancX * scale, -ancY * scale, rig.W * scale, rig.H * scale);
       ctx.restore();
     }
 
-    // ── LAYER 4: Independently Articulated Forelimbs / Uplifted Arms ──
-    var stridePhase = Math.sin(now * 0.0075);
-    var armLRot = stridePhase * 0.07 - strafeNorm * 0.09;
-    var armRRot = -stridePhase * 0.07 - strafeNorm * 0.09;
-    drawArticulatedPart(rig.armL, rig.pivots.armL, armLRot, 1.0, 1.0, 0, stridePhase * 4.5, 1.0);
-    drawArticulatedPart(rig.armR, rig.pivots.armR, armRRot, 1.0, 1.0, 0, -stridePhase * 4.5, 1.0);
-
-    // ── LAYER 5: Breathing Central Torso & Live Dorsal Material Energy ──
-    drawArticulatedPart(rig.torso, { x: ancX, y: ancY }, 0, 1.0, 1.0, 0, 0, 1.0);
-
-    // Live Dorsal Elemental Energy Overlay (Dragon Traveling Magma Spine / Unicorn Heart Core / Princess Bodice Crystal)
+    // ── LAYER 3: Live Dorsal Elemental Energy Overlay & Expressive Optics ──
     ctx.save();
     ctx.globalCompositeOperation = "lighter";
     if (baseMode === "meteor") {
-      // Traveling blue-gold plasma pulses ascending the Meteor Dragon's dorsal spine plates
       for (var sp = 0; sp < 6; sp++) {
         var spProg = ((now * 0.0022 + sp / 6) % 1.0);
         var spy = (145 - spProg * 235) * scale;
@@ -15325,10 +15479,37 @@ try { checkUrlHashRoutine(); } catch(e){}
         ctx.arc(0, spy, spR * 2.2, 0, Math.PI * 2);
         ctx.fill();
       }
+      var eyeInt = 0.65 + 0.35 * Math.sin(now * 0.012) + (lockProgress > 0 ? 0.35 : 0);
+      for (var es = -1; es <= 1; es += 2) {
+        ctx.fillStyle = "rgba(254, 240, 138, " + Math.min(1, eyeInt).toFixed(2) + ")";
+        ctx.beginPath();
+        ctx.arc(es * 24 * scale, (rig.cfg.headY - ancY - 72) * scale, 4.2 * scale, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    } else if (baseMode === "helix") {
+      var gemGY = -4 * scale;
+      var gemGR = (20 + Math.sin(now * 0.009) * 4) * scale;
+      var gemGG = ctx.createRadialGradient(0, gemGY, 0, 0, gemGY, gemGR);
+      gemGG.addColorStop(0.0, "#ffffff");
+      gemGG.addColorStop(0.45, meta.color);
+      gemGG.addColorStop(1.0, "rgba(0, 0, 0, 0)");
+      ctx.fillStyle = gemGG;
+      ctx.beginPath();
+      ctx.arc(0, gemGY, gemGR, 0, Math.PI * 2);
+      ctx.fill();
+
+      var hornPulseY = -(110 + ((now * 0.08) % 90)) * scale;
+      var hornG = ctx.createRadialGradient(0, hornPulseY, 0, 0, hornPulseY, 16 * scale);
+      hornG.addColorStop(0.0, "#ffffff");
+      hornG.addColorStop(0.5, "#22d3ee");
+      hornG.addColorStop(1.0, "rgba(34, 211, 238, 0)");
+      ctx.fillStyle = hornG;
+      ctx.beginPath();
+      ctx.arc(0, hornPulseY, 16 * scale, 0, Math.PI * 2);
+      ctx.fill();
     } else {
-      // Pulsing dorsal heart-gem singularity on Helix Unicorn / Dynamo Princess
-      var gemY = (baseMode === "helix" ? -4 : 12) * scale;
-      var gemR = (22 + Math.sin(now * 0.009) * 5) * scale;
+      var gemY = 12 * scale;
+      var gemR = (20 + Math.sin(now * 0.009) * 4) * scale;
       var gemG = ctx.createRadialGradient(0, gemY, 0, 0, gemY, gemR);
       gemG.addColorStop(0.0, "#ffffff");
       gemG.addColorStop(0.45, meta.color);
@@ -15337,59 +15518,38 @@ try { checkUrlHashRoutine(); } catch(e){}
       ctx.beginPath();
       ctx.arc(0, gemY, gemR, 0, Math.PI * 2);
       ctx.fill();
-    }
-    ctx.restore();
 
-    // ── LAYER 6: Coordinated Head, Crown/Horn & Expressive Reactive Eyes/Optics ──
-    drawArticulatedPart(rig.head, rig.pivots.head, headYawRot, 1.0, 1.0, headShiftX, headShiftY, 1.0);
-
-    // Expressive Ocular Glint & Horn/Crown Telemetry on the Head
-    ctx.save();
-    ctx.globalCompositeOperation = "lighter";
-    var hPx = (rig.pivots.head.x - ancX + headShiftX) * scale;
-    var hPy = (rig.pivots.head.y - ancY + headShiftY) * scale;
-    ctx.translate(hPx, hPy);
-    ctx.rotate(headYawRot);
-    if (baseMode === "helix") {
-      // Helical bioluminescent rings traveling up the Unicorn's spiral cyan horn
-      var hornPulseY = -(115 + ((now * 0.08) % 90)) * scale;
-      var hornG = ctx.createRadialGradient(0, hornPulseY, 0, 0, hornPulseY, 18 * scale);
-      hornG.addColorStop(0.0, "#ffffff");
-      hornG.addColorStop(0.5, "#22d3ee");
-      hornG.addColorStop(1.0, "rgba(34, 211, 238, 0)");
-      ctx.fillStyle = hornG;
-      ctx.beginPath();
-      ctx.arc(0, hornPulseY, 18 * scale, 0, Math.PI * 2);
-      ctx.fill();
-    } else if (baseMode === "meteor") {
-      // Blazing lateral magma ocular slits on the Dragon's head
-      var eyeInt = 0.65 + 0.35 * Math.sin(now * 0.012) + (lockProgress > 0 ? 0.35 : 0);
-      for (var es = -1; es <= 1; es += 2) {
-        ctx.fillStyle = "rgba(254, 240, 138, " + Math.min(1, eyeInt).toFixed(2) + ")";
-        ctx.beginPath();
-        ctx.arc(es * 24 * scale, -72 * scale, 4.5 * scale, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    } else {
-      // Shimmering starlight tiara crown gem on Dynamo Princess
-      var crownG = ctx.createRadialGradient(0, -48 * scale, 0, 0, -48 * scale, 16 * scale);
+      var crownG = ctx.createRadialGradient(0, -48 * scale, 0, 0, -48 * scale, 15 * scale);
       crownG.addColorStop(0.0, "#ffffff");
       crownG.addColorStop(0.5, meta.accent);
       crownG.addColorStop(1.0, "rgba(0, 0, 0, 0)");
       ctx.fillStyle = crownG;
       ctx.beginPath();
-      ctx.arc(0, -48 * scale, 16 * scale, 0, Math.PI * 2);
+      ctx.arc(0, -48 * scale, 15 * scale, 0, Math.PI * 2);
       ctx.fill();
     }
     ctx.restore();
 
-    // ── LAYER 7: Independently Gimbaled Twin Shoulder Weapons with Hydraulic Firing Recoil & Muzzle Flashes ──
-    var recL = activeRecoilY * (0.85 + 0.3 * Math.sin(now * 0.05));
-    var recR = activeRecoilY * (0.85 + 0.3 * Math.cos(now * 0.05));
-    drawArticulatedPart(rig.cannonL, rig.pivots.cannonL, targetAimAngle, 1.0, 1.0, 0, recL, 1.0);
-    drawArticulatedPart(rig.cannonR, rig.pivots.cannonR, targetAimAngle, 1.0, 1.0, 0, recR, 1.0);
+    // ── LAYER 4: Independently Gimbaled Twin Shoulder Weapons (t6-guns.png) with Hydraulic Firing Recoil ──
+    if (rig.guns) {
+      var pivL = rig.cfg.gunPivotL;
+      var pivR = rig.cfg.gunPivotR;
+      var halfW = rig.W * 0.5;
+      // Left Cannon (sx = 0..512)
+      ctx.save();
+      ctx.translate((pivL.x - ancX) * scale, (pivL.y - ancY + recL) * scale);
+      ctx.rotate(targetAimAngle);
+      ctx.drawImage(rig.guns, 0, 0, halfW, rig.H, -pivL.x * scale, -pivL.y * scale, halfW * scale, rig.H * scale);
+      ctx.restore();
+      // Right Cannon (sx = 512..1024)
+      ctx.save();
+      ctx.translate((pivR.x - ancX) * scale, (pivR.y - ancY + recR) * scale);
+      ctx.rotate(targetAimAngle);
+      ctx.drawImage(rig.guns, halfW, 0, halfW, rig.H, (halfW - pivR.x) * scale, -pivR.y * scale, halfW * scale, rig.H * scale);
+      ctx.restore();
+    }
 
-    // Twin Shoulder Cannon Muzzle Ignition & Dual Synchronized Lock-On Energy Beams!
+    // Twin Shoulder Cannon Muzzle Ignition & Dual Synchronized Lock-On Energy Beams
     var mzL = {
       x: (meta.muzzleL.x - ancX) * scale,
       y: (meta.muzzleL.y - ancY + recL) * scale
@@ -15416,7 +15576,6 @@ try { checkUrlHashRoutine(); } catch(e){}
     if (typeof ctx.filter === "string") ctx.filter = "none";
     ctx.restore();
 
-    // If locked onto a target particle (or firing tactical skill), fire twin 3D elemental beams from the exact world-space shoulder muzzles!
     if (lockedParticle && lockProgress > 0) {
       var cosR = Math.cos(rollBank), sinR = Math.sin(rollBank);
       var worldMzL = {
@@ -15478,8 +15637,19 @@ try { checkUrlHashRoutine(); } catch(e){}
 
     var exc = (progress > 0) ? (progress * 0.35) : 0;
     var spinMult = 1.0 + exc * 2.5;
-    var rCore = 18.5 + exc * 2.5;
+    var rCore = getPlayerCoreVisualRadius(progress);
     var drawR = rCore * 1.25;
+
+    if (continuousEvolutionTier > 1.02) {
+      var bgGrad = ctx.createRadialGradient(-rCore * 0.25, -rCore * 0.25, 1, 0, 0, rCore);
+      bgGrad.addColorStop(0.0, "rgba(18, 22, 54, 0.94)");
+      bgGrad.addColorStop(0.75, "rgba(8, 12, 32, 0.97)");
+      bgGrad.addColorStop(1.0, "rgba(4, 7, 22, 0.98)");
+      ctx.fillStyle = bgGrad;
+      ctx.beginPath();
+      ctx.arc(0, 0, rCore * 0.98, 0, Math.PI * 2);
+      ctx.fill();
+    }
 
     // ── 1. Movement-Driven Bending Ionized Wake (From cursorTrail history) ──
     if (cursorTrail.length > 2) {
@@ -15579,7 +15749,7 @@ try { checkUrlHashRoutine(); } catch(e){}
     var exc = (progress > 0) ? (progress * 0.35) : 0;
     var rotBase = now * 0.0006;
     var spinMult = 1.0 + exc * 2.5;
-    var rCore = 19.0 + exc * 2.5;
+    var rCore = getPlayerCoreVisualRadius(progress);
     var drawR = rCore * 1.25;
 
     // Movement-Driven Bending Refractive Wake from cursorTrail
@@ -15628,6 +15798,16 @@ try { checkUrlHashRoutine(); } catch(e){}
     var hlxSprite = (window.MeteorVFXEngine && typeof window.MeteorVFXEngine.getClassicHelixSphere === "function")
       ? window.MeteorVFXEngine.getClassicHelixSphere(hlxFrame)
       : null;
+    if (continuousEvolutionTier > 1.02) {
+      var hBgG = ctx.createRadialGradient(-rCore * 0.2, -rCore * 0.2, 1, 0, 0, rCore);
+      hBgG.addColorStop(0.0, "rgba(12, 22, 48, 0.94)");
+      hBgG.addColorStop(0.78, "rgba(6, 12, 32, 0.97)");
+      hBgG.addColorStop(1.0, "rgba(3, 8, 22, 0.98)");
+      ctx.fillStyle = hBgG;
+      ctx.beginPath();
+      ctx.arc(0, 0, rCore * 0.98, 0, Math.PI * 2);
+      ctx.fill();
+    }
     if (hlxSprite) {
       ctx.save();
       ctx.rotate(cursor.heading * 0.38 + Math.sin(now * 0.0014) * 0.22);
@@ -15701,7 +15881,7 @@ try { checkUrlHashRoutine(); } catch(e){}
     var exc = (progress > 0) ? (progress * 0.35) : 0;
     var spinMult = 1.0 + exc * 2.5;
     var tumble = now * 0.0011 + (cursor.speed > 5 ? cursor.speed * 0.0015 : 0);
-    var coreR = 16.5 + exc * 2.5;
+    var coreR = getPlayerCoreVisualRadius(progress);
     var rockR = coreR * 1.25;
 
     // Movement-Driven Dusty Cinder Wake from cursorTrail
@@ -16046,7 +16226,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   function drawPlasmaCometCursor(cx, cy, now, progress) {
     ctx.save();
     var exc = (progress > 0) ? (progress * 0.35) : 0;
-    var rCore = 19.5 + exc * 3.0;
+    var rCore = getPlayerCoreVisualRadius(progress);
     var drawR = rCore * 1.25;
     var frameIdx = ((now * 0.013) | 0) % 4;
     var cometSprite = (window.MeteorVFXEngine && typeof window.MeteorVFXEngine.getCometSphere === "function")
@@ -16082,6 +16262,12 @@ try { checkUrlHashRoutine(); } catch(e){}
     if (cometSprite) {
       ctx.save();
       ctx.translate(cx, cy);
+      if (continuousEvolutionTier > 1.02) {
+        ctx.fillStyle = "rgba(10, 6, 26, 0.96)";
+        ctx.beginPath();
+        ctx.arc(0, 0, rCore * 0.98, 0, Math.PI * 2);
+        ctx.fill();
+      }
       ctx.rotate(now * 0.0005);
       ctx.drawImage(cometSprite, -drawR, -drawR, drawR * 2, drawR * 2);
       ctx.restore();
@@ -16132,7 +16318,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   function drawHelixCrystalOrbCursor(cx, cy, now, progress) {
     ctx.save();
     var exc = (progress > 0) ? (progress * 0.35) : 0;
-    var rCore = 19.5 + exc * 3.0;
+    var rCore = getPlayerCoreVisualRadius(progress);
     var drawR = rCore * 1.25;
     var frameIdx = ((now * 0.012) | 0) % 4;
     var orbSprite = (window.MeteorVFXEngine && typeof window.MeteorVFXEngine.getHelixOrbSphere === "function")
@@ -16163,6 +16349,12 @@ try { checkUrlHashRoutine(); } catch(e){}
     if (orbSprite) {
       ctx.save();
       ctx.translate(cx, cy);
+      if (continuousEvolutionTier > 1.02) {
+        ctx.fillStyle = "rgba(6, 16, 36, 0.96)";
+        ctx.beginPath();
+        ctx.arc(0, 0, rCore * 0.98, 0, Math.PI * 2);
+        ctx.fill();
+      }
       ctx.rotate(now * 0.0016);
       ctx.drawImage(orbSprite, -drawR, -drawR, drawR * 2, drawR * 2);
       ctx.restore();
@@ -16208,7 +16400,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   function drawMoltenCoreCursor(cx, cy, now, progress) {
     ctx.save();
     var exc = (progress > 0) ? (progress * 0.35) : 0;
-    var rCore = 19.5 + exc * 3.0;
+    var rCore = getPlayerCoreVisualRadius(progress);
     var drawR = rCore * 1.25;
     var fIdx = ((now * 0.007) | 0) % 6; // Fluctuates individual fissure heat across 6 states
     var moltenSprite = (window.MeteorVFXEngine && typeof window.MeteorVFXEngine.getMoltenCoreSphere === "function")
@@ -16378,6 +16570,9 @@ try { checkUrlHashRoutine(); } catch(e){}
     triggerVictory: triggerVictory,
     setTier: function(t) { setPlayerEvolutionTier(t, performance.now(), true); },
     getTier: function() { return playerEvolutionTier; },
+    getContinuousTier: function() { return continuousEvolutionTier; },
+    revertToBaseTier: function() { revertEvolutionToBaseTier(performance.now()); },
+    getTouchActive: function() { return !!lockedParticle && contactDuration > 0; },
     triggerTier6Hatch: function() { setPlayerEvolutionTier(6, performance.now(), true); },
     getCurrentVariant: function() { return currentGameVariant; },
     isActive: function() { return isActive; },
@@ -16395,7 +16590,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   <script>
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v96', { scope: './' }).catch(function() {});
+        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v97', { scope: './' }).catch(function() {});
       });
     }
   </script>
