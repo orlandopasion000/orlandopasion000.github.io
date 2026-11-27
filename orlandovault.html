@@ -6456,9 +6456,7 @@
       inset: 0;
       z-index: 2;
       pointer-events: none;
-      background:
-        radial-gradient(circle at 50% 44%, rgba(10, 10, 14, 0.24) 0%, rgba(10, 10, 14, 0.36) 100%),
-        linear-gradient(180deg, rgba(0, 0, 0, 0.14) 0%, rgba(0, 0, 0, 0.05) 42%, rgba(0, 0, 0, 0.22) 100%);
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.18) 0%, rgba(0, 0, 0, 0.03) 26%, rgba(0, 0, 0, 0.04) 74%, rgba(0, 0, 0, 0.22) 100%);
     }
     .vault-gate-card {
       width: 100%;
@@ -6984,7 +6982,7 @@
       font-weight: 400;
       line-height: 1;
       color: #ffffff;
-      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.24);
+      text-shadow: 0 1px 5px rgba(0, 0, 0, 0.34);
       font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI Variable Display', 'Segoe UI', 'Inter', sans-serif;
     }
     .ios-key-letters {
@@ -6993,7 +6991,7 @@
       letter-spacing: 0.22em;
       padding-left: 0.22em;
       color: #ffffff;
-      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.26);
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.34);
       margin-top: 2px;
       height: 11px;
     }
@@ -9967,13 +9965,13 @@
         if (window.caches) {
           caches.keys().then(keys => {
             keys.forEach(k => {
-              if (k.startsWith('vault-') && k !== 'vault-jarvis-v70') {
+              if (k.startsWith('vault-') && k !== 'vault-jarvis-v71') {
                 caches.delete(k);
               }
             });
           });
         }
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v70', { scope: '/orlandovault/' }).then(reg => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v71', { scope: '/orlandovault/' }).then(reg => {
           if (reg && reg.update) reg.update();
         }).catch(err => {
           console.warn('Vault SW registration error:', err);
@@ -12423,7 +12421,7 @@
       if (errMsg) setLockError(errMsg);
     }
 
-    const LIQUID_LENS_DIM = 168;
+    const LIQUID_LENS_DIM = 246;
     let liquidLensLut = null;
     let liquidLensCache = { key: '', bufW: 0, bufH: 0, sharpPixels: null, softPixels: null };
     let liquidLensOutputBuf = null;
@@ -12509,7 +12507,7 @@
       const imgLeft = photoRect.left + (photoRect.width - rw) * pxPct;
       const imgTop = photoRect.top + (photoRect.height - rh) * pyPct;
 
-      const srcScale = Math.min(1, 960 / Math.max(rw, rh));
+      const srcScale = Math.min(1, 1600 / Math.max(rw, rh));
       const bufW = Math.max(2, Math.round(rw * srcScale));
       const bufH = Math.max(2, Math.round(rh * srcScale));
       const cacheKey = (bgImg.currentSrc || bgImg.src) + '|' + bufW + 'x' + bufH;
@@ -12574,11 +12572,11 @@
             const gRaw = sharpPixels[sp4 + 1] * wH + softPixels[sp4 + 1] * wS;
             const bRaw = sharpPixels[sp4 + 2] * wH + softPixels[sp4 + 2] * wS;
 
-            // iOS 26 Light-Gathering Neutral Smoke-Pearl Glass Curve
+            // iOS 26 Light-Gathering Neutral Smoke-Pearl Glass Curve (tuned for clear 4K backdrop contrast)
             const delta = lut.dome[i] - lut.groove[i];
-            let rC = (rRaw * 0.78 + 34) * 0.84 + 22 + delta;
-            let gC = (gRaw * 0.78 + 34) * 0.84 + 22 + delta;
-            let bC = (bRaw * 0.78 + 35.5) * 0.84 + 22 + delta;
+            let rC = (rRaw * 0.72 + 26) * 0.84 + 18 + delta;
+            let gC = (gRaw * 0.72 + 26) * 0.84 + 18 + delta;
+            let bC = (bRaw * 0.72 + 27.5) * 0.84 + 18 + delta;
 
             out[p4] = rC < 0 ? 0 : (rC > 255 ? 255 : rC);
             out[p4 + 1] = gC < 0 ? 0 : (gC > 255 ? 255 : gC);
