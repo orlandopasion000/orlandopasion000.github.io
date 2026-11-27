@@ -1,0 +1,405 @@
+/* ==========================================================================
+   ORLANDOVAULT PHASE 3: PERFORMANCE VIRTUALIZATION, 2FA TOTP, WATCHTOWER,
+   CLOUD AUDIT DEVICES & SNAPSHOT STYLES
+   ========================================================================== */
+
+/* 60/120fps Off-Screen Card Virtualization */
+.vault-card {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 230px;
+}
+.vault-card-compact {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 150px;
+}
+.vault-list-chip {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 48px;
+}
+
+/* Watchtower Topbar Pill */
+.btn-tool-watchtower {
+  border-color: rgba(168, 85, 247, 0.42) !important;
+  color: #e9d5ff !important;
+  background: rgba(139, 92, 246, 0.12) !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.btn-tool-watchtower:hover {
+  border-color: #c084fc !important;
+  box-shadow: 0 0 14px rgba(168, 85, 247, 0.4);
+}
+.wt-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 5px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 800;
+  background: #f59e0b;
+  color: #0f172a;
+}
+.wt-badge.clean {
+  background: #10b981;
+  color: #022c22;
+}
+.wt-badge.critical {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+/* Built-In 2FA TOTP Live Authenticator Deck */
+.card-totp-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 7px;
+  border: 1px solid rgba(16, 185, 129, 0.5);
+  background: linear-gradient(135deg, rgba(6, 78, 59, 0.45), rgba(16, 185, 129, 0.16));
+  color: #6ee7b7;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+  font-family: 'JetBrains Mono', monospace;
+}
+.card-totp-chip:hover {
+  background: rgba(16, 185, 129, 0.3);
+  color: #ffffff;
+}
+
+.focus-totp-deck {
+  background: linear-gradient(135deg, rgba(6, 78, 59, 0.36) 0%, rgba(15, 23, 42, 0.9) 100%);
+  border: 1px solid rgba(16, 185, 129, 0.45);
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.totp-deck-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.totp-code-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.totp-ring-wrap {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.totp-ring-svg {
+  transform: rotate(-90deg);
+  width: 34px;
+  height: 34px;
+}
+.totp-ring-secs {
+  position: absolute;
+  font-size: 10px;
+  font-weight: 800;
+  color: #6ee7b7;
+  font-family: 'JetBrains Mono', monospace;
+}
+.totp-live-code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: #ffffff;
+  text-shadow: 0 0 12px rgba(16, 185, 129, 0.45);
+}
+.btn-copy-totp {
+  padding: 7px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(16, 185, 129, 0.55);
+  background: rgba(16, 185, 129, 0.18);
+  color: #6ee7b7;
+  font-size: 11.5px;
+  font-weight: 800;
+  cursor: pointer;
+  min-height: 36px;
+}
+.btn-copy-totp:hover {
+  background: #10b981;
+  color: #022c22;
+}
+.edit-totp-preview {
+  margin-top: 6px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: #6ee7b7;
+  font-size: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Security Health Watchtower Modal */
+.watchtower-modal-card {
+  background: linear-gradient(180deg, rgba(12, 18, 32, 0.98) 0%, rgba(6, 10, 18, 0.99) 100%);
+  border: 1.5px solid rgba(168, 85, 247, 0.5);
+  border-radius: 20px;
+  max-width: 780px;
+  width: 100%;
+  max-height: 88dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.8), 0 0 35px rgba(168, 85, 247, 0.22);
+}
+.watchtower-body {
+  padding: 18px 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.wt-hero-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.wt-score-circle {
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  border: 3px solid #10b981;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(16, 185, 129, 0.1);
+  flex-shrink: 0;
+}
+.wt-score-val {
+  font-size: 22px;
+  font-weight: 900;
+  color: #ffffff;
+  line-height: 1;
+}
+.wt-score-grade {
+  font-size: 10.5px;
+  font-weight: 800;
+  color: #6ee7b7;
+}
+.wt-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 8px;
+}
+.wt-stat-tile {
+  padding: 10px 8px;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: center;
+  cursor: pointer;
+}
+.wt-stat-tile.active {
+  border-color: #c084fc;
+  background: rgba(168, 85, 247, 0.18);
+}
+.wt-stat-num {
+  font-size: 20px;
+  font-weight: 800;
+  color: #f8fafc;
+}
+.wt-stat-lbl {
+  font-size: 10.5px;
+  color: #94a3b8;
+  font-weight: 700;
+}
+.wt-issue-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  flex-wrap: wrap;
+}
+.wt-sev-pill {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 999px;
+  text-transform: uppercase;
+}
+.wt-sev-breached, .wt-sev-weak { background: rgba(239, 68, 68, 0.22); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.45); }
+.wt-sev-reused, .wt-sev-old { background: rgba(245, 158, 11, 0.2); color: #fde047; border: 1px solid rgba(245, 158, 11, 0.45); }
+.wt-sev-2fa { background: rgba(56, 189, 248, 0.18); color: #7dd3fc; border: 1px solid rgba(56, 189, 248, 0.45); }
+.btn-wt-fix {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(56, 189, 248, 0.48);
+  background: rgba(56, 189, 248, 0.14);
+  color: #bae6fd;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  min-height: 36px;
+}
+
+/* Sync Health Modal Base Styles + Shared Action Buttons */
+.sync-health-card {
+  background: linear-gradient(180deg, rgba(12, 18, 32, 0.98) 0%, rgba(6, 10, 18, 0.99) 100%);
+  border: 1.5px solid rgba(56, 189, 248, 0.42);
+  border-radius: 20px;
+  max-width: 780px;
+  width: 100%;
+  max-height: 88dvh;
+  padding: 18px 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.8), 0 0 35px rgba(56, 189, 248, 0.16);
+}
+.sync-health-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.sync-health-pulse-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.8);
+  flex-shrink: 0;
+}
+.sync-health-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+  gap: 8px;
+}
+.sync-stat-box {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.sync-stat-label {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #94a3b8;
+  font-weight: 700;
+  margin-bottom: 3px;
+}
+.sync-stat-val {
+  font-size: 14px;
+  font-weight: 800;
+  color: #f8fafc;
+}
+.sync-stat-val.match {
+  color: #34d399;
+}
+.sync-health-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+.btn-sync-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 13px;
+  min-height: 36px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(30, 41, 59, 0.85);
+  color: #e2e8f0;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+.btn-sync-action:hover {
+  border-color: rgba(56, 189, 248, 0.65);
+  background: rgba(51, 65, 85, 0.92);
+  color: #ffffff;
+}
+.btn-sync-action.primary {
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.9), rgba(37, 99, 235, 0.9));
+  border-color: rgba(125, 211, 252, 0.75);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(14, 165, 233, 0.35);
+}
+.btn-sync-action.primary:hover {
+  filter: brightness(1.1);
+}
+
+/* Cloud Device Registry, Weekly Snapshots & Audit Badges */
+.device-registry-panel {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(10, 15, 26, 0.78);
+  border: 1px solid rgba(56, 189, 248, 0.24);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.device-pill-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 11.5px;
+  color: #e2e8f0;
+  flex-wrap: wrap;
+}
+.audit-device-chip {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: rgba(56, 189, 248, 0.14);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: #7dd3fc;
+}
+
+@media (max-width: 768px) {
+  #watchtowerModal {
+    align-items: flex-end !important;
+    padding: 0 !important;
+  }
+  #watchtowerModal .watchtower-modal-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 24px 24px 0 0 !important;
+    max-height: 92dvh !important;
+    margin: 0 !important;
+    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
