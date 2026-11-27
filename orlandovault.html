@@ -7103,9 +7103,333 @@
       ::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.28); border-radius: 999px; }
       ::-webkit-scrollbar-thumb:hover { background: rgba(56, 189, 248, 0.5); }
     }
+
+    /* ==========================================================================
+       PHASE 2: 30-DAY TRASH, PASSWORD HISTORY, MOBILE THUMB BAR & BOTTOM SHEETS
+       ========================================================================== */
+    .filter-pill-trash {
+      border-color: rgba(248, 113, 113, 0.35);
+      color: #fca5a5;
+    }
+    .filter-pill-trash.active {
+      background: rgba(239, 68, 68, 0.22) !important;
+      border-color: #ef4444 !important;
+      color: #fecaca !important;
+    }
+    .trash-banner-bar {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: rgba(127, 29, 29, 0.26);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fecaca;
+      font-size: 12.5px;
+    }
+    .btn-trash-action {
+      padding: 7px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(56, 189, 248, 0.45);
+      background: rgba(14, 165, 233, 0.16);
+      color: #bae6fd;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      min-height: 36px;
+    }
+    .btn-trash-action.danger {
+      border-color: rgba(239, 68, 68, 0.5);
+      background: rgba(239, 68, 68, 0.18);
+      color: #fecaca;
+    }
+    .trash-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed rgba(248, 113, 113, 0.28);
+      flex-wrap: wrap;
+    }
+    .trash-expiry-pill {
+      font-size: 11px;
+      font-weight: 700;
+      color: #fca5a5;
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      padding: 3px 8px;
+      border-radius: 999px;
+    }
+    .pwd-history-deck {
+      margin-top: 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      background: rgba(10, 15, 26, 0.72);
+      overflow: hidden;
+    }
+    .pwd-history-toggle {
+      width: 100%;
+      background: transparent;
+      border: none;
+      color: #bae6fd;
+      padding: 10px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      min-height: 40px;
+    }
+    .pwd-history-list {
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      padding: 0 12px 12px;
+      border-top: 1px solid rgba(56, 189, 248, 0.14);
+      padding-top: 8px;
+    }
+    .pwd-history-deck.open .pwd-history-list {
+      display: flex;
+    }
+    .pwd-history-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 6px 9px;
+      border-radius: 8px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 11.5px;
+      flex-wrap: wrap;
+    }
+    .pwd-history-val {
+      font-family: 'JetBrains Mono', monospace;
+      color: #e2e8f0;
+      font-size: 11.5px;
+      word-break: break-all;
+    }
+    .pwd-history-meta {
+      font-size: 10.5px;
+      color: #64748b;
+    }
+    .pwd-history-actions {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .pwd-history-btn {
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      background: rgba(56, 189, 248, 0.12);
+      color: #bae6fd;
+      font-size: 10.5px;
+      font-weight: 700;
+      cursor: pointer;
+      min-height: 30px;
+    }
+    .mobile-thumb-bar {
+      display: none;
+      position: fixed;
+      left: max(10px, env(safe-area-inset-left, 10px));
+      right: max(10px, env(safe-area-inset-right, 10px));
+      bottom: max(10px, env(safe-area-inset-bottom, 10px));
+      z-index: 99980;
+      background: rgba(8, 12, 22, 0.92);
+      backdrop-filter: blur(22px) saturate(150%);
+      -webkit-backdrop-filter: blur(22px) saturate(150%);
+      border: 1px solid rgba(56, 189, 248, 0.36);
+      border-radius: 20px;
+      padding: 6px 8px;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.72), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+      align-items: center;
+      justify-content: space-around;
+      gap: 4px;
+    }
+    .mobile-thumb-bar button {
+      flex: 1;
+      min-width: 44px;
+      min-height: 46px;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 14px;
+      color: #cbd5e1;
+      font-size: 10.5px;
+      font-weight: 700;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      cursor: pointer;
+      position: relative;
+      touch-action: manipulation;
+    }
+    .mobile-thumb-bar button.active {
+      background: rgba(56, 189, 248, 0.16);
+      border-color: rgba(56, 189, 248, 0.45);
+      color: #38bdf8;
+    }
+    .mobile-thumb-bar button.thumb-primary {
+      background: linear-gradient(135deg, rgba(14, 165, 233, 0.28), rgba(16, 185, 129, 0.24));
+      border-color: rgba(56, 189, 248, 0.5);
+      color: #ffffff;
+    }
+    .mobile-thumb-bar .thumb-ico {
+      font-size: 16px;
+      line-height: 1;
+    }
+    .thumb-badge {
+      position: absolute;
+      top: 3px;
+      right: 14%;
+      min-width: 16px;
+      height: 16px;
+      padding: 0 4px;
+      border-radius: 999px;
+      background: #ef4444;
+      color: #ffffff;
+      font-size: 9.5px;
+      font-weight: 800;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .thumb-badge.visible {
+      display: inline-flex;
+    }
+    body.vault-locked-active #mobileThumbBar,
+    body.vault-modal-open #mobileThumbBar {
+      display: none !important;
+    }
+    .quick-action-sheet {
+      width: 100%;
+      max-width: 440px;
+      background: linear-gradient(180deg, rgba(14, 20, 34, 0.98) 0%, rgba(7, 10, 18, 0.99) 100%);
+      border: 1px solid rgba(56, 189, 248, 0.42);
+      border-radius: 22px;
+      padding: 12px 16px 18px;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.78);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .quick-action-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .quick-action-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .quick-action-sub {
+      font-size: 11.5px;
+      color: #94a3b8;
+    }
+    .quick-action-btn {
+      width: 100%;
+      min-height: 48px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.04);
+      color: #f8fafc;
+      font-size: 13.5px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+    .quick-action-btn:hover {
+      background: rgba(56, 189, 248, 0.14);
+      border-color: rgba(56, 189, 248, 0.45);
+    }
+    .quick-action-btn.danger {
+      color: #fecaca;
+      border-color: rgba(239, 68, 68, 0.36);
+      background: rgba(239, 68, 68, 0.1);
+    }
+    .pull-sync-pill {
+      position: fixed;
+      top: calc(10px + env(safe-area-inset-top, 0px));
+      left: 50%;
+      transform: translate(-50%, -80px);
+      z-index: 99985;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: rgba(8, 15, 28, 0.94);
+      border: 1px solid rgba(56, 189, 248, 0.55);
+      color: #38bdf8;
+      font-size: 12px;
+      font-weight: 700;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65);
+      pointer-events: none;
+      opacity: 0;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+    .pull-sync-pill.visible {
+      opacity: 1;
+    }
+    @media (max-width: 768px) {
+      body:not(.vault-locked-active):not(.vault-modal-open) .mobile-thumb-bar {
+        display: flex;
+      }
+      .vault-layout {
+        padding-bottom: calc(108px + env(safe-area-inset-bottom, 0px)) !important;
+      }
+      .standalone-subapp-dock.active {
+        bottom: calc(74px + env(safe-area-inset-bottom, 0px)) !important;
+      }
+      #accountFocusModal,
+      #cardEditModal,
+      #syncHealthModal,
+      #cardQuickActionModal {
+        align-items: flex-end !important;
+        padding: 0 !important;
+      }
+      #accountFocusModal .focus-hud-box,
+      #cardEditModal .card-editor-modal,
+      #syncHealthModal .sync-health-card,
+      #cardQuickActionModal .quick-action-sheet {
+        width: 100% !important;
+        max-width: 100% !important;
+        border-radius: 24px 24px 0 0 !important;
+        max-height: 92dvh !important;
+        margin: 0 !important;
+        padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px)) !important;
+      }
+    }
+    @media (pointer: coarse) {
+      .btn-card-pin,
+      .btn-card-edit,
+      .btn-pwd-action,
+      .modal-close-btn,
+      .mobile-thumb-bar button {
+        min-width: 44px;
+        min-height: 44px;
+      }
+    }
 </style>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 </head>
 <body class="vault-locked-active">
   <!-- INSTANT PRIVACY CURTAIN ON APP/TAB BLUR -->
@@ -7350,6 +7674,7 @@
     <section class="controls-panel">
       <div class="filter-pills-row" id="filterPillsRow">
         <button type="button" class="filter-pill active" data-cat="all">ALL (<span id="totalVaultAccounts">0</span>)</button>
+        <button type="button" class="filter-pill" data-cat="Pinned">⭐ PINNED (<span id="pinnedVaultCount">0</span>)</button>
         <button type="button" class="filter-pill" data-cat="DepEd">DEPED OFFICIAL</button>
         <button type="button" class="filter-pill" data-cat="Social">SOCIAL MEDIA</button>
         <button type="button" class="filter-pill" data-cat="AI & Dev">CLAUDE & AI</button>
@@ -7362,6 +7687,7 @@
         <button type="button" class="filter-pill" data-cat="Family">FAMILY</button>
         <button type="button" class="filter-pill" data-cat="System">SYSTEM &amp; DEVICE</button>
         <button type="button" class="filter-pill" data-cat="Critical">CRITICAL ONLY</button>
+        <button type="button" class="filter-pill filter-pill-trash" data-cat="Trash">🗑️ TRASH (<span id="trashVaultCount">0</span>)</button>
         <button type="button" class="filter-pill btn-pill-add" id="btnAddNewAccount" title="Add New Credential Card" onclick="openNewCardEditor()">+ NEW ACCOUNT</button>
       </div>
     
@@ -7509,6 +7835,7 @@
   <!-- SYNC HEALTH & INTEGRITY HUD MODAL -->
   <div class="modal-backdrop" id="syncHealthModal" style="display:none;" role="dialog" aria-modal="true" aria-label="Cloud Sync Health & Cryptographic Integrity">
     <div class="sync-health-card">
+      <div class="ios-grabber-bar" aria-label="Swipe down to dismiss"></div>
       <div class="sync-health-header">
         <div style="display:flex;align-items:center;gap:8px;">
           <span class="sync-health-pulse-dot" id="modalPulseDot"></span>
@@ -7589,6 +7916,9 @@
         <button type="button" class="btn-sync-action primary" id="btnForceResyncCloud">⚡ Force Cloud Pull</button>
         <button type="button" class="btn-sync-action" id="btnCreateLocalSnapshot">💾 Create Snapshot</button>
         <button type="button" class="btn-sync-action" id="btnRestoreSnapshot">↺ Restore Snapshot</button>
+        <button type="button" class="btn-sync-action" id="btnSyncExportOvault">📤 Export .ovault</button>
+        <button type="button" class="btn-sync-action" id="btnSyncImportOvault">📥 Import .ovault</button>
+        <input type="file" id="inputImportOvaultFile" accept=".ovault,.json,application/json" style="display:none;">
       </div>
     </div>
   </div>
@@ -7700,6 +8030,8 @@
           <textarea class="edit-form-textarea" id="editInputNotes" rows="2" placeholder="e.g. Remarks, instructions, recovery reminders, or personal context"></textarea>
         </div>
 
+        <div class="edit-form-group" id="editPwdHistoryDeck" style="display:none;"></div>
+
         <div class="edit-form-options-row">
           <label class="cyber-actuator-panel panel-priority" for="editChkPriority">
             <input type="checkbox" id="editChkPriority" class="cyber-actuator-input">
@@ -7769,6 +8101,33 @@
       </form>
     </div>
   </div>
+
+  <!-- MOBILE LONG-PRESS QUICK ACTION SHEET -->
+  <div class="modal-backdrop" id="cardQuickActionModal" role="dialog" aria-modal="true" aria-label="Account Quick Actions">
+    <div class="quick-action-sheet" id="cardQuickActionSheet">
+      <div class="ios-grabber-bar" aria-label="Swipe down to dismiss"></div>
+      <div class="quick-action-header">
+        <div style="min-width:0;">
+          <div class="quick-action-title" id="quickActionTitle">Account</div>
+          <div class="quick-action-sub" id="quickActionSub">Quick Actions</div>
+        </div>
+        <button type="button" class="modal-close-btn" id="btnCloseQuickAction" title="Close">✕</button>
+      </div>
+      <div id="quickActionButtons" style="display:flex;flex-direction:column;gap:8px;"></div>
+    </div>
+  </div>
+
+  <!-- PULL-TO-SYNC TOP INDICATOR -->
+  <div class="pull-sync-pill" id="pullToSyncPill" aria-hidden="true">↓ Pull to Sync Cloud Vault</div>
+
+  <!-- MOBILE STICKY BOTTOM THUMB ZONE BAR -->
+  <nav class="mobile-thumb-bar" id="mobileThumbBar" aria-label="Mobile Quick Navigation">
+    <button type="button" id="btnThumbSearch" title="Spotlight Search"><span class="thumb-ico">🔍</span><span>Search</span></button>
+    <button type="button" id="btnThumbPinned" title="Pinned Accounts"><span class="thumb-ico">⭐</span><span>Pinned</span></button>
+    <button type="button" id="btnThumbNew" class="thumb-primary" title="Add New Account"><span class="thumb-ico">➕</span><span>New</span></button>
+    <button type="button" id="btnThumbTrash" title="30-Day Trash"><span class="thumb-ico">🗑️</span><span>Trash</span><span class="thumb-badge" id="thumbTrashBadge">0</span></button>
+    <button type="button" id="btnThumbLock" title="Lock Vault"><span class="thumb-ico">🔒</span><span>Lock</span></button>
+  </nav>
 
   <div class="modal-backdrop" id="sheetSyncModal">
     <div class="sheet-sync-modal">
@@ -8367,18 +8726,132 @@
     document.getElementById('editChkCritical')?.addEventListener('change', syncToggleChips);
 
     let deleteArmTimer = null;
+    const TRASH_RETENTION_MS = 30 * 24 * 60 * 60 * 1000;
+
+    function normalizePasswordHistory(item) {
+      if (!item) return [];
+      if (Array.isArray(item.passwordHistory) && item.passwordHistory.length > 0) {
+        return item.passwordHistory.filter(h => h && h.password).slice(0, 5);
+      }
+      if (item.old_password) {
+        return [{ password: item.old_password, changedAt: item.updatedAt || Date.now() }];
+      }
+      return [];
+    }
+
+    function wirePasswordHistoryDeck(containerEl, item, mode = 'focus') {
+      if (!containerEl || !item) return;
+      const hist = normalizePasswordHistory(item);
+      if (hist.length === 0) {
+        containerEl.innerHTML = '';
+        containerEl.style.display = 'none';
+        return;
+      }
+      containerEl.style.display = 'block';
+      const deckId = 'pwdHistDeck_' + mode;
+      containerEl.innerHTML = `
+        <div class="pwd-history-deck ${mode === 'focus' ? '' : 'open'}" id="${deckId}">
+          <button type="button" class="pwd-history-toggle" id="${deckId}_toggle">
+            <span>🕒 Password History (${hist.length})</span>
+            <span style="font-size:11px;opacity:0.75;">${mode === 'focus' ? 'Tap to view ▾' : 'Saved rotations ▴'}</span>
+          </button>
+          <div class="pwd-history-list">
+            ${hist.map((entry, idx) => `
+              <div class="pwd-history-row" data-hist-idx="${idx}">
+                <div style="display:flex;flex-direction:column;gap:2px;min-width:0;flex:1;">
+                  <span class="pwd-history-val" data-revealed="false" data-raw="${escapeHtml(entry.password)}">••••••••••••</span>
+                  <span class="pwd-history-meta">${typeof formatRelativeTime === 'function' ? formatRelativeTime(entry.changedAt) : 'Previous'}</span>
+                </div>
+                <div class="pwd-history-actions">
+                  <button type="button" class="pwd-history-btn btn-hist-peek" data-idx="${idx}">👁️</button>
+                  <button type="button" class="pwd-history-btn btn-hist-copy" data-idx="${idx}">Copy</button>
+                  <button type="button" class="pwd-history-btn btn-hist-restore" data-idx="${idx}">↺ Use</button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+
+      const deck = containerEl.querySelector('#' + deckId);
+      const toggle = containerEl.querySelector('#' + deckId + '_toggle');
+      if (toggle && deck) {
+        toggle.onclick = () => deck.classList.toggle('open');
+      }
+      containerEl.querySelectorAll('.btn-hist-peek').forEach(btn => {
+        btn.onclick = () => {
+          const row = btn.closest('.pwd-history-row');
+          const valEl = row ? row.querySelector('.pwd-history-val') : null;
+          if (!valEl) return;
+          const isRev = valEl.getAttribute('data-revealed') === 'true';
+          valEl.setAttribute('data-revealed', isRev ? 'false' : 'true');
+          valEl.textContent = isRev ? '••••••••••••' : valEl.getAttribute('data-raw');
+          btn.textContent = isRev ? '👁️' : '🙈';
+        };
+      });
+      containerEl.querySelectorAll('.btn-hist-copy').forEach(btn => {
+        btn.onclick = () => {
+          const idx = parseInt(btn.getAttribute('data-idx'), 10);
+          const entry = hist[idx];
+          if (!entry || !entry.password) return;
+          copyPasswordSilently(entry.password);
+          if (typeof startClipboardAutoWipe === 'function') startClipboardAutoWipe(entry.password);
+          if (typeof showToast === 'function') showToast('📋 Historical password copied! Auto-wipes in 25s', '🕒');
+        };
+      });
+      containerEl.querySelectorAll('.btn-hist-restore').forEach(btn => {
+        btn.onclick = () => {
+          const idx = parseInt(btn.getAttribute('data-idx'), 10);
+          const entry = hist[idx];
+          if (!entry || !entry.password) return;
+          if (mode === 'editor') {
+            const pwdIn = document.getElementById('editInputPassword');
+            if (pwdIn) {
+              pwdIn.value = entry.password;
+              pwdIn.type = 'text';
+            }
+            if (typeof showToast === 'function') showToast('↺ Loaded historical password — click Save to apply.', '🕒');
+          } else {
+            const target = vaultItems.find(x => x.id === item.id);
+            if (!target) return;
+            const now = Date.now();
+            const nextHist = normalizePasswordHistory(target);
+            if (target.password && target.password !== entry.password) {
+              nextHist.unshift({ password: target.password, changedAt: now });
+              target.old_password = target.password;
+            }
+            target.password = entry.password;
+            target.passwordHistory = nextHist.slice(0, 5);
+            target.updatedAt = now;
+            target.rev = (target.rev || 0) + 1;
+            if (typeof window.setVaultItems === 'function') window.setVaultItems(vaultItems);
+            try { persistVaultToSecureCache(); } catch(e) {}
+            if (typeof window.markVaultRecordDirty === 'function') window.markVaultRecordDirty(target.id);
+            if (typeof window.triggerVaultCloudPush === 'function') window.triggerVaultCloudPush();
+            openAccountFocusModal(target.id, openedFromSpotlight);
+            if (typeof showToast === 'function') showToast('↺ Restored previous password!', '✅');
+          }
+        };
+      });
+    }
+    window.wirePasswordHistoryDeck = wirePasswordHistoryDeck;
+
     function resetDeleteButtonState() {
       if (deleteArmTimer) {
         clearTimeout(deleteArmTimer);
         deleteArmTimer = null;
       }
       const btn = document.getElementById('btnDeleteCardEdit');
+      const id = (document.getElementById('editCardId') || {}).value;
+      const item = id ? vaultItems.find(x => x.id === id) : null;
       if (btn) {
         btn.setAttribute('data-confirm-armed', 'false');
         btn.style.background = '';
         btn.style.borderColor = '';
         btn.style.color = '';
-        btn.innerHTML = '<span>Delete Account</span>';
+        btn.innerHTML = (item && item.trashed)
+          ? '<span>🔥 Delete Forever</span>'
+          : '<span>🗑️ Move to 30-Day Trash</span>';
       }
     }
 
@@ -8386,8 +8859,8 @@
       const item = vaultItems.find(x => x.id === itemId);
       if (!item) return;
 
-      resetDeleteButtonState();
       document.getElementById('editCardId').value = item.id;
+      resetDeleteButtonState();
       document.getElementById('editModalHeaderTitle').textContent = item.title || 'Credential Anatomy';
       document.getElementById('editInputTitle').value = item.title || '';
       const catSel = document.getElementById('editSelectCategory');
@@ -8421,6 +8894,8 @@
         document.getElementById('editInputNotes').value = split.notes;
       }
 
+      wirePasswordHistoryDeck(document.getElementById('editPwdHistoryDeck'), item, 'editor');
+
       document.getElementById('editChkPriority').checked = !!(item.isPriority || item.pinned);
       document.getElementById('editChkCritical').checked = (item.importance || '').toLowerCase() === 'critical';
       if (typeof syncToggleChips === 'function') syncToggleChips();
@@ -8441,8 +8916,10 @@
     }
 
     function openNewCardEditor() {
-      resetDeleteButtonState();
       document.getElementById('editCardId').value = '';
+      resetDeleteButtonState();
+      const histDeck = document.getElementById('editPwdHistoryDeck');
+      if (histDeck) { histDeck.innerHTML = ''; histDeck.style.display = 'none'; }
       document.getElementById('editModalHeaderTitle').textContent = 'New Credential Account';
       document.getElementById('editInputTitle').value = '';
       document.getElementById('editSelectCategory').value = 'DepEd';
@@ -8574,6 +9051,11 @@
         const item = vaultItems.find(x => x.id === id);
         if (item) {
           if (item.password && password !== item.password) {
+            const hist = normalizePasswordHistory(item);
+            if (!hist[0] || hist[0].password !== item.password) {
+              hist.unshift({ password: item.password, changedAt: now });
+            }
+            item.passwordHistory = hist.slice(0, 5);
             item.old_password = item.password;
           }
           item.title = title;
@@ -8590,6 +9072,7 @@
           item.importance = isCritical ? 'Critical' : 'Normal';
           item.updatedAt = now;
           item.updated_at = new Date(now).toISOString();
+          item.rev = (item.rev || 0) + 1;
           item.updatedBy = window.VAULT_CLIENT_ID || 'local';
           item.deleted = false;
           trackCardUsage(id, 'edit_card', 4);
@@ -8670,20 +9153,111 @@
       }
     }
 
+    function syncVaultAfterTrashChange(id, mode, title) {
+      if (typeof window.setVaultItems === 'function') window.setVaultItems(vaultItems);
+      window.vaultItems = vaultItems;
+      try { persistVaultToSecureCache(); } catch(e) {}
+      if (typeof currentFocusItem !== 'undefined' && currentFocusItem && currentFocusItem.id === id) {
+        if (typeof closeAccountFocusModal === 'function') closeAccountFocusModal(false);
+      }
+      renderVault();
+      renderMetrics();
+      if (typeof window.updateSyncHealthUI === 'function') window.updateSyncHealthUI();
+      if (mode === 'perm') {
+        if (typeof window.deleteRecordFromCloud === 'function') window.deleteRecordFromCloud(id);
+        logAudit('DELETED_CARD_PERMANENT', 'Permanently deleted: ' + title);
+      } else {
+        if (typeof window.markVaultRecordDirty === 'function') window.markVaultRecordDirty(id);
+        if (typeof window.triggerVaultCloudPush === 'function') window.triggerVaultCloudPush();
+        logAudit(mode === 'restore' ? 'RESTORED_FROM_TRASH' : 'MOVED_TO_TRASH', title);
+      }
+    }
+
+    function moveCardToTrash(id) {
+      const item = vaultItems.find(x => x.id === id);
+      if (!item) return false;
+      const now = Date.now();
+      item.trashed = true;
+      item.trashedAt = now;
+      item.updatedAt = now;
+      item.rev = (item.rev || 0) + 1;
+      syncVaultAfterTrashChange(id, 'trash', item.title || id);
+      showToast(`🗑️ Moved "${item.title}" to 30-Day Trash.`, '♻️');
+      return true;
+    }
+    window.moveCardToTrash = moveCardToTrash;
+
+    function restoreCardFromTrash(id) {
+      const item = vaultItems.find(x => x.id === id);
+      if (!item) return false;
+      const now = Date.now();
+      item.trashed = false;
+      item.trashedAt = 0;
+      item.updatedAt = now;
+      item.rev = (item.rev || 0) + 1;
+      if (typeof removeVaultTombstone === 'function') removeVaultTombstone(id);
+      syncVaultAfterTrashChange(id, 'restore', item.title || id);
+      showToast(`♻️ Restored "${item.title}" to Vault!`, '✨');
+      return true;
+    }
+    window.restoreCardFromTrash = restoreCardFromTrash;
+
+    function permanentlyDeleteCard(id) {
+      const item = vaultItems.find(x => x.id === id);
+      const title = item ? item.title : 'Account';
+      if (typeof addVaultTombstone === 'function') addVaultTombstone(id);
+      vaultItems = vaultItems.filter(x => x.id !== id);
+      if (typeof getPinnedRegistry === 'function' && typeof savePinnedRegistry === 'function') {
+        savePinnedRegistry(getPinnedRegistry().filter(x => x !== id));
+      }
+      syncVaultAfterTrashChange(id, 'perm', title);
+      showToast(`🔥 Permanently deleted "${title}".`, '🗑️');
+      return true;
+    }
+    window.permanentlyDeleteCard = permanentlyDeleteCard;
+
+    function emptyVaultTrash() {
+      const trashed = vaultItems.filter(x => !!x.trashed);
+      if (trashed.length === 0) return 0;
+      trashed.forEach(item => {
+        if (typeof addVaultTombstone === 'function') addVaultTombstone(item.id);
+        if (typeof window.deleteRecordFromCloud === 'function') window.deleteRecordFromCloud(item.id);
+      });
+      const trashIds = new Set(trashed.map(t => t.id));
+      vaultItems = vaultItems.filter(x => !trashIds.has(x.id));
+      if (typeof window.setVaultItems === 'function') window.setVaultItems(vaultItems);
+      try { persistVaultToSecureCache(); } catch(e) {}
+      renderVault();
+      renderMetrics();
+      if (typeof window.updateSyncHealthUI === 'function') window.updateSyncHealthUI();
+      showToast(`🔥 Emptied ${trashed.length} items from Trash.`, '🗑️');
+      return trashed.length;
+    }
+    window.emptyVaultTrash = emptyVaultTrash;
+
     function deleteCardFromEditor(forceConfirm = false) {
       const force = (forceConfirm === true);
       const id = document.getElementById('editCardId').value;
       if (!id) return;
       const item = vaultItems.find(x => x.id === id);
-      const title = item ? item.title : 'this account';
-      const btnDelete = document.getElementById('btnDeleteCardEdit');
+      if (!item) return;
 
+      // Active cards move safely to 30-Day Encrypted Trash in 1 tap; already-trashed cards require 2-tap armed confirm to delete forever.
+      if (!item.trashed) {
+        resetDeleteButtonState();
+        closeCardEditor();
+        moveCardToTrash(id);
+        return;
+      }
+
+      const title = item.title || 'this account';
+      const btnDelete = document.getElementById('btnDeleteCardEdit');
       if (!force && btnDelete && btnDelete.getAttribute('data-confirm-armed') !== 'true') {
         btnDelete.setAttribute('data-confirm-armed', 'true');
         btnDelete.style.background = 'rgba(239, 68, 68, 0.24)';
         btnDelete.style.borderColor = '#ef4444';
         btnDelete.style.color = '#fecaca';
-        btnDelete.innerHTML = `<span>⚠️ Confirm Delete "${escapeHtml(title.slice(0, 22))}" — Tap Again</span>`;
+        btnDelete.innerHTML = `<span>⚠️ Confirm Permanent Delete "${escapeHtml(title.slice(0, 18))}"</span>`;
         if (typeof playJarvisSound === 'function') playJarvisSound('click');
         if (deleteArmTimer) clearTimeout(deleteArmTimer);
         deleteArmTimer = setTimeout(resetDeleteButtonState, 4500);
@@ -8691,46 +9265,8 @@
       }
 
       resetDeleteButtonState();
-
-      // 1. Record permanent deletion tombstone
-      if (typeof addVaultTombstone === 'function') {
-        addVaultTombstone(id);
-      }
-
-      // 2. Remove from local vault array & priority registry
-      vaultItems = vaultItems.filter(x => x.id !== id);
-      if (typeof window.setVaultItems === 'function') window.setVaultItems(vaultItems);
-      window.vaultItems = vaultItems;
-
-      if (typeof getPinnedRegistry === 'function' && typeof savePinnedRegistry === 'function') {
-        const cleanReg = getPinnedRegistry().filter(x => x !== id);
-        savePinnedRegistry(cleanReg);
-      }
-
-      try {
-        persistVaultToSecureCache();
-      } catch(e) {}
-
-      // 3. Close focus modal if it was open for this deleted card
-      if (typeof currentFocusItem !== 'undefined' && currentFocusItem && currentFocusItem.id === id) {
-        if (typeof closeAccountFocusModal === 'function') closeAccountFocusModal(false);
-      }
-
       closeCardEditor();
-      renderVault();
-      renderMetrics();
-      if (typeof window.updateSyncHealthUI === 'function') window.updateSyncHealthUI();
-      logAudit('DELETED_CARD', 'Removed account: ' + title);
-      showToast(`Deleted "${title}" permanently.`, '🗑️');
-      recordVaultMutation('CARD_DELETE', { id: id, title: title, deletedAt: Date.now() });
-      if (typeof playJarvisSound === 'function') playJarvisSound('reveal');
-
-      // 4. Push deletion to Firebase Firestore immediately
-      if (typeof window.deleteRecordFromCloud === 'function') {
-        window.deleteRecordFromCloud(id);
-      } else if (typeof window.triggerVaultCloudPush === 'function') {
-        window.triggerVaultCloudPush();
-      }
+      permanentlyDeleteCard(id);
     }
 
     function copyPasswordSilently(text) {
@@ -9434,6 +9970,18 @@
           </div>
 
           ${renderSmartMetadata(item.metadata, item.notes, { maskSensitive: window.vaultPrivacyMask !== false })}
+          ${item.trashed ? (() => {
+            const daysLeft = Math.max(0, Math.ceil((30 * 86400000 - (Date.now() - (item.trashedAt || Date.now()))) / 86400000));
+            return `
+              <div class="trash-card-footer" onclick="event.stopPropagation();">
+                <span class="trash-expiry-pill">Purges in ${daysLeft}d</span>
+                <div style="display:flex;gap:6px;">
+                  <button type="button" class="btn-trash-action" onclick="event.stopPropagation(); restoreCardFromTrash('${item.id}');">♻️ Restore</button>
+                  <button type="button" class="btn-trash-action danger" onclick="event.stopPropagation(); permanentlyDeleteCard('${item.id}');">🔥 Delete</button>
+                </div>
+              </div>
+            `;
+          })() : ''}
         </article>
       `;
     }
@@ -9592,11 +10140,15 @@
       container.className = 'vault-grid mode-' + currentViewMode;
 
       const q = searchQuery.toLowerCase().trim();
+      const isTrashView = activeCategory === 'Trash';
       const filtered = vaultItems.filter(item => {
-        if (activeCategory === 'Critical' && (item.importance || '').toLowerCase() !== 'critical') {
-          return false;
-        } else if (activeCategory !== 'all' && activeCategory !== 'Critical' && item.category !== activeCategory) {
-          return false;
+        if (isTrashView) {
+          if (!item.trashed) return false;
+        } else {
+          if (item.trashed) return false;
+          if (activeCategory === 'Pinned' && !(item.isPriority || item.pinned)) return false;
+          else if (activeCategory === 'Critical' && (item.importance || '').toLowerCase() !== 'critical') return false;
+          else if (activeCategory !== 'all' && activeCategory !== 'Critical' && activeCategory !== 'Pinned' && item.category !== activeCategory) return false;
         }
 
         if (!q) return true;
@@ -9604,11 +10156,25 @@
         return searchStr.includes(q);
       });
 
+      const thumbPin = document.getElementById('btnThumbPinned');
+      const thumbTrash = document.getElementById('btnThumbTrash');
+      if (thumbPin) thumbPin.classList.toggle('active', activeCategory === 'Pinned');
+      if (thumbTrash) thumbTrash.classList.toggle('active', activeCategory === 'Trash');
+
+      const trashBannerHtml = isTrashView ? `
+        <div class="trash-banner-bar">
+          <span>🗑️ <strong>30-Day Encrypted Trash</strong> — Trashed accounts auto-purge after 30 days. Tap Restore to bring them back.</span>
+          ${filtered.length > 0 ? '<button type="button" class="btn-trash-action danger" id="btnEmptyVaultTrash" onclick="emptyVaultTrash()">🔥 Empty Trash (' + filtered.length + ')</button>' : ''}
+        </div>
+      ` : '';
+
       if (filtered.length === 0) {
-        if (!q && (!vaultItems || vaultItems.length === 0)) {
+        if (isTrashView) {
+          container.innerHTML = trashBannerHtml + '<div class="empty-state">🗑️ Trash is empty. Deleted items remain encrypted here for 30 days before auto-purge.</div>';
+        } else if (!q && (!vaultItems || vaultItems.length === 0)) {
           container.innerHTML = '<div class="empty-state" style="padding:60px 20px;text-align:center;color:#94a3b8;"><div class="sync-health-pulse-dot" style="margin:0 auto 14px;width:12px;height:12px;background:#38bdf8;box-shadow:0 0 12px #38bdf8;"></div><div style="font-size:14px;font-weight:600;color:#e2e8f0;margin-bottom:6px;">Decrypting & Synchronizing Cloud Vault...</div><div style="font-size:12px;color:#64748b;">Establishing AES-256-GCM Zero-Knowledge channel with Firebase Firestore</div></div>';
         } else {
-          container.innerHTML = '<div class="empty-state">No credentials found matching "' + q + '". Jarvis is standing by.</div>';
+          container.innerHTML = '<div class="empty-state">No credentials found matching "' + escapeHtml(q) + '". Jarvis is standing by.</div>';
         }
         return;
       }
@@ -9630,8 +10196,8 @@
 
       // Render directly into container (FLAT 1-LAYER GRID, NO NESTED CONTAINER BUGS)
       let cardsHtml = '';
-      if (currentViewMode === 'large') {
-        cardsHtml = sortedCards.map(renderLargeCardHtml).join('');
+      if (isTrashView || currentViewMode === 'large') {
+        cardsHtml = trashBannerHtml + sortedCards.map(renderLargeCardHtml).join('');
       } else if (currentViewMode === 'compact') {
         cardsHtml = sortedCards.map(renderCompactCardHtml).join('');
       } else if (currentViewMode === 'details') {
@@ -9798,8 +10364,21 @@
     }
 
     function renderMetrics() {
+      const items = Array.isArray(vaultItems) ? vaultItems : [];
+      const activeItems = items.filter(x => !x.trashed);
+      const pinnedCount = activeItems.filter(x => x.isPriority || x.pinned).length;
+      const trashCount = items.length - activeItems.length;
       const accountsEl = document.getElementById('totalVaultAccounts');
-      if (accountsEl) accountsEl.textContent = vaultItems.length;
+      const pinnedEl = document.getElementById('pinnedVaultCount');
+      const trashEl = document.getElementById('trashVaultCount');
+      const thumbBadge = document.getElementById('thumbTrashBadge');
+      if (accountsEl) accountsEl.textContent = activeItems.length;
+      if (pinnedEl) pinnedEl.textContent = pinnedCount;
+      if (trashEl) trashEl.textContent = trashCount;
+      if (thumbBadge) {
+        thumbBadge.textContent = trashCount;
+        thumbBadge.classList.toggle('visible', trashCount > 0);
+      }
       if (typeof window.updateSyncHealthUI === 'function') window.updateSyncHealthUI();
     }
 
@@ -9965,13 +10544,13 @@
         if (window.caches) {
           caches.keys().then(keys => {
             keys.forEach(k => {
-              if (k.startsWith('vault-') && k !== 'vault-jarvis-v72') {
+              if (k.startsWith('vault-') && k !== 'vault-jarvis-v73') {
                 caches.delete(k);
               }
             });
           });
         }
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v72', { scope: '/orlandovault/' }).then(reg => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v73', { scope: '/orlandovault/' }).then(reg => {
           if (reg && reg.update) reg.update();
         }).catch(err => {
           console.warn('Vault SW registration error:', err);
@@ -10636,17 +11215,114 @@
       playJarvisSound('copy');
     }
 
-    function exportVaultBackupFile() {
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(vaultItems, null, 2));
-      const a = document.createElement('a');
-      a.setAttribute("href", dataStr);
-      a.setAttribute("download", `OrlandoVault_Backup_${new Date().toISOString().slice(0,10)}.json`);
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      showToast('🛡️ Encrypted Vault Backup downloaded!', '💾');
-      logAudit('EXPORTED_BACKUP', 'Downloaded full vault backup file');
-      playJarvisSound('copy');
+    async function computeOvaultSha256(saltHex, iv, ciphertext) {
+      const data = new TextEncoder().encode(String(saltHex || '') + ':' + String(iv || '') + ':' + String(ciphertext || ''));
+      const digest = await window.crypto.subtle.digest('SHA-256', data);
+      return Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    async function exportEncryptedOvaultEnvelope() {
+      const envMeta = typeof window.getActiveVaultMetaForBackup === 'function' ? window.getActiveVaultMetaForBackup() : null;
+      const encFn = window._encryptForOvaultExport;
+      if (!envMeta || typeof encFn !== 'function') {
+        throw new Error('Unlock OrlandoVault before exporting an encrypted .ovault backup.');
+      }
+      const pins = typeof getPinnedRegistry === 'function' ? getPinnedRegistry() : [];
+      const tombstones = typeof getVaultTombstones === 'function' ? getVaultTombstones() : {};
+      const payloadJson = JSON.stringify({
+        items: vaultItems || [],
+        pins: pins,
+        tombstones: tombstones,
+        exportedAt: Date.now()
+      });
+      const encryptedPayload = await encFn(payloadJson);
+      const sha256Checksum = await computeOvaultSha256(envMeta.saltHex, encryptedPayload.iv, encryptedPayload.ciphertext);
+      return {
+        format: 'ORLANDOVAULT_ZK_V4',
+        v: 4,
+        passcodeMode: envMeta.passcodeMode || 'pin6',
+        saltHex: envMeta.saltHex,
+        kdfIterations: envMeta.kdfIterations || 600000,
+        keyCanary: envMeta.keyCanary,
+        recordCount: (vaultItems || []).length,
+        exportedAt: Date.now(),
+        sha256Checksum: sha256Checksum,
+        encryptedPayload: encryptedPayload
+      };
+    }
+    window.exportEncryptedOvaultEnvelope = exportEncryptedOvaultEnvelope;
+
+    async function importEncryptedOvaultEnvelope(envelope, optionalSecret = null) {
+      if (!envelope || envelope.format !== 'ORLANDOVAULT_ZK_V4' || !envelope.encryptedPayload) {
+        throw new Error('Invalid .ovault backup format.');
+      }
+      const expectedHash = await computeOvaultSha256(envelope.saltHex, envelope.encryptedPayload.iv, envelope.encryptedPayload.ciphertext);
+      if (!envelope.sha256Checksum || expectedHash !== envelope.sha256Checksum) {
+        throw new Error('Backup integrity check failed (SHA-256 checksum mismatch).');
+      }
+      if (!window.VaultCrypto) throw new Error('VaultCrypto unavailable.');
+      let decryptKey = null;
+      if (optionalSecret && typeof optionalSecret === 'string') {
+        const candidate = await window.VaultCrypto.deriveKey(optionalSecret, envelope.saltHex, envelope.kdfIterations || 600000);
+        const ok = await window.VaultCrypto.verifyCanary(envelope.keyCanary, candidate);
+        if (!ok) throw new Error('Incorrect passcode/password for this .ovault backup.');
+        decryptKey = candidate;
+      } else if (typeof window._verifyActiveKeyCanary === 'function' && await window._verifyActiveKeyCanary(envelope.keyCanary)) {
+        decryptKey = '__ACTIVE__';
+      } else {
+        throw new Error('BACKUP_SECRET_REQUIRED');
+      }
+
+      const plainStr = decryptKey === '__ACTIVE__'
+        ? await window._decryptWithActiveKey(envelope.encryptedPayload)
+        : await window.VaultCrypto.decryptStrict(envelope.encryptedPayload, decryptKey);
+      const parsed = JSON.parse(plainStr || '{}');
+      const incoming = Array.isArray(parsed.items) ? parsed.items : [];
+
+      const localMap = new Map((vaultItems || []).map(x => [x.id, x]));
+      let importedCount = 0;
+      incoming.forEach(item => {
+        if (!item || !item.id) return;
+        const existing = localMap.get(item.id);
+        if (!existing || (item.updatedAt || 0) >= (existing.updatedAt || 0)) {
+          localMap.set(item.id, item);
+          if (typeof window.markVaultRecordDirty === 'function') window.markVaultRecordDirty(item.id);
+          importedCount++;
+        }
+      });
+      const merged = Array.from(localMap.values());
+      vaultItems = merged;
+      if (typeof window.setVaultItems === 'function') window.setVaultItems(merged);
+      if (typeof saveVaultTombstones === 'function' && parsed.tombstones) {
+        const tb = Object.assign({}, getVaultTombstones(), parsed.tombstones);
+        saveVaultTombstones(tb);
+      }
+      try { persistVaultToSecureCache(); } catch(e) {}
+      renderVault();
+      renderMetrics();
+      if (typeof window.markVaultFullPush === 'function') window.markVaultFullPush();
+      if (typeof window.triggerVaultCloudPush === 'function') window.triggerVaultCloudPush();
+      if (typeof logAudit === 'function') logAudit('IMPORTED_OVAULT', `Merged ${importedCount} encrypted records from .ovault backup`);
+      return { totalMerged: merged.length, updatedFromBackup: importedCount };
+    }
+    window.importEncryptedOvaultEnvelope = importEncryptedOvaultEnvelope;
+
+    async function exportVaultBackupFile() {
+      try {
+        const envelope = await exportEncryptedOvaultEnvelope();
+        const dataStr = "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(envelope, null, 2));
+        const a = document.createElement('a');
+        a.setAttribute("href", dataStr);
+        a.setAttribute("download", `OrlandoVault_Backup_${new Date().toISOString().slice(0,10)}.ovault.json`);
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        showToast(`🛡️ SHA-256 Verified Encrypted .ovault Backup (${envelope.recordCount} items) downloaded!`, '💾');
+        logAudit('EXPORTED_BACKUP', 'Downloaded SHA-256 verified Zero-Knowledge .ovault backup');
+        playJarvisSound('copy');
+      } catch(err) {
+        showToast('❌ ' + (err.message || 'Export failed'), '⚠️');
+      }
     }
 
   
@@ -11135,7 +11811,7 @@
     function isAllowedStorageKey(key) {
       if (!key) return true;
       if (STORAGE_MANIFEST[key]) return true;
-      if (key === '__sak' || key.startsWith('firebase:') || key.startsWith('firebaseui')) return true;
+      if (key === '__sak' || key.startsWith('firebase:') || key.startsWith('firebaseui') || key.startsWith('firestore_')) return true;
       return false;
     }
 
@@ -11388,18 +12064,40 @@
     }
     window.togglePrivacyMask = togglePrivacyMask;
 
-    // Initialize Firebase Auth safely
     let firebaseAuth = null;
+    let firebaseDb = null;
+    let firestoreRecordsUnsub = null;
+    let firestoreMasterUnsub = null;
+    let isRealtimeListenerActive = false;
+    let hasPendingCloudWrites = false;
     try {
       if (typeof firebase !== 'undefined') {
         if (!firebase.apps || firebase.apps.length === 0) {
           firebase.initializeApp(FIREBASE_CONFIG);
         }
         firebaseAuth = firebase.auth();
+        if (typeof firebase.firestore === 'function') {
+          firebaseDb = firebase.firestore();
+          firebaseDb.enablePersistence({ synchronizeTabs: true }).catch(() => {});
+        }
       }
     } catch(e) {
-      console.warn('[Firebase Auth Init]', e.message);
+      console.warn('[Firebase Auth/Firestore Init]', e.message);
     }
+
+    window.getActiveVaultMetaForBackup = function() {
+      return activeVaultMeta && activeSessionKey ? activeVaultMeta : null;
+    };
+    window._encryptForOvaultExport = async function(text) {
+      return await VaultCrypto.encrypt(text, activeSessionKey);
+    };
+    window._decryptWithActiveKey = async function(cipherObj) {
+      return await VaultCrypto.decryptStrict(cipherObj, activeSessionKey);
+    };
+    window._verifyActiveKeyCanary = async function(canaryObj) {
+      if (!activeSessionKey || !canaryObj) return false;
+      return await VaultCrypto.verifyCanary(canaryObj, activeSessionKey);
+    };
 
     function isCloudAuthenticated() {
       return !!(firebaseAuth && firebaseAuth.currentUser);
@@ -11564,6 +12262,7 @@
 
     function lockVault(reason = '') {
       const lastMode = (activeVaultMeta && activeVaultMeta.passcodeMode) || (readLocalEncryptedCacheEnvelope() || {}).passcodeMode || 'password';
+      stopRealtimeFirestoreSync();
       activeSessionKey = null;
       hasCompletedInitialPull = false;
       isSyncing = false;
@@ -11618,18 +12317,37 @@
     }
     window.lockVault = lockVault;
 
+    function readFieldVal(raw, name, fallback) {
+      if (!raw) return fallback;
+      // Handle Firestore SDK doc.data() plain JS values vs REST .fields.{integerValue, stringValue, booleanValue}
+      const v = raw[name];
+      if (v === undefined || v === null) return fallback;
+      if (typeof v === 'object' && !Array.isArray(v)) {
+        if ('stringValue' in v) return v.stringValue;
+        if ('booleanValue' in v) return v.booleanValue;
+        if ('integerValue' in v) return parseInt(v.integerValue || '0', 10);
+      }
+      return v;
+    }
+
     async function decryptItemListFromRawDocs(rawDocs, key, localTombstones) {
       const items = [];
+      const now = Date.now();
+      const retentionMs = typeof TRASH_RETENTION_MS === 'number' ? TRASH_RETENTION_MS : (30 * 86400000);
       for (let i = 0; i < rawDocs.length; i++) {
-        const f = rawDocs[i].fields;
-        if (!f || !f.id) continue;
-        const id = f.id.stringValue;
-        const isDel = f.deleted ? f.deleted.booleanValue : false;
-        const upTime = f.updatedAt ? parseInt(f.updatedAt.integerValue || '0', 10) : 0;
+        const rawDoc = rawDocs[i];
+        const f = rawDoc && rawDoc.fields ? rawDoc.fields : rawDoc;
+        const id = readFieldVal(f, 'id', '');
+        if (!f || !id) continue;
+        const isDel = !!readFieldVal(f, 'deleted', false);
+        const upTime = Number(readFieldVal(f, 'updatedAt', 0)) || 0;
+        const isTrashed = !!readFieldVal(f, 'trashed', false);
+        const trashedAt = Number(readFieldVal(f, 'trashedAt', 0)) || 0;
 
-        if (isDel) {
-          localTombstones[id] = Math.max(localTombstones[id] || 0, upTime || Date.now());
+        if (isDel || (isTrashed && trashedAt > 0 && (now - trashedAt > retentionMs))) {
+          localTombstones[id] = Math.max(localTombstones[id] || 0, upTime || now);
           if (typeof saveVaultTombstones === 'function') saveVaultTombstones(localTombstones);
+          if (isTrashed && !isDel) dirtyDeleteIds.add(id);
           continue;
         }
         if (localTombstones[id] && upTime <= localTombstones[id]) continue;
@@ -11638,46 +12356,124 @@
         let plainOldPass = '';
         let plainMetadata = '';
         let plainNotes = '';
+        let passwordHistory = [];
 
-        if (f.encryptedPassword && f.encryptedPassword.stringValue) {
-          plainPass = await VaultCrypto.decryptStrict(JSON.parse(f.encryptedPassword.stringValue), key);
+        const ep = readFieldVal(f, 'encryptedPassword', '');
+        const eop = readFieldVal(f, 'encryptedOldPassword', '');
+        const em = readFieldVal(f, 'encryptedMetadata', '');
+        const en = readFieldVal(f, 'encryptedNotes', '');
+        const eph = readFieldVal(f, 'encryptedPasswordHistory', '');
+
+        if (ep) plainPass = await VaultCrypto.decryptStrict(typeof ep === 'string' ? JSON.parse(ep) : ep, key);
+        if (eop) plainOldPass = await VaultCrypto.decryptStrict(typeof eop === 'string' ? JSON.parse(eop) : eop, key);
+        if (em) plainMetadata = await VaultCrypto.decryptStrict(typeof em === 'string' ? JSON.parse(em) : em, key);
+        if (en) plainNotes = await VaultCrypto.decryptStrict(typeof en === 'string' ? JSON.parse(en) : en, key);
+        if (eph) {
+          try {
+            const decHist = await VaultCrypto.decryptStrict(typeof eph === 'string' ? JSON.parse(eph) : eph, key);
+            const parsedHist = JSON.parse(decHist || '[]');
+            if (Array.isArray(parsedHist)) passwordHistory = parsedHist.filter(h => h && h.password).slice(0, 5);
+          } catch(e) {}
         }
-        if (f.encryptedOldPassword && f.encryptedOldPassword.stringValue) {
-          plainOldPass = await VaultCrypto.decryptStrict(JSON.parse(f.encryptedOldPassword.stringValue), key);
-        }
-        if (f.encryptedMetadata && f.encryptedMetadata.stringValue) {
-          plainMetadata = await VaultCrypto.decryptStrict(JSON.parse(f.encryptedMetadata.stringValue), key);
-        }
-        if (f.encryptedNotes && f.encryptedNotes.stringValue) {
-          plainNotes = await VaultCrypto.decryptStrict(JSON.parse(f.encryptedNotes.stringValue), key);
+        if (passwordHistory.length === 0 && plainOldPass) {
+          passwordHistory = [{ password: plainOldPass, changedAt: upTime || now }];
         }
 
         items.push({
           id: id,
-          title: f.title ? f.title.stringValue : '',
-          username: f.username ? f.username.stringValue : '',
-          category: f.category ? f.category.stringValue : 'Portals',
-          badge: f.badge ? f.badge.stringValue : '',
-          importance: f.importance ? f.importance.stringValue : 'Normal',
-          status: f.status ? f.status.stringValue : 'Secured',
-          isPriority: f.isPriority ? f.isPriority.booleanValue : false,
-          pinned: f.pinned ? f.pinned.booleanValue : false,
-          pinned_at: f.pinned_at ? parseInt(f.pinned_at.integerValue || '0', 10) : 0,
-          lastUsedAt: f.lastUsedAt ? parseInt(f.lastUsedAt.integerValue || '0', 10) : 0,
-          usageScore: f.usageScore ? parseInt(f.usageScore.integerValue || '0', 10) : 0,
-          copyPasswordCount: f.copyPasswordCount ? parseInt(f.copyPasswordCount.integerValue || '0', 10) : 0,
-          copyUsernameCount: f.copyUsernameCount ? parseInt(f.copyUsernameCount.integerValue || '0', 10) : 0,
-          viewPasswordCount: f.viewPasswordCount ? parseInt(f.viewPasswordCount.integerValue || '0', 10) : 0,
+          title: String(readFieldVal(f, 'title', '') || ''),
+          username: String(readFieldVal(f, 'username', '') || ''),
+          category: String(readFieldVal(f, 'category', 'Portals') || 'Portals'),
+          badge: String(readFieldVal(f, 'badge', '') || ''),
+          importance: String(readFieldVal(f, 'importance', 'Normal') || 'Normal'),
+          status: String(readFieldVal(f, 'status', 'Secured') || 'Secured'),
+          isPriority: !!readFieldVal(f, 'isPriority', false),
+          pinned: !!readFieldVal(f, 'pinned', false),
+          pinned_at: Number(readFieldVal(f, 'pinned_at', 0)) || 0,
+          lastUsedAt: Number(readFieldVal(f, 'lastUsedAt', 0)) || 0,
+          usageScore: Number(readFieldVal(f, 'usageScore', 0)) || 0,
+          copyPasswordCount: Number(readFieldVal(f, 'copyPasswordCount', 0)) || 0,
+          copyUsernameCount: Number(readFieldVal(f, 'copyUsernameCount', 0)) || 0,
+          viewPasswordCount: Number(readFieldVal(f, 'viewPasswordCount', 0)) || 0,
           updatedAt: upTime,
-          updatedBy: f.updatedBy ? f.updatedBy.stringValue : '',
+          rev: Number(readFieldVal(f, 'rev', 0)) || 0,
+          trashed: isTrashed,
+          trashedAt: trashedAt,
+          updatedBy: String(readFieldVal(f, 'updatedBy', '') || ''),
           password: plainPass,
           old_password: plainOldPass,
+          passwordHistory: passwordHistory,
           metadata: plainMetadata,
           notes: plainNotes
         });
       }
       return items;
     }
+
+    function stopRealtimeFirestoreSync() {
+      if (firestoreRecordsUnsub) {
+        try { firestoreRecordsUnsub(); } catch(e) {}
+        firestoreRecordsUnsub = null;
+      }
+      if (firestoreMasterUnsub) {
+        try { firestoreMasterUnsub(); } catch(e) {}
+        firestoreMasterUnsub = null;
+      }
+      isRealtimeListenerActive = false;
+      hasPendingCloudWrites = false;
+    }
+
+    function startRealtimeFirestoreSync() {
+      stopRealtimeFirestoreSync();
+      if (!activeSessionKey || !firebaseDb || !isCloudAuthenticated()) return;
+      try {
+        firestoreRecordsUnsub = firebaseDb.collection('orlandovault_records').onSnapshot(
+          { includeMetadataChanges: true },
+          async (snapshot) => {
+            if (!activeSessionKey) return;
+            hasPendingCloudWrites = !!(snapshot && snapshot.metadata && snapshot.metadata.hasPendingWrites);
+            if (!snapshot || snapshot.empty) {
+              updateSyncHealthUI();
+              return;
+            }
+            if (isPushing || isApplyingRemote) {
+              updateSyncHealthUI();
+              return;
+            }
+            try {
+              const rawDocs = snapshot.docs.map(d => Object.assign({ id: d.id }, d.data()));
+              const localTombstones = typeof getVaultTombstones === 'function' ? getVaultTombstones() : {};
+              const fetchedItems = await decryptItemListFromRawDocs(rawDocs, activeSessionKey, localTombstones);
+              syncHealthState.cloudCount = fetchedItems.length;
+              await mergeRemoteFetchedItems(fetchedItems, null, null, localTombstones, false);
+              hasCompletedInitialPull = true;
+              syncHealthState.lastPull = Date.now();
+              syncHealthState.status = hasPendingCloudWrites ? 'syncing' : 'synced';
+              updateSyncHealthUI();
+            } catch(e) {}
+          },
+          (err) => {
+            console.warn('[Firestore onSnapshot records]', err && err.message);
+            isRealtimeListenerActive = false;
+          }
+        );
+
+        firestoreMasterUnsub = firebaseDb.doc('orlandovault_sync/master_channel').onSnapshot(
+          (docSnap) => {
+            if (!activeSessionKey || !docSnap || !docSnap.exists) return;
+            const d = docSnap.data() || {};
+            if (d.ts && d.ts > lastSeenRemoteTs) lastSeenRemoteTs = d.ts;
+          },
+          () => {}
+        );
+        isRealtimeListenerActive = true;
+        updateSyncHealthUI();
+      } catch(e) {
+        isRealtimeListenerActive = false;
+      }
+    }
+    window.startRealtimeFirestoreSync = startRealtimeFirestoreSync;
+    window.stopRealtimeFirestoreSync = stopRealtimeFirestoreSync;
 
     async function fetchAllRemoteRawDocs(authHeaders) {
       let pageToken = '';
@@ -11804,6 +12600,7 @@
         if (typeof window.renderVault === 'function') window.renderVault();
         if (typeof window.renderMetrics === 'function') window.renderMetrics();
         await pullFromCloud(true, false);
+        startRealtimeFirestoreSync();
         return;
       }
 
@@ -11936,12 +12733,13 @@
       const statHash = document.getElementById('statIntegrityHash');
 
       const items = (typeof window.getVaultItems === 'function' ? window.getVaultItems() : window.vaultItems) || [];
-      syncHealthState.localCount = items.length;
-      syncHealthState.pinnedCount = items.filter(x => x.pinned || x.isPriority).length;
+      const activeItems = items.filter(x => !x.trashed);
+      syncHealthState.localCount = activeItems.length;
+      syncHealthState.pinnedCount = activeItems.filter(x => x.pinned || x.isPriority).length;
 
       let outbox = [];
       try { outbox = JSON.parse(localStorage.getItem(LS_MUTATION_JOURNAL) || '[]'); } catch(e){}
-      syncHealthState.outboxCount = outbox.length;
+      syncHealthState.outboxCount = hasPendingCloudWrites ? Math.max(1, outbox.length) : outbox.length;
 
       if (statLocal) statLocal.textContent = syncHealthState.localCount;
       if (statCloud) statCloud.textContent = syncHealthState.cloudCount;
@@ -11949,7 +12747,7 @@
       if (statOutbox) statOutbox.textContent = syncHealthState.outboxCount + ' Pending';
       if (statPull) statPull.textContent = syncHealthState.lastPull ? new Date(syncHealthState.lastPull).toLocaleTimeString() : 'Pending';
 
-      const match = syncHealthState.localCount > 0 && syncHealthState.localCount === syncHealthState.cloudCount;
+      const match = items.length > 0 && items.length === syncHealthState.cloudCount;
       if (statHash) {
         statHash.textContent = !activeSessionKey ? 'LOCKED' : (match ? '100% MATCH' : (syncHealthState.cloudCount > 0 ? 'Divergent' : 'Connecting'));
         statHash.className = 'sync-stat-val ' + (match ? 'match' : '');
@@ -11960,6 +12758,8 @@
       if (modalDot) modalDot.className = cls;
       if (label) {
         if (!activeSessionKey) label.textContent = 'Locked';
+        else if (hasPendingCloudWrites) label.textContent = 'Pending Sync ⏳';
+        else if (isRealtimeListenerActive) label.textContent = 'Live Sync ⚡ (' + syncHealthState.localCount + ')';
         else label.textContent = syncHealthState.status === 'synced'
           ? ('Synced (' + syncHealthState.localCount + ')')
           : (syncHealthState.status === 'syncing' ? 'Syncing...' : 'Sync Health');
@@ -11968,7 +12768,68 @@
     window.updateSyncHealthUI = updateSyncHealthUI;
 
     function buildVaultFingerprint(items, pins) {
-      return (items || []).length + '|' + (pins || []).join(',') + '|' + (items || []).map(x => `${x.id}:${x.updatedAt || 0}:${x.isPriority ? 1 : 0}:${x.importance === 'Critical' ? 1 : 0}:${x.category}:${x.title}`).join(';');
+      return (items || []).length + '|' + (pins || []).join(',') + '|' + (items || []).map(x => `${x.id}:${x.updatedAt || 0}:${x.rev || 0}:${x.trashed ? 1 : 0}:${x.isPriority ? 1 : 0}:${x.importance === 'Critical' ? 1 : 0}:${x.category}:${x.title}`).join(';');
+    }
+
+    async function mergeRemoteFetchedItems(fetchedItems, masterPinnedIds, masterTs, localTombstones, forceRender = false) {
+      if (!Array.isArray(fetchedItems) || fetchedItems.length === 0) return;
+      isApplyingRemote = true;
+      try {
+        const currentLocalItems = (typeof window.getVaultItems === 'function' ? window.getVaultItems() : window.vaultItems) || [];
+        const localMap = new Map((Array.isArray(currentLocalItems) ? currentLocalItems : []).map(x => [x.id, x]));
+        const merged = [];
+
+        fetchedItems.forEach(remoteItem => {
+          const delAt = localTombstones[remoteItem.id];
+          const rTime = remoteItem.updatedAt || 0;
+          if (delAt && rTime <= delAt) {
+            localMap.delete(remoteItem.id);
+            return;
+          }
+          const localItem = localMap.get(remoteItem.id);
+          if (!localItem) {
+            merged.push(remoteItem);
+          } else {
+            const lTime = localItem.updatedAt || 0;
+            const lRev = localItem.rev || 0;
+            const rRev = remoteItem.rev || 0;
+            const preferLocal = dirtyRecordIds.has(remoteItem.id) || (lTime > rTime) || (lTime === rTime && lRev > rRev);
+            if (preferLocal) {
+              merged.push(localItem);
+              dirtyRecordIds.add(remoteItem.id);
+            } else {
+              merged.push(remoteItem);
+            }
+            localMap.delete(remoteItem.id);
+          }
+        });
+
+        localMap.forEach(val => {
+          if (!localTombstones[val.id]) merged.push(val);
+        });
+
+        if (typeof window.setVaultItems === 'function') window.setVaultItems(merged);
+        window.vaultItems = merged;
+
+        let effectivePinned = merged.filter(x => x.pinned || x.isPriority).map(x => x.id);
+        if (effectivePinned.length === 0 && Array.isArray(masterPinnedIds) && masterPinnedIds.length > 0) {
+          effectivePinned = masterPinnedIds.filter(pid => !localTombstones[pid]);
+        }
+        if (typeof savePinnedRegistry === 'function') savePinnedRegistry(effectivePinned);
+        if (typeof window.reapplyPriorityPins === 'function') window.reapplyPriorityPins(merged);
+
+        await persistEncryptedVaultCache();
+
+        const newFp = buildVaultFingerprint(merged, effectivePinned);
+        if ((newFp !== lastRenderFingerprint || forceRender) && !isUserTypingOrEditingModalOpen()) {
+          lastRenderFingerprint = newFp;
+          if (typeof window.renderVault === 'function') window.renderVault();
+        }
+        if (typeof window.renderMetrics === 'function') window.renderMetrics();
+        if (masterTs && masterTs > 0) lastSeenRemoteTs = masterTs;
+      } finally {
+        isApplyingRemote = false;
+      }
     }
 
     function isUserTypingOrEditingModalOpen() {
@@ -12132,64 +12993,10 @@
         }
 
         if (fetchedItems.length > 0) {
-          isApplyingRemote = true;
-          try {
-            const currentLocalItems = (typeof window.getVaultItems === 'function' ? window.getVaultItems() : window.vaultItems) || [];
-            const localMap = new Map((Array.isArray(currentLocalItems) ? currentLocalItems : []).map(x => [x.id, x]));
-            const merged = [];
-
-            fetchedItems.forEach(remoteItem => {
-              const delAt = localTombstones[remoteItem.id];
-              const rTime = remoteItem.updatedAt || 0;
-              if (delAt && rTime <= delAt) {
-                localMap.delete(remoteItem.id);
-                return;
-              }
-              const localItem = localMap.get(remoteItem.id);
-              if (!localItem) {
-                merged.push(remoteItem);
-              } else {
-                const lTime = localItem.updatedAt || 0;
-                if (dirtyRecordIds.has(remoteItem.id) || lTime > rTime) {
-                  merged.push(localItem);
-                  dirtyRecordIds.add(remoteItem.id);
-                } else {
-                  merged.push(remoteItem);
-                }
-                localMap.delete(remoteItem.id);
-              }
-            });
-
-            localMap.forEach(val => {
-              if (!localTombstones[val.id]) merged.push(val);
-            });
-
-            if (typeof window.setVaultItems === 'function') window.setVaultItems(merged);
-            window.vaultItems = merged;
-
-            let effectivePinned = merged.filter(x => x.pinned || x.isPriority).map(x => x.id);
-            if (effectivePinned.length === 0 && Array.isArray(masterPinnedIds) && masterPinnedIds.length > 0) {
-              effectivePinned = masterPinnedIds.filter(pid => !localTombstones[pid]);
-            }
-            if (typeof savePinnedRegistry === 'function') savePinnedRegistry(effectivePinned);
-            if (typeof window.reapplyPriorityPins === 'function') window.reapplyPriorityPins(merged);
-
-            await persistEncryptedVaultCache();
-
-            const newFp = buildVaultFingerprint(merged, effectivePinned);
-            if ((newFp !== lastRenderFingerprint || isInitial) && !isUserTypingOrEditingModalOpen()) {
-              lastRenderFingerprint = newFp;
-              if (typeof window.renderVault === 'function') window.renderVault();
-            }
-            if (typeof window.renderMetrics === 'function') window.renderMetrics();
-
-            if (masterTs > 0) lastSeenRemoteTs = masterTs;
-            syncHealthState.lastPull = Date.now();
-            syncHealthState.cloudCount = fetchedItems.length;
-            syncHealthState.status = 'synced';
-          } finally {
-            isApplyingRemote = false;
-          }
+          await mergeRemoteFetchedItems(fetchedItems, masterPinnedIds, masterTs, localTombstones, isInitial);
+          syncHealthState.lastPull = Date.now();
+          syncHealthState.cloudCount = fetchedItems.length;
+          syncHealthState.status = 'synced';
         }
 
         hasCompletedInitialPull = true;
@@ -12251,12 +13058,44 @@
           ? items
           : items.filter(it => dirtyRecordIds.has(it.id));
 
+        const sdkPayloads = [];
         for (let i = 0; i < targetItems.length; i++) {
           const item = targetItems[i];
           const encPass = await VaultCrypto.encrypt(item.password || '', key);
           const encOldPass = await VaultCrypto.encrypt(item.old_password || '', key);
           const encMeta = await VaultCrypto.encrypt(item.metadata || '', key);
           const encNotes = await VaultCrypto.encrypt(item.notes || '', key);
+          const histArr = Array.isArray(item.passwordHistory) ? item.passwordHistory.slice(0, 5) : [];
+          const encHist = await VaultCrypto.encrypt(histArr.length ? JSON.stringify(histArr) : '', key);
+
+          sdkPayloads.push({
+            id: item.id,
+            title: item.title || '',
+            username: item.username || '',
+            category: item.category || 'Portals',
+            badge: item.badge || '',
+            importance: item.importance || 'Normal',
+            status: item.status || 'Secured',
+            isPriority: !!(item.pinned || item.isPriority),
+            pinned: !!(item.pinned || item.isPriority),
+            pinned_at: Number(item.pinned_at || 0),
+            lastUsedAt: Number(item.lastUsedAt || 0),
+            usageScore: Math.round(item.usageScore || 0),
+            copyPasswordCount: Number(item.copyPasswordCount || 0),
+            copyUsernameCount: Number(item.copyUsernameCount || 0),
+            viewPasswordCount: Number(item.viewPasswordCount || 0),
+            updatedAt: Number(item.updatedAt || now),
+            rev: Number(item.rev || 0),
+            trashed: !!item.trashed,
+            trashedAt: Number(item.trashedAt || 0),
+            updatedBy: CLIENT_ID,
+            deleted: false,
+            encryptedPassword: JSON.stringify(encPass),
+            encryptedOldPassword: JSON.stringify(encOldPass),
+            encryptedMetadata: JSON.stringify(encMeta),
+            encryptedNotes: JSON.stringify(encNotes),
+            encryptedPasswordHistory: JSON.stringify(encHist)
+          });
 
           writes.push({
             update: {
@@ -12278,31 +13117,72 @@
                 copyUsernameCount: { integerValue: String(item.copyUsernameCount || 0) },
                 viewPasswordCount: { integerValue: String(item.viewPasswordCount || 0) },
                 updatedAt: { integerValue: String(item.updatedAt || now) },
+                rev: { integerValue: String(item.rev || 0) },
+                trashed: { booleanValue: !!item.trashed },
+                trashedAt: { integerValue: String(item.trashedAt || 0) },
                 updatedBy: { stringValue: CLIENT_ID },
                 deleted: { booleanValue: false },
                 encryptedPassword: { stringValue: JSON.stringify(encPass) },
                 encryptedOldPassword: { stringValue: JSON.stringify(encOldPass) },
                 encryptedMetadata: { stringValue: JSON.stringify(encMeta) },
-                encryptedNotes: { stringValue: JSON.stringify(encNotes) }
+                encryptedNotes: { stringValue: JSON.stringify(encNotes) },
+                encryptedPasswordHistory: { stringValue: JSON.stringify(encHist) }
               }
             }
           });
         }
 
-        dirtyDeleteIds.forEach(delId => {
+        const delIds = Array.from(dirtyDeleteIds);
+        delIds.forEach(delId => {
           writes.push({
             delete: 'projects/' + FIREBASE_CONFIG.projectId + '/databases/(default)/documents/orlandovault_records/' + delId
           });
         });
 
-        for (let b = 0; b < writes.length; b += 100) {
-          const chunk = writes.slice(b, b + 100);
-          const cRes = await fetch(COMMIT_URL, {
-            method: 'POST',
-            headers: Object.assign({ 'Content-Type': 'application/json' }, authHeaders),
-            body: JSON.stringify({ writes: chunk })
-          });
-          if (!cRes.ok) throw new Error('Firestore commit HTTP ' + cRes.status);
+        let sdkCommitted = false;
+        if (firebaseDb && typeof firebaseDb.batch === 'function') {
+          try {
+            const colRef = firebaseDb.collection('orlandovault_records');
+            const totalOps = sdkPayloads.length + delIds.length;
+            let curBatch = firebaseDb.batch();
+            let opCount = 0;
+            for (const p of sdkPayloads) {
+              curBatch.set(colRef.doc(p.id), p);
+              opCount++;
+              if (opCount >= 400) {
+                await curBatch.commit();
+                curBatch = firebaseDb.batch();
+                opCount = 0;
+              }
+            }
+            for (const did of delIds) {
+              curBatch.delete(colRef.doc(did));
+              opCount++;
+              if (opCount >= 400) {
+                await curBatch.commit();
+                curBatch = firebaseDb.batch();
+                opCount = 0;
+              }
+            }
+            if (opCount > 0 || totalOps === 0) {
+              if (opCount > 0) await curBatch.commit();
+            }
+            sdkCommitted = true;
+          } catch(sdkErr) {
+            sdkCommitted = false;
+          }
+        }
+
+        if (!sdkCommitted) {
+          for (let b = 0; b < writes.length; b += 100) {
+            const chunk = writes.slice(b, b + 100);
+            const cRes = await fetch(COMMIT_URL, {
+              method: 'POST',
+              headers: Object.assign({ 'Content-Type': 'application/json' }, authHeaders),
+              body: JSON.stringify({ writes: chunk })
+            });
+            if (!cRes.ok) throw new Error('Firestore commit HTTP ' + cRes.status);
+          }
         }
 
         const pinnedIds = items.filter(x => x.pinned || x.isPriority).map(x => x.id);
@@ -12876,6 +13756,36 @@
       if (btnForceResync) btnForceResync.onclick = () => { pullFromCloud(true, true); };
       if (btnCreateSnap) btnCreateSnap.onclick = async () => { await createSnapshot('manual'); updateSyncHealthUI(); };
       if (btnRestSnap) btnRestSnap.onclick = () => { window.restoreVaultSnapshot(); };
+      const btnExportOv = document.getElementById('btnSyncExportOvault');
+      const btnImportOv = document.getElementById('btnSyncImportOvault');
+      const fileImportOv = document.getElementById('inputImportOvaultFile');
+      if (btnExportOv) btnExportOv.onclick = () => { if (typeof exportVaultBackupFile === 'function') exportVaultBackupFile(); };
+      if (btnImportOv && fileImportOv) {
+        btnImportOv.onclick = () => { fileImportOv.value = ''; fileImportOv.click(); };
+        fileImportOv.onchange = async (e) => {
+          const file = e.target.files && e.target.files[0];
+          if (!file) return;
+          try {
+            const text = await file.text();
+            const parsed = JSON.parse(text);
+            let res;
+            try {
+              res = await window.importEncryptedOvaultEnvelope(parsed, null);
+            } catch(needErr) {
+              if (needErr && needErr.message === 'BACKUP_SECRET_REQUIRED') {
+                const sec = window.prompt('Enter the Passcode / Master Password used to encrypt this .ovault backup:');
+                if (!sec) return;
+                res = await window.importEncryptedOvaultEnvelope(parsed, sec);
+              } else {
+                throw needErr;
+              }
+            }
+            if (typeof showToast === 'function') showToast(`📥 Imported ${res.updatedFromBackup} encrypted records (${res.totalMerged} total)!`, '✅');
+          } catch(err) {
+            if (typeof showToast === 'function') showToast('❌ ' + (err.message || 'Import failed'), '⚠️');
+          }
+        };
+      }
 
       const btnSignOut = document.getElementById('btnVaultSignOut');
       if (btnSignOut) {
@@ -13313,7 +14223,7 @@
       }, 5000);
 
       setInterval(() => {
-        if (activeSessionKey && document.visibilityState === 'visible') {
+        if (activeSessionKey && !isRealtimeListenerActive && document.visibilityState === 'visible') {
           pullFromCloud(false, false);
         }
       }, 8000);
@@ -13685,7 +14595,12 @@
             ${typeof renderSmartMetadata === 'function' ? renderSmartMetadata(item.metadata, item.notes, { maskSensitive: false }) : `<div class="focus-notes-text">${escapeHtml(item.notes || '')}</div>`}
           </div>
         ` : ''}
+        <div id="focusPwdHistoryHost" style="display:none;"></div>
       `;
+
+      if (typeof window.wirePasswordHistoryDeck === 'function') {
+        window.wirePasswordHistoryDeck(document.getElementById('focusPwdHistoryHost'), item, 'focus');
+      }
 
       // Wire up inline Copy Password & Open Portal button
       const btnCopyLaunch = document.getElementById('btnFocusCopyAndLaunch');
@@ -13951,8 +14866,8 @@
       spotlightMatches = [];
 
       if (!q) {
-        // When empty, show Top Priority Accounts & Facebook-style Frequent Accounts
-        const creds = Array.isArray(vaultItems) ? vaultItems : [];
+        // When empty, show Top Priority Accounts & Facebook-style Frequent Accounts (excluding Trash)
+        const creds = (Array.isArray(vaultItems) ? vaultItems : []).filter(c => !c.trashed);
         const topPinned = creds.filter(c => c.isPriority || c.pinned).slice(0, 4);
 
         if (topPinned.length > 0) {
@@ -14032,7 +14947,7 @@
           'stream': 'streaming'
         };
 
-        const creds = Array.isArray(vaultItems) ? vaultItems : [];
+        const creds = (Array.isArray(vaultItems) ? vaultItems : []).filter(c => !c.trashed);
         const scoredCreds = [];
 
         creds.forEach(item => {
@@ -14460,10 +15375,11 @@
     let isHorizontalGesture = false;
     let isVerticalGesture = false;
 
-    const FILTER_ORDER = ['all', 'DepEd', 'Social', 'AI & Dev', 'Banking & Finance', 'Portals', 'Entertainment', 'Shopping', 'Gmail', 'Microsoft', 'Family', 'System', 'Critical'];
+    const FILTER_ORDER = ['all', 'Pinned', 'DepEd', 'Social', 'AI & Dev', 'Banking & Finance', 'Portals', 'Entertainment', 'Shopping', 'Gmail', 'Microsoft', 'Family', 'System', 'Critical', 'Trash'];
 
     function getActiveModal() {
       const candidates = [
+        document.getElementById('cardQuickActionModal'),
         document.getElementById('vaultSpotlightModal'),
         document.getElementById('accountFocusModal'),
         document.getElementById('cardEditModal'),
@@ -14475,18 +15391,25 @@
       for (let i = 0; i < candidates.length; i++) {
         const m = candidates[i];
         if (!m) continue;
-        if (m.classList.contains('open') || m.classList.contains('active')) {
+        if (m.classList.contains('open') || m.classList.contains('active') || m.style.display === 'flex') {
           return m;
         }
       }
       return null;
     }
 
+    function syncBodyModalOpenClass() {
+      const anyActive = document.querySelector('.modal-backdrop.open, .modal-backdrop.active, .spotlight-backdrop.open, #syncHealthModal[style*="flex"]');
+      document.body.classList.toggle('vault-modal-open', !!anyActive);
+    }
+
     function closeActiveModal() {
       const m = getActiveModal();
       if (!m) return false;
 
-      if (m.id === 'vaultSpotlightModal' && typeof window.closeVaultSpotlight === 'function') {
+      if (m.id === 'cardQuickActionModal' && typeof window.closeCardQuickMenu === 'function') {
+        window.closeCardQuickMenu();
+      } else if (m.id === 'vaultSpotlightModal' && typeof window.closeVaultSpotlight === 'function') {
         window.closeVaultSpotlight();
       } else if (m.id === 'accountFocusModal') {
         window.closeAccountFocusModal(false);
@@ -14503,6 +15426,7 @@
       } else {
         m.classList.remove('open', 'active');
       }
+      syncBodyModalOpenClass();
 
       if (typeof playJarvisSound === 'function') playJarvisSound('click');
       if (navigator.vibrate) try { navigator.vibrate([10]); } catch(e){}
@@ -14539,16 +15463,17 @@
           if (typeof window.lockPageScroll === 'function') window.lockPageScroll();
         } else {
           // If no other modal is open, restore background scroll smoothly
-          const anyActive = document.querySelector('.modal-backdrop.open, .modal-backdrop.active, .spotlight-backdrop.open');
+          const anyActive = document.querySelector('.modal-backdrop.open, .modal-backdrop.active, .spotlight-backdrop.open, #syncHealthModal[style*="flex"]');
           if (!anyActive && typeof window.unlockPageScroll === 'function') {
             window.unlockPageScroll();
           }
         }
+        syncBodyModalOpenClass();
       });
       obs.observe(m, { attributes: true, attributeFilter: ['class', 'style'] });
     }
 
-    ['vaultSpotlightModal', 'accountFocusModal', 'cardEditModal', 'sheetSyncModal', 'qrModal', 'historyModal', 'syncHealthModal'].forEach(setupModalHistoryPush);
+    ['cardQuickActionModal', 'vaultSpotlightModal', 'accountFocusModal', 'cardEditModal', 'sheetSyncModal', 'qrModal', 'historyModal', 'syncHealthModal'].forEach(setupModalHistoryPush);
 
     function showEdgeIndicator(dir, text) {
       const el = dir === 'left' ? document.getElementById('appleEdgeIndicatorLeft') : document.getElementById('appleEdgeIndicatorRight');
@@ -14598,7 +15523,7 @@
     let usingPointer = false;
 
     function handleDragStart(clientX, clientY, target) {
-      if (target && target.closest('input, textarea, select, button, a, .btn-pwd-action, .btn-focus-copy-user-inline, .btn-card-pin, .btn-card-edit')) {
+      if (target && target.closest('input, textarea, select, button, a, .filter-pills-row, .vault-table-container, #vaultLockOverlay, #mobileThumbBar, .btn-pwd-action, .btn-focus-copy-user-inline, .btn-card-pin, .btn-card-edit')) {
         return false;
       }
       touchStartX = clientX;
@@ -14609,7 +15534,7 @@
 
       activeDragModal = getActiveModal();
       if (activeDragModal) {
-        activeDragBox = activeDragModal.querySelector('.spotlight-box, .focus-hud-box, .card-editor-modal, .qr-suite-container, .modal-box') || activeDragModal;
+        activeDragBox = activeDragModal.querySelector('.spotlight-box, .focus-hud-box, .card-editor-modal, .sync-health-card, .quick-action-sheet, .qr-suite-container, .modal-box') || activeDragModal;
         if (activeDragBox) {
           activeDragBox.style.transition = 'none';
         }
@@ -14649,11 +15574,24 @@
             activeDragModal.style.opacity = String(Math.max(0.15, 1 - dy / 350));
           }
         }
+      } else if (!activeDragModal && isVerticalGesture && dy > 16 && window.scrollY <= 0 && !document.body.classList.contains('vault-locked-active')) {
+        const pill = document.getElementById('pullToSyncPill');
+        if (pill) {
+          const pullY = Math.min(82, dy * 0.65);
+          pill.classList.add('visible');
+          pill.style.transform = 'translate(-50%, ' + Math.round(pullY - 12) + 'px)';
+          pill.textContent = dy > 68 ? '↻ Release to Sync Cloud Vault' : '↓ Pull to Sync Cloud Vault';
+        }
       }
     }
 
     function handleDragEnd(clientX, clientY) {
       if (!touchStartTime) return;
+      const pill = document.getElementById('pullToSyncPill');
+      if (pill) {
+        pill.classList.remove('visible');
+        pill.style.transform = '';
+      }
       const dt = Math.max(1, Date.now() - touchStartTime);
       const dx = clientX - touchStartX;
       const dy = clientY - touchStartY;
@@ -14708,8 +15646,10 @@
           activeDragModal.style.opacity = '';
         }
       } else {
-        // Main view edge swiping
-        if (isHorizontalGesture && absX > 50 && (absX > 80 || vx > 0.35)) {
+        // Pull-to-Sync when scrolled at top, else horizontal edge swipe
+        if (isVerticalGesture && dy > 68 && window.scrollY <= 0 && !document.body.classList.contains('vault-locked-active')) {
+          if (typeof window.pullVaultFromCloud === 'function') window.pullVaultFromCloud(false, true);
+        } else if (isHorizontalGesture && absX > 50 && (absX > 80 || vx > 0.35)) {
           if (dx > 0) {
             triggerFilterSwipe(-1); // Back
           } else {
@@ -14820,6 +15760,86 @@
       canceled: false,
       pointerId: null
     };
+    let longPressTimer = null;
+    let lastLongPressAt = 0;
+
+    function closeCardQuickMenu() {
+      const m = document.getElementById('cardQuickActionModal');
+      if (m) m.classList.remove('active');
+    }
+    window.closeCardQuickMenu = closeCardQuickMenu;
+
+    function openCardQuickMenu(cardId) {
+      const items = (typeof window.getVaultItems === 'function' ? window.getVaultItems() : window.vaultItems) || [];
+      const item = items.find(x => x.id === cardId);
+      const modal = document.getElementById('cardQuickActionModal');
+      const titleEl = document.getElementById('quickActionTitle');
+      const subEl = document.getElementById('quickActionSub');
+      const btnsEl = document.getElementById('quickActionButtons');
+      if (!item || !modal || !btnsEl) return;
+
+      if (titleEl) titleEl.textContent = item.title || 'Account';
+      if (subEl) subEl.textContent = (item.username || '') + (item.category ? (' · ' + item.category) : '');
+      const portalUrl = typeof resolveAccountPortalUrl === 'function' ? resolveAccountPortalUrl(item) : '';
+      const isPinned = !!(item.isPriority || item.pinned);
+
+      btnsEl.innerHTML = item.trashed ? `
+        <button type="button" class="quick-action-btn" data-qa="restore"><span>♻️ Restore to Vault</span><span>↩</span></button>
+        <button type="button" class="quick-action-btn danger" data-qa="perm_delete"><span>🔥 Delete Forever</span><span>✕</span></button>
+      ` : `
+        <button type="button" class="quick-action-btn" data-qa="copy_pwd"><span>📋 Copy Password</span><span>25s wipe</span></button>
+        <button type="button" class="quick-action-btn" data-qa="copy_user"><span>👤 Copy Username / Email</span><span>Copy</span></button>
+        ${portalUrl ? '<button type="button" class="quick-action-btn" data-qa="copy_launch"><span>⚡ Copy Password & Open Portal</span><span>↗</span></button>' : ''}
+        <button type="button" class="quick-action-btn" data-qa="pin"><span>${isPinned ? '☆ Remove Top Priority Pin' : '⭐ Pin to Top Priority'}</span><span>Pin</span></button>
+        <button type="button" class="quick-action-btn" data-qa="edit"><span>✏️ Edit Account</span><span>Edit</span></button>
+        <button type="button" class="quick-action-btn danger" data-qa="trash"><span>🗑️ Move to 30-Day Trash</span><span>30d</span></button>
+      `;
+
+      btnsEl.querySelectorAll('[data-qa]').forEach(btn => {
+        btn.onclick = () => {
+          const act = btn.getAttribute('data-qa');
+          closeCardQuickMenu();
+          if (act === 'copy_pwd' && typeof copyPasswordById === 'function') copyPasswordById(item.id, null, false);
+          else if (act === 'copy_user' && typeof copyUsernameById === 'function') copyUsernameById(item.id, null);
+          else if (act === 'copy_launch') {
+            if (typeof copyPasswordById === 'function') copyPasswordById(item.id, null, false);
+            try { window.open(portalUrl, '_blank', 'noopener,noreferrer'); } catch(e) {}
+          }
+          else if (act === 'pin' && typeof toggleCardPriority === 'function') toggleCardPriority(item.id);
+          else if (act === 'edit' && typeof openCardEditor === 'function') openCardEditor(item.id);
+          else if (act === 'trash' && typeof window.moveCardToTrash === 'function') window.moveCardToTrash(item.id);
+          else if (act === 'restore' && typeof window.restoreCardFromTrash === 'function') window.restoreCardFromTrash(item.id);
+          else if (act === 'perm_delete' && typeof window.permanentlyDeleteCard === 'function') window.permanentlyDeleteCard(item.id);
+        };
+      });
+
+      modal.classList.add('active');
+    }
+    window.openCardQuickMenu = openCardQuickMenu;
+
+    document.getElementById('btnCloseQuickAction')?.addEventListener('click', closeCardQuickMenu);
+    document.getElementById('cardQuickActionModal')?.addEventListener('click', (e) => {
+      if (e.target && e.target.id === 'cardQuickActionModal') closeCardQuickMenu();
+    });
+
+    // Mobile Bottom Thumb Zone Bar Navigation Bindings
+    document.getElementById('btnThumbSearch')?.addEventListener('click', () => {
+      if (typeof window.openVaultSpotlight === 'function') window.openVaultSpotlight();
+    });
+    document.getElementById('btnThumbPinned')?.addEventListener('click', () => {
+      const targetCat = (document.querySelector('.filter-pill.active')?.getAttribute('data-cat') === 'Pinned') ? 'all' : 'Pinned';
+      document.querySelector('.filter-pill[data-cat="' + targetCat + '"]')?.click();
+    });
+    document.getElementById('btnThumbNew')?.addEventListener('click', () => {
+      if (typeof openNewCardEditor === 'function') openNewCardEditor();
+    });
+    document.getElementById('btnThumbTrash')?.addEventListener('click', () => {
+      const targetCat = (document.querySelector('.filter-pill.active')?.getAttribute('data-cat') === 'Trash') ? 'all' : 'Trash';
+      document.querySelector('.filter-pill[data-cat="' + targetCat + '"]')?.click();
+    });
+    document.getElementById('btnThumbLock')?.addEventListener('click', () => {
+      if (typeof window.lockVault === 'function') window.lockVault('Vault locked from mobile bar.');
+    });
 
     function triggerCardActivation(cardId) {
       if (!cardId) return;
@@ -14840,7 +15860,7 @@
       grid.addEventListener('pointerdown', function(e) {
         const card = e.target.closest('.vault-card, .vault-card-compact, .vault-table-row, .vault-list-chip');
         if (!card) return;
-        if (e.target.closest('button, a, input, select, textarea, .btn-card-pin, .btn-card-edit, .compact-btn-copy-pwd, .compact-username-row, .btn-copy-user, .btn-pwd-action, .btn-copy-instant, .table-action-pill')) return;
+        if (e.target.closest('button, a, input, select, textarea, .btn-card-pin, .btn-card-edit, .compact-btn-copy-pwd, .compact-username-row, .btn-copy-user, .btn-pwd-action, .btn-copy-instant, .table-action-pill, .trash-card-footer')) return;
 
         tapState.cardId = card.getAttribute('data-card-id');
         tapState.startX = e.clientX;
@@ -14848,6 +15868,19 @@
         tapState.startTime = Date.now();
         tapState.canceled = false;
         tapState.pointerId = e.pointerId;
+
+        if (longPressTimer) clearTimeout(longPressTimer);
+        const holdCardId = tapState.cardId;
+        longPressTimer = setTimeout(() => {
+          const anyModal = document.querySelector('.modal-backdrop.open, .modal-backdrop.active, .spotlight-backdrop.open');
+          if (tapState.cardId === holdCardId && !tapState.canceled && !anyModal) {
+            tapState.canceled = true;
+            tapState.cardId = null;
+            lastLongPressAt = Date.now();
+            if (navigator.vibrate) try { navigator.vibrate([12]); } catch(err) {}
+            openCardQuickMenu(holdCardId);
+          }
+        }, 430);
       }, { passive: true });
 
       grid.addEventListener('pointermove', function(e) {
@@ -14855,15 +15888,18 @@
         const dist = Math.hypot(e.clientX - tapState.startX, e.clientY - tapState.startY);
         if (dist > 8) {
           tapState.canceled = true; // User is scrolling!
+          if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
         }
       }, { passive: true });
 
       grid.addEventListener('pointercancel', function() {
         tapState.canceled = true;
         tapState.cardId = null;
+        if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
       }, { passive: true });
 
       grid.addEventListener('pointerup', function(e) {
+        if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
         if (!tapState.cardId || tapState.canceled) {
           tapState.cardId = null;
           return;
@@ -14872,9 +15908,9 @@
         const cardId = tapState.cardId;
         tapState.cardId = null;
 
-        // On touch: enforce safe tap constraints (< 8px displacement and < 500ms duration)
+        // On touch: enforce safe tap constraints (< 8px displacement and < 420ms duration)
         if (e.pointerType === 'touch' || e.pointerType === 'pen') {
-          if (dt > 500) return; // Held too long
+          if (dt > 420) return;
         }
 
         triggerCardActivation(cardId);
@@ -14882,7 +15918,8 @@
 
       // Direct click backup for hybrid mouse / trackpad / accessibility events
       grid.addEventListener('click', function(e) {
-        if (e.target.closest('button, a, input, select, textarea, .btn-card-pin, .btn-card-edit, .compact-btn-copy-pwd, .compact-username-row, .btn-copy-user, .btn-pwd-action, .btn-copy-instant, .table-action-pill')) return;
+        if (Date.now() - lastLongPressAt < 650) return;
+        if (e.target.closest('button, a, input, select, textarea, .btn-card-pin, .btn-card-edit, .compact-btn-copy-pwd, .compact-username-row, .btn-copy-user, .btn-pwd-action, .btn-copy-instant, .table-action-pill, .trash-card-footer')) return;
         const card = e.target.closest('.vault-card, .vault-card-compact, .vault-table-row, .vault-list-chip');
         if (!card) return;
         const cardId = card.getAttribute('data-card-id');
