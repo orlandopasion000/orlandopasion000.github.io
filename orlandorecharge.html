@@ -9559,17 +9559,27 @@ try { checkUrlHashRoutine(); } catch(e){}
     var cursorAsteroidSprite = null;
     var initialized = false;
 
-    // AAA Real-3D Raytraced 16-Frame PBR Sphere Atlases (2560x160 = 16 x 160x160 frames, R_norm = 0.77)
+    // AAA Photorealistic Texture-Mapped 16-Frame PBR Sphere Atlases (2560x160 = 16 x 160x160 frames, R_norm = 0.77)
     var ATLAS_FRAMES = 16;
     var ATLAS_CELL = 160;
     var ATLAS_RNORM = 0.77;
     var sphere3DAtlases = {
-      meteor: { img: null, loaded: false },
-      molten: { img: null, loaded: false },
-      orb:    { img: null, loaded: false },
+      meteor:        { img: null, loaded: false },
+      "meteor-core": { img: null, loaded: false },
+      molten:        { img: null, loaded: false },
+      orb:           { img: null, loaded: false },
+      dynamo:        { img: null, loaded: false },
+      helix:         { img: null, loaded: false },
+      "helix-core":  { img: null, loaded: false },
+      comet:         { img: null, loaded: false }
+    };
+    var wake3DSprites = {
       dynamo: { img: null, loaded: false },
       helix:  { img: null, loaded: false },
-      comet:  { img: null, loaded: false }
+      meteor: { img: null, loaded: false },
+      comet:  { img: null, loaded: false },
+      orb:    { img: null, loaded: false },
+      molten: { img: null, loaded: false }
     };
     if (typeof Image !== "undefined") {
       Object.keys(sphere3DAtlases).forEach(function(k) {
@@ -9578,11 +9588,19 @@ try { checkUrlHashRoutine(); } catch(e){}
         aImg.onload = function() {
           sphere3DAtlases[k].loaded = !!(aImg.naturalWidth >= ATLAS_CELL * ATLAS_FRAMES);
         };
-        aImg.src = "assets/sphere-3d-" + k + ".webp?v=408";
+        aImg.src = "assets/sphere-3d-" + k + ".webp?v=411";
+      });
+      Object.keys(wake3DSprites).forEach(function(k) {
+        var wImg = new Image();
+        wake3DSprites[k].img = wImg;
+        wImg.onload = function() {
+          wake3DSprites[k].loaded = !!(wImg.naturalWidth > 64);
+        };
+        wImg.src = "assets/wake-3d-" + k + ".webp?v=411";
       });
     }
 
-    function draw3DSphereFrame(targetCtx, modeKey, frameFloat, cx, cy, visualRadius, alpha, smoothCrossfade) {
+    function draw3DSphereFrame(targetCtx, modeKey, frameFloat, cx, cy, visualRadius, alpha, smoothCrossfade, headingAngle) {
       var entry = sphere3DAtlases[modeKey];
       if (!entry || !entry.loaded || !entry.img) return false;
       var total = ATLAS_FRAMES;
@@ -9590,11 +9608,17 @@ try { checkUrlHashRoutine(); } catch(e){}
       var f0 = Math.floor(wrapped);
       var frac = wrapped - f0;
       var drawSize = (visualRadius * 2.0) / ATLAS_RNORM;
-      var dx = cx - drawSize * 0.5;
-      var dy = cy - drawSize * 0.5;
       var aVal = (typeof alpha === "number") ? alpha : 1.0;
 
       targetCtx.save();
+      if (typeof headingAngle === "number") {
+        targetCtx.translate(cx, cy);
+        targetCtx.rotate(headingAngle);
+        cx = 0;
+        cy = 0;
+      }
+      var dx = cx - drawSize * 0.5;
+      var dy = cy - drawSize * 0.5;
       if (smoothCrossfade && frac > 0.04 && frac < 0.96) {
         var f1 = (f0 + 1) % total;
         targetCtx.globalAlpha = aVal;
@@ -9609,7 +9633,102 @@ try { checkUrlHashRoutine(); } catch(e){}
       return true;
     }
 
-    // Real Macro-Photography Reference Textures (Extracted with Edge-Aware Alpha Masks)
+    function draw3DWake(targetCtx, wakeKey, px0, py0, heading, rightOffsetPx, widthPx, heightPx, alpha, nowMs, instPhase, waveAmpPx, isAdditive, spineX, spineY, spineK, fastSingleBlit) {
+      var entry = wake3DSprites[wakeKey];
+      if (!entry || !entry.loaded || !entry.img || widthPx < 4 || heightPx < 4) return false;
+      var img = entry.img;
+      targetCtx.save();
+      targetCtx.translate(px0, py0);
+      targetCtx.rotate(heading);
+      targetCtx.globalAlpha = alpha;
+      if (isAdditive) targetCtx.globalCompositeOperation = "lighter";
+
+      if (fastSingleBlit) {
+        targetCtx.drawImage(img, rightOffsetPx - widthPx, -heightPx * 0.5, widthPx, heightPx);
+      } else {
+        var iw = img.naturalWidth || img.width;
+        var ih = img.naturalHeight || img.height;
+        var slices = 12;
+        var sw = iw / slices;
+        var dw = widthPx / slices;
+        var phase = nowMs * 0.0048 + (instPhase || 0);
+        var cosH = Math.cos(heading), sinH = Math.sin(heading);
+        var maxBend = heightPx * 0.28;
+        for (var s = 0; s < slices; s++) {
+          var sx0 = Math.round(s * sw);
+          var sx1 = Math.round((s + 1) * sw);
+          var dx0 = Math.round(rightOffsetPx - widthPx + s * dw);
+          var dx1 = Math.round(rightOffsetPx - widthPx + (s + 1) * dw);
+          if (sx1 <= sx0 || dx1 <= dx0) continue;
+          var distNorm = 1.0 - (s / slices);
+          var bend = 0;
+          if (spineK >= 3 && spineX && spineY) {
+            var spIdx = Math.min(spineK - 1, Math.round(distNorm * (spineK - 1)));
+            var relX = spineX[spIdx] - px0;
+            var relY = spineY[spIdx] - py0;
+            var perp = -relX * sinH + relY * cosH;
+            bend = Math.max(-maxBend, Math.min(maxBend, perp * 0.45));
+          }
+          var wave = Math.sin(phase + s * 0.52) * (waveAmpPx || 0) * distNorm * distNorm;
+          targetCtx.drawImage(img, sx0, 0, sx1 - sx0, ih, dx0, -heightPx * 0.5 + bend + wave, dx1 - dx0, heightPx);
+        }
+      }
+      targetCtx.restore();
+      return true;
+    }
+
+    function drawOpticalFlare(tCtx, fx, fy, fRad, colorGlow) {
+      tCtx.save();
+      tCtx.globalCompositeOperation = "lighter";
+      var g = tCtx.createRadialGradient(fx, fy, 0, fx, fy, fRad);
+      g.addColorStop(0.0, "#ffffff");
+      g.addColorStop(0.28, colorGlow);
+      g.addColorStop(1.0, "rgba(0, 0, 0, 0)");
+      tCtx.fillStyle = g;
+      tCtx.beginPath();
+      tCtx.arc(fx, fy, fRad, 0, Math.PI * 2);
+      tCtx.fill();
+
+      tCtx.fillStyle = "#ffffff";
+      for (var a = 0; a < 4; a++) {
+        tCtx.save();
+        tCtx.translate(fx, fy);
+        tCtx.rotate(a * (Math.PI * 0.25));
+        var len = (a % 2 === 0) ? (fRad * 1.15) : (fRad * 0.46);
+        var wid = (a % 2 === 0) ? (fRad * 0.085) : (fRad * 0.045);
+        tCtx.beginPath();
+        tCtx.moveTo(-len, 0);
+        tCtx.lineTo(0, -wid);
+        tCtx.lineTo(len, 0);
+        tCtx.lineTo(0, wid);
+        tCtx.closePath();
+        tCtx.globalAlpha = (a % 2 === 0) ? 0.90 : 0.48;
+        tCtx.fill();
+        tCtx.restore();
+      }
+      tCtx.restore();
+    }
+
+    function drawHorizontalFlare(tCtx, fx, fy, halfW, colorGlow, rotAng) {
+      tCtx.save();
+      tCtx.translate(fx, fy);
+      if (typeof rotAng === "number" && rotAng !== 0) tCtx.rotate(rotAng);
+      tCtx.globalCompositeOperation = "lighter";
+      var lg = tCtx.createLinearGradient(-halfW, 0, halfW, 0);
+      lg.addColorStop(0.0, "rgba(0, 0, 0, 0)");
+      lg.addColorStop(0.32, colorGlow);
+      lg.addColorStop(0.50, "#ffffff");
+      lg.addColorStop(0.68, colorGlow);
+      lg.addColorStop(1.0, "rgba(0, 0, 0, 0)");
+      tCtx.strokeStyle = lg;
+      tCtx.lineWidth = Math.max(1.6, halfW * 0.045);
+      tCtx.beginPath();
+      tCtx.moveTo(-halfW, 0);
+      tCtx.lineTo(halfW, 0);
+      tCtx.stroke();
+      tCtx.restore();
+      drawOpticalFlare(tCtx, fx, fy, halfW * 0.24, colorGlow);
+    }
     var macroRefTextures = {
       blueDynamo: null,
       moltenMeteor: null,
@@ -11067,8 +11186,14 @@ try { checkUrlHashRoutine(); } catch(e){}
         return flamePuffSprite;
       },
       draw3DSphereFrame: draw3DSphereFrame,
+      draw3DWake: draw3DWake,
+      drawOpticalFlare: drawOpticalFlare,
+      drawHorizontalFlare: drawHorizontalFlare,
       has3DAtlas: function(modeKey) {
         return !!(sphere3DAtlases[modeKey] && sphere3DAtlases[modeKey].loaded);
+      },
+      has3DWake: function(wakeKey) {
+        return !!(wake3DSprites[wakeKey] && wake3DSprites[wakeKey].loaded);
       }
     };
   })();
@@ -12146,7 +12271,30 @@ try { checkUrlHashRoutine(); } catch(e){}
         var headPtX = _ptsX[0];
         var headPtY = _ptsY[0];
 
-        if (isMeteor) {
+        var activeWakeKey = isMoltenCore ? "molten" : (isMeteor ? "meteor" : (isComet ? "comet" : (isHelixOrb ? "orb" : (isHelix ? "helix" : "dynamo"))));
+        var visR = headR * (tier === 3 ? 2.35 : (tier === 2 ? 1.88 : 1.48));
+        var instPhaseWake = (p.pulsePhase || 0) + i * 1.37;
+        var wakeLenScale = (tier === 3 ? 1.0 : (tier === 2 ? 0.88 : 0.72)) * (0.92 + Math.min(0.24, speedRatio * 0.18));
+        var usePhotorealWake = (gameGlowProgress > 0.06) && MeteorVFXEngine.has3DWake && MeteorVFXEngine.has3DWake(activeWakeKey);
+
+        if (usePhotorealWake) {
+          var wakeAlpha = renderAlpha * Math.min(1.0, gameGlowProgress * 1.15) * (tier === 1 ? 0.82 : 0.96);
+          var fastBlit = (tier === 1 || isFastRenderMode);
+          if (activeWakeKey === "meteor") {
+            MeteorVFXEngine.draw3DWake(targetCtx, "meteor", headPtX, headPtY, p.heading, visR * 0.82, visR * 6.8 * wakeLenScale, visR * 3.05, wakeAlpha, now, instPhaseWake, visR * 0.07, false, _ptsX, _ptsY, K, fastBlit);
+          } else if (activeWakeKey === "molten") {
+            // Exact locked bow-shock aspect ratio (820x320 anchored at +2.02*r -> width=8.91*r, height=3.48*r) so crescent wraps front sphere cleanly
+            MeteorVFXEngine.draw3DWake(targetCtx, "molten", headPtX, headPtY, p.heading, visR * 2.02, visR * 8.91, visR * 3.48, wakeAlpha, now, instPhaseWake, visR * 0.05, true, _ptsX, _ptsY, K, fastBlit);
+          } else if (activeWakeKey === "dynamo") {
+            MeteorVFXEngine.draw3DWake(targetCtx, "dynamo", headPtX, headPtY, p.heading, -visR * 0.62, visR * 5.8 * wakeLenScale, visR * 2.65, wakeAlpha, now, instPhaseWake, visR * 0.08, true, _ptsX, _ptsY, K, fastBlit);
+          } else if (activeWakeKey === "helix") {
+            MeteorVFXEngine.draw3DWake(targetCtx, "helix", headPtX, headPtY, p.heading, -visR * 0.62, visR * 5.8 * wakeLenScale, visR * 2.35, wakeAlpha, now, instPhaseWake, visR * 0.09, true, _ptsX, _ptsY, K, fastBlit);
+          } else if (activeWakeKey === "comet") {
+            MeteorVFXEngine.draw3DWake(targetCtx, "comet", headPtX, headPtY, p.heading, -visR * 0.38, visR * 6.0 * wakeLenScale, visR * 2.75, wakeAlpha, now, instPhaseWake, visR * 0.07, true, _ptsX, _ptsY, K, fastBlit);
+          } else if (activeWakeKey === "orb") {
+            MeteorVFXEngine.draw3DWake(targetCtx, "orb", headPtX, headPtY, p.heading, -visR * 0.22, visR * 6.0 * wakeLenScale, visR * 2.65, wakeAlpha, now, instPhaseWake, visR * 0.07, true, _ptsX, _ptsY, K, fastBlit);
+          }
+        } else if (isMeteor) {
           // ── METEOR (REF 5 ORBITAL METEOR) & MOLTEN CORE METEOR (REF 2 MOLTEN METEOR) WAKE ──
           var smokeSprite = MeteorVFXEngine.getSmoke();
           if (smokeSprite && K >= 4 && (isMoltenCore || currentSpeed > p.baseSpeed * 1.15)) {
@@ -12385,46 +12533,14 @@ try { checkUrlHashRoutine(); } catch(e){}
       var py0 = _ptsY[0];
 
       if (isMeteor) {
-        // ── REAL-3D RAYTRACED PLANETARY METEOR (Perfect 3D Sphere) & MOLTEN SUPERNOVA CORE ──
-        var rockR = headR * (tier === 3 ? 2.35 : (tier === 2 ? 1.88 : 1.50));
+        // ── PHOTOREALISTIC 3D METEOR (Cratered Basalt + Fire Engulfment, NO Saturn Rings!) & MOLTEN CORE ──
+        var rockR = headR * (tier === 3 ? 2.35 : (tier === 2 ? 1.88 : 1.48));
         var instPhase = (p.pulsePhase || 0) + i * 1.37;
         var spinDir = (i & 1) ? 1 : -1;
         var atlas3dFrame = (((now * (isMoltenCore ? 0.0082 : 0.0092) * spinDir + instPhase * 2.5) % 16) + 16) % 16;
 
         if (isMoltenCore) {
-          // ── MOLTEN: Crisp 3D Voronoi Tectonic Core Sandwiched Inside Tilted Supernova Plasma Halo ──
-          var mTilt = -0.30 + ((i % 5) - 2) * 0.09;
-          var mRx = rockR * 1.56;
-          var mRy = mRx * 0.34;
-          var mSatU = ((now * 0.0028 * spinDir + instPhase) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
-          var mSatSin = Math.sin(mSatU);
-          var mSatCos = Math.cos(mSatU);
-          var mCosT = Math.cos(mTilt), mSinT = Math.sin(mTilt);
-
-          // PASS 1 (BEHIND 3D SPHERE): Rear supernova plasma arc & rear flare node
-          if (tier >= 2) {
-            targetCtx.save();
-            targetCtx.translate(px0, py0);
-            targetCtx.rotate(mTilt);
-            targetCtx.beginPath();
-            targetCtx.ellipse(0, 0, mRx, mRy, 0, Math.PI * 1.05, Math.PI * 1.95);
-            targetCtx.strokeStyle = "rgba(220, 38, 38, " + (renderAlpha * 0.38).toFixed(2) + ")";
-            targetCtx.lineWidth = tier === 3 ? 2.6 : 1.8;
-            targetCtx.stroke();
-            targetCtx.restore();
-
-            if (mSatSin < 0) {
-              var msx = px0 + (mSatCos * mRx) * mCosT - (mSatSin * mRy) * mSinT;
-              var msy = py0 + (mSatCos * mRx) * mSinT + (mSatSin * mRy) * mCosT;
-              targetCtx.beginPath();
-              targetCtx.arc(msx, msy, tier === 3 ? 2.1 : 1.5, 0, Math.PI * 2);
-              targetCtx.fillStyle = "rgba(249, 115, 22, " + (renderAlpha * 0.65).toFixed(2) + ")";
-              targetCtx.fill();
-            }
-          }
-
-          // PASS 2: Crisp 3D Raytraced Molten Voronoi Sphere (Zero double-exposure ghosting!)
-          var drawnM = MeteorVFXEngine.draw3DSphereFrame(targetCtx, "molten", atlas3dFrame, px0, py0, rockR * 1.05, renderAlpha, false);
+          var drawnM = MeteorVFXEngine.draw3DSphereFrame(targetCtx, "molten", atlas3dFrame, px0, py0, rockR, renderAlpha, false, p.heading);
           if (!drawnM) {
             var astCanvasF = MeteorVFXEngine.getMoltenCoreSphere(((now * 0.0065 + i * 1.7) | 0) % 6);
             if (astCanvasF) {
@@ -12433,95 +12549,11 @@ try { checkUrlHashRoutine(); } catch(e){}
               targetCtx.drawImage(astCanvasF, px0 - drawRM, py0 - drawRM, drawRM * 2, drawRM * 2);
             }
           }
-
-          // Focused directional thermal compression bow-shock arc along p.heading
-          var leadCap = MeteorVFXEngine.getMoltenLeadingEdge();
-          if (leadCap && tier >= 2) {
-            var leadR = rockR * 1.24;
-            targetCtx.save();
-            targetCtx.translate(px0, py0);
-            targetCtx.rotate(p.heading);
-            targetCtx.globalCompositeOperation = "lighter";
-            targetCtx.globalAlpha = renderAlpha * (0.48 + 0.14 * Math.sin(now * 0.012 + instPhase));
-            targetCtx.drawImage(leadCap, -leadR, -leadR, leadR * 2, leadR * 2);
-            targetCtx.restore();
-          }
-
-          // PASS 3 (IN FRONT OF 3D SPHERE): Additive solar-orange & white-gold foreground corona arc & flare
           if (tier >= 2) {
-            targetCtx.save();
-            targetCtx.globalCompositeOperation = "lighter";
-            targetCtx.translate(px0, py0);
-            targetCtx.rotate(mTilt);
-            targetCtx.beginPath();
-            targetCtx.ellipse(0, 0, mRx, mRy, 0, Math.PI * 0.05, Math.PI * 0.95);
-            targetCtx.strokeStyle = "rgba(249, 115, 22, " + (renderAlpha * 0.62).toFixed(2) + ")";
-            targetCtx.lineWidth = tier === 3 ? 2.4 : 1.7;
-            targetCtx.stroke();
-            targetCtx.strokeStyle = "rgba(254, 240, 138, " + (renderAlpha * 0.48).toFixed(2) + ")";
-            targetCtx.lineWidth = 0.85;
-            targetCtx.stroke();
-            targetCtx.restore();
-
-            if (mSatSin >= 0) {
-              var msxF = px0 + (mSatCos * mRx) * mCosT - (mSatSin * mRy) * mSinT;
-              var msyF = py0 + (mSatCos * mRx) * mSinT + (mSatSin * mRy) * mCosT;
-              targetCtx.save();
-              targetCtx.globalCompositeOperation = "lighter";
-              targetCtx.beginPath();
-              targetCtx.arc(msxF, msyF, tier === 3 ? 3.4 : 2.5, 0, Math.PI * 2);
-              targetCtx.fillStyle = "rgba(249, 115, 22, " + (renderAlpha * 0.55).toFixed(2) + ")";
-              targetCtx.fill();
-              targetCtx.beginPath();
-              targetCtx.arc(msxF, msyF, tier === 3 ? 1.8 : 1.3, 0, Math.PI * 2);
-              targetCtx.fillStyle = "rgba(254, 249, 195, " + (renderAlpha * 0.96).toFixed(2) + ")";
-              targetCtx.fill();
-              targetCtx.restore();
-            }
+            MeteorVFXEngine.drawHorizontalFlare(targetCtx, px0, py0, rockR * 1.25, "rgba(251, 191, 36, " + (renderAlpha * 0.88).toFixed(2) + ")", p.heading);
           }
         } else {
-          // ── METEOR: Perfect 3D Planetary Caldera Sphere + Tilted 3D Volumetric Accretion Ring (Back -> Sphere -> Front) ──
-          var ringTilt = 0.26 + ((i % 5) - 2) * 0.08;
-          var ringRx = rockR * (tier === 3 ? 2.02 : (tier === 2 ? 1.82 : 1.58));
-          var ringRy = ringRx * 0.30;
-          var cosTilt = Math.cos(ringTilt), sinTilt = Math.sin(ringTilt);
-          var numCinders = isFastRenderMode ? (tier === 3 ? 8 : (tier === 2 ? 5 : 3)) : (tier === 3 ? 14 : (tier === 2 ? 9 : 5));
-
-          // PASS 1 (BEHIND 3D SPHERE): Soft golden-amber rear accretion arc & depth-attenuated orbiting moons (sinU < 0)
-          if (tier >= 2) {
-            targetCtx.save();
-            targetCtx.translate(px0, py0);
-            targetCtx.rotate(ringTilt);
-            targetCtx.beginPath();
-            targetCtx.ellipse(0, 0, ringRx, ringRy, 0, Math.PI * 1.06, Math.PI * 1.94);
-            targetCtx.strokeStyle = "rgba(180, 83, 9, " + (renderAlpha * 0.28).toFixed(2) + ")";
-            targetCtx.lineWidth = tier === 3 ? 2.6 : 1.8;
-            targetCtx.stroke();
-            targetCtx.restore();
-          }
-          for (var ci = 0; ci < numCinders; ci++) {
-            var cSpeed = 0.0017 + (ci % 4) * 0.0005;
-            var u = (now * cSpeed + ci * (Math.PI * 2 / numCinders) + instPhase) % (Math.PI * 2);
-            if (u > 2.72 && u < 3.08) continue;
-            var sinU = Math.sin(u);
-            if (sinU >= 0) continue;
-            var cosU = Math.cos(u);
-            var radVar = 1.0 + ((ci % 3) - 1) * 0.05;
-            var lx = cosU * ringRx * radVar;
-            var ly = sinU * ringRy * radVar;
-            var cxP = px0 + lx * cosTilt - ly * sinTilt;
-            var cyP = py0 + lx * sinTilt + ly * cosTilt;
-            var cRad = (tier === 3 ? 1.45 : 1.1) * (0.72 + 0.18 * (1 + sinU));
-            targetCtx.beginPath();
-            targetCtx.arc(cxP, cyP, cRad, 0, Math.PI * 2);
-            targetCtx.fillStyle = (ci % 2 === 0)
-              ? ("rgba(234, 88, 12, " + (renderAlpha * 0.56).toFixed(2) + ")")
-              : ("rgba(87, 83, 78, " + (renderAlpha * 0.72).toFixed(2) + ")");
-            targetCtx.fill();
-          }
-
-          // PASS 2 (PERFECT 3D RAYTRACED METEOR SPHERE — Fixed World Lighting, True 3D Axial Spin!)
-          var drawnAst = MeteorVFXEngine.draw3DSphereFrame(targetCtx, "meteor", atlas3dFrame, px0, py0, rockR * 1.02, renderAlpha, false);
+          var drawnAst = MeteorVFXEngine.draw3DSphereFrame(targetCtx, "meteor", atlas3dFrame, px0, py0, rockR, renderAlpha, false, p.heading);
           if (!drawnAst) {
             var astFallback = MeteorVFXEngine.getAsteroid(i % 6);
             if (astFallback) {
@@ -12529,43 +12561,20 @@ try { checkUrlHashRoutine(); } catch(e){}
               targetCtx.drawImage(astFallback, px0 - rockR, py0 - rockR, rockR * 2, rockR * 2);
             }
           }
-
-          // PASS 3 (IN FRONT OF 3D SPHERE): Specular foreground accretion arc & incandescent orbiting moons (sinU >= 0)
           if (tier >= 2) {
             targetCtx.save();
-            targetCtx.translate(px0, py0);
-            targetCtx.rotate(ringTilt);
+            targetCtx.globalCompositeOperation = "lighter";
+            var gxM = px0 - cosH * (rockR * 0.56);
+            var gyM = py0 - sinH * (rockR * 0.56);
+            var wrapM = targetCtx.createRadialGradient(gxM, gyM, rockR * 0.08, gxM, gyM, rockR * 1.40);
+            wrapM.addColorStop(0.0, "rgba(255, 250, 205, " + (renderAlpha * 0.55).toFixed(2) + ")");
+            wrapM.addColorStop(0.45, "rgba(251, 146, 60, " + (renderAlpha * 0.32).toFixed(2) + ")");
+            wrapM.addColorStop(1.0, "rgba(220, 38, 38, 0)");
+            targetCtx.fillStyle = wrapM;
             targetCtx.beginPath();
-            targetCtx.ellipse(0, 0, ringRx, ringRy, 0, Math.PI * 0.06, Math.PI * 0.94);
-            targetCtx.strokeStyle = "rgba(245, 158, 11, " + (renderAlpha * 0.42).toFixed(2) + ")";
-            targetCtx.lineWidth = tier === 3 ? 2.8 : 2.0;
-            targetCtx.stroke();
-            targetCtx.strokeStyle = "rgba(254, 240, 138, " + (renderAlpha * 0.34).toFixed(2) + ")";
-            targetCtx.lineWidth = 0.9;
-            targetCtx.stroke();
-            targetCtx.restore();
-          }
-          for (var ci = 0; ci < numCinders; ci++) {
-            var cSpeed = 0.0017 + (ci % 4) * 0.0005;
-            var u = (now * cSpeed + ci * (Math.PI * 2 / numCinders) + instPhase) % (Math.PI * 2);
-            if (u > 2.72 && u < 3.08) continue;
-            var sinU = Math.sin(u);
-            if (sinU < 0) continue;
-            var cosU = Math.cos(u);
-            var radVar = 1.0 + ((ci % 3) - 1) * 0.05;
-            var lx = cosU * ringRx * radVar;
-            var ly = sinU * ringRy * radVar;
-            var cxP = px0 + lx * cosTilt - ly * sinTilt;
-            var cyP = py0 + lx * sinTilt + ly * cosTilt;
-            var cRad = (tier === 3 ? 1.9 : 1.35) * (0.85 + 0.25 * sinU);
-            targetCtx.beginPath();
-            targetCtx.arc(cxP, cyP, cRad, 0, Math.PI * 2);
-            targetCtx.fillStyle = (ci % 3 === 0)
-              ? ("rgba(254, 240, 138, " + (renderAlpha * 0.96).toFixed(2) + ")")
-              : ((ci % 3 === 1)
-                ? ("rgba(249, 115, 22, " + (renderAlpha * 0.92).toFixed(2) + ")")
-                : ("rgba(68, 64, 60, " + (renderAlpha * 0.94).toFixed(2) + ")"));
+            targetCtx.arc(gxM, gyM, rockR * 1.40, 0, Math.PI * 2);
             targetCtx.fill();
+            targetCtx.restore();
           }
         }
 
@@ -12578,39 +12587,42 @@ try { checkUrlHashRoutine(); } catch(e){}
           targetCtx.stroke();
         }
 
-        // Spawn peeling/drifting embers & cinders that cool and fade behind the rock
-        var emberSpawnRate = isFastRenderMode ? 0.12 : ((tier === 3) ? 0.30 : ((tier === 2) ? 0.18 : 0.05));
-        var emberMaxStardust = isFastRenderMode ? 2 : (tier === 3 ? 5 : (tier === 2 ? 3 : 1));
+        // Spawn subtle embers drifting behind basalt spheres
+        var emberSpawnRate = isFastRenderMode ? 0.10 : ((tier === 3) ? 0.24 : ((tier === 2) ? 0.14 : 0.04));
+        var emberMaxStardust = isFastRenderMode ? 2 : (tier === 3 ? 4 : (tier === 2 ? 2 : 1));
         if (emberMaxStardust > 0 && Math.random() < emberSpawnRate) {
           if (!p.stardust) p.stardust = [];
           if (p.stardust.length < emberMaxStardust) {
-            var driftAng = isMoltenCore
-              ? (p.heading + Math.PI + (Math.random() - 0.5) * 0.85)
-              : (Math.random() * Math.PI * 2);
-            var driftSpd = isMoltenCore ? (0.35 + Math.random() * 0.55) : (0.25 + Math.random() * 0.45);
+            var driftAng = p.heading + Math.PI + (Math.random() - 0.5) * 0.85;
+            var driftSpd = 0.30 + Math.random() * 0.50;
             p.stardust.push({
-              x: px0 + (Math.random() - 0.5) * (rockR * 1.2),
-              y: py0 + (Math.random() - 0.5) * (rockR * 1.2),
+              x: px0 + (Math.random() - 0.5) * (rockR * 1.1),
+              y: py0 + (Math.random() - 0.5) * (rockR * 1.1),
               vx: Math.cos(driftAng) * driftSpd,
               vy: Math.sin(driftAng) * driftSpd,
-              alpha: 0.98,
-              r: 0.80 + Math.random() * (tier === 3 ? 1.35 : 1.0),
+              alpha: 0.96,
+              r: 0.75 + Math.random() * (tier === 3 ? 1.25 : 0.9),
               isEmber: true
             });
           }
         }
 
       } else if (isComet) {
-        // ── REAL-3D RAYTRACED VIOLET PLASMA COMET + AMBER STUDIO RIM ──
-        var cometR = headR * (tier === 3 ? 2.35 : (tier === 2 ? 1.88 : 1.50));
+        // ── PHOTOREALISTIC 3D VIOLET PLASMA COMET + AMBER/CYAN RIM + LEADING STARBURST ──
+        var cometR = headR * (tier === 3 ? 2.35 : (tier === 2 ? 1.88 : 1.48));
         var c3dFrame = (((now * 0.0105 + i * 1.9) % 16) + 16) % 16;
-        if (!MeteorVFXEngine.draw3DSphereFrame(targetCtx, "comet", c3dFrame, px0, py0, cometR, renderAlpha, tier >= 2 && !isFastRenderMode)) {
+        if (!MeteorVFXEngine.draw3DSphereFrame(targetCtx, "comet", c3dFrame, px0, py0, cometR, renderAlpha, false, p.heading)) {
           var cometFallback = MeteorVFXEngine.getCometSphere((((now * 0.011 + i * 1.3) | 0)) % 4);
           if (cometFallback) {
             var cDrawR = cometR * 1.22;
             targetCtx.globalAlpha = renderAlpha;
             targetCtx.drawImage(cometFallback, px0 - cDrawR, py0 - cDrawR, cDrawR * 2, cDrawR * 2);
           }
+        }
+        if (tier >= 2) {
+          var cStarX = px0 + cosH * (cometR * 0.76) - sinH * (-cometR * 0.46);
+          var cStarY = py0 + sinH * (cometR * 0.76) + cosH * (-cometR * 0.46);
+          MeteorVFXEngine.drawOpticalFlare(targetCtx, cStarX, cStarY, cometR * 0.34, "rgba(253, 224, 71, " + (renderAlpha * 0.90).toFixed(2) + ")");
         }
         if (isTargetLocked) {
           var syncRatioC = (typeof contactDuration === "number") ? Math.min(1.0, contactDuration / 2.0) : 0.6;
@@ -12622,37 +12634,10 @@ try { checkUrlHashRoutine(); } catch(e){}
         }
 
       } else if (isHelixOrb) {
-        // ── REAL-3D RAYMARCHED OPTICAL CRYSTAL-AURORA ORB + 3D PEARL SATELLITES (Zero jerky pinwheel!) ──
-        var orbR = headR * (tier === 3 ? 2.35 : (tier === 2 ? 1.88 : 1.50));
+        // ── PHOTOREALISTIC 3D CRYSTAL VIOLET ORB + UPPER-LEFT OPTICAL STAR GLINT ──
+        var orbR = headR * (tier === 3 ? 2.35 : (tier === 2 ? 1.88 : 1.48));
         var orb3dFrame = (((now * 0.010 + i * 1.7) % 16) + 16) % 16;
-        var orbTilt = -0.32 + Math.sin(now * 0.0007 + i) * 0.14;
-        var orbRx = orbR * 1.38;
-        var orbRy = orbR * 0.36;
-        var orbSatAng = (now * 0.0024 + i * 1.8) % (Math.PI * 2);
-        var orbSatSin = Math.sin(orbSatAng);
-        var orbSatCos = Math.cos(orbSatAng);
-
-        // PASS 1 (BEHIND 3D ORB): Rear refractive ellipse + rear crystal pearl satellite
-        if (tier >= 2) {
-          targetCtx.save();
-          targetCtx.translate(px0, py0);
-          targetCtx.rotate(orbTilt);
-          targetCtx.beginPath();
-          targetCtx.ellipse(0, 0, orbRx, orbRy, 0, Math.PI, Math.PI * 2);
-          targetCtx.strokeStyle = "rgba(103, 232, 249, " + (renderAlpha * 0.28).toFixed(2) + ")";
-          targetCtx.lineWidth = tier === 3 ? 1.3 : 0.95;
-          targetCtx.stroke();
-          if (orbSatSin < 0) {
-            targetCtx.beginPath();
-            targetCtx.arc(orbSatCos * orbRx, orbSatSin * orbRy, 1.4, 0, Math.PI * 2);
-            targetCtx.fillStyle = "rgba(165, 243, 252, " + (renderAlpha * 0.65).toFixed(2) + ")";
-            targetCtx.fill();
-          }
-          targetCtx.restore();
-        }
-
-        // PASS 2 (PERFECT 3D RAYMARCHED CRYSTAL-AURORA SPHERE — Smooth 16-Frame Volumetric Flow!)
-        if (!MeteorVFXEngine.draw3DSphereFrame(targetCtx, "orb", orb3dFrame, px0, py0, orbR, renderAlpha, tier >= 2 && !isFastRenderMode)) {
+        if (!MeteorVFXEngine.draw3DSphereFrame(targetCtx, "orb", orb3dFrame, px0, py0, orbR, renderAlpha, tier >= 2 && !isFastRenderMode, p.heading)) {
           var orbFallback = MeteorVFXEngine.getHelixOrbSphere((((now * 0.011 + i * 0.9) | 0)) % 4);
           if (orbFallback) {
             var oDrawR = orbR * 1.22;
@@ -12660,29 +12645,10 @@ try { checkUrlHashRoutine(); } catch(e){}
             targetCtx.drawImage(orbFallback, px0 - oDrawR, py0 - oDrawR, oDrawR * 2, oDrawR * 2);
           }
         }
-
-        // PASS 3 (IN FRONT OF 3D ORB): Foreground refractive arc & luminous pearl satellite
         if (tier >= 2) {
-          targetCtx.save();
-          targetCtx.translate(px0, py0);
-          targetCtx.rotate(orbTilt);
-          targetCtx.beginPath();
-          targetCtx.ellipse(0, 0, orbRx, orbRy, 0, 0, Math.PI);
-          targetCtx.strokeStyle = "rgba(232, 121, 249, " + (renderAlpha * 0.62).toFixed(2) + ")";
-          targetCtx.lineWidth = tier === 3 ? 1.55 : 1.1;
-          targetCtx.stroke();
-          if (orbSatSin >= 0) {
-            var sxO = orbSatCos * orbRx, syO = orbSatSin * orbRy;
-            targetCtx.beginPath();
-            targetCtx.arc(sxO, syO, tier === 3 ? 2.1 : 1.6, 0, Math.PI * 2);
-            targetCtx.fillStyle = "rgba(245, 208, 254, " + (renderAlpha * 0.92).toFixed(2) + ")";
-            targetCtx.fill();
-            targetCtx.beginPath();
-            targetCtx.arc(sxO - 0.5, syO - 0.5, 0.85, 0, Math.PI * 2);
-            targetCtx.fillStyle = "#ffffff";
-            targetCtx.fill();
-          }
-          targetCtx.restore();
+          var oStarX = px0 + cosH * (-orbR * 0.52) - sinH * (-orbR * 0.54);
+          var oStarY = py0 + sinH * (-orbR * 0.52) + cosH * (-orbR * 0.54);
+          MeteorVFXEngine.drawOpticalFlare(targetCtx, oStarX, oStarY, orbR * 0.28, "rgba(232, 121, 249, " + (renderAlpha * 0.90).toFixed(2) + ")");
         }
         if (isTargetLocked) {
           var syncRatioHO = (typeof contactDuration === "number") ? Math.min(1.0, contactDuration / 2.0) : 0.6;
@@ -12694,38 +12660,11 @@ try { checkUrlHashRoutine(); } catch(e){}
         }
 
       } else {
-        // ── REAL-3D RAYTRACED DYNAMO & HELIX SPHERES ──
+        // ── PHOTOREALISTIC 3D DYNAMO & HELIX SPHERES (Zero Synthetic Orbital Rings on Targets!) ──
         if (isHelix) {
-          var clHelixR = headR * (tier === 3 ? 2.35 : (tier === 2 ? 1.88 : 1.50));
+          var clHelixR = headR * (tier === 3 ? 2.35 : (tier === 2 ? 1.88 : 1.48));
           var clH3dFrame = (((now * 0.010 + i * 1.5) % 16) + 16) % 16;
-          var orbPlane1 = -0.95 + Math.sin(now * 0.0007 + i) * 0.18;
-          var orbPlane2 = 0.32 + Math.cos(now * 0.0006 + i * 1.3) * 0.16;
-          var traceRx = clHelixR * 1.34;
-          var traceRy = clHelixR * 0.36;
-
-          if (tier >= 2) {
-            targetCtx.save();
-            targetCtx.translate(px0, py0);
-            targetCtx.rotate(orbPlane1);
-            targetCtx.beginPath();
-            targetCtx.ellipse(0, 0, traceRx, traceRy, 0, Math.PI, Math.PI * 2);
-            targetCtx.strokeStyle = "rgba(34, 211, 238, " + (renderAlpha * 0.32).toFixed(2) + ")";
-            targetCtx.lineWidth = tier === 3 ? 1.1 : 0.85;
-            targetCtx.stroke();
-            targetCtx.restore();
-
-            targetCtx.save();
-            targetCtx.translate(px0, py0);
-            targetCtx.rotate(orbPlane2);
-            targetCtx.beginPath();
-            targetCtx.ellipse(0, 0, traceRx * 1.06, traceRy * 0.95, 0, Math.PI, Math.PI * 2);
-            targetCtx.strokeStyle = "rgba(192, 132, 252, " + (renderAlpha * 0.30).toFixed(2) + ")";
-            targetCtx.lineWidth = tier === 3 ? 1.1 : 0.85;
-            targetCtx.stroke();
-            targetCtx.restore();
-          }
-
-          if (!MeteorVFXEngine.draw3DSphereFrame(targetCtx, "helix", clH3dFrame, px0, py0, clHelixR, renderAlpha, tier >= 2 && !isFastRenderMode)) {
+          if (!MeteorVFXEngine.draw3DSphereFrame(targetCtx, "helix", clH3dFrame, px0, py0, clHelixR, renderAlpha, tier >= 2 && !isFastRenderMode, p.heading)) {
             var clHDrawR = clHelixR * 1.20;
             var clHelixFb = MeteorVFXEngine.getClassicHelixSphere((((now * 0.009 + i * 1.1) | 0)) % 4);
             if (clHelixFb) {
@@ -12733,95 +12672,16 @@ try { checkUrlHashRoutine(); } catch(e){}
               targetCtx.drawImage(clHelixFb, px0 - clHDrawR, py0 - clHDrawR, clHDrawR * 2, clHDrawR * 2);
             }
           }
-
-          if (tier >= 2) {
-            targetCtx.save();
-            targetCtx.translate(px0, py0);
-            targetCtx.rotate(orbPlane1);
-            targetCtx.beginPath();
-            targetCtx.ellipse(0, 0, traceRx, traceRy, 0, 0, Math.PI);
-            targetCtx.strokeStyle = "rgba(103, 232, 249, " + (renderAlpha * 0.88).toFixed(2) + ")";
-            targetCtx.lineWidth = tier === 3 ? 1.35 : 1.0;
-            targetCtx.stroke();
-            targetCtx.restore();
-
-            targetCtx.save();
-            targetCtx.translate(px0, py0);
-            targetCtx.rotate(orbPlane2);
-            targetCtx.beginPath();
-            targetCtx.ellipse(0, 0, traceRx * 1.06, traceRy * 0.95, 0, 0, Math.PI);
-            targetCtx.strokeStyle = "rgba(216, 180, 254, " + (renderAlpha * 0.85).toFixed(2) + ")";
-            targetCtx.lineWidth = tier === 3 ? 1.35 : 1.0;
-            targetCtx.stroke();
-            targetCtx.restore();
-          }
-
         } else {
-          var clDynR = headR * (tier === 3 ? 2.35 : (tier === 2 ? 1.88 : 1.50));
+          var clDynR = headR * (tier === 3 ? 2.35 : (tier === 2 ? 1.88 : 1.48));
           var clD3dFrame = (((now * 0.011 + i * 1.8) % 16) + 16) % 16;
-          var dynOrb1 = 0.58 + Math.sin(now * 0.0008 + i) * 0.16;
-          var dynOrb2 = -0.62 + Math.cos(now * 0.0007 + i * 1.3) * 0.16;
-          var dynRx = clDynR * 1.36;
-          var dynRy = clDynR * 0.38;
-
-          if (tier >= 2) {
-            targetCtx.save();
-            targetCtx.translate(px0, py0);
-            targetCtx.rotate(dynOrb1);
-            targetCtx.beginPath();
-            targetCtx.ellipse(0, 0, dynRx, dynRy, 0, Math.PI, Math.PI * 2);
-            targetCtx.strokeStyle = "rgba(251, 191, 36, " + (renderAlpha * 0.42).toFixed(2) + ")";
-            targetCtx.lineWidth = tier === 3 ? 1.35 : 1.0;
-            targetCtx.stroke();
-            targetCtx.restore();
-
-            targetCtx.save();
-            targetCtx.translate(px0, py0);
-            targetCtx.rotate(dynOrb2);
-            targetCtx.beginPath();
-            targetCtx.ellipse(0, 0, dynRx * 1.04, dynRy * 0.96, 0, Math.PI, Math.PI * 2);
-            targetCtx.strokeStyle = "rgba(56, 189, 248, " + (renderAlpha * 0.42).toFixed(2) + ")";
-            targetCtx.lineWidth = tier === 3 ? 1.35 : 1.0;
-            targetCtx.stroke();
-            targetCtx.restore();
-          }
-
-          if (!MeteorVFXEngine.draw3DSphereFrame(targetCtx, "dynamo", clD3dFrame, px0, py0, clDynR, renderAlpha, tier >= 2 && !isFastRenderMode)) {
+          if (!MeteorVFXEngine.draw3DSphereFrame(targetCtx, "dynamo", clD3dFrame, px0, py0, clDynR, renderAlpha, false, p.heading)) {
             var clDDrawR = clDynR * 1.24;
             var clDynFb = MeteorVFXEngine.getDynamoSphere((((now * 0.013 + i * 1.4) | 0)) % 4);
             if (clDynFb) {
               targetCtx.globalAlpha = renderAlpha;
               targetCtx.drawImage(clDynFb, px0 - clDDrawR, py0 - clDDrawR, clDDrawR * 2, clDDrawR * 2);
             }
-          }
-
-          if (tier >= 2) {
-            targetCtx.save();
-            targetCtx.translate(px0, py0);
-            targetCtx.rotate(dynOrb1);
-            targetCtx.beginPath();
-            targetCtx.ellipse(0, 0, dynRx, dynRy, 0, 0, Math.PI);
-            targetCtx.strokeStyle = "rgba(253, 224, 71, " + (renderAlpha * 0.92).toFixed(2) + ")";
-            targetCtx.lineWidth = tier === 3 ? 1.65 : 1.25;
-            targetCtx.stroke();
-            var eU1 = (now * 0.0032 + i * 1.7) % (Math.PI * 2);
-            if (Math.sin(eU1) >= -0.15) {
-              targetCtx.beginPath();
-              targetCtx.arc(Math.cos(eU1) * dynRx, Math.sin(eU1) * dynRy, tier === 3 ? 2.1 : 1.5, 0, Math.PI * 2);
-              targetCtx.fillStyle = "#fef08a";
-              targetCtx.fill();
-            }
-            targetCtx.restore();
-
-            targetCtx.save();
-            targetCtx.translate(px0, py0);
-            targetCtx.rotate(dynOrb2);
-            targetCtx.beginPath();
-            targetCtx.ellipse(0, 0, dynRx * 1.04, dynRy * 0.96, 0, 0, Math.PI);
-            targetCtx.strokeStyle = "rgba(125, 211, 252, " + (renderAlpha * 0.92).toFixed(2) + ")";
-            targetCtx.lineWidth = tier === 3 ? 1.65 : 1.25;
-            targetCtx.stroke();
-            targetCtx.restore();
           }
         }
         if (isTargetLocked) {
@@ -15662,7 +15522,7 @@ try { checkUrlHashRoutine(); } catch(e){}
     }
   }
 
-  // ── Shared Flagship Sovereign 3D Quantum Core Renderer (All 6 Realms) ──
+  // ── Shared Flagship Photorealistic 3-Ring Bohr Quantum Core Renderer (All 6 Realms) ──
   function drawHeroQuantumCoreBase(cx, cy, now, progress, cfg) {
     if (deviceInputMode === "touch" && isTouchDown && typeof cursor.touchRealX === "number") {
       ctx.save();
@@ -15718,90 +15578,58 @@ try { checkUrlHashRoutine(); } catch(e){}
     ctx.translate(cx, cy);
 
     // 2. Outer Celestial Aura Bloom
-    var auraR = rCore * (1.72 + exc * 0.35);
-    var auraGrad = ctx.createRadialGradient(0, 0, rCore * 0.55, 0, 0, auraR);
+    var auraR = rCore * (1.82 + exc * 0.35);
+    var auraGrad = ctx.createRadialGradient(0, 0, rCore * 0.50, 0, 0, auraR);
     auraGrad.addColorStop(0.0, cfg.aura);
-    auraGrad.addColorStop(0.65, "rgba(15, 23, 42, 0.08)");
+    auraGrad.addColorStop(0.65, "rgba(15, 23, 42, 0.14)");
     auraGrad.addColorStop(1.0, "rgba(0, 0, 0, 0)");
     ctx.fillStyle = auraGrad;
     ctx.beginPath();
     ctx.arc(0, 0, auraR, 0, Math.PI * 2);
     ctx.fill();
 
-    // Dual counter-precessing 3D astrolabe orbital planes
-    var majorA = rCore * 1.44;
-    var minorA = rCore * 0.42;
-    var majorB = rCore * 1.54;
-    var minorB = rCore * 0.48;
-    var angleA = cfg.tiltA + Math.sin(now * 0.00055) * 0.14 + now * 0.00028 * spinMult;
-    var angleB = cfg.tiltB + Math.cos(now * 0.00048) * 0.14 - now * 0.00022 * spinMult;
+    // 3 Symmetric Intersecting Bohr Atomic Orbits (0 deg, 60 deg, 120 deg) with gentle precession
+    var bohrRx = rCore * 1.66;
+    var bohrRy = rCore * 0.55;
+    var baseRot = now * 0.00024 * spinMult;
+    var orbitAngles = [baseRot, baseRot + Math.PI / 3, baseRot + (2 * Math.PI) / 3];
+    var orbitCols = [cfg.ringA, cfg.ringB, cfg.ringC];
 
-    function drawAstrolabeHalf(isFront) {
+    function drawBohrOrbitsHalf(isFront) {
       var startAng = isFront ? 0 : Math.PI;
       var endAng = isFront ? Math.PI : Math.PI * 2;
-      var planes = [
-        { ang: angleA, rx: majorA, ry: minorA, col: isFront ? cfg.ringPrimary : cfg.trailGlow, lw: isFront ? 1.65 : 1.05, satCol: cfg.sentinelColor, satSpd: 0.0029, ticks: true },
-        { ang: angleB, rx: majorB, ry: minorB, col: isFront ? cfg.ringGold : "rgba(212, 168, 83, 0.28)", lw: isFront ? 1.45 : 0.95, satCol: cfg.sentinelGold, satSpd: -0.0024, ticks: false }
-      ];
-      for (var pi = 0; pi < planes.length; pi++) {
-        var pl = planes[pi];
+      for (var oi = 0; oi < 3; oi++) {
         ctx.save();
-        ctx.rotate(pl.ang);
+        ctx.rotate(orbitAngles[oi]);
+        if (isFront) ctx.globalCompositeOperation = "lighter";
         ctx.beginPath();
-        ctx.ellipse(0, 0, pl.rx, pl.ry, 0, startAng, endAng);
-        ctx.strokeStyle = pl.col;
-        ctx.lineWidth = pl.lw;
+        ctx.ellipse(0, 0, bohrRx, bohrRy, 0, startAng, endAng);
+        ctx.strokeStyle = orbitCols[oi];
+        ctx.globalAlpha = isFront ? 0.85 : 0.42;
+        ctx.lineWidth = isFront ? 2.1 : 1.3;
+        ctx.stroke();
+        ctx.strokeStyle = "#ffffff";
+        ctx.globalAlpha = isFront ? 0.88 : 0.24;
+        ctx.lineWidth = isFront ? 0.75 : 0.45;
         ctx.stroke();
 
-        // Precision engraved calibration ticks on primary ring
-        if (pl.ticks) {
-          for (var ti = 0; ti < 8; ti++) {
-            var tu = (ti * Math.PI * 0.25 + now * 0.0004) % (Math.PI * 2);
-            var sinT = Math.sin(tu);
-            if ((isFront && sinT < 0) || (!isFront && sinT >= 0)) continue;
-            var tx = Math.cos(tu) * pl.rx;
-            var ty = sinT * pl.ry;
-            ctx.beginPath();
-            ctx.moveTo(tx * 0.95, ty * 0.95);
-            ctx.lineTo(tx * 1.04, ty * 1.04);
-            ctx.strokeStyle = isFront ? cfg.ringGold : "rgba(245, 198, 92, 0.35)";
-            ctx.lineWidth = isFront ? 1.2 : 0.8;
-            ctx.stroke();
-          }
-        }
-
-        // Orbiting Sentinel Satellites (true Z-depth front/back sorting)
-        for (var si = 0; si < 2; si++) {
-          var su = ((now * pl.satSpd * spinMult + si * Math.PI) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
+        // Orbiting Optical Star-Flare Electron Vertices (2 per orbit, Z-sorted!)
+        for (var ei = 0; ei < 2; ei++) {
+          var su = ((now * 0.0022 * spinMult * (oi % 2 === 0 ? 1 : -1) + oi * 1.05 + ei * Math.PI) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
           var sinS = Math.sin(su);
           if ((isFront && sinS < 0) || (!isFront && sinS >= 0)) continue;
-          var sx = Math.cos(su) * pl.rx;
-          var sy = sinS * pl.ry;
-          var sRad = isFront ? (si === 0 ? 2.6 : 1.9) : 1.4;
-          ctx.beginPath();
-          ctx.arc(sx, sy, sRad + (isFront ? 1.4 : 0), 0, Math.PI * 2);
-          ctx.fillStyle = isFront ? cfg.aura : "rgba(15, 23, 42, 0.35)";
-          ctx.fill();
-          ctx.beginPath();
-          ctx.arc(sx, sy, sRad, 0, Math.PI * 2);
-          ctx.fillStyle = pl.satCol;
-          ctx.globalAlpha = isFront ? 0.96 : 0.45;
-          ctx.fill();
-          if (isFront) {
-            ctx.beginPath();
-            ctx.arc(sx - sRad * 0.25, sy - sRad * 0.25, sRad * 0.42, 0, Math.PI * 2);
-            ctx.fillStyle = "#ffffff";
-            ctx.globalAlpha = 0.95;
-            ctx.fill();
+          var ex = Math.cos(su) * bohrRx;
+          var ey = sinS * bohrRy;
+          if (window.MeteorVFXEngine && window.MeteorVFXEngine.drawOpticalFlare) {
+            window.MeteorVFXEngine.drawOpticalFlare(ctx, ex, ey, isFront ? 8.5 : 5.0, orbitCols[oi]);
           }
-          ctx.globalAlpha = 1;
         }
         ctx.restore();
       }
     }
 
-    // 3. PASS 1 (BEHIND 3D SPHERE): Back Hemisphere Astrolabe Gimbals & Satellites
-    drawAstrolabeHalf(false);
+    // 3. PASS 1 (BEHIND 3D SPHERE): Back Hemisphere of 3-Ring Bohr Orbits & Star Nodes
+    drawBohrOrbitsHalf(false);
 
     // 4. Spherical Core Backing for Tier II-V+ Evolved Wings (Prevents feather roots ghosting inside crystal cores)
     if (continuousEvolutionTier > 1.02) {
@@ -15815,45 +15643,49 @@ try { checkUrlHashRoutine(); } catch(e){}
       ctx.fill();
     }
 
-    // 5. PASS 2: True Raytraced 3D Hero Sphere (Crisp tectonic rocks without ghosting; silky crossfade on translucent volumetric crystal spheres)
-    var heroFrame = (now * (cfg.spinRate || 0.010) * (1.0 + exc * 0.85)) % 16;
-    var useSmoothCrossfade = (cfg.atlasKey !== "molten" && cfg.atlasKey !== "meteor");
+    // 5. PASS 2: Photorealistic Texture-Mapped 3D Hero Sphere
+    var heroFrame = (now * (cfg.spinRate || 0.0085) * (1.0 + exc * 0.85)) % 16;
+    var useSmoothCrossfade = (cfg.atlasKey !== "molten" && cfg.atlasKey !== "meteor-core");
     var drew3D = (window.MeteorVFXEngine && typeof window.MeteorVFXEngine.draw3DSphereFrame === "function")
-      ? window.MeteorVFXEngine.draw3DSphereFrame(ctx, cfg.atlasKey, heroFrame, 0, 0, rCore * 1.04, 1.0, useSmoothCrossfade)
+      ? window.MeteorVFXEngine.draw3DSphereFrame(ctx, cfg.atlasKey, heroFrame, 0, 0, rCore * 1.05, 1.0, useSmoothCrossfade)
       : false;
     if (!drew3D) {
-      var fbGrad = ctx.createRadialGradient(-rCore * 0.32, -rCore * 0.32, 1, 0, 0, rCore * 1.04);
+      var fbGrad = ctx.createRadialGradient(-rCore * 0.32, -rCore * 0.32, 1, 0, 0, rCore * 1.05);
       fbGrad.addColorStop(0.0, "#ffffff");
       fbGrad.addColorStop(0.32, cfg.sentinelColor);
       fbGrad.addColorStop(0.85, cfg.lockColor);
       fbGrad.addColorStop(1.0, "#090d1e");
       ctx.fillStyle = fbGrad;
       ctx.beginPath();
-      ctx.arc(0, 0, rCore * 1.04, 0, Math.PI * 2);
+      ctx.arc(0, 0, rCore * 1.05, 0, Math.PI * 2);
       ctx.fill();
     }
 
-    // Crisp rim highlight ring separating hero sphere from starfield
-    ctx.beginPath();
-    ctx.arc(0, 0, rCore * 1.03, 0, Math.PI * 2);
-    ctx.strokeStyle = cfg.rimStroke;
-    ctx.lineWidth = 1.15;
-    ctx.stroke();
+    // 6. PASS 3 (IN FRONT OF 3D SPHERE): Foreground Half of 3-Ring Bohr Orbits & Optical Star-Flare Nodes
+    drawBohrOrbitsHalf(true);
 
-    // 6. PASS 3 (IN FRONT OF 3D SPHERE): Front Hemisphere Astrolabe Gimbals & Specular Satellites
-    drawAstrolabeHalf(true);
+    // 7. Realm-Specific Optical Lens / Starburst Glint (Matches Official Pill Badges)
+    if (window.MeteorVFXEngine && window.MeteorVFXEngine.drawOpticalFlare) {
+      if (cfg.flareStyle === "horiz") {
+        window.MeteorVFXEngine.drawHorizontalFlare(ctx, 0, 0, rCore * 1.48, cfg.flareColor);
+      } else if (cfg.flareStyle === "comet_nose") {
+        window.MeteorVFXEngine.drawOpticalFlare(ctx, rCore * 0.72, -rCore * 0.48, rCore * 0.42, cfg.flareColor);
+      } else if (cfg.flareStyle === "orb_corner") {
+        window.MeteorVFXEngine.drawOpticalFlare(ctx, -rCore * 0.52, -rCore * 0.54, rCore * 0.34, cfg.flareColor);
+      }
+    }
 
-    // 7. Articulated Lock Caliper Brackets & Resonance Ring (Synchronization Overdrive)
+    // 8. Articulated Lock Caliper Brackets & Resonance Ring (Synchronization Overdrive)
     if (progress > 0 || continuousEvolutionTier >= 2.9) {
-      var caliperScale = progress > 0 ? (1.28 + (1.0 - progress) * 0.42) : 1.38;
+      var caliperScale = progress > 0 ? (1.28 + (1.0 - progress) * 0.42) : 1.42;
       var calR = rCore * caliperScale;
       var calSpin = now * 0.0012 * (progress > 0.8 ? 2.4 : 1.0);
-      var arcSpan = progress > 0 ? (0.34 + progress * 0.24) : 0.24;
+      var arcSpan = progress > 0 ? (0.34 + progress * 0.24) : 0.22;
       ctx.save();
       ctx.rotate(calSpin);
       ctx.strokeStyle = progress > 0.82 ? "#fef08a" : (progress > 0 ? cfg.lockColor : cfg.ringGold);
-      ctx.globalAlpha = progress > 0 ? (0.55 + progress * 0.45) : 0.35;
-      ctx.lineWidth = progress > 0.82 ? 2.2 : 1.5;
+      ctx.globalAlpha = progress > 0 ? (0.55 + progress * 0.45) : 0.30;
+      ctx.lineWidth = progress > 0.82 ? 2.2 : 1.4;
       for (var ci = 0; ci < 4; ci++) {
         var ca = ci * (Math.PI * 0.5);
         ctx.beginPath();
@@ -15873,9 +15705,9 @@ try { checkUrlHashRoutine(); } catch(e){}
       ctx.restore();
     }
 
-    // 8. Pinpoint Singularity Aiming Reticle
+    // 9. Pinpoint Singularity Aiming Reticle
     ctx.beginPath();
-    ctx.arc(0, 0, 1.7, 0, Math.PI * 2);
+    ctx.arc(0, 0, 1.6, 0, Math.PI * 2);
     ctx.fillStyle = "#ffffff";
     ctx.fill();
 
@@ -15883,12 +15715,12 @@ try { checkUrlHashRoutine(); } catch(e){}
   }
 
   var HERO_CORE_THEMES = {
-    dynamo: { atlasKey: "dynamo", trailGlow: "rgba(56, 189, 248, 0.42)", trailCore: "rgba(224, 242, 254, 0.92)", ringPrimary: "rgba(125, 211, 252, 0.92)", ringGold: "rgba(245, 198, 92, 0.88)", aura: "rgba(56, 189, 248, 0.24)", rimStroke: "rgba(186, 230, 253, 0.55)", spinRate: 0.011, tiltA: 0.42, tiltB: -0.56, sentinelColor: "#e0f2fe", sentinelGold: "#fde68a", lockColor: "#38bdf8" },
-    helix:  { atlasKey: "helix",  trailGlow: "rgba(34, 211, 238, 0.40)", trailCore: "rgba(232, 121, 249, 0.90)", ringPrimary: "rgba(103, 232, 249, 0.92)", ringGold: "rgba(216, 180, 254, 0.88)", aura: "rgba(192, 132, 252, 0.24)", rimStroke: "rgba(165, 243, 252, 0.55)", spinRate: 0.010, tiltA: -0.74, tiltB: 0.36, sentinelColor: "#67e8f9", sentinelGold: "#f0abfc", lockColor: "#22d3ee" },
-    meteor: { atlasKey: "meteor", trailGlow: "rgba(234, 88, 12, 0.48)",  trailCore: "rgba(254, 215, 170, 0.92)", ringPrimary: "rgba(251, 146, 60, 0.92)",  ringGold: "rgba(252, 211, 77, 0.88)",  aura: "rgba(249, 115, 22, 0.26)",  rimStroke: "rgba(253, 186, 116, 0.55)", spinRate: 0.009, tiltA: 0.26,  tiltB: -0.60, sentinelColor: "#fed7aa", sentinelGold: "#fb923c", lockColor: "#f97316" },
-    comet:  { atlasKey: "comet",  trailGlow: "rgba(139, 92, 246, 0.46)", trailCore: "rgba(253, 230, 138, 0.92)", ringPrimary: "rgba(192, 132, 252, 0.92)", ringGold: "rgba(251, 191, 36, 0.86)",  aura: "rgba(168, 85, 247, 0.26)",  rimStroke: "rgba(216, 180, 254, 0.55)", spinRate: 0.011, tiltA: 0.34,  tiltB: -0.52, sentinelColor: "#f3e8ff", sentinelGold: "#fde68a", lockColor: "#c084fc" },
-    orb:    { atlasKey: "orb",    trailGlow: "rgba(45, 212, 191, 0.42)", trailCore: "rgba(240, 171, 252, 0.90)", ringPrimary: "rgba(103, 232, 249, 0.92)", ringGold: "rgba(244, 114, 182, 0.86)", aura: "rgba(45, 212, 191, 0.24)",  rimStroke: "rgba(196, 181, 253, 0.55)", spinRate: 0.012, tiltA: -0.44, tiltB: 0.54, sentinelColor: "#a5f3fc", sentinelGold: "#f472b6", lockColor: "#2dd4bf" },
-    molten: { atlasKey: "molten", trailGlow: "rgba(239, 68, 68, 0.50)",  trailCore: "rgba(254, 240, 138, 0.94)", ringPrimary: "rgba(249, 115, 22, 0.95)",  ringGold: "rgba(251, 191, 36, 0.92)",  aura: "rgba(239, 68, 68, 0.28)",   rimStroke: "rgba(254, 215, 170, 0.58)", spinRate: 0.010, tiltA: 0.32,  tiltB: -0.54, sentinelColor: "#fef08a", sentinelGold: "#f97316", lockColor: "#f97316" }
+    dynamo: { atlasKey: "dynamo",      trailGlow: "rgba(99, 102, 241, 0.46)",  trailCore: "rgba(224, 242, 254, 0.92)", ringA: "#fbbf24", ringB: "#fde047", ringC: "#f59e0b", ringGold: "rgba(245, 198, 92, 0.88)",  aura: "rgba(168, 85, 247, 0.36)", flareStyle: "horiz",      flareColor: "rgba(168, 85, 247, 0.88)", spinRate: 0.0085, sentinelColor: "#e0f2fe", lockColor: "#38bdf8" },
+    helix:  { atlasKey: "helix-core",  trailGlow: "rgba(34, 211, 238, 0.42)",  trailCore: "rgba(232, 121, 249, 0.90)", ringA: "#22d3ee", ringB: "#c084fc", ringC: "#38bdf8", ringGold: "rgba(216, 180, 254, 0.88)", aura: "rgba(34, 211, 238, 0.34)", flareStyle: "horiz",      flareColor: "rgba(34, 211, 238, 0.90)", spinRate: 0.0080, sentinelColor: "#67e8f9", lockColor: "#22d3ee" },
+    meteor: { atlasKey: "meteor-core", trailGlow: "rgba(234, 88, 12, 0.48)",   trailCore: "rgba(254, 215, 170, 0.92)", ringA: "#f97316", ringB: "#fbbf24", ringC: "#fb923c", ringGold: "rgba(252, 211, 77, 0.88)",  aura: "rgba(249, 115, 22, 0.36)", flareStyle: "horiz",      flareColor: "rgba(251, 146, 60, 0.95)", spinRate: 0.0085, sentinelColor: "#fed7aa", lockColor: "#f97316" },
+    comet:  { atlasKey: "comet",       trailGlow: "rgba(139, 92, 246, 0.46)",  trailCore: "rgba(253, 230, 138, 0.92)", ringA: "#22d3ee", ringB: "#fbbf24", ringC: "#c084fc", ringGold: "rgba(251, 191, 36, 0.86)",  aura: "rgba(56, 189, 248, 0.34)", flareStyle: "comet_nose", flareColor: "rgba(253, 230, 138, 0.92)", spinRate: 0.0085, sentinelColor: "#f3e8ff", lockColor: "#c084fc" },
+    orb:    { atlasKey: "orb",         trailGlow: "rgba(45, 212, 191, 0.42)",  trailCore: "rgba(240, 171, 252, 0.90)", ringA: "#22d3ee", ringB: "#e879f9", ringC: "#38bdf8", ringGold: "rgba(244, 114, 182, 0.86)", aura: "rgba(232, 121, 249, 0.34)", flareStyle: "orb_corner", flareColor: "rgba(232, 121, 249, 0.92)", spinRate: 0.0090, sentinelColor: "#a5f3fc", lockColor: "#2dd4bf" },
+    molten: { atlasKey: "molten",      trailGlow: "rgba(239, 68, 68, 0.50)",   trailCore: "rgba(254, 240, 138, 0.94)", ringA: "#f97316", ringB: "#fde047", ringC: "#fb923c", ringGold: "rgba(251, 191, 36, 0.92)",  aura: "rgba(251, 191, 36, 0.38)", flareStyle: "horiz",      flareColor: "rgba(251, 191, 36, 0.95)", spinRate: 0.0085, sentinelColor: "#fef08a", lockColor: "#f97316" }
   };
 
   function drawQuantumAtomicCursor(cx, cy, now, progress) {
@@ -16247,7 +16079,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   <script>
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v99', { scope: './' }).catch(function() {});
+        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v100', { scope: './' }).catch(function() {});
       });
     }
   </script>
