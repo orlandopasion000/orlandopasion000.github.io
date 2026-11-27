@@ -3817,7 +3817,7 @@
     .standalone-subapp-dock {
       display: none;
       position: fixed;
-      bottom: 18px;
+      bottom: max(18px, calc(8px + env(safe-area-inset-bottom, 0px)));
       left: 50%;
       transform: translateX(-50%);
       background: rgba(10, 14, 22, 0.85);
@@ -5379,6 +5379,10 @@
       .btn-card-pin:hover, .btn-card-edit:hover, .btn-pwd-action:hover, .btn-copy-instant:hover {
         transform: none !important;
       }
+      input:not([type="checkbox"]):not([type="radio"]),
+      textarea {
+        font-size: 16px !important;
+      }
     }
 
     /* Responsive Top Bar: Snug fit under Dynamic Island / notch without double padding */
@@ -6380,13 +6384,25 @@
     #vaultLockOverlay {
       position: fixed;
       inset: 0;
+      width: 100vw;
+      width: 100dvw;
+      height: 100vh;
+      height: 100dvh;
       z-index: 99999;
       background: #1a1615;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 18px 16px;
+      padding: max(12px, env(safe-area-inset-top, 12px)) max(12px, env(safe-area-inset-right, 12px)) max(16px, env(safe-area-inset-bottom, 16px)) max(12px, env(safe-area-inset-left, 12px));
       overflow: hidden;
+      opacity: 1;
+      transform: scale(1);
+      transition: opacity 0.2s cubic-bezier(0.22, 1, 0.36, 1), transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    #vaultLockOverlay.unlocking {
+      opacity: 0;
+      transform: scale(1.035);
+      pointer-events: none;
     }
     #vaultLockOverlay.unlocked {
       display: none !important;
@@ -6400,34 +6416,38 @@
     .ios-lock-bg-ambient {
       position: absolute;
       inset: -44px;
-      background: url('assets/lock-wallpaper-4k.jpg') 50% 24% / cover no-repeat;
-      filter: blur(40px) saturate(1.15) brightness(0.8);
+      background: url('assets/lock-wallpaper-4k.jpg') 50% 40% / cover no-repeat;
+      filter: blur(42px) saturate(1.12) brightness(0.84);
       transform: scale(1.08);
       z-index: 0;
       pointer-events: none;
+    }
+    .ios-lock-picture {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+      display: block;
     }
     .ios-lock-bg-photo {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
+      max-width: none !important;
       object-fit: cover;
-      object-position: 50% 22%;
-      z-index: 1;
+      object-position: 50% 42%;
+      display: block;
       pointer-events: none;
     }
     @media (min-aspect-ratio: 1/1) {
+      .ios-lock-bg-ambient {
+        background-image: url('assets/lock-wallpaper-desktop-4k.jpg');
+      }
       .ios-lock-bg-photo {
-        top: 0;
-        bottom: 0;
-        left: 50%;
-        right: auto;
-        transform: translateX(-50%);
-        height: 100%;
-        width: min(100vw, 82vh);
-        object-position: 50% 20%;
-        mask-image: linear-gradient(90deg, transparent 0%, #000 13%, #000 87%, transparent 100%);
-        -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 13%, #000 87%, transparent 100%);
+        object-position: 50% 34%;
       }
     }
     .ios-lock-scrim {
@@ -6435,7 +6455,9 @@
       inset: 0;
       z-index: 2;
       pointer-events: none;
-      background: linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.11) 45%, rgba(0, 0, 0, 0.26) 100%);
+      background:
+        radial-gradient(circle at 50% 44%, rgba(10, 10, 14, 0.24) 0%, rgba(10, 10, 14, 0.36) 100%),
+        linear-gradient(180deg, rgba(0, 0, 0, 0.14) 0%, rgba(0, 0, 0, 0.05) 42%, rgba(0, 0, 0, 0.22) 100%);
     }
     .vault-gate-card {
       width: 100%;
@@ -6450,7 +6472,7 @@
       color: #f8fafc;
       position: relative;
       z-index: 3;
-      max-height: 96vh;
+      max-height: 96dvh;
       overflow-y: auto;
     }
     .vault-gate-card.ios-pin-active {
@@ -6459,8 +6481,9 @@
       box-shadow: none !important;
       backdrop-filter: none !important;
       -webkit-backdrop-filter: none !important;
-      max-width: 340px;
-      padding: 6px 0;
+      max-width: 680px;
+      width: auto;
+      padding: 4px 0;
       overflow: visible;
     }
     .vault-gate-card.ios-pin-active .vault-gate-badge,
@@ -6787,31 +6810,47 @@
       }
     }
 
-    /* Exact 5-Layer Apple iOS 26 Refractive Liquid Glass Passcode Keypad */
+    /* Exact 7-Layer Apple iOS 26 Snell's-Law Liquid Glass Passcode Keypad + Full Device Responsiveness */
     .ios-pin-wrap {
+      --ios-btn-size: clamp(66px, 8.8dvh, 80px);
+      --ios-col-gap: clamp(16px, 2.2dvh, 22px);
+      --ios-row-gap: clamp(11px, 1.55dvh, 15px);
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 4px;
       padding: 4px 0 2px;
     }
+    #iosPinPanel,
+    .ios-pin-prompt,
+    .ios-key-num,
+    .ios-key-letters,
+    .ios-pin-footer button {
+      font-variant-numeric: normal !important;
+      font-feature-settings: "tnum" 0 !important;
+    }
+    .ios-pin-meta {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
     .ios-pin-prompt {
-      font-size: 17.5px;
+      font-size: 19px;
       font-weight: 400;
       color: #ffffff;
-      letter-spacing: -0.01em;
+      letter-spacing: -0.015em;
       text-align: center;
-      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.28);
-      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
+      text-shadow: 0 1px 8px rgba(0, 0, 0, 0.34);
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI Variable Display', 'Segoe UI', 'Inter', sans-serif;
     }
     .ios-pin-subhint {
       font-size: 12px;
-      color: rgba(255, 255, 255, 0.9);
-      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
+      color: rgba(255, 255, 255, 0.92);
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
       text-align: center;
       min-height: 0;
       display: none;
-      margin-top: 2px;
+      margin-top: 4px;
     }
     .ios-pin-subhint.visible {
       display: block;
@@ -6821,22 +6860,22 @@
       align-items: center;
       justify-content: center;
       gap: 22px;
-      margin: 14px 0 34px;
+      margin: 15px 0 clamp(20px, 3.6dvh, 34px);
     }
     .ios-pin-dot {
-      width: 12.5px;
-      height: 12.5px;
+      width: 13px;
+      height: 13px;
       border-radius: 50%;
-      border: 1.5px solid rgba(255, 255, 255, 0.94);
+      border: 1.6px solid rgba(255, 255, 255, 0.95);
       background: transparent;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.22);
-      transition: background 0.12s ease, transform 0.12s ease, box-shadow 0.12s ease;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+      transition: background 0.1s ease, transform 0.12s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.12s ease;
     }
     .ios-pin-dot.filled {
       background: #ffffff;
       border-color: #ffffff;
-      box-shadow: 0 0 8px rgba(255, 255, 255, 0.78);
-      transform: scale(1.06);
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.85);
+      transform: scale(1.08);
     }
     @keyframes iosPinShake {
       0%, 100% { transform: translateX(0); }
@@ -6848,20 +6887,20 @@
     }
     .ios-keypad-grid {
       display: grid;
-      grid-template-columns: repeat(3, 80px);
-      gap: 15px 20px;
+      grid-template-columns: repeat(3, var(--ios-btn-size));
+      gap: var(--ios-row-gap) var(--ios-col-gap);
       justify-content: center;
     }
     .ios-key-btn {
       position: relative;
       overflow: hidden;
-      width: 80px;
-      height: 80px;
+      width: var(--ios-btn-size);
+      height: var(--ios-btn-size);
       border-radius: 50%;
-      background: radial-gradient(circle at 50% 42%, rgba(120, 120, 128, 0.16) 0%, rgba(110, 110, 118, 0.22) 68%, rgba(255, 255, 255, 0.18) 100%);
+      background: radial-gradient(circle at 50% 45%, rgba(160, 160, 168, 0.24) 0%, rgba(125, 125, 134, 0.28) 72%, rgba(255, 255, 255, 0.2) 100%);
       border: none;
-      backdrop-filter: saturate(118%) contrast(1.03);
-      -webkit-backdrop-filter: saturate(118%) contrast(1.03);
+      backdrop-filter: saturate(122%) contrast(1.04);
+      -webkit-backdrop-filter: saturate(122%) contrast(1.04);
       color: #ffffff;
       display: flex;
       flex-direction: column;
@@ -6869,87 +6908,103 @@
       justify-content: center;
       cursor: pointer;
       user-select: none;
+      touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
       outline: none;
-      box-shadow: inset 0 1.5px 3px rgba(255, 255, 255, 0.45), inset 0 -1.5px 3px rgba(255, 255, 255, 0.18), 0 2px 10px rgba(0, 0, 0, 0.08);
-      transition: transform 0.08s ease, background 0.12s ease;
+      box-shadow:
+        0 6px 18px rgba(0, 0, 0, 0.24),
+        0 1.5px 4px rgba(0, 0, 0, 0.16),
+        inset 0 1px 2px rgba(255, 255, 255, 0.38);
+      transition: transform 0.09s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    /* Layer 2: Optical edge-refraction lens ring matching the exact photo pixels beneath each circle */
+    /* Optical Snell's-law convex meniscus refracted canvas */
+    .ios-key-lens {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      max-width: none !important;
+      height: 100% !important;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 1;
+      display: block;
+    }
+    /* Tactile iPhone Luminous Press Bloom + Trailing Glow Decay */
     .ios-key-btn::before {
       content: '';
       position: absolute;
       inset: 0;
       border-radius: 50%;
-      background-image: url('assets/lock-wallpaper-4k.jpg');
-      background-repeat: no-repeat;
-      background-size: var(--lens-bg-w, 430px) var(--lens-bg-h, 932px);
-      background-position: var(--lens-bg-x, 50%) var(--lens-bg-y, 50%);
-      transform: scale(1.16);
-      filter: blur(0.6px) saturate(1.15) brightness(1.04);
-      opacity: 0.92;
-      -webkit-mask-image: radial-gradient(circle, transparent 0%, transparent 63%, rgba(0, 0, 0, 0.85) 82%, #000 100%);
-      mask-image: radial-gradient(circle, transparent 0%, transparent 63%, rgba(0, 0, 0, 0.85) 82%, #000 100%);
+      background: radial-gradient(circle at 50% 48%, rgba(255, 255, 255, 0.62) 0%, rgba(255, 255, 255, 0.36) 64%, rgba(255, 255, 255, 0.5) 100%);
+      opacity: 0;
+      transition: opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1);
       pointer-events: none;
-      z-index: 1;
+      z-index: 2;
     }
-    /* Layer 3: Dual-arc 360-degree specular glass rim + inner meniscus highlights */
+    .ios-key-btn.is-pressing::before,
+    .ios-key-btn.pressed::before,
+    .ios-key-btn:active::before {
+      opacity: 1;
+      transition: opacity 0.03s ease-out;
+    }
+    /* Dual-Arc 360-degree Specular Glass Rim */
     .ios-key-btn::after {
       content: '';
       position: absolute;
       inset: 0;
       border-radius: 50%;
-      padding: 1.15px;
-      background: conic-gradient(from 130deg at 50% 50%, rgba(255, 255, 255, 0.24) 0deg, rgba(255, 255, 255, 0.92) 85deg, rgba(255, 255, 255, 0.22) 175deg, rgba(255, 255, 255, 0.78) 265deg, rgba(255, 255, 255, 0.24) 360deg);
+      padding: 1.3px;
+      background: conic-gradient(from 135deg at 50% 50%, rgba(255, 255, 255, 0.96) 0deg, rgba(255, 255, 255, 0.28) 90deg, rgba(255, 255, 255, 0.85) 180deg, rgba(255, 255, 255, 0.26) 270deg, rgba(255, 255, 255, 0.96) 360deg);
       -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
       -webkit-mask-composite: xor;
       mask-composite: exclude;
       pointer-events: none;
-      z-index: 3;
+      z-index: 4;
     }
     .ios-key-btn:focus-visible {
-      box-shadow: 0 0 0 2px #38bdf8, inset 0 1.5px 3px rgba(255, 255, 255, 0.45);
+      box-shadow: 0 0 0 2px #38bdf8, 0 6px 18px rgba(0, 0, 0, 0.24);
     }
     .ios-key-btn:hover {
-      background: radial-gradient(circle at 50% 42%, rgba(140, 140, 148, 0.24) 0%, rgba(120, 120, 128, 0.3) 68%, rgba(255, 255, 255, 0.26) 100%);
+      filter: brightness(1.06);
     }
     .ios-key-btn:active,
+    .ios-key-btn.is-pressing,
     .ios-key-btn.pressed {
-      background: radial-gradient(circle, rgba(255, 255, 255, 0.48) 0%, rgba(255, 255, 255, 0.62) 100%);
-      transform: scale(0.96);
+      transform: scale(0.955);
     }
     .ios-key-num,
     .ios-key-letters {
       position: relative;
-      z-index: 2;
+      z-index: 3;
     }
     .ios-key-num {
-      font-size: 36px;
+      font-size: calc(var(--ios-btn-size) * 0.45);
       font-weight: 400;
       line-height: 1;
       color: #ffffff;
-      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
-      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.24);
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI Variable Display', 'Segoe UI', 'Inter', sans-serif;
     }
     .ios-key-letters {
-      font-size: 9.5px;
+      font-size: clamp(8.5px, calc(var(--ios-btn-size) * 0.12), 10px);
       font-weight: 700;
       letter-spacing: 0.22em;
       padding-left: 0.22em;
       color: #ffffff;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.22);
-      margin-top: 3px;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.26);
+      margin-top: 2px;
       height: 11px;
     }
     .ios-key-zero .ios-key-letters {
       display: none;
     }
     .ios-pin-footer {
-      width: 100%;
-      max-width: 268px;
+      width: calc(3 * var(--ios-btn-size) + 2 * var(--ios-col-gap));
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-top: 36px;
+      margin-top: clamp(18px, 3.6dvh, 34px);
     }
     .ios-pin-footer button {
       background: transparent;
@@ -6957,8 +7012,8 @@
       color: #ffffff;
       font-size: 16px;
       font-weight: 400;
-      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
+      text-shadow: 0 1px 5px rgba(0, 0, 0, 0.34);
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI Variable Display', 'Segoe UI', 'Inter', sans-serif;
       cursor: pointer;
       padding: 6px 4px;
       -webkit-tap-highlight-color: transparent;
@@ -6985,25 +7040,69 @@
       height: 15px;
       flex-shrink: 0;
     }
-    @media (max-width: 390px), (max-height: 780px) {
+    @media (max-width: 480px) {
+      .ios-pin-wrap {
+        --ios-btn-size: clamp(68px, 19.6vw, 82px);
+        --ios-col-gap: clamp(16px, 5.2vw, 24px);
+        --ios-row-gap: clamp(12px, 1.85dvh, 17px);
+      }
+    }
+    @media (max-height: 700px) and (orientation: portrait) {
+      .ios-pin-wrap {
+        --ios-btn-size: clamp(60px, 8.6dvh, 72px);
+        --ios-col-gap: 16px;
+        --ios-row-gap: 10px;
+      }
       .ios-pin-dots {
-        margin: 10px 0 22px;
-      }
-      .ios-keypad-grid {
-        grid-template-columns: repeat(3, 68px);
-        gap: 12px 18px;
-      }
-      .ios-key-btn {
-        width: 68px;
-        height: 68px;
-      }
-      .ios-key-num {
-        font-size: 31px;
+        margin: 10px 0 18px;
       }
       .ios-pin-footer {
-        max-width: 236px;
-        margin-top: 22px;
+        margin-top: 16px;
       }
+    }
+    @media (max-height: 540px) and (orientation: landscape) {
+      .ios-pin-wrap {
+        --ios-btn-size: clamp(48px, 14.5dvh, 60px);
+        --ios-col-gap: clamp(12px, 3dvh, 18px);
+        --ios-row-gap: clamp(8px, 2dvh, 12px);
+        display: grid !important;
+        grid-template-columns: auto auto;
+        grid-template-rows: auto auto;
+        column-gap: 34px;
+        row-gap: 14px;
+        align-items: center;
+      }
+      .ios-pin-meta {
+        grid-column: 1;
+        grid-row: 1;
+      }
+      .ios-keypad-grid {
+        grid-column: 2;
+        grid-row: 1 / span 2;
+      }
+      .ios-pin-footer {
+        grid-column: 1;
+        grid-row: 2;
+        width: 200px;
+        margin-top: 0;
+        align-self: start;
+        justify-self: center;
+      }
+      .ios-pin-dots {
+        margin: 12px 0 0;
+        gap: 16px;
+      }
+      .ios-key-letters {
+        font-size: 7.5px;
+        height: 9px;
+      }
+    }
+    /* Subtle Windows Desktop Scrollbars */
+    @media (pointer: fine) {
+      ::-webkit-scrollbar { width: 8px; height: 8px; }
+      ::-webkit-scrollbar-track { background: rgba(5, 7, 12, 0.6); }
+      ::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.28); border-radius: 999px; }
+      ::-webkit-scrollbar-thumb:hover { background: rgba(56, 189, 248, 0.5); }
     }
 </style>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
@@ -7020,7 +7119,10 @@
   <!-- ZERO-KNOWLEDGE AUTHENTICATION & IPHONE LIQUID GLASS PASSCODE LOCK GATE -->
   <div id="vaultLockOverlay" role="dialog" aria-modal="true" aria-label="OrlandoVault Zero-Knowledge Lock Gate">
     <div class="ios-lock-bg-ambient" aria-hidden="true"></div>
-    <img src="assets/lock-wallpaper-4k.jpg" alt="" class="ios-lock-bg-photo" decoding="async" fetchpriority="high" aria-hidden="true">
+    <picture class="ios-lock-picture" aria-hidden="true">
+      <source media="(min-aspect-ratio: 1/1)" srcset="assets/lock-wallpaper-desktop-4k.jpg">
+      <img src="assets/lock-wallpaper-4k.jpg" alt="" class="ios-lock-bg-photo" id="iosLockBgPhoto" decoding="async" fetchpriority="high">
+    </picture>
     <div class="ios-lock-scrim" aria-hidden="true"></div>
     <div class="vault-gate-card" id="vaultGateCard">
       <div class="vault-gate-badge" id="vaultGateModeBadge">🔐 ZERO-KNOWLEDGE VAULT · LOCKED</div>
@@ -7097,27 +7199,29 @@
 
         <!-- Exact Apple iOS Liquid Glass 6-Digit Circular Passcode Panel -->
         <div id="iosPinPanel" class="ios-pin-wrap" style="display:none;">
-          <div class="ios-pin-prompt" id="iosPinPrompt">Enter Passcode</div>
-          <div class="ios-pin-subhint" id="iosPinSubHint"></div>
-          <div class="ios-pin-dots" id="iosPinDots" aria-label="6-digit passcode progress">
-            <span class="ios-pin-dot"></span>
-            <span class="ios-pin-dot"></span>
-            <span class="ios-pin-dot"></span>
-            <span class="ios-pin-dot"></span>
-            <span class="ios-pin-dot"></span>
-            <span class="ios-pin-dot"></span>
+          <div class="ios-pin-meta">
+            <div class="ios-pin-prompt" id="iosPinPrompt">Enter Passcode</div>
+            <div class="ios-pin-subhint" id="iosPinSubHint"></div>
+            <div class="ios-pin-dots" id="iosPinDots" aria-label="6-digit passcode progress">
+              <span class="ios-pin-dot"></span>
+              <span class="ios-pin-dot"></span>
+              <span class="ios-pin-dot"></span>
+              <span class="ios-pin-dot"></span>
+              <span class="ios-pin-dot"></span>
+              <span class="ios-pin-dot"></span>
+            </div>
           </div>
           <div class="ios-keypad-grid" id="iosKeypadGrid">
-            <button type="button" class="ios-key-btn" data-digit="1"><span class="ios-key-num">1</span><span class="ios-key-letters"></span></button>
-            <button type="button" class="ios-key-btn" data-digit="2"><span class="ios-key-num">2</span><span class="ios-key-letters">ABC</span></button>
-            <button type="button" class="ios-key-btn" data-digit="3"><span class="ios-key-num">3</span><span class="ios-key-letters">DEF</span></button>
-            <button type="button" class="ios-key-btn" data-digit="4"><span class="ios-key-num">4</span><span class="ios-key-letters">GHI</span></button>
-            <button type="button" class="ios-key-btn" data-digit="5"><span class="ios-key-num">5</span><span class="ios-key-letters">JKL</span></button>
-            <button type="button" class="ios-key-btn" data-digit="6"><span class="ios-key-num">6</span><span class="ios-key-letters">MNO</span></button>
-            <button type="button" class="ios-key-btn" data-digit="7"><span class="ios-key-num">7</span><span class="ios-key-letters">PQRS</span></button>
-            <button type="button" class="ios-key-btn" data-digit="8"><span class="ios-key-num">8</span><span class="ios-key-letters">TUV</span></button>
-            <button type="button" class="ios-key-btn" data-digit="9"><span class="ios-key-num">9</span><span class="ios-key-letters">WXYZ</span></button>
-            <button type="button" class="ios-key-btn ios-key-zero" data-digit="0" style="grid-column: 2;"><span class="ios-key-num">0</span><span class="ios-key-letters"></span></button>
+            <button type="button" class="ios-key-btn" data-digit="1"><canvas class="ios-key-lens" aria-hidden="true"></canvas><span class="ios-key-num">1</span><span class="ios-key-letters"></span></button>
+            <button type="button" class="ios-key-btn" data-digit="2"><canvas class="ios-key-lens" aria-hidden="true"></canvas><span class="ios-key-num">2</span><span class="ios-key-letters">ABC</span></button>
+            <button type="button" class="ios-key-btn" data-digit="3"><canvas class="ios-key-lens" aria-hidden="true"></canvas><span class="ios-key-num">3</span><span class="ios-key-letters">DEF</span></button>
+            <button type="button" class="ios-key-btn" data-digit="4"><canvas class="ios-key-lens" aria-hidden="true"></canvas><span class="ios-key-num">4</span><span class="ios-key-letters">GHI</span></button>
+            <button type="button" class="ios-key-btn" data-digit="5"><canvas class="ios-key-lens" aria-hidden="true"></canvas><span class="ios-key-num">5</span><span class="ios-key-letters">JKL</span></button>
+            <button type="button" class="ios-key-btn" data-digit="6"><canvas class="ios-key-lens" aria-hidden="true"></canvas><span class="ios-key-num">6</span><span class="ios-key-letters">MNO</span></button>
+            <button type="button" class="ios-key-btn" data-digit="7"><canvas class="ios-key-lens" aria-hidden="true"></canvas><span class="ios-key-num">7</span><span class="ios-key-letters">PQRS</span></button>
+            <button type="button" class="ios-key-btn" data-digit="8"><canvas class="ios-key-lens" aria-hidden="true"></canvas><span class="ios-key-num">8</span><span class="ios-key-letters">TUV</span></button>
+            <button type="button" class="ios-key-btn" data-digit="9"><canvas class="ios-key-lens" aria-hidden="true"></canvas><span class="ios-key-num">9</span><span class="ios-key-letters">WXYZ</span></button>
+            <button type="button" class="ios-key-btn ios-key-zero" data-digit="0" style="grid-column: 2;"><canvas class="ios-key-lens" aria-hidden="true"></canvas><span class="ios-key-num">0</span><span class="ios-key-letters"></span></button>
           </div>
           <div class="ios-pin-footer">
             <button type="button" id="btnIosLeftAction">Password</button>
@@ -9862,13 +9966,13 @@
         if (window.caches) {
           caches.keys().then(keys => {
             keys.forEach(k => {
-              if (k.startsWith('vault-') && k !== 'vault-jarvis-v69') {
+              if (k.startsWith('vault-') && k !== 'vault-jarvis-v70') {
                 caches.delete(k);
               }
             });
           });
         }
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v69', { scope: '/orlandovault/' }).then(reg => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v70', { scope: '/orlandovault/' }).then(reg => {
           if (reg && reg.update) reg.update();
         }).catch(err => {
           console.warn('Vault SW registration error:', err);
@@ -11439,7 +11543,15 @@
     function showUnlockedWorkspace() {
       document.body.classList.remove('vault-locked-active');
       const overlay = document.getElementById('vaultLockOverlay');
-      if (overlay) overlay.classList.add('unlocked');
+      if (overlay) {
+        overlay.classList.add('unlocking');
+        setTimeout(() => {
+          if (activeSessionKey) {
+            overlay.classList.add('unlocked');
+          }
+          overlay.classList.remove('unlocking');
+        }, 190);
+      }
       const curtain = document.getElementById('vaultPrivacyCurtain');
       if (curtain) curtain.classList.remove('active');
       const pwdIn = document.getElementById('vaultMasterPwdInput');
@@ -11482,7 +11594,10 @@
       if (curtain) curtain.classList.remove('active');
 
       const overlay = document.getElementById('vaultLockOverlay');
-      if (overlay) overlay.classList.remove('unlocked');
+      if (overlay) {
+        overlay.classList.remove('unlocking');
+        overlay.classList.remove('unlocked');
+      }
 
       const pwdIn = document.getElementById('vaultMasterPwdInput');
       const pwdConf = document.getElementById('vaultMasterPwdConfirm');
@@ -12307,15 +12422,72 @@
       if (errMsg) setLockError(errMsg);
     }
 
+    const LIQUID_LENS_DIM = 168;
+    let liquidLensLut = null;
+    let liquidLensCache = { key: '', bufW: 0, bufH: 0, sharpPixels: null, softPixels: null };
+    let liquidLensOutputBuf = null;
+
+    function getLiquidLensLut() {
+      if (liquidLensLut) return liquidLensLut;
+      const D = LIQUID_LENS_DIM;
+      const n = D * D;
+      const su = new Float32Array(n);
+      const sv = new Float32Array(n);
+      const softW = new Float32Array(n);
+      const dome = new Float32Array(n);
+      const groove = new Float32Array(n);
+      const alpha = new Uint8ClampedArray(n);
+
+      for (let py = 0; py < D; py++) {
+        const v = ((py + 0.5) / D) * 2 - 1;
+        for (let px = 0; px < D; px++) {
+          const u = ((px + 0.5) / D) * 2 - 1;
+          const idx = py * D + px;
+          const r = Math.hypot(u, v);
+          if (r > 1.008) {
+            alpha[idx] = 0;
+            continue;
+          }
+          alpha[idx] = Math.min(255, Math.max(0, Math.round((1.0 - r) * 64 * 255)));
+          const invR = r > 1e-4 ? 1 / r : 0;
+          const nx = u * invR;
+          const ny = v * invR;
+
+          // Physical Snell convex-meniscus refraction (n = 1.48): gentle center lens + strong curved edge wrap
+          let disp = -0.095 * r;
+          let swirl = 0;
+          if (r > 0.56) {
+            const t = (r - 0.56) / 0.44;
+            disp -= 0.44 * Math.pow(t, 2.15);
+            swirl = 0.024 * t * t;
+          }
+          su[idx] = Math.max(-1.22, Math.min(1.22, u + nx * disp - ny * swirl));
+          sv[idx] = Math.max(-1.22, Math.min(1.22, v + ny * disp + nx * swirl));
+
+          // Softly diffused crystal interior transitions to sharp meniscus caustics at the rim
+          softW[idx] = r < 0.7 ? 0.58 * Math.pow(1 - r / 0.7, 1.25) : 0;
+          // 3D directional glass dome highlight + inner 1.5px dark meniscus groove at r ~ 0.935
+          const fresnel = Math.pow(r, 4.2) * 18;
+          const spec = Math.max(0, -0.58 * u - 0.68 * v) * 14 + Math.max(0, 0.55 * u + 0.65 * v) * 7;
+          dome[idx] = fresnel + spec;
+          groove[idx] = Math.exp(-Math.pow((r - 0.935) / 0.032, 2)) * 22;
+        }
+      }
+      liquidLensLut = { D, su, sv, softW, dome, groove, alpha };
+      return liquidLensLut;
+    }
+
     function syncLiquidGlassLensCoords() {
-      const bgImg = document.querySelector('#vaultLockOverlay .ios-lock-bg-photo');
+      const bgImg = document.getElementById('iosLockBgPhoto') || document.querySelector('#vaultLockOverlay .ios-lock-bg-photo');
       const pinPanel = document.getElementById('iosPinPanel');
       if (!bgImg || !pinPanel || pinPanel.style.display === 'none') return;
+      if (!bgImg.complete || !bgImg.naturalWidth || !bgImg.naturalHeight) return;
+
       const photoRect = bgImg.getBoundingClientRect();
       if (!photoRect.width || !photoRect.height) return;
 
-      const natW = bgImg.naturalWidth || 2560;
-      const natH = bgImg.naturalHeight || 3840;
+      const natW = bgImg.naturalWidth;
+      const natH = bgImg.naturalHeight;
       const natRatio = natW / natH;
       const boxRatio = photoRect.width / photoRect.height;
 
@@ -12328,22 +12500,97 @@
         rw = photoRect.height * natRatio;
       }
 
-      const objPos = (getComputedStyle(bgImg).objectPosition || '50% 22%').trim().split(/\s+/);
+      const objPos = (getComputedStyle(bgImg).objectPosition || '50% 42%').trim().split(/\s+/);
       const parsePct = (token, fallback) => token && token.endsWith('%') ? (parseFloat(token) / 100) : fallback;
       const pxPct = parsePct(objPos[0], 0.5);
-      const pyPct = parsePct(objPos[1], 0.22);
+      const pyPct = parsePct(objPos[1], 0.42);
 
       const imgLeft = photoRect.left + (photoRect.width - rw) * pxPct;
       const imgTop = photoRect.top + (photoRect.height - rh) * pyPct;
 
-      pinPanel.querySelectorAll('.ios-key-btn').forEach(btn => {
-        const br = btn.getBoundingClientRect();
-        if (!br.width) return;
-        btn.style.setProperty('--lens-bg-w', rw.toFixed(1) + 'px');
-        btn.style.setProperty('--lens-bg-h', rh.toFixed(1) + 'px');
-        btn.style.setProperty('--lens-bg-x', (imgLeft - br.left).toFixed(1) + 'px');
-        btn.style.setProperty('--lens-bg-y', (imgTop - br.top).toFixed(1) + 'px');
-      });
+      const srcScale = Math.min(1, 960 / Math.max(rw, rh));
+      const bufW = Math.max(2, Math.round(rw * srcScale));
+      const bufH = Math.max(2, Math.round(rh * srcScale));
+      const cacheKey = (bgImg.currentSrc || bgImg.src) + '|' + bufW + 'x' + bufH;
+
+      try {
+        if (liquidLensCache.key !== cacheKey) {
+          const sharpCanvas = document.createElement('canvas');
+          sharpCanvas.width = bufW;
+          sharpCanvas.height = bufH;
+          const sCtx = sharpCanvas.getContext('2d', { willReadFrequently: true });
+          sCtx.drawImage(bgImg, 0, 0, bufW, bufH);
+          const sharpPixels = sCtx.getImageData(0, 0, bufW, bufH).data;
+
+          const softCanvas = document.createElement('canvas');
+          softCanvas.width = bufW;
+          softCanvas.height = bufH;
+          const bCtx = softCanvas.getContext('2d', { willReadFrequently: true });
+          bCtx.filter = 'blur(' + Math.max(1.2, 3.2 * srcScale).toFixed(2) + 'px)';
+          bCtx.drawImage(sharpCanvas, 0, 0);
+          bCtx.filter = 'none';
+          const softPixels = bCtx.getImageData(0, 0, bufW, bufH).data;
+
+          liquidLensCache = { key: cacheKey, bufW, bufH, sharpPixels, softPixels };
+        }
+
+        const lut = getLiquidLensLut();
+        const D = lut.D;
+        if (!liquidLensOutputBuf || liquidLensOutputBuf.width !== D) {
+          liquidLensOutputBuf = new ImageData(D, D);
+        }
+        const out = liquidLensOutputBuf.data;
+        const { sharpPixels, softPixels } = liquidLensCache;
+
+        pinPanel.querySelectorAll('.ios-key-btn').forEach(btn => {
+          const canvas = btn.querySelector('.ios-key-lens');
+          const br = btn.getBoundingClientRect();
+          if (!canvas || !br.width) return;
+          if (canvas.width !== D || canvas.height !== D) {
+            canvas.width = D;
+            canvas.height = D;
+          }
+
+          const cx = (br.left + br.width * 0.5 - imgLeft) * srcScale;
+          const cy = (br.top + br.height * 0.5 - imgTop) * srcScale;
+          const rad = br.width * 0.5 * srcScale;
+          const total = D * D;
+
+          for (let i = 0; i < total; i++) {
+            const p4 = i << 2;
+            const a = lut.alpha[i];
+            if (a === 0) {
+              out[p4 + 3] = 0;
+              continue;
+            }
+            const sx = Math.max(0, Math.min(bufW - 1, (cx + lut.su[i] * rad) | 0));
+            const sy = Math.max(0, Math.min(bufH - 1, (cy + lut.sv[i] * rad) | 0));
+            const sp4 = (sy * bufW + sx) << 2;
+
+            const wS = lut.softW[i];
+            const wH = 1 - wS;
+            const rRaw = sharpPixels[sp4] * wH + softPixels[sp4] * wS;
+            const gRaw = sharpPixels[sp4 + 1] * wH + softPixels[sp4 + 1] * wS;
+            const bRaw = sharpPixels[sp4 + 2] * wH + softPixels[sp4 + 2] * wS;
+
+            // iOS 26 Light-Gathering Neutral Smoke-Pearl Glass Curve
+            const delta = lut.dome[i] - lut.groove[i];
+            let rC = (rRaw * 0.78 + 34) * 0.84 + 22 + delta;
+            let gC = (gRaw * 0.78 + 34) * 0.84 + 22 + delta;
+            let bC = (bRaw * 0.78 + 35.5) * 0.84 + 22 + delta;
+
+            out[p4] = rC < 0 ? 0 : (rC > 255 ? 255 : rC);
+            out[p4 + 1] = gC < 0 ? 0 : (gC > 255 ? 255 : gC);
+            out[p4 + 2] = bC < 0 ? 0 : (bC > 255 ? 255 : bC);
+            out[p4 + 3] = a;
+          }
+
+          const ctx = canvas.getContext('2d');
+          ctx.putImageData(liquidLensOutputBuf, 0, 0);
+        });
+      } catch (e) {
+        // Fallback silently to CSS Liquid Glass styles if canvas readback is restricted
+      }
     }
     window.syncLiquidGlassLensCoords = syncLiquidGlassLensCoords;
 
@@ -12798,11 +13045,28 @@
         });
       }
 
-      // Wire iPhone 6-digit keypad clicks, bottom iOS row actions & keyboard input
+      // Wire zero-latency iPhone Liquid Glass keypad pointerdown + trailing bloom, keyboard & Numpad input
       const iosGrid = document.getElementById('iosKeypadGrid');
       if (iosGrid) {
+        const triggerKeyPressVisual = (btn) => {
+          btn.classList.add('is-pressing');
+          clearTimeout(btn._pressTimer);
+          btn._pressTimer = setTimeout(() => btn.classList.remove('is-pressing'), 240);
+        };
         iosGrid.querySelectorAll('.ios-key-btn[data-digit]').forEach(btn => {
-          btn.onclick = () => appendIosPinDigit(btn.getAttribute('data-digit'));
+          let lastPointerAt = 0;
+          btn.addEventListener('pointerdown', (e) => {
+            if (e.button && e.button !== 0) return;
+            lastPointerAt = performance.now();
+            triggerKeyPressVisual(btn);
+            appendIosPinDigit(btn.getAttribute('data-digit'));
+          });
+          btn.addEventListener('pointercancel', () => btn.classList.remove('is-pressing'));
+          btn.addEventListener('click', (e) => {
+            if (performance.now() - lastPointerAt < 450 && e.detail > 0) return;
+            triggerKeyPressVisual(btn);
+            appendIosPinDigit(btn.getAttribute('data-digit'));
+          });
         });
       }
       const btnIosRight = document.getElementById('btnIosRightAction');
@@ -12860,14 +13124,17 @@
         if (!pinPanel || pinPanel.style.display === 'none') return;
         if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
 
-        if (/^[0-9]$/.test(e.key)) {
+        const numpadMatch = (e.code || '').match(/^Numpad([0-9])$/);
+        const digitKey = /^[0-9]$/.test(e.key) ? e.key : (numpadMatch ? numpadMatch[1] : null);
+        if (digitKey !== null) {
           e.preventDefault();
-          const keyEl = pinPanel.querySelector('.ios-key-btn[data-digit="' + e.key + '"]');
+          const keyEl = pinPanel.querySelector('.ios-key-btn[data-digit="' + digitKey + '"]');
           if (keyEl) {
-            keyEl.classList.add('pressed');
-            setTimeout(() => keyEl.classList.remove('pressed'), 120);
+            keyEl.classList.add('is-pressing');
+            clearTimeout(keyEl._pressTimer);
+            keyEl._pressTimer = setTimeout(() => keyEl.classList.remove('is-pressing'), 240);
           }
-          appendIosPinDigit(e.key);
+          appendIosPinDigit(digitKey);
         } else if (e.key === 'Backspace') {
           e.preventDefault();
           if (!iosPinBusy && iosPinBuffer.length > 0) {
@@ -12939,13 +13206,28 @@
         });
       }
 
-      const bgPhotoEl = document.querySelector('#vaultLockOverlay .ios-lock-bg-photo');
-      if (bgPhotoEl) bgPhotoEl.addEventListener('load', syncLiquidGlassLensCoords);
+      const bgPhotoEl = document.getElementById('iosLockBgPhoto') || document.querySelector('#vaultLockOverlay .ios-lock-bg-photo');
+      if (bgPhotoEl) {
+        bgPhotoEl.addEventListener('load', () => {
+          if (typeof requestAnimationFrame === 'function') requestAnimationFrame(syncLiquidGlassLensCoords);
+          else syncLiquidGlassLensCoords();
+        });
+      }
       let lensResizeTimer = null;
-      window.addEventListener('resize', () => {
+      const scheduleLensSync = () => {
         if (lensResizeTimer) clearTimeout(lensResizeTimer);
-        lensResizeTimer = setTimeout(syncLiquidGlassLensCoords, 40);
-      });
+        lensResizeTimer = setTimeout(() => {
+          if (typeof requestAnimationFrame === 'function') requestAnimationFrame(syncLiquidGlassLensCoords);
+          else syncLiquidGlassLensCoords();
+        }, 32);
+      };
+      window.addEventListener('resize', scheduleLensSync);
+      window.addEventListener('orientationchange', scheduleLensSync);
+      if (window.visualViewport) window.visualViewport.addEventListener('resize', scheduleLensSync);
+      if (typeof ResizeObserver === 'function') {
+        const lockOv = document.getElementById('vaultLockOverlay');
+        if (lockOv) new ResizeObserver(scheduleLensSync).observe(lockOv);
+      }
 
       // Activity & Auto-Lock / Instant Privacy Curtain
       ['pointerdown', 'keydown', 'touchstart', 'scroll'].forEach(evt => {
