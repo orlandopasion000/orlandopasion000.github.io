@@ -6723,6 +6723,183 @@
         padding: 20px 16px;
       }
     }
+
+    /* Authentic iPhone iOS 6-Digit Circular Passcode Keypad */
+    .ios-pin-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding: 6px 0 4px;
+    }
+    .ios-pin-prompt {
+      font-size: 16px;
+      font-weight: 500;
+      color: #ffffff;
+      letter-spacing: 0.01em;
+      text-align: center;
+    }
+    .ios-pin-subhint {
+      font-size: 11.5px;
+      color: #94a3b8;
+      text-align: center;
+      margin-top: -6px;
+      min-height: 15px;
+    }
+    .ios-pin-dots {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin: 4px 0 8px;
+    }
+    .ios-pin-dot {
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      border: 1.6px solid rgba(255, 255, 255, 0.88);
+      background: transparent;
+      transition: background 0.12s ease, transform 0.12s ease, box-shadow 0.12s ease;
+    }
+    .ios-pin-dot.filled {
+      background: #ffffff;
+      border-color: #ffffff;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+      transform: scale(1.08);
+    }
+    @keyframes iosPinShake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-10px); }
+      40%, 80% { transform: translateX(10px); }
+    }
+    .ios-pin-dots.shake {
+      animation: iosPinShake 0.36s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+    }
+    .ios-keypad-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 72px);
+      gap: 14px 20px;
+      justify-content: center;
+      margin-top: 2px;
+    }
+    .ios-key-btn {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.13);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      outline: none;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 6px 18px rgba(0, 0, 0, 0.28);
+      transition: background 0.12s ease, transform 0.08s ease;
+    }
+    .ios-key-btn:focus-visible {
+      box-shadow: 0 0 0 2px #38bdf8, inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    }
+    .ios-key-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    .ios-key-btn:active,
+    .ios-key-btn.pressed {
+      background: rgba(255, 255, 255, 0.44);
+      transform: scale(0.94);
+    }
+    .ios-key-num {
+      font-size: 28px;
+      font-weight: 400;
+      line-height: 1.05;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
+    }
+    .ios-key-letters {
+      font-size: 8.5px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      color: rgba(255, 255, 255, 0.8);
+      margin-top: 2px;
+      min-height: 10px;
+    }
+    .ios-key-util {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: transparent;
+      border: none;
+      color: rgba(255, 255, 255, 0.88);
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      transition: opacity 0.15s ease, transform 0.1s ease;
+    }
+    .ios-key-util:active {
+      transform: scale(0.9);
+      opacity: 0.65;
+    }
+    .ios-pin-footer {
+      width: 100%;
+      max-width: 264px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 6px;
+    }
+    .ios-pin-footer button {
+      background: transparent;
+      border: none;
+      color: #cbd5e1;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 6px 8px;
+    }
+    .ios-pin-footer button:hover {
+      color: #ffffff;
+    }
+    .switch-pin6-banner {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+      padding: 9px 11px;
+      border-radius: 10px;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      font-size: 12px;
+      color: #bae6fd;
+      cursor: pointer;
+    }
+    .switch-pin6-banner input {
+      accent-color: #38bdf8;
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+    }
+    @media (max-width: 400px) {
+      .ios-keypad-grid {
+        grid-template-columns: repeat(3, 64px);
+        gap: 12px 16px;
+      }
+      .ios-key-btn,
+      .ios-key-util {
+        width: 64px;
+        height: 64px;
+      }
+      .ios-key-num {
+        font-size: 25px;
+      }
+    }
 </style>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
@@ -6801,8 +6978,45 @@
             </div>
           </div>
 
+          <label class="switch-pin6-banner" id="switchToPin6Box" style="display:none;">
+            <input type="checkbox" id="chkSwitchToPin6AfterUnlock" checked>
+            <span>Switch to <strong>iPhone 6-Digit Passcode</strong> right after unlock</span>
+          </label>
+
           <button type="submit" class="btn-vault-unlock-primary" id="btnVaultUnlockSubmit">🔓 Unlock Vault</button>
         </form>
+
+        <!-- Authentic iPhone iOS 6-Digit Circular Passcode Panel -->
+        <div id="iosPinPanel" class="ios-pin-wrap" style="display:none;">
+          <div class="ios-pin-prompt" id="iosPinPrompt">Enter Passcode</div>
+          <div class="ios-pin-subhint" id="iosPinSubHint">Tap 6 numbers or type on keyboard</div>
+          <div class="ios-pin-dots" id="iosPinDots" aria-label="6-digit passcode progress">
+            <span class="ios-pin-dot"></span>
+            <span class="ios-pin-dot"></span>
+            <span class="ios-pin-dot"></span>
+            <span class="ios-pin-dot"></span>
+            <span class="ios-pin-dot"></span>
+            <span class="ios-pin-dot"></span>
+          </div>
+          <div class="ios-keypad-grid" id="iosKeypadGrid">
+            <button type="button" class="ios-key-btn" data-digit="1"><span class="ios-key-num">1</span><span class="ios-key-letters"></span></button>
+            <button type="button" class="ios-key-btn" data-digit="2"><span class="ios-key-num">2</span><span class="ios-key-letters">ABC</span></button>
+            <button type="button" class="ios-key-btn" data-digit="3"><span class="ios-key-num">3</span><span class="ios-key-letters">DEF</span></button>
+            <button type="button" class="ios-key-btn" data-digit="4"><span class="ios-key-num">4</span><span class="ios-key-letters">GHI</span></button>
+            <button type="button" class="ios-key-btn" data-digit="5"><span class="ios-key-num">5</span><span class="ios-key-letters">JKL</span></button>
+            <button type="button" class="ios-key-btn" data-digit="6"><span class="ios-key-num">6</span><span class="ios-key-letters">MNO</span></button>
+            <button type="button" class="ios-key-btn" data-digit="7"><span class="ios-key-num">7</span><span class="ios-key-letters">PQRS</span></button>
+            <button type="button" class="ios-key-btn" data-digit="8"><span class="ios-key-num">8</span><span class="ios-key-letters">TUV</span></button>
+            <button type="button" class="ios-key-btn" data-digit="9"><span class="ios-key-num">9</span><span class="ios-key-letters">WXYZ</span></button>
+            <button type="button" class="ios-key-util" id="btnIosBioSlot" title="Unlock with Biometrics / Passkey" aria-label="Biometrics" style="visibility:hidden;">🧬</button>
+            <button type="button" class="ios-key-btn" data-digit="0"><span class="ios-key-num">0</span><span class="ios-key-letters"></span></button>
+            <button type="button" class="ios-key-util" id="btnIosBackspace" title="Delete digit" aria-label="Delete digit" style="visibility:hidden;">⌫</button>
+          </div>
+          <div class="ios-pin-footer">
+            <button type="button" id="btnIosLeftAction">Use Password</button>
+            <button type="button" id="btnIosClearPin">Clear</button>
+          </div>
+        </div>
 
         <button type="button" class="btn-bio-unlock" id="btnVaultBioUnlock" style="display:none;">
           <span>🧬</span>
@@ -7145,6 +7359,9 @@
             <option value="10">10 Minutes</option>
             <option value="15">15 Minutes</option>
           </select>
+        </div>
+        <div class="sync-security-row">
+          <button type="button" class="btn-sync-action primary" id="btnSetIosPin6" style="flex:1;font-size:11.5px;">🔢 Set / Change 6-Digit iPhone Passcode</button>
         </div>
         <div class="sync-security-row">
           <button type="button" class="btn-sync-action" id="btnSetupBiometricUnlock" style="flex:1;font-size:11.5px;">🧬 Enable Biometric / Passkey Unlock</button>
@@ -9538,13 +9755,13 @@
         if (window.caches) {
           caches.keys().then(keys => {
             keys.forEach(k => {
-              if (k.startsWith('vault-') && k !== 'vault-jarvis-v66') {
+              if (k.startsWith('vault-') && k !== 'vault-jarvis-v67') {
                 caches.delete(k);
               }
             });
           });
         }
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v66', { scope: '/orlandovault/' }).then(reg => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v67', { scope: '/orlandovault/' }).then(reg => {
           if (reg && reg.update) reg.update();
         }).catch(err => {
           console.warn('Vault SW registration error:', err);
@@ -10974,6 +11191,10 @@
       console.warn('[Firebase Auth Init]', e.message);
     }
 
+    function isCloudAuthenticated() {
+      return !!(firebaseAuth && firebaseAuth.currentUser);
+    }
+
     async function getAuthHeaders() {
       const headers = {};
       try {
@@ -11011,19 +11232,29 @@
       return { pct: Math.max(20, score), color: '#f59e0b', text: 'Too weak — aim for 10+ chars with mixed case & numbers/symbols' };
     }
 
-    function refreshBioButtonVisibility() {
-      const bioBtn = document.getElementById('btnVaultBioUnlock');
-      const setupBtn = document.getElementById('btnSetupBiometricUnlock');
-      let hasBio = false;
+    function hasBioWrapConfigured() {
       try {
         const raw = localStorage.getItem(LS_BIO_WRAP);
         if (raw) {
           const parsed = JSON.parse(raw);
-          hasBio = !!(parsed && parsed.credentialId && parsed.wrappedPwd);
+          return !!(parsed && parsed.credentialId && parsed.wrappedPwd);
         }
       } catch(e) {}
+      return false;
+    }
+
+    function refreshBioButtonVisibility() {
+      const bioBtn = document.getElementById('btnVaultBioUnlock');
+      const iosBioSlot = document.getElementById('btnIosBioSlot');
+      const setupBtn = document.getElementById('btnSetupBiometricUnlock');
+      const hasBio = hasBioWrapConfigured();
       if (bioBtn) {
-        bioBtn.style.display = (!isFirstTimeMigration && hasBio) ? 'flex' : 'none';
+        const pinPanel = document.getElementById('iosPinPanel');
+        const pinVisible = pinPanel && pinPanel.style.display !== 'none';
+        bioBtn.style.display = (!isFirstTimeMigration && hasBio && !pinVisible) ? 'flex' : 'none';
+      }
+      if (iosBioSlot) {
+        iosBioSlot.style.visibility = (!isFirstTimeMigration && hasBio && iosPinMode === 'unlock') ? 'visible' : 'hidden';
       }
       if (setupBtn) {
         setupBtn.textContent = hasBio ? '✅ Biometric Unlock Active (Click to Disable)' : '🧬 Enable Biometric / Passkey Unlock';
@@ -11050,6 +11281,7 @@
         const enc = await VaultCrypto.encrypt(payload, activeSessionKey);
         const envelope = {
           v: 4,
+          passcodeMode: activeVaultMeta.passcodeMode || 'password',
           saltHex: activeVaultMeta.saltHex,
           kdfIterations: activeVaultMeta.kdfIterations || KDF_ITERATIONS_V4,
           keyCanary: activeVaultMeta.keyCanary,
@@ -11081,6 +11313,7 @@
       activeSessionKey = derivedKey;
       activeVaultMeta = {
         v: 4,
+        passcodeMode: env.passcodeMode || 'password',
         saltHex: env.saltHex,
         kdfIterations: iters,
         keyCanary: env.keyCanary
@@ -11115,6 +11348,7 @@
     }
 
     function lockVault(reason = '') {
+      const lastMode = (activeVaultMeta && activeVaultMeta.passcodeMode) || (readLocalEncryptedCacheEnvelope() || {}).passcodeMode || 'password';
       activeSessionKey = null;
       hasCompletedInitialPull = false;
       isSyncing = false;
@@ -11150,6 +11384,11 @@
       if (pwdIn) pwdIn.value = '';
       if (pwdConf) pwdConf.value = '';
 
+      if (lastMode === 'pin6' && !isFirstTimeMigration) {
+        showIosPinPanel('unlock', false);
+      } else {
+        showPasswordUnlockForm();
+      }
       if (reason) setLockError(reason);
       if (typeof renderMetrics === 'function') {
         try { renderMetrics(); } catch(e) {}
@@ -11236,7 +11475,7 @@
     }
 
     // One-time v3 -> v4 zero-knowledge migration (legacy v3 secret isolated strictly inside this migration)
-    async function migrateLegacyV3ToV4(newMasterPassword) {
+    async function migrateLegacyV3ToV4(newMasterPassword, passcodeMode = 'password') {
       const authHeaders = await getAuthHeaders();
       const rawDocs = await fetchAllRemoteRawDocs(authHeaders);
       const localTombstones = typeof getVaultTombstones === 'function' ? getVaultTombstones() : {};
@@ -11257,6 +11496,7 @@
       activeSessionKey = newKey;
       activeVaultMeta = {
         v: 4,
+        passcodeMode: passcodeMode,
         saltHex: newSaltHex,
         kdfIterations: KDF_ITERATIONS_V4,
         keyCanary: canary
@@ -11276,41 +11516,66 @@
       showUnlockedWorkspace();
       if (typeof window.renderVault === 'function') window.renderVault();
       if (typeof window.renderMetrics === 'function') window.renderMetrics();
-      if (typeof logAudit === 'function') logAudit('VAULT_UPGRADED_V4', 'Upgraded Zero-Knowledge Encryption to PBKDF2 600k + Random Salt + Master Password');
+      if (typeof logAudit === 'function') logAudit('VAULT_UPGRADED_V4', 'Upgraded Zero-Knowledge Encryption to PBKDF2 600k + Random Salt');
+    }
+
+    async function reencryptVaultWithNewSecret(newSecret, newMode = 'password') {
+      if (!activeSessionKey) throw new Error('Unlock vault first.');
+      const freshSalt = VaultCrypto.generateRandomSaltHex();
+      const freshKey = await VaultCrypto.deriveKey(newSecret, freshSalt, KDF_ITERATIONS_V4);
+      const freshCanary = await VaultCrypto.createCanary(freshKey);
+
+      activeSessionKey = freshKey;
+      activeVaultMeta = {
+        v: 4,
+        passcodeMode: newMode,
+        saltHex: freshSalt,
+        kdfIterations: KDF_ITERATIONS_V4,
+        keyCanary: freshCanary
+      };
+      try { localStorage.removeItem(LS_BIO_WRAP); } catch(e) {}
+      refreshBioButtonVisibility();
+      await persistEncryptedVaultCache();
+      fullPushRequired = true;
+      await pushToCloud(true);
+      if (typeof logAudit === 'function') logAudit('PASSCODE_MODE_UPDATED', 'Updated vault key & passcode mode to: ' + newMode);
     }
 
     async function unlockVaultWithPassword(masterPassword) {
       const env = readLocalEncryptedCacheEnvelope();
 
       if (isFirstTimeMigration) {
-        return await migrateLegacyV3ToV4(masterPassword);
+        return await migrateLegacyV3ToV4(masterPassword, 'password');
       }
 
-      // 1. Try cloud metadata first if available, else fall back to encrypted local cache metadata
+      // 1. Try cloud metadata first if authenticated & available, else use encrypted local cache metadata
       const authHeaders = await getAuthHeaders();
       let meta = activeVaultMeta;
 
-      try {
-        const masterRes = await fetch(MASTER_DOC_URL, { cache: 'no-store', headers: authHeaders });
-        if (masterRes.ok) {
-          const masterDoc = await masterRes.json();
-          const mf = masterDoc.fields || {};
-          const v = mf.v ? parseInt(mf.v.integerValue || '0', 10) : 0;
-          if (v >= 4 && mf.saltHex && mf.saltHex.stringValue && mf.keyCanary && mf.keyCanary.stringValue) {
-            meta = {
-              v: v,
-              saltHex: mf.saltHex.stringValue,
-              kdfIterations: mf.kdfIterations ? parseInt(mf.kdfIterations.integerValue || String(KDF_ITERATIONS_V4), 10) : KDF_ITERATIONS_V4,
-              keyCanary: JSON.parse(mf.keyCanary.stringValue)
-            };
+      if (isCloudAuthenticated()) {
+        try {
+          const masterRes = await fetch(MASTER_DOC_URL, { cache: 'no-store', headers: authHeaders });
+          if (masterRes.ok) {
+            const masterDoc = await masterRes.json();
+            const mf = masterDoc.fields || {};
+            const v = mf.v ? parseInt(mf.v.integerValue || '0', 10) : 0;
+            if (v >= 4 && mf.saltHex && mf.saltHex.stringValue && mf.keyCanary && mf.keyCanary.stringValue) {
+              meta = {
+                v: v,
+                passcodeMode: (mf.passcodeMode && mf.passcodeMode.stringValue) || 'password',
+                saltHex: mf.saltHex.stringValue,
+                kdfIterations: mf.kdfIterations ? parseInt(mf.kdfIterations.integerValue || String(KDF_ITERATIONS_V4), 10) : KDF_ITERATIONS_V4,
+                keyCanary: JSON.parse(mf.keyCanary.stringValue)
+              };
+            }
           }
-        }
-      } catch(e) {}
+        } catch(e) {}
+      }
 
       if (meta && meta.saltHex && meta.keyCanary) {
         const candidateKey = await VaultCrypto.deriveKey(masterPassword, meta.saltHex, meta.kdfIterations || KDF_ITERATIONS_V4);
         const ok = await VaultCrypto.verifyCanary(meta.keyCanary, candidateKey);
-        if (!ok) throw new Error('Incorrect Master Password. Key canary verification failed.');
+        if (!ok) throw new Error('Incorrect Master Password / Passcode.');
 
         activeSessionKey = candidateKey;
         activeVaultMeta = meta;
@@ -11350,24 +11615,7 @@
       const valid = await VaultCrypto.verifyCanary(activeVaultMeta.keyCanary, curKey);
       if (!valid) throw new Error('Current Master Password is incorrect.');
       if (!newPwd || newPwd.length < 10) throw new Error('New Master Password must be at least 10 characters.');
-
-      const freshSalt = VaultCrypto.generateRandomSaltHex();
-      const freshKey = await VaultCrypto.deriveKey(newPwd, freshSalt, KDF_ITERATIONS_V4);
-      const freshCanary = await VaultCrypto.createCanary(freshKey);
-
-      activeSessionKey = freshKey;
-      activeVaultMeta = {
-        v: 4,
-        saltHex: freshSalt,
-        kdfIterations: KDF_ITERATIONS_V4,
-        keyCanary: freshCanary
-      };
-      try { localStorage.removeItem(LS_BIO_WRAP); } catch(e) {}
-      refreshBioButtonVisibility();
-      await persistEncryptedVaultCache();
-      fullPushRequired = true;
-      await pushToCloud(true);
-      if (typeof logAudit === 'function') logAudit('MASTER_PASSWORD_ROTATED', 'Master Password rotated & cloud vault re-encrypted.');
+      await reencryptVaultWithNewSecret(newPwd, 'password');
     }
 
     // Biometric / Passkey Quick-Unlock (WebAuthn PRF)
@@ -11586,7 +11834,7 @@
     // 4. PULL FROM CLOUD (AUTHORIZED, ZERO-KNOWLEDGE V4)
     // ==========================================================================
     async function pullFromCloud(isInitial = false, showFeedback = false) {
-      if (!activeSessionKey) return false;
+      if (!activeSessionKey || !isCloudAuthenticated()) return false;
       if (isSyncing || isPushing) return false;
       if (!isInitial && !showFeedback && (pushTimer !== null || dirtyRecordIds.size > 0 || dirtyDeleteIds.size > 0)) {
         return false;
@@ -11769,7 +12017,7 @@
 
     // 6. PUSH TO CLOUD (ZERO-KNOWLEDGE V4 CIPHERTEXT + CANARY)
     async function pushToCloud(showFeedback = false) {
-      if (!activeSessionKey || !activeVaultMeta) return false;
+      if (!activeSessionKey || !activeVaultMeta || !isCloudAuthenticated()) return false;
       if (!hasCompletedInitialPull) {
         const ok = await pullFromCloud(true, false);
         if (!ok && !hasCompletedInitialPull) return false;
@@ -11872,6 +12120,7 @@
           body: JSON.stringify({
             fields: {
               v: { integerValue: "4" },
+              passcodeMode: { stringValue: activeVaultMeta.passcodeMode || 'password' },
               kdfIterations: { integerValue: String(activeVaultMeta.kdfIterations || KDF_ITERATIONS_V4) },
               saltHex: { stringValue: activeVaultMeta.saltHex },
               keyCanary: { stringValue: JSON.stringify(activeVaultMeta.keyCanary) },
@@ -11926,6 +12175,180 @@
       }
     }
 
+    // iPhone iOS 6-Digit Circular Passcode State & Controller
+    let iosPinBuffer = '';
+    let iosPinMode = 'unlock'; // 'unlock' | 'setup_create' | 'setup_confirm'
+    let iosPinDraftFirst = '';
+    let iosPinAllowCancel = false;
+    let iosPinBusy = false;
+    let iosPinFailCount = 0;
+    let iosPinLockoutUntil = 0;
+
+    function updateIosPinDots() {
+      const dotsWrap = document.getElementById('iosPinDots');
+      if (dotsWrap) {
+        const dots = dotsWrap.querySelectorAll('.ios-pin-dot');
+        dots.forEach((d, idx) => d.classList.toggle('filled', idx < iosPinBuffer.length));
+      }
+      const delBtn = document.getElementById('btnIosBackspace');
+      if (delBtn) delBtn.style.visibility = iosPinBuffer.length > 0 ? 'visible' : 'hidden';
+    }
+
+    function triggerIosPinShake(errMsg) {
+      const dotsWrap = document.getElementById('iosPinDots');
+      if (dotsWrap) {
+        dotsWrap.classList.remove('shake');
+        void dotsWrap.offsetWidth;
+        dotsWrap.classList.add('shake');
+      }
+      iosPinBuffer = '';
+      updateIosPinDots();
+      if (navigator.vibrate) try { navigator.vibrate([35, 35, 35]); } catch(e) {}
+      if (errMsg) setLockError(errMsg);
+    }
+
+    function showIosPinPanel(mode = 'unlock', allowCancel = false) {
+      iosPinMode = mode;
+      iosPinAllowCancel = allowCancel;
+      iosPinBuffer = '';
+      if (mode === 'setup_create') iosPinDraftFirst = '';
+      setLockError('');
+
+      const pinPanel = document.getElementById('iosPinPanel');
+      const form = document.getElementById('vaultUnlockForm');
+      const modeBadge = document.getElementById('vaultGateModeBadge');
+      const gateTitle = document.getElementById('vaultGateTitle');
+      const promptEl = document.getElementById('iosPinPrompt');
+      const subEl = document.getElementById('iosPinSubHint');
+      const leftBtn = document.getElementById('btnIosLeftAction');
+      const migNotice = document.getElementById('lockMigrationNotice');
+
+      if (form) form.style.display = 'none';
+      if (migNotice) migNotice.style.display = 'none';
+      if (pinPanel) pinPanel.style.display = 'flex';
+
+      if (mode === 'setup_create') {
+        if (modeBadge) modeBadge.textContent = '📱 IPHONE 6-DIGIT PASSCODE';
+        if (gateTitle) gateTitle.textContent = 'Set 6-Digit Passcode';
+        if (promptEl) promptEl.textContent = 'Create 6-Digit Passcode';
+        if (subEl) subEl.textContent = 'Tap 6 numbers to protect OrlandoVault';
+      } else if (mode === 'setup_confirm') {
+        if (promptEl) promptEl.textContent = 'Confirm 6-Digit Passcode';
+        if (subEl) subEl.textContent = 'Re-enter the same 6 numbers to confirm';
+      } else {
+        if (modeBadge) modeBadge.textContent = '🔐 ZERO-KNOWLEDGE VAULT · LOCKED';
+        if (gateTitle) gateTitle.textContent = 'Unlock OrlandoVault';
+        if (promptEl) promptEl.textContent = 'Enter Passcode';
+        if (subEl) subEl.textContent = 'Tap 6 numbers or type on keyboard';
+      }
+      if (leftBtn) leftBtn.textContent = allowCancel ? 'Cancel' : 'Use Password';
+      updateIosPinDots();
+      refreshBioButtonVisibility();
+    }
+
+    function showPasswordUnlockForm() {
+      const pinPanel = document.getElementById('iosPinPanel');
+      const form = document.getElementById('vaultUnlockForm');
+      const switchBox = document.getElementById('switchToPin6Box');
+      if (pinPanel) pinPanel.style.display = 'none';
+      if (form) form.style.display = 'block';
+      if (switchBox) {
+        const showSwitch = !isFirstTimeMigration && (!activeVaultMeta || activeVaultMeta.passcodeMode !== 'pin6');
+        switchBox.style.display = showSwitch ? 'flex' : 'none';
+      }
+      refreshBioButtonVisibility();
+    }
+
+    function openIosPin6SetupOverlay(allowCancel = true) {
+      const stGoogle = document.getElementById('lockStageGoogle');
+      const stUnlock = document.getElementById('lockStageUnlock');
+      const overlay = document.getElementById('vaultLockOverlay');
+      if (stGoogle) stGoogle.style.display = 'none';
+      if (stUnlock) stUnlock.style.display = 'block';
+      if (overlay) overlay.classList.remove('unlocked');
+      showIosPinPanel('setup_create', allowCancel);
+    }
+    window.openIosPin6SetupOverlay = openIosPin6SetupOverlay;
+    window.showPasswordUnlockForm = showPasswordUnlockForm;
+    window.getIosPinState = function() {
+      const pinPanel = document.getElementById('iosPinPanel');
+      return {
+        panelVisible: !!(pinPanel && pinPanel.style.display !== 'none'),
+        mode: iosPinMode,
+        length: iosPinBuffer.length,
+        failCount: iosPinFailCount,
+        lockoutUntil: iosPinLockoutUntil,
+        passcodeMode: activeVaultMeta ? activeVaultMeta.passcodeMode : 'unknown'
+      };
+    };
+
+    async function handleIosPinComplete(pin6) {
+      if (iosPinBusy) return;
+      iosPinBusy = true;
+      const subEl = document.getElementById('iosPinSubHint');
+      try {
+        if (iosPinMode === 'setup_create') {
+          iosPinDraftFirst = pin6;
+          iosPinBusy = false;
+          showIosPinPanel('setup_confirm', iosPinAllowCancel);
+          return;
+        }
+        if (iosPinMode === 'setup_confirm') {
+          if (pin6 !== iosPinDraftFirst) {
+            iosPinBusy = false;
+            showIosPinPanel('setup_create', iosPinAllowCancel);
+            triggerIosPinShake('Passcodes did not match. Please try again.');
+            return;
+          }
+          if (subEl) subEl.textContent = 'Encrypting Cloud Vault (600k PBKDF2)...';
+          if (isFirstTimeMigration) {
+            await migrateLegacyV3ToV4(pin6, 'pin6');
+          } else {
+            await reencryptVaultWithNewSecret(pin6, 'pin6');
+          }
+          iosPinFailCount = 0;
+          showUnlockedWorkspace();
+          if (typeof window.showToast === 'function') window.showToast('✅ iPhone 6-Digit Passcode active!', '📱');
+          return;
+        }
+
+        // 'unlock' mode
+        if (subEl) subEl.textContent = 'Unlocking AES-256-GCM Vault...';
+        await unlockVaultWithPassword(pin6);
+        iosPinFailCount = 0;
+      } catch(err) {
+        iosPinFailCount += 1;
+        if (iosPinFailCount >= 5) {
+          iosPinLockoutUntil = Date.now() + 30000;
+          triggerIosPinShake('Too many wrong passcodes. Try again in 30 seconds.');
+        } else {
+          triggerIosPinShake((err && err.message) || 'Incorrect Passcode.');
+        }
+        if (subEl) subEl.textContent = 'Tap 6 numbers or type on keyboard';
+      } finally {
+        iosPinBusy = false;
+      }
+    }
+
+    function appendIosPinDigit(digit) {
+      if (iosPinBusy) return;
+      if (Date.now() < iosPinLockoutUntil) {
+        const secs = Math.ceil((iosPinLockoutUntil - Date.now()) / 1000);
+        setLockError('Passcode temporarily locked. Wait ' + secs + 's.');
+        return;
+      }
+      if (iosPinBuffer.length >= 6) return;
+      setLockError('');
+      iosPinBuffer += String(digit);
+      updateIosPinDots();
+      if (typeof playJarvisSound === 'function') playJarvisSound('tap');
+      if (navigator.vibrate) try { navigator.vibrate([8]); } catch(e) {}
+      if (iosPinBuffer.length === 6) {
+        const completed = iosPinBuffer;
+        setTimeout(() => handleIosPinComplete(completed), 110);
+      }
+    }
+
     // 7. WIRE AUTH GATE, AUTO-LOCK, PRIVACY CURTAIN & MODALS
     async function inspectCloudVersionForSignedInUser() {
       isFirstTimeMigration = false;
@@ -11942,6 +12365,7 @@
           if (v >= 4 && mf.saltHex && mf.saltHex.stringValue && mf.keyCanary && mf.keyCanary.stringValue) {
             activeVaultMeta = {
               v: v,
+              passcodeMode: (mf.passcodeMode && mf.passcodeMode.stringValue) || 'password',
               saltHex: mf.saltHex.stringValue,
               kdfIterations: mf.kdfIterations ? parseInt(mf.kdfIterations.integerValue || String(KDF_ITERATIONS_V4), 10) : KDF_ITERATIONS_V4,
               keyCanary: JSON.parse(mf.keyCanary.stringValue)
@@ -11950,11 +12374,23 @@
             isFirstTimeMigration = true;
           }
         } else if (env && env.saltHex && env.keyCanary) {
-          activeVaultMeta = { v: 4, saltHex: env.saltHex, kdfIterations: env.kdfIterations || KDF_ITERATIONS_V4, keyCanary: env.keyCanary };
+          activeVaultMeta = {
+            v: 4,
+            passcodeMode: env.passcodeMode || 'password',
+            saltHex: env.saltHex,
+            kdfIterations: env.kdfIterations || KDF_ITERATIONS_V4,
+            keyCanary: env.keyCanary
+          };
         }
       } catch(e) {
         if (env && env.saltHex && env.keyCanary) {
-          activeVaultMeta = { v: 4, saltHex: env.saltHex, kdfIterations: env.kdfIterations || KDF_ITERATIONS_V4, keyCanary: env.keyCanary };
+          activeVaultMeta = {
+            v: 4,
+            passcodeMode: env.passcodeMode || 'password',
+            saltHex: env.saltHex,
+            kdfIterations: env.kdfIterations || KDF_ITERATIONS_V4,
+            keyCanary: env.keyCanary
+          };
         }
       }
 
@@ -11968,12 +12404,12 @@
 
       if (isFirstTimeMigration) {
         if (modeBadge) modeBadge.textContent = '🛡️ FIRST-TIME V4 SECURITY UPGRADE';
-        if (gateTitle) gateTitle.textContent = 'Create Your Master Password';
-        if (pwdLabel) pwdLabel.textContent = 'New Master Password (min 10 chars)';
-        if (migNotice) migNotice.style.display = 'block';
-        if (confirmGroup) confirmGroup.style.display = 'block';
-        if (strengthBox) strengthBox.style.display = 'block';
-        if (submitBtn) submitBtn.textContent = '🔒 Upgrade & Re-Encrypt Vault (v4)';
+        if (gateTitle) gateTitle.textContent = 'Create 6-Digit Passcode';
+        if (confirmGroup) confirmGroup.style.display = 'none';
+        if (strengthBox) strengthBox.style.display = 'none';
+        showIosPinPanel('setup_create', false);
+      } else if (activeVaultMeta && activeVaultMeta.passcodeMode === 'pin6') {
+        showIosPinPanel('unlock', false);
       } else {
         if (modeBadge) modeBadge.textContent = '🔐 ZERO-KNOWLEDGE VAULT · LOCKED';
         if (gateTitle) gateTitle.textContent = 'Unlock OrlandoVault';
@@ -11982,6 +12418,7 @@
         if (confirmGroup) confirmGroup.style.display = 'none';
         if (strengthBox) strengthBox.style.display = 'none';
         if (submitBtn) submitBtn.textContent = '🔓 Unlock Vault';
+        showPasswordUnlockForm();
       }
       refreshBioButtonVisibility();
     }
@@ -12196,6 +12633,11 @@
           }
           try {
             await unlockVaultWithPassword(pwd);
+            const chkPin6 = document.getElementById('chkSwitchToPin6AfterUnlock');
+            const switchBox = document.getElementById('switchToPin6Box');
+            if (switchBox && switchBox.style.display !== 'none' && chkPin6 && chkPin6.checked) {
+              openIosPin6SetupOverlay(true);
+            }
           } catch(err) {
             setLockError(err.message || 'Unlock failed.');
           } finally {
@@ -12206,6 +12648,88 @@
           }
         });
       }
+
+      // Wire iPhone 6-digit keypad clicks, util buttons, Sync Health setup button & keyboard input
+      const iosGrid = document.getElementById('iosKeypadGrid');
+      if (iosGrid) {
+        iosGrid.querySelectorAll('.ios-key-btn[data-digit]').forEach(btn => {
+          btn.onclick = () => appendIosPinDigit(btn.getAttribute('data-digit'));
+        });
+      }
+      const btnIosBack = document.getElementById('btnIosBackspace');
+      if (btnIosBack) {
+        btnIosBack.onclick = () => {
+          if (iosPinBusy || iosPinBuffer.length === 0) return;
+          iosPinBuffer = iosPinBuffer.slice(0, -1);
+          updateIosPinDots();
+        };
+      }
+      const btnIosClear = document.getElementById('btnIosClearPin');
+      if (btnIosClear) {
+        btnIosClear.onclick = () => {
+          if (iosPinBusy) return;
+          iosPinBuffer = '';
+          updateIosPinDots();
+          setLockError('');
+        };
+      }
+      const btnIosLeft = document.getElementById('btnIosLeftAction');
+      if (btnIosLeft) {
+        btnIosLeft.onclick = () => {
+          if (iosPinAllowCancel && activeSessionKey) {
+            showUnlockedWorkspace();
+          } else {
+            showPasswordUnlockForm();
+          }
+        };
+      }
+      const btnIosBio = document.getElementById('btnIosBioSlot');
+      if (btnIosBio) {
+        btnIosBio.onclick = async () => {
+          setLockError('');
+          try { await unlockWithBiometrics(); } catch(err) { setLockError('Biometric unlock failed: ' + err.message); }
+        };
+      }
+      const btnSetPin6 = document.getElementById('btnSetIosPin6');
+      if (btnSetPin6) {
+        btnSetPin6.onclick = () => {
+          const syncModalEl = document.getElementById('syncHealthModal');
+          if (syncModalEl) syncModalEl.style.display = 'none';
+          openIosPin6SetupOverlay(true);
+        };
+      }
+      document.addEventListener('keydown', (e) => {
+        const overlay = document.getElementById('vaultLockOverlay');
+        const stUnlock = document.getElementById('lockStageUnlock');
+        const pinPanel = document.getElementById('iosPinPanel');
+        if (!overlay || overlay.classList.contains('unlocked')) return;
+        if (!stUnlock || stUnlock.style.display === 'none') return;
+        if (!pinPanel || pinPanel.style.display === 'none') return;
+        if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+
+        if (/^[0-9]$/.test(e.key)) {
+          e.preventDefault();
+          const keyEl = pinPanel.querySelector('.ios-key-btn[data-digit="' + e.key + '"]');
+          if (keyEl) {
+            keyEl.classList.add('pressed');
+            setTimeout(() => keyEl.classList.remove('pressed'), 120);
+          }
+          appendIosPinDigit(e.key);
+        } else if (e.key === 'Backspace') {
+          e.preventDefault();
+          if (!iosPinBusy && iosPinBuffer.length > 0) {
+            iosPinBuffer = iosPinBuffer.slice(0, -1);
+            updateIosPinDots();
+          }
+        } else if (e.key === 'Escape') {
+          e.preventDefault();
+          if (!iosPinBusy) {
+            iosPinBuffer = '';
+            updateIosPinDots();
+            setLockError('');
+          }
+        }
+      });
 
       const bioUnlockBtn = document.getElementById('btnVaultBioUnlock');
       if (bioUnlockBtn) {
