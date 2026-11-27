@@ -306,7 +306,48 @@
       }
     });
     const bwItems = active.map(it => {
+      const rType = it.recordType || 'login';
       const urlMatch = (it.metadata || '').match(/https?:\/\/[^\s|]+/i);
+      if (rType === 'bank_card' && it.templateData) {
+        const td = it.templateData;
+        const m = String(td.expiryMonthYear || '').match(/^(\d{1,2})\s*\/\s*(\d{2}|\d{4})$/);
+        const expMonth = m ? String(parseInt(m[1], 10)).padStart(2, '0') : '';
+        const expYear = m ? (m[2].length === 2 ? '20' + m[2] : m[2]) : '';
+        return {
+          id: it.id,
+          folderId: catIds.get(it.category || 'IDs & Cards') || null,
+          type: 3,
+          name: it.title || 'Untitled Card',
+          notes: [it.notes, it.metadata].filter(Boolean).join('\n'),
+          favorite: !!(it.isPriority || it.pinned),
+          card: {
+            cardholderName: td.cardHolder || '',
+            brand: td.brand || 'Visa',
+            number: td.cardNumber || '',
+            expMonth,
+            expYear,
+            code: td.cvv || ''
+          }
+        };
+      }
+      if ((rType === 'gov_id' || rType === 'wifi' || rType === 'recovery_codes') && it.templateData) {
+        const td = it.templateData;
+        const fields = Object.keys(td).map(k => ({
+          name: k,
+          value: typeof td[k] === 'string' ? td[k] : JSON.stringify(td[k]),
+          type: 0
+        }));
+        return {
+          id: it.id,
+          folderId: catIds.get(it.category || 'IDs & Cards') || null,
+          type: 2,
+          name: it.title || 'Secure Item',
+          notes: [it.notes, it.metadata, rType === 'wifi' ? `Wi-Fi Password: ${it.password || ''}` : ''].filter(Boolean).join('\n'),
+          favorite: !!(it.isPriority || it.pinned),
+          fields,
+          secureNote: { type: 0 }
+        };
+      }
       return {
         id: it.id,
         folderId: catIds.get(it.category || 'Portals') || null,

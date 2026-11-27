@@ -139,30 +139,49 @@
     const TWO_FA_CATS = ['Banking & Finance', 'Gmail', 'DepEd'];
 
     active.forEach(it => {
-      const p = it.password || '';
-      const breachNum = p ? (hibpBreachCache.get(p) || 0) : 0;
-      if (breachNum > 0) {
-        counts.breached++;
-        findings.push({ type: 'breached', severity: 'breached', label: `Breached (${breachNum.toLocaleString()}×)`, item: it, targetField: 'editInputPassword' });
-      }
-      if (p && (pwdCounts.get(p) || 0) > 1) {
-        counts.reused++;
-        findings.push({ type: 'reused', severity: 'reused', label: `Reused on ${pwdCounts.get(p)} accounts`, item: it, targetField: 'editInputPassword' });
-      }
-      const weakReason = isPasswordWeak(p, it);
-      if (weakReason) {
-        counts.weak++;
-        findings.push({ type: 'weak', severity: 'weak', label: weakReason, item: it, targetField: 'editInputPassword' });
-      }
-      const changedAt = Number(it.passwordChangedAt || it.updatedAt || 0);
-      if (changedAt > 0 && (now - changedAt) > OLD_MS) {
-        counts.old++;
-        const days = Math.floor((now - changedAt) / 86400000);
-        findings.push({ type: 'old', severity: 'old', label: `Last rotated ${days}d ago (>180d)`, item: it, targetField: 'editInputPassword' });
-      }
-      if (!it.totpSecret && (TWO_FA_CATS.includes(it.category) || (it.importance || '').toLowerCase() === 'critical')) {
-        counts.missing2fa++;
-        findings.push({ type: 'missing2fa', severity: '2fa', label: 'No built-in 2FA configured', item: it, targetField: 'editInputTotpSecret' });
+      const rType = it.recordType || 'login';
+      if (rType === 'login') {
+        const p = it.password || '';
+        const breachNum = p ? (hibpBreachCache.get(p) || 0) : 0;
+        if (breachNum > 0) {
+          counts.breached++;
+          findings.push({ type: 'breached', severity: 'breached', label: `Breached (${breachNum.toLocaleString()}×)`, item: it, targetField: 'editInputPassword' });
+        }
+        if (p && (pwdCounts.get(p) || 0) > 1) {
+          counts.reused++;
+          findings.push({ type: 'reused', severity: 'reused', label: `Reused on ${pwdCounts.get(p)} accounts`, item: it, targetField: 'editInputPassword' });
+        }
+        const weakReason = isPasswordWeak(p, it);
+        if (weakReason) {
+          counts.weak++;
+          findings.push({ type: 'weak', severity: 'weak', label: weakReason, item: it, targetField: 'editInputPassword' });
+        }
+        const changedAt = Number(it.passwordChangedAt || it.updatedAt || 0);
+        if (changedAt > 0 && (now - changedAt) > OLD_MS) {
+          counts.old++;
+          const days = Math.floor((now - changedAt) / 86400000);
+          findings.push({ type: 'old', severity: 'old', label: `Last rotated ${days}d ago (>180d)`, item: it, targetField: 'editInputPassword' });
+        }
+        if (!it.totpSecret && (TWO_FA_CATS.includes(it.category) || (it.importance || '').toLowerCase() === 'critical')) {
+          counts.missing2fa++;
+          findings.push({ type: 'missing2fa', severity: '2fa', label: 'No built-in 2FA configured', item: it, targetField: 'editInputTotpSecret' });
+        }
+      } else if ((rType === 'gov_id' || rType === 'bank_card') && window.VaultTemplates && typeof window.VaultTemplates.evaluateItemExpiry === 'function') {
+        const exp = window.VaultTemplates.evaluateItemExpiry(it, now);
+        const targetFld = rType === 'gov_id' ? 'tplGovExpiryDate' : 'tplCardExpiry';
+        if (exp.status === 'expired') {
+          counts.weak++;
+          findings.push({ type: 'weak', severity: 'breached', label: exp.label, item: it, targetField: targetFld });
+        } else if (exp.status === 'expiring') {
+          counts.old++;
+          findings.push({ type: 'old', severity: 'old', label: exp.label, item: it, targetField: targetFld });
+        }
+      } else if (rType === 'recovery_codes' && it.templateData && Array.isArray(it.templateData.codes)) {
+        const unused = it.templateData.codes.filter(c => c && !c.used).length;
+        if (unused <= 2) {
+          counts.missing2fa++;
+          findings.push({ type: 'missing2fa', severity: '2fa', label: `Low unused backup codes (${unused} left)`, item: it, targetField: 'tplRecoveryCodesInput' });
+        }
       }
     });
 
@@ -236,12 +255,22 @@
     // Quick count helper used by badge without triggering recursion
     const active = (Array.isArray(items) ? items : []).filter(x => !x.trashed);
     const pwdCounts = new Map();
-    active.forEach(it => { if (it.password) pwdCounts.set(it.password, (pwdCounts.get(it.password) || 0) + 1); });
-    let breached = 0, weak = 0, reused = 0;
     active.forEach(it => {
-      if (it.password && (hibpBreachCache.get(it.password) || 0) > 0) breached++;
-      if (isPasswordWeak(it.password || '', it)) weak++;
-      if (it.password && (pwdCounts.get(it.password) || 0) > 1) reused++;
+      if ((it.recordType || 'login') === 'login' && it.password) {
+        pwdCounts.set(it.password, (pwdCounts.get(it.password) || 0) + 1);
+      }
+    });
+    let breached = 0, weak = 0, reused = 0;
+    const now = Date.now();
+    active.forEach(it => {
+      const rType = it.recordType || 'login';
+      if (rType === 'login') {
+        if (it.password && (hibpBreachCache.get(it.password) || 0) > 0) breached++;
+        if (isPasswordWeak(it.password || '', it)) weak++;
+        if (it.password && (pwdCounts.get(it.password) || 0) > 1) reused++;
+      } else if ((rType === 'gov_id' || rType === 'bank_card') && window.VaultTemplates && typeof window.VaultTemplates.evaluateItemExpiry === 'function') {
+        if (window.VaultTemplates.evaluateItemExpiry(it, now).status === 'expired') weak++;
+      }
     });
     return { counts: { breached, weak, reused } };
   }

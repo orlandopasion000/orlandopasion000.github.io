@@ -17,8 +17,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/vault-core.css?v=vault-v77">
-  <link rel="stylesheet" href="css/vault-pro.css?v=vault-v77">
+  <link rel="stylesheet" href="css/vault-core.css?v=vault-v78">
+  <link rel="stylesheet" href="css/vault-pro.css?v=vault-v78">
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
@@ -288,6 +288,7 @@
         <button type="button" class="filter-pill" data-cat="Family">FAMILY</button>
         <button type="button" class="filter-pill" data-cat="System">SYSTEM &amp; DEVICE</button>
         <button type="button" class="filter-pill" data-cat="Critical">CRITICAL ONLY</button>
+        <button type="button" class="filter-pill" data-cat="IDs & Cards">🪪 IDS &amp; CARDS</button>
         <button type="button" class="filter-pill filter-pill-trash" data-cat="Trash">🗑️ TRASH (<span id="trashVaultCount">0</span>)</button>
         <button type="button" class="filter-pill btn-pill-add" id="btnAddNewAccount" title="Add New Credential Card" onclick="openNewCardEditor()">+ NEW ACCOUNT</button>
       </div>
@@ -522,6 +523,7 @@
         <button type="button" class="btn-sync-action" id="btnSyncExportOvault">📤 Export .ovault</button>
         <button type="button" class="btn-sync-action" id="btnSyncImportOvault">📥 Import .ovault</button>
         <button type="button" class="btn-sync-action" id="btnSyncExportBitwarden">📦 Bitwarden JSON</button>
+        <button type="button" class="btn-sync-action primary" id="btnOpenEmergencyKit">🛟 Emergency Kit</button>
         <input type="file" id="inputImportOvaultFile" accept=".ovault,.json,application/json" style="display:none;">
       </div>
     </div>
@@ -576,6 +578,8 @@
 
       <form id="formCardEditor" class="card-edit-form" onsubmit="return false;">
         <input type="hidden" id="editCardId">
+        <div class="record-type-bar" id="editRecordTypeBar"></div>
+        <div id="editStructuredFieldsHost" style="display:none;flex-direction:column;gap:8px;margin-bottom:8px;"></div>
 
         <div class="edit-form-group">
           <label class="edit-form-label" for="editInputTitle">APP / WEBSITE:</label>
@@ -595,6 +599,7 @@
             <option value="Gmail">Gmail Ecosystem (Personal, School, Secondary)</option>
             <option value="Microsoft">Microsoft 365 (Office, OneDrive, Azure)</option>
             <option value="Family">Family Vault (Blanca, Mom & Relatives)</option>
+            <option value="IDs & Cards">IDs, Bank Cards, Wi-Fi &amp; Recovery</option>
             <option value="System">System & Device (Admin, Router, Local)</option>
           </select>
         </div>
@@ -730,6 +735,31 @@
         <button type="button" class="modal-close-btn" id="btnCloseQuickAction" title="Close">✕</button>
       </div>
       <div id="quickActionButtons" style="display:flex;flex-direction:column;gap:8px;"></div>
+    </div>
+  </div>
+
+  <!-- EMERGENCY RECOVERY KIT PRINTABLE MODAL -->
+  <div class="modal-backdrop" id="emergencyKitModal" role="dialog" aria-modal="true" aria-label="Emergency Vault Recovery Kit">
+    <div class="emergency-kit-card">
+      <div class="ios-grabber-bar" aria-label="Swipe down to dismiss"></div>
+      <div class="sync-health-header" style="padding:14px 20px;border-bottom:1px solid rgba(255,255,255,0.08);">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:18px;">🛟</span>
+          <h3 style="margin:0;font-size:16px;color:#f8fafc;letter-spacing:0.02em;">Emergency Vault Recovery Kit</h3>
+        </div>
+        <button type="button" class="modal-close-btn" id="closeEmergencyKitModal" title="Close">✕</button>
+      </div>
+      <div class="kit-controls-bar">
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <label style="display:inline-flex;align-items:center;gap:5px;cursor:pointer;"><input type="checkbox" id="chkKitIds" checked> Gov IDs</label>
+          <label style="display:inline-flex;align-items:center;gap:5px;cursor:pointer;"><input type="checkbox" id="chkKitRecovery" checked> Unused 2FA Codes</label>
+          <label style="display:inline-flex;align-items:center;gap:5px;cursor:pointer;"><input type="checkbox" id="chkKitCritical" checked> Critical Directory</label>
+        </div>
+        <button type="button" class="btn-sync-action primary" id="btnPrintEmergencyKit">🖨️ Print / Save PDF Sheet</button>
+      </div>
+      <div class="kit-sheet-scroll">
+        <div class="kit-print-sheet" id="emergencyKitPrintSheet"></div>
+      </div>
     </div>
   </div>
 
@@ -1552,6 +1582,9 @@
         totpInput.value = item.totpSecret || '';
         if (typeof window.updateEditorTotpPreview === 'function') window.updateEditorTotpPreview();
       }
+      if (window.VaultTemplates && typeof window.VaultTemplates.populateEditorForItem === 'function') {
+        window.VaultTemplates.populateEditorForItem(item);
+      }
 
       wirePasswordHistoryDeck(document.getElementById('editPwdHistoryDeck'), item, 'editor');
 
@@ -1603,6 +1636,9 @@
       if (totpInput) totpInput.value = '';
       const totpPrev = document.getElementById('editTotpLivePreview');
       if (totpPrev) totpPrev.style.display = 'none';
+      if (window.VaultTemplates && typeof window.VaultTemplates.setEditorType === 'function') {
+        window.VaultTemplates.setEditorType('login');
+      }
       document.getElementById('editChkPriority').checked = true; // New cards default to priority
       document.getElementById('editChkCritical').checked = false;
       if (typeof syncToggleChips === 'function') syncToggleChips();
@@ -1686,6 +1722,10 @@
       const notes = document.getElementById('editInputNotes').value.trim();
       const totpInputEl = document.getElementById('editInputTotpSecret');
       const totpSecret = totpInputEl ? totpInputEl.value.trim() : '';
+      const existingForTpl = id ? vaultItems.find(x => x.id === id) : null;
+      const tplPayload = (window.VaultTemplates && typeof window.VaultTemplates.collectEditorTemplatePayload === 'function')
+        ? window.VaultTemplates.collectEditorTemplatePayload(existingForTpl)
+        : { recordType: 'login', templateData: null, autoUsername: null };
       const isPriority = document.getElementById('editChkPriority').checked;
       const isCritical = document.getElementById('editChkCritical').checked;
 
@@ -1727,11 +1767,13 @@
           item.title = title;
           item.category = category;
           item.badge = badge;
-          item.username = username;
+          item.username = tplPayload.autoUsername !== null ? tplPayload.autoUsername : username;
           item.password = password;
           item.metadata = metadata;
           item.notes = notes;
           item.totpSecret = totpSecret;
+          item.recordType = tplPayload.recordType;
+          item.templateData = tplPayload.templateData;
           item.isPriority = isPriority;
           item.pinned = isPriority;
           if (isPriority && !item.pinned_at) item.pinned_at = now;
@@ -1756,8 +1798,10 @@
           category: category,
           badge: badge,
           title: title,
-          username: username,
+          username: tplPayload.autoUsername !== null ? tplPayload.autoUsername : username,
           password: password,
+          recordType: tplPayload.recordType,
+          templateData: tplPayload.templateData,
           old_password: '',
           metadata: metadata,
           notes: notes,
@@ -2617,28 +2661,36 @@
             </div>
           </div>
 
-          <div class="card-username-row">
-            <span title="${safeUser}">${safeUser}</span>
-            <button type="button" class="btn-copy-user" onclick="event.stopPropagation(); copyUsernameById('${item.id}', this);" title="Copy Username / Email">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-              Copy
-            </button>
-          </div>
+          ${(() => {
+            const tplHtml = (window.VaultTemplates && item.recordType && item.recordType !== 'login')
+              ? window.VaultTemplates.renderCardStructuredDeck(item, window.vaultPrivacyMask !== false)
+              : null;
+            if (tplHtml) return tplHtml;
+            return `
+              <div class="card-username-row">
+                <span title="${safeUser}">${safeUser}</span>
+                <button type="button" class="btn-copy-user" onclick="event.stopPropagation(); copyUsernameById('${item.id}', this);" title="Copy Username / Email">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  Copy
+                </button>
+              </div>
 
-          <div class="password-quantum-deck">
-            <div class="pwd-display-box masked" id="pwdBox-${item.id}" data-raw="${safePwd}" data-masked="${maskedPwd}">
-              ${maskedPwd}
-            </div>
-            <div class="pwd-action-cluster">
-              <button type="button" class="btn-pwd-action" onclick="event.stopPropagation(); toggleReveal('${item.id}');" title="Toggle Show/Hide Password">
-                <svg width="15" height="15" id="eyeIcon-${item.id}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-              </button>
-              <button type="button" class="btn-copy-instant" onclick="event.stopPropagation(); copyPasswordById('${item.id}', this, true);" title="1-Click Copy Password & Focus">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                COPY
-              </button>
-            </div>
-          </div>
+              <div class="password-quantum-deck">
+                <div class="pwd-display-box masked" id="pwdBox-${item.id}" data-raw="${safePwd}" data-masked="${maskedPwd}">
+                  ${maskedPwd}
+                </div>
+                <div class="pwd-action-cluster">
+                  <button type="button" class="btn-pwd-action" onclick="event.stopPropagation(); toggleReveal('${item.id}');" title="Toggle Show/Hide Password">
+                    <svg width="15" height="15" id="eyeIcon-${item.id}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </button>
+                  <button type="button" class="btn-copy-instant" onclick="event.stopPropagation(); copyPasswordById('${item.id}', this, true);" title="1-Click Copy Password & Focus">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                    COPY
+                  </button>
+                </div>
+              </div>
+            `;
+          })()}
 
           ${renderSmartMetadata(item.metadata, item.notes, { maskSensitive: window.vaultPrivacyMask !== false })}
           ${item.trashed ? (() => {
@@ -2819,6 +2871,9 @@
           if (item.trashed) return false;
           if (activeCategory === 'Pinned' && !(item.isPriority || item.pinned)) return false;
           else if (activeCategory === 'Critical' && (item.importance || '').toLowerCase() !== 'critical') return false;
+          else if (activeCategory === 'IDs & Cards') {
+            if (item.category !== 'IDs & Cards' && (!item.recordType || item.recordType === 'login')) return false;
+          }
           else if (activeCategory !== 'all' && activeCategory !== 'Critical' && activeCategory !== 'Pinned' && item.category !== activeCategory) return false;
         }
 
@@ -3218,13 +3273,13 @@
         if (window.caches) {
           caches.keys().then(keys => {
             keys.forEach(k => {
-              if (k.startsWith('vault-') && k !== 'vault-jarvis-v77') {
+              if (k.startsWith('vault-') && k !== 'vault-jarvis-v78') {
                 caches.delete(k);
               }
             });
           });
         }
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v77', { scope: '/orlandovault/' }).then(reg => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v78', { scope: '/orlandovault/' }).then(reg => {
           if (reg && reg.update) reg.update();
         }).catch(err => {
           console.warn('Vault SW registration error:', err);
@@ -5109,6 +5164,7 @@
         let plainMetadata = '';
         let plainNotes = '';
         let plainTotp = '';
+        let templateData = null;
         let passwordHistory = [];
 
         const ep = readFieldVal(f, 'encryptedPassword', '');
@@ -5116,6 +5172,7 @@
         const em = readFieldVal(f, 'encryptedMetadata', '');
         const en = readFieldVal(f, 'encryptedNotes', '');
         const etotp = readFieldVal(f, 'encryptedTotpSecret', '');
+        const etpl = readFieldVal(f, 'encryptedTemplateData', '');
         const eph = readFieldVal(f, 'encryptedPasswordHistory', '');
 
         if (ep) plainPass = await VaultCrypto.decryptStrict(typeof ep === 'string' ? JSON.parse(ep) : ep, key);
@@ -5123,6 +5180,12 @@
         if (em) plainMetadata = await VaultCrypto.decryptStrict(typeof em === 'string' ? JSON.parse(em) : em, key);
         if (en) plainNotes = await VaultCrypto.decryptStrict(typeof en === 'string' ? JSON.parse(en) : en, key);
         if (etotp) plainTotp = await VaultCrypto.decryptStrict(typeof etotp === 'string' ? JSON.parse(etotp) : etotp, key);
+        if (etpl) {
+          try {
+            const decTpl = await VaultCrypto.decryptStrict(typeof etpl === 'string' ? JSON.parse(etpl) : etpl, key);
+            templateData = JSON.parse(decTpl || 'null');
+          } catch (e) {}
+        }
         if (eph) {
           try {
             const decHist = await VaultCrypto.decryptStrict(typeof eph === 'string' ? JSON.parse(eph) : eph, key);
@@ -5161,6 +5224,8 @@
           metadata: plainMetadata,
           notes: plainNotes,
           totpSecret: plainTotp,
+          recordType: String(readFieldVal(f, 'recordType', 'login') || 'login'),
+          templateData: templateData,
           passwordChangedAt: Number(readFieldVal(f, 'passwordChangedAt', 0)) || 0
         });
       }
@@ -5825,6 +5890,7 @@
           const encMeta = await VaultCrypto.encrypt(item.metadata || '', key);
           const encNotes = await VaultCrypto.encrypt(item.notes || '', key);
           const encTotp = await VaultCrypto.encrypt(item.totpSecret || '', key);
+          const encTpl = await VaultCrypto.encrypt(item.templateData ? JSON.stringify(item.templateData) : '', key);
           const histArr = Array.isArray(item.passwordHistory) ? item.passwordHistory.slice(0, 5) : [];
           const encHist = await VaultCrypto.encrypt(histArr.length ? JSON.stringify(histArr) : '', key);
 
@@ -5854,7 +5920,9 @@
             encryptedOldPassword: JSON.stringify(encOldPass),
             encryptedMetadata: JSON.stringify(encMeta),
             encryptedNotes: JSON.stringify(encNotes),
+            recordType: item.recordType || 'login',
             encryptedTotpSecret: JSON.stringify(encTotp),
+            encryptedTemplateData: JSON.stringify(encTpl),
             passwordChangedAt: Number(item.passwordChangedAt || 0),
             encryptedPasswordHistory: JSON.stringify(encHist)
           });
@@ -5888,7 +5956,9 @@
                 encryptedOldPassword: { stringValue: JSON.stringify(encOldPass) },
                 encryptedMetadata: { stringValue: JSON.stringify(encMeta) },
                 encryptedNotes: { stringValue: JSON.stringify(encNotes) },
+                recordType: { stringValue: item.recordType || 'login' },
                 encryptedTotpSecret: { stringValue: JSON.stringify(encTotp) },
+                encryptedTemplateData: { stringValue: JSON.stringify(encTpl) },
                 passwordChangedAt: { integerValue: String(item.passwordChangedAt || 0) },
                 encryptedPasswordHistory: { stringValue: JSON.stringify(encHist) }
               }
@@ -7248,6 +7318,10 @@
       { id: 'filter-gmail', cat: 'Filter Apps & Websites', icon: '📧', title: 'Filter: Gmail Ecosystem', desc: 'Personal, Gaming, and Institutional Google Mail vaults', action: () => { filterVaultByCategory('Gmail'); }, badge: 'Gmail' },
       { id: 'filter-portals', cat: 'Filter Apps & Websites', icon: '🌐', title: 'Filter: Government & Portals', desc: 'LTO, DTS, and official web portals', action: () => { filterVaultByCategory('Portals'); }, badge: 'Portals' },
       { id: 'sys-autofill', cat: 'Security Operations', icon: '🧩', title: 'Open Browser Autofill & Extension Hub', desc: 'Install/sync Chrome & Edge Zero-Knowledge Autofill + Domain Matcher', action: () => { if (window.VaultAutofillBridge) window.VaultAutofillBridge.open(); }, badge: 'Autofill' },
+      { id: 'sys-emergency-kit', cat: 'Security Operations', icon: '🛟', title: 'Emergency Vault Recovery Kit', desc: 'Generate & print offline emergency recovery sheet with handwritten key box', action: () => { if (window.VaultTemplates) window.VaultTemplates.openEmergencyKit(); }, badge: 'Print Kit' },
+      { id: 'new-gov-id', cat: 'IDs & Cards Templates', icon: '🪪', title: 'Add Government ID (PRC, LTO, TIN, PhilHealth)', desc: 'Create structured ID card with expiry tracking', action: () => { openNewCardEditor(); if (window.VaultTemplates) window.VaultTemplates.setEditorType('gov_id'); }, badge: 'Template' },
+      { id: 'new-bank-card', cat: 'IDs & Cards Templates', icon: '💳', title: 'Add Encrypted Bank / Credit Card', desc: 'Store card number, expiry, masked CVV, and ATM PIN', action: () => { openNewCardEditor(); if (window.VaultTemplates) window.VaultTemplates.setEditorType('bank_card'); }, badge: 'Template' },
+      { id: 'new-wifi', cat: 'IDs & Cards Templates', icon: '📶', title: 'Add Wi-Fi Network & Camera QR Card', desc: 'Create scannable Wi-Fi QR code for iPhone & Android guests', action: () => { openNewCardEditor(); if (window.VaultTemplates) window.VaultTemplates.setEditorType('wifi'); }, badge: 'Template' },
       { id: 'sys-watchtower', cat: 'Security Operations', icon: '🛡️', title: 'Open Security Health Watchtower', desc: 'Scan for breached, weak, reused, old, or missing 2FA credentials', action: () => { if (window.VaultWatchtower) window.VaultWatchtower.open(); }, badge: 'Security' },
       { id: 'filter-crit', cat: 'Filter Apps & Websites', icon: '⚡', title: 'Filter: Critical Accounts Only', desc: 'High-security administrative and primary credentials', action: () => { filterVaultByCategory('Critical'); }, badge: 'Priority' },
 
@@ -7396,38 +7470,46 @@
           </div>
         </div>
 
-        <div class="focus-deck-card">
-          <div class="focus-deck-label">
-            <span>Username / Email</span>
-            <button type="button" class="btn-focus-copy-user-inline" id="btnFocusCopyUserInline" title="Copy Username / Email">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-              <span>Copy User</span>
-            </button>
-          </div>
-          <div class="focus-deck-val-row">
-            <div class="focus-deck-value">${safeUser}</div>
-          </div>
-        </div>
-
-        <div class="focus-pwd-deck">
-          <div class="focus-deck-label">
-            <span style="color:#ffd700;">Encrypted Password</span>
-            <span id="focusPwdEntropyLabel" style="color:#94a3b8;font-size:9.5px;">${safePwd.length} characters</span>
-          </div>
-          <div class="focus-deck-val-row">
-            <div class="focus-pwd-display masked" id="focusPwdDisplay" data-raw="${safePwd}" data-masked="${maskedPwd}">${maskedPwd}</div>
-            <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
-              <button type="button" class="btn-pwd-action" id="btnFocusToggleReveal" title="Toggle Show/Hide" style="padding:6px 10px;border-radius:8px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#ffffff;cursor:pointer;">
-                <svg width="15" height="15" id="focusEyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-              </button>
-              <button type="button" class="btn-focus-copy-user-inline" id="btnFocusCopyPwdInline" title="Copy Password" style="border-color:rgba(255,215,0,0.45);color:#fde047;background:rgba(255,215,0,0.1);">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                <span>Copy Pass</span>
-              </button>
+        ${(() => {
+          const focusTpl = (window.VaultTemplates && item.recordType && item.recordType !== 'login')
+            ? window.VaultTemplates.renderFocusStructuredDeck(item, portalUrl)
+            : null;
+          if (focusTpl) return focusTpl;
+          return `
+            <div class="focus-deck-card">
+              <div class="focus-deck-label">
+                <span>Username / Email</span>
+                <button type="button" class="btn-focus-copy-user-inline" id="btnFocusCopyUserInline" title="Copy Username / Email">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  <span>Copy User</span>
+                </button>
+              </div>
+              <div class="focus-deck-val-row">
+                <div class="focus-deck-value">${safeUser}</div>
+              </div>
             </div>
-          </div>
-          ${portalUrl ? `<button type="button" class="btn-focus-copy-launch" id="btnFocusCopyAndLaunch" data-portal-url="${escapeHtml(portalUrl)}" title="Copy password silently and open ${escapeHtml(portalUrl)}">⚡ Copy Password &amp; Open Portal ↗</button>` : ''}
-        </div>
+
+            <div class="focus-pwd-deck">
+              <div class="focus-deck-label">
+                <span style="color:#ffd700;">Encrypted Password</span>
+                <span id="focusPwdEntropyLabel" style="color:#94a3b8;font-size:9.5px;">${safePwd.length} characters</span>
+              </div>
+              <div class="focus-deck-val-row">
+                <div class="focus-pwd-display masked" id="focusPwdDisplay" data-raw="${safePwd}" data-masked="${maskedPwd}">${maskedPwd}</div>
+                <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+                  <button type="button" class="btn-pwd-action" id="btnFocusToggleReveal" title="Toggle Show/Hide" style="padding:6px 10px;border-radius:8px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#ffffff;cursor:pointer;">
+                    <svg width="15" height="15" id="focusEyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </button>
+                  <button type="button" class="btn-focus-copy-user-inline" id="btnFocusCopyPwdInline" title="Copy Password" style="border-color:rgba(255,215,0,0.45);color:#fde047;background:rgba(255,215,0,0.1);">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                    <span>Copy Pass</span>
+                  </button>
+                </div>
+              </div>
+              ${portalUrl ? `<button type="button" class="btn-focus-copy-launch" id="btnFocusCopyAndLaunch" data-portal-url="${escapeHtml(portalUrl)}" title="Copy password silently and open ${escapeHtml(portalUrl)}">⚡ Copy Password &amp; Open Portal ↗</button>` : ''}
+            </div>
+          `;
+        })()}
 
         ${item.totpSecret ? `
           <div class="focus-totp-deck" id="focusTotpDeck">
@@ -7499,6 +7581,9 @@
         }
       }
 
+      if (window.VaultTemplates && item.recordType && item.recordType !== 'login') {
+        window.VaultTemplates.wireFocusStructuredActions(item, () => openAccountFocusModal(item.id, openedFromSpotlight));
+      }
       if (typeof window.wirePasswordHistoryDeck === 'function') {
         window.wirePasswordHistoryDeck(document.getElementById('focusPwdHistoryHost'), item, 'focus');
       }
@@ -8277,7 +8362,7 @@
     let isHorizontalGesture = false;
     let isVerticalGesture = false;
 
-    const FILTER_ORDER = ['all', 'Pinned', 'DepEd', 'Social', 'AI & Dev', 'Banking & Finance', 'Portals', 'Entertainment', 'Shopping', 'Gmail', 'Microsoft', 'Family', 'System', 'Critical', 'Trash'];
+    const FILTER_ORDER = ['all', 'Pinned', 'DepEd', 'Social', 'AI & Dev', 'Banking & Finance', 'Portals', 'Entertainment', 'Shopping', 'Gmail', 'Microsoft', 'Family', 'System', 'Critical', 'IDs & Cards', 'Trash'];
 
     function getActiveModal() {
       const candidates = [
@@ -8290,7 +8375,8 @@
         document.getElementById('historyModal'),
         document.getElementById('syncHealthModal'),
         document.getElementById('watchtowerModal'),
-        document.getElementById('autofillHubModal')
+        document.getElementById('autofillHubModal'),
+        document.getElementById('emergencyKitModal')
       ];
       for (let i = 0; i < candidates.length; i++) {
         const m = candidates[i];
@@ -8331,6 +8417,8 @@
         window.VaultWatchtower.close();
       } else if (m.id === 'autofillHubModal' && window.VaultAutofillBridge) {
         window.VaultAutofillBridge.close();
+      } else if (m.id === 'emergencyKitModal' && window.VaultTemplates) {
+        window.VaultTemplates.closeEmergencyKit();
       } else {
         m.classList.remove('open', 'active');
       }
@@ -8381,7 +8469,7 @@
       obs.observe(m, { attributes: true, attributeFilter: ['class', 'style'] });
     }
 
-    ['cardQuickActionModal', 'vaultSpotlightModal', 'accountFocusModal', 'cardEditModal', 'sheetSyncModal', 'qrModal', 'historyModal', 'syncHealthModal', 'watchtowerModal', 'autofillHubModal'].forEach(setupModalHistoryPush);
+    ['cardQuickActionModal', 'vaultSpotlightModal', 'accountFocusModal', 'cardEditModal', 'sheetSyncModal', 'qrModal', 'historyModal', 'syncHealthModal', 'watchtowerModal', 'autofillHubModal', 'emergencyKitModal'].forEach(setupModalHistoryPush);
 
     function showEdgeIndicator(dir, text) {
       const el = dir === 'left' ? document.getElementById('appleEdgeIndicatorLeft') : document.getElementById('appleEdgeIndicatorRight');
@@ -8442,7 +8530,7 @@
 
       activeDragModal = getActiveModal();
       if (activeDragModal) {
-        activeDragBox = activeDragModal.querySelector('.spotlight-box, .focus-hud-box, .card-editor-modal, .sync-health-card, .watchtower-modal-card, .autofill-modal-card, .quick-action-sheet, .qr-suite-container, .modal-box') || activeDragModal;
+        activeDragBox = activeDragModal.querySelector('.spotlight-box, .focus-hud-box, .card-editor-modal, .sync-health-card, .watchtower-modal-card, .autofill-modal-card, .emergency-kit-card, .quick-action-sheet, .qr-suite-container, .modal-box') || activeDragModal;
         if (activeDragBox) {
           activeDragBox.style.transition = 'none';
         }
@@ -8916,8 +9004,9 @@
   })();
   </script>
 
-  <script src="js/totp-watchtower.js?v=vault-v77"></script>
-  <script src="js/cloud-telemetry.js?v=vault-v77"></script>
-  <script src="js/autofill-bridge.js?v=vault-v77"></script>
+  <script src="js/vault-templates.js?v=vault-v78"></script>
+  <script src="js/totp-watchtower.js?v=vault-v78"></script>
+  <script src="js/cloud-telemetry.js?v=vault-v78"></script>
+  <script src="js/autofill-bridge.js?v=vault-v78"></script>
 </body>
 </html>
