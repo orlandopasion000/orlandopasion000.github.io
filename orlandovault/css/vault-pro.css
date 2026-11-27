@@ -389,6 +389,48 @@
   color: #7dd3fc;
 }
 
+/* Frameless Minimalist Google Sign-In Gate (only "Sign in with Google" button shown) */
+.vault-gate-card.google-signin-only {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  padding: 0 !important;
+  width: auto !important;
+  max-width: 340px !important;
+  overflow: visible !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.vault-gate-card.google-signin-only .vault-gate-badge,
+.vault-gate-card.google-signin-only .vault-gate-header {
+  display: none !important;
+}
+.vault-gate-card.google-signin-only #lockStageGoogle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.vault-gate-card.google-signin-only .btn-google-vault-signin {
+  margin-top: 0;
+  width: auto;
+  min-width: 236px;
+  padding: 13px 26px;
+  border-radius: 14px;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.38), 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+.vault-gate-card.google-signin-only .vault-gate-error {
+  margin-top: 12px;
+  background: rgba(15, 23, 42, 0.86);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 10px 14px;
+  border-radius: 12px;
+  text-align: center;
+}
+
 @media (max-width: 768px) {
   #watchtowerModal {
     align-items: flex-end !important;

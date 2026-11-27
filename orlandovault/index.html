@@ -17,8 +17,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/vault-core.css?v=vault-v74">
-  <link rel="stylesheet" href="css/vault-pro.css?v=vault-v74">
+  <link rel="stylesheet" href="css/vault-core.css?v=vault-v75">
+  <link rel="stylesheet" href="css/vault-pro.css?v=vault-v75">
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
@@ -39,7 +39,7 @@
       <img src="assets/lock-wallpaper-4k.jpg" alt="" class="ios-lock-bg-photo" id="iosLockBgPhoto" decoding="async" fetchpriority="high">
     </picture>
     <div class="ios-lock-scrim" aria-hidden="true"></div>
-    <div class="vault-gate-card" id="vaultGateCard">
+    <div class="vault-gate-card google-signin-only" id="vaultGateCard">
       <div class="vault-gate-badge" id="vaultGateModeBadge">🔐 ZERO-KNOWLEDGE VAULT · LOCKED</div>
       <div class="vault-gate-header">
         <img src="assets/vault-icon-128.png" alt="OrlandoVault" class="vault-gate-logo">
@@ -51,9 +51,6 @@
 
       <!-- Stage 1: Authorized Google Sign-In -->
       <div id="lockStageGoogle">
-        <p style="font-size:12px;color:#cbd5e1;margin:10px 0 0;line-height:1.5;">
-          Authorized owners only (<code>orlandopasion1994@gmail.com</code> or <code>orlandopasion0817@gmail.com</code>).
-        </p>
         <button type="button" class="btn-google-vault-signin" id="btnVaultGoogleSignIn">
           <svg width="18" height="18" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
@@ -3200,13 +3197,13 @@
         if (window.caches) {
           caches.keys().then(keys => {
             keys.forEach(k => {
-              if (k.startsWith('vault-') && k !== 'vault-jarvis-v74') {
+              if (k.startsWith('vault-') && k !== 'vault-jarvis-v75') {
                 caches.delete(k);
               }
             });
           });
         }
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v74', { scope: '/orlandovault/' }).then(reg => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v75', { scope: '/orlandovault/' }).then(reg => {
           if (reg && reg.update) reg.update();
         }).catch(err => {
           console.warn('Vault SW registration error:', err);
@@ -5026,7 +5023,14 @@
       if (pwdIn) pwdIn.value = '';
       if (pwdConf) pwdConf.value = '';
 
-      if (lastMode === 'pin6' && !isFirstTimeMigration) {
+      const gateCard = document.getElementById('vaultGateCard');
+      const stGoogle = document.getElementById('lockStageGoogle');
+      if (stGoogle && stGoogle.style.display !== 'none') {
+        if (gateCard) {
+          gateCard.classList.remove('ios-pin-active');
+          gateCard.classList.add('google-signin-only');
+        }
+      } else if (lastMode === 'pin6' && !isFirstTimeMigration) {
         showIosPinPanel('unlock', false);
       } else {
         showPasswordUnlockForm();
@@ -6235,7 +6239,10 @@
       const leftBtn = document.getElementById('btnIosLeftAction');
       const migNotice = document.getElementById('lockMigrationNotice');
 
-      if (gateCard) gateCard.classList.add('ios-pin-active');
+      if (gateCard) {
+        gateCard.classList.remove('google-signin-only');
+        gateCard.classList.add('ios-pin-active');
+      }
       if (form) form.style.display = 'none';
       if (migNotice) migNotice.style.display = 'none';
       if (pinPanel) pinPanel.style.display = 'flex';
@@ -6268,7 +6275,7 @@
       const form = document.getElementById('vaultUnlockForm');
       const switchBox = document.getElementById('switchToPin6Box');
       const backBtn = document.getElementById('btnSwitchBackToPin6');
-      if (gateCard) gateCard.classList.remove('ios-pin-active');
+      if (gateCard) gateCard.classList.remove('ios-pin-active', 'google-signin-only');
       if (pinPanel) pinPanel.style.display = 'none';
       if (form) form.style.display = 'block';
       if (switchBox) {
@@ -6285,6 +6292,8 @@
       const stGoogle = document.getElementById('lockStageGoogle');
       const stUnlock = document.getElementById('lockStageUnlock');
       const overlay = document.getElementById('vaultLockOverlay');
+      const gateCard = document.getElementById('vaultGateCard');
+      if (gateCard) gateCard.classList.remove('google-signin-only');
       if (stGoogle) stGoogle.style.display = 'none';
       if (stUnlock) stUnlock.style.display = 'block';
       if (overlay) overlay.classList.remove('unlocked');
@@ -6876,9 +6885,12 @@
           const emailPill = document.getElementById('lockSignedInEmail');
           const modalEmail = document.getElementById('syncAuthEmailLabel');
 
+          const gateCard = document.getElementById('vaultGateCard');
           if (!user) {
-            const gateCard = document.getElementById('vaultGateCard');
-            if (gateCard) gateCard.classList.remove('ios-pin-active');
+            if (gateCard) {
+              gateCard.classList.remove('ios-pin-active');
+              gateCard.classList.add('google-signin-only');
+            }
             if (stGoogle) stGoogle.style.display = 'block';
             if (stUnlock) stUnlock.style.display = 'none';
             if (modalEmail) modalEmail.textContent = 'Not Signed In';
@@ -6889,6 +6901,10 @@
           const email = (user.email || '').toLowerCase();
           if (!ALLOWED_VAULT_EMAILS.includes(email) || user.emailVerified === false) {
             try { await firebaseAuth.signOut(); } catch(e) {}
+            if (gateCard) {
+              gateCard.classList.remove('ios-pin-active');
+              gateCard.classList.add('google-signin-only');
+            }
             if (stGoogle) stGoogle.style.display = 'block';
             if (stUnlock) stUnlock.style.display = 'none';
             setLockError('Access Denied: "' + (user.email || 'unknown') + '" is not an authorized owner of OrlandoVault.');
@@ -6896,6 +6912,7 @@
           }
 
           setLockError('');
+          if (gateCard) gateCard.classList.remove('google-signin-only');
           if (emailPill) emailPill.textContent = '✓ ' + user.email;
           if (modalEmail) modalEmail.textContent = user.email;
           if (stGoogle) stGoogle.style.display = 'none';
@@ -8849,7 +8866,7 @@
   })();
   </script>
 
-  <script src="js/totp-watchtower.js?v=vault-v74"></script>
-  <script src="js/cloud-telemetry.js?v=vault-v74"></script>
+  <script src="js/totp-watchtower.js?v=vault-v75"></script>
+  <script src="js/cloud-telemetry.js?v=vault-v75"></script>
 </body>
 </html>
