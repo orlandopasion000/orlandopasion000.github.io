@@ -17,8 +17,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/vault-core.css?v=vault-v78">
-  <link rel="stylesheet" href="css/vault-pro.css?v=vault-v78">
+  <link rel="stylesheet" href="css/vault-core.css?v=vault-v79">
+  <link rel="stylesheet" href="css/vault-pro.css?v=vault-v79">
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
@@ -39,6 +39,31 @@
       <img src="assets/lock-wallpaper-4k.jpg" alt="" class="ios-lock-bg-photo" id="iosLockBgPhoto" decoding="async" fetchpriority="high">
     </picture>
     <div class="ios-lock-scrim" aria-hidden="true"></div>
+    <div class="ios-dynamic-island" id="iosDynamicIsland" data-di-state="idle" role="button" tabindex="0" aria-label="Face ID Dynamic Island">
+      <span class="di-lock-wrap" aria-hidden="true">
+        <svg class="di-lock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+          <path class="di-lock-shackle" d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          <rect x="5" y="11" width="14" height="10" rx="2.5"></rect>
+        </svg>
+      </span>
+      <span class="di-label" id="iosDiText">Face ID</span>
+      <span class="di-face-wrap" aria-hidden="true">
+        <svg class="di-face-svg" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8.5 3.5H5.5C4.4 3.5 3.5 4.4 3.5 5.5V8.5"/>
+          <path d="M19.5 3.5H22.5C23.6 3.5 24.5 4.4 24.5 5.5V8.5"/>
+          <path d="M3.5 19.5V22.5C3.5 23.6 4.4 24.5 5.5 24.5H8.5"/>
+          <path d="M24.5 19.5V22.5C24.5 23.6 23.6 24.5 22.5 24.5H19.5"/>
+          <path d="M9.8 10.2V12.2"/>
+          <path d="M18.2 10.2V12.2"/>
+          <path d="M14 10.2V14.6C14 15.3 13.5 15.8 12.8 15.8H12.2"/>
+          <path d="M10 18.2C11 19.6 12.4 20.3 14 20.3C15.6 20.3 17 19.6 18 18.2"/>
+        </svg>
+        <svg class="di-check-svg" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="14" cy="14" r="10.5"/>
+          <polyline points="9.5 14.3 12.6 17.5 18.8 11.2"/>
+        </svg>
+      </span>
+    </div>
     <div class="vault-gate-card google-signin-only" id="vaultGateCard">
       <div class="vault-gate-badge" id="vaultGateModeBadge">🔐 ZERO-KNOWLEDGE VAULT · LOCKED</div>
       <div class="vault-gate-header">
@@ -1639,6 +1664,9 @@
       if (window.VaultTemplates && typeof window.VaultTemplates.setEditorType === 'function') {
         window.VaultTemplates.setEditorType('login');
       }
+      if (window.VaultEncryptedScans && typeof window.VaultEncryptedScans.resetEditorScansForItem === 'function') {
+        window.VaultEncryptedScans.resetEditorScansForItem('');
+      }
       document.getElementById('editChkPriority').checked = true; // New cards default to priority
       document.getElementById('editChkCritical').checked = false;
       if (typeof syncToggleChips === 'function') syncToggleChips();
@@ -1710,7 +1738,7 @@
       if (typeof playJarvisSound === 'function') playJarvisSound('click');
     }
 
-    function saveCardEditor(keepOpen = false) {
+    async function saveCardEditor(keepOpen = false) {
       keepOpen = (keepOpen === true);
       const id = document.getElementById('editCardId').value;
       const title = document.getElementById('editInputTitle').value.trim();
@@ -1848,6 +1876,10 @@
       try {
         persistVaultToSecureCache();
       } catch(e) {}
+
+      if (targetId && window.VaultEncryptedScans && typeof window.VaultEncryptedScans.commitPendingEditorScans === 'function') {
+        try { await window.VaultEncryptedScans.commitPendingEditorScans(targetId); } catch(e) {}
+      }
 
       renderVault();
       renderMetrics();
@@ -3273,13 +3305,13 @@
         if (window.caches) {
           caches.keys().then(keys => {
             keys.forEach(k => {
-              if (k.startsWith('vault-') && k !== 'vault-jarvis-v78') {
+              if (k.startsWith('vault-') && k !== 'vault-jarvis-v79') {
                 caches.delete(k);
               }
             });
           });
         }
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v78', { scope: '/orlandovault/' }).then(reg => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v79', { scope: '/orlandovault/' }).then(reg => {
           if (reg && reg.update) reg.update();
         }).catch(err => {
           console.warn('Vault SW registration error:', err);
@@ -4521,6 +4553,7 @@
       'orlandovault_enc_cache_v4': { type: 'LOCAL_ONLY', category: 'crypto_cache', schemaVersion: 4, dataType: 'object' },
       'orlandovault_enc_snaps_v4': { type: 'LOCAL_ONLY', category: 'crypto_backup', schemaVersion: 4, dataType: 'array' },
       'orlandovault_bio_wrap_v4': { type: 'LOCAL_ONLY', category: 'webauthn', schemaVersion: 4, dataType: 'object' },
+      'orlandovault_faceid_prompt_dismissed_v1': { type: 'LOCAL_ONLY', category: 'webauthn', schemaVersion: 1, dataType: 'boolean' },
       'orlandovault_autolock_min': { type: 'LOCAL_ONLY', category: 'security', schemaVersion: 1, dataType: 'number' },
       'orlandovault_privacy_mask_v1': { type: 'LOCAL_ONLY', category: 'security', schemaVersion: 1, dataType: 'boolean' },
       'orlandovault_priority_pins_v4': { type: 'SYNC', category: 'pins', schemaVersion: 4, dataType: 'array' },
@@ -4932,11 +4965,14 @@
     }
 
     function hasBioWrapConfigured() {
+      if (window.VaultFaceId && typeof window.VaultFaceId.hasBioWrapConfigured === 'function') {
+        return window.VaultFaceId.hasBioWrapConfigured();
+      }
       try {
         const raw = localStorage.getItem(LS_BIO_WRAP);
         if (raw) {
           const parsed = JSON.parse(raw);
-          return !!(parsed && parsed.credentialId && parsed.wrappedPwd);
+          return !!(parsed && parsed.credentialId && (parsed.wrappedPayload || parsed.wrappedPwd));
         }
       } catch(e) {}
       return false;
@@ -5028,6 +5064,9 @@
       if (typeof window.renderMetrics === 'function') window.renderMetrics();
       updateSyncHealthUI();
       runPhase3PostUnlockHooks(true);
+      if (window.VaultFaceId && typeof window.VaultFaceId.onPasscodeUnlockSuccess === 'function') {
+        window.VaultFaceId.onPasscodeUnlockSuccess(passphrase, env.saltHex, env.passcodeMode || 'pin6', false);
+      }
       return items.length;
     }
     window.attemptOfflineEncryptedCacheUnlock = unlockWithEncryptedCache;
@@ -5121,6 +5160,9 @@
       syncHealthState.status = 'locked';
       updateSyncHealthUI();
       refreshBioButtonVisibility();
+      if (window.VaultFaceId && typeof window.VaultFaceId.onManualVaultLock === 'function') {
+        window.VaultFaceId.onManualVaultLock();
+      }
     }
     window.lockVault = lockVault;
 
@@ -5345,9 +5387,17 @@
 
     async function reencryptVaultWithNewSecret(newSecret, newMode = 'password') {
       if (!activeSessionKey) throw new Error('Unlock vault first.');
+      const oldSessionKey = activeSessionKey;
       const freshSalt = VaultCrypto.generateRandomSaltHex();
       const freshKey = await VaultCrypto.deriveKey(newSecret, freshSalt, KDF_ITERATIONS_V4);
       const freshCanary = await VaultCrypto.createCanary(freshKey);
+
+      if (window.VaultEncryptedScans && typeof window.VaultEncryptedScans.reencryptAllLocalScans === 'function') {
+        await window.VaultEncryptedScans.reencryptAllLocalScans(
+          (cObj) => VaultCrypto.decryptStrict(cObj, oldSessionKey),
+          (plain) => VaultCrypto.encrypt(plain, freshKey)
+        );
+      }
 
       activeSessionKey = freshKey;
       activeVaultMeta = {
@@ -5357,11 +5407,18 @@
         kdfIterations: KDF_ITERATIONS_V4,
         keyCanary: freshCanary
       };
-      try { localStorage.removeItem(LS_BIO_WRAP); } catch(e) {}
+      if (window.VaultFaceId && typeof window.VaultFaceId.clearBioWrapStorage === 'function') {
+        window.VaultFaceId.clearBioWrapStorage();
+      } else {
+        try { localStorage.removeItem(LS_BIO_WRAP); } catch(e) {}
+      }
       refreshBioButtonVisibility();
       await persistEncryptedVaultCache();
       fullPushRequired = true;
       await pushToCloud(true);
+      if (window.VaultFaceId && typeof window.VaultFaceId.stashTransientUnlockSecret === 'function') {
+        await window.VaultFaceId.stashTransientUnlockSecret(newSecret, freshSalt, newMode);
+      }
       if (typeof logAudit === 'function') logAudit('PASSCODE_MODE_UPDATED', 'Updated vault key & passcode mode to: ' + newMode);
     }
 
@@ -5421,6 +5478,9 @@
         showUnlockedWorkspace();
         if (typeof window.renderVault === 'function') window.renderVault();
         if (typeof window.renderMetrics === 'function') window.renderMetrics();
+        if (window.VaultFaceId && typeof window.VaultFaceId.onPasscodeUnlockSuccess === 'function') {
+          window.VaultFaceId.onPasscodeUnlockSuccess(masterPassword, meta.saltHex, meta.passcodeMode || 'pin6', true);
+        }
         await pullFromCloud(true, false);
         startRealtimeFirestoreSync();
         runPhase3PostUnlockHooks(false);
@@ -5444,104 +5504,95 @@
       await reencryptVaultWithNewSecret(newPwd, 'password');
     }
 
-    // Biometric / Passkey Quick-Unlock (WebAuthn PRF)
-    async function setupBiometricUnlock(masterPwdToWrap) {
-      if (!window.PublicKeyCredential || !navigator.credentials) {
-        throw new Error('WebAuthn Passkeys are not supported in this browser.');
-      }
-      if (!activeSessionKey || !activeVaultMeta) throw new Error('Vault must be unlocked first.');
-      const checkKey = await VaultCrypto.deriveKey(masterPwdToWrap, activeVaultMeta.saltHex, activeVaultMeta.kdfIterations || KDF_ITERATIONS_V4);
-      const valid = await VaultCrypto.verifyCanary(activeVaultMeta.keyCanary, checkKey);
-      if (!valid) throw new Error('Master Password verification failed.');
-
-      const prfSalt = new Uint8Array(32);
-      const challenge = new Uint8Array(32);
-      const userId = new Uint8Array(16);
-      window.crypto.getRandomValues(prfSalt);
-      window.crypto.getRandomValues(challenge);
-      window.crypto.getRandomValues(userId);
-
-      const cred = await navigator.credentials.create({
-        publicKey: {
-          challenge: challenge,
-          rp: { name: 'OrlandoVault' },
-          user: {
-            id: userId,
-            name: (firebaseAuth && firebaseAuth.currentUser && firebaseAuth.currentUser.email) || 'orlandovault@owner',
-            displayName: 'Sir Orlando V. Pasion, Jr.'
-          },
-          pubKeyCredParams: [{ alg: -7, type: 'public-key' }, { alg: -257, type: 'public-key' }],
-          authenticatorSelection: {
-            authenticatorAttachment: 'platform',
-            userVerification: 'required',
-            residentKey: 'preferred'
-          },
-          extensions: {
-            prf: { eval: { first: prfSalt } }
+    // Biometric / Passkey Quick-Unlock (Phase 6 Dual-Tier Hardware Engine in js/vault-faceid.js)
+    window._ovFaceIdHooks = {
+      isUnlocked: () => !!activeSessionKey,
+      getActiveMeta: () => activeVaultMeta || readLocalEncryptedCacheEnvelope(),
+      verifySecretAgainstActiveMeta: async (secret) => {
+        const meta = activeVaultMeta || readLocalEncryptedCacheEnvelope();
+        if (!meta || !meta.saltHex || !meta.keyCanary) return false;
+        const ck = await VaultCrypto.deriveKey(secret, meta.saltHex, meta.kdfIterations || KDF_ITERATIONS_V4);
+        return await VaultCrypto.verifyCanary(meta.keyCanary, ck);
+      },
+      completeFastHardwareUnlock: async (bundle) => {
+        if (!bundle) throw new Error('Empty Face ID bundle.');
+        const env = readLocalEncryptedCacheEnvelope();
+        const meta = activeVaultMeta || (env && env.saltHex ? env : null);
+        if (bundle.rawKeyB64 && meta && meta.saltHex && bundle.saltHex === meta.saltHex && meta.keyCanary) {
+          const rawBuf = base64ToArrayBuffer(bundle.rawKeyB64);
+          const importedKey = await window.crypto.subtle.importKey(
+            'raw',
+            rawBuf,
+            { name: 'AES-GCM', length: 256 },
+            false,
+            ['encrypt', 'decrypt']
+          );
+          const valid = await VaultCrypto.verifyCanary(meta.keyCanary, importedKey);
+          if (valid) {
+            activeSessionKey = importedKey;
+            activeVaultMeta = {
+              v: 4,
+              passcodeMode: meta.passcodeMode || bundle.passcodeMode || 'pin6',
+              saltHex: meta.saltHex,
+              kdfIterations: meta.kdfIterations || KDF_ITERATIONS_V4,
+              keyCanary: meta.keyCanary
+            };
+            lastActivityAt = Date.now();
+            if (env && env.encryptedData) {
+              try {
+                const dec = await VaultCrypto.decryptStrict(env.encryptedData, importedKey);
+                const parsed = JSON.parse(dec || '{}');
+                if (Array.isArray(parsed.items)) {
+                  if (typeof window.setVaultItems === 'function') window.setVaultItems(parsed.items);
+                  window.vaultItems = parsed.items;
+                  if (Array.isArray(parsed.pins) && typeof savePinnedRegistry === 'function') savePinnedRegistry(parsed.pins);
+                }
+              } catch(e) {}
+            }
+            if (bundle.secret && window.VaultFaceId && typeof window.VaultFaceId.stashTransientUnlockSecret === 'function') {
+              window.VaultFaceId.stashTransientUnlockSecret(bundle.secret, meta.saltHex, activeVaultMeta.passcodeMode).catch(() => {});
+            }
+            showUnlockedWorkspace();
+            if (typeof window.renderVault === 'function') window.renderVault();
+            if (typeof window.renderMetrics === 'function') window.renderMetrics();
+            updateSyncHealthUI();
+            Promise.resolve().then(async () => {
+              if (isCloudAuthenticated()) {
+                await pullFromCloud(true, false).catch(() => {});
+                startRealtimeFirestoreSync();
+              }
+              runPhase3PostUnlockHooks(!isCloudAuthenticated());
+            });
+            return;
           }
         }
-      });
+        if (bundle.secret) {
+          await unlockVaultWithPassword(bundle.secret);
+          return;
+        }
+        throw new Error('Could not unwrap vault key.');
+      },
+      fillAllPinDotsForMatch: () => {
+        document.querySelectorAll('#iosPinDots .ios-pin-dot').forEach(d => d.classList.add('filled'));
+      },
+      setLockError: setLockError,
+      refreshBioUI: refreshBioButtonVisibility,
+      encryptWithSession: async (plain) => await VaultCrypto.encrypt(plain, activeSessionKey),
+      decryptWithSession: async (cipherObj) => await VaultCrypto.decryptStrict(cipherObj, activeSessionKey)
+    };
 
-      const ext = cred.getClientExtensionResults ? cred.getClientExtensionResults() : {};
-      let prfBytes = ext.prf && ext.prf.results && ext.prf.results.first ? new Uint8Array(ext.prf.results.first) : null;
-      if (!prfBytes) {
-        // Retrieve PRF output via immediate assertion
-        const chal2 = new Uint8Array(32);
-        window.crypto.getRandomValues(chal2);
-        const assertion = await navigator.credentials.get({
-          publicKey: {
-            challenge: chal2,
-            allowCredentials: [{ id: cred.rawId, type: 'public-key' }],
-            userVerification: 'required',
-            extensions: { prf: { eval: { first: prfSalt } } }
-          }
-        });
-        const ext2 = assertion.getClientExtensionResults ? assertion.getClientExtensionResults() : {};
-        prfBytes = ext2.prf && ext2.prf.results && ext2.prf.results.first ? new Uint8Array(ext2.prf.results.first) : null;
+    async function setupBiometricUnlock(masterPwdToWrap) {
+      if (window.VaultFaceId && typeof window.VaultFaceId.enrollFaceId === 'function') {
+        return await window.VaultFaceId.enrollFaceId(masterPwdToWrap || null);
       }
-
-      if (!prfBytes) {
-        throw new Error('This device/authenticator does not support WebAuthn PRF hardware key wrapping.');
-      }
-
-      const wrapDigest = await window.crypto.subtle.digest('SHA-256', prfBytes);
-      const wrapKey = await window.crypto.subtle.importKey('raw', wrapDigest, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
-      const wrappedPwd = await VaultCrypto.encrypt(masterPwdToWrap, wrapKey);
-
-      localStorage.setItem(LS_BIO_WRAP, JSON.stringify({
-        credentialId: arrayBufferToBase64(cred.rawId),
-        prfSalt: arrayBufferToBase64(prfSalt),
-        wrappedPwd: wrappedPwd
-      }));
-      refreshBioButtonVisibility();
+      throw new Error('Face ID module unavailable.');
     }
 
-    async function unlockWithBiometrics() {
-      const raw = localStorage.getItem(LS_BIO_WRAP);
-      if (!raw) throw new Error('No biometric passkey configured on this device.');
-      const saved = JSON.parse(raw);
-      const challenge = new Uint8Array(32);
-      window.crypto.getRandomValues(challenge);
-
-      const assertion = await navigator.credentials.get({
-        publicKey: {
-          challenge: challenge,
-          allowCredentials: [{ id: base64ToArrayBuffer(saved.credentialId), type: 'public-key' }],
-          userVerification: 'required',
-          extensions: {
-            prf: { eval: { first: new Uint8Array(base64ToArrayBuffer(saved.prfSalt)) } }
-          }
-        }
-      });
-
-      const ext = assertion.getClientExtensionResults ? assertion.getClientExtensionResults() : {};
-      const prfBytes = ext.prf && ext.prf.results && ext.prf.results.first ? new Uint8Array(ext.prf.results.first) : null;
-      if (!prfBytes) throw new Error('Biometric PRF assertion failed.');
-
-      const wrapDigest = await window.crypto.subtle.digest('SHA-256', prfBytes);
-      const wrapKey = await window.crypto.subtle.importKey('raw', wrapDigest, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
-      const masterPassword = await VaultCrypto.decryptStrict(saved.wrappedPwd, wrapKey);
-      await unlockVaultWithPassword(masterPassword);
+    async function unlockWithBiometrics(opts = {}) {
+      if (window.VaultFaceId && typeof window.VaultFaceId.unlockWithFaceId === 'function') {
+        return await window.VaultFaceId.unlockWithFaceId(opts);
+      }
+      throw new Error('Face ID module unavailable.');
     }
 
     function updateSyncHealthUI() {
@@ -6359,6 +6410,9 @@
       }
       updateIosPinDots();
       refreshBioButtonVisibility();
+      if (window.VaultFaceId && typeof window.VaultFaceId.onPinPanelShown === 'function') {
+        window.VaultFaceId.onPinPanelShown(mode);
+      }
       if (typeof requestAnimationFrame === 'function') requestAnimationFrame(syncLiquidGlassLensCoords);
       setTimeout(syncLiquidGlassLensCoords, 60);
     }
@@ -6435,6 +6489,9 @@
           iosPinFailCount = 0;
           showUnlockedWorkspace();
           if (typeof window.showToast === 'function') window.showToast('✅ iPhone 6-Digit Passcode active!', '📱');
+          if (window.VaultFaceId && typeof window.VaultFaceId.onPasscodeUnlockSuccess === 'function') {
+            window.VaultFaceId.onPasscodeUnlockSuccess(pin6, activeVaultMeta ? activeVaultMeta.saltHex : '', 'pin6', true);
+          }
           return;
         }
 
@@ -6704,31 +6761,15 @@
       const btnBioSetup = document.getElementById('btnSetupBiometricUnlock');
       if (btnBioSetup) {
         btnBioSetup.onclick = async () => {
-          if (localStorage.getItem(LS_BIO_WRAP)) {
-            localStorage.removeItem(LS_BIO_WRAP);
-            refreshBioButtonVisibility();
+          if (window.VaultFaceId && window.VaultFaceId.hasBioWrapConfigured()) {
+            await window.VaultFaceId.disableFaceId();
             if (typeof showToast === 'function') showToast('Biometric Quick-Unlock disabled on this device.', '🔒');
             return;
           }
-          const panel = btnBioSetup.closest('.sync-security-panel');
-          if (!panel) return;
-          let promptRow = document.getElementById('bioVerifyPwdRow');
-          if (!promptRow) {
-            promptRow = document.createElement('div');
-            promptRow.id = 'bioVerifyPwdRow';
-            promptRow.style.cssText = 'display:flex;gap:6px;padding-top:6px;';
-            promptRow.innerHTML = '<input type="password" id="bioSetupPwdInput" class="vault-gate-input" placeholder="Enter Master Password to bind Passkey..." style="padding:7px 10px;font-size:12px;"><button type="button" id="btnConfirmBioBind" class="btn-sync-action primary" style="white-space:nowrap;">Enroll Passkey</button>';
-            panel.appendChild(promptRow);
-            document.getElementById('btnConfirmBioBind').onclick = async () => {
-              const pwd = document.getElementById('bioSetupPwdInput').value;
-              try {
-                await setupBiometricUnlock(pwd);
-                promptRow.remove();
-                if (typeof showToast === 'function') showToast('✅ Biometric / Passkey Quick-Unlock enabled!', '🧬');
-              } catch(err) {
-                if (typeof showToast === 'function') showToast('Passkey setup failed: ' + err.message, '❌');
-              }
-            };
+          const syncModalEl = document.getElementById('syncHealthModal');
+          if (syncModalEl) syncModalEl.style.display = 'none';
+          if (window.VaultFaceId && typeof window.VaultFaceId.openEnrollSheet === 'function') {
+            await window.VaultFaceId.openEnrollSheet();
           }
         };
       }
@@ -6882,6 +6923,9 @@
           });
           btn.addEventListener('pointercancel', () => btn.classList.remove('is-pressing'));
           btn.addEventListener('click', (e) => {
+            if (window.VaultFaceId && typeof window.VaultFaceId.onKeypadDigitClick === 'function') {
+              window.VaultFaceId.onKeypadDigitClick();
+            }
             if (performance.now() - lastPointerAt < 450 && e.detail > 0) return;
             triggerKeyPressVisual(btn);
             appendIosPinDigit(btn.getAttribute('data-digit'));
@@ -6952,6 +6996,9 @@
             keyEl.classList.add('is-pressing');
             clearTimeout(keyEl._pressTimer);
             keyEl._pressTimer = setTimeout(() => keyEl.classList.remove('is-pressing'), 240);
+          }
+          if (window.VaultFaceId && typeof window.VaultFaceId.onKeypadDigitClick === 'function') {
+            window.VaultFaceId.onKeypadDigitClick();
           }
           appendIosPinDigit(digitKey);
         } else if (e.key === 'Backspace') {
@@ -7323,6 +7370,7 @@
       { id: 'new-bank-card', cat: 'IDs & Cards Templates', icon: '💳', title: 'Add Encrypted Bank / Credit Card', desc: 'Store card number, expiry, masked CVV, and ATM PIN', action: () => { openNewCardEditor(); if (window.VaultTemplates) window.VaultTemplates.setEditorType('bank_card'); }, badge: 'Template' },
       { id: 'new-wifi', cat: 'IDs & Cards Templates', icon: '📶', title: 'Add Wi-Fi Network & Camera QR Card', desc: 'Create scannable Wi-Fi QR code for iPhone & Android guests', action: () => { openNewCardEditor(); if (window.VaultTemplates) window.VaultTemplates.setEditorType('wifi'); }, badge: 'Template' },
       { id: 'sys-watchtower', cat: 'Security Operations', icon: '🛡️', title: 'Open Security Health Watchtower', desc: 'Scan for breached, weak, reused, old, or missing 2FA credentials', action: () => { if (window.VaultWatchtower) window.VaultWatchtower.open(); }, badge: 'Security' },
+      { id: 'sys-faceid', cat: 'Security Operations', icon: '🧬', title: 'Enable / Manage iPhone Face ID Unlock', desc: 'Configure Dynamic Island auto-seek Face ID or Touch ID quick unlock', action: () => { if (window.VaultFaceId) window.VaultFaceId.openEnrollSheet(); }, badge: 'Face ID' },
       { id: 'filter-crit', cat: 'Filter Apps & Websites', icon: '⚡', title: 'Filter: Critical Accounts Only', desc: 'High-security administrative and primary credentials', action: () => { filterVaultByCategory('Critical'); }, badge: 'Priority' },
 
       { id: 'nav-recharge', cat: 'Flagship Web Apps', icon: '⚡', title: 'Switch to OrlandoRecharge', desc: 'Precision horology, 23-block alarm cockpit & Tier 3 particles', action: () => window.launchSubApp('orlandorecharge', 'OrlandoRechargeMainAppWindow', 1280, 850), badge: 'Flagship' },
@@ -9004,9 +9052,10 @@
   })();
   </script>
 
-  <script src="js/vault-templates.js?v=vault-v78"></script>
-  <script src="js/totp-watchtower.js?v=vault-v78"></script>
-  <script src="js/cloud-telemetry.js?v=vault-v78"></script>
-  <script src="js/autofill-bridge.js?v=vault-v78"></script>
+  <script src="js/vault-faceid.js?v=vault-v79"></script>
+  <script src="js/vault-templates.js?v=vault-v79"></script>
+  <script src="js/totp-watchtower.js?v=vault-v79"></script>
+  <script src="js/cloud-telemetry.js?v=vault-v79"></script>
+  <script src="js/autofill-bridge.js?v=vault-v79"></script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 /* OrlandoVault · Offline-First Jarvis Security Service Worker */
-var CACHE_NAME = 'vault-jarvis-v78';
+var CACHE_NAME = 'vault-jarvis-v79';
 var ASSETS = [
   './',
   './index.html',
@@ -10,6 +10,7 @@ var ASSETS = [
   './js/totp-watchtower.js',
   './js/cloud-telemetry.js',
   './js/autofill-bridge.js',
+  './js/vault-faceid.js',
   './js/vault-templates.js',
   './assets/lock-wallpaper-4k.jpg',
   './assets/lock-wallpaper-desktop-4k.jpg',

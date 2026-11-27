@@ -184,6 +184,60 @@
     return codes.map(c => (c && c.code ? c.code : '')).filter(Boolean).join('\n');
   }
 
+  function renderScanUploadSectionHtml() {
+    return `
+      <div class="tpl-scan-upload-box">
+        <div class="tpl-scan-upload-head">📷 ENCRYPTED PHOTO SCANS (FRONT / BACK · E2E AES-GCM)</div>
+        <div class="tpl-scan-upload-row">
+          <div class="tpl-scan-slot">
+            <input type="file" id="inputScanFront" accept="image/*" style="display:none;">
+            <button type="button" class="btn-tpl-copy" id="btnPickScanFront">📷 Front Scan</button>
+            <button type="button" class="btn-tpl-copy" id="btnRemoveScanFront" style="display:none;color:#fca5a5;">✕</button>
+            <span class="tpl-scan-status" id="lblScanFrontStatus">None</span>
+          </div>
+          <div class="tpl-scan-slot">
+            <input type="file" id="inputScanBack" accept="image/*" style="display:none;">
+            <button type="button" class="btn-tpl-copy" id="btnPickScanBack">📷 Back Scan</button>
+            <button type="button" class="btn-tpl-copy" id="btnRemoveScanBack" style="display:none;color:#fca5a5;">✕</button>
+            <span class="tpl-scan-status" id="lblScanBackStatus">None</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function bindEditorScanUploadControls() {
+    const wireSide = (side, inputId, pickBtnId, rmBtnId) => {
+      const inp = document.getElementById(inputId);
+      const pick = document.getElementById(pickBtnId);
+      const rm = document.getElementById(rmBtnId);
+      if (pick && inp) pick.onclick = () => inp.click();
+      if (inp) {
+        inp.onchange = async () => {
+          const f = inp.files && inp.files[0];
+          if (!f || !window.VaultEncryptedScans) return;
+          try {
+            await window.VaultEncryptedScans.stageEditorScan(side, f);
+            if (typeof window.showToast === 'function') window.showToast(`📷 ${side === 'back' ? 'Back' : 'Front'} scan staged for AES-GCM encryption.`, '🛡️');
+          } catch (err) {
+            if (typeof window.showToast === 'function') window.showToast('Scan error: ' + err.message, '❌');
+          }
+          inp.value = '';
+        };
+      }
+      if (rm) {
+        rm.onclick = () => {
+          if (window.VaultEncryptedScans) window.VaultEncryptedScans.clearStagedEditorScan(side);
+        };
+      }
+    };
+    wireSide('front', 'inputScanFront', 'btnPickScanFront', 'btnRemoveScanFront');
+    wireSide('back', 'inputScanBack', 'btnPickScanBack', 'btnRemoveScanBack');
+    if (window.VaultEncryptedScans && typeof window.VaultEncryptedScans.refreshEditorScanStatusLabels === 'function') {
+      window.VaultEncryptedScans.refreshEditorScanStatusLabels();
+    }
+  }
+
   function renderStructuredEditorFields(type, td = {}) {
     const host = document.getElementById('editStructuredFieldsHost');
     if (!host) return;
@@ -228,8 +282,10 @@
               <input type="date" class="edit-form-input" id="tplGovExpiryDate" value="${esc(td.expiryDate || '')}">
             </div>
           </div>
+          ${renderScanUploadSectionHtml()}
         </div>
       `;
+      bindEditorScanUploadControls();
       host.querySelectorAll('[data-gov-preset]').forEach(btn => {
         btn.onclick = () => {
           const k = btn.getAttribute('data-gov-preset');
@@ -289,8 +345,10 @@
               </div>
             </div>
           </div>
+          ${renderScanUploadSectionHtml()}
         </div>
       `;
+      bindEditorScanUploadControls();
       return;
     }
 
@@ -390,6 +448,9 @@
   }
 
   function populateEditorForItem(item) {
+    if (window.VaultEncryptedScans && typeof window.VaultEncryptedScans.resetEditorScansForItem === 'function') {
+      window.VaultEncryptedScans.resetEditorScansForItem(item && item.id ? item.id : '');
+    }
     const rType = (item && item.recordType) || 'login';
     setEditorType(rType, (item && item.templateData) || {});
   }
@@ -589,6 +650,7 @@
           </div>
           ${portalUrl ? `<button type="button" class="btn-focus-copy-launch" id="btnFocusCopyAndLaunch" data-portal-url="${esc(portalUrl)}">⚡ Copy ID &amp; Open Portal ↗</button>` : ''}
         </div>
+        <div id="focusEncryptedScansHost"></div>
       `;
     }
 
@@ -629,6 +691,7 @@
             </div>
           ` : ''}
         </div>
+        <div id="focusEncryptedScansHost"></div>
       `;
     }
 
@@ -710,6 +773,56 @@
           window.copyTemplateField(item.id, 'idNumber', 'ID Number', btnGovLaunch);
           if (portalUrl) try { window.open(portalUrl, '_blank', 'noopener,noreferrer'); } catch (e) {}
         };
+      }
+    }
+
+    if ((item.recordType === 'gov_id' || item.recordType === 'bank_card') && window.VaultEncryptedScans) {
+      const scanHost = document.getElementById('focusEncryptedScansHost');
+      if (scanHost) {
+        window.VaultEncryptedScans.loadDecryptedScans(item.id).then((scans) => {
+          if (!scans || (!scans.front && !scans.back)) return;
+          if (!document.body.contains(scanHost)) return;
+          scanHost.innerHTML = `
+            <div class="focus-scans-deck" id="focusEncryptedScansDeck">
+              <div class="focus-deck-label">
+                <span style="color:#93c5fd;">📷 ENCRYPTED CARD / ID SCANS</span>
+                <button type="button" class="btn-tpl-copy" id="btnToggleScanBlur">👁️ Reveal ID Scans</button>
+              </div>
+              <div class="focus-scans-grid">
+                ${scans.front ? `
+                  <div class="scan-thumb-card" data-scan-side="front">
+                    <img class="scan-thumb-img blurred" id="scanImgFront" src="${scans.front}" alt="Encrypted Front Scan">
+                    <div class="scan-thumb-cap">Front Side (Tap to Zoom)</div>
+                  </div>
+                ` : ''}
+                ${scans.back ? `
+                  <div class="scan-thumb-card" data-scan-side="back">
+                    <img class="scan-thumb-img blurred" id="scanImgBack" src="${scans.back}" alt="Encrypted Back Scan">
+                    <div class="scan-thumb-cap">Back Side (Tap to Zoom)</div>
+                  </div>
+                ` : ''}
+              </div>
+            </div>
+          `;
+          let revealed = false;
+          const toggleBtn = document.getElementById('btnToggleScanBlur');
+          if (toggleBtn) {
+            toggleBtn.onclick = () => {
+              revealed = !revealed;
+              scanHost.querySelectorAll('.scan-thumb-img').forEach(img => img.classList.toggle('blurred', !revealed));
+              toggleBtn.textContent = revealed ? '🙈 Blur Scans' : '👁️ Reveal ID Scans';
+            };
+          }
+          scanHost.querySelectorAll('.scan-thumb-card').forEach(card => {
+            card.onclick = () => {
+              const side = card.getAttribute('data-scan-side');
+              const url = side === 'back' ? scans.back : scans.front;
+              if (url && window.VaultEncryptedScans) {
+                window.VaultEncryptedScans.openScanLightbox(url, `${item.title || 'ID'} · ${side === 'back' ? 'Back' : 'Front'} Scan`);
+              }
+            };
+          });
+        }).catch(() => {});
       }
     }
 
