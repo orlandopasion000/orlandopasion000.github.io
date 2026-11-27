@@ -431,7 +431,153 @@
   text-align: center;
 }
 
+/* Compact Micro-Header & Compressed Filter Bar (v76) */
+.vault-topbar {
+  padding: max(5px, env(safe-area-inset-top, 5px)) 12px 5px 12px !important;
+  gap: 8px !important;
+  flex-wrap: nowrap !important;
+  min-height: 36px !important;
+}
+.brand-cluster {
+  gap: 8px !important;
+  flex-shrink: 0 !important;
+}
+.vault-brand-logo-frame {
+  width: 26px !important;
+  height: 26px !important;
+}
+.vault-topbar-emblem {
+  width: 26px !important;
+  height: 26px !important;
+  border-radius: 7px !important;
+}
+.brand-meta h1 {
+  margin: 0 !important;
+  font-size: 12.5px !important;
+  letter-spacing: 1px !important;
+  gap: 4px !important;
+  line-height: 1 !important;
+  white-space: nowrap;
+}
+.topbar-actions {
+  gap: 4px !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto !important;
+  scrollbar-width: none !important;
+  min-width: 0;
+}
+.topbar-actions::-webkit-scrollbar {
+  display: none !important;
+}
+.btn-topbar-search {
+  min-width: 118px !important;
+  height: 25px !important;
+  min-height: 25px !important;
+  padding: 0 9px !important;
+  font-size: 10.5px !important;
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.01em !important;
+  gap: 5px !important;
+  border-radius: 6px !important;
+}
+.btn-topbar-search svg,
+.btn-topbar-tool svg {
+  width: 11px !important;
+  height: 11px !important;
+}
+.topbar-kbd {
+  font-size: 8.5px !important;
+  padding: 1px 4px !important;
+}
+.btn-topbar-tool {
+  height: 25px !important;
+  min-height: 25px !important;
+  min-width: 0 !important;
+  padding: 0 7px !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.01em !important;
+  text-transform: none !important;
+  gap: 4px !important;
+  border-radius: 6px !important;
+}
+.wt-badge {
+  min-width: 15px !important;
+  height: 14px !important;
+  padding: 0 4px !important;
+  font-size: 9px !important;
+}
+.btn-topbar-desktop {
+  height: 25px !important;
+  min-height: 25px !important;
+  padding: 0 9px !important;
+  gap: 5px !important;
+  border-radius: 6px !important;
+  font-size: 9.5px !important;
+}
+.btn-topbar-desktop .desktop-btn-label {
+  font-size: 9.5px !important;
+  letter-spacing: 0.02em !important;
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 700 !important;
+}
+.btn-topbar-desktop .desktop-btn-icon,
+.btn-topbar-desktop .futuristic-launch-svg,
+.btn-topbar-desktop .futuristic-portal-svg {
+  width: 12px !important;
+  height: 12px !important;
+}
+.vault-layout {
+  padding-top: 4px !important;
+  gap: 6px !important;
+}
+.controls-panel {
+  gap: 3px !important;
+  margin-bottom: 2px !important;
+}
+.filter-pills-row {
+  gap: 4px !important;
+  padding: 1px 1px 3px 1px !important;
+  margin-bottom: 1px !important;
+}
+.filter-pill,
+.btn-pill-add {
+  height: 21px !important;
+  min-height: 21px !important;
+  padding: 0 7px !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 9.5px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.02em !important;
+  border-radius: 5px !important;
+}
+.vault-view-subbar {
+  padding: 1px 2px !important;
+  margin-bottom: 2px !important;
+  min-height: 20px !important;
+}
+
 @media (max-width: 768px) {
+  .vault-topbar {
+    min-height: 38px !important;
+    padding-top: max(5px, env(safe-area-inset-top, 5px)) !important;
+    padding-bottom: 5px !important;
+  }
+  .brand-meta h1 {
+    font-size: 12px !important;
+  }
+  .btn-topbar-search {
+    min-height: 28px !important;
+    height: 28px !important;
+    min-width: 96px !important;
+    padding: 0 9px !important;
+    font-size: 11px !important;
+  }
+  .btn-topbar-search span {
+    font-size: 11px !important;
+  }
   #watchtowerModal {
     align-items: flex-end !important;
     padding: 0 !important;
