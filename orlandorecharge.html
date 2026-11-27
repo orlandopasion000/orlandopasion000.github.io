@@ -2560,16 +2560,6 @@ body.universe-game-active .qgame-left-hud {
   box-shadow: 0 0 12px rgba(251, 191, 36, 0.28);
   margin-left: 6px;
 }
-/* Dashboard Prestige Overcharge Aura on Hero Clock after Gold/Diamond Victory */
-body[data-quantum-overcharge="comet"] #clock {
-  filter: drop-shadow(0 0 18px rgba(56, 189, 248, 0.55)) drop-shadow(0 0 34px rgba(168, 85, 247, 0.45));
-}
-body[data-quantum-overcharge="helixorb"] #clock {
-  filter: drop-shadow(0 0 18px rgba(34, 211, 238, 0.55)) drop-shadow(0 0 34px rgba(232, 121, 249, 0.45));
-}
-body[data-quantum-overcharge="moltencore"] #clock {
-  filter: drop-shadow(0 0 18px rgba(251, 191, 36, 0.60)) drop-shadow(0 0 34px rgba(234, 88, 12, 0.48));
-}
 @keyframes qgEqBar {
   0% { height: 3px; background: #38bdf8; }
   50% { background: #ffd700; }
@@ -11168,10 +11158,10 @@ try { checkUrlHashRoutine(); } catch(e){}
     }
   }, { passive: true });
 
-  // Dual-Layer Population: Device & GPU-scaled ambient swarm + Dedicated 3D Weaver Dancers (Tuned for silky 60-120fps even on low-end devices)
-  var baseAmbCount = width < 600 ? 32 : (width < 900 ? 46 : (width < 1200 ? 64 : 82));
+  // Dual-Layer Population: Streamlined ambient swarm + Dedicated 3D Weaver Dancers (~75% fewer small Tier 1 models for 60-120fps clarity)
+  var baseAmbCount = width < 600 ? 14 : (width < 900 ? 17 : (width < 1200 ? 19 : 22));
   var AMBIENT_COUNT = isLowEndDevice ? Math.round(baseAmbCount * 0.72) : baseAmbCount;
-  var WEAVER_COUNT = width < 600 ? 8 : (width < 768 ? 10 : 12); // Evenly distributed in depth: ~5-6 are in front at any moment!
+  var WEAVER_COUNT = width < 600 ? 8 : (width < 768 ? 10 : 12); // Keeps all 6 Extra-Big + 8 Big hero spheres while trimming clutter!
 
   function createParticle(isWeaver, phaseOffset) {
     var minSpawnX = 40, maxSpawnX = width - 40;
@@ -12713,7 +12703,7 @@ try { checkUrlHashRoutine(); } catch(e){}
           var traceRx = clHelixR * 1.34;
           var traceRy = clHelixR * 0.36;
 
-          if (tier >= 2 || !isFastRenderMode) {
+          if (tier >= 2) {
             targetCtx.save();
             targetCtx.translate(px0, py0);
             targetCtx.rotate(orbPlane1);
@@ -12744,17 +12734,17 @@ try { checkUrlHashRoutine(); } catch(e){}
             }
           }
 
-          targetCtx.save();
-          targetCtx.translate(px0, py0);
-          targetCtx.rotate(orbPlane1);
-          targetCtx.beginPath();
-          targetCtx.ellipse(0, 0, traceRx, traceRy, 0, 0, Math.PI);
-          targetCtx.strokeStyle = "rgba(103, 232, 249, " + (renderAlpha * 0.88).toFixed(2) + ")";
-          targetCtx.lineWidth = tier === 3 ? 1.35 : 1.0;
-          targetCtx.stroke();
-          targetCtx.restore();
+          if (tier >= 2) {
+            targetCtx.save();
+            targetCtx.translate(px0, py0);
+            targetCtx.rotate(orbPlane1);
+            targetCtx.beginPath();
+            targetCtx.ellipse(0, 0, traceRx, traceRy, 0, 0, Math.PI);
+            targetCtx.strokeStyle = "rgba(103, 232, 249, " + (renderAlpha * 0.88).toFixed(2) + ")";
+            targetCtx.lineWidth = tier === 3 ? 1.35 : 1.0;
+            targetCtx.stroke();
+            targetCtx.restore();
 
-          if (tier >= 2 || !isFastRenderMode) {
             targetCtx.save();
             targetCtx.translate(px0, py0);
             targetCtx.rotate(orbPlane2);
@@ -12774,7 +12764,7 @@ try { checkUrlHashRoutine(); } catch(e){}
           var dynRx = clDynR * 1.36;
           var dynRy = clDynR * 0.38;
 
-          if (tier >= 2 || !isFastRenderMode) {
+          if (tier >= 2) {
             targetCtx.save();
             targetCtx.translate(px0, py0);
             targetCtx.rotate(dynOrb1);
@@ -12805,24 +12795,24 @@ try { checkUrlHashRoutine(); } catch(e){}
             }
           }
 
-          targetCtx.save();
-          targetCtx.translate(px0, py0);
-          targetCtx.rotate(dynOrb1);
-          targetCtx.beginPath();
-          targetCtx.ellipse(0, 0, dynRx, dynRy, 0, 0, Math.PI);
-          targetCtx.strokeStyle = "rgba(253, 224, 71, " + (renderAlpha * 0.92).toFixed(2) + ")";
-          targetCtx.lineWidth = tier === 3 ? 1.65 : 1.25;
-          targetCtx.stroke();
-          var eU1 = (now * 0.0032 + i * 1.7) % (Math.PI * 2);
-          if (Math.sin(eU1) >= -0.15) {
+          if (tier >= 2) {
+            targetCtx.save();
+            targetCtx.translate(px0, py0);
+            targetCtx.rotate(dynOrb1);
             targetCtx.beginPath();
-            targetCtx.arc(Math.cos(eU1) * dynRx, Math.sin(eU1) * dynRy, tier === 3 ? 2.1 : 1.5, 0, Math.PI * 2);
-            targetCtx.fillStyle = "#fef08a";
-            targetCtx.fill();
-          }
-          targetCtx.restore();
+            targetCtx.ellipse(0, 0, dynRx, dynRy, 0, 0, Math.PI);
+            targetCtx.strokeStyle = "rgba(253, 224, 71, " + (renderAlpha * 0.92).toFixed(2) + ")";
+            targetCtx.lineWidth = tier === 3 ? 1.65 : 1.25;
+            targetCtx.stroke();
+            var eU1 = (now * 0.0032 + i * 1.7) % (Math.PI * 2);
+            if (Math.sin(eU1) >= -0.15) {
+              targetCtx.beginPath();
+              targetCtx.arc(Math.cos(eU1) * dynRx, Math.sin(eU1) * dynRy, tier === 3 ? 2.1 : 1.5, 0, Math.PI * 2);
+              targetCtx.fillStyle = "#fef08a";
+              targetCtx.fill();
+            }
+            targetCtx.restore();
 
-          if (tier >= 2 || !isFastRenderMode) {
             targetCtx.save();
             targetCtx.translate(px0, py0);
             targetCtx.rotate(dynOrb2);
@@ -14169,9 +14159,6 @@ try { checkUrlHashRoutine(); } catch(e){}
       if (isNewRecord) {
         bestTimesStore[currentGameVariant] = remTimeNum;
         try { localStorage.setItem("dra-quantum-best-times", JSON.stringify(bestTimesStore)); } catch (e) {}
-      }
-      if (medalObj.overcharge) {
-        document.body.setAttribute("data-quantum-overcharge", currentGameVariant);
       }
       if (statLabel1) statLabel1.textContent = isNewRecord ? "FINAL TIME (★ NEW BEST)" : ("FINAL TIME (BEST " + Math.max(remTimeNum, prevBest).toFixed(2) + "s)");
       if (preservedTimeEl) {
@@ -16260,7 +16247,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   <script>
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v98', { scope: './' }).catch(function() {});
+        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v99', { scope: './' }).catch(function() {});
       });
     }
   </script>
