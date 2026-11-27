@@ -9558,10 +9558,10 @@ try { checkUrlHashRoutine(); } catch(e){}
     var cursorAsteroidSprite = null;
     var initialized = false;
 
-    // AAA Photorealistic Texture-Mapped 16-Frame PBR Sphere Atlases (2560x160 = 16 x 160x160 frames, R_norm = 0.77)
+    // AAA Photorealistic Texture-Mapped 16-Frame PBR Sphere Atlases (3584x224 = 16 x 224x224 frames, R_norm = 0.79)
     var ATLAS_FRAMES = 16;
-    var ATLAS_CELL = 160;
-    var ATLAS_RNORM = 0.77;
+    var ATLAS_CELL = 224;
+    var ATLAS_RNORM = 0.79;
     var sphere3DAtlases = {
       meteor:        { img: null, loaded: false },
       "meteor-core": { img: null, loaded: false },
@@ -9572,14 +9572,6 @@ try { checkUrlHashRoutine(); } catch(e){}
       "helix-core":  { img: null, loaded: false },
       comet:         { img: null, loaded: false }
     };
-    var wake3DSprites = {
-      dynamo: { img: null, loaded: false },
-      helix:  { img: null, loaded: false },
-      meteor: { img: null, loaded: false },
-      comet:  { img: null, loaded: false },
-      orb:    { img: null, loaded: false },
-      molten: { img: null, loaded: false }
-    };
     if (typeof Image !== "undefined") {
       Object.keys(sphere3DAtlases).forEach(function(k) {
         var aImg = new Image();
@@ -9587,15 +9579,7 @@ try { checkUrlHashRoutine(); } catch(e){}
         aImg.onload = function() {
           sphere3DAtlases[k].loaded = !!(aImg.naturalWidth >= ATLAS_CELL * ATLAS_FRAMES);
         };
-        aImg.src = "assets/sphere-3d-" + k + ".webp?v=411";
-      });
-      Object.keys(wake3DSprites).forEach(function(k) {
-        var wImg = new Image();
-        wake3DSprites[k].img = wImg;
-        wImg.onload = function() {
-          wake3DSprites[k].loaded = !!(wImg.naturalWidth > 64);
-        };
-        wImg.src = "assets/wake-3d-" + k + ".webp?v=411";
+        aImg.src = "assets/sphere-3d-" + k + ".webp?v=412";
       });
     }
 
@@ -9632,48 +9616,8 @@ try { checkUrlHashRoutine(); } catch(e){}
       return true;
     }
 
-    function draw3DWake(targetCtx, wakeKey, px0, py0, heading, rightOffsetPx, widthPx, heightPx, alpha, nowMs, instPhase, waveAmpPx, isAdditive, spineX, spineY, spineK, fastSingleBlit) {
-      var entry = wake3DSprites[wakeKey];
-      if (!entry || !entry.loaded || !entry.img || widthPx < 4 || heightPx < 4) return false;
-      var img = entry.img;
-      targetCtx.save();
-      targetCtx.translate(px0, py0);
-      targetCtx.rotate(heading);
-      targetCtx.globalAlpha = alpha;
-      if (isAdditive) targetCtx.globalCompositeOperation = "lighter";
-
-      if (fastSingleBlit) {
-        targetCtx.drawImage(img, rightOffsetPx - widthPx, -heightPx * 0.5, widthPx, heightPx);
-      } else {
-        var iw = img.naturalWidth || img.width;
-        var ih = img.naturalHeight || img.height;
-        var slices = 12;
-        var sw = iw / slices;
-        var dw = widthPx / slices;
-        var phase = nowMs * 0.0048 + (instPhase || 0);
-        var cosH = Math.cos(heading), sinH = Math.sin(heading);
-        var maxBend = heightPx * 0.28;
-        for (var s = 0; s < slices; s++) {
-          var sx0 = Math.round(s * sw);
-          var sx1 = Math.round((s + 1) * sw);
-          var dx0 = Math.round(rightOffsetPx - widthPx + s * dw);
-          var dx1 = Math.round(rightOffsetPx - widthPx + (s + 1) * dw);
-          if (sx1 <= sx0 || dx1 <= dx0) continue;
-          var distNorm = 1.0 - (s / slices);
-          var bend = 0;
-          if (spineK >= 3 && spineX && spineY) {
-            var spIdx = Math.min(spineK - 1, Math.round(distNorm * (spineK - 1)));
-            var relX = spineX[spIdx] - px0;
-            var relY = spineY[spIdx] - py0;
-            var perp = -relX * sinH + relY * cosH;
-            bend = Math.max(-maxBend, Math.min(maxBend, perp * 0.45));
-          }
-          var wave = Math.sin(phase + s * 0.52) * (waveAmpPx || 0) * distNorm * distNorm;
-          targetCtx.drawImage(img, sx0, 0, sx1 - sx0, ih, dx0, -heightPx * 0.5 + bend + wave, dx1 - dx0, heightPx);
-        }
-      }
-      targetCtx.restore();
-      return true;
+    function draw3DWake() {
+      return false;
     }
 
     function drawOpticalFlare(tCtx, fx, fy, fRad, colorGlow) {
@@ -11191,8 +11135,8 @@ try { checkUrlHashRoutine(); } catch(e){}
       has3DAtlas: function(modeKey) {
         return !!(sphere3DAtlases[modeKey] && sphere3DAtlases[modeKey].loaded);
       },
-      has3DWake: function(wakeKey) {
-        return !!(wake3DSprites[wakeKey] && wake3DSprites[wakeKey].loaded);
+      has3DWake: function() {
+        return false;
       }
     };
   })();
@@ -11839,9 +11783,9 @@ try { checkUrlHashRoutine(); } catch(e){}
             }
 
             p.turnFlex = Math.sign(tanY || 1) * 0.65;
-            if (isHighSpeedCursor && p.isRadiant) {
-              p.trail.push({ x: p.x, y: p.y, alpha: p.isFront ? 0.85 : 0.65 });
-              if (p.trail.length > 3) p.trail.shift();
+            if (!isGameMode && gameGlowProgress < 0.05 && isHighSpeedCursor && p.isRadiant) {
+              p.trail.push({ x: p.x, y: p.y, alpha: p.isFront ? 0.60 : 0.45 });
+              if (p.trail.length > 2) p.trail.shift();
             }
           }
         } else {
@@ -11859,9 +11803,9 @@ try { checkUrlHashRoutine(); } catch(e){}
             // Subtle momentary flex specifically when banking around mouse shield
             p.turnFlex = Math.sign(tanY || 1) * 0.75;
 
-            if (isHighSpeedCursor && p.isRadiant) {
-              p.trail.push({ x: p.x, y: p.y, alpha: p.isFront ? 0.85 : 0.65 });
-              if (p.trail.length > 3) p.trail.shift();
+            if (!isGameMode && gameGlowProgress < 0.05 && isHighSpeedCursor && p.isRadiant) {
+              p.trail.push({ x: p.x, y: p.y, alpha: p.isFront ? 0.60 : 0.45 });
+              if (p.trail.length > 2) p.trail.shift();
             }
 
           } else if (dist < INFLUENCE_RADIUS) {
@@ -12065,15 +12009,17 @@ try { checkUrlHashRoutine(); } catch(e){}
 
       if (!p.isFront && p.isRadiant) radiantBackNodes.push(p);
 
-      // ── Render Kinetic Jet Trails ──
-      if (p.trail.length > 0) {
+      // ── Render Kinetic Jet Trails (Disabled in Game Mode for Pure 3D Sphere Focus) ──
+      if (isGameMode || gameGlowProgress >= 0.05) {
+        if (p.trail.length > 0) p.trail.length = 0;
+      } else if (p.trail.length > 0) {
         for (var tIdx = p.trail.length - 1; tIdx >= 0; tIdx--) {
           var tr = p.trail[tIdx];
-          tr.alpha *= 0.74;
+          tr.alpha *= 0.66;
           if (tr.alpha > 0.05) {
             targetCtx.beginPath();
-            targetCtx.arc(tr.x, tr.y, p.isFront ? 1.6 : 1.2, 0, Math.PI * 2);
-            targetCtx.fillStyle = "hsla(" + Math.round(p.hue) + ", 95%, 72%, " + (tr.alpha * p.fadeProgress).toFixed(2) + ")";
+            targetCtx.arc(tr.x, tr.y, p.isFront ? 1.4 : 1.0, 0, Math.PI * 2);
+            targetCtx.fillStyle = "hsla(" + Math.round(p.hue) + ", 95%, 72%, " + (tr.alpha * p.fadeProgress * 0.65).toFixed(2) + ")";
             targetCtx.fill();
           } else {
             p.trail[tIdx] = p.trail[p.trail.length - 1];
@@ -12099,95 +12045,58 @@ try { checkUrlHashRoutine(); } catch(e){}
       while (p.heading > Math.PI) p.heading -= Math.PI * 2;
       while (p.heading < -Math.PI) p.heading += Math.PI * 2;
 
-      // ── 1. Inverse Kinematics Spine Tracking: Compact, Short, Sphere-Dominant Tails Across All 6 Games ──
+      // ── 1. Inverse Kinematics Spine Tracking (Minimal Idle Micro-Fireflies Only; Game Mode Uses Zero Trails) ──
       var isComet = (gameParticleStyle === "comet");
       var isHelixOrb = (gameParticleStyle === "helixorb");
       var isMoltenCore = (gameParticleStyle === "moltencore");
       var isLuxuryVariant = (isComet || isHelixOrb || isMoltenCore);
       var isHelix = (gameParticleStyle === "helix" || isHelixOrb);
       var isMeteor = (gameParticleStyle === "meteor" || isMoltenCore);
-      // Compact spine joint count: especially short & clean for the 2 Helix games (5 joints max for Tier 2/3, 4 for Tier 1)
-      var targetSpineK = isHelix
-        ? ((p.lumiTier >= 2) ? 5 : 4)
-        : (isLuxuryVariant
-          ? ((p.lumiTier >= 2) ? 6 : 5)
-          : (isGameMode ? ((p.lumiTier >= 2) ? 6 : 5) : 4));
-      if (!p.spine || p.spine.length !== targetSpineK) {
-        var spc = p.segmentSpacing || 2.5;
-        p.spine = [];
-        for (var sj = 0; sj < targetSpineK; sj++) {
-          p.spine.push({ x: p.x - Math.cos(p.heading) * sj * spc, y: p.y - Math.sin(p.heading) * sj * spc });
-        }
-      }
-      p.spine[0].x = p.x;
-      p.spine[0].y = p.y;
+      var isCleanSphereGame = (isGameMode || gameGlowProgress > 0.05);
+      var headR = curSize * 0.54;
+      p.curSize = curSize;
+      p.currentAngle = p.heading;
 
-      // Speed-dependent wave oscillation: faster motion makes the intertwined ribbons undulate smoothly
-      var speedRatio = Math.max(0, (currentSpeed - p.baseSpeed) / (p.baseSpeed * 2.2));
+      // ── FEATURE 1: RELATIVISTIC SPEED-DILATION (Micro Doppler Shift on Acceleration) ──
+      var currentSpeedSafe = Math.hypot(p.vx, p.vy);
+      var speedRatio = Math.max(0, (currentSpeedSafe - p.baseSpeed) / (p.baseSpeed * 2.2));
       p.wavePhase = (p.wavePhase || 0) + (0.16 + speedRatio * 0.20);
-
-      // Significantly reduced tail length across all 6 variants (especially compact on the 2 Helix games)
-      var tailGrowth = 1.0 + (mult - 1.0) * gameGlowProgress * (isHelix ? 0.22 : (isLuxuryVariant ? 0.30 : 0.25));
-      var speedStretch = isGameMode ? Math.min(0.18, speedRatio * 0.14) : 0;
-      var curSpacing = (p.segmentSpacing || 2.6) * (isHelix ? 0.78 : (isLuxuryVariant ? 0.98 : (isGameMode ? 0.85 : 0.72))) * tailGrowth * (1.0 + speedStretch);
-      var K = p.spine.length;
       var cosH = Math.cos(p.heading);
       var sinH = Math.sin(p.heading);
-      for (var sj = 1; sj < K; sj++) {
-        var leader = p.spine[sj - 1];
-        var follower = p.spine[sj];
-        var sdx = follower.x - leader.x;
-        var sdy = follower.y - leader.y;
-        var sDist = Math.hypot(sdx, sdy);
-        if (sDist > 0.001) {
-          var invD = curSpacing / sDist;
-          follower.x = leader.x + sdx * invD;
-          follower.y = leader.y + sdy * invD;
-        } else {
-          follower.x = leader.x - cosH * curSpacing;
-          follower.y = leader.y - sinH * curSpacing;
+      var K = 0;
+
+      if (!isCleanSphereGame) {
+        var targetSpineK = 3;
+        if (!p.spine || p.spine.length !== targetSpineK) {
+          var spc = (p.segmentSpacing || 2.5) * 0.32;
+          p.spine = [];
+          for (var sj = 0; sj < targetSpineK; sj++) {
+            p.spine.push({ x: p.x - cosH * sj * spc, y: p.y - sinH * sj * spc });
+          }
         }
-      }
-
-      // Compute display points & dual interwoven ribbon coordinates into pre-allocated typed arrays (zero per-frame heap allocations)
-      _ptsX[0] = p.spine[0].x;
-      _ptsY[0] = p.spine[0].y;
-      _ribbon1X[0] = p.spine[0].x;
-      _ribbon1Y[0] = p.spine[0].y;
-      _ribbon2X[0] = p.spine[0].x;
-      _ribbon2Y[0] = p.spine[0].y;
-
-      var invK = 1 / K;
-      if (isHelix) {
-        // Compact, Sleek Double-Strand Ribbon for Quantum Helix & Helix Crystal Orb (Sphere-Dominant)
-        var waveAmp = curSize * (isHelixOrb ? 0.24 : 0.18);
-        var twistRate = isHelixOrb ? 1.75 : 1.85;
-
+        p.spine[0].x = p.x;
+        p.spine[0].y = p.y;
+        var curSpacing = (p.segmentSpacing || 2.6) * 0.32;
+        K = p.spine.length;
         for (var sj = 1; sj < K; sj++) {
-          var pPrev = p.spine[sj - 1];
-          var pCurr = p.spine[sj];
-          var segDx = pPrev.x - pCurr.x;
-          var segDy = pPrev.y - pCurr.y;
-          var segLen = Math.hypot(segDx, segDy) || 1;
-          var perpX = -segDy / segLen;
-          var perpY = segDx / segLen;
-
-          var env = Math.pow(1 - (sj * invK), 0.90) * Math.sin(Math.min(1, sj * 0.6) * Math.PI * 0.5);
-          var wave1 = Math.sin(p.wavePhase - sj * twistRate) * waveAmp * env;
-          var wave2 = -wave1;
-
-          _ptsX[sj] = pCurr.x;
-          _ptsY[sj] = pCurr.y;
-
-          _ribbon1X[sj] = pCurr.x + perpX * wave1;
-          _ribbon1Y[sj] = pCurr.y + perpY * wave1;
-
-          _ribbon2X[sj] = pCurr.x + perpX * wave2;
-          _ribbon2Y[sj] = pCurr.y + perpY * wave2;
+          var leader = p.spine[sj - 1];
+          var follower = p.spine[sj];
+          var sdx = follower.x - leader.x;
+          var sdy = follower.y - leader.y;
+          var sDist = Math.hypot(sdx, sdy);
+          if (sDist > 0.001) {
+            var invD = curSpacing / sDist;
+            follower.x = leader.x + sdx * invD;
+            follower.y = leader.y + sdy * invD;
+          } else {
+            follower.x = leader.x - cosH * curSpacing;
+            follower.y = leader.y - sinH * curSpacing;
+          }
         }
-      } else {
-        // Classic streamlined single-contour quantum wavepacket (Pure, sleek wave)
-        var waveAmp = curSize * (isMoltenCore ? 0.24 : 0.20);
+        _ptsX[0] = p.spine[0].x;
+        _ptsY[0] = p.spine[0].y;
+        var invK = 1 / K;
+        var waveAmp = curSize * 0.14;
         for (var sj = 1; sj < K; sj++) {
           var pPrev = p.spine[sj - 1];
           var pCurr = p.spine[sj];
@@ -12198,15 +12107,12 @@ try { checkUrlHashRoutine(); } catch(e){}
           _ptsX[sj] = pCurr.x - (segDy / segLen) * wave;
           _ptsY[sj] = pCurr.y + (segDx / segLen) * wave;
         }
+      } else {
+        _ptsX[0] = p.x;
+        _ptsY[0] = p.y;
       }
 
-      var headR = curSize * 0.54;
-      p.curSize = curSize;
-      p.currentAngle = p.heading;
-
-      // ── FEATURE 1: RELATIVISTIC SPEED-DILATION (Micro Doppler Shift on Acceleration) ──
       var dopplerBoost = Math.min(1.0, speedRatio * 0.65 + beatKickImpulse * 0.45);
-
       var currentAlpha = Math.min(0.98, p.alpha * (0.82 + Math.sin(p.pulsePhase) * 0.18)) * p.fadeProgress * readingClearance;
       if (isAudioHot) {
         currentAlpha = Math.min(1.0, currentAlpha + liveBass * 0.25);
@@ -12229,317 +12135,71 @@ try { checkUrlHashRoutine(); } catch(e){}
         fHeadHue = Math.round(48 * lockRatio + fHeadHue * (1 - lockRatio));
         midHue = Math.round(195 * lockRatio + midHue * (1 - lockRatio));
       }
-      var renderAlpha = Math.min(0.95, currentAlpha * (1.0 + gameAlphaBoost) + (gameGlowProgress * 0.16));
+      var renderAlpha = Math.min(0.96, currentAlpha * (1.0 + gameAlphaBoost) + (gameGlowProgress * 0.16));
 
-      // ── 2. Render Seamless Smooth Tapered Quantum Wavepacket Body & Intertwined Ribbons ──
-      if (K >= 2) {
-        var invKm1 = 1 / (K - 1);
-        if (!isHelix) {
-          var widScale = isMoltenCore ? 1.25 : (isComet ? 0.95 : 0.82);
-          for (var sj = 0; sj < K; sj++) {
-            var tNorm = 1 - sj * invKm1; // 1.0 at head (sj=0), 0.0 at tail tip (sj=K-1)
-            var taper = tNorm * (0.15 + 0.85 * tNorm);
-            var rj = Math.max(0.35, headR * widScale * (0.08 + 0.92 * taper));
-            if (isMoltenCore && sj > 0 && sj < K - 1) {
-              // Billowing turbulent fire contour modulation
-              rj *= 1.0 + 0.20 * Math.sin(now * 0.018 - sj * 1.4 + i * 1.7);
-            }
-            var dxT, dyT;
-            if (sj === 0) {
-              dxT = _ptsX[0] - _ptsX[1];
-              dyT = _ptsY[0] - _ptsY[1];
-            } else if (sj === K - 1) {
-              dxT = _ptsX[K - 2] - _ptsX[K - 1];
-              dyT = _ptsY[K - 2] - _ptsY[K - 1];
-            } else {
-              dxT = _ptsX[sj - 1] - _ptsX[sj + 1];
-              dyT = _ptsY[sj - 1] - _ptsY[sj + 1];
-            }
-            var dLen = Math.hypot(dxT, dyT) || 1;
-            var nx = (-dyT / dLen) * rj;
-            var ny = (dxT / dLen) * rj;
-            _leftX[sj] = _ptsX[sj] + nx;
-            _leftY[sj] = _ptsY[sj] + ny;
-            _rightX[sj] = _ptsX[sj] - nx;
-            _rightY[sj] = _ptsY[sj] - ny;
-          }
-        }
-
-        var tailTipX = _ptsX[K - 1];
-        var tailTipY = _ptsY[K - 1];
-        var headPtX = _ptsX[0];
-        var headPtY = _ptsY[0];
-
-        var activeWakeKey = isMoltenCore ? "molten" : (isMeteor ? "meteor" : (isComet ? "comet" : (isHelixOrb ? "orb" : (isHelix ? "helix" : "dynamo"))));
-        var visR = headR * (tier === 3 ? 2.35 : (tier === 2 ? 1.88 : 1.48));
-        var instPhaseWake = (p.pulsePhase || 0) + i * 1.37;
-        var wakeLenScale = (tier === 3 ? 1.0 : (tier === 2 ? 0.88 : 0.72)) * (0.92 + Math.min(0.24, speedRatio * 0.18));
-        var usePhotorealWake = (gameGlowProgress > 0.06) && MeteorVFXEngine.has3DWake && MeteorVFXEngine.has3DWake(activeWakeKey);
-
-        if (usePhotorealWake) {
-          var wakeAlpha = renderAlpha * Math.min(1.0, gameGlowProgress * 1.15) * (tier === 1 ? 0.82 : 0.96);
-          var fastBlit = (tier === 1 || isFastRenderMode);
-          if (activeWakeKey === "meteor") {
-            MeteorVFXEngine.draw3DWake(targetCtx, "meteor", headPtX, headPtY, p.heading, visR * 0.82, visR * 6.8 * wakeLenScale, visR * 3.05, wakeAlpha, now, instPhaseWake, visR * 0.07, false, _ptsX, _ptsY, K, fastBlit);
-          } else if (activeWakeKey === "molten") {
-            // Exact locked bow-shock aspect ratio (820x320 anchored at +2.02*r -> width=8.91*r, height=3.48*r) so crescent wraps front sphere cleanly
-            MeteorVFXEngine.draw3DWake(targetCtx, "molten", headPtX, headPtY, p.heading, visR * 2.02, visR * 8.91, visR * 3.48, wakeAlpha, now, instPhaseWake, visR * 0.05, true, _ptsX, _ptsY, K, fastBlit);
-          } else if (activeWakeKey === "dynamo") {
-            MeteorVFXEngine.draw3DWake(targetCtx, "dynamo", headPtX, headPtY, p.heading, -visR * 0.62, visR * 5.8 * wakeLenScale, visR * 2.65, wakeAlpha, now, instPhaseWake, visR * 0.08, true, _ptsX, _ptsY, K, fastBlit);
-          } else if (activeWakeKey === "helix") {
-            MeteorVFXEngine.draw3DWake(targetCtx, "helix", headPtX, headPtY, p.heading, -visR * 0.62, visR * 5.8 * wakeLenScale, visR * 2.35, wakeAlpha, now, instPhaseWake, visR * 0.09, true, _ptsX, _ptsY, K, fastBlit);
-          } else if (activeWakeKey === "comet") {
-            MeteorVFXEngine.draw3DWake(targetCtx, "comet", headPtX, headPtY, p.heading, -visR * 0.38, visR * 6.0 * wakeLenScale, visR * 2.75, wakeAlpha, now, instPhaseWake, visR * 0.07, true, _ptsX, _ptsY, K, fastBlit);
-          } else if (activeWakeKey === "orb") {
-            MeteorVFXEngine.draw3DWake(targetCtx, "orb", headPtX, headPtY, p.heading, -visR * 0.22, visR * 6.0 * wakeLenScale, visR * 2.65, wakeAlpha, now, instPhaseWake, visR * 0.07, true, _ptsX, _ptsY, K, fastBlit);
-          }
-        } else if (isMeteor) {
-          // ── METEOR (REF 5 ORBITAL METEOR) & MOLTEN CORE METEOR (REF 2 MOLTEN METEOR) WAKE ──
-          var smokeSprite = MeteorVFXEngine.getSmoke();
-          if (smokeSprite && K >= 4 && (isMoltenCore || currentSpeed > p.baseSpeed * 1.15)) {
-            var puffR = headR * (isMoltenCore ? 1.55 : 1.15) * (tier === 3 ? 1.0 : (tier === 2 ? 0.84 : 0.72));
-            var smokeAlpha = renderAlpha * (isMoltenCore ? 0.34 : 0.18) * (tier === 3 ? 1.0 : (tier === 2 ? 0.75 : 0.55));
-            targetCtx.globalAlpha = smokeAlpha;
-            targetCtx.drawImage(smokeSprite, _ptsX[K - 1] - puffR, _ptsY[K - 1] - puffR, puffR * 2, puffR * 2);
-            if (isMoltenCore && K >= 6) {
-              targetCtx.drawImage(smokeSprite, _ptsX[K - 3] - puffR * 0.82, _ptsY[K - 3] - puffR * 0.82, puffR * 1.64, puffR * 1.64);
-            }
-            targetCtx.globalAlpha = 1.0;
-          }
-
-          if (isMoltenCore) {
-            if (tier >= 2) {
-              // Cinema-grade 3-Layer Supernova Thermal Wake (Tier II & Tier III spheres)
-              targetCtx.save();
-              targetCtx.globalCompositeOperation = "lighter";
-              targetCtx.lineCap = "round";
-              targetCtx.lineJoin = "round";
-
-              var wakeReach = Math.min(1.0, 0.50 + speedRatio * 0.85);
-              var minStreamSpan = Math.max(curSpacing * (K - 1), headR * (tier === 3 ? 3.8 : 2.9));
-              // Blend physical spine with guaranteed backward volumetric plume vector so slow drifts still look fierce
-              var mwx = [], mwy = [];
-              for (var sj = 0; sj < K; sj++) {
-                var frac = sj * invKm1;
-                var plx = _ptsX[0] - cosH * (frac * minStreamSpan);
-                var ply = _ptsY[0] - sinH * (frac * minStreamSpan);
-                mwx.push(_ptsX[sj] * 0.48 + plx * 0.52);
-                mwy.push(_ptsY[sj] * 0.48 + ply * 0.52);
-              }
-
-              // Layer A: Broad deep-crimson supernova plasma envelope
-              targetCtx.beginPath();
-              targetCtx.moveTo(mwx[0], mwy[0]);
-              for (var sj = 1; sj < K; sj++) {
-                var swayA = Math.sin(now * 0.011 - sj * 0.85 + i * 1.3) * (headR * 0.34 * (sj * invKm1));
-                targetCtx.lineTo(mwx[sj] + (-sinH) * swayA, mwy[sj] + cosH * swayA);
-              }
-              targetCtx.strokeStyle = "rgba(220, 38, 38, " + (renderAlpha * 0.36 * wakeReach).toFixed(2) + ")";
-              targetCtx.lineWidth = Math.max(2.6, headR * 1.55);
-              targetCtx.stroke();
-
-              // Layer B: Helical solar-orange plasma ribbon
-              targetCtx.beginPath();
-              targetCtx.moveTo(mwx[0], mwy[0]);
-              for (var sj = 1; sj < K; sj++) {
-                var swayB = Math.sin(now * 0.016 - sj * 1.25 + i * 2.1) * (headR * 0.52 * (sj * invKm1));
-                targetCtx.lineTo(mwx[sj] + (-sinH) * swayB, mwy[sj] + cosH * swayB);
-              }
-              targetCtx.strokeStyle = "rgba(249, 115, 22, " + (renderAlpha * 0.68 * wakeReach).toFixed(2) + ")";
-              targetCtx.lineWidth = Math.max(1.5, headR * 0.82);
-              targetCtx.stroke();
-
-              // Layer C: Incandescent white-gold core ignition filament
-              var coreLen = Math.max(3, Math.floor(K * 0.65));
-              targetCtx.beginPath();
-              targetCtx.moveTo(mwx[0], mwy[0]);
-              for (var sj = 1; sj < coreLen; sj++) {
-                var swayC = Math.cos(now * 0.019 - sj * 1.35 + i) * (headR * 0.22 * (sj / coreLen));
-                targetCtx.lineTo(mwx[sj] + (-sinH) * swayC, mwy[sj] + cosH * swayC);
-              }
-              targetCtx.strokeStyle = "rgba(254, 240, 138, " + (renderAlpha * 0.82 * wakeReach).toFixed(2) + ")";
-              targetCtx.lineWidth = Math.max(0.9, headR * 0.34);
-              targetCtx.stroke();
-
-              // Volumetric ignition gas glow right behind trailing limb
-              var fpSpr = MeteorVFXEngine.getFlamePuff ? MeteorVFXEngine.getFlamePuff() : null;
-              if (fpSpr && K >= 3) {
-                var fPR = headR * 1.25 * (tier === 3 ? 1.15 : 0.92);
-                targetCtx.globalAlpha = renderAlpha * 0.34 * wakeReach;
-                targetCtx.drawImage(fpSpr, mwx[1] - fPR, mwy[1] - fPR, fPR * 2, fPR * 2);
-              }
-              targetCtx.restore();
-
-              // Cooling solar sparklets peeling cleanly along the slipstream
-              targetCtx.save();
-              for (var pe = 1; pe < Math.min(K, 6); pe++) {
-                var coolFrac = pe / Math.min(K, 6);
-                var peOff = Math.sin(now * 0.016 + pe * 2.5 + i * 1.7) * (headR * 0.92 * coolFrac);
-                var pex = mwx[pe] + (-sinH) * peOff;
-                var pey = mwy[pe] + cosH * peOff;
-                targetCtx.beginPath();
-                targetCtx.arc(pex, pey, Math.max(0.7, (1.0 - coolFrac * 0.5) * 1.45), 0, Math.PI * 2);
-                targetCtx.fillStyle = (coolFrac < 0.45)
-                  ? ("rgba(254, 215, 170, " + (renderAlpha * (1 - coolFrac) * 0.85).toFixed(2) + ")")
-                  : ("rgba(234, 88, 12, " + (renderAlpha * (1 - coolFrac) * 0.58).toFixed(2) + ")");
-                targetCtx.fill();
-              }
-              targetCtx.restore();
-            } else {
-              // Tier I Molten Micro-Spark: Sleek razor-thin incandescent golden streak (no brown cone)
-              var m1Alpha = renderAlpha * Math.min(0.60, 0.22 + speedRatio * 0.42);
-              var m1Len = Math.max(curSpacing * (K - 1), headR * 2.2);
-              targetCtx.save();
-              targetCtx.globalCompositeOperation = "lighter";
-              targetCtx.lineCap = "round";
-              targetCtx.beginPath();
-              targetCtx.moveTo(_ptsX[0], _ptsY[0]);
-              targetCtx.lineTo(_ptsX[0] - cosH * m1Len, _ptsY[0] - sinH * m1Len);
-              targetCtx.strokeStyle = "rgba(251, 146, 60, " + m1Alpha.toFixed(2) + ")";
-              targetCtx.lineWidth = Math.max(0.85, headR * 0.42);
-              targetCtx.stroke();
-              targetCtx.restore();
-            }
-          } else {
-            // Meteor (Orbital Caldera): Delicate golden-ember & dark silicate trailing stream
-            var orbWakeAlpha = renderAlpha * Math.min(0.36, 0.10 + speedRatio * 0.28);
-            targetCtx.lineCap = "round";
-            targetCtx.strokeStyle = "rgba(234, 88, 12, " + orbWakeAlpha.toFixed(2) + ")";
-            targetCtx.lineWidth = Math.max(1.0, headR * 0.28);
-            targetCtx.beginPath();
-            targetCtx.moveTo(_ptsX[0], _ptsY[0]);
-            for (var sj = 1; sj < K; sj++) {
-              targetCtx.lineTo(_ptsX[sj], _ptsY[sj]);
-            }
-            targetCtx.stroke();
-          }
-
-        } else if (isHelix) {
-          // ── REF 6 (PRISM HELIX) & REF 3 (SPIRAL HELIX): RESTRAINED MOVEMENT-DRIVEN REFRACTIVE SLIPSTREAM WAKE ──
-          var wakeVis = Math.min(1.0, 0.32 + speedRatio * 0.85);
-          var strandWidth = Math.max(0.85, headR * (isHelixOrb ? 0.24 : 0.20) * (tier === 3 ? 1.0 : (tier === 2 ? 0.80 : 0.62)));
-
-          targetCtx.lineCap = "round";
-          targetCtx.lineJoin = "round";
-          targetCtx.strokeStyle = "rgba(34, 211, 238, " + (renderAlpha * 0.55 * wakeVis).toFixed(2) + ")";
-          targetCtx.lineWidth = strandWidth;
-          targetCtx.beginPath();
-          targetCtx.moveTo(_ribbon1X[0], _ribbon1Y[0]);
-          for (var sj = 0; sj < K - 1; sj++) {
-            var mx1 = (_ribbon1X[sj] + _ribbon1X[sj + 1]) * 0.5;
-            var my1 = (_ribbon1Y[sj] + _ribbon1Y[sj + 1]) * 0.5;
-            targetCtx.quadraticCurveTo(_ribbon1X[sj], _ribbon1Y[sj], mx1, my1);
-          }
-          targetCtx.lineTo(tailTipX, tailTipY);
-          targetCtx.stroke();
-
-          targetCtx.strokeStyle = "rgba(192, 132, 252, " + (renderAlpha * 0.52 * wakeVis).toFixed(2) + ")";
-          targetCtx.lineWidth = strandWidth;
-          targetCtx.beginPath();
-          targetCtx.moveTo(_ribbon2X[0], _ribbon2Y[0]);
-          for (var sj = 0; sj < K - 1; sj++) {
-            var mx2 = (_ribbon2X[sj] + _ribbon2X[sj + 1]) * 0.5;
-            var my2 = (_ribbon2Y[sj] + _ribbon2Y[sj + 1]) * 0.5;
-            targetCtx.quadraticCurveTo(_ribbon2X[sj], _ribbon2Y[sj], mx2, my2);
-          }
-          targetCtx.lineTo(tailTipX, tailTipY);
-          targetCtx.stroke();
-
-        } else {
-          // ── REF 1 (BLUE DYNAMO) & REF 4 (VIOLET PLASMA COMET): SHORT MOVEMENT-DRIVEN IONIZED WAKE ──
-          var ionWakeScale = isComet ? Math.min(1.0, 0.25 + speedRatio * 0.95) : Math.min(1.0, 0.35 + speedRatio * 0.85);
-          if (tier >= 2 && !isFastRenderMode) {
-            var bodyGrad = targetCtx.createLinearGradient(tailTipX, tailTipY, headPtX, headPtY);
-            if (isComet) {
-              bodyGrad.addColorStop(0.0, "rgba(30, 10, 60, 0.0)");
-              bodyGrad.addColorStop(0.50, "rgba(109, 40, 217, " + (renderAlpha * 0.24 * ionWakeScale).toFixed(2) + ")");
-              bodyGrad.addColorStop(1.0, "rgba(168, 85, 247, " + (renderAlpha * 0.48 * ionWakeScale).toFixed(2) + ")");
-            } else {
-              bodyGrad.addColorStop(0.0, "rgba(12, 74, 110, 0.0)");
-              bodyGrad.addColorStop(0.50, "rgba(2, 132, 199, " + (renderAlpha * 0.26 * ionWakeScale).toFixed(2) + ")");
-              bodyGrad.addColorStop(1.0, "rgba(56, 189, 248, " + (renderAlpha * 0.50 * ionWakeScale).toFixed(2) + ")");
-            }
-            targetCtx.fillStyle = bodyGrad;
-          } else {
-            targetCtx.fillStyle = isComet
-              ? ("rgba(124, 58, 237, " + (renderAlpha * 0.26 * ionWakeScale).toFixed(2) + ")")
-              : ("rgba(2, 132, 199, " + (renderAlpha * 0.28 * ionWakeScale).toFixed(2) + ")");
-          }
-
-          targetCtx.beginPath();
-          targetCtx.moveTo(_leftX[0], _leftY[0]);
-          for (var sj = 0; sj < K - 1; sj++) {
-            var mxL = (_leftX[sj] + _leftX[sj + 1]) * 0.5;
-            var myL = (_leftY[sj] + _leftY[sj + 1]) * 0.5;
-            targetCtx.quadraticCurveTo(_leftX[sj], _leftY[sj], mxL, myL);
-          }
-          targetCtx.lineTo(tailTipX, tailTipY);
-          targetCtx.lineTo(_rightX[K - 1], _rightY[K - 1]);
-          for (var sj = K - 1; sj > 0; sj--) {
-            var mxR = (_rightX[sj] + _rightX[sj - 1]) * 0.5;
-            var myR = (_rightY[sj] + _rightY[sj - 1]) * 0.5;
-            targetCtx.quadraticCurveTo(_rightX[sj], _rightY[sj], mxR, myR);
-          }
-          targetCtx.lineTo(_rightX[0], _rightY[0]);
-          targetCtx.closePath();
-          targetCtx.fill();
-
-          // Short Crackling Corona Discharge Filament in Wake (Extinguishes and branches naturally)
-          if (K >= 3 && (tier >= 2 || (i % 2 === 0))) {
-            var eTick = ((now * 0.032 + i * 0.41) | 0);
-            var eLife = Math.sin(now * 0.012 + i * 1.9);
-            if (eLife > -0.45) {
-              var eAlpha = renderAlpha * (tier === 3 ? 0.85 : (tier === 2 ? 0.72 : 0.55)) * ionWakeScale;
-              var arcAmp = Math.max(1.5, headR * 0.55);
-              targetCtx.lineCap = "round";
-              targetCtx.lineJoin = "round";
-              targetCtx.beginPath();
-              targetCtx.moveTo(_ptsX[0], _ptsY[0]);
-              for (var ej = 1; ej < K; ej++) {
-                var ax = _ptsX[ej];
-                var ay = _ptsY[ej];
-                if (ej < K - 1) {
-                  var edx = _ptsX[ej - 1] - _ptsX[ej + 1];
-                  var edy = _ptsY[ej - 1] - _ptsY[ej + 1];
-                  var edLen = Math.hypot(edx, edy) || 1;
-                  var enx = -edy / edLen;
-                  var eny = edx / edLen;
-                  var eEnv = Math.sin((ej * invKm1) * Math.PI);
-                  var jWave = Math.sin(eTick * 3.71 + ej * 4.93 + i * 2.17);
-                  ax += enx * jWave * arcAmp * eEnv;
-                  ay += eny * jWave * arcAmp * eEnv;
-                }
-                targetCtx.lineTo(ax, ay);
-              }
-              targetCtx.strokeStyle = isComet
-                ? ("rgba(168, 85, 247, " + (eAlpha * 0.55).toFixed(2) + ")")
-                : ("rgba(56, 189, 248, " + (eAlpha * 0.55).toFixed(2) + ")");
-              targetCtx.lineWidth = Math.max(1.6, headR * 0.36);
-              targetCtx.stroke();
-
-              targetCtx.strokeStyle = isComet
-                ? ("rgba(243, 232, 255, " + (eAlpha * 0.90).toFixed(2) + ")")
-                : ("rgba(224, 242, 254, " + (eAlpha * 0.90).toFixed(2) + ")");
-              targetCtx.lineWidth = Math.max(0.7, headR * 0.14);
-              targetCtx.stroke();
-            }
-          }
-        }
-      }
-
-      // ── 3. Render Radiant Leading Quantum Head ──
       var px0 = _ptsX[0];
       var py0 = _ptsY[0];
+      var tierScale = isCleanSphereGame ? (tier === 3 ? 2.54 : (tier === 2 ? 2.04 : 1.54)) : (tier === 3 ? 2.35 : (tier === 2 ? 1.88 : 1.48));
+      var visR = headR * tierScale;
+
+      // ── 2. Trail Elimination: Zero Protruding Tails in Game Mode; Whisper Rim Cushion Only When Dashing Fast ──
+      if (isCleanSphereGame) {
+        if (tier >= 2 && speedRatio > 0.18 && !isFastRenderMode) {
+          var cushionR = visR * 1.05;
+          var cOffX = px0 - cosH * (visR * 0.24);
+          var cOffY = py0 - sinH * (visR * 0.24);
+          var cushionAlpha = renderAlpha * 0.16 * Math.min(1.0, speedRatio);
+          var cHue = isMeteor ? "rgba(251, 146, 60, " : (isComet ? "rgba(168, 85, 247, " : (isHelixOrb ? "rgba(217, 70, 239, " : "rgba(56, 189, 248, "));
+          targetCtx.save();
+          targetCtx.globalCompositeOperation = "lighter";
+          var cg = targetCtx.createRadialGradient(cOffX, cOffY, visR * 0.18, cOffX, cOffY, cushionR);
+          cg.addColorStop(0.0, cHue + cushionAlpha.toFixed(3) + ")");
+          cg.addColorStop(0.65, cHue + (cushionAlpha * 0.35).toFixed(3) + ")");
+          cg.addColorStop(1.0, cHue + "0)");
+          targetCtx.fillStyle = cg;
+          targetCtx.beginPath();
+          targetCtx.arc(cOffX, cOffY, cushionR, 0, Math.PI * 2);
+          targetCtx.fill();
+          targetCtx.restore();
+        }
+      } else if (K >= 2) {
+        // Subtle idle dashboard fireflies (reduced alpha and compact 3-joint wake)
+        var invKm1 = 1 / (K - 1);
+        for (var sj = 0; sj < K; sj++) {
+          var tNorm = 1 - sj * invKm1;
+          var taper = tNorm * (0.15 + 0.85 * tNorm);
+          var rj = Math.max(0.3, headR * 0.72 * (0.08 + 0.92 * taper));
+          var dxT = (sj === 0) ? (_ptsX[0] - _ptsX[1]) : ((sj === K - 1) ? (_ptsX[K - 2] - _ptsX[K - 1]) : (_ptsX[sj - 1] - _ptsX[sj + 1]));
+          var dyT = (sj === 0) ? (_ptsY[0] - _ptsY[1]) : ((sj === K - 1) ? (_ptsY[K - 2] - _ptsY[K - 1]) : (_ptsY[sj - 1] - _ptsY[sj + 1]));
+          var dLen = Math.hypot(dxT, dyT) || 1;
+          var nx = (-dyT / dLen) * rj;
+          var ny = (dxT / dLen) * rj;
+          _leftX[sj] = _ptsX[sj] + nx;
+          _leftY[sj] = _ptsY[sj] + ny;
+          _rightX[sj] = _ptsX[sj] - nx;
+          _rightY[sj] = _ptsY[sj] - ny;
+        }
+        targetCtx.fillStyle = "rgba(56, 189, 248, " + (renderAlpha * 0.14).toFixed(2) + ")";
+        targetCtx.beginPath();
+        targetCtx.moveTo(_leftX[0], _leftY[0]);
+        for (var sj = 1; sj < K; sj++) targetCtx.lineTo(_leftX[sj], _leftY[sj]);
+        for (var sj = K - 1; sj >= 0; sj--) targetCtx.lineTo(_rightX[sj], _rightY[sj]);
+        targetCtx.closePath();
+        targetCtx.fill();
+      }
+
+      // ── 3. Render Enhanced 224px Photorealistic 3D Spheres ──
+      var smoothCrossfade = (tier >= 2 && !isFastRenderMode);
 
       if (isMeteor) {
-        // ── PHOTOREALISTIC 3D METEOR (Cratered Basalt + Fire Engulfment, NO Saturn Rings!) & MOLTEN CORE ──
-        var rockR = headR * (tier === 3 ? 2.35 : (tier === 2 ? 1.88 : 1.48));
+        // ── ENHANCED 3D METEOR (Cratered Basalt + Incandescent Blackbody Fissures) & MOLTEN CORE ──
+        var rockR = visR;
         var instPhase = (p.pulsePhase || 0) + i * 1.37;
         var spinDir = (i & 1) ? 1 : -1;
         var atlas3dFrame = (((now * (isMoltenCore ? 0.0082 : 0.0092) * spinDir + instPhase * 2.5) % 16) + 16) % 16;
 
         if (isMoltenCore) {
-          var drawnM = MeteorVFXEngine.draw3DSphereFrame(targetCtx, "molten", atlas3dFrame, px0, py0, rockR, renderAlpha, false, p.heading);
+          var drawnM = MeteorVFXEngine.draw3DSphereFrame(targetCtx, "molten", atlas3dFrame, px0, py0, rockR, renderAlpha, smoothCrossfade, p.heading);
           if (!drawnM) {
             var astCanvasF = MeteorVFXEngine.getMoltenCoreSphere(((now * 0.0065 + i * 1.7) | 0) % 6);
             if (astCanvasF) {
@@ -12549,10 +12209,25 @@ try { checkUrlHashRoutine(); } catch(e){}
             }
           }
           if (tier >= 2) {
-            MeteorVFXEngine.drawHorizontalFlare(targetCtx, px0, py0, rockR * 1.25, "rgba(251, 191, 36, " + (renderAlpha * 0.88).toFixed(2) + ")", p.heading);
+            // Tight Front-Only Supersonic Ice-Cyan Mach Bow-Shock Crescent + Golden Horizontal Lens Flare (Zero Rear Tail!)
+            targetCtx.save();
+            targetCtx.globalCompositeOperation = "lighter";
+            var bowCx = px0 + cosH * (rockR * 0.14);
+            var bowCy = py0 + sinH * (rockR * 0.14);
+            targetCtx.strokeStyle = "rgba(125, 211, 252, " + (renderAlpha * 0.72).toFixed(2) + ")";
+            targetCtx.lineWidth = Math.max(1.4, rockR * 0.12);
+            targetCtx.lineCap = "round";
+            targetCtx.beginPath();
+            targetCtx.arc(bowCx, bowCy, rockR * 1.18, p.heading - 0.42 * Math.PI, p.heading + 0.42 * Math.PI);
+            targetCtx.stroke();
+            targetCtx.strokeStyle = "rgba(240, 249, 255, " + (renderAlpha * 0.85).toFixed(2) + ")";
+            targetCtx.lineWidth = Math.max(0.7, rockR * 0.045);
+            targetCtx.stroke();
+            targetCtx.restore();
+            MeteorVFXEngine.drawHorizontalFlare(targetCtx, px0, py0, rockR * 1.18, "rgba(251, 191, 36, " + (renderAlpha * 0.86).toFixed(2) + ")", p.heading);
           }
         } else {
-          var drawnAst = MeteorVFXEngine.draw3DSphereFrame(targetCtx, "meteor", atlas3dFrame, px0, py0, rockR, renderAlpha, false, p.heading);
+          var drawnAst = MeteorVFXEngine.draw3DSphereFrame(targetCtx, "meteor", atlas3dFrame, px0, py0, rockR, renderAlpha, smoothCrossfade, p.heading);
           if (!drawnAst) {
             var astFallback = MeteorVFXEngine.getAsteroid(i % 6);
             if (astFallback) {
@@ -12561,17 +12236,18 @@ try { checkUrlHashRoutine(); } catch(e){}
             }
           }
           if (tier >= 2) {
+            // Tight Concentric Leading-Nose Atmospheric Heat Sheen (No Rear Offset Tail!)
             targetCtx.save();
             targetCtx.globalCompositeOperation = "lighter";
-            var gxM = px0 - cosH * (rockR * 0.56);
-            var gyM = py0 - sinH * (rockR * 0.56);
-            var wrapM = targetCtx.createRadialGradient(gxM, gyM, rockR * 0.08, gxM, gyM, rockR * 1.40);
-            wrapM.addColorStop(0.0, "rgba(255, 250, 205, " + (renderAlpha * 0.55).toFixed(2) + ")");
-            wrapM.addColorStop(0.45, "rgba(251, 146, 60, " + (renderAlpha * 0.32).toFixed(2) + ")");
+            var gxM = px0 + cosH * (rockR * 0.12);
+            var gyM = py0 + sinH * (rockR * 0.12);
+            var wrapM = targetCtx.createRadialGradient(gxM, gyM, rockR * 0.15, gxM, gyM, rockR * 1.18);
+            wrapM.addColorStop(0.0, "rgba(255, 250, 205, " + (renderAlpha * 0.28).toFixed(2) + ")");
+            wrapM.addColorStop(0.55, "rgba(251, 146, 60, " + (renderAlpha * 0.22).toFixed(2) + ")");
             wrapM.addColorStop(1.0, "rgba(220, 38, 38, 0)");
             targetCtx.fillStyle = wrapM;
             targetCtx.beginPath();
-            targetCtx.arc(gxM, gyM, rockR * 1.40, 0, Math.PI * 2);
+            targetCtx.arc(gxM, gyM, rockR * 1.18, 0, Math.PI * 2);
             targetCtx.fill();
             targetCtx.restore();
           }
@@ -12580,37 +12256,17 @@ try { checkUrlHashRoutine(); } catch(e){}
         if (isTargetLocked) {
           var syncRatioM = (typeof contactDuration === "number") ? Math.min(1.0, contactDuration / 2.0) : 0.6;
           targetCtx.beginPath();
-          targetCtx.arc(px0, py0, rockR * (1.45 + syncRatioM * 0.45), 0, Math.PI * 2);
+          targetCtx.arc(px0, py0, rockR * (1.35 + syncRatioM * 0.35), 0, Math.PI * 2);
           targetCtx.strokeStyle = "rgba(255, 140, 0, " + (syncRatioM * 0.85).toFixed(2) + ")";
           targetCtx.lineWidth = 1.6;
           targetCtx.stroke();
         }
 
-        // Spawn subtle embers drifting behind basalt spheres
-        var emberSpawnRate = isFastRenderMode ? 0.10 : ((tier === 3) ? 0.24 : ((tier === 2) ? 0.14 : 0.04));
-        var emberMaxStardust = isFastRenderMode ? 2 : (tier === 3 ? 4 : (tier === 2 ? 2 : 1));
-        if (emberMaxStardust > 0 && Math.random() < emberSpawnRate) {
-          if (!p.stardust) p.stardust = [];
-          if (p.stardust.length < emberMaxStardust) {
-            var driftAng = p.heading + Math.PI + (Math.random() - 0.5) * 0.85;
-            var driftSpd = 0.30 + Math.random() * 0.50;
-            p.stardust.push({
-              x: px0 + (Math.random() - 0.5) * (rockR * 1.1),
-              y: py0 + (Math.random() - 0.5) * (rockR * 1.1),
-              vx: Math.cos(driftAng) * driftSpd,
-              vy: Math.sin(driftAng) * driftSpd,
-              alpha: 0.96,
-              r: 0.75 + Math.random() * (tier === 3 ? 1.25 : 0.9),
-              isEmber: true
-            });
-          }
-        }
-
       } else if (isComet) {
-        // ── PHOTOREALISTIC 3D VIOLET PLASMA COMET + AMBER/CYAN RIM + LEADING STARBURST ──
-        var cometR = headR * (tier === 3 ? 2.35 : (tier === 2 ? 1.88 : 1.48));
+        // ── ENHANCED 3D VIOLET PLASMA COMET + AMBER/CYAN RIM + LEADING STARBURST ──
+        var cometR = visR;
         var c3dFrame = (((now * 0.0105 + i * 1.9) % 16) + 16) % 16;
-        if (!MeteorVFXEngine.draw3DSphereFrame(targetCtx, "comet", c3dFrame, px0, py0, cometR, renderAlpha, false, p.heading)) {
+        if (!MeteorVFXEngine.draw3DSphereFrame(targetCtx, "comet", c3dFrame, px0, py0, cometR, renderAlpha, smoothCrossfade, p.heading)) {
           var cometFallback = MeteorVFXEngine.getCometSphere((((now * 0.011 + i * 1.3) | 0)) % 4);
           if (cometFallback) {
             var cDrawR = cometR * 1.22;
@@ -12619,24 +12275,24 @@ try { checkUrlHashRoutine(); } catch(e){}
           }
         }
         if (tier >= 2) {
-          var cStarX = px0 + cosH * (cometR * 0.76) - sinH * (-cometR * 0.46);
-          var cStarY = py0 + sinH * (cometR * 0.76) + cosH * (-cometR * 0.46);
-          MeteorVFXEngine.drawOpticalFlare(targetCtx, cStarX, cStarY, cometR * 0.34, "rgba(253, 224, 71, " + (renderAlpha * 0.90).toFixed(2) + ")");
+          var cStarX = px0 + cosH * (cometR * 0.72) - sinH * (-cometR * 0.44);
+          var cStarY = py0 + sinH * (cometR * 0.72) + cosH * (-cometR * 0.44);
+          MeteorVFXEngine.drawOpticalFlare(targetCtx, cStarX, cStarY, cometR * 0.32, "rgba(253, 224, 71, " + (renderAlpha * 0.90).toFixed(2) + ")");
         }
         if (isTargetLocked) {
           var syncRatioC = (typeof contactDuration === "number") ? Math.min(1.0, contactDuration / 2.0) : 0.6;
           targetCtx.beginPath();
-          targetCtx.arc(px0, py0, cometR * (1.35 + syncRatioC * 0.4), 0, Math.PI * 2);
+          targetCtx.arc(px0, py0, cometR * (1.32 + syncRatioC * 0.35), 0, Math.PI * 2);
           targetCtx.strokeStyle = "rgba(192, 132, 252, " + (syncRatioC * 0.85).toFixed(2) + ")";
           targetCtx.lineWidth = 1.6;
           targetCtx.stroke();
         }
 
       } else if (isHelixOrb) {
-        // ── PHOTOREALISTIC 3D CRYSTAL VIOLET ORB + UPPER-LEFT OPTICAL STAR GLINT ──
-        var orbR = headR * (tier === 3 ? 2.35 : (tier === 2 ? 1.88 : 1.48));
+        // ── ENHANCED 3D CRYSTAL VIOLET ORB + UPPER-LEFT OPTICAL STAR GLINT ──
+        var orbR = visR;
         var orb3dFrame = (((now * 0.010 + i * 1.7) % 16) + 16) % 16;
-        if (!MeteorVFXEngine.draw3DSphereFrame(targetCtx, "orb", orb3dFrame, px0, py0, orbR, renderAlpha, tier >= 2 && !isFastRenderMode, p.heading)) {
+        if (!MeteorVFXEngine.draw3DSphereFrame(targetCtx, "orb", orb3dFrame, px0, py0, orbR, renderAlpha, smoothCrossfade, p.heading)) {
           var orbFallback = MeteorVFXEngine.getHelixOrbSphere((((now * 0.011 + i * 0.9) | 0)) % 4);
           if (orbFallback) {
             var oDrawR = orbR * 1.22;
@@ -12645,25 +12301,25 @@ try { checkUrlHashRoutine(); } catch(e){}
           }
         }
         if (tier >= 2) {
-          var oStarX = px0 + cosH * (-orbR * 0.52) - sinH * (-orbR * 0.54);
-          var oStarY = py0 + sinH * (-orbR * 0.52) + cosH * (-orbR * 0.54);
+          var oStarX = px0 + cosH * (-orbR * 0.50) - sinH * (-orbR * 0.52);
+          var oStarY = py0 + sinH * (-orbR * 0.50) + cosH * (-orbR * 0.52);
           MeteorVFXEngine.drawOpticalFlare(targetCtx, oStarX, oStarY, orbR * 0.28, "rgba(232, 121, 249, " + (renderAlpha * 0.90).toFixed(2) + ")");
         }
         if (isTargetLocked) {
           var syncRatioHO = (typeof contactDuration === "number") ? Math.min(1.0, contactDuration / 2.0) : 0.6;
           targetCtx.beginPath();
-          targetCtx.arc(px0, py0, orbR * (1.35 + syncRatioHO * 0.4), 0, Math.PI * 2);
+          targetCtx.arc(px0, py0, orbR * (1.32 + syncRatioHO * 0.35), 0, Math.PI * 2);
           targetCtx.strokeStyle = "rgba(217, 70, 239, " + (syncRatioHO * 0.85).toFixed(2) + ")";
           targetCtx.lineWidth = 1.6;
           targetCtx.stroke();
         }
 
       } else {
-        // ── PHOTOREALISTIC 3D DYNAMO & HELIX SPHERES (Zero Synthetic Orbital Rings on Targets!) ──
+        // ── ENHANCED 3D DYNAMO & HELIX SPHERES (Embedded 3D DNA + Crystal Shell, Zero Tails) ──
         if (isHelix) {
-          var clHelixR = headR * (tier === 3 ? 2.35 : (tier === 2 ? 1.88 : 1.48));
+          var clHelixR = visR;
           var clH3dFrame = (((now * 0.010 + i * 1.5) % 16) + 16) % 16;
-          if (!MeteorVFXEngine.draw3DSphereFrame(targetCtx, "helix", clH3dFrame, px0, py0, clHelixR, renderAlpha, tier >= 2 && !isFastRenderMode, p.heading)) {
+          if (!MeteorVFXEngine.draw3DSphereFrame(targetCtx, "helix", clH3dFrame, px0, py0, clHelixR, renderAlpha, smoothCrossfade, p.heading)) {
             var clHDrawR = clHelixR * 1.20;
             var clHelixFb = MeteorVFXEngine.getClassicHelixSphere((((now * 0.009 + i * 1.1) | 0)) % 4);
             if (clHelixFb) {
@@ -12672,9 +12328,9 @@ try { checkUrlHashRoutine(); } catch(e){}
             }
           }
         } else {
-          var clDynR = headR * (tier === 3 ? 2.35 : (tier === 2 ? 1.88 : 1.48));
+          var clDynR = visR;
           var clD3dFrame = (((now * 0.011 + i * 1.8) % 16) + 16) % 16;
-          if (!MeteorVFXEngine.draw3DSphereFrame(targetCtx, "dynamo", clD3dFrame, px0, py0, clDynR, renderAlpha, false, p.heading)) {
+          if (!MeteorVFXEngine.draw3DSphereFrame(targetCtx, "dynamo", clD3dFrame, px0, py0, clDynR, renderAlpha, smoothCrossfade, p.heading)) {
             var clDDrawR = clDynR * 1.24;
             var clDynFb = MeteorVFXEngine.getDynamoSphere((((now * 0.013 + i * 1.4) | 0)) % 4);
             if (clDynFb) {
@@ -12686,52 +12342,36 @@ try { checkUrlHashRoutine(); } catch(e){}
         if (isTargetLocked) {
           var syncRatioCl = (typeof contactDuration === "number") ? Math.min(1.0, contactDuration / 2.0) : 0.6;
           targetCtx.beginPath();
-          targetCtx.arc(px0, py0, headR * (1.85 + syncRatioCl * 0.4), 0, Math.PI * 2);
+          targetCtx.arc(px0, py0, visR * (1.32 + syncRatioCl * 0.35), 0, Math.PI * 2);
           targetCtx.strokeStyle = "rgba(255, 215, 0, " + (syncRatioCl * 0.85).toFixed(2) + ")";
           targetCtx.lineWidth = 1.5;
           targetCtx.stroke();
         }
       }
 
-      // Render Micro-Stardust Quantum Sparks, Electric Wake Lights & Helix Nucleotide Spores (Ultra-Fast Hardware GPU Blit)
-      if (p.stardust && p.stardust.length > 0) {
+      // Disabled stardust breadcrumb trails in Game Mode so every 3D sphere renders cleanly
+      if (isCleanSphereGame) {
+        if (p.stardust && p.stardust.length > 0) p.stardust.length = 0;
+      } else if (p.stardust && p.stardust.length > 0) {
         var eCyan = MeteorVFXEngine.getElectricSpark();
         var eViolet = MeteorVFXEngine.getElectricVioletSpark();
         var hCyan = MeteorVFXEngine.getHelixSpark(false);
         var hMag = MeteorVFXEngine.getHelixSpark(true);
-        var mEmber = MeteorVFXEngine.getEmber();
 
         for (var si = p.stardust.length - 1; si >= 0; si--) {
           var spk = p.stardust[si];
           if (spk.vx) spk.x += spk.vx * dtScale;
           if (spk.vy) spk.y += spk.vy * dtScale;
-          spk.alpha *= (isGameMode ? 0.88 : 0.90);
-          if (spk.alpha > 0.04) {
+          spk.alpha *= 0.85;
+          if (spk.alpha > 0.05) {
             var sAlpha = spk.alpha * renderAlpha;
-            if (isMeteor && spk.isEmber) {
-              // Macro ember/cinder cooling curve: white-orange -> deep orange -> dark crimson charcoal as spk.alpha cools
-              targetCtx.globalAlpha = 1.0;
-              var coolR = Math.max(0.9, spk.r * (0.55 + spk.alpha * 0.55));
-              targetCtx.beginPath();
-              targetCtx.arc(spk.x, spk.y, coolR, 0, Math.PI * 2);
-              if (spk.alpha > 0.65) {
-                targetCtx.fillStyle = "rgba(251, 146, 60, " + sAlpha.toFixed(2) + ")";
-              } else if (spk.alpha > 0.32) {
-                targetCtx.fillStyle = "rgba(185, 28, 28, " + sAlpha.toFixed(2) + ")";
-              } else {
-                targetCtx.fillStyle = "rgba(68, 64, 60, " + (sAlpha * 1.4).toFixed(2) + ")";
-              }
-              targetCtx.fill();
-            } else {
-              targetCtx.globalAlpha = sAlpha > 1.0 ? 1.0 : sAlpha;
-              var sSprite = isHelix ? (spk.isStrandB ? hMag : hCyan) : (spk.isViolet ? eViolet : eCyan);
-              if (sSprite) {
-                var sDiameter = Math.max(2.4, spk.r * 2.5);
-                targetCtx.drawImage(sSprite, spk.x - sDiameter * 0.5, spk.y - sDiameter * 0.5, sDiameter, sDiameter);
-              }
+            targetCtx.globalAlpha = sAlpha > 1.0 ? 1.0 : sAlpha;
+            var sSprite = isHelix ? (spk.isStrandB ? hMag : hCyan) : (spk.isViolet ? eViolet : eCyan);
+            if (sSprite) {
+              var sDiameter = Math.max(2.0, spk.r * 2.1);
+              targetCtx.drawImage(sSprite, spk.x - sDiameter * 0.5, spk.y - sDiameter * 0.5, sDiameter, sDiameter);
             }
           } else {
-            // High-speed O(1) swap-and-pop: zero GC churn
             p.stardust[si] = p.stardust[p.stardust.length - 1];
             p.stardust.pop();
           }
@@ -15548,35 +15188,10 @@ try { checkUrlHashRoutine(); } catch(e){}
     var spinMult = 1.0 + exc * 2.4;
     var rCore = getPlayerCoreVisualRadius(progress);
 
-    // 1. World-Space Fluid Quadratic Slipstream Ribbon from cursorTrail
-    if (cursorTrail.length > 2) {
-      ctx.save();
-      ctx.lineCap = "round";
-      ctx.lineJoin = "round";
-      var wMax = Math.min(cursorTrail.length, 9);
-      ctx.beginPath();
-      ctx.moveTo(cx, cy);
-      for (var wi = 1; wi < wMax - 1; wi++) {
-        var wp = cursorTrail[wi];
-        var wpNext = cursorTrail[wi + 1];
-        var xm = (wp.x + wpNext.x) * 0.5;
-        var ym = (wp.y + wpNext.y) * 0.5;
-        ctx.quadraticCurveTo(wp.x, wp.y, xm, ym);
-      }
-      ctx.lineTo(cursorTrail[wMax - 1].x, cursorTrail[wMax - 1].y);
-      ctx.strokeStyle = cfg.trailGlow;
-      ctx.lineWidth = 5.4;
-      ctx.stroke();
-      ctx.strokeStyle = cfg.trailCore;
-      ctx.lineWidth = 1.45;
-      ctx.stroke();
-      ctx.restore();
-    }
-
     ctx.save();
     ctx.translate(cx, cy);
 
-    // 2. Outer Celestial Aura Bloom
+    // 1. Outer Celestial Aura Bloom
     var auraR = rCore * (1.82 + exc * 0.35);
     var auraGrad = ctx.createRadialGradient(0, 0, rCore * 0.50, 0, 0, auraR);
     auraGrad.addColorStop(0.0, cfg.aura);
@@ -15587,7 +15202,7 @@ try { checkUrlHashRoutine(); } catch(e){}
     ctx.arc(0, 0, auraR, 0, Math.PI * 2);
     ctx.fill();
 
-    // 3 Symmetric Intersecting Bohr Atomic Orbits (0 deg, 60 deg, 120 deg) with gentle precession
+    // 2. Symmetric Intersecting Bohr Atomic Orbits (0 deg, 60 deg, 120 deg) with gentle precession
     var bohrRx = rCore * 1.66;
     var bohrRy = rCore * 0.55;
     var baseRot = now * 0.00024 * spinMult;
@@ -15638,27 +15253,38 @@ try { checkUrlHashRoutine(); } catch(e){}
       bgGrad.addColorStop(1.0, "rgba(3, 6, 18, 0.99)");
       ctx.fillStyle = bgGrad;
       ctx.beginPath();
-      ctx.arc(0, 0, rCore * 0.97, 0, Math.PI * 2);
+      ctx.arc(0, 0, rCore * 1.04, 0, Math.PI * 2);
       ctx.fill();
     }
 
-    // 5. PASS 2: Photorealistic Texture-Mapped 3D Hero Sphere
+    // 5. PASS 2: Enhanced 224px Photorealistic Texture-Mapped 3D Hero Sphere
     var heroFrame = (now * (cfg.spinRate || 0.0085) * (1.0 + exc * 0.85)) % 16;
-    var useSmoothCrossfade = (cfg.atlasKey !== "molten" && cfg.atlasKey !== "meteor-core");
     var drew3D = (window.MeteorVFXEngine && typeof window.MeteorVFXEngine.draw3DSphereFrame === "function")
-      ? window.MeteorVFXEngine.draw3DSphereFrame(ctx, cfg.atlasKey, heroFrame, 0, 0, rCore * 1.05, 1.0, useSmoothCrossfade)
+      ? window.MeteorVFXEngine.draw3DSphereFrame(ctx, cfg.atlasKey, heroFrame, 0, 0, rCore * 1.12, 1.0, true)
       : false;
     if (!drew3D) {
-      var fbGrad = ctx.createRadialGradient(-rCore * 0.32, -rCore * 0.32, 1, 0, 0, rCore * 1.05);
+      var fbGrad = ctx.createRadialGradient(-rCore * 0.32, -rCore * 0.32, 1, 0, 0, rCore * 1.12);
       fbGrad.addColorStop(0.0, "#ffffff");
       fbGrad.addColorStop(0.32, cfg.sentinelColor);
       fbGrad.addColorStop(0.85, cfg.lockColor);
       fbGrad.addColorStop(1.0, "#090d1e");
       ctx.fillStyle = fbGrad;
       ctx.beginPath();
-      ctx.arc(0, 0, rCore * 1.05, 0, Math.PI * 2);
+      ctx.arc(0, 0, rCore * 1.12, 0, Math.PI * 2);
       ctx.fill();
     }
+
+    // Crisp 3D Crystal Optics Rim Gleam
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+    ctx.strokeStyle = "#e0f2fe";
+    ctx.globalAlpha = 0.52;
+    ctx.lineWidth = 1.15;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.arc(0, 0, rCore * 1.08, -0.85 * Math.PI, -0.15 * Math.PI);
+    ctx.stroke();
+    ctx.restore();
 
     // 6. PASS 3 (IN FRONT OF 3D SPHERE): Foreground Half of 3-Ring Bohr Orbits & Optical Star-Flare Nodes
     drawBohrOrbitsHalf(true);
@@ -16078,7 +15704,7 @@ try { checkUrlHashRoutine(); } catch(e){}
   <script>
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v100', { scope: './' }).catch(function() {});
+        navigator.serviceWorker.register('recharge-sw.js?v=recharge-v101', { scope: './' }).catch(function() {});
       });
     }
   </script>
