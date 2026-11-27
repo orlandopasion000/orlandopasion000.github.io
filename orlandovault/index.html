@@ -17,8 +17,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/vault-core.css?v=vault-v76">
-  <link rel="stylesheet" href="css/vault-pro.css?v=vault-v76">
+  <link rel="stylesheet" href="css/vault-core.css?v=vault-v77">
+  <link rel="stylesheet" href="css/vault-pro.css?v=vault-v77">
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
@@ -193,6 +193,12 @@
           <line x1="10" y1="4" x2="10" y2="20"></line>
         </svg>
         <span>Sheets Sync</span>
+      </button>
+
+      <!-- Browser Autofill Companion Extension Pill -->
+      <button type="button" class="btn-topbar-tool btn-tool-autofill" id="btnTopbarAutofill" title="Browser Autofill Companion Extension (Chrome / Edge)">
+        <span class="autofill-dot" id="autofillTopbarDot"></span>
+        <span>🧩 Autofill</span>
       </button>
 
       <!-- Security Health Watchtower Pill -->
@@ -724,6 +730,21 @@
         <button type="button" class="modal-close-btn" id="btnCloseQuickAction" title="Close">✕</button>
       </div>
       <div id="quickActionButtons" style="display:flex;flex-direction:column;gap:8px;"></div>
+    </div>
+  </div>
+
+  <!-- BROWSER AUTOFILL EXTENSION & QUICK-FILL HUB MODAL -->
+  <div class="modal-backdrop" id="autofillHubModal" role="dialog" aria-modal="true" aria-label="Browser Autofill Extension Hub">
+    <div class="autofill-modal-card">
+      <div class="ios-grabber-bar" aria-label="Swipe down to dismiss"></div>
+      <div class="sync-health-header" style="padding:14px 20px;border-bottom:1px solid rgba(255,255,255,0.08);">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:18px;">🧩</span>
+          <h3 style="margin:0;font-size:16px;color:#f8fafc;letter-spacing:0.02em;">Browser Autofill &amp; Extension Hub</h3>
+        </div>
+        <button type="button" class="modal-close-btn" id="closeAutofillHubModal" title="Close">✕</button>
+      </div>
+      <div class="autofill-hub-body" id="autofillHubBody"></div>
     </div>
   </div>
 
@@ -3197,13 +3218,13 @@
         if (window.caches) {
           caches.keys().then(keys => {
             keys.forEach(k => {
-              if (k.startsWith('vault-') && k !== 'vault-jarvis-v76') {
+              if (k.startsWith('vault-') && k !== 'vault-jarvis-v77') {
                 caches.delete(k);
               }
             });
           });
         }
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v76', { scope: '/orlandovault/' }).then(reg => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v77', { scope: '/orlandovault/' }).then(reg => {
           if (reg && reg.update) reg.update();
         }).catch(err => {
           console.warn('Vault SW registration error:', err);
@@ -4909,6 +4930,9 @@
         };
         localStorage.setItem(LS_ENC_CACHE, JSON.stringify(envelope));
         purgeLegacyPlaintextStorage();
+        if (window.VaultAutofillBridge && typeof window.VaultAutofillBridge.syncEnvelopeToExtension === 'function') {
+          window.VaultAutofillBridge.syncEnvelopeToExtension(false);
+        }
         return true;
       } catch(e) {
         return false;
@@ -6503,6 +6527,20 @@
           }
         };
       }
+      const btnTopbarAf = document.getElementById('btnTopbarAutofill');
+      const afModal = document.getElementById('autofillHubModal');
+      const btnCloseAf = document.getElementById('closeAutofillHubModal');
+      if (btnTopbarAf) {
+        btnTopbarAf.onclick = () => { if (window.VaultAutofillBridge) window.VaultAutofillBridge.open(); };
+      }
+      if (btnCloseAf) {
+        btnCloseAf.onclick = () => { if (window.VaultAutofillBridge) window.VaultAutofillBridge.close(); };
+      }
+      if (afModal) {
+        afModal.addEventListener('click', (e) => {
+          if (e.target === afModal && window.VaultAutofillBridge) window.VaultAutofillBridge.close();
+        });
+      }
       const btnTopbarWt = document.getElementById('btnTopbarWatchtower');
       const wtModal = document.getElementById('watchtowerModal');
       const btnCloseWt = document.getElementById('closeWatchtowerModal');
@@ -7209,6 +7247,7 @@
       { id: 'filter-ms', cat: 'Filter Apps & Websites', icon: '💼', title: 'Filter: Microsoft 365', desc: 'DepEd and Institutional Microsoft accounts', action: () => { filterVaultByCategory('Microsoft'); }, badge: 'M365' },
       { id: 'filter-gmail', cat: 'Filter Apps & Websites', icon: '📧', title: 'Filter: Gmail Ecosystem', desc: 'Personal, Gaming, and Institutional Google Mail vaults', action: () => { filterVaultByCategory('Gmail'); }, badge: 'Gmail' },
       { id: 'filter-portals', cat: 'Filter Apps & Websites', icon: '🌐', title: 'Filter: Government & Portals', desc: 'LTO, DTS, and official web portals', action: () => { filterVaultByCategory('Portals'); }, badge: 'Portals' },
+      { id: 'sys-autofill', cat: 'Security Operations', icon: '🧩', title: 'Open Browser Autofill & Extension Hub', desc: 'Install/sync Chrome & Edge Zero-Knowledge Autofill + Domain Matcher', action: () => { if (window.VaultAutofillBridge) window.VaultAutofillBridge.open(); }, badge: 'Autofill' },
       { id: 'sys-watchtower', cat: 'Security Operations', icon: '🛡️', title: 'Open Security Health Watchtower', desc: 'Scan for breached, weak, reused, old, or missing 2FA credentials', action: () => { if (window.VaultWatchtower) window.VaultWatchtower.open(); }, badge: 'Security' },
       { id: 'filter-crit', cat: 'Filter Apps & Websites', icon: '⚡', title: 'Filter: Critical Accounts Only', desc: 'High-security administrative and primary credentials', action: () => { filterVaultByCategory('Critical'); }, badge: 'Priority' },
 
@@ -7409,6 +7448,7 @@
               </div>
               <button type="button" class="btn-copy-totp" id="btnFocusCopyTotp">📋 Copy 2FA</button>
             </div>
+            ${portalUrl ? `<button type="button" class="btn-focus-copy-launch" id="btnFocusCopyTotpAndLaunch" style="margin-top:6px;padding:8px 12px;font-size:11.5px;" data-portal-url="${escapeHtml(portalUrl)}">🔐 Copy 2FA Code &amp; Open Portal ↗</button>` : ''}
           </div>
         ` : ''}
 
@@ -7449,6 +7489,13 @@
         const btnCopyTotp = document.getElementById('btnFocusCopyTotp');
         if (btnCopyTotp) {
           btnCopyTotp.onclick = () => { if (window.copyTotpById) window.copyTotpById(item.id, btnCopyTotp); };
+        }
+        const btnCopyTotpLaunch = document.getElementById('btnFocusCopyTotpAndLaunch');
+        if (btnCopyTotpLaunch && portalUrl) {
+          btnCopyTotpLaunch.onclick = async () => {
+            if (window.copyTotpById) await window.copyTotpById(item.id, btnCopyTotpLaunch);
+            try { window.open(portalUrl, '_blank', 'noopener,noreferrer'); } catch(e) {}
+          };
         }
       }
 
@@ -8242,7 +8289,8 @@
         document.getElementById('qrModal'),
         document.getElementById('historyModal'),
         document.getElementById('syncHealthModal'),
-        document.getElementById('watchtowerModal')
+        document.getElementById('watchtowerModal'),
+        document.getElementById('autofillHubModal')
       ];
       for (let i = 0; i < candidates.length; i++) {
         const m = candidates[i];
@@ -8281,6 +8329,8 @@
         m.style.display = 'none';
       } else if (m.id === 'watchtowerModal' && window.VaultWatchtower) {
         window.VaultWatchtower.close();
+      } else if (m.id === 'autofillHubModal' && window.VaultAutofillBridge) {
+        window.VaultAutofillBridge.close();
       } else {
         m.classList.remove('open', 'active');
       }
@@ -8331,7 +8381,7 @@
       obs.observe(m, { attributes: true, attributeFilter: ['class', 'style'] });
     }
 
-    ['cardQuickActionModal', 'vaultSpotlightModal', 'accountFocusModal', 'cardEditModal', 'sheetSyncModal', 'qrModal', 'historyModal', 'syncHealthModal', 'watchtowerModal'].forEach(setupModalHistoryPush);
+    ['cardQuickActionModal', 'vaultSpotlightModal', 'accountFocusModal', 'cardEditModal', 'sheetSyncModal', 'qrModal', 'historyModal', 'syncHealthModal', 'watchtowerModal', 'autofillHubModal'].forEach(setupModalHistoryPush);
 
     function showEdgeIndicator(dir, text) {
       const el = dir === 'left' ? document.getElementById('appleEdgeIndicatorLeft') : document.getElementById('appleEdgeIndicatorRight');
@@ -8392,7 +8442,7 @@
 
       activeDragModal = getActiveModal();
       if (activeDragModal) {
-        activeDragBox = activeDragModal.querySelector('.spotlight-box, .focus-hud-box, .card-editor-modal, .sync-health-card, .watchtower-modal-card, .quick-action-sheet, .qr-suite-container, .modal-box') || activeDragModal;
+        activeDragBox = activeDragModal.querySelector('.spotlight-box, .focus-hud-box, .card-editor-modal, .sync-health-card, .watchtower-modal-card, .autofill-modal-card, .quick-action-sheet, .qr-suite-container, .modal-box') || activeDragModal;
         if (activeDragBox) {
           activeDragBox.style.transition = 'none';
         }
@@ -8866,7 +8916,8 @@
   })();
   </script>
 
-  <script src="js/totp-watchtower.js?v=vault-v76"></script>
-  <script src="js/cloud-telemetry.js?v=vault-v76"></script>
+  <script src="js/totp-watchtower.js?v=vault-v77"></script>
+  <script src="js/cloud-telemetry.js?v=vault-v77"></script>
+  <script src="js/autofill-bridge.js?v=vault-v77"></script>
 </body>
 </html>

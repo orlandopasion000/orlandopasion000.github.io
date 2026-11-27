@@ -1,0 +1,72 @@
+{
+  "manifest_version": 3,
+  "name": "OrlandoVault · Zero-Knowledge Autofill",
+  "version": "1.0.0",
+  "description": "1-Click Zero-Knowledge Password & Live 6-Digit 2FA Autofill Companion for OrlandoVault.",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "tabs",
+    "scripting",
+    "alarms",
+    "clipboardWrite"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "OrlandoVault Autofill",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/vault-icon-16.png",
+      "32": "icons/vault-icon-32.png",
+      "48": "icons/vault-icon-48.png",
+      "128": "icons/vault-icon-128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/vault-icon-16.png",
+    "32": "icons/vault-icon-32.png",
+    "48": "icons/vault-icon-48.png",
+    "128": "icons/vault-icon-128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://orlandopasion000.github.io/orlandovault*",
+        "http://127.0.0.1/*",
+        "http://localhost/*"
+      ],
+      "js": ["bridge-content.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "exclude_matches": [
+        "https://orlandopasion000.github.io/orlandovault*"
+      ],
+      "js": ["autofill-content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Alt+Shift+O"
+      },
+      "description": "Open OrlandoVault Autofill Popup"
+    },
+    "autofill-active-tab": {
+      "suggested_key": {
+        "default": "Alt+Shift+L"
+      },
+      "description": "Instant Autofill Login + 2FA on Current Page"
+    }
+  }
+}

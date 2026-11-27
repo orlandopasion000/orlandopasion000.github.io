@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OrlandoVault Autofill</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header class="ext-header">
+    <div class="ext-brand">
+      <img src="icons/vault-icon-48.png" alt="OrlandoVault" class="ext-logo">
+      <div>
+        <div class="ext-title">ORLANDO <span>VAULT</span></div>
+        <div class="ext-sub" id="extHostLabel">Zero-Knowledge Autofill</div>
+      </div>
+    </div>
+    <div class="ext-header-actions">
+      <span class="ext-status-dot" id="extStatusDot" title="Vault Status"></span>
+      <button type="button" class="ext-icon-btn" id="btnExtSyncWeb" title="Open Web Vault to Sync">🔄</button>
+      <button type="button" class="ext-icon-btn" id="btnExtLock" title="Lock Extension" style="display:none;">🔒</button>
+    </div>
+  </header>
+
+  <!-- View 1: Pair / Import -->
+  <section id="viewSetup" class="ext-view" style="display:none;">
+    <div class="ext-card">
+      <div class="ext-card-title">🔗 Connect Your Encrypted Vault</div>
+      <p class="ext-card-desc">
+        Open your unlocked <strong>OrlandoVault</strong> web tab to pair ciphertext automatically, or load an encrypted <code>.ovault</code> backup file.
+      </p>
+      <button type="button" class="ext-btn-primary" id="btnOpenWebPair">🌐 Open OrlandoVault Web App</button>
+      <label class="ext-btn-secondary" for="extImportOvaultInput" style="margin-top:8px;cursor:pointer;display:flex;justify-content:center;">
+        📥 Import .ovault Backup File
+      </label>
+      <input type="file" id="extImportOvaultInput" accept=".ovault,.json,application/json" style="display:none;">
+    </div>
+  </section>
+
+  <!-- View 2: Locked (6-Digit iOS PIN or Master Password) -->
+  <section id="viewLocked" class="ext-view" style="display:none;">
+    <div id="extPinPanel" class="ext-pin-panel">
+      <div class="ext-pin-prompt">Enter 6-Digit Passcode</div>
+      <div class="ext-pin-dots" id="extPinDots">
+        <span></span><span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <div class="ext-pin-grid" id="extPinGrid">
+        <button type="button" data-digit="1">1</button>
+        <button type="button" data-digit="2">2<small>ABC</small></button>
+        <button type="button" data-digit="3">3<small>DEF</small></button>
+        <button type="button" data-digit="4">4<small>GHI</small></button>
+        <button type="button" data-digit="5">5<small>JKL</small></button>
+        <button type="button" data-digit="6">6<small>MNO</small></button>
+        <button type="button" data-digit="7">7<small>PQRS</small></button>
+        <button type="button" data-digit="8">8<small>TUV</small></button>
+        <button type="button" data-digit="9">9<small>WXYZ</small></button>
+        <button type="button" id="btnPinSwitchPwd" class="ext-pin-util">Password</button>
+        <button type="button" data-digit="0">0</button>
+        <button type="button" id="btnPinBackspace" class="ext-pin-util">⌫</button>
+      </div>
+    </div>
+
+    <form id="extPwdForm" class="ext-card" style="display:none;">
+      <div class="ext-card-title">🔑 Unlock with Master Password</div>
+      <input type="password" id="extMasterPwdInput" class="ext-input" placeholder="Enter Master Password..." autocomplete="off">
+      <button type="submit" class="ext-btn-primary" style="margin-top:10px;">🔓 Unlock Vault</button>
+      <button type="button" class="ext-link-btn" id="btnSwitchBackToPin">← Use 6-Digit Passcode</button>
+    </form>
+
+    <div class="ext-error" id="extUnlockError" style="display:none;"></div>
+  </section>
+
+  <!-- View 3: Unlocked Autofill Cockpit -->
+  <section id="viewUnlocked" class="ext-view" style="display:none;">
+    <div class="ext-search-row">
+      <input type="search" id="extSearchInput" class="ext-search-input" placeholder="Search accounts or domains..." autocomplete="off">
+      <button type="button" class="ext-gen-btn" id="btnToggleGen" title="Strong Password Generator">⚡ Gen</button>
+    </div>
+
+    <div id="extGenPanel" class="ext-gen-panel" style="display:none;">
+      <div class="ext-gen-code" id="extGenPassword">--</div>
+      <div class="ext-gen-actions">
+        <button type="button" class="ext-mini-btn" id="btnRegenPwd">🔄</button>
+        <button type="button" class="ext-mini-btn accent" id="btnCopyGenPwd">📋 Copy</button>
+      </div>
+    </div>
+
+    <div id="extMatchesSection" style="display:none;">
+      <div class="ext-sec-label">⚡ MATCHING THIS WEBSITE</div>
+      <div id="extMatchesList" class="ext-list"></div>
+    </div>
+
+    <div class="ext-sec-label" id="extOthersLabel">ALL ACCOUNTS</div>
+    <div id="extOthersList" class="ext-list"></div>
+  </section>
+
+  <div class="ext-toast" id="extToast" style="display:none;"></div>
+
+  <script src="vault-crypto-totp.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
