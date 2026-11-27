@@ -6391,6 +6391,12 @@
     #vaultLockOverlay.unlocked {
       display: none !important;
     }
+    body.vault-locked-active #standaloneSubAppDock,
+    body.vault-locked-active .vault-topbar,
+    body.vault-locked-active .vault-layout {
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
     .ios-lock-bg-ambient {
       position: absolute;
       inset: -44px;
@@ -6429,7 +6435,7 @@
       inset: 0;
       z-index: 2;
       pointer-events: none;
-      background: linear-gradient(180deg, rgba(0, 0, 0, 0.24) 0%, rgba(0, 0, 0, 0.14) 48%, rgba(0, 0, 0, 0.36) 100%);
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.11) 45%, rgba(0, 0, 0, 0.26) 100%);
     }
     .vault-gate-card {
       width: 100%;
@@ -6781,39 +6787,31 @@
       }
     }
 
-    /* Authentic Apple iOS Liquid Glass 6-Digit Circular Passcode Keypad */
+    /* Exact 5-Layer Apple iOS 26 Refractive Liquid Glass Passcode Keypad */
     .ios-pin-wrap {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
       padding: 4px 0 2px;
     }
-    .ios-top-lock-icon {
-      color: #ffffff;
-      opacity: 0.95;
-      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
-      margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
     .ios-pin-prompt {
-      font-size: 19px;
+      font-size: 17.5px;
       font-weight: 400;
       color: #ffffff;
-      letter-spacing: 0.01em;
+      letter-spacing: -0.01em;
       text-align: center;
-      text-shadow: 0 1px 8px rgba(0, 0, 0, 0.42);
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.28);
       font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
     }
     .ios-pin-subhint {
       font-size: 12px;
-      color: rgba(255, 255, 255, 0.85);
-      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
+      color: rgba(255, 255, 255, 0.9);
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
       text-align: center;
       min-height: 0;
       display: none;
+      margin-top: 2px;
     }
     .ios-pin-subhint.visible {
       display: block;
@@ -6822,22 +6820,22 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 20px;
-      margin: 10px 0 26px;
+      gap: 22px;
+      margin: 14px 0 34px;
     }
     .ios-pin-dot {
-      width: 13px;
-      height: 13px;
+      width: 12.5px;
+      height: 12.5px;
       border-radius: 50%;
-      border: 1.8px solid rgba(255, 255, 255, 0.95);
+      border: 1.5px solid rgba(255, 255, 255, 0.94);
       background: transparent;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.28);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.22);
       transition: background 0.12s ease, transform 0.12s ease, box-shadow 0.12s ease;
     }
     .ios-pin-dot.filled {
       background: #ffffff;
       border-color: #ffffff;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.78);
       transform: scale(1.06);
     }
     @keyframes iosPinShake {
@@ -6850,18 +6848,20 @@
     }
     .ios-keypad-grid {
       display: grid;
-      grid-template-columns: repeat(3, 78px);
-      gap: 16px 24px;
+      grid-template-columns: repeat(3, 80px);
+      gap: 15px 20px;
       justify-content: center;
     }
     .ios-key-btn {
-      width: 78px;
-      height: 78px;
+      position: relative;
+      overflow: hidden;
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
-      background: linear-gradient(145deg, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0.07) 52%, rgba(255, 255, 255, 0.18) 100%);
-      border: 1px solid rgba(255, 255, 255, 0.54);
-      backdrop-filter: blur(5px) saturate(145%) brightness(1.06);
-      -webkit-backdrop-filter: blur(5px) saturate(145%) brightness(1.06);
+      background: radial-gradient(circle at 50% 42%, rgba(120, 120, 128, 0.16) 0%, rgba(110, 110, 118, 0.22) 68%, rgba(255, 255, 255, 0.18) 100%);
+      border: none;
+      backdrop-filter: saturate(118%) contrast(1.03);
+      -webkit-backdrop-filter: saturate(118%) contrast(1.03);
       color: #ffffff;
       display: flex;
       flex-direction: column;
@@ -6871,27 +6871,63 @@
       user-select: none;
       -webkit-tap-highlight-color: transparent;
       outline: none;
-      box-shadow: inset 0 1.5px 2.5px rgba(255, 255, 255, 0.78), inset 0 -1.5px 3px rgba(255, 255, 255, 0.22), 0 8px 24px rgba(0, 0, 0, 0.18);
-      transition: background 0.12s ease, transform 0.08s ease, box-shadow 0.12s ease;
+      box-shadow: inset 0 1.5px 3px rgba(255, 255, 255, 0.45), inset 0 -1.5px 3px rgba(255, 255, 255, 0.18), 0 2px 10px rgba(0, 0, 0, 0.08);
+      transition: transform 0.08s ease, background 0.12s ease;
+    }
+    /* Layer 2: Optical edge-refraction lens ring matching the exact photo pixels beneath each circle */
+    .ios-key-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background-image: url('assets/lock-wallpaper-4k.jpg');
+      background-repeat: no-repeat;
+      background-size: var(--lens-bg-w, 430px) var(--lens-bg-h, 932px);
+      background-position: var(--lens-bg-x, 50%) var(--lens-bg-y, 50%);
+      transform: scale(1.16);
+      filter: blur(0.6px) saturate(1.15) brightness(1.04);
+      opacity: 0.92;
+      -webkit-mask-image: radial-gradient(circle, transparent 0%, transparent 63%, rgba(0, 0, 0, 0.85) 82%, #000 100%);
+      mask-image: radial-gradient(circle, transparent 0%, transparent 63%, rgba(0, 0, 0, 0.85) 82%, #000 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+    /* Layer 3: Dual-arc 360-degree specular glass rim + inner meniscus highlights */
+    .ios-key-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      padding: 1.15px;
+      background: conic-gradient(from 130deg at 50% 50%, rgba(255, 255, 255, 0.24) 0deg, rgba(255, 255, 255, 0.92) 85deg, rgba(255, 255, 255, 0.22) 175deg, rgba(255, 255, 255, 0.78) 265deg, rgba(255, 255, 255, 0.24) 360deg);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      z-index: 3;
     }
     .ios-key-btn:focus-visible {
-      box-shadow: 0 0 0 2px #38bdf8, inset 0 1.5px 2.5px rgba(255, 255, 255, 0.78);
+      box-shadow: 0 0 0 2px #38bdf8, inset 0 1.5px 3px rgba(255, 255, 255, 0.45);
     }
     .ios-key-btn:hover {
-      background: linear-gradient(145deg, rgba(255, 255, 255, 0.34) 0%, rgba(255, 255, 255, 0.14) 52%, rgba(255, 255, 255, 0.26) 100%);
+      background: radial-gradient(circle at 50% 42%, rgba(140, 140, 148, 0.24) 0%, rgba(120, 120, 128, 0.3) 68%, rgba(255, 255, 255, 0.26) 100%);
     }
     .ios-key-btn:active,
     .ios-key-btn.pressed {
-      background: rgba(255, 255, 255, 0.56);
-      border-color: rgba(255, 255, 255, 0.9);
-      transform: scale(0.95);
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.48) 0%, rgba(255, 255, 255, 0.62) 100%);
+      transform: scale(0.96);
+    }
+    .ios-key-num,
+    .ios-key-letters {
+      position: relative;
+      z-index: 2;
     }
     .ios-key-num {
-      font-size: 34px;
+      font-size: 36px;
       font-weight: 400;
       line-height: 1;
       color: #ffffff;
-      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.28);
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
       font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
     }
     .ios-key-letters {
@@ -6899,21 +6935,21 @@
       font-weight: 700;
       letter-spacing: 0.22em;
       padding-left: 0.22em;
-      color: rgba(255, 255, 255, 0.92);
-      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-      margin-top: 2px;
-      min-height: 11px;
+      color: #ffffff;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.22);
+      margin-top: 3px;
+      height: 11px;
     }
     .ios-key-zero .ios-key-letters {
       display: none;
     }
     .ios-pin-footer {
       width: 100%;
-      max-width: 282px;
+      max-width: 268px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-top: 24px;
+      margin-top: 36px;
     }
     .ios-pin-footer button {
       background: transparent;
@@ -6921,10 +6957,10 @@
       color: #ffffff;
       font-size: 16px;
       font-weight: 400;
-      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
       font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
       cursor: pointer;
-      padding: 6px 8px;
+      padding: 6px 4px;
       -webkit-tap-highlight-color: transparent;
     }
     .ios-pin-footer button:hover {
@@ -6951,7 +6987,7 @@
     }
     @media (max-width: 390px), (max-height: 780px) {
       .ios-pin-dots {
-        margin: 8px 0 18px;
+        margin: 10px 0 22px;
       }
       .ios-keypad-grid {
         grid-template-columns: repeat(3, 68px);
@@ -6962,18 +6998,18 @@
         height: 68px;
       }
       .ios-key-num {
-        font-size: 30px;
+        font-size: 31px;
       }
       .ios-pin-footer {
-        max-width: 242px;
-        margin-top: 16px;
+        max-width: 236px;
+        margin-top: 22px;
       }
     }
 </style>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 </head>
-<body>
+<body class="vault-locked-active">
   <!-- INSTANT PRIVACY CURTAIN ON APP/TAB BLUR -->
   <div id="vaultPrivacyCurtain" role="dialog" aria-modal="true" aria-label="Vault Privacy Shield Active">
     <div style="font-size:38px;">🛡️</div>
@@ -7059,13 +7095,8 @@
           <button type="button" id="btnSwitchBackToPin6" style="display:none;width:100%;margin-top:8px;background:transparent;border:none;color:#bae6fd;font-size:12.5px;font-weight:600;cursor:pointer;padding:6px;">← Back to iPhone 6-Digit Passcode</button>
         </form>
 
-        <!-- Authentic Apple iOS Liquid Glass 6-Digit Circular Passcode Panel -->
+        <!-- Exact Apple iOS Liquid Glass 6-Digit Circular Passcode Panel -->
         <div id="iosPinPanel" class="ios-pin-wrap" style="display:none;">
-          <div class="ios-top-lock-icon" aria-hidden="true">
-            <svg width="20" height="22" viewBox="0 0 24 26" fill="currentColor">
-              <path d="M18 10V7a6 6 0 1 0-12 0v3H4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V12a2 2 0 0 0-2-2h-2zm-9-3a3 3 0 1 1 6 0v3H9V7z"/>
-            </svg>
-          </div>
           <div class="ios-pin-prompt" id="iosPinPrompt">Enter Passcode</div>
           <div class="ios-pin-subhint" id="iosPinSubHint"></div>
           <div class="ios-pin-dots" id="iosPinDots" aria-label="6-digit passcode progress">
@@ -9831,13 +9862,13 @@
         if (window.caches) {
           caches.keys().then(keys => {
             keys.forEach(k => {
-              if (k.startsWith('vault-') && k !== 'vault-jarvis-v68') {
+              if (k.startsWith('vault-') && k !== 'vault-jarvis-v69') {
                 caches.delete(k);
               }
             });
           });
         }
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v68', { scope: '/orlandovault/' }).then(reg => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v69', { scope: '/orlandovault/' }).then(reg => {
           if (reg && reg.update) reg.update();
         }).catch(err => {
           console.warn('Vault SW registration error:', err);
@@ -11406,6 +11437,7 @@
     window.attemptOfflineEncryptedCacheUnlock = unlockWithEncryptedCache;
 
     function showUnlockedWorkspace() {
+      document.body.classList.remove('vault-locked-active');
       const overlay = document.getElementById('vaultLockOverlay');
       if (overlay) overlay.classList.add('unlocked');
       const curtain = document.getElementById('vaultPrivacyCurtain');
@@ -11445,6 +11477,7 @@
         try { window.unlockPageScroll(); } catch(e) {}
       }
 
+      document.body.classList.add('vault-locked-active');
       const curtain = document.getElementById('vaultPrivacyCurtain');
       if (curtain) curtain.classList.remove('active');
 
@@ -11546,21 +11579,8 @@
       return rawDocs;
     }
 
-    // One-time v3 -> v4 zero-knowledge migration (legacy v3 secret isolated strictly inside this migration)
-    async function migrateLegacyV3ToV4(newMasterPassword, passcodeMode = 'password') {
-      const authHeaders = await getAuthHeaders();
-      const rawDocs = await fetchAllRemoteRawDocs(authHeaders);
-      const localTombstones = typeof getVaultTombstones === 'function' ? getVaultTombstones() : {};
-
-      const LEGACY_V3_SALT = '0f7a3c8e9b2d1f4a5c6e7d8b9a0c1e2f';
-      const LEGACY_V3_PASS = 'OrlandoVault_Master_Passphrase_2026_Secure';
-      const legacyKey = await VaultCrypto.deriveKey(LEGACY_V3_PASS, LEGACY_V3_SALT, 100000);
-
-      let migratedItems = [];
-      if (rawDocs.length > 0) {
-        migratedItems = await decryptItemListFromRawDocs(rawDocs, legacyKey, localTombstones);
-      }
-
+    // Initialize a brand-new v4 zero-knowledge vault if cloud metadata is empty
+    async function migrateLegacyV3ToV4(newMasterPassword, passcodeMode = 'pin6') {
       const newSaltHex = VaultCrypto.generateRandomSaltHex();
       const newKey = await VaultCrypto.deriveKey(newMasterPassword, newSaltHex, KDF_ITERATIONS_V4);
       const canary = await VaultCrypto.createCanary(newKey);
@@ -11577,9 +11597,9 @@
       hasCompletedInitialPull = true;
       lastActivityAt = Date.now();
 
-      if (typeof window.setVaultItems === 'function') window.setVaultItems(migratedItems);
-      window.vaultItems = migratedItems;
-      if (typeof window.reapplyPriorityPins === 'function') window.reapplyPriorityPins(migratedItems);
+      const emptyItems = [];
+      if (typeof window.setVaultItems === 'function') window.setVaultItems(emptyItems);
+      window.vaultItems = emptyItems;
       await persistEncryptedVaultCache();
 
       fullPushRequired = true;
@@ -12287,6 +12307,46 @@
       if (errMsg) setLockError(errMsg);
     }
 
+    function syncLiquidGlassLensCoords() {
+      const bgImg = document.querySelector('#vaultLockOverlay .ios-lock-bg-photo');
+      const pinPanel = document.getElementById('iosPinPanel');
+      if (!bgImg || !pinPanel || pinPanel.style.display === 'none') return;
+      const photoRect = bgImg.getBoundingClientRect();
+      if (!photoRect.width || !photoRect.height) return;
+
+      const natW = bgImg.naturalWidth || 2560;
+      const natH = bgImg.naturalHeight || 3840;
+      const natRatio = natW / natH;
+      const boxRatio = photoRect.width / photoRect.height;
+
+      let rw, rh;
+      if (boxRatio > natRatio) {
+        rw = photoRect.width;
+        rh = photoRect.width / natRatio;
+      } else {
+        rh = photoRect.height;
+        rw = photoRect.height * natRatio;
+      }
+
+      const objPos = (getComputedStyle(bgImg).objectPosition || '50% 22%').trim().split(/\s+/);
+      const parsePct = (token, fallback) => token && token.endsWith('%') ? (parseFloat(token) / 100) : fallback;
+      const pxPct = parsePct(objPos[0], 0.5);
+      const pyPct = parsePct(objPos[1], 0.22);
+
+      const imgLeft = photoRect.left + (photoRect.width - rw) * pxPct;
+      const imgTop = photoRect.top + (photoRect.height - rh) * pyPct;
+
+      pinPanel.querySelectorAll('.ios-key-btn').forEach(btn => {
+        const br = btn.getBoundingClientRect();
+        if (!br.width) return;
+        btn.style.setProperty('--lens-bg-w', rw.toFixed(1) + 'px');
+        btn.style.setProperty('--lens-bg-h', rh.toFixed(1) + 'px');
+        btn.style.setProperty('--lens-bg-x', (imgLeft - br.left).toFixed(1) + 'px');
+        btn.style.setProperty('--lens-bg-y', (imgTop - br.top).toFixed(1) + 'px');
+      });
+    }
+    window.syncLiquidGlassLensCoords = syncLiquidGlassLensCoords;
+
     function showIosPinPanel(mode = 'unlock', allowCancel = false) {
       iosPinMode = mode;
       iosPinAllowCancel = allowCancel;
@@ -12316,7 +12376,7 @@
         if (subEl) { subEl.textContent = 'Re-enter your 6-digit passcode'; subEl.classList.add('visible'); }
         if (leftBtn) { leftBtn.textContent = 'Start Over'; leftBtn.style.visibility = 'visible'; }
       } else {
-        if (promptEl) promptEl.textContent = 'Enter Passcode';
+        if (promptEl) promptEl.textContent = hasBioWrapConfigured() ? 'Swipe up for Face ID or Enter Passcode' : 'Enter Passcode';
         if (subEl) { subEl.textContent = ''; subEl.classList.remove('visible'); }
         if (leftBtn) {
           leftBtn.textContent = hasBioWrapConfigured() ? 'Face ID' : 'Password';
@@ -12325,6 +12385,8 @@
       }
       updateIosPinDots();
       refreshBioButtonVisibility();
+      if (typeof requestAnimationFrame === 'function') requestAnimationFrame(syncLiquidGlassLensCoords);
+      setTimeout(syncLiquidGlassLensCoords, 60);
     }
 
     function showPasswordUnlockForm() {
@@ -12871,10 +12933,19 @@
           if (stUnlock) stUnlock.style.display = 'block';
 
           if (!activeSessionKey) {
+            showIosPinPanel('unlock', false);
             await inspectCloudVersionForSignedInUser();
           }
         });
       }
+
+      const bgPhotoEl = document.querySelector('#vaultLockOverlay .ios-lock-bg-photo');
+      if (bgPhotoEl) bgPhotoEl.addEventListener('load', syncLiquidGlassLensCoords);
+      let lensResizeTimer = null;
+      window.addEventListener('resize', () => {
+        if (lensResizeTimer) clearTimeout(lensResizeTimer);
+        lensResizeTimer = setTimeout(syncLiquidGlassLensCoords, 40);
+      });
 
       // Activity & Auto-Lock / Instant Privacy Curtain
       ['pointerdown', 'keydown', 'touchstart', 'scroll'].forEach(evt => {
