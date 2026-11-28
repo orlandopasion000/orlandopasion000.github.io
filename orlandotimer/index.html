@@ -40,7 +40,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&family=Orbitron:wght@600;700;800;900&family=Outfit:wght@600;700;800;900&family=Space+Grotesk:wght@600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
   <!-- Relative Stylesheet (with cache-bust versioning) -->
-  <link rel="stylesheet" href="style.css?v=31.0">
+  <link rel="stylesheet" href="style.css?v=32.0">
 </head>
 <body data-app-theme="pure-black" data-clock-style="pure-black">
   <!-- Accessibility Live Region for Screen Readers -->
@@ -1324,6 +1324,10 @@
           <div class="qg-metric-badge" title="Combo Multiplier">
             <span>Combo:</span> <strong id="qGameComboVal" style="color:#38bdf8;">x1</strong>
           </div>
+          <div class="qg-metric-badge qg-stasis-badge" id="qGameStasisBadge" title="Superhot Stasis: Universe freezes when cursor pauses">
+            <span>Stasis:</span> <strong id="qStasisStateText" style="color:#4ade80;">❄️ FROZEN</strong>
+          </div>
+          <button type="button" class="qg-hud-btn" id="qGameWisdomVisionBtn" title="Toggle Wisdom Vision: All | Even Parity | Digit Sum (V)">👁️ Vision: ALL</button>
           <button type="button" class="qg-hud-btn" id="qGameAudioToggleBtn" title="Toggle Sound (M)">🔊 Sound: ON</button>
           <button type="button" class="qg-hud-btn" id="qGameFullscreenBtn" title="Toggle Fullscreen (F)">⛶ Fullscreen</button>
           <button type="button" class="qg-hud-btn qg-btn-close" id="qGameCloseBtn" title="Exit Game (Esc)">✕ Exit</button>
@@ -1386,15 +1390,46 @@
       </div>
     </div>
 
-    <!-- Grand Victory Modal -->
+    <!-- Telekinesis Aim & Prime Factor Inspection Card (Features 2, 3, 4, 8) -->
+    <div class="qg-tele-inspect-card" id="qGameTeleInspectCard" style="display:none;" aria-live="polite">
+      <div class="qg-inspect-header">
+        <span class="qg-inspect-beam-dot"></span>
+        <span class="qg-inspect-num" id="qInspectNum">42</span>
+        <span class="qg-inspect-status" id="qInspectStatus">DIVISIBLE ✓</span>
+      </div>
+      <div class="qg-inspect-prime" id="qInspectPrime">Prime Anatomy: 2 × 3 × 7</div>
+      <div class="qg-inspect-formula" id="qInspectFormula">42 ÷ 6 = 7 (Remainder: 0)</div>
+      <div class="qg-inspect-actions" id="qInspectActions">
+        <button type="button" class="qg-inspect-btn qg-btn-absorb" id="qInspectAbsorbBtn">⚡ Absorb Beam [Click]</button>
+        <button type="button" class="qg-inspect-btn qg-btn-transmute" id="qInspectTransmuteBtn" style="display:none;">⚗️ Transmute Remainder</button>
+      </div>
+    </div>
+
+        <!-- Grand Victory Modal -->
     <div id="qDivisorVictoryModal" class="qg-modal-wrap" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="qVictoryTitle">
       <div class="qg-modal-card">
         <div class="qg-modal-badge">★ COGNITIVE VICTORY ACHIEVED ★</div>
         <h2 class="qg-modal-title" id="qVictoryTitle">DIVISOR 6 FULLY MASTERED!</h2>
         <div class="qg-modal-score" id="qVictoryScore">Final Score: 1,800 Points</div>
 
+        <!-- Archimedes Grandmaster Wisdom Rating -->
+        <div class="qg-archimedes-laurel" id="qVictoryLaurel">
+          <span class="qg-laurel-star">⭐</span>
+          <span class="qg-laurel-star">⭐</span>
+          <span class="qg-laurel-star">⭐</span>
+          <div class="qg-laurel-rank" id="qVictoryRank">ARCHIMEDES GRANDMASTER · ZERO MISTAKES</div>
+        </div>
+
         <div class="qg-table-grid" id="qVictoryTable">
           <!-- Populated dynamically with multiplication table -->
+        </div>
+
+        <!-- The Codex of Orlando: Architectural & Astronomical Lore -->
+        <div class="qg-codex-card" id="qVictoryCodexCard">
+          <div class="qg-codex-title" id="qCodexTitle">📜 THE CODEX OF ORLANDO · WISDOM OF 6</div>
+          <div class="qg-codex-text" id="qCodexText">
+            The number 6 is the first 'Perfect Number' in mathematics (1 + 2 + 3 = 6). In ancient Babylonian astronomy, 6 formed the bedrock of the sexagesimal system (base-60), giving us 60 seconds in a minute, 60 minutes in an hour, and 360 degrees in a circle.
+          </div>
         </div>
 
         <div class="qg-modal-actions">
@@ -1409,7 +1444,7 @@
   <script src="assets/relative-time.js"></script>
   <script src="assets/qrcode.min.js"></script>
   <script src="app.js?v=31.0"></script>
-  <script src="assets/quantum-divisor-game.js?v=1.0"></script>
+  <script src="assets/quantum-divisor-game.js?v=3.0"></script>
 
 
 

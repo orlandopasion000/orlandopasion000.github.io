@@ -7224,3 +7224,243 @@ body.zen-mode .standalone-subapp-dock {
   transform: translateY(-2px);
   box-shadow: 0 0 15px rgba(56, 189, 248, 0.6);
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   10 WISDOM SYSTEMS: STASIS, TELEKINESIS, PRIME CARD, LAUREL & CODEX OF ORLANDO
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* 1. Superhot Stasis Badge */
+.qg-stasis-badge {
+  background: rgba(6, 78, 59, 0.45) !important;
+  border-color: rgba(74, 222, 128, 0.4) !important;
+  box-shadow: 0 0 10px rgba(74, 222, 128, 0.2);
+  transition: all 0.3s ease;
+}
+
+.qg-stasis-badge.qg-stasis-active {
+  background: rgba(120, 53, 15, 0.45) !important;
+  border-color: rgba(251, 191, 36, 0.4) !important;
+  box-shadow: 0 0 10px rgba(251, 191, 36, 0.2);
+}
+
+/* 2. Telekinesis Aim & Prime Factor Inspection Card */
+.qg-tele-inspect-card {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000002;
+  width: 440px;
+  max-width: calc(100vw - 32px);
+  background: rgba(15, 23, 42, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1.5px solid rgba(56, 189, 248, 0.45);
+  border-radius: 18px;
+  padding: 14px 18px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65), 0 0 25px rgba(56, 189, 248, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: auto;
+  animation: qgCardSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes qgCardSlideUp {
+  from { opacity: 0; transform: translate(-50%, 14px) scale(0.96); }
+  to { opacity: 1; transform: translate(-50%, 0) scale(1); }
+}
+
+.qg-inspect-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 8px;
+}
+
+.qg-inspect-beam-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 10px #38bdf8;
+  animation: qgBeamPulse 1.2s infinite alternate ease-in-out;
+}
+
+@keyframes qgBeamPulse {
+  0% { transform: scale(0.8); opacity: 0.6; }
+  100% { transform: scale(1.3); opacity: 1; }
+}
+
+.qg-inspect-num {
+  font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.5px;
+}
+
+.qg-inspect-status {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  padding: 3px 9px;
+  border-radius: 9999px;
+  text-transform: uppercase;
+}
+
+.qg-inspect-status.is-divisible {
+  background: rgba(34, 197, 94, 0.2);
+  border: 1px solid rgba(74, 222, 128, 0.5);
+  color: #4ade80;
+  box-shadow: 0 0 8px rgba(74, 222, 128, 0.3);
+}
+
+.qg-inspect-status.is-not-divisible {
+  background: rgba(244, 63, 94, 0.2);
+  border: 1px solid rgba(251, 113, 133, 0.5);
+  color: #fb7185;
+}
+
+.qg-inspect-prime {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: #38bdf8;
+  background: rgba(30, 41, 59, 0.6);
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+.qg-inspect-formula {
+  font-size: 13px;
+  color: #cbd5e1;
+  font-weight: 500;
+  padding: 0 2px;
+}
+
+.qg-inspect-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.qg-inspect-btn {
+  flex: 1;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: all 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.qg-btn-absorb {
+  background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
+  color: #030712;
+  box-shadow: 0 4px 14px rgba(56, 189, 248, 0.4);
+}
+
+.qg-btn-absorb:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(56, 189, 248, 0.6);
+}
+
+.qg-btn-transmute {
+  background: rgba(168, 85, 247, 0.2);
+  border: 1px solid rgba(192, 132, 252, 0.4);
+  color: #e9d5ff;
+}
+
+.qg-btn-transmute:hover {
+  background: rgba(168, 85, 247, 0.35);
+  border-color: rgba(192, 132, 252, 0.7);
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.4);
+}
+
+/* 3. Archimedes Grandmaster Laurel & Rank */
+.qg-archimedes-laurel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 16px;
+  padding: 10px 16px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1.5px solid rgba(251, 191, 36, 0.35);
+  border-radius: 16px;
+}
+
+.qg-archimedes-laurel > div:first-child,
+.qg-archimedes-laurel {
+  text-align: center;
+}
+
+.qg-laurel-stars-row {
+  display: flex;
+  gap: 8px;
+  font-size: 24px;
+}
+
+.qg-laurel-star {
+  display: inline-block;
+  font-size: 22px;
+  animation: qgStarShimmer 2.2s infinite ease-in-out;
+}
+
+.qg-laurel-star:nth-child(2) { animation-delay: 0.3s; }
+.qg-laurel-star:nth-child(3) { animation-delay: 0.6s; }
+
+@keyframes qgStarShimmer {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.6)); }
+  50% { transform: scale(1.18); filter: drop-shadow(0 0 12px rgba(251, 191, 36, 1)); }
+}
+
+.qg-laurel-rank {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  color: #fbbf24;
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+  text-transform: uppercase;
+}
+
+/* 4. The Codex of Orlando Lore Card */
+.qg-codex-card {
+  margin-top: 18px;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.85) 100%);
+  border: 1.5px solid rgba(251, 191, 36, 0.4);
+  border-radius: 16px;
+  padding: 14px 18px;
+  text-align: left;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 20px rgba(251, 191, 36, 0.15);
+}
+
+.qg-codex-title {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #fbbf24;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-transform: uppercase;
+}
+
+.qg-codex-text {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #cbd5e1;
+  font-style: italic;
+}
