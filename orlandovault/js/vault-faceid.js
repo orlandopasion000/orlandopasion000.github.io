@@ -747,31 +747,34 @@
       } catch (e) {}
     }
 
+    const idbWrapKey = await window.crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+    await putHardwareKeyInIdb(idbWrapKey);
+    const wrappedPayloadIdb = await encryptWithAesKey(bundleJson, idbWrapKey);
+
     let record;
     if (prfBytes && prfBytes.byteLength > 0) {
       const wrapDigest = await window.crypto.subtle.digest('SHA-256', prfBytes);
       const wrapKey = await window.crypto.subtle.importKey('raw', wrapDigest, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
       const wrappedPayload = await encryptWithAesKey(bundleJson, wrapKey);
       record = {
-        v: 6,
+        v: 7,
         tier: 'prf',
         credentialId: arrayBufferToBase64(cred.rawId),
         transports: internalTransports,
         prfSalt: arrayBufferToBase64(prfSalt),
         wrappedPayload,
+        wrappedPayloadIdb,
         saltHex,
         createdAt: Date.now()
       };
     } else {
-      const idbWrapKey = await window.crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
-      await putHardwareKeyInIdb(idbWrapKey);
-      const wrappedPayload = await encryptWithAesKey(bundleJson, idbWrapKey);
       record = {
-        v: 6,
+        v: 7,
         tier: 'idb_uv',
         credentialId: arrayBufferToBase64(cred.rawId),
         transports: internalTransports,
-        wrappedPayload,
+        wrappedPayload: wrappedPayloadIdb,
+        wrappedPayloadIdb,
         saltHex,
         createdAt: Date.now()
       };
@@ -856,27 +859,37 @@
       if (saved.tier === 'idb_uv') {
         const hwKey = await getHardwareKeyFromIdb();
         if (!hwKey) throw new Error('Hardware biometric wrap key missing on this device.');
-        const plainJson = await decryptWithAesKey(saved.wrappedPayload, hwKey);
+        const plainJson = await decryptWithAesKey(saved.wrappedPayloadIdb || saved.wrappedPayload, hwKey);
         bundle = JSON.parse(plainJson);
       } else {
         const ext = assertion.getClientExtensionResults ? assertion.getClientExtensionResults() : {};
         const prfBytes = (ext.prf && ext.prf.results && ext.prf.results.first)
           ? new Uint8Array(ext.prf.results.first)
           : null;
-        if (!prfBytes || prfBytes.byteLength === 0) {
-          throw new Error(`${prof.shortLabel} hardware PRF key release failed.`);
-        }
-        const wrapDigest = await window.crypto.subtle.digest('SHA-256', prfBytes);
-        const wrapKey = await window.crypto.subtle.importKey('raw', wrapDigest, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
-        if (saved.wrappedPayload) {
-          const plainJson = await decryptWithAesKey(saved.wrappedPayload, wrapKey);
+        if (prfBytes && prfBytes.byteLength > 0) {
+          const wrapDigest = await window.crypto.subtle.digest('SHA-256', prfBytes);
+          const wrapKey = await window.crypto.subtle.importKey('raw', wrapDigest, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+          if (saved.wrappedPayload) {
+            const plainJson = await decryptWithAesKey(saved.wrappedPayload, wrapKey);
+            bundle = JSON.parse(plainJson);
+          } else if (saved.wrappedPwd) {
+            const legacySecret = window.VaultCrypto
+              ? await window.VaultCrypto.decryptStrict(saved.wrappedPwd, wrapKey)
+              : await decryptWithAesKey(saved.wrappedPwd, wrapKey);
+            bundle = { rawKeyB64: null, secret: legacySecret, saltHex: null, passcodeMode: 'pin6' };
+          }
+        } else if (saved.wrappedPayloadIdb) {
+          const hwKey = await getHardwareKeyFromIdb();
+          if (!hwKey) throw new Error('Hardware biometric wrap key missing on this device.');
+          const plainJson = await decryptWithAesKey(saved.wrappedPayloadIdb, hwKey);
           bundle = JSON.parse(plainJson);
-        } else if (saved.wrappedPwd) {
-          // Backward compatible upgrade path for Phase 1 LS_BIO_WRAP
-          const legacySecret = window.VaultCrypto
-            ? await window.VaultCrypto.decryptStrict(saved.wrappedPwd, wrapKey)
-            : await decryptWithAesKey(saved.wrappedPwd, wrapKey);
-          bundle = { rawKeyB64: null, secret: legacySecret, saltHex: null, passcodeMode: 'pin6' };
+          try {
+            saved.tier = 'idb_uv';
+            saved.wrappedPayload = saved.wrappedPayloadIdb;
+            localStorage.setItem(LS_BIO_WRAP, JSON.stringify(saved));
+          } catch (e) {}
+        } else {
+          throw new Error(`${prof.shortLabel} recognized! Enter your 6-digit passcode once to complete Windows Hello compatibility — after that, touching your sensor will unlock instantly.`);
         }
       }
 
@@ -1156,10 +1169,44 @@
     if (window.VaultEncryptedScans) window.VaultEncryptedScans.clearDecryptedMemory();
   }
 
+  async function upgradeExistingBioRecordWithIdbFallback(secret, saltHex, passcodeMode) {
+    try {
+      if (!secret) return false;
+      const raw = localStorage.getItem(LS_BIO_WRAP);
+      if (!raw) return false;
+      const saved = JSON.parse(raw);
+      if (!saved || !saved.credentialId || saved.wrappedPayloadIdb) return false;
+      const h = hooks();
+      const meta = (h.getActiveMeta && h.getActiveMeta()) || {};
+      const useSalt = saltHex || saved.saltHex || meta.saltHex;
+      if (!useSalt) return false;
+      const useMode = passcodeMode || meta.passcodeMode || 'pin6';
+      const rawKeyB64 = await deriveExtractableKeyB64(secret, useSalt, meta.kdfIterations || 600000);
+      const bundleJson = JSON.stringify({ rawKeyB64, secret, saltHex: useSalt, passcodeMode: useMode });
+      const idbWrapKey = await window.crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+      await putHardwareKeyInIdb(idbWrapKey);
+      const wrappedPayloadIdb = await encryptWithAesKey(bundleJson, idbWrapKey);
+      saved.wrappedPayloadIdb = wrappedPayloadIdb;
+      if (getBiometricDeviceProfile().kind === 'zenbook_fingerprint' || saved.tier !== 'prf') {
+        saved.tier = 'idb_uv';
+        saved.wrappedPayload = wrappedPayloadIdb;
+      }
+      saved.saltHex = useSalt;
+      localStorage.setItem(LS_BIO_WRAP, JSON.stringify(saved));
+      if (typeof window.logAudit === 'function') {
+        window.logAudit('BIO_UPGRADED_HYBRID', 'Upgraded biometric key with Windows Hello IDB_UV fallback');
+      }
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   async function onPasscodeUnlockSuccess(secret, saltHex, passcodeMode, isInteractive = false) {
     await stashTransientUnlockSecret(secret, saltHex, passcodeMode);
     if (hasBioWrapConfigured()) {
       forceEnrollPromptNextUnlock = false;
+      await upgradeExistingBioRecordWithIdbFallback(secret, saltHex, passcodeMode);
       return;
     }
     let dismissed = false;
