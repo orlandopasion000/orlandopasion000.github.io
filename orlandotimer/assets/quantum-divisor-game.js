@@ -1,17 +1,17 @@
 /**
- * Quantum Divisor Arcade — Grand Cosmic Mathematical Odyssey (v3.0 Wisdom Edition)
+ * Quantum Divisor Arcade — Grand Cosmic Mathematical Odyssey (v4.0 Pure Deduction Edition)
  * Fusion of God-Tier VFX: [ DYNAMO ] [ HELIX ] [ METEOR ] [ COMET ] [ ORB ] [ MOLTEN ]
  * Featuring 6 Interactive Celestial Multiplication & Divisibility Games:
  * [ 6 ]  [ 7 ]  [ 8 ]  [ 9 ]  [ 12 ]  [ 13 ]
  *
- * Integrated 10 Classroom Wisdom & Contemplative Systems:
+ * Wisdom & Contemplative Features:
  * 1. Superhot Stasis Engine (Universe freezes to 0.02x when cursor pauses for calm contemplation)
- * 2. Harmonic Planetary Constellations (Spheres orbit in 3 concentric celestial rings — zero random pinballing)
- * 3. Quantum Telekinesis / Remote Tractor Beam (Aim laser locks onto spheres; click/space absorbs remotely)
- * 4. Prime Factor Dissection Card (Real-time HUD breakdown: 42 = 2 × 3 × 7, quotient & remainder)
- * 5. Wisdom Vision Heuristic Filters (Key V: ALL, PARITY [dim odd numbers for even divisors], DIGIT-SUM [Σ])
- * 6. Harmonic Chain Reactions (Resonant golden ripples highlighting doubles and quadruples)
- * 7. Remainder Transmutation (Key T or HUD: Alchemically transmute non-divisibles into multiples: 34 + 2 -> 36)
+ * 2. Harmonic Planetary Constellations (Spheres orbit peacefully in 3 concentric celestial rings)
+ * 3. Uniform Pure Deduction (ALL 20 spheres share identical gorgeous color/shading — zero spoiler cues!)
+ * 4. Enhanced Number Visibility (Ultra-high contrast backing disc + razor-sharp bold typography)
+ * 5. Quantum Telekinesis / Remote Tractor Beam (Unified laser aim locks onto spheres; click/space absorbs remotely)
+ * 6. Wisdom Vision Heuristic Filters (Key V: ALL, PARITY [dims odd numbers for even divisors], DIGIT-SUM [Σ])
+ * 7. Harmonic Chain Reactions (Resonant golden ripples highlighting doubles and quadruples)
  * 8. Archimedes Move Economy (Zero-mistake deduction earns the 3-Star Archimedes Grandmaster Laurel)
  * 9. Titan Boss Climax (Central celestial boss dismantled via 3 telekinesis resonance pulses)
  * 10. The Codex of Orlando (Rich astronomical, historical, and mathematical lore for each divisor)
@@ -253,7 +253,6 @@
   let floatingTexts = [];
   let shockwaves = [];
   let cosmicDust = [];
-  let tractorParticles = [];
 
   // ══════════════════════════════════════════════════════════════════════════
   // 3. SOUND SYNTHESIZER (WEB AUDIO API)
@@ -315,48 +314,9 @@
     });
   }
 
-  function playTransmuteArpeggio() {
-    const notes = [440, 554.37, 659.25, 880];
-    notes.forEach((freq, idx) => {
-      setTimeout(() => playTone(freq, 0.3, 'triangle', 0.14), idx * 60);
-    });
-  }
-
   // ══════════════════════════════════════════════════════════════════════════
-  // 4. MATHEMATICAL UTILITIES & PRIME ANATOMY
+  // 4. MATHEMATICAL UTILITIES
   // ══════════════════════════════════════════════════════════════════════════
-  function getPrimeFactors(n) {
-    if (n <= 1) return [n];
-    const factors = [];
-    let d = 2;
-    let temp = n;
-    while (d * d <= temp) {
-      while (temp % d === 0) {
-        factors.push(d);
-        temp /= d;
-      }
-      d++;
-    }
-    if (temp > 1) factors.push(temp);
-    return factors;
-  }
-
-  const SUPERSCRIPTS = { '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹' };
-  function toSuperscript(num) {
-    return String(num).split('').map(d => SUPERSCRIPTS[d] || d).join('');
-  }
-
-  function formatPrimeAnatomy(n) {
-    const factors = getPrimeFactors(n);
-    if (factors.length === 1) {
-      return `${n} is a Prime Number (Only divisible by 1 & ${n})`;
-    }
-    const counts = {};
-    factors.forEach(f => { counts[f] = (counts[f] || 0) + 1; });
-    const parts = Object.entries(counts).map(([base, exp]) => exp > 1 ? `${base}${toSuperscript(exp)}` : `${base}`);
-    return `Prime Anatomy: ${parts.join(' × ')} = ${n}`;
-  }
-
   function advanceQuest() {
     consecutiveCorrect = 0;
     questFactor++;
@@ -389,13 +349,8 @@
   }
 
   // ══════════════════════════════════════════════════════════════════════════
-  // 5. HARMONIC PLANETARY CONSTELLATIONS (ZERO ERRATIC PINBALLING)
+  // 5. HARMONIC PLANETARY CONSTELLATIONS
   // ══════════════════════════════════════════════════════════════════════════
-  // 3 Concentric Celestial Orbital Rings:
-  // Ring 0 (Inner): 5 spheres, gentle clockwise rotation (+0.0016)
-  // Ring 1 (Mid):   7 spheres, counter-clockwise rotation (-0.0012)
-  // Ring 2 (Outer): 8 spheres, calm clockwise rotation (+0.0009)
-  // Total = 20 Spheres in perfect harmonic equilibrium
   const ORBIT_RINGS = [
     { ring: 0, count: 5, radiusRatio: 0.22, speed: 0.0016 },
     { ring: 1, count: 7, radiusRatio: 0.35, speed: -0.0012 },
@@ -420,7 +375,8 @@
       }
     }
 
-    const radius = Math.max(22, Math.min(28, width * 0.024));
+    // Slightly larger, comfortable radius for ultra-clear visibility
+    const radius = Math.max(26, Math.min(32, width * 0.026));
     const baseAngle = (Math.PI * 2 * slotIndex) / Math.max(1, totalInRing) + (Math.random() - 0.5) * 0.25;
     const isTarget = cfg.targetMultiples.includes(val);
 
@@ -447,7 +403,6 @@
     spheres = [];
     const cfg = GAME_CONFIGS[currentDivisor];
 
-    // Prepare list of multiples to seed
     const multiplesToSeed = [questTarget];
     const otherTargets = cfg.normalFactors
       .map(f => currentDivisor * f)
@@ -470,14 +425,15 @@
   }
 
   // ══════════════════════════════════════════════════════════════════════════
-  // 6. GRAPHICS RENDERING ENGINE
+  // 6. GRAPHICS RENDERING ENGINE (UNIFORM PURE DEDUCTION COLORS)
   // ══════════════════════════════════════════════════════════════════════════
 
-  // Draw 3D Glassmorphic Number Sphere
+  // Draw 3D Glassmorphic Number Sphere:
+  // CRITICAL RULE: ALL 20 SPHERES SHARE THE EXACT SAME LUXURIOUS COLOR & SHADING!
+  // No color hints or spoiler cues between multiples, non-multiples, or quest targets.
+  // The learner must read the number and perform the mental calculation!
   function drawSphere(s, time) {
     const cfg = GAME_CONFIGS[currentDivisor];
-    const isQuestTarget = s.value === questTarget;
-    const isTarget = s.isTarget;
     const isChained = chainHighlightSpheres.has(s);
 
     ctx.save();
@@ -485,36 +441,25 @@
     ctx.scale(s.scale, s.scale);
 
     const r = s.radius;
-    const pulse = Math.sin(time * 0.003 + s.pulsePhase) * 1.5;
 
-    // Wisdom Vision 1: Parity Filter (Dim odd numbers for even divisors)
+    // Wisdom Vision: Parity Filter (Dims odd numbers only when explicitly requested by user)
     if (wisdomVisionMode === 'PARITY' && currentDivisor % 2 === 0) {
       if (s.value % 2 !== 0) {
         ctx.globalAlpha = 0.22;
       }
     }
 
-    // 1. Ambient Outer Halo
+    // 1. Ambient Outer Halo — 100% Identical for ALL choices
     const haloGrad = ctx.createRadialGradient(0, 0, r * 0.5, 0, 0, r * 1.6);
-    if (isQuestTarget) {
-      haloGrad.addColorStop(0, 'rgba(251, 191, 36, 0.45)');
-      haloGrad.addColorStop(0.7, 'rgba(245, 158, 11, 0.25)');
-      haloGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
-    } else if (isTarget) {
-      haloGrad.addColorStop(0, cfg.palette.aura);
-      haloGrad.addColorStop(0.7, 'rgba(56, 189, 248, 0.2)');
-      haloGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
-    } else {
-      haloGrad.addColorStop(0, 'rgba(148, 163, 184, 0.18)');
-      haloGrad.addColorStop(0.8, 'rgba(51, 65, 85, 0.08)');
-      haloGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
-    }
+    haloGrad.addColorStop(0, cfg.palette.aura);
+    haloGrad.addColorStop(0.7, 'rgba(56, 189, 248, 0.15)');
+    haloGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
     ctx.fillStyle = haloGrad;
     ctx.beginPath();
     ctx.arc(0, 0, r * 1.6, 0, Math.PI * 2);
     ctx.fill();
 
-    // Harmonic Chain Reaction Resonant Ripples
+    // Harmonic Chain Reaction Resonant Ripples (Doubles/multiples of caught number)
     if (isChained) {
       const rippleR = r * 1.5 + Math.sin(time * 0.01) * 6;
       ctx.strokeStyle = 'rgba(251, 191, 36, 0.85)';
@@ -524,24 +469,12 @@
       ctx.stroke();
     }
 
-    // 2. 3D Volumetric Sphere Body (Off-center light source)
+    // 2. 3D Volumetric Sphere Body — 100% Identical luxurious theme palette for ALL choices
     const sphereGrad = ctx.createRadialGradient(-r * 0.35, -r * 0.35, r * 0.1, 0, 0, r);
-    if (isQuestTarget) {
-      sphereGrad.addColorStop(0, '#ffffff');
-      sphereGrad.addColorStop(0.3, '#fef08a');
-      sphereGrad.addColorStop(0.7, '#d97706');
-      sphereGrad.addColorStop(1, '#451a03');
-    } else if (isTarget) {
-      sphereGrad.addColorStop(0, '#ffffff');
-      sphereGrad.addColorStop(0.35, cfg.palette.coreGradStart);
-      sphereGrad.addColorStop(0.8, cfg.palette.coreGradEnd);
-      sphereGrad.addColorStop(1, '#020617');
-    } else {
-      sphereGrad.addColorStop(0, '#f1f5f9');
-      sphereGrad.addColorStop(0.4, '#475569');
-      sphereGrad.addColorStop(0.85, '#1e293b');
-      sphereGrad.addColorStop(1, '#090d16');
-    }
+    sphereGrad.addColorStop(0, '#ffffff');
+    sphereGrad.addColorStop(0.35, cfg.palette.coreGradStart);
+    sphereGrad.addColorStop(0.82, cfg.palette.coreGradEnd);
+    sphereGrad.addColorStop(1, '#020617');
 
     ctx.fillStyle = sphereGrad;
     ctx.beginPath();
@@ -552,28 +485,37 @@
     ctx.save();
     ctx.beginPath();
     ctx.ellipse(-r * 0.3, -r * 0.35, r * 0.42, r * 0.22, -Math.PI / 4, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.55)';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.52)';
     ctx.fill();
     ctx.restore();
 
     // 4. Outer Glass Rim
-    ctx.strokeStyle = isQuestTarget ? 'rgba(251, 191, 36, 0.8)' : isTarget ? 'rgba(255, 255, 255, 0.45)' : 'rgba(255, 255, 255, 0.15)';
-    ctx.lineWidth = isQuestTarget ? 2.5 : 1.5;
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+    ctx.lineWidth = 1.8;
     ctx.beginPath();
     ctx.arc(0, 0, r, 0, Math.PI * 2);
     ctx.stroke();
 
-    // 5. Number Typography
+    // 5. High-Contrast Dark Backing Disc for Enhanced Number Visibility
+    // Ensures digits pop out with supreme clarity against any background or glow
+    ctx.fillStyle = 'rgba(5, 12, 24, 0.62)';
+    ctx.beginPath();
+    ctx.arc(0, 0, r * 0.72, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 6. Razor-Sharp Ultra-Visible Typography
+    const strVal = String(s.value);
+    const fontSize = strVal.length >= 3 ? Math.round(r * 0.78) : Math.round(r * 0.98);
     ctx.fillStyle = '#ffffff';
-    ctx.font = `800 ${Math.round(r * 0.9)}px 'Space Grotesk', system-ui, -apple-system, sans-serif`;
+    ctx.font = `900 ${fontSize}px 'Space Grotesk', system-ui, -apple-system, sans-serif`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
-    ctx.shadowBlur = 6;
-    ctx.fillText(s.value, 0, 1);
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
+    ctx.shadowBlur = 8;
+    ctx.fillText(strVal, 0, 1.5);
     ctx.shadowBlur = 0;
 
-    // Wisdom Vision 2: Digit Sum Pill (Σ)
+    // Wisdom Vision: Digit Sum Pill (Σ)
     if (wisdomVisionMode === 'DIGIT_SUM') {
       const digitSum = String(s.value).split('').reduce((a, b) => a + Number(b), 0);
       const isSpecialSum = (currentDivisor === 9 && digitSum % 9 === 0) || (currentDivisor === 6 && digitSum % 3 === 0);
@@ -593,7 +535,7 @@
       ctx.fillText(`Σ=${digitSum}`, 0, -r - 10);
     }
 
-    // Wisdom Vision 1: Parity Tag
+    // Wisdom Vision: Parity Tag
     if (wisdomVisionMode === 'PARITY' && currentDivisor % 2 === 0 && s.value % 2 !== 0) {
       ctx.fillStyle = 'rgba(244, 63, 94, 0.9)';
       ctx.font = "800 10px monospace";
@@ -752,28 +694,26 @@
   }
 
   // Draw Quantum Telekinesis Laser Tractor Beam & Lock-on Reticle
-  function drawTractorBeam(targetX, targetY, isBoss = false, isDivisible = true, time) {
+  // UNIFIED COLOR: Beam never reveals divisibility; always uses theme's electric beam!
+  function drawTractorBeam(targetX, targetY, isBoss = false, time) {
+    const cfg = GAME_CONFIGS[currentDivisor];
     ctx.save();
 
     // 1. Oscillating Plasma Laser Core
     const beamGrad = ctx.createLinearGradient(cursor.x, cursor.y, targetX, targetY);
     if (isBoss) {
-      beamGrad.addColorStop(0, 'rgba(251, 191, 36, 0.8)');
-      beamGrad.addColorStop(0.5, 'rgba(239, 68, 68, 0.9)');
-      beamGrad.addColorStop(1, 'rgba(251, 191, 36, 0.8)');
-    } else if (isDivisible) {
-      beamGrad.addColorStop(0, 'rgba(56, 189, 248, 0.7)');
-      beamGrad.addColorStop(0.5, 'rgba(74, 222, 128, 0.9)');
-      beamGrad.addColorStop(1, 'rgba(56, 189, 248, 0.7)');
+      beamGrad.addColorStop(0, 'rgba(251, 191, 36, 0.85)');
+      beamGrad.addColorStop(0.5, 'rgba(239, 68, 68, 0.95)');
+      beamGrad.addColorStop(1, 'rgba(251, 191, 36, 0.85)');
     } else {
-      beamGrad.addColorStop(0, 'rgba(251, 113, 133, 0.6)');
-      beamGrad.addColorStop(0.5, 'rgba(244, 63, 94, 0.8)');
-      beamGrad.addColorStop(1, 'rgba(251, 113, 133, 0.6)');
+      beamGrad.addColorStop(0, 'rgba(255, 255, 255, 0.9)');
+      beamGrad.addColorStop(0.4, cfg.palette.primary);
+      beamGrad.addColorStop(1, 'rgba(255, 255, 255, 0.85)');
     }
 
     ctx.strokeStyle = beamGrad;
-    ctx.lineWidth = 2.5;
-    ctx.shadowColor = isDivisible ? '#38bdf8' : '#fb7185';
+    ctx.lineWidth = 2.4;
+    ctx.shadowColor = cfg.palette.primary;
     ctx.shadowBlur = 12;
 
     // Laser sine-wave oscillation
@@ -786,7 +726,7 @@
 
     for (let i = 1; i < steps; i++) {
       const frac = i / steps;
-      const wave = Math.sin(time * 0.01 + frac * Math.PI * 4) * 4;
+      const wave = Math.sin(time * 0.01 + frac * Math.PI * 4) * 3.5;
       const px = cursor.x + (targetX - cursor.x) * frac + nx * wave;
       const py = cursor.y + (targetY - cursor.y) * frac + ny * wave;
       ctx.lineTo(px, py);
@@ -794,13 +734,13 @@
     ctx.lineTo(targetX, targetY);
     ctx.stroke();
 
-    // 2. Targeting Lock Reticle Brackets [ ]
-    const reticleR = isBoss ? 90 : 38;
+    // 2. Targeting Lock Reticle Brackets [ ] — Identical for ALL choices
+    const reticleR = isBoss ? 90 : 42;
     ctx.translate(targetX, targetY);
     ctx.rotate(time * 0.003);
 
-    ctx.strokeStyle = isBoss ? '#fbbf24' : isDivisible ? '#4ade80' : '#fb7185';
-    ctx.lineWidth = 2;
+    ctx.strokeStyle = isBoss ? '#fbbf24' : '#38bdf8';
+    ctx.lineWidth = 2.2;
     ctx.shadowBlur = 10;
 
     const bSize = 10;
@@ -898,7 +838,6 @@
 
   // Draw Deep Celestial Cosmos with Concentric Orbit Tracks
   function drawBackground() {
-    // Deep Cosmic Gradient
     const bgGrad = ctx.createRadialGradient(width / 2, height / 2, 50, width / 2, height / 2, Math.max(width, height) * 0.85);
     bgGrad.addColorStop(0, '#0a0f1d');
     bgGrad.addColorStop(0.6, '#030712');
@@ -912,7 +851,7 @@
     const minDim = Math.min(width, height);
 
     ctx.save();
-    ORBIT_RINGS.forEach((ringDef, rIdx) => {
+    ORBIT_RINGS.forEach((ringDef) => {
       const radius = minDim * ringDef.radiusRatio;
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
       ctx.lineWidth = 1.2;
@@ -937,7 +876,7 @@
   }
 
   // ══════════════════════════════════════════════════════════════════════════
-  // 7. GOD-TIER PARTICLE PHYSICS & SHOCKWAVES
+  // 7. PARTICLE PHYSICS & SHOCKWAVES
   // ══════════════════════════════════════════════════════════════════════════
   function spawnSupernova(x, y, count = 35) {
     const cfg = GAME_CONFIGS[currentDivisor];
@@ -1074,7 +1013,7 @@
     combo = Math.min(10, combo + 1);
     consecutiveCorrect++;
 
-    // Harmonic Chain Reaction: Highlight doubles and multiples of this number!
+    // Harmonic Chain Reaction: Highlight doubles and multiples of this number
     spheres.forEach(other => {
       if (other !== s && other.value > val && other.value % val === 0) {
         chainHighlightSpheres.set(other, 180);
@@ -1136,24 +1075,6 @@
     }
   }
 
-  function triggerRemainderTransmutation() {
-    if (!targetedSphere || targetedSphere.isTarget) return;
-
-    const val = targetedSphere.value;
-    const rem = val % currentDivisor;
-    const needed = currentDivisor - rem;
-
-    targetedSphere.value += needed;
-    targetedSphere.isTarget = true;
-    score += 150;
-
-    spawnSupernova(targetedSphere.x, targetedSphere.y, 35);
-    playTransmuteArpeggio();
-    spawnFloatingText(`⚗️ TRANSMUTED: ${val} + ${needed} = ${targetedSphere.value}!`, targetedSphere.x, targetedSphere.y, '#c084fc', 18);
-
-    updateHUD();
-  }
-
   function showRemainderToast(val, quotient, rem) {
     const toast = document.getElementById('qGameRemainderToast');
     if (!toast) return;
@@ -1179,7 +1100,7 @@
 
     const explain = document.getElementById('qReviveExplain');
     if (explain) {
-      explain.textContent = `Remember: Every multiple of ${currentDivisor} leaves a remainder of exactly 0. You can freeze time by resting your cursor, inspect prime factorizations calmly, or use Remainder Transmutation [T]!`;
+      explain.textContent = `Remember: Every multiple of ${currentDivisor} leaves a remainder of exactly 0. You can freeze time by resting your cursor to calculate calmly!`;
     }
     modal.style.display = 'flex';
   }
@@ -1393,7 +1314,7 @@
       if (bossActive && boss) {
         targetedBoss = true;
         targetedSphere = null;
-        drawTractorBeam(boss.x, boss.y, true, true, time);
+        drawTractorBeam(boss.x, boss.y, true, time);
       } else {
         targetedBoss = false;
         let best = null;
@@ -1407,52 +1328,8 @@
         }
         targetedSphere = best;
         if (targetedSphere) {
-          const isDiv = targetedSphere.value % currentDivisor === 0;
-          drawTractorBeam(targetedSphere.x, targetedSphere.y, false, isDiv, time);
-        }
-      }
-
-      // Update Telekinesis HUD Card
-      const inspectCard = document.getElementById('qGameTeleInspectCard');
-      if (inspectCard) {
-        if (targetedBoss && boss) {
-          inspectCard.style.display = 'flex';
-          document.getElementById('qInspectNum').textContent = boss.value;
-          const stEl = document.getElementById('qInspectStatus');
-          stEl.textContent = `TITAN BOSS (LOCKS: ${boss.hp}/${boss.maxHp})`;
-          stEl.className = 'qg-inspect-status is-divisible';
-          document.getElementById('qInspectPrime').textContent = formatPrimeAnatomy(boss.value);
-          document.getElementById('qInspectFormula').textContent = `${boss.value} ÷ ${currentDivisor} = 10 (FINAL TITAN TERM)`;
-          const transBtn = document.getElementById('qInspectTransmuteBtn');
-          if (transBtn) transBtn.style.display = 'none';
-        } else if (targetedSphere) {
-          inspectCard.style.display = 'flex';
-          const val = targetedSphere.value;
-          document.getElementById('qInspectNum').textContent = val;
-          const isDiv = val % currentDivisor === 0;
-          const stEl = document.getElementById('qInspectStatus');
-          const transBtn = document.getElementById('qInspectTransmuteBtn');
-
-          if (isDiv) {
-            stEl.textContent = 'DIVISIBLE ✓';
-            stEl.className = 'qg-inspect-status is-divisible';
-            document.getElementById('qInspectFormula').textContent = `${val} ÷ ${currentDivisor} = ${val / currentDivisor} (Remainder: 0)`;
-            if (transBtn) transBtn.style.display = 'none';
-          } else {
-            stEl.textContent = 'NOT DIVISIBLE ✗';
-            stEl.className = 'qg-inspect-status is-not-divisible';
-            const q = Math.floor(val / currentDivisor);
-            const rem = val % currentDivisor;
-            const needed = currentDivisor - rem;
-            document.getElementById('qInspectFormula').textContent = `${val} ÷ ${currentDivisor} = ${q} (Remainder: ${rem})`;
-            if (transBtn) {
-              transBtn.style.display = 'inline-flex';
-              transBtn.textContent = `⚗️ Transmute (+${needed} → ${val + needed})`;
-            }
-          }
-          document.getElementById('qInspectPrime').textContent = formatPrimeAnatomy(val);
-        } else {
-          inspectCard.style.display = 'none';
+          // Unified laser beam — never spoils divisibility!
+          drawTractorBeam(targetedSphere.x, targetedSphere.y, false, time);
         }
       }
 
@@ -1546,8 +1423,6 @@
     if (revModal) revModal.style.display = 'none';
     const vicModal = document.getElementById('qDivisorVictoryModal');
     if (vicModal) vicModal.style.display = 'none';
-    const inspectCard = document.getElementById('qGameTeleInspectCard');
-    if (inspectCard) inspectCard.style.display = 'none';
   }
 
   function resizeCanvas() {
@@ -1595,19 +1470,25 @@
   function onKeyDown(e) {
     if (!activeGame) return;
     if (e.key === 'Escape') {
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
       exit();
     } else if (e.key === 'm' || e.key === 'M') {
+      e.stopPropagation();
       audioMuted = !audioMuted;
       updateAudioToggleBtn();
     } else if (e.key === 'f' || e.key === 'F') {
+      e.stopPropagation();
       toggleGameFullscreen();
     } else if (e.key === ' ' || e.code === 'Space') {
       e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
       triggerRemoteAbsorption();
     } else if (e.key === 'v' || e.key === 'V') {
+      e.stopPropagation();
       cycleWisdomVision();
-    } else if (e.key === 't' || e.key === 'T') {
-      triggerRemainderTransmutation();
     }
   }
 
@@ -1643,7 +1524,7 @@
   // DOM Bindings Initialization
   function initDOMBindings() {
     window.addEventListener('resize', resizeCanvas);
-    window.addEventListener('keydown', onKeyDown);
+    window.addEventListener('keydown', onKeyDown, true);
 
     const canvasEl = document.getElementById('quantumDivisorCanvas');
     if (canvasEl) {
@@ -1670,12 +1551,6 @@
 
     const visionBtn = document.getElementById('qGameWisdomVisionBtn');
     if (visionBtn) visionBtn.addEventListener('click', cycleWisdomVision);
-
-    const absorbBtn = document.getElementById('qInspectAbsorbBtn');
-    if (absorbBtn) absorbBtn.addEventListener('click', triggerRemoteAbsorption);
-
-    const transmuteBtn = document.getElementById('qInspectTransmuteBtn');
-    if (transmuteBtn) transmuteBtn.addEventListener('click', triggerRemainderTransmutation);
 
     // Revive Modal Actions
     const rebootBtn = document.getElementById('qReviveRebootBtn');
