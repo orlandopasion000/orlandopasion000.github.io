@@ -40,7 +40,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&family=Orbitron:wght@600;700;800;900&family=Outfit:wght@600;700;800;900&family=Space+Grotesk:wght@600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
   <!-- Relative Stylesheet (with cache-bust versioning) -->
-  <link rel="stylesheet" href="style.css?v=30.3">
+  <link rel="stylesheet" href="style.css?v=31.0">
 </head>
 <body data-app-theme="pure-black" data-clock-style="pure-black">
   <!-- Accessibility Live Region for Screen Readers -->
@@ -386,6 +386,43 @@
         </div>
       </div>
       <div class="or-header-right">
+        <!-- 0. ENTER / EXIT FULL SCREEN (Matching OrlandoRecharge) -->
+        <button type="button" class="fs-toggle-btn" id="btnToggleFullscreen" title="Enter Full Screen (Click / F)" aria-label="Enter Full Screen">
+          <span class="fs-btn-glyph" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+            </svg>
+          </span>
+          <span class="fs-btn-label"><span class="fs-word-enter">ENTER </span>FULL<span class="fs-word-screen">SCREEN</span></span>
+        </button>
+
+        <!-- 0B. QUANTUM DIVISOR ARCADE GAMES (6 | 7 | 8 | 9 | 12 | 13) -->
+        <div class="qgame-btn-group" id="qGameDivisorGroup" role="group" aria-label="Quantum Divisor Math Arcade Games">
+          <button type="button" class="qgame-btn-launch qgame-btn-d6" data-divisor-launch="6" title="Launch Divisor 6 Arcade (Dynamo Singularity · Catch 12, 18, 24... 60)" aria-label="Launch Divisor 6 Game">
+            <span class="game-btn-media-core d6-core" aria-hidden="true">6</span>
+            <span class="game-btn-label"><span class="qg-prefix">DIVISOR </span>6</span>
+          </button>
+          <button type="button" class="qgame-btn-launch qgame-btn-d7" data-divisor-launch="7" title="Launch Divisor 7 Arcade (Prism Helix · Catch 14, 21, 28... 70)" aria-label="Launch Divisor 7 Game">
+            <span class="game-btn-media-core d7-core" aria-hidden="true">7</span>
+            <span class="game-btn-label"><span class="qg-prefix">DIVISOR </span>7</span>
+          </button>
+          <button type="button" class="qgame-btn-launch qgame-btn-d8" data-divisor-launch="8" title="Launch Divisor 8 Arcade (Volcanic Meteor · Catch 16, 24, 32... 80)" aria-label="Launch Divisor 8 Game">
+            <span class="game-btn-media-core d8-core" aria-hidden="true">8</span>
+            <span class="game-btn-label"><span class="qg-prefix">DIVISOR </span>8</span>
+          </button>
+          <button type="button" class="qgame-btn-launch qgame-btn-d9" data-divisor-launch="9" title="Launch Divisor 9 Arcade (Plasma Comet · Catch 18, 27, 36... 90)" aria-label="Launch Divisor 9 Game">
+            <span class="game-btn-media-core d9-core" aria-hidden="true">9</span>
+            <span class="game-btn-label"><span class="qg-prefix">DIVISOR </span>9</span>
+          </button>
+          <button type="button" class="qgame-btn-launch qgame-btn-d12" data-divisor-launch="12" title="Launch Divisor 12 Arcade (Crystal Orb · Catch 24, 36, 48... 120)" aria-label="Launch Divisor 12 Game">
+            <span class="game-btn-media-core d12-core" aria-hidden="true">12</span>
+            <span class="game-btn-label"><span class="qg-prefix">DIVISOR </span>12</span>
+          </button>
+          <button type="button" class="qgame-btn-launch qgame-btn-d13" data-divisor-launch="13" title="Launch Divisor 13 Arcade (Thermonuclear Molten · Catch 26, 39, 52... 130)" aria-label="Launch Divisor 13 Game">
+            <span class="game-btn-media-core d13-core" aria-hidden="true">13</span>
+            <span class="game-btn-label"><span class="qg-prefix">DIVISOR </span>13</span>
+          </button>
+        </div>
         <!-- 1. SPOTLIGHT COMMAND PALETTE TRIGGER (CTRL + K / ⌘K) -->
         <button type="button" class="btn-topbar-search" id="btnTopbarSearch" title="Open Horology Spotlight Command Palette (Ctrl + K / ⌘K)">
           <svg class="topbar-search-svg" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2">
@@ -596,6 +633,8 @@
             <span>Alarm</span>
           </button>
         </nav>
+
+  
       </div>
 
       <!-- ========================================== -->
@@ -1252,9 +1291,75 @@
     </button>
   </nav>
 
+  <!-- ============================================================ -->
+  <!-- QUANTUM DIVISOR ARCADE OVERLAY (FULLSCREEN CANVAS ODYSSEY)  -->
+  <!-- ============================================================ -->
+  <div id="quantumDivisorGameOverlay" class="quantum-divisor-overlay" style="display:none;" aria-hidden="true" role="dialog" aria-label="Quantum Divisor Math Arcade">
+    <canvas id="quantumDivisorCanvas" class="qgame-canvas"></canvas>
+
+    <!-- In-Game Top HUD -->
+    <header class="qg-top-hud">
+      <div class="qg-hud-upper">
+        <!-- Title & Subtitle -->
+        <div class="qg-title-block">
+          <div class="qg-level-title" id="qGameLevelTitle">DIVISOR 6 · DYNAMO SINGULARITY</div>
+          <div class="qg-level-subtitle" id="qGameLevelSubtitle">Catch All Numbers Divisible by 6 (9 Multiples Total: 2nd..10th Term)</div>
+        </div>
+
+        <!-- Level Selector Tabs [ 6 ] [ 7 ] [ 8 ] [ 9 ] [ 12 ] [ 13 ] -->
+        <div class="qg-tabs-row" role="tablist" aria-label="Select Divisor Game">
+          <button type="button" class="qg-tab-btn active" data-divisor="6">6</button>
+          <button type="button" class="qg-tab-btn" data-divisor="7">7</button>
+          <button type="button" class="qg-tab-btn" data-divisor="8">8</button>
+          <button type="button" class="qg-tab-btn" data-divisor="9">9</button>
+          <button type="button" class="qg-tab-btn" data-divisor="12">12</button>
+          <button type="button" class="qg-tab-btn" data-divisor="13">13</button>
+        </div>
+
+        <!-- Metrics & Controls -->
+        <div class="qg-actions-right">
+          <div class="qg-metric-badge" title="Current Score">
+            <span>Score:</span> <strong id="qGameScoreVal">0</strong>
+          </div>
+          <div class="qg-metric-badge" title="Combo Multiplier">
+            <span>Combo:</span> <strong id="qGameComboVal" style="color:#38bdf8;">x1</strong>
+          </div>
+          <button type="button" class="qg-hud-btn" id="qGameAudioToggleBtn" title="Toggle Sound (M)">🔊 Sound: ON</button>
+          <button type="button" class="qg-hud-btn" id="qGameFullscreenBtn" title="Toggle Fullscreen (F)">⛶ Fullscreen</button>
+          <button type="button" class="qg-hud-btn qg-btn-close" id="qGameCloseBtn" title="Exit Game (Esc)">✕ Exit</button>
+        </div>
+      </div>
+
+      <!-- Live Checklist of Target Multiples -->
+      <div class="qg-checklist-row" id="qGameChecklistRow" aria-label="Target multiples checklist">
+        <!-- Generated dynamically via JS -->
+      </div>
+    </header>
+
+    <!-- Grand Victory Modal -->
+    <div id="qDivisorVictoryModal" class="qg-modal-wrap" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="qVictoryTitle">
+      <div class="qg-modal-card">
+        <div class="qg-modal-badge">★ COGNITIVE VICTORY ACHIEVED ★</div>
+        <h2 class="qg-modal-title" id="qVictoryTitle">DIVISOR 6 FULLY MASTERED!</h2>
+        <div class="qg-modal-score" id="qVictoryScore">Final Score: 1,800 Points</div>
+
+        <div class="qg-table-grid" id="qVictoryTable">
+          <!-- Populated dynamically with multiplication table -->
+        </div>
+
+        <div class="qg-modal-actions">
+          <button type="button" class="qg-modal-btn qg-btn-gold" id="qVictoryNextLevel">Advance to Next Divisor ➔</button>
+          <button type="button" class="qg-modal-btn qg-btn-cyan" id="qVictoryPlayAgain">⟳ Play Again</button>
+          <button type="button" class="qg-modal-btn qg-btn-slate" id="qVictoryExit">Return to Timer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="assets/relative-time.js"></script>
   <script src="assets/qrcode.min.js"></script>
-  <script src="app.js?v=30.3"></script>
+  <script src="app.js?v=31.0"></script>
+  <script src="assets/quantum-divisor-game.js?v=1.0"></script>
 
 
 

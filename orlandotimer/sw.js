@@ -3,7 +3,7 @@
  * Enables ultra-fast offline caching & PWA installation
  */
 
-const CACHE_NAME = 'orlandotimer-v39';
+const CACHE_NAME = 'orlandotimer-v40';
 const ASSETS_TO_CACHE = [
   './',
   'index.html',
@@ -16,7 +16,8 @@ const ASSETS_TO_CACHE = [
   'assets/ot-icon-192.png',
   'assets/ot-icon-512.png',
   'assets/app-icon.ico',
-  'assets/lexend.ttf'
+  'assets/lexend.ttf',
+  'assets/quantum-divisor-game.js'
 ];
 
 self.addEventListener('install', (event) => {

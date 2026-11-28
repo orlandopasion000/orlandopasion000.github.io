@@ -1215,6 +1215,19 @@
     if (zenFsSpan) zenFsSpan.textContent = isFs ? exitText : enterText;
     const zenFsBtn = document.getElementById('btnZenFullscreen');
     if (zenFsBtn) zenFsBtn.title = isFs ? `${exitText} (F)` : `${enterText} (F)`;
+
+    // Update Topbar Fullscreen Toggle Button (matching OrlandoRecharge)
+    const btnToggleFs = document.getElementById('btnToggleFullscreen');
+    if (btnToggleFs) {
+      const glyph = btnToggleFs.querySelector('.fs-btn-glyph');
+      const label = btnToggleFs.querySelector('.fs-btn-label');
+      const enterSvg = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>';
+      const exitSvg = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></svg>';
+      btnToggleFs.title = isFs ? 'Exit Full Screen (Esc / Click)' : 'Enter Full Screen (Click / F)';
+      btnToggleFs.setAttribute('aria-label', isFs ? 'Exit Full Screen' : 'Enter Full Screen');
+      if (glyph) glyph.innerHTML = isFs ? exitSvg : enterSvg;
+      if (label) label.innerHTML = isFs ? '<span class="fs-word-enter">EXIT </span>FULL<span class="fs-word-screen">SCREEN</span>' : '<span class="fs-word-enter">ENTER </span>FULL<span class="fs-word-screen">SCREEN</span>';
+    }
   }
 
   if (btnFullscreen) {
@@ -1231,6 +1244,20 @@
           document.exitFullscreen().catch(() => {});
         } else if (document.webkitExitFullscreen) {
           document.webkitExitFullscreen();
+        }
+      }
+    });
+  }
+
+  const btnToggleFullscreen = document.getElementById('btnToggleFullscreen');
+  if (btnToggleFullscreen) {
+    btnToggleFullscreen.addEventListener('click', () => {
+      if (btnFullscreen) btnFullscreen.click();
+      else {
+        if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+          document.documentElement.requestFullscreen().catch(() => {});
+        } else {
+          document.exitFullscreen().catch(() => {});
         }
       }
     });
@@ -4447,6 +4474,13 @@
           notifyUserToast(isAct ? 'SUB-APP DOCK SHOWN' : 'SUB-APP DOCK HIDDEN', isAct ? '🧭 Bottom 5-App Ecosystem Dock is now visible.' : '🧭 Bottom Sub-App Dock concealed.');
         }
       } },
+      // Quantum Divisor Arcade Commands
+      { id: 'qgame-d6', cat: 'Quantum Divisor Arcade', icon: '⚡', title: 'Play Divisor 6 (Dynamo Singularity)', desc: 'Catch multiples of 6 (12..60) with 3D Tesla electric arcs', badge: 'Game 6', action: () => { if (window.QuantumDivisorGame) window.QuantumDivisorGame.launch(6); } },
+      { id: 'qgame-d7', cat: 'Quantum Divisor Arcade', icon: '🧬', title: 'Play Divisor 7 (Prism Helix)', desc: 'Catch multiples of 7 (14..70) with intertwined helical strands', badge: 'Game 7', action: () => { if (window.QuantumDivisorGame) window.QuantumDivisorGame.launch(7); } },
+      { id: 'qgame-d8', cat: 'Quantum Divisor Arcade', icon: '☄️', title: 'Play Divisor 8 (Volcanic Meteor)', desc: 'Catch multiples of 8 (16..80) with fiery solar flares', badge: 'Game 8', action: () => { if (window.QuantumDivisorGame) window.QuantumDivisorGame.launch(8); } },
+      { id: 'qgame-d9', cat: 'Quantum Divisor Arcade', icon: '🌌', title: 'Play Divisor 9 (Plasma Comet)', desc: 'Catch multiples of 9 (18..90) with ion starlight wake', badge: 'Game 9', action: () => { if (window.QuantumDivisorGame) window.QuantumDivisorGame.launch(9); } },
+      { id: 'qgame-d12', cat: 'Quantum Divisor Arcade', icon: '🔮', title: 'Play Divisor 12 (Crystal Orb)', desc: 'Catch multiples of 12 (24..120) with emerald harmonic waves', badge: 'Game 12', action: () => { if (window.QuantumDivisorGame) window.QuantumDivisorGame.launch(12); } },
+      { id: 'qgame-d13', cat: 'Quantum Divisor Arcade', icon: '🔥', title: 'Play Divisor 13 (Thermonuclear Molten)', desc: 'Catch multiples of 13 (26..130) with supercritical magma cores', badge: 'Game 13', action: () => { if (window.QuantumDivisorGame) window.QuantumDivisorGame.launch(13); } },
       { id: 'sys-fullscreen', cat: 'Horology System & Audio', icon: '⛶', title: 'Toggle Full Screen Display', desc: 'Enter or exit distraction-free full-screen horology mode (Hotkey: F)', badge: 'Fullscreen', action: () => { const b = document.getElementById('btnFullscreen'); if (b) b.click(); } },
       { id: 'sys-standalone', cat: 'Horology System & Audio', icon: '🪟', title: 'Open Main Web App (Standalone Window)', desc: 'Launch Orlando Timer in a dedicated chromeless desktop window', badge: 'PWA', action: handleLaunchStandaloneApp },
 
