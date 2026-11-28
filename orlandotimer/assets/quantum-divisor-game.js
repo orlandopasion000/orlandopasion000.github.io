@@ -6,7 +6,7 @@
  *
  * Rules:
  * - The player's cursor is the Divisor Celestial Core.
- * - Exactly 30 roaming 3D glassmorphic spheres drift freely across the cosmos.
+ * - Exactly 20 roaming 3D glassmorphic spheres drift freely across the cosmos.
  * - Catch all 9 numbers divisible by the base divisor (from 2nd term up to 10th term).
  * - Avoid numbers that are not divisible by it (gentle deflection + educational guidance).
  * - High-speed 60fps HTML5 Canvas physics + Web Audio melodic synthesizer.
@@ -244,7 +244,7 @@
   };
 
   // 30 Roaming Spheres
-  const TOTAL_SPHERES = 30;
+  const TOTAL_SPHERES = 20;
   let spheres = [];
 
   // Particles & Visual Shockwaves
@@ -270,10 +270,10 @@
     if (val === null) {
       // Choose whether to spawn a remaining target or a distractor
       const remainingTargets = cfg.targetMultiples.filter(m => !caughtMultiples.has(m));
-      // Keep about 6-8 target multiples present in the pool of 30
+      // Keep about 4-5 target multiples present in the pool of 20
       const currentTargetCount = spheres.filter(s => cfg.targetMultiples.includes(s.value)).length;
       
-      if (remainingTargets.length > 0 && (currentTargetCount < 7 || Math.random() < 0.35)) {
+      if (remainingTargets.length > 0 && (currentTargetCount < 5 || Math.random() < 0.35)) {
         val = remainingTargets[Math.floor(Math.random() * remainingTargets.length)];
       } else {
         const pool = cfg.nonMultiplesPool;
@@ -334,7 +334,7 @@
       spheres.push(createSphere(targetCopy[i], false));
     }
 
-    // Fill the remainder up to TOTAL_SPHERES (30 spheres roaming)
+    // Fill the remainder up to TOTAL_SPHERES (20 spheres roaming)
     while (spheres.length < TOTAL_SPHERES) {
       spheres.push(createSphere(null, false));
     }
@@ -780,7 +780,7 @@
     // Floating text: e.g. "+100 · 36 ÷ 6 = 6!"
     spawnFloatingText(`+${100 * combo}!  ${val} ÷ ${currentDivisor} = ${quotient}`, s.x, s.y, '#fef08a', 18);
 
-    // Remove caught sphere and spawn a new distractor/remaining target to maintain exactly 30
+    // Remove caught sphere and spawn a new distractor/remaining target to maintain exactly 20
     spheres.splice(index, 1);
     spheres.push(createSphere(null, true));
 
