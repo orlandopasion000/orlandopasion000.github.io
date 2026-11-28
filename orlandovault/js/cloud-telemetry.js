@@ -152,7 +152,7 @@
       platform: navigator.platform || '',
       lastSeenAt: now,
       lastAction,
-      appVersion: 'v84'
+      appVersion: 'v85'
     };
 
     const reg = (await readEncryptedSyncDoc('device_registry')) || { devices: [], revokedClientIds: [] };
@@ -191,7 +191,7 @@
       if (d && d.clientId && d.clientId !== clientId) revokedSet.add(d.clientId);
     });
     const mine = (reg.devices || []).filter(d => d && d.clientId === clientId);
-    lastCloudDevices = mine.length ? mine : [{ clientId, label: getFriendlyDeviceLabel(), lastSeenAt: Date.now(), lastAction: 'Revoked Others', appVersion: 'v84' }];
+    lastCloudDevices = mine.length ? mine : [{ clientId, label: getFriendlyDeviceLabel(), lastSeenAt: Date.now(), lastAction: 'Revoked Others', appVersion: 'v85' }];
     await writeEncryptedSyncDoc('device_registry', {
       devices: lastCloudDevices,
       revokedClientIds: Array.from(revokedSet).slice(-30)
@@ -205,7 +205,7 @@
     const panel = document.getElementById('deviceRegistryPanel');
     if (!panel) return;
     const clientId = window.VAULT_CLIENT_ID || 'ov_local';
-    const devices = lastCloudDevices.length ? lastCloudDevices : [{ clientId, label: getFriendlyDeviceLabel(), lastSeenAt: Date.now(), lastAction: 'Current Session', appVersion: 'v84' }];
+    const devices = lastCloudDevices.length ? lastCloudDevices : [{ clientId, label: getFriendlyDeviceLabel(), lastSeenAt: Date.now(), lastAction: 'Current Session', appVersion: 'v85' }];
 
     panel.innerHTML = `
       <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">

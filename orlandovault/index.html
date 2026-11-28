@@ -17,8 +17,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/vault-core.css?v=vault-v84">
-  <link rel="stylesheet" href="css/vault-pro.css?v=vault-v84">
+  <link rel="stylesheet" href="css/vault-core.css?v=vault-v85">
+  <link rel="stylesheet" href="css/vault-pro.css?v=vault-v85">
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
@@ -3322,13 +3322,13 @@
         if (window.caches) {
           caches.keys().then(keys => {
             keys.forEach(k => {
-              if (k.startsWith('vault-') && k !== 'vault-jarvis-v84') {
+              if (k.startsWith('vault-') && k !== 'vault-jarvis-v85') {
                 caches.delete(k);
               }
             });
           });
         }
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v84', { scope: '/orlandovault/' }).then(reg => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v85', { scope: '/orlandovault/' }).then(reg => {
           if (reg && reg.update) reg.update();
         }).catch(err => {
           console.warn('Vault SW registration error:', err);
@@ -9388,10 +9388,10 @@
   })();
   </script>
 
-  <script src="js/vault-faceid.js?v=vault-v84"></script>
-  <script src="js/vault-templates.js?v=vault-v84"></script>
-  <script src="js/totp-watchtower.js?v=vault-v84"></script>
-  <script src="js/cloud-telemetry.js?v=vault-v84"></script>
-  <script src="js/autofill-bridge.js?v=vault-v84"></script>
+  <script src="js/vault-faceid.js?v=vault-v85"></script>
+  <script src="js/vault-templates.js?v=vault-v85"></script>
+  <script src="js/totp-watchtower.js?v=vault-v85"></script>
+  <script src="js/cloud-telemetry.js?v=vault-v85"></script>
+  <script src="js/autofill-bridge.js?v=vault-v85"></script>
 </body>
 </html>

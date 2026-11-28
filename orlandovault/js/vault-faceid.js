@@ -327,7 +327,10 @@
   // ==========================================================================
   function ensureDynamicIslandEl() {
     let di = document.getElementById('iosDynamicIsland');
-    if (di) return di;
+    if (di) {
+      bindDynamicIslandClick(di);
+      return di;
+    }
     const overlay = document.getElementById('vaultLockOverlay');
     if (!overlay) return null;
     di = document.createElement('div');
@@ -499,6 +502,8 @@
 
   function handleDynamicIslandActivation() {
     const prof = getBiometricDeviceProfile();
+    bioCancelledByUser = false;
+    wakeArmPending = false;
     if (hasBioWrapConfigured()) {
       unlockWithFaceId({ reason: 'dynamic_island', silentOnCancel: false }).catch(() => {});
       return;
@@ -904,11 +909,12 @@
       if (isGestureGate) {
         gestureAutoSeekArmed = true;
         anyTouchAutoScanArmed = true;
-        setDynamicIslandState('idle');
+        bioCancelledByUser = false;
+        setDynamicIslandState('hint', prof.kind === 'zenbook_fingerprint' ? 'Click to Scan' : 'Tap for Face ID');
         const subEl = document.getElementById('iosPinSubHint');
         if (subEl && !subEl.textContent) {
           subEl.textContent = prof.kind === 'zenbook_fingerprint'
-            ? 'Touch Fingerprint Sensor or click anywhere'
+            ? 'Click fingerprint pill or anywhere to open Windows Hello'
             : 'Touch anywhere or look for Face ID';
           subEl.classList.add('visible');
         }

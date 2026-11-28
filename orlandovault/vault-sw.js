@@ -1,5 +1,5 @@
 /* OrlandoVault · Offline-First Jarvis Security Service Worker */
-var CACHE_NAME = 'vault-jarvis-v84';
+var CACHE_NAME = 'vault-jarvis-v85';
 var ASSETS = [
   './',
   './index.html',
@@ -54,14 +54,15 @@ self.addEventListener('fetch', function(e) {
   if (!url.startsWith(self.location.origin)) return;
   if (url.indexOf('firestore.googleapis.com') !== -1 || url.indexOf('docs.google.com') !== -1 || url.indexOf('ntfy.sh') !== -1) return;
 
-  // HTML / Navigation requests: Network-First so all updates appear immediately online!
-  // Automatically falls back to offline cache only if network is unavailable.
+  // HTML, JS & CSS requests: Network-First so app updates take effect on very first reload online
+  // Automatically falls back to offline cache if network is unavailable.
   var isHtml = e.request.mode === 'navigate' ||
                url.endsWith('/') ||
                url.endsWith('/index.html') ||
                (e.request.headers.get('accept') && e.request.headers.get('accept').indexOf('text/html') !== -1);
+  var isCodeAsset = /\.(js|css)(\?|$)/i.test(url);
 
-  if (isHtml) {
+  if (isHtml || isCodeAsset) {
     e.respondWith(
       fetch(e.request).then(function(networkResponse) {
         if (networkResponse && networkResponse.status === 200) {
@@ -73,7 +74,8 @@ self.addEventListener('fetch', function(e) {
         return networkResponse;
       }).catch(function() {
         return caches.match(e.request).then(function(r) {
-          return r || caches.match('./index.html');
+          if (r) return r;
+          return isHtml ? caches.match('./index.html') : caches.match(e.request, { ignoreSearch: true });
         });
       })
     );
