@@ -1030,8 +1030,9 @@
   color: #30d158;
   display: none;
 }
-.ios-dynamic-island:not(.di-configured)[data-di-state="idle"] .di-face-svg {
-  color: rgba(255, 255, 255, 0.48);
+.ios-dynamic-island:not(.di-configured)[data-di-state="idle"] .di-face-svg,
+.ios-dynamic-island:not(.di-configured)[data-di-state="idle"] .di-fp-svg {
+  color: rgba(255, 255, 255, 0.45);
 }
 @keyframes iosDiPulse {
   0%, 100% { transform: scale(1); opacity: 0.92; }
@@ -1492,6 +1493,21 @@
 }
 .zenbook-bio-window[data-zb-state="scanning"] .zb-scan-beam {
   animation: zbScanSweep 1.1s ease-in-out infinite;
+}
+.zenbook-bio-window[data-zb-state="setup"] {
+  border-color: rgba(251, 191, 36, 0.52);
+}
+.zenbook-bio-window[data-zb-state="setup"] .zb-fp-ring {
+  background: rgba(251, 191, 36, 0.12);
+  border-color: rgba(251, 191, 36, 0.48);
+}
+.zenbook-bio-window[data-zb-state="setup"] .zb-fp-svg {
+  color: #fbbf24;
+}
+.zenbook-bio-window[data-zb-state="setup"] .zb-scan-btn {
+  border-color: rgba(251, 191, 36, 0.48);
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.22), rgba(245, 158, 11, 0.14));
+  color: #fef3c7;
 }
 .zenbook-bio-window[data-zb-state="matched"] {
   border-color: rgba(16, 185, 129, 0.65);

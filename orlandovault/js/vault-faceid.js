@@ -23,7 +23,9 @@
   let activeFaceIdPromise = null;
   let gestureAutoSeekArmed = true;
   let anyTouchAutoScanArmed = true;
+  let bioCancelledByUser = false;
   let manualLockGraceUntil = 0;
+  let wakeArmPending = false;
   let autoMountTimer = null;
   let diResetTimer = null;
   let forceEnrollPromptNextUnlock = false;
@@ -97,9 +99,9 @@
       scanningLabel: 'Touch Sensor',
       matchedLabel: 'Verified',
       failedLabel: 'Try Sensor Again',
-      enrollBadge: 'WINDOWS HELLO · ASUS ZENBOOK TPM 2.0',
+      enrollBadge: 'WINDOWS HELLO · ASUS ZENBOOK ELAN SENSOR',
       enrollTitle: 'Enable Zenbook Fingerprint Unlock?',
-      enrollDesc: 'Seal your vault key inside your ASUS Zenbook TPM 2.0 security chip. Rest your finger on the laptop fingerprint reader when Windows Security prompts.',
+      enrollDesc: 'Pair your ASUS Zenbook ELAN touch sensor with Windows Hello. Once activated, OrlandoVault opens Windows Security automatically when locked so resting your finger unlocks immediately.',
       enrollBtn: 'Activate Fingerprint Sensor',
       enrollWaitLabel: 'Waiting for Fingerprint Sensor...',
       syncBtnActive: '✅ Zenbook Fingerprint Active (Click to Disable)',
@@ -382,7 +384,7 @@
     win.innerHTML = `
       <div class="zb-win-topbar">
         <span class="zb-win-brand">🪟 Windows Security · ASUS Zenbook</span>
-        <span class="zb-win-tpm">TPM 2.0</span>
+        <span class="zb-win-tpm">ELAN · TPM 2.0</span>
       </div>
       <div class="zb-win-body">
         <div class="zb-fp-ring" id="zbFpRingTrigger" role="button" tabindex="0" aria-label="Touch Fingerprint Sensor">
@@ -401,14 +403,21 @@
     const triggerScan = (e) => {
       e.preventDefault();
       e.stopPropagation();
+      bioCancelledByUser = false;
+      wakeArmPending = false;
       if (hasBioWrapConfigured()) {
         unlockWithFaceId({ reason: 'zenbook_window', silentOnCancel: false }).catch(() => {});
       } else {
         forceEnrollPromptNextUnlock = true;
         const subEl = document.getElementById('iosPinSubHint');
         if (subEl) {
-          subEl.textContent = 'Enter your 6-digit passcode once to activate Zenbook Fingerprint';
+          subEl.textContent = 'Enter your 6-digit passcode once to pair your ELAN touch sensor';
           subEl.classList.add('visible');
+        }
+        const errEl = document.getElementById('vaultLockError');
+        if (errEl) {
+          errEl.textContent = 'Enter your 6-digit passcode once now, then click Activate Fingerprint Sensor to link Windows Hello.';
+          errEl.style.display = 'block';
         }
       }
     };
@@ -423,25 +432,35 @@
     const prof = getBiometricDeviceProfile();
     const gateCard = document.getElementById('vaultGateCard');
     const pinActive = gateCard && gateCard.classList.contains('ios-pin-active');
-    const visible = currentPinMode === 'unlock' && !!pinActive && prof.kind === 'zenbook_fingerprint' && hasBioWrapConfigured();
+    const isConfigured = hasBioWrapConfigured();
+    const visible = currentPinMode === 'unlock' && !!pinActive && prof.kind === 'zenbook_fingerprint';
     win.classList.toggle('visible', visible);
-    const st = state || 'idle';
+    const st = !isConfigured ? 'setup' : (state || 'idle');
     win.setAttribute('data-zb-state', st);
     const ttl = document.getElementById('zbBioStatusTitle');
     const sub = document.getElementById('zbBioStatusSub');
+    const btn = document.getElementById('btnZenbookScanTrigger');
     if (ttl && sub) {
-      if (st === 'scanning') {
-        ttl.textContent = 'Reading Fingerprint...';
-        sub.textContent = 'Touch your ASUS Zenbook capacitive sensor';
+      if (st === 'setup') {
+        ttl.textContent = 'Fingerprint Sensor Not Linked Yet';
+        sub.textContent = 'Unlock with 6-digit passcode once to pair ELAN Windows Hello';
+        if (btn) btn.textContent = '🔐 Pair ELAN Touch Sensor';
+      } else if (st === 'scanning') {
+        ttl.textContent = 'Touch Fingerprint Sensor Now';
+        sub.textContent = 'Put your finger on your ASUS Zenbook sensor';
+        if (btn) btn.textContent = '⏳ Listening for ELAN Sensor...';
       } else if (st === 'matched') {
         ttl.textContent = 'Fingerprint Verified';
         sub.textContent = 'Unsealing AES-256-GCM Session Key';
+        if (btn) btn.textContent = '✅ Verified';
       } else if (st === 'failed') {
         ttl.textContent = 'Sensor Did Not Match';
-        sub.textContent = 'Try sensor again or finish 6-digit passcode';
+        sub.textContent = 'Click below to re-open Windows Security or enter PIN';
+        if (btn) btn.textContent = '🫆 Retry Windows Hello Sensor';
       } else {
-        ttl.textContent = 'Touch Fingerprint Sensor';
-        sub.textContent = 'Rest finger on your ASUS Zenbook reader or press Enter';
+        ttl.textContent = 'ELAN Fingerprint Sensor Ready';
+        sub.textContent = 'Touch sensor when Windows Security opens, or click below';
+        if (btn) btn.textContent = '🫆 Scan Fingerprint Now';
       }
     }
   }
@@ -896,6 +915,10 @@
         return false;
       }
 
+      if (err && (err.name === 'NotAllowedError' || err.name === 'AbortError') && elapsed >= 250 && elapsed < 50000) {
+        bioCancelledByUser = true;
+      }
+
       setDynamicIslandState('failed');
       if (diResetTimer) clearTimeout(diResetTimer);
       diResetTimer = setTimeout(() => setDynamicIslandState('idle'), 1000);
@@ -1080,15 +1103,16 @@
 
     setDynamicIslandState('idle');
     if (hasBioWrapConfigured()) {
+      bioCancelledByUser = false;
       gestureAutoSeekArmed = true;
       anyTouchAutoScanArmed = true;
-      if (Date.now() >= manualLockGraceUntil && document.visibilityState === 'visible' && !activeFaceIdPromise) {
+      if (Date.now() >= manualLockGraceUntil && !wakeArmPending && document.visibilityState === 'visible' && !activeFaceIdPromise) {
         if (autoMountTimer) clearTimeout(autoMountTimer);
         autoMountTimer = setTimeout(() => {
           const pinPanel = document.getElementById('iosPinPanel');
           const overlay = document.getElementById('vaultLockOverlay');
           const panelOpen = pinPanel && pinPanel.style.display !== 'none' && overlay && !overlay.classList.contains('unlocked');
-          if (panelOpen && currentPinMode === 'unlock' && !(hooks().isUnlocked && hooks().isUnlocked())) {
+          if (panelOpen && currentPinMode === 'unlock' && !bioCancelledByUser && !(hooks().isUnlocked && hooks().isUnlocked())) {
             unlockWithFaceId({ reason: 'auto_mount', silentOnCancel: true }).catch(() => {});
           }
         }, 15);
@@ -1102,15 +1126,19 @@
   function onKeypadDigitClick() {
     if (currentPinMode !== 'unlock') return;
     if (!hasBioWrapConfigured()) return;
-    if (!gestureAutoSeekArmed || activeFaceIdPromise) return;
+    if (!gestureAutoSeekArmed || activeFaceIdPromise || bioCancelledByUser) return;
     if (hooks().isUnlocked && hooks().isUnlocked()) return;
     gestureAutoSeekArmed = false;
     anyTouchAutoScanArmed = false;
+    wakeArmPending = false;
     unlockWithFaceId({ reason: 'typing_digits', silentOnCancel: true }).catch(() => {});
   }
 
-  function onManualVaultLock(wasUnlocked = true) {
-    manualLockGraceUntil = wasUnlocked ? (Date.now() + 900) : 0;
+  function onManualVaultLock(wasUnlocked = true, isManual = true) {
+    manualLockGraceUntil = (wasUnlocked && isManual) ? (Date.now() + 900) : 0;
+    // Wait for first pointer/focus return after unattended idle auto-lock so Windows Security pops right when user returns
+    wakeArmPending = !isManual;
+    bioCancelledByUser = false;
     gestureAutoSeekArmed = true;
     anyTouchAutoScanArmed = true;
     clearTransientSecret();
@@ -1130,6 +1158,7 @@
     }
     let dismissed = false;
     try { dismissed = localStorage.getItem(LS_FACEID_DISMISSED) === '1'; } catch (e) {}
+    const prof = getBiometricDeviceProfile();
     const isTouchDevice = (navigator.maxTouchPoints > 0)
       || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent || '')
       || !!(window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
@@ -1142,7 +1171,7 @@
 
     setTimeout(() => {
       if (!(hooks().isUnlocked && hooks().isUnlocked()) || hasBioWrapConfigured()) return;
-      if (shouldForce || isTouchDevice) {
+      if (shouldForce || isTouchDevice || prof.kind === 'zenbook_fingerprint' || prof.kind === 'mac_touchid') {
         openEnrollSheet('one_tap');
       } else {
         showDesktopBioOfferPill();
@@ -1152,12 +1181,14 @@
 
   function tryResumeAutoFaceId(reason) {
     if (Date.now() < manualLockGraceUntil) return;
+    if (bioCancelledByUser && reason !== 'user_wake') return;
     const overlayEl = document.getElementById('vaultLockOverlay');
     const pinPanel = document.getElementById('iosPinPanel');
     const isLockedOnPin = overlayEl && !overlayEl.classList.contains('unlocked')
       && pinPanel && pinPanel.style.display !== 'none'
       && currentPinMode === 'unlock';
     if (isLockedOnPin && hasBioWrapConfigured() && !activeFaceIdPromise && !(hooks().isUnlocked && hooks().isUnlocked())) {
+      wakeArmPending = false;
       unlockWithFaceId({ reason, silentOnCancel: true }).catch(() => {});
     }
   }
@@ -1214,10 +1245,26 @@
     }
 
     document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible') tryResumeAutoFaceId('visibility_return');
+      if (document.visibilityState === 'visible') {
+        bioCancelledByUser = false;
+        tryResumeAutoFaceId('visibility_return');
+      }
     });
-    window.addEventListener('pageshow', () => tryResumeAutoFaceId('app_pageshow'));
-    window.addEventListener('focus', () => tryResumeAutoFaceId('app_focus'));
+    window.addEventListener('pageshow', () => {
+      bioCancelledByUser = false;
+      tryResumeAutoFaceId('app_pageshow');
+    });
+    window.addEventListener('focus', () => {
+      bioCancelledByUser = false;
+      tryResumeAutoFaceId('app_focus');
+    });
+    document.addEventListener('pointerdown', (e) => {
+      if (!wakeArmPending || activeFaceIdPromise) return;
+      if (e.target && e.target.closest && e.target.closest('#btnLockSwitchGoogle, #btnIosRightAction')) return;
+      wakeArmPending = false;
+      bioCancelledByUser = false;
+      tryResumeAutoFaceId('user_wake');
+    }, { capture: true, passive: true });
     document.addEventListener('keydown', (e) => {
       if (e.key !== 'Enter') return;
       const ov = document.getElementById('vaultLockOverlay');

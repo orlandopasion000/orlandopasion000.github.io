@@ -17,8 +17,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/vault-core.css?v=vault-v83">
-  <link rel="stylesheet" href="css/vault-pro.css?v=vault-v83">
+  <link rel="stylesheet" href="css/vault-core.css?v=vault-v84">
+  <link rel="stylesheet" href="css/vault-pro.css?v=vault-v84">
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
@@ -3322,13 +3322,13 @@
         if (window.caches) {
           caches.keys().then(keys => {
             keys.forEach(k => {
-              if (k.startsWith('vault-') && k !== 'vault-jarvis-v83') {
+              if (k.startsWith('vault-') && k !== 'vault-jarvis-v84') {
                 caches.delete(k);
               }
             });
           });
         }
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v83', { scope: '/orlandovault/' }).then(reg => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v84', { scope: '/orlandovault/' }).then(reg => {
           if (reg && reg.update) reg.update();
         }).catch(err => {
           console.warn('Vault SW registration error:', err);
@@ -4865,7 +4865,7 @@
       const limitMs = getAutoLockMs();
       if (Date.now() - lastActivityAt >= limitMs) {
         const mins = Math.max(1, Math.round(limitMs / 60000));
-        lockVault('Auto-locked after ' + mins + ' minute' + (mins === 1 ? '' : 's') + ' of inactivity.');
+        lockVault('Auto-locked after ' + mins + ' minute' + (mins === 1 ? '' : 's') + ' of inactivity.', { isManual: false });
         return true;
       }
       return false;
@@ -5220,8 +5220,9 @@
       consumePendingPwaShortcut();
     }
 
-    function lockVault(reason = '') {
+    function lockVault(reason = '', opts = {}) {
       const wasUnlocked = !!activeSessionKey;
+      const isManual = (opts === false) ? false : !(opts && opts.isManual === false);
       const lastMode = (activeVaultMeta && activeVaultMeta.passcodeMode) || (readLocalEncryptedCacheEnvelope() || {}).passcodeMode || 'password';
       stopRealtimeFirestoreSync();
       activeSessionKey = null;
@@ -5277,6 +5278,10 @@
       if (pwdIn) pwdIn.value = '';
       if (pwdConf) pwdConf.value = '';
 
+      if (window.VaultFaceId && typeof window.VaultFaceId.onManualVaultLock === 'function') {
+        window.VaultFaceId.onManualVaultLock(wasUnlocked, isManual);
+      }
+
       const gateCard = document.getElementById('vaultGateCard');
       const stGoogle = document.getElementById('lockStageGoogle');
       const stUnlock = document.getElementById('lockStageUnlock');
@@ -5303,9 +5308,6 @@
       syncHealthState.status = 'locked';
       updateSyncHealthUI();
       refreshBioButtonVisibility();
-      if (window.VaultFaceId && typeof window.VaultFaceId.onManualVaultLock === 'function') {
-        window.VaultFaceId.onManualVaultLock(wasUnlocked);
-      }
     }
     window.lockVault = lockVault;
 
@@ -6863,7 +6865,7 @@
       if (btnMask) btnMask.onclick = togglePrivacyMask;
 
       const btnLock = document.getElementById('btnTopbarLockVault');
-      if (btnLock) btnLock.onclick = () => { lockVault('Vault locked manually.'); };
+      if (btnLock) btnLock.onclick = () => { lockVault('Vault locked manually.', { isManual: true }); };
 
       // Auto-lock / Remember Device selector in Sync Health modal
       const selAuto = document.getElementById('selectAutoLockMinutes');
@@ -7426,7 +7428,7 @@
         if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'l') {
           if (activeSessionKey) {
             e.preventDefault();
-            lockVault('Locked via shortcut.');
+            lockVault('Locked via shortcut.', { isManual: true });
           }
         }
       });
@@ -9214,7 +9216,7 @@
       document.querySelector('.filter-pill[data-cat="' + targetCat + '"]')?.click();
     });
     document.getElementById('btnThumbLock')?.addEventListener('click', () => {
-      if (typeof window.lockVault === 'function') window.lockVault('Vault locked from mobile bar.');
+      if (typeof window.lockVault === 'function') window.lockVault('Vault locked from mobile bar.', { isManual: true });
     });
 
     function triggerCardActivation(cardId) {
@@ -9386,10 +9388,10 @@
   })();
   </script>
 
-  <script src="js/vault-faceid.js?v=vault-v83"></script>
-  <script src="js/vault-templates.js?v=vault-v83"></script>
-  <script src="js/totp-watchtower.js?v=vault-v83"></script>
-  <script src="js/cloud-telemetry.js?v=vault-v83"></script>
-  <script src="js/autofill-bridge.js?v=vault-v83"></script>
+  <script src="js/vault-faceid.js?v=vault-v84"></script>
+  <script src="js/vault-templates.js?v=vault-v84"></script>
+  <script src="js/totp-watchtower.js?v=vault-v84"></script>
+  <script src="js/cloud-telemetry.js?v=vault-v84"></script>
+  <script src="js/autofill-bridge.js?v=vault-v84"></script>
 </body>
 </html>

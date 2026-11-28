@@ -6463,7 +6463,7 @@
       -webkit-backdrop-filter: none !important;
       max-width: 680px;
       width: auto;
-      padding: 4px 0;
+      padding: max(54px, calc(env(safe-area-inset-top, 10px) + 46px)) 0 6px;
       overflow: visible;
     }
     .vault-gate-card.ios-pin-active .vault-gate-badge,
@@ -7027,6 +7027,22 @@
         --ios-row-gap: clamp(12px, 1.85dvh, 17px);
       }
     }
+    @media (max-height: 760px) and (min-width: 601px) {
+      .ios-pin-wrap {
+        --ios-btn-size: clamp(54px, 7.6dvh, 72px);
+        --ios-col-gap: clamp(14px, 2dvh, 20px);
+        --ios-row-gap: clamp(8px, 1.3dvh, 13px);
+      }
+      .ios-pin-prompt {
+        font-size: 17px;
+      }
+      .ios-pin-dots {
+        margin: 10px 0 clamp(12px, 2.2dvh, 22px);
+      }
+      .ios-pin-footer {
+        margin-top: clamp(12px, 2.4dvh, 22px);
+      }
+    }
     @media (max-height: 700px) and (orientation: portrait) {
       .ios-pin-wrap {
         --ios-btn-size: clamp(60px, 8.6dvh, 72px);
@@ -7041,6 +7057,9 @@
       }
     }
     @media (max-height: 540px) and (orientation: landscape) {
+      .vault-gate-card.ios-pin-active {
+        padding-top: 38px;
+      }
       .ios-pin-wrap {
         --ios-btn-size: clamp(48px, 14.5dvh, 60px);
         --ios-col-gap: clamp(12px, 3dvh, 18px);
