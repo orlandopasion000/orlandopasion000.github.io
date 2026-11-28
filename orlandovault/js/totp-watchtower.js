@@ -8,6 +8,7 @@
   const BASE32_ALPHA = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
   const hibpBreachCache = new Map(); // RAM-only map: password -> count (cleared on lock)
   let currentWatchtowerFilter = 'all';
+  let watchtowerShowAll = false;
   let lastWatchtowerReport = null;
 
   function parseTotpInput(rawInput) {
@@ -129,7 +130,9 @@
     const active = (Array.isArray(items) ? items : []).filter(x => !x.trashed);
     const pwdCounts = new Map();
     active.forEach(it => {
-      if (it.password) pwdCounts.set(it.password, (pwdCounts.get(it.password) || 0) + 1);
+      if ((it.recordType || 'login') === 'login' && it.password) {
+        pwdCounts.set(it.password, (pwdCounts.get(it.password) || 0) + 1);
+      }
     });
 
     const findings = [];
@@ -201,7 +204,7 @@
   }
 
   async function scanHibpBreaches(items, onProgress) {
-    const active = (Array.isArray(items) ? items : []).filter(x => !x.trashed && x.password);
+    const active = (Array.isArray(items) ? items : []).filter(x => !x.trashed && (x.recordType || 'login') === 'login' && x.password);
     const uniquePwds = Array.from(new Set(active.map(x => x.password)));
     const prefixMap = new Map();
 
@@ -283,6 +286,7 @@
     const shown = currentWatchtowerFilter === 'all'
       ? rep.findings
       : rep.findings.filter(f => f.type === currentWatchtowerFilter);
+    const visibleFindings = watchtowerShowAll ? shown : shown.slice(0, 80);
 
     body.innerHTML = `
       <div class="wt-hero-row">
@@ -310,9 +314,9 @@
         <button type="button" class="wt-stat-tile ${currentWatchtowerFilter === 'missing2fa' ? 'active' : ''}" data-wtf="missing2fa"><div class="wt-stat-num">${rep.counts.missing2fa}</div><div class="wt-stat-lbl">No 2FA</div></button>
       </div>
       <div style="display:flex;flex-direction:column;gap:8px;">
-        ${shown.length === 0
+        ${visibleFindings.length === 0
           ? '<div style="text-align:center;padding:24px;color:#6ee7b7;font-size:13px;">✅ Zero issues in this category!</div>'
-          : shown.slice(0, 80).map(f => `
+          : visibleFindings.map(f => `
             <div class="wt-issue-row">
               <div style="min-width:0;flex:1;">
                 <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
@@ -324,15 +328,24 @@
               <button type="button" class="btn-wt-fix" data-fix-id="${f.item.id}" data-fix-field="${f.targetField}">✏️ Fix Now</button>
             </div>
           `).join('')}
+        ${(!watchtowerShowAll && shown.length > 80) ? `<button type="button" class="btn-sync-action" id="btnWtShowAllFindings" style="width:100%;justify-content:center;margin-top:4px;">Show All ${shown.length} Findings (+${shown.length - 80} more)</button>` : ''}
       </div>
     `;
 
     body.querySelectorAll('[data-wtf]').forEach(btn => {
       btn.onclick = () => {
         currentWatchtowerFilter = btn.getAttribute('data-wtf');
+        watchtowerShowAll = false;
         renderWatchtowerModal();
       };
     });
+    const showAllBtn = document.getElementById('btnWtShowAllFindings');
+    if (showAllBtn) {
+      showAllBtn.onclick = () => {
+        watchtowerShowAll = true;
+        renderWatchtowerModal();
+      };
+    }
     body.querySelectorAll('.btn-wt-fix').forEach(btn => {
       btn.onclick = () => {
         const id = btn.getAttribute('data-fix-id');
@@ -366,6 +379,7 @@
     m.classList.add('active');
   }
   function closeWatchtowerModal() {
+    watchtowerShowAll = false;
     const m = document.getElementById('watchtowerModal');
     if (m) m.classList.remove('active');
   }

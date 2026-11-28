@@ -1,5 +1,5 @@
 /* OrlandoVault · Offline-First Jarvis Security Service Worker */
-var CACHE_NAME = 'vault-jarvis-v82';
+var CACHE_NAME = 'vault-jarvis-v83';
 var ASSETS = [
   './',
   './index.html',
@@ -72,7 +72,9 @@ self.addEventListener('fetch', function(e) {
         }
         return networkResponse;
       }).catch(function() {
-        return caches.match(e.request);
+        return caches.match(e.request).then(function(r) {
+          return r || caches.match('./index.html');
+        });
       })
     );
     return;
@@ -81,17 +83,22 @@ self.addEventListener('fetch', function(e) {
   // Stale-While-Revalidate for static sub-assets (icons, scripts, styles): Instant 0ms load, revalidate in background
   e.respondWith(
     caches.match(e.request).then(function(cachedResponse) {
-      var networkFetch = fetch(e.request).then(function(networkResponse) {
-        if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
-          var responseToCache = networkResponse.clone();
-          caches.open(CACHE_NAME).then(function(cache) {
-            cache.put(e.request, responseToCache).catch(function() {});
-          });
-        }
-        return networkResponse;
-      }).catch(function() {});
+      var matchPromise = cachedResponse
+        ? Promise.resolve(cachedResponse)
+        : caches.match(e.request, { ignoreSearch: true });
+      return matchPromise.then(function(hit) {
+        var networkFetch = fetch(e.request).then(function(networkResponse) {
+          if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
+            var responseToCache = networkResponse.clone();
+            caches.open(CACHE_NAME).then(function(cache) {
+              cache.put(e.request, responseToCache).catch(function() {});
+            });
+          }
+          return networkResponse;
+        }).catch(function() {});
 
-      return cachedResponse || networkFetch;
+        return hit || networkFetch;
+      });
     })
   );
 });

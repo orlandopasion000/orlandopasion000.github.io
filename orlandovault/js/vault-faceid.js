@@ -402,7 +402,7 @@
       e.preventDefault();
       e.stopPropagation();
       if (hasBioWrapConfigured()) {
-        unlockWithFaceId({ reason: 'zenbook_window', silentOnCancel: false });
+        unlockWithFaceId({ reason: 'zenbook_window', silentOnCancel: false }).catch(() => {});
       } else {
         forceEnrollPromptNextUnlock = true;
         const subEl = document.getElementById('iosPinSubHint');
@@ -481,7 +481,7 @@
   function handleDynamicIslandActivation() {
     const prof = getBiometricDeviceProfile();
     if (hasBioWrapConfigured()) {
-      unlockWithFaceId({ reason: 'dynamic_island', silentOnCancel: false });
+      unlockWithFaceId({ reason: 'dynamic_island', silentOnCancel: false }).catch(() => {});
       return;
     }
     setDynamicIslandState('hint', 'Passcode first');
@@ -710,7 +710,8 @@
         const a2 = await navigator.credentials.get({
           publicKey: {
             challenge: chal2,
-            allowCredentials: [{ id: cred.rawId, type: 'public-key' }],
+            timeout: 60000,
+            allowCredentials: [{ id: cred.rawId, type: 'public-key', transports: internalTransports }],
             userVerification: 'required',
             extensions: { prf: { eval: { first: prfSalt } } }
           }
@@ -757,7 +758,7 @@
     updateDynamicIslandVisibility(false);
     if (h.refreshBioUI) h.refreshBioUI();
     if (typeof window.logAudit === 'function') {
-      window.logAudit('FACEID_ENABLED', `Activated iPhone Face ID Quick-Unlock (${record.tier})`);
+      window.logAudit('FACEID_ENABLED', `Activated ${prof.shortLabel} Quick-Unlock (${record.tier})`);
     }
     return record;
   }
@@ -780,12 +781,13 @@
     const reason = options.reason || 'manual';
     const silentOnCancel = !!options.silentOnCancel;
     const h = hooks();
+    const prof = getBiometricDeviceProfile();
 
     const raw = localStorage.getItem(LS_BIO_WRAP);
-    if (!raw) throw new Error('Face ID is not configured on this device.');
+    if (!raw) throw new Error(`${prof.shortLabel} is not configured on this device.`);
     const saved = JSON.parse(raw);
     if (!saved || !saved.credentialId || (!saved.wrappedPayload && !saved.wrappedPwd)) {
-      throw new Error('Stored Face ID configuration is incomplete.');
+      throw new Error(`Stored ${prof.shortLabel} configuration is incomplete.`);
     }
 
     const challenge = new Uint8Array(32);
@@ -806,13 +808,13 @@
       };
     }
 
-    setDynamicIslandState('scanning', 'Face ID');
+    setDynamicIslandState('scanning');
     const tStart = performance.now();
 
     try {
       const assertion = await navigator.credentials.get({ publicKey: pubKey, mediation: 'optional' });
       if (!assertion || !assertion.response || !assertion.response.authenticatorData) {
-        throw new Error('Face ID assertion returned empty authenticator data.');
+        throw new Error(`${prof.shortLabel} assertion returned empty authenticator data.`);
       }
 
       const authData = new Uint8Array(assertion.response.authenticatorData);
@@ -823,7 +825,7 @@
       const userPresent = (flags & 0x01) !== 0;
       const userVerified = (flags & 0x04) !== 0;
       if (!userPresent || !userVerified) {
-        throw new Error('Face ID biometric verification flag not satisfied.');
+        throw new Error(`${prof.shortLabel} biometric verification flag not satisfied.`);
       }
 
       let bundle = null;
@@ -838,7 +840,7 @@
           ? new Uint8Array(ext.prf.results.first)
           : null;
         if (!prfBytes || prfBytes.byteLength === 0) {
-          throw new Error('Face ID hardware PRF key release failed.');
+          throw new Error(`${prof.shortLabel} hardware PRF key release failed.`);
         }
         const wrapDigest = await window.crypto.subtle.digest('SHA-256', prfBytes);
         const wrapKey = await window.crypto.subtle.importKey('raw', wrapDigest, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
@@ -861,7 +863,7 @@
 
       gestureAutoSeekArmed = false;
       anyTouchAutoScanArmed = false;
-      setDynamicIslandState('matched', 'Unlocked');
+      setDynamicIslandState('matched');
       if (h.fillAllPinDotsForMatch) h.fillAllPinDotsForMatch();
       if (navigator.vibrate && navigator.userActivation && navigator.userActivation.hasBeenActive) {
         try { navigator.vibrate([12, 30, 18]); } catch (e) {}
@@ -886,18 +888,20 @@
         setDynamicIslandState('idle');
         const subEl = document.getElementById('iosPinSubHint');
         if (subEl && !subEl.textContent) {
-          subEl.textContent = 'Touch anywhere or look for Face ID';
+          subEl.textContent = prof.kind === 'zenbook_fingerprint'
+            ? 'Touch Fingerprint Sensor or click anywhere'
+            : 'Touch anywhere or look for Face ID';
           subEl.classList.add('visible');
         }
         return false;
       }
 
-      setDynamicIslandState('failed', 'Face ID Failed');
+      setDynamicIslandState('failed');
       if (diResetTimer) clearTimeout(diResetTimer);
       diResetTimer = setTimeout(() => setDynamicIslandState('idle'), 1000);
 
       if (!silentOnCancel && h.setLockError) {
-        h.setLockError('Face ID: ' + ((err && err.message) || 'Verification cancelled or did not match.'));
+        h.setLockError(prof.shortLabel + ': ' + ((err && err.message) || 'Verification cancelled or did not match.'));
       }
       if (silentOnCancel) return false;
       throw err;
@@ -1201,9 +1205,7 @@
 
         const target = e.target;
         if (target && target.closest) {
-          if (target.closest('#btnLockSwitchGoogle, #btnIosRightAction, #zenbookBioWindow')) return;
-          if (target.closest('#btnIosLeftAction') && !hasBioWrapConfigured()) return;
-          if (target.closest('#iosDynamicIsland')) return;
+          if (target.closest('#btnLockSwitchGoogle, #btnIosRightAction, #btnIosLeftAction, #zenbookBioWindow, #iosDynamicIsland')) return;
         }
         anyTouchAutoScanArmed = false;
         gestureAutoSeekArmed = false;

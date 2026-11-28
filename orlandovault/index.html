@@ -17,8 +17,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/vault-core.css?v=vault-v82">
-  <link rel="stylesheet" href="css/vault-pro.css?v=vault-v82">
+  <link rel="stylesheet" href="css/vault-core.css?v=vault-v83">
+  <link rel="stylesheet" href="css/vault-pro.css?v=vault-v83">
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
@@ -3322,13 +3322,13 @@
         if (window.caches) {
           caches.keys().then(keys => {
             keys.forEach(k => {
-              if (k.startsWith('vault-') && k !== 'vault-jarvis-v82') {
+              if (k.startsWith('vault-') && k !== 'vault-jarvis-v83') {
                 caches.delete(k);
               }
             });
           });
         }
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v82', { scope: '/orlandovault/' }).then(reg => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v83', { scope: '/orlandovault/' }).then(reg => {
           if (reg && reg.update) reg.update();
         }).catch(err => {
           console.warn('Vault SW registration error:', err);
@@ -3521,7 +3521,7 @@
           osc2.stop(now + 0.05);
 
           // Native mobile vibration haptics
-          if (navigator.vibrate) {
+          if (navigator.vibrate && navigator.userActivation && navigator.userActivation.hasBeenActive) {
             try { navigator.vibrate([14, 35, 14]); } catch (ve) {}
           }
         } else if (type === 'reveal') {
@@ -3533,7 +3533,7 @@
           osc1.start(now);
           osc1.stop(now + 0.18);
 
-          if (navigator.vibrate) {
+          if (navigator.vibrate && navigator.userActivation && navigator.userActivation.hasBeenActive) {
             try { navigator.vibrate(8); } catch (ve) {}
           }
         } else if (type === 'click') {
@@ -3552,7 +3552,7 @@
           osc2.start(now);
           osc2.stop(now + 0.035);
 
-          if (navigator.vibrate) {
+          if (navigator.vibrate && navigator.userActivation && navigator.userActivation.hasBeenActive) {
             try { navigator.vibrate(6); } catch (ve) {}
           }
         }
@@ -5171,6 +5171,30 @@
     }
     window.attemptOfflineEncryptedCacheUnlock = unlockWithEncryptedCache;
 
+    let pendingPwaShortcutConsumed = false;
+    function consumePendingPwaShortcut() {
+      if (pendingPwaShortcutConsumed) return;
+      pendingPwaShortcutConsumed = true;
+      try {
+        const sp = new URLSearchParams(window.location.search || '');
+        const act = sp.get('action');
+        const tab = sp.get('tab');
+        if (!act && !tab) return;
+        const cleanUrl = window.location.pathname + (window.location.hash || '');
+        try { history.replaceState({}, '', cleanUrl); } catch (e) {}
+        setTimeout(() => {
+          if (!activeSessionKey) return;
+          if (act === 'search' && typeof window.openVaultSpotlight === 'function') {
+            window.openVaultSpotlight();
+          } else if (tab === 'history') {
+            if (typeof window.renderHistory === 'function') window.renderHistory();
+            const hm = document.getElementById('historyModal');
+            if (hm) hm.classList.add('active');
+          }
+        }, 120);
+      } catch (e) {}
+    }
+
     function showUnlockedWorkspace() {
       document.body.classList.remove('vault-locked-active');
       const overlay = document.getElementById('vaultLockOverlay');
@@ -5193,6 +5217,7 @@
       refreshBioButtonVisibility();
       syncPrivacyMaskUI();
       if (typeof window.resumeVaultParticles === 'function') window.resumeVaultParticles();
+      consumePendingPwaShortcut();
     }
 
     function lockVault(reason = '') {
@@ -5220,8 +5245,14 @@
       const grid = document.getElementById('vaultGridContainer');
       if (grid) grid.innerHTML = '';
 
-      if (typeof closeActiveModal === 'function') {
-        while (closeActiveModal()) {}
+      if (typeof window.closeActiveVaultModal === 'function') {
+        while (window.closeActiveVaultModal()) {}
+      }
+      if (window.VaultFaceId && typeof window.VaultFaceId.closeEnrollSheet === 'function') {
+        window.VaultFaceId.closeEnrollSheet();
+      }
+      if (window.VaultEncryptedScans && typeof window.VaultEncryptedScans.closeScanLightbox === 'function') {
+        window.VaultEncryptedScans.closeScanLightbox();
       }
       document.querySelectorAll('.modal-backdrop, .spotlight-backdrop').forEach(el => {
         el.classList.remove('active', 'open');
@@ -6387,7 +6418,7 @@
       }
       iosPinBuffer = '';
       updateIosPinDots();
-      if (navigator.vibrate) try { navigator.vibrate([35, 35, 35]); } catch(e) {}
+      if (navigator.vibrate && navigator.userActivation && navigator.userActivation.hasBeenActive) try { navigator.vibrate([35, 35, 35]); } catch(e) {}
       if (errMsg) setLockError(errMsg);
     }
 
@@ -6739,7 +6770,7 @@
       iosPinBuffer += String(digit);
       updateIosPinDots();
       if (typeof playJarvisSound === 'function') playJarvisSound('tap');
-      if (navigator.vibrate) try { navigator.vibrate([8]); } catch(e) {}
+      if (navigator.vibrate && navigator.userActivation && navigator.userActivation.hasBeenActive) try { navigator.vibrate([8]); } catch(e) {}
       if (iosPinBuffer.length === 6) {
         const completed = iosPinBuffer;
         setTimeout(() => handleIosPinComplete(completed), 110);
@@ -8587,6 +8618,8 @@
     window.addEventListener('keydown', (e) => {
       if (accountFocusModal && (accountFocusModal.classList.contains('open') || accountFocusModal.classList.contains('active'))) {
         if (e.key === 'Escape') {
+          const scanLb = document.getElementById('scanLightboxOverlay');
+          if (scanLb && scanLb.classList.contains('active')) return;
           e.preventDefault();
           closeAccountFocusModal(openedFromSpotlight);
           return;
@@ -8703,6 +8736,8 @@
 
     function getActiveModal() {
       const candidates = [
+        document.getElementById('scanLightboxOverlay'),
+        document.getElementById('iosFaceIdEnrollSheet'),
         document.getElementById('cardQuickActionModal'),
         document.getElementById('vaultSpotlightModal'),
         document.getElementById('accountFocusModal'),
@@ -8734,7 +8769,11 @@
       const m = getActiveModal();
       if (!m) return false;
 
-      if (m.id === 'cardQuickActionModal' && typeof window.closeCardQuickMenu === 'function') {
+      if (m.id === 'scanLightboxOverlay' && window.VaultEncryptedScans && typeof window.VaultEncryptedScans.closeScanLightbox === 'function') {
+        window.VaultEncryptedScans.closeScanLightbox();
+      } else if (m.id === 'iosFaceIdEnrollSheet' && window.VaultFaceId && typeof window.VaultFaceId.closeEnrollSheet === 'function') {
+        window.VaultFaceId.closeEnrollSheet();
+      } else if (m.id === 'cardQuickActionModal' && typeof window.closeCardQuickMenu === 'function') {
         window.closeCardQuickMenu();
       } else if (m.id === 'vaultSpotlightModal' && typeof window.closeVaultSpotlight === 'function') {
         window.closeVaultSpotlight();
@@ -8762,7 +8801,9 @@
       syncBodyModalOpenClass();
 
       if (typeof playJarvisSound === 'function') playJarvisSound('click');
-      if (navigator.vibrate) try { navigator.vibrate([10]); } catch(e){}
+      if (navigator.vibrate && navigator.userActivation && navigator.userActivation.hasBeenActive) {
+        try { navigator.vibrate([10]); } catch(e){}
+      }
       return true;
     }
 
@@ -8846,7 +8887,7 @@
           const label = nextPill.textContent.trim().split(' ')[0] || (delta < 0 ? 'BACK' : 'FORWARD');
           showEdgeIndicator(delta < 0 ? 'left' : 'right', label);
           if (typeof playJarvisSound === 'function') playJarvisSound('click');
-          if (navigator.vibrate) try { navigator.vibrate([8]); } catch(e){}
+          if (navigator.vibrate && navigator.userActivation && navigator.userActivation.hasBeenActive) try { navigator.vibrate([8]); } catch(e){}
         }
       }
     }
@@ -9212,7 +9253,7 @@
             tapState.canceled = true;
             tapState.cardId = null;
             lastLongPressAt = Date.now();
-            if (navigator.vibrate) try { navigator.vibrate([12]); } catch(err) {}
+            if (navigator.vibrate && navigator.userActivation && navigator.userActivation.hasBeenActive) try { navigator.vibrate([12]); } catch(err) {}
             openCardQuickMenu(holdCardId);
           }
         }, 430);
@@ -9305,8 +9346,10 @@
           triggerCardActivation(cardId);
         }
       } else if (e.key === 'Escape') {
-        if (typeof window.closeActiveVaultModal === 'function') {
-          window.closeActiveVaultModal();
+        if (e.defaultPrevented) return;
+        if (typeof window.closeActiveVaultModal === 'function' && window.closeActiveVaultModal()) {
+          e.preventDefault();
+          e.stopPropagation();
         }
       }
     });
@@ -9314,6 +9357,7 @@
     // 4. IOS-SAFE BACKGROUND SCROLL LOCK ENGINE
     let lockedScrollY = 0;
     window.lockPageScroll = function() {
+      if (document.body.style.position === 'fixed') return;
       lockedScrollY = window.pageYOffset || document.documentElement.scrollTop;
       document.body.style.position = 'fixed';
       document.body.style.top = '-' + lockedScrollY + 'px';
@@ -9322,6 +9366,7 @@
     };
 
     window.unlockPageScroll = function() {
+      if (document.body.style.position !== 'fixed') return;
       document.body.style.position = '';
       document.body.style.top = '';
       document.body.style.width = '';
@@ -9341,10 +9386,10 @@
   })();
   </script>
 
-  <script src="js/vault-faceid.js?v=vault-v82"></script>
-  <script src="js/vault-templates.js?v=vault-v82"></script>
-  <script src="js/totp-watchtower.js?v=vault-v82"></script>
-  <script src="js/cloud-telemetry.js?v=vault-v82"></script>
-  <script src="js/autofill-bridge.js?v=vault-v82"></script>
+  <script src="js/vault-faceid.js?v=vault-v83"></script>
+  <script src="js/vault-templates.js?v=vault-v83"></script>
+  <script src="js/totp-watchtower.js?v=vault-v83"></script>
+  <script src="js/cloud-telemetry.js?v=vault-v83"></script>
+  <script src="js/autofill-bridge.js?v=vault-v83"></script>
 </body>
 </html>

@@ -762,6 +762,7 @@
         pinShown = !pinShown;
         const valEl = document.getElementById('focusPinVal');
         if (valEl) valEl.textContent = pinShown ? valEl.getAttribute('data-raw') : valEl.getAttribute('data-masked');
+        btnPin.textContent = pinShown ? '🙈 Hide' : '👁️ PIN';
       };
     }
 
@@ -836,7 +837,8 @@
             if (!c || !c.code) return;
             if (typeof window.copyPasswordSilently === 'function') window.copyPasswordSilently(c.code);
             if (typeof window.startClipboardAutoWipe === 'function') window.startClipboardAutoWipe(c.code);
-            if (typeof window.showToast === 'function') window.showToast(`📋 Recovery code copied (${c.code})`, '🛟');
+            if (typeof window.logAudit === 'function') window.logAudit('COPIED_SECRET_FIELD', 'Copied recovery code for: ' + (item.title || item.id));
+            if (typeof window.showToast === 'function') window.showToast('📋 Recovery code copied! Auto-wipes in 25s.', '🛟');
           };
         });
         grid.querySelectorAll('[data-rec-toggle]').forEach(btn => {

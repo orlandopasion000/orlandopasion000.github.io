@@ -6,7 +6,7 @@ importScripts('vault-crypto-totp.js');
 const STORAGE_ENC_KEY = 'ov_ext_enc_envelope_v4';
 const SESSION_RAW_KEY = 'ov_ext_session_key_b64';
 const ALARM_AUTOLOCK = 'ov_ext_autolock';
-const AUTOLOCK_MINUTES = 15;
+const AUTOLOCK_MINUTES = 5;
 
 try {
   if (chrome.storage && chrome.storage.session && chrome.storage.session.setAccessLevel) {
