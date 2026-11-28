@@ -1303,7 +1303,7 @@
         <!-- Title & Subtitle -->
         <div class="qg-title-block">
           <div class="qg-level-title" id="qGameLevelTitle">DIVISOR 6 · DYNAMO SINGULARITY</div>
-          <div class="qg-level-subtitle" id="qGameLevelSubtitle">Catch All Numbers Divisible by 6 (9 Multiples Total: 2nd..10th Term)</div>
+          <div class="qg-level-subtitle" id="qGameLevelSubtitle">Catch Multiples of 6 · Target Quest &amp; Titan Boss Encounter</div>
         </div>
 
         <!-- Level Selector Tabs [ 6 ] [ 7 ] [ 8 ] [ 9 ] [ 12 ] [ 13 ] -->
@@ -1330,11 +1330,61 @@
         </div>
       </div>
 
+      <!-- Feature 1: Prominent Target Term Quest Strip + Feature 4: 3 Shields -->
+      <div class="qg-quest-strip" id="qGameQuestStrip">
+        <div class="qg-quest-badge" id="qGameQuestBadge">
+          <span class="qg-quest-pulse-icon">🎯</span>
+          <span class="qg-quest-label">ACTIVE QUEST:</span>
+          <span class="qg-quest-formula" id="qGameQuestFormula">6 × 2 = ?</span>
+          <span class="qg-quest-hint" id="qGameQuestHint">[Find 12]</span>
+        </div>
+        
+        <div class="qg-shields-container" id="qGameShieldsRow" title="Quantum Energy Shields (Avoid Non-Divisibles!)">
+          <span class="qg-shield-label">SHIELDS:</span>
+          <span class="qg-shield-icon active" id="qShield1">🛡️</span>
+          <span class="qg-shield-icon active" id="qShield2">🛡️</span>
+          <span class="qg-shield-icon active" id="qShield3">🛡️</span>
+        </div>
+      </div>
+
+      <!-- Feature 8: Titan Boss Health Strip (Shown during Titan Boss encounter) -->
+      <div class="qg-boss-strip" id="qGameBossStrip" style="display:none;">
+        <span class="qg-boss-badge">⚠️ TITAN BOSS ALERT</span>
+        <span class="qg-boss-name" id="qGameBossName">TITAN 60 (6 × 10)</span>
+        <div class="qg-boss-hp-track">
+          <div class="qg-boss-hp-fill" id="qGameBossHpFill" style="width:100%;"></div>
+        </div>
+        <span class="qg-boss-hp-text" id="qGameBossHpText">3 / 3 LOCKS</span>
+      </div>
+
       <!-- Live Checklist of Target Multiples -->
       <div class="qg-checklist-row" id="qGameChecklistRow" aria-label="Target multiples checklist">
         <!-- Generated dynamically via JS -->
       </div>
     </header>
+
+    <!-- Educational Remainder Toast Alert (Feature 4) -->
+    <div class="qg-remainder-toast" id="qGameRemainderToast" style="display:none;" role="alert">
+      <div class="qg-remainder-icon">⚠️</div>
+      <div class="qg-remainder-body">
+        <div class="qg-remainder-title" id="qRemainderTitle">NOT DIVISIBLE!</div>
+        <div class="qg-remainder-math" id="qRemainderMath">35 ÷ 6 = 5 with Remainder 5</div>
+        <div class="qg-remainder-explain" id="qRemainderExplain">Because 6 × 5 = 30 (+ 5 = 35)</div>
+      </div>
+    </div>
+
+    <!-- Friendly Quantum Reboot Revive Modal (Feature 4) -->
+    <div id="qGameReviveModal" class="qg-modal-wrap" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="qReviveTitle">
+      <div class="qg-modal-card" style="max-width:440px;">
+        <div class="qg-modal-badge" style="background:rgba(239,68,68,0.25);border-color:#ef4444;color:#fca5a5;">⚡ QUANTUM SHIELD DEPLETED ⚡</div>
+        <h3 class="qg-modal-title" id="qReviveTitle" style="font-size:20px;">Solve to Restore Shields!</h3>
+        <p style="color:#94a3b8;font-size:13px;margin-bottom:16px;">Answer correctly to reboot 2 Quantum Shields:</p>
+        <div class="qg-revive-question" id="qReviveQuestion" style="font-size:26px;font-weight:900;color:#fef08a;margin-bottom:18px;">6 × 4 = ?</div>
+        <div class="qg-revive-options" id="qReviveOptions" style="display:flex;gap:10px;justify-content:center;">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+    </div>
 
     <!-- Grand Victory Modal -->
     <div id="qDivisorVictoryModal" class="qg-modal-wrap" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="qVictoryTitle">
