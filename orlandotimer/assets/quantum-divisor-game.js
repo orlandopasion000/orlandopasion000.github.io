@@ -35,14 +35,14 @@
       reserveNonMultiples: [8, 14, 16, 20, 22, 25, 28, 32, 34, 38, 40, 44, 46, 50, 52, 56, 58, 62, 64, 68],
       palette: {
         primary: '#38bdf8', // Electric Sapphire
-        secondary: '#fbbf24', // Amber Spark
+        secondary: '#38bdf8', // Cyan Spark
         highlightTint: '#e0f2fe',
         aura: 'rgba(56, 189, 248, 0.45)',
         coreGradStart: '#0284c7',
         coreGradEnd: '#082f49',
         ringColor: '#38bdf8',
-        bohrRingA: '#fbbf24',
-        bohrRingB: '#fde047',
+        bohrRingA: 'rgba(56, 189, 248, 0.45)',
+        bohrRingB: 'rgba(56, 189, 248, 0.35)',
         particleHue: 200,
         lightningColor: '#e0f2fe'
       }
@@ -81,13 +81,13 @@
       reserveNonMultiples: [11, 14, 18, 22, 26, 30, 35, 38, 42, 45, 52, 54, 60, 62, 69, 74, 78, 82, 86, 90],
       palette: {
         primary: '#f97316', // Blazing Orange
-        secondary: '#fbbf24', // Sun Flare
+        secondary: '#f97316', // Orange Flare
         highlightTint: '#fef3c7',
         aura: 'rgba(249, 115, 22, 0.45)',
         coreGradStart: '#ea580c',
         coreGradEnd: '#431407',
         ringColor: '#f97316',
-        bohrRingA: '#fbbf24',
+        bohrRingA: 'rgba(56, 189, 248, 0.45)',
         bohrRingB: '#fb923c',
         particleHue: 25,
         lightningColor: '#fed7aa'
@@ -432,25 +432,14 @@
       }
     }
 
-    // 1. Dual-Stage Radiant Corona Outer Aura (100% Identical for ALL choices)
-    const auraGrad = ctx.createRadialGradient(0, 0, r * 0.4, 0, 0, r * 2.1);
-    auraGrad.addColorStop(0, cfg.palette.aura);
-    auraGrad.addColorStop(0.55, 'rgba(56, 189, 248, 0.14)');
+    // 1. Tight Specular Rim Glow (Significantly reduced glow, 100% OLED clean)
+    const auraGrad = ctx.createRadialGradient(0, 0, r * 0.85, 0, 0, r * 1.15);
+    auraGrad.addColorStop(0, 'rgba(56, 189, 248, 0.08)');
     auraGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
     ctx.fillStyle = auraGrad;
     ctx.beginPath();
-    ctx.arc(0, 0, r * 2.1, 0, Math.PI * 2);
+    ctx.arc(0, 0, r * 1.15, 0, Math.PI * 2);
     ctx.fill();
-
-    // Harmonic Chain Reaction Resonant Ripples
-    if (isChained) {
-      const rippleR = r * 1.5 + Math.sin(time * 0.01) * 6;
-      ctx.strokeStyle = 'rgba(251, 191, 36, 0.85)';
-      ctx.lineWidth = 2.5;
-      ctx.beginPath();
-      ctx.arc(0, 0, rippleR, 0, Math.PI * 2);
-      ctx.stroke();
-    }
 
     // 2. 6-Stop Radiant Gemstone Volumetric 3D Gradient (100% Identical for ALL choices, including Term 10!)
     const sphereGrad = ctx.createRadialGradient(-r * 0.38, -r * 0.4, r * 0.05, 0, 0, r);
@@ -473,7 +462,7 @@
     ctx.strokeStyle = cfg.palette.primary;
     ctx.lineWidth = 2.8;
     ctx.shadowColor = cfg.palette.primary;
-    ctx.shadowBlur = 8;
+    ctx.shadowBlur = 0;
     ctx.stroke();
     ctx.restore();
 
@@ -511,7 +500,7 @@
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.shadowColor = 'rgba(0, 0, 0, 0.98)';
-    ctx.shadowBlur = 9;
+    ctx.shadowBlur = 2;
     ctx.shadowOffsetY = 1.5;
     ctx.fillText(strVal, 0, 1.5);
     ctx.shadowBlur = 0;
@@ -642,8 +631,7 @@
     ctx.rotate(time * 0.001);
     ctx.strokeStyle = cfg.palette.bohrRingA;
     ctx.lineWidth = 1.8;
-    ctx.shadowColor = cfg.palette.bohrRingA;
-    ctx.shadowBlur = 10;
+    ctx.shadowBlur = 0;
     ctx.beginPath();
     ctx.ellipse(0, 0, r * 1.35, r * 0.55, time * 0.001, 0, Math.PI * 2);
     ctx.stroke();
@@ -687,7 +675,7 @@
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.shadowColor = '#000000';
-    ctx.shadowBlur = 10;
+    ctx.shadowBlur = 2;
     ctx.fillText(currentDivisor, 0, 2);
     ctx.shadowBlur = 0;
 
@@ -707,7 +695,7 @@
     ctx.strokeStyle = beamGrad;
     ctx.lineWidth = 2.4;
     ctx.shadowColor = cfg.palette.primary;
-    ctx.shadowBlur = 12;
+    ctx.shadowBlur = 2;
 
     ctx.beginPath();
     ctx.moveTo(cursor.x, cursor.y);
@@ -733,7 +721,7 @@
 
     ctx.strokeStyle = '#38bdf8';
     ctx.lineWidth = 2.2;
-    ctx.shadowBlur = 10;
+    ctx.shadowBlur = 0;
 
     const bSize = 10;
     [-reticleR, reticleR].forEach(bx => {
@@ -753,30 +741,18 @@
 
   // Draw Deep Celestial Cosmos with Radiant Nebulae (Across Full Canvas)
   function drawBackground() {
-    const bgGrad = ctx.createRadialGradient(width / 2, height / 2, 50, width / 2, height / 2, Math.max(width, height) * 0.95);
-    bgGrad.addColorStop(0, '#0a0f1d');
-    bgGrad.addColorStop(0.65, '#030712');
-    bgGrad.addColorStop(1, '#000000');
-    ctx.fillStyle = bgGrad;
+    // Pure OLED True Black Canvas (Turns off OLED pixels completely)
+    ctx.fillStyle = '#000000';
     ctx.fillRect(0, 0, width, height);
 
-    // Radiant Drifting Cosmic Nebulae Clouds across wide expanse
-    cosmicNebulae.forEach(neb => {
-      const ng = ctx.createRadialGradient(neb.x, neb.y, 10, neb.x, neb.y, neb.r);
-      ng.addColorStop(0, neb.color);
-      ng.addColorStop(1, 'rgba(0, 0, 0, 0)');
-      ctx.fillStyle = ng;
-      ctx.fillRect(0, 0, width, height);
-    });
-
-    // Cosmic Star Dust
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+    // Crisp, subtle pinpoint stars (Zero cloudy nebulae for true OLED black)
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
     for (let i = 0; i < cosmicDust.length; i++) {
       const d = cosmicDust[i];
       d.y += d.speed * stasisFactor;
       if (d.y > height) d.y = 0;
       ctx.beginPath();
-      ctx.arc(d.x, d.y, d.size, 0, Math.PI * 2);
+      ctx.arc(d.x, d.y, d.size * 0.8, 0, Math.PI * 2);
       ctx.fill();
     }
   }
@@ -803,7 +779,7 @@
     shockwaves.push({ x: x, y: y, radius: 10, maxRadius: 130, alpha: 0.9 });
   }
 
-  function spawnFloatingText(text, x, y, color = '#fef08a', fontSize = 16) {
+  function spawnFloatingText(text, x, y, color = '#38bdf8', fontSize = 16) {
     floatingTexts.push({
       text: text,
       x: x,
@@ -914,12 +890,7 @@
     combo = Math.min(10, combo + 1);
     consecutiveCorrect++;
 
-    // Harmonic Chain Reaction: Highlight doubles and multiples of this number
-    spheres.forEach(other => {
-      if (other !== s && other.value > val && other.value % val === 0) {
-        chainHighlightSpheres.set(other, 180);
-      }
-    });
+    // Harmonic Chain Reaction: (No yellow circles)
 
     // Shield Restoration on 2 consecutive correct catches
     if (consecutiveCorrect >= 2 && shields < 3) {
@@ -929,7 +900,7 @@
       playTone(880, 0.25, 'triangle', 0.15);
     }
 
-    spawnFloatingText(`CRITICAL HIT! +${300 * combo} (Term ${factor} Mastered!)`, s.x, s.y, '#fef08a', 18);
+    spawnFloatingText(`CRITICAL HIT! +${300 * combo} (Term ${factor} Mastered!)`, s.x, s.y, '#38bdf8', 18);
 
     // If Term 10 (Final Term) was just caught: VICTORY!
     if (questFactor >= 10) {
@@ -945,7 +916,7 @@
     const replacementVal = getUniqueReplacementValue();
     spheres[index] = createSphere(replacementVal, s.x, s.y);
 
-    spawnFloatingText(`ADVANCED TO TERM ${questFactor}!`, width / 2, height * 0.22, '#fbbf24', 20);
+    spawnFloatingText(`ADVANCED TO TERM ${questFactor}!`, width / 2, height * 0.22, '#38bdf8', 18);
     playTone(523.25, 0.2, 'sine', 0.15);
     setTimeout(() => playTone(659.25, 0.25, 'sine', 0.15), 100);
     updateHUD();
@@ -1009,54 +980,48 @@
     gameCleared = true;
     playVictoryFanfare();
 
-    for (let f = 0; f < 8; f++) {
+    for (let f = 0; f < 4; f++) {
       setTimeout(() => {
-        const fx = width * (0.15 + Math.random() * 0.7);
-        const fy = height * (0.2 + Math.random() * 0.5);
-        spawnSupernova(fx, fy, 65);
-      }, f * 160);
+        const fx = width * (0.2 + Math.random() * 0.6);
+        const fy = height * (0.25 + Math.random() * 0.5);
+        spawnSupernova(fx, fy, 40);
+      }, f * 180);
     }
 
     const modal = document.getElementById('qDivisorVictoryModal');
     if (modal) {
       const cfg = GAME_CONFIGS[currentDivisor];
       const titleEl = document.getElementById('qVictoryTitle');
-      const tableEl = document.getElementById('qVictoryTable');
+      const subtitleEl = document.getElementById('qVictorySubtitle');
       const scoreEl = document.getElementById('qVictoryScore');
+      const accuracyEl = document.getElementById('qVictoryAccuracy');
       const rankEl = document.getElementById('qVictoryRank');
-      const codexTitleEl = document.getElementById('qCodexTitle');
-      const codexTextEl = document.getElementById('qCodexText');
+      const tableEl = document.getElementById('qVictoryTable');
 
-      if (titleEl) titleEl.textContent = `DIVISOR ${currentDivisor} · ALL 10 TERMS MASTERED!`;
-      if (scoreEl) scoreEl.textContent = `Final Score: ${score.toLocaleString()} Points · Move Economy: ${mistakesMade} Mistakes`;
+      if (titleEl) titleEl.textContent = `DIVISOR ${currentDivisor} MASTERED!`;
+      if (subtitleEl) subtitleEl.textContent = `ALL 10 TERMS COMPLETED · ${cfg.name.toUpperCase()}`;
+      if (scoreEl) scoreEl.textContent = `${score.toLocaleString()}`;
+      if (accuracyEl) {
+        accuracyEl.textContent = mistakesMade === 0 ? '0 MISTAKES' : `${mistakesMade} MISTAKE${mistakesMade > 1 ? 'S' : ''}`;
+      }
 
       if (rankEl) {
         if (mistakesMade === 0) {
-          rankEl.textContent = '⭐⭐⭐ ARCHIMEDES GRANDMASTER · ZERO MISTAKES DEDUCTION';
+          rankEl.textContent = '★★★ GRANDMASTER';
         } else if (mistakesMade === 1) {
-          rankEl.textContent = '⭐⭐ PYTHAGOREAN SCHOLAR · 1 MISTAKE SUSTAINED';
+          rankEl.textContent = '⭐⭐ SCHOLAR';
         } else {
-          rankEl.textContent = '⭐ EUCLIDEAN APPRENTICE · COMPLETE VICTORY';
+          rankEl.textContent = '⭐ APPRENTICE';
         }
       }
 
       if (tableEl) {
-        let tableHtml = '';
-        cfg.targetMultiples.forEach((m, idx) => {
-          const factor = idx + 2;
-          tableHtml += `
-            <div class="qg-table-row">
-              <span class="qg-fact-eq">${currentDivisor} × ${factor} = <strong>${m}</strong></span>
-              <span class="qg-fact-div">${m} ÷ ${currentDivisor} = <strong>${factor}</strong> ✓</span>
-            </div>
-          `;
+        let seqHtml = '';
+        cfg.targetMultiples.forEach(m => {
+          seqHtml += `<span class="qg-seq-pill">${m} ✓</span>`;
         });
-        tableEl.innerHTML = tableHtml;
+        tableEl.innerHTML = seqHtml;
       }
-
-      const lore = CODEX_LORE[currentDivisor] || CODEX_LORE[6];
-      if (codexTitleEl) codexTitleEl.textContent = lore.title;
-      if (codexTextEl) codexTextEl.textContent = lore.text;
 
       modal.style.display = 'flex';
     }
@@ -1121,7 +1086,7 @@
         } else {
           stasisBadge.classList.add('qg-stasis-active');
           stasisText.textContent = '⚡ FLUID';
-          stasisText.style.color = '#fbbf24';
+          stasisText.style.color = '#38bdf8';
         }
       }
 
@@ -1458,12 +1423,19 @@
       });
     }
 
-    const vicNextBtn = document.getElementById('qVictoryNextBtn');
+    const vicNextBtn = document.getElementById('qVictoryNextLevel') || document.getElementById('qVictoryNextBtn');
     if (vicNextBtn) {
       vicNextBtn.addEventListener('click', () => {
         const order = [6, 7, 8, 9, 12, 13];
         const nextIdx = (order.indexOf(currentDivisor) + 1) % order.length;
         launch(order[nextIdx]);
+      });
+    }
+
+    const vicPlayAgainBtn = document.getElementById('qVictoryPlayAgain') || document.getElementById('qVictoryRetryBtn');
+    if (vicPlayAgainBtn) {
+      vicPlayAgainBtn.addEventListener('click', () => {
+        launch(currentDivisor);
       });
     }
 

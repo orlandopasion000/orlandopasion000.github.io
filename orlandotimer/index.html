@@ -40,7 +40,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&family=Orbitron:wght@600;700;800;900&family=Outfit:wght@600;700;800;900&family=Space+Grotesk:wght@600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
   <!-- Relative Stylesheet (with cache-bust versioning) -->
-  <link rel="stylesheet" href="style.css?v=35.0">
+  <link rel="stylesheet" href="style.css?v=36.0">
 </head>
 <body data-app-theme="pure-black" data-clock-style="pure-black">
   <!-- Accessibility Live Region for Screen Readers -->
@@ -1370,37 +1370,53 @@
       </div>
     </div>
 
-    <!-- Grand Victory Modal -->
-    <div id="qDivisorVictoryModal" class="qg-modal-wrap" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="qVictoryTitle">
-      <div class="qg-modal-card">
-        <div class="qg-modal-badge">★ COGNITIVE VICTORY ACHIEVED ★</div>
-        <h2 class="qg-modal-title" id="qVictoryTitle">DIVISOR 6 FULLY MASTERED!</h2>
-        <div class="qg-modal-score" id="qVictoryScore">Final Score: 1,800 Points</div>
-
-        <!-- Archimedes Grandmaster Wisdom Rating -->
-        <div class="qg-archimedes-laurel" id="qVictoryLaurel">
-          <span class="qg-laurel-star">⭐</span>
-          <span class="qg-laurel-star">⭐</span>
-          <span class="qg-laurel-star">⭐</span>
-          <div class="qg-laurel-rank" id="qVictoryRank">ARCHIMEDES GRANDMASTER · ZERO MISTAKES</div>
+    <!-- Compact Executive Victory Modal (OrlandoRecharge Flagship Design) -->
+    <div id="qDivisorVictoryModal" class="qg-victory-modal" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="qVictoryTitle">
+      <div class="qg-victory-card" id="qVictoryCard">
+        <div class="qg-victory-aurora"></div>
+        <div class="qg-victory-icon">
+          <svg viewBox="0 0 24 24" fill="none" class="qg-victory-svg">
+            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="url(#qgVicGoldGrad)" stroke="#ffffff" stroke-width="1.2"/>
+            <defs>
+              <linearGradient id="qgVicGoldGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#ffd700"/>
+                <stop offset="50%" stop-color="#38bdf8"/>
+                <stop offset="100%" stop-color="#f59e0b"/>
+              </linearGradient>
+            </defs>
+          </svg>
         </div>
+        <h2 class="qg-victory-title" id="qVictoryTitle">DIVISOR 6 MASTERED!</h2>
+        <div class="qg-victory-subtitle" id="qVictorySubtitle">ALL 10 TERMS COMPLETED · PERFECT SEQUENCE</div>
 
-        <div class="qg-table-grid" id="qVictoryTable">
-          <!-- Populated dynamically with multiplication table -->
-        </div>
-
-        <!-- The Codex of Orlando: Architectural & Astronomical Lore -->
-        <div class="qg-codex-card" id="qVictoryCodexCard">
-          <div class="qg-codex-title" id="qCodexTitle">📜 THE CODEX OF ORLANDO · WISDOM OF 6</div>
-          <div class="qg-codex-text" id="qCodexText">
-            The number 6 is the first 'Perfect Number' in mathematics (1 + 2 + 3 = 6). In ancient Babylonian astronomy, 6 formed the bedrock of the sexagesimal system (base-60), giving us 60 seconds in a minute, 60 minutes in an hour, and 360 degrees in a circle.
+        <div class="qg-victory-stats">
+          <div class="qg-stat-box">
+            <div class="qg-stat-label">FINAL SCORE</div>
+            <div class="qg-stat-val highlight" id="qVictoryScore">13,500</div>
+          </div>
+          <div class="qg-stat-box">
+            <div class="qg-stat-label">MOVE ECONOMY</div>
+            <div class="qg-stat-val success" id="qVictoryAccuracy">0 MISTAKES</div>
+          </div>
+          <div class="qg-stat-box">
+            <div class="qg-stat-label">RANKING</div>
+            <div class="qg-stat-val" id="qVictoryRank">★★★ GRANDMASTER</div>
           </div>
         </div>
 
-        <div class="qg-modal-actions">
-          <button type="button" class="qg-modal-btn qg-btn-gold" id="qVictoryNextLevel">Advance to Next Divisor ➔</button>
-          <button type="button" class="qg-modal-btn qg-btn-cyan" id="qVictoryPlayAgain">⟳ Play Again</button>
-          <button type="button" class="qg-modal-btn qg-btn-slate" id="qVictoryExit">Return to Timer</button>
+        <!-- Compact Sequence Pills (Clean single horizontal strip) -->
+        <div class="qg-victory-sequence" id="qVictoryTable">
+          <!-- Populated dynamically with compact sequence badges -->
+        </div>
+
+        <div class="qg-victory-actions">
+          <button type="button" class="qg-btn-action primary" id="qVictoryNextLevel">
+            <span class="qg-btn-icon">⚡</span>
+            <span>Advance to Next Divisor ➔</span>
+          </button>
+          <button type="button" class="qg-btn-action secondary" id="qVictoryPlayAgain">
+            <span>⟳ Play Again</span>
+          </button>
         </div>
       </div>
     </div>
@@ -1409,7 +1425,7 @@
   <script src="assets/relative-time.js"></script>
   <script src="assets/qrcode.min.js"></script>
   <script src="app.js?v=31.0"></script>
-  <script src="assets/quantum-divisor-game.js?v=6.0"></script>
+  <script src="assets/quantum-divisor-game.js?v=7.0"></script>
 
 
 
