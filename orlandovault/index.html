@@ -17,8 +17,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/vault-core.css?v=vault-v80">
-  <link rel="stylesheet" href="css/vault-pro.css?v=vault-v80">
+  <link rel="stylesheet" href="css/vault-core.css?v=vault-v81">
+  <link rel="stylesheet" href="css/vault-pro.css?v=vault-v81">
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
@@ -57,6 +57,16 @@
           <path d="M18.2 10.2V12.2"/>
           <path d="M14 10.2V14.6C14 15.3 13.5 15.8 12.8 15.8H12.2"/>
           <path d="M10 18.2C11 19.6 12.4 20.3 14 20.3C15.6 20.3 17 19.6 18 18.2"/>
+        </svg>
+        <svg class="di-fp-svg" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 4.2c-4.7 0-8.6 3.3-9.5 7.8"/>
+          <path d="M23.5 12c-.4-2.2-1.5-4.2-3.1-5.5"/>
+          <path d="M7.2 13.5c0-3.8 3-6.8 6.8-6.8 3.1 0 5.7 2 6.5 4.8"/>
+          <path d="M9.6 22.8c-1.4-2-2.2-4.6-2.2-7.4"/>
+          <path d="M10.1 13.7c0-2.2 1.7-4 3.9-4s3.9 1.8 3.9 4v3.1c0 2.5.6 4.4 1.6 5.9"/>
+          <path d="M14 12.2v5.3c0 2.6.7 4.7 1.8 6.4"/>
+          <path d="M11.6 18.2c.2 2.2.8 4 1.7 5.5"/>
+          <path d="M20.7 14.3v2.5c0 1.9.4 3.4 1 4.6"/>
         </svg>
         <svg class="di-check-svg" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="14" cy="14" r="10.5"/>
@@ -3310,13 +3320,13 @@
         if (window.caches) {
           caches.keys().then(keys => {
             keys.forEach(k => {
-              if (k.startsWith('vault-') && k !== 'vault-jarvis-v80') {
+              if (k.startsWith('vault-') && k !== 'vault-jarvis-v81') {
                 caches.delete(k);
               }
             });
           });
         }
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v80', { scope: '/orlandovault/' }).then(reg => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v81', { scope: '/orlandovault/' }).then(reg => {
           if (reg && reg.update) reg.update();
         }).catch(err => {
           console.warn('Vault SW registration error:', err);
@@ -5007,13 +5017,26 @@
       const bioBtn = document.getElementById('btnVaultBioUnlock');
       const setupBtn = document.getElementById('btnSetupBiometricUnlock');
       const hasBio = hasBioWrapConfigured();
+      const prof = (window.VaultFaceId && typeof window.VaultFaceId.getBiometricDeviceProfile === 'function')
+        ? window.VaultFaceId.getBiometricDeviceProfile()
+        : null;
       if (bioBtn) {
         const pinPanel = document.getElementById('iosPinPanel');
         const pinVisible = pinPanel && pinPanel.style.display !== 'none';
         bioBtn.style.display = (!isFirstTimeMigration && hasBio && !pinVisible) ? 'flex' : 'none';
+        const lbl = bioBtn.querySelector('span:last-child');
+        if (lbl && prof) {
+          lbl.textContent = prof.kind === 'zenbook_fingerprint'
+            ? 'Unlock with Zenbook Fingerprint'
+            : (prof.kind === 'mac_touchid' ? 'Unlock with Touch ID' : 'Unlock with Face ID');
+        }
       }
       if (setupBtn) {
-        setupBtn.textContent = hasBio ? '✅ Biometric Unlock Active (Click to Disable)' : '🧬 Enable Biometric / Passkey Unlock';
+        if (prof) {
+          setupBtn.textContent = hasBio ? prof.syncBtnActive : prof.syncBtnIdle;
+        } else {
+          setupBtn.textContent = hasBio ? '✅ Biometric Unlock Active (Click to Disable)' : '🧬 Enable Biometric / Passkey Unlock';
+        }
       }
     }
 
@@ -6544,10 +6567,19 @@
         if (subEl) { subEl.textContent = 'Re-enter your 6-digit passcode'; subEl.classList.add('visible'); }
         if (leftBtn) { leftBtn.textContent = 'Start Over'; leftBtn.style.visibility = 'visible'; }
       } else {
-        if (promptEl) promptEl.textContent = hasBioWrapConfigured() ? 'Swipe up for Face ID or Enter Passcode' : 'Enter Passcode';
+        const bioProf = (window.VaultFaceId && typeof window.VaultFaceId.getBiometricDeviceProfile === 'function')
+          ? window.VaultFaceId.getBiometricDeviceProfile()
+          : null;
+        if (promptEl) {
+          promptEl.textContent = hasBioWrapConfigured()
+            ? (bioProf ? bioProf.lockPrompt : 'Swipe up for Face ID or Enter Passcode')
+            : 'Enter Passcode';
+        }
         if (subEl) { subEl.textContent = ''; subEl.classList.remove('visible'); }
         if (leftBtn) {
-          leftBtn.textContent = hasBioWrapConfigured() ? 'Face ID' : 'Password';
+          leftBtn.textContent = hasBioWrapConfigured()
+            ? (bioProf ? bioProf.actionBtnLabel : 'Face ID')
+            : 'Password';
           leftBtn.style.visibility = 'visible';
         }
       }
@@ -7582,7 +7614,7 @@
       { id: 'new-bank-card', cat: 'IDs & Cards Templates', icon: '💳', title: 'Add Encrypted Bank / Credit Card', desc: 'Store card number, expiry, masked CVV, and ATM PIN', action: () => { openNewCardEditor(); if (window.VaultTemplates) window.VaultTemplates.setEditorType('bank_card'); }, badge: 'Template' },
       { id: 'new-wifi', cat: 'IDs & Cards Templates', icon: '📶', title: 'Add Wi-Fi Network & Camera QR Card', desc: 'Create scannable Wi-Fi QR code for iPhone & Android guests', action: () => { openNewCardEditor(); if (window.VaultTemplates) window.VaultTemplates.setEditorType('wifi'); }, badge: 'Template' },
       { id: 'sys-watchtower', cat: 'Security Operations', icon: '🛡️', title: 'Open Security Health Watchtower', desc: 'Scan for breached, weak, reused, old, or missing 2FA credentials', action: () => { if (window.VaultWatchtower) window.VaultWatchtower.open(); }, badge: 'Security' },
-      { id: 'sys-faceid', cat: 'Security Operations', icon: '🧬', title: 'Enable / Manage iPhone Face ID Unlock', desc: 'Configure Dynamic Island auto-seek Face ID or Touch ID quick unlock', action: () => { if (window.VaultFaceId) window.VaultFaceId.openEnrollSheet(); }, badge: 'Face ID' },
+      { id: 'sys-faceid', cat: 'Security Operations', icon: '🫆', title: 'Enable / Manage Fingerprint & Face ID Unlock', desc: 'Configure ASUS Zenbook Fingerprint, Windows Hello, Touch ID, or iPhone Face ID', action: () => { if (window.VaultFaceId) window.VaultFaceId.openEnrollSheet(); }, badge: 'Biometrics' },
       { id: 'filter-crit', cat: 'Filter Apps & Websites', icon: '⚡', title: 'Filter: Critical Accounts Only', desc: 'High-security administrative and primary credentials', action: () => { filterVaultByCategory('Critical'); }, badge: 'Priority' },
 
       { id: 'nav-recharge', cat: 'Flagship Web Apps', icon: '⚡', title: 'Switch to OrlandoRecharge', desc: 'Precision horology, 23-block alarm cockpit & Tier 3 particles', action: () => window.launchSubApp('orlandorecharge', 'OrlandoRechargeMainAppWindow', 1280, 850), badge: 'Flagship' },
@@ -7604,14 +7636,23 @@
     function openSpotlight() {
       if (!spotlightModal) return;
       spotlightModal.classList.add('open');
+      renderSpotlightResults('');
       if (spotlightInput) {
         spotlightInput.value = '';
-        // Only auto-focus on mouse/desktop; avoid forcing mobile keyboard open on touch devices
-        if (document.documentElement.getAttribute('data-input') === 'mouse') {
-          spotlightInput.focus();
+        try { spotlightInput.focus({ preventScroll: true }); } catch (e) { spotlightInput.focus(); }
+        if (typeof requestAnimationFrame === 'function') {
+          requestAnimationFrame(() => {
+            if (spotlightModal.classList.contains('open')) {
+              try { spotlightInput.focus({ preventScroll: true }); } catch (e) {}
+            }
+          });
         }
+        setTimeout(() => {
+          if (spotlightModal.classList.contains('open') && document.activeElement !== spotlightInput) {
+            try { spotlightInput.focus({ preventScroll: true }); } catch (e) {}
+          }
+        }, 45);
       }
-      renderSpotlightResults('');
       if (typeof playJarvisSound === 'function') playJarvisSound('reveal');
     }
 
@@ -8554,6 +8595,8 @@
         e.preventDefault();
         if (spotlightModal && spotlightModal.classList.contains('open')) closeSpotlight();
         else openSpotlight();
+      } else if (spotlightModal && spotlightModal.classList.contains('open') && spotlightInput && document.activeElement !== spotlightInput && e.key && e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        spotlightInput.focus();
       } else if (e.key === '/' && document.activeElement && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName) && !document.activeElement.isContentEditable && !document.querySelector('.modal-backdrop.active, .modal-backdrop.open, .spotlight-backdrop.open')) {
         e.preventDefault();
         openSpotlight();
@@ -9264,10 +9307,10 @@
   })();
   </script>
 
-  <script src="js/vault-faceid.js?v=vault-v80"></script>
-  <script src="js/vault-templates.js?v=vault-v80"></script>
-  <script src="js/totp-watchtower.js?v=vault-v80"></script>
-  <script src="js/cloud-telemetry.js?v=vault-v80"></script>
-  <script src="js/autofill-bridge.js?v=vault-v80"></script>
+  <script src="js/vault-faceid.js?v=vault-v81"></script>
+  <script src="js/vault-templates.js?v=vault-v81"></script>
+  <script src="js/totp-watchtower.js?v=vault-v81"></script>
+  <script src="js/cloud-telemetry.js?v=vault-v81"></script>
+  <script src="js/autofill-bridge.js?v=vault-v81"></script>
 </body>
 </html>

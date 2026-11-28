@@ -1360,3 +1360,180 @@
   font-size: 11px;
   cursor: pointer;
 }
+
+/* ASUS Zenbook Windows Hello Fingerprint Mode + Dedicated Security Window */
+.di-fp-svg {
+  width: 19px;
+  height: 19px;
+  color: #38bdf8;
+  display: none;
+}
+.ios-dynamic-island.di-mode-fingerprint .di-face-svg {
+  display: none !important;
+}
+.ios-dynamic-island.di-mode-fingerprint .di-fp-svg {
+  display: block;
+}
+.ios-dynamic-island.di-mode-fingerprint[data-di-state="matched"] .di-fp-svg {
+  display: none !important;
+}
+.ios-dynamic-island.di-mode-fingerprint[data-di-state="scanning"] {
+  border-color: rgba(56, 189, 248, 0.55);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.72), 0 0 22px rgba(56, 189, 248, 0.28);
+}
+.ios-dynamic-island.di-mode-fingerprint[data-di-state="scanning"] .di-fp-svg {
+  animation: iosDiPulse 1s ease-in-out infinite;
+}
+
+.ios-faceid-badge {
+  display: inline-block;
+  margin-bottom: 8px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #30d158;
+  background: rgba(48, 209, 88, 0.12);
+  border: 1px solid rgba(48, 209, 88, 0.34);
+}
+.ios-faceid-sheet-card.theme-fingerprint .ios-faceid-badge {
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.14);
+  border-color: rgba(56, 189, 248, 0.38);
+}
+.ios-faceid-sheet-card.theme-fingerprint .ios-faceid-hero-icon {
+  background: rgba(56, 189, 248, 0.14);
+  border-color: rgba(56, 189, 248, 0.45);
+  color: #38bdf8;
+}
+.ios-faceid-sheet-card.theme-fingerprint .btn-ios-faceid-primary {
+  background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+  color: #021226;
+}
+
+#vaultLockOverlay:not(.unlocked) .zenbook-bio-window.visible {
+  display: flex;
+}
+.zenbook-bio-window {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 12;
+  width: 314px;
+  padding: 13px 14px;
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  border: 1px solid rgba(56, 189, 248, 0.38);
+  box-shadow: 0 22px 54px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  display: none;
+  flex-direction: column;
+  gap: 11px;
+  color: #f8fafc;
+}
+.zb-win-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.zb-win-brand {
+  font-size: 11px;
+  font-weight: 700;
+  color: #cbd5e1;
+}
+.zb-win-tpm {
+  font-size: 9.5px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(56, 189, 248, 0.16);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  color: #7dd3fc;
+}
+.zb-win-body {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.zb-fp-ring {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: rgba(56, 189, 248, 0.1);
+  border: 1.5px solid rgba(56, 189, 248, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  cursor: pointer;
+}
+.zb-fp-svg {
+  width: 30px;
+  height: 30px;
+  color: #38bdf8;
+}
+.zb-scan-beam {
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  height: 2px;
+  background: #38bdf8;
+  box-shadow: 0 0 10px #38bdf8;
+  opacity: 0;
+}
+@keyframes zbScanSweep {
+  0%, 100% { top: 8px; opacity: 0.9; }
+  50% { top: 42px; opacity: 1; }
+}
+.zenbook-bio-window[data-zb-state="scanning"] .zb-scan-beam {
+  animation: zbScanSweep 1.1s ease-in-out infinite;
+}
+.zenbook-bio-window[data-zb-state="matched"] {
+  border-color: rgba(16, 185, 129, 0.65);
+}
+.zenbook-bio-window[data-zb-state="matched"] .zb-fp-ring {
+  background: rgba(16, 185, 129, 0.16);
+  border-color: rgba(16, 185, 129, 0.7);
+}
+.zenbook-bio-window[data-zb-state="matched"] .zb-fp-svg {
+  color: #34d399;
+}
+.zenbook-bio-window[data-zb-state="failed"] {
+  border-color: rgba(239, 68, 68, 0.6);
+}
+.zenbook-bio-window[data-zb-state="failed"] .zb-fp-svg {
+  color: #f87171;
+}
+.zb-win-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+}
+.zb-win-sub {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 2px;
+  line-height: 1.35;
+}
+.zb-scan-btn {
+  width: 100%;
+  min-height: 36px;
+  border-radius: 10px;
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.24), rgba(14, 165, 233, 0.16));
+  color: #e0f2fe;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.zb-scan-btn:hover {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.36), rgba(14, 165, 233, 0.28));
+}
+@media (max-width: 700px) {
+  .zenbook-bio-window { display: none !important; }
+}

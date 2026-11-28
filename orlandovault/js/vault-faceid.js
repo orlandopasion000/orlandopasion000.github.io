@@ -29,6 +29,100 @@
   let forceEnrollPromptNextUnlock = false;
   let currentPinMode = 'unlock';
 
+  function getBiometricDeviceProfile() {
+    const forced = window._ovForceBioProfile;
+    const ua = navigator.userAgent || '';
+    const plat = navigator.platform || '';
+    const isCoarseSmall = !!(window.matchMedia && window.matchMedia('(pointer: coarse)').matches) && window.innerWidth <= 600;
+    const isAppleMobile = /iPhone|iPad|iPod/i.test(ua) || isCoarseSmall;
+    const isMac = !isAppleMobile && (/Mac/i.test(plat) || /Macintosh/i.test(ua));
+
+    let kind = 'zenbook_fingerprint';
+    if (forced === 'iphone_faceid' || forced === 'zenbook_fingerprint' || forced === 'mac_touchid') {
+      kind = forced;
+    } else if (isAppleMobile) {
+      kind = 'iphone_faceid';
+    } else if (isMac) {
+      kind = 'mac_touchid';
+    }
+
+    if (kind === 'iphone_faceid') {
+      return {
+        kind,
+        iconKind: 'faceid',
+        shortLabel: 'Face ID',
+        actionBtnLabel: 'Face ID',
+        lockPrompt: 'Swipe up for Face ID or Enter Passcode',
+        scanningLabel: 'Face ID',
+        matchedLabel: 'Unlocked',
+        failedLabel: 'Face ID Failed',
+        enrollBadge: 'IPHONE BIOMETRIC SHIELD · FACE ID',
+        enrollTitle: 'Enable iPhone Face ID?',
+        enrollDesc: 'Unlock OrlandoVault automatically the moment you look at your iPhone or start entering your 6 digits.',
+        enrollBtn: 'Activate Face ID',
+        enrollWaitLabel: 'Scanning Face ID...',
+        syncBtnActive: '✅ Face ID / Passkey Active (Click to Disable)',
+        syncBtnIdle: '🧬 Enable iPhone Face ID Unlock',
+        desktopPillLabel: '🧬 Enable Face ID'
+      };
+    }
+
+    if (kind === 'mac_touchid') {
+      return {
+        kind,
+        iconKind: 'fingerprint',
+        shortLabel: 'Touch ID',
+        actionBtnLabel: 'Touch ID',
+        lockPrompt: 'Use Touch ID Sensor or Enter Passcode',
+        scanningLabel: 'Touch ID',
+        matchedLabel: 'Verified',
+        failedLabel: 'Try Again',
+        enrollBadge: 'APPLE SILICON SECURE ENCLAVE · TOUCH ID',
+        enrollTitle: 'Enable Mac Touch ID?',
+        enrollDesc: 'Seal your vault key inside Secure Enclave hardware so resting your finger unlocks OrlandoVault.',
+        enrollBtn: 'Activate Touch ID',
+        enrollWaitLabel: 'Waiting for Touch ID...',
+        syncBtnActive: '✅ Touch ID Active (Click to Disable)',
+        syncBtnIdle: '🫆 Enable Touch ID Unlock',
+        desktopPillLabel: '🫆 Enable Mac Touch ID'
+      };
+    }
+
+    return {
+      kind: 'zenbook_fingerprint',
+      iconKind: 'fingerprint',
+      shortLabel: 'Fingerprint',
+      actionBtnLabel: 'Fingerprint',
+      lockPrompt: 'Touch Fingerprint Sensor or Enter Passcode',
+      scanningLabel: 'Touch Sensor',
+      matchedLabel: 'Verified',
+      failedLabel: 'Try Sensor Again',
+      enrollBadge: 'WINDOWS HELLO · ASUS ZENBOOK TPM 2.0',
+      enrollTitle: 'Enable Zenbook Fingerprint Unlock?',
+      enrollDesc: 'Seal your vault key inside your ASUS Zenbook TPM 2.0 security chip. Rest your finger on the laptop fingerprint reader when Windows Security prompts.',
+      enrollBtn: 'Activate Fingerprint Sensor',
+      enrollWaitLabel: 'Waiting for Fingerprint Sensor...',
+      syncBtnActive: '✅ Zenbook Fingerprint Active (Click to Disable)',
+      syncBtnIdle: '🫆 Enable Zenbook Fingerprint Unlock',
+      desktopPillLabel: '🫆 Enable Zenbook Fingerprint'
+    };
+  }
+
+  function buildFingerprintSvg(clsName) {
+    return `
+      <svg class="${clsName}" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 4.2c-4.7 0-8.6 3.3-9.5 7.8"/>
+        <path d="M23.5 12c-.4-2.2-1.5-4.2-3.1-5.5"/>
+        <path d="M7.2 13.5c0-3.8 3-6.8 6.8-6.8 3.1 0 5.7 2 6.5 4.8"/>
+        <path d="M9.6 22.8c-1.4-2-2.2-4.6-2.2-7.4"/>
+        <path d="M10.1 13.7c0-2.2 1.7-4 3.9-4s3.9 1.8 3.9 4v3.1c0 2.5.6 4.4 1.6 5.9"/>
+        <path d="M14 12.2v5.3c0 2.6.7 4.7 1.8 6.4"/>
+        <path d="M11.6 18.2c.2 2.2.8 4 1.7 5.5"/>
+        <path d="M20.7 14.3v2.5c0 1.9.4 3.4 1 4.6"/>
+      </svg>
+    `;
+  }
+
   // Transient in-memory AES-GCM token holding unlocked secret for 3 mins
   // so 1-tap Face ID enrollment never forces re-typing PIN/Password right after unlock.
   let transientTokenObj = null;
@@ -267,6 +361,7 @@
           <path d="M14 10.2V14.6C14 15.3 13.5 15.8 12.8 15.8H12.2"/>
           <path d="M10 18.2C11 19.6 12.4 20.3 14 20.3C15.6 20.3 17 19.6 18 18.2"/>
         </svg>
+        ${buildFingerprintSvg('di-fp-svg')}
         <svg class="di-check-svg" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="14" cy="14" r="10.5"/>
           <polyline points="9.5 14.3 12.6 17.5 18.8 11.2"/>
@@ -275,32 +370,116 @@
     `;
   }
 
+  function ensureZenbookBioWindow() {
+    let win = document.getElementById('zenbookBioWindow');
+    if (win) return win;
+    const overlay = document.getElementById('vaultLockOverlay');
+    if (!overlay) return null;
+    win = document.createElement('div');
+    win.id = 'zenbookBioWindow';
+    win.className = 'zenbook-bio-window';
+    win.setAttribute('data-zb-state', 'idle');
+    win.innerHTML = `
+      <div class="zb-win-topbar">
+        <span class="zb-win-brand">🪟 Windows Security · ASUS Zenbook</span>
+        <span class="zb-win-tpm">TPM 2.0</span>
+      </div>
+      <div class="zb-win-body">
+        <div class="zb-fp-ring" id="zbFpRingTrigger" role="button" tabindex="0" aria-label="Touch Fingerprint Sensor">
+          ${buildFingerprintSvg('zb-fp-svg')}
+          <div class="zb-scan-beam" aria-hidden="true"></div>
+        </div>
+        <div class="zb-win-copy">
+          <div class="zb-win-title" id="zbBioStatusTitle">Touch Fingerprint Sensor</div>
+          <div class="zb-win-sub" id="zbBioStatusSub">Rest finger on your ASUS Zenbook reader or press Enter</div>
+        </div>
+      </div>
+      <button type="button" class="zb-scan-btn" id="btnZenbookScanTrigger">🫆 Scan Fingerprint Now</button>
+    `;
+    overlay.appendChild(win);
+
+    const triggerScan = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (hasBioWrapConfigured()) {
+        unlockWithFaceId({ reason: 'zenbook_window', silentOnCancel: false });
+      } else {
+        forceEnrollPromptNextUnlock = true;
+        const subEl = document.getElementById('iosPinSubHint');
+        if (subEl) {
+          subEl.textContent = 'Enter your 6-digit passcode once to activate Zenbook Fingerprint';
+          subEl.classList.add('visible');
+        }
+      }
+    };
+    document.getElementById('btnZenbookScanTrigger')?.addEventListener('click', triggerScan);
+    document.getElementById('zbFpRingTrigger')?.addEventListener('click', triggerScan);
+    return win;
+  }
+
+  function syncZenbookBioWindow(state) {
+    const win = ensureZenbookBioWindow();
+    if (!win) return;
+    const prof = getBiometricDeviceProfile();
+    const gateCard = document.getElementById('vaultGateCard');
+    const pinActive = gateCard && gateCard.classList.contains('ios-pin-active');
+    const visible = currentPinMode === 'unlock' && !!pinActive && prof.kind === 'zenbook_fingerprint' && hasBioWrapConfigured();
+    win.classList.toggle('visible', visible);
+    const st = state || 'idle';
+    win.setAttribute('data-zb-state', st);
+    const ttl = document.getElementById('zbBioStatusTitle');
+    const sub = document.getElementById('zbBioStatusSub');
+    if (ttl && sub) {
+      if (st === 'scanning') {
+        ttl.textContent = 'Reading Fingerprint...';
+        sub.textContent = 'Touch your ASUS Zenbook capacitive sensor';
+      } else if (st === 'matched') {
+        ttl.textContent = 'Fingerprint Verified';
+        sub.textContent = 'Unsealing AES-256-GCM Session Key';
+      } else if (st === 'failed') {
+        ttl.textContent = 'Sensor Did Not Match';
+        sub.textContent = 'Try sensor again or finish 6-digit passcode';
+      } else {
+        ttl.textContent = 'Touch Fingerprint Sensor';
+        sub.textContent = 'Rest finger on your ASUS Zenbook reader or press Enter';
+      }
+    }
+  }
+
   function setDynamicIslandState(state, customLabel) {
     const di = ensureDynamicIslandEl();
     if (!di) return;
+    const prof = getBiometricDeviceProfile();
     if (diResetTimer) { clearTimeout(diResetTimer); diResetTimer = null; }
     di.setAttribute('data-di-state', state || 'idle');
+    di.classList.toggle('di-mode-fingerprint', prof.iconKind === 'fingerprint');
     const txt = document.getElementById('iosDiText');
     if (txt) {
       if (customLabel !== undefined) txt.textContent = customLabel;
-      else if (state === 'scanning') txt.textContent = 'Face ID';
-      else if (state === 'matched') txt.textContent = 'Unlocked';
-      else if (state === 'failed') txt.textContent = 'Face ID Failed';
+      else if (state === 'scanning') txt.textContent = prof.scanningLabel;
+      else if (state === 'matched') txt.textContent = prof.matchedLabel;
+      else if (state === 'failed') txt.textContent = prof.failedLabel;
       else if (state === 'hint') txt.textContent = 'Passcode first';
       else txt.textContent = '';
     }
+    syncZenbookBioWindow(state || 'idle');
   }
 
   function updateDynamicIslandVisibility(visible) {
     const di = ensureDynamicIslandEl();
-    if (!di) return;
-    di.classList.toggle('visible', !!visible);
-    if (visible) {
-      di.classList.toggle('di-configured', hasBioWrapConfigured());
+    const prof = getBiometricDeviceProfile();
+    if (di) {
+      di.classList.toggle('visible', !!visible);
+      di.classList.toggle('di-mode-fingerprint', prof.iconKind === 'fingerprint');
+      if (visible) {
+        di.classList.toggle('di-configured', hasBioWrapConfigured());
+      }
     }
+    syncZenbookBioWindow('idle');
   }
 
   function handleDynamicIslandActivation() {
+    const prof = getBiometricDeviceProfile();
     if (hasBioWrapConfigured()) {
       unlockWithFaceId({ reason: 'dynamic_island', silentOnCancel: false });
       return;
@@ -308,7 +487,7 @@
     setDynamicIslandState('hint', 'Passcode first');
     const subEl = document.getElementById('iosPinSubHint');
     if (subEl) {
-      subEl.textContent = 'Enter your 6-digit passcode once to activate Face ID';
+      subEl.textContent = `Enter your 6-digit passcode once to activate ${prof.shortLabel}`;
       subEl.classList.add('visible');
     }
     forceEnrollPromptNextUnlock = true;
@@ -344,20 +523,10 @@
     sheet.setAttribute('aria-modal', 'true');
     sheet.setAttribute('aria-label', 'Enable iPhone Face ID');
     sheet.innerHTML = `
-      <div class="ios-faceid-sheet-card">
-        <div class="ios-faceid-hero-icon" aria-hidden="true">
-          <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M8.5 3.5H5.5C4.4 3.5 3.5 4.4 3.5 5.5V8.5"/>
-            <path d="M19.5 3.5H22.5C23.6 3.5 24.5 4.4 24.5 5.5V8.5"/>
-            <path d="M3.5 19.5V22.5C3.5 23.6 4.4 24.5 5.5 24.5H8.5"/>
-            <path d="M24.5 19.5V22.5C24.5 23.6 23.6 24.5 22.5 24.5H19.5"/>
-            <path d="M9.8 10.2V12.2"/>
-            <path d="M18.2 10.2V12.2"/>
-            <path d="M14 10.2V14.6C14 15.3 13.5 15.8 12.8 15.8H12.2"/>
-            <path d="M10 18.2C11 19.6 12.4 20.3 14 20.3C15.6 20.3 17 19.6 18 18.2"/>
-          </svg>
-        </div>
-        <h3 class="ios-faceid-sheet-title">Enable iPhone Face ID?</h3>
+      <div class="ios-faceid-sheet-card" id="iosFaceIdSheetCard">
+        <div class="ios-faceid-hero-icon" id="iosFaceIdHeroIcon" aria-hidden="true"></div>
+        <div class="ios-faceid-badge" id="faceIdSheetBadge">IPHONE BIOMETRIC SHIELD · FACE ID</div>
+        <h3 class="ios-faceid-sheet-title" id="faceIdSheetTitle">Enable iPhone Face ID?</h3>
         <p class="ios-faceid-sheet-desc" id="faceIdSheetDesc">Unlock OrlandoVault automatically the moment you look at your iPhone or start entering your 6 digits.</p>
         <div id="faceIdSecretVerifyRow" class="ios-faceid-verify-row" style="display:none;">
           <input type="password" id="faceIdVerifyInput" class="vault-gate-input" autocomplete="off" placeholder="Confirm your 6-digit passcode or password...">
@@ -390,6 +559,7 @@
       const errEl = document.getElementById('faceIdEnrollError');
       const verifyRow = document.getElementById('faceIdSecretVerifyRow');
       const inp = document.getElementById('faceIdVerifyInput');
+      const prof = getBiometricDeviceProfile();
       if (errEl) { errEl.style.display = 'none'; errEl.textContent = ''; }
       const needsInput = verifyRow && verifyRow.style.display !== 'none';
       const typedSecret = needsInput && inp ? inp.value : null;
@@ -399,18 +569,18 @@
       }
       try {
         btn.disabled = true;
-        btn.textContent = 'Scanning Face ID...';
+        btn.textContent = prof.enrollWaitLabel;
         await enrollFaceId(typedSecret);
         closeSheet(false);
-        if (typeof window.showToast === 'function') window.showToast('Face ID & Dynamic Island Auto-Unlock active!', '🧬');
+        if (typeof window.showToast === 'function') window.showToast(`${prof.shortLabel} Hardware Auto-Unlock active!`, prof.iconKind === 'fingerprint' ? '🫆' : '🧬');
       } catch (err) {
         if (errEl) {
-          errEl.textContent = (err && err.message) || 'Could not activate Face ID.';
+          errEl.textContent = (err && err.message) || `Could not activate ${prof.shortLabel}.`;
           errEl.style.display = 'block';
         }
       } finally {
         btn.disabled = false;
-        btn.textContent = needsInput ? 'Verify & Activate Face ID' : 'Activate Face ID';
+        btn.textContent = needsInput ? `Verify & ${prof.enrollBtn}` : prof.enrollBtn;
       }
     };
     return sheet;
@@ -418,6 +588,12 @@
 
   async function openEnrollSheet(preferredMode) {
     const sheet = ensureFaceIdEnrollSheet();
+    const prof = getBiometricDeviceProfile();
+    const card = document.getElementById('iosFaceIdSheetCard');
+    const heroIcon = document.getElementById('iosFaceIdHeroIcon');
+    const badgeEl = document.getElementById('faceIdSheetBadge');
+    const titleEl = document.getElementById('faceIdSheetTitle');
+    const descEl = document.getElementById('faceIdSheetDesc');
     const verifyRow = document.getElementById('faceIdSecretVerifyRow');
     const confirmBtn = document.getElementById('btnConfirmFaceIdSheet');
     const errEl = document.getElementById('faceIdEnrollError');
@@ -425,10 +601,20 @@
     if (errEl) { errEl.style.display = 'none'; errEl.textContent = ''; }
     if (inp) inp.value = '';
 
+    if (card) card.classList.toggle('theme-fingerprint', prof.iconKind === 'fingerprint');
+    if (heroIcon) {
+      heroIcon.innerHTML = prof.iconKind === 'fingerprint'
+        ? buildFingerprintSvg('')
+        : `<svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 3.5H5.5C4.4 3.5 3.5 4.4 3.5 5.5V8.5"/><path d="M19.5 3.5H22.5C23.6 3.5 24.5 4.4 24.5 5.5V8.5"/><path d="M3.5 19.5V22.5C3.5 23.6 4.4 24.5 5.5 24.5H8.5"/><path d="M24.5 19.5V22.5C24.5 23.6 23.6 24.5 22.5 24.5H19.5"/><path d="M9.8 10.2V12.2"/><path d="M18.2 10.2V12.2"/><path d="M14 10.2V14.6C14 15.3 13.5 15.8 12.8 15.8H12.2"/><path d="M10 18.2C11 19.6 12.4 20.3 14 20.3C15.6 20.3 17 19.6 18 18.2"/></svg>`;
+    }
+    if (badgeEl) badgeEl.textContent = prof.enrollBadge;
+    if (titleEl) titleEl.textContent = prof.enrollTitle;
+    if (descEl) descEl.textContent = prof.enrollDesc;
+
     const tok = await readTransientUnlockSecret();
     const useOneTap = preferredMode === 'one_tap' || !!tok;
     if (verifyRow) verifyRow.style.display = useOneTap ? 'none' : 'block';
-    if (confirmBtn) confirmBtn.textContent = useOneTap ? 'Activate Face ID' : 'Verify & Activate Face ID';
+    if (confirmBtn) confirmBtn.textContent = useOneTap ? prof.enrollBtn : `Verify & ${prof.enrollBtn}`;
     sheet.classList.add('active');
     if (!useOneTap && inp) setTimeout(() => inp.focus(), 80);
   }
@@ -485,14 +671,16 @@
     const emailLabel = document.getElementById('syncAuthEmailLabel')?.textContent;
     const userEmail = (emailLabel && emailLabel !== 'Not Signed In') ? emailLabel : 'owner@orlandovault';
 
+    const prof = getBiometricDeviceProfile();
     const cred = await navigator.credentials.create({
       publicKey: {
         challenge,
+        timeout: 60000,
         rp: buildRpDescriptor(),
         user: {
           id: userId,
           name: userEmail,
-          displayName: 'OrlandoVault Face ID'
+          displayName: prof.kind === 'zenbook_fingerprint' ? 'OrlandoVault · Zenbook Fingerprint' : 'OrlandoVault Face ID'
         },
         pubKeyCredParams: [
           { alg: -7, type: 'public-key' },
@@ -508,6 +696,10 @@
         }
       }
     });
+    const rawTransports = (cred.response && typeof cred.response.getTransports === 'function')
+      ? cred.response.getTransports()
+      : [];
+    const internalTransports = Array.from(new Set([...(Array.isArray(rawTransports) ? rawTransports : []), 'internal']));
 
     const ext = cred.getClientExtensionResults ? cred.getClientExtensionResults() : {};
     let prfBytes = (ext.prf && ext.prf.results && ext.prf.results.first) ? new Uint8Array(ext.prf.results.first) : null;
@@ -539,6 +731,7 @@
         v: 6,
         tier: 'prf',
         credentialId: arrayBufferToBase64(cred.rawId),
+        transports: internalTransports,
         prfSalt: arrayBufferToBase64(prfSalt),
         wrappedPayload,
         saltHex,
@@ -552,6 +745,7 @@
         v: 6,
         tier: 'idb_uv',
         credentialId: arrayBufferToBase64(cred.rawId),
+        transports: internalTransports,
         wrappedPayload,
         saltHex,
         createdAt: Date.now()
@@ -598,7 +792,12 @@
     window.crypto.getRandomValues(challenge);
     const pubKey = {
       challenge,
-      allowCredentials: [{ id: base64ToArrayBuffer(saved.credentialId), type: 'public-key' }],
+      timeout: 60000,
+      allowCredentials: [{
+        id: base64ToArrayBuffer(saved.credentialId),
+        type: 'public-key',
+        transports: (Array.isArray(saved.transports) && saved.transports.length) ? saved.transports : ['internal']
+      }],
       userVerification: 'required'
     };
     if (saved.tier !== 'idb_uv' && saved.prfSalt) {
@@ -844,11 +1043,12 @@
 
   function showDesktopBioOfferPill() {
     if (document.getElementById('desktopBioOfferPill')) return;
+    const prof = getBiometricDeviceProfile();
     const pill = document.createElement('div');
     pill.id = 'desktopBioOfferPill';
     pill.className = 'desktop-bio-offer-pill';
     pill.innerHTML = `
-      <button type="button" id="btnDesktopBioOfferEnable" class="btn-desktop-bio-enable">🧬 Enable Windows Hello / Face ID</button>
+      <button type="button" id="btnDesktopBioOfferEnable" class="btn-desktop-bio-enable">${prof.desktopPillLabel}</button>
       <button type="button" id="btnDesktopBioOfferDismiss" class="btn-desktop-bio-dismiss" title="Dismiss">✕</button>
     `;
     document.body.appendChild(pill);
@@ -1001,7 +1201,7 @@
 
         const target = e.target;
         if (target && target.closest) {
-          if (target.closest('#btnLockSwitchGoogle, #btnIosRightAction')) return;
+          if (target.closest('#btnLockSwitchGoogle, #btnIosRightAction, #zenbookBioWindow')) return;
           if (target.closest('#btnIosLeftAction') && !hasBioWrapConfigured()) return;
           if (target.closest('#iosDynamicIsland')) return;
         }
@@ -1016,6 +1216,18 @@
     });
     window.addEventListener('pageshow', () => tryResumeAutoFaceId('app_pageshow'));
     window.addEventListener('focus', () => tryResumeAutoFaceId('app_focus'));
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter') return;
+      const ov = document.getElementById('vaultLockOverlay');
+      const pinPanel = document.getElementById('iosPinPanel');
+      if (!ov || ov.classList.contains('unlocked') || currentPinMode !== 'unlock') return;
+      if (!pinPanel || pinPanel.style.display === 'none' || !hasBioWrapConfigured()) return;
+      if (getBiometricDeviceProfile().kind !== 'zenbook_fingerprint') return;
+      const pinSt = typeof window.getIosPinState === 'function' ? window.getIosPinState() : null;
+      if (pinSt && pinSt.length > 0) return;
+      e.preventDefault();
+      unlockWithFaceId({ reason: 'enter_key', silentOnCancel: false }).catch(() => {});
+    });
   }
 
   // ==========================================================================
@@ -1385,6 +1597,7 @@
   window.VaultFaceId = {
     LS_BIO_WRAP,
     LS_FACEID_DISMISSED,
+    getBiometricDeviceProfile,
     hasBioWrapConfigured,
     isPlatformBiometricSupported,
     enrollFaceId,
