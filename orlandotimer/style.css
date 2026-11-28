@@ -6681,22 +6681,7 @@ body.zen-mode .standalone-subapp-dock {
 }
 
 /* In-Game Top HUD */
-.qg-top-hud {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  padding: 10px 16px;
-  background: linear-gradient(180deg, rgba(3, 7, 18, 0.88) 0%, rgba(3, 7, 18, 0.45) 75%, transparent 100%);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  z-index: 10;
-  pointer-events: auto;
-}
+/* legacy .qg-top-hud replaced by compressed bar below */
 
 .qg-hud-upper {
   display: flex;
@@ -7463,4 +7448,206 @@ body.zen-mode .standalone-subapp-dock {
   line-height: 1.6;
   color: #cbd5e1;
   font-style: italic;
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   IN-GAME HUD (ULTRA-COMPRESSED SINGLE-ROW LUXURY BAR)
+   ══════════════════════════════════════════════════════════════════════════ */
+.qg-top-hud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 44px;
+  padding: 0 14px;
+  background: linear-gradient(180deg, rgba(3, 7, 18, 0.94) 0%, rgba(3, 7, 18, 0.78) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  z-index: 20;
+  pointer-events: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+}
+
+.qg-hud-left,
+.qg-hud-center,
+.qg-actions-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.qg-compact-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border-radius: 9999px;
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 11px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.qg-badge-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 8px #38bdf8;
+  animation: qgPulse 1.6s infinite ease-in-out;
+}
+
+.qg-level-title {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #f8fafc;
+}
+
+/* Level Selector Tabs [ 6 ] [ 7 ] [ 8 ] [ 9 ] [ 12 ] [ 13 ] */
+.qg-tabs-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: rgba(15, 23, 42, 0.6);
+  padding: 2px 4px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.qg-tab-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.qg-tab-btn:hover {
+  color: #ffffff;
+}
+
+.qg-tab-btn.active {
+  background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+  color: #030712;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
+}
+
+/* Center: Pure Sequential Term Quest (Zero Answer Hint!) */
+.qg-quest-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(251, 191, 36, 0.4);
+  padding: 3px 12px;
+  border-radius: 9999px;
+  box-shadow: 0 0 12px rgba(251, 191, 36, 0.15);
+  white-space: nowrap;
+}
+
+.qg-quest-pulse-icon {
+  font-size: 13px;
+  animation: qgPulse 1.4s infinite ease-in-out;
+}
+
+.qg-quest-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #fbbf24;
+  text-transform: uppercase;
+}
+
+.qg-quest-formula {
+  font-size: 14px;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  background: linear-gradient(135deg, #ffffff 0%, #fef08a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Shields Row */
+.qg-shields-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(15, 23, 42, 0.6);
+  padding: 3px 8px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 12px;
+}
+
+/* Metrics & Action Buttons */
+.qg-actions-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.qg-metric-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 9999px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 11px;
+  font-weight: 700;
+  color: #f8fafc;
+  white-space: nowrap;
+}
+
+.qg-metric-badge strong {
+  color: #fbbf24;
+}
+
+.qg-hud-btn {
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #cbd5e1;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.qg-hud-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.qg-hud-btn.qg-btn-close {
+  background: rgba(239, 68, 68, 0.18);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+}
+
+.qg-hud-btn.qg-btn-close:hover {
+  background: #ef4444;
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.5);
 }

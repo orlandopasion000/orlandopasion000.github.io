@@ -1,27 +1,25 @@
 /**
- * Quantum Divisor Arcade — Grand Cosmic Mathematical Odyssey (v4.0 Pure Deduction Edition)
+ * Quantum Divisor Arcade — Grand Cosmic Mathematical Odyssey (v5.0 Pure Sequence & Radiant Edition)
  * Fusion of God-Tier VFX: [ DYNAMO ] [ HELIX ] [ METEOR ] [ COMET ] [ ORB ] [ MOLTEN ]
  * Featuring 6 Interactive Celestial Multiplication & Divisibility Games:
  * [ 6 ]  [ 7 ]  [ 8 ]  [ 9 ]  [ 12 ]  [ 13 ]
  *
- * Wisdom & Contemplative Features:
- * 1. Superhot Stasis Engine (Universe freezes to 0.02x when cursor pauses for calm contemplation)
- * 2. Harmonic Planetary Constellations (Spheres orbit peacefully in 3 concentric celestial rings)
- * 3. Uniform Pure Deduction (ALL 20 spheres share identical gorgeous color/shading — zero spoiler cues!)
- * 4. Enhanced Number Visibility (Ultra-high contrast backing disc + razor-sharp bold typography)
- * 5. Quantum Telekinesis / Remote Tractor Beam (Unified laser aim locks onto spheres; click/space absorbs remotely)
- * 6. Wisdom Vision Heuristic Filters (Key V: ALL, PARITY [dims odd numbers for even divisors], DIGIT-SUM [Σ])
- * 7. Harmonic Chain Reactions (Resonant golden ripples highlighting doubles and quadruples)
- * 8. Archimedes Move Economy (Zero-mistake deduction earns the 3-Star Archimedes Grandmaster Laurel)
- * 9. Titan Boss Climax (Central celestial boss dismantled via 3 telekinesis resonance pulses)
- * 10. The Codex of Orlando (Rich astronomical, historical, and mathematical lore for each divisor)
+ * Core Enhancements:
+ * 1. Ultra-Compressed Luxury Single-Row HUD (Sleek 44px bar, smaller refined font, zero screen clutter)
+ * 2. Strict Sequential Progression (Always Term 2, 3... up to 10th Term Titan Boss)
+ * 3. Zero Answer Revealed (Displays "TERM 2/10: 6 × 2 = ?" without spoiler text)
+ * 4. Maximize Screen Width (All 20 numbers roam freely across 100% of the screen expanse — zero center clumping)
+ * 5. God-Tier Radiant Graphics (Luminous gemstone gradients, subsurface caustics, dual specular glares, deep nebulae)
+ * 6. Superhot Stasis Engine (Universe freezes to 0.02x when cursor pauses for calm reflection)
+ * 7. Unified Quantum Tractor Beam (Cyan plasma laser locks onto targets; click/space absorbs remotely)
+ * 8. The Codex of Orlando (Rich architectural, astronomical, and mathematical lore on victory)
  */
 
 (function () {
   'use strict';
 
   // ══════════════════════════════════════════════════════════════════════════
-  // 1. GAME DATA & LEVEL CONFIGURATIONS
+  // 1. GAME DATA & RADIANT LUXURY CONFIGURATIONS
   // ══════════════════════════════════════════════════════════════════════════
   const GAME_CONFIGS = {
     6: {
@@ -37,6 +35,7 @@
       palette: {
         primary: '#38bdf8', // Electric Sapphire
         secondary: '#fbbf24', // Amber Spark
+        highlightTint: '#e0f2fe',
         aura: 'rgba(56, 189, 248, 0.45)',
         coreGradStart: '#0284c7',
         coreGradEnd: '#082f49',
@@ -60,6 +59,7 @@
       palette: {
         primary: '#c084fc', // Violet Strand
         secondary: '#22d3ee', // Cyan Strand
+        highlightTint: '#f5d0fe',
         aura: 'rgba(192, 132, 252, 0.45)',
         coreGradStart: '#9333ea',
         coreGradEnd: '#3b0764',
@@ -83,6 +83,7 @@
       palette: {
         primary: '#f97316', // Blazing Orange
         secondary: '#fbbf24', // Sun Flare
+        highlightTint: '#fef3c7',
         aura: 'rgba(249, 115, 22, 0.45)',
         coreGradStart: '#ea580c',
         coreGradEnd: '#431407',
@@ -106,6 +107,7 @@
       palette: {
         primary: '#818cf8', // Indigo Starlight
         secondary: '#2dd4bf', // Ion Cyan
+        highlightTint: '#e0e7ff',
         aura: 'rgba(129, 140, 248, 0.45)',
         coreGradStart: '#6366f1',
         coreGradEnd: '#1e1b4b',
@@ -129,6 +131,7 @@
       palette: {
         primary: '#34d399', // Emerald Glow
         secondary: '#e879f9', // Prismatic Magenta
+        highlightTint: '#d1fae5',
         aura: 'rgba(52, 211, 153, 0.45)',
         coreGradStart: '#059669',
         coreGradEnd: '#022c22',
@@ -152,6 +155,7 @@
       palette: {
         primary: '#ef4444', // Magma Red
         secondary: '#f59e0b', // Solar Flare Amber
+        highlightTint: '#fee2e2',
         aura: 'rgba(239, 68, 68, 0.45)',
         coreGradStart: '#b91c1c',
         coreGradEnd: '#450a0a',
@@ -164,7 +168,6 @@
     }
   };
 
-  // The Codex of Orlando: Architectural & Astronomical Lore
   const CODEX_LORE = {
     6: {
       title: "📜 THE CODEX OF ORLANDO · WISDOM OF 6 (HEXAGONAL HARMONY)",
@@ -195,7 +198,7 @@
   const TOTAL_SPHERES = 20;
 
   // ══════════════════════════════════════════════════════════════════════════
-  // 2. STATE MANAGEMENT & WISDOM SYSTEMS
+  // 2. STATE MANAGEMENT
   // ══════════════════════════════════════════════════════════════════════════
   let activeGame = null;
   let currentDivisor = 6;
@@ -208,17 +211,17 @@
   let gamePaused = false;
   let gameCleared = false;
 
-  // Pedagogical Quest & Shield State
-  let questFactor = 2; // Starts at Divisor x 2
-  let questTarget = 12; // Divisor x questFactor
-  let shields = 3; // 3 shields before reboot
+  // Sequential Progression: Always starts at 2nd term (Divisor x 2) up to 10th term
+  let questFactor = 2;
+  let questTarget = 12;
+  let shields = 3;
   let consecutiveCorrect = 0;
 
-  // Boss Encounter State
+  // Boss Encounter State (10th Term Titan Boss)
   let bossActive = false;
   let boss = null;
 
-  // ── 10 Wisdom Systems State ──
+  // Stasis & Wisdom State
   let stasisFactor = 1.0;
   let lastCursorX = 0;
   let lastCursorY = 0;
@@ -228,7 +231,7 @@
   let targetedBoss = false;
   let mistakesMade = 0;
   let totalCaptures = 0;
-  let chainHighlightSpheres = new Map(); // sphere -> remainingFrames
+  let chainHighlightSpheres = new Map();
 
   // Canvas & Render Context
   let canvas = null;
@@ -243,16 +246,16 @@
     targetX: 0,
     targetY: 0,
     radius: 36,
-    active: false,
-    trail: []
+    active: false
   };
 
-  // Spheres & FX
+  // Free-Roaming Spheres & VFX
   let spheres = [];
   let supernovas = [];
   let floatingTexts = [];
   let shockwaves = [];
   let cosmicDust = [];
+  let cosmicNebulae = [];
 
   // ══════════════════════════════════════════════════════════════════════════
   // 3. SOUND SYNTHESIZER (WEB AUDIO API)
@@ -315,49 +318,9 @@
   }
 
   // ══════════════════════════════════════════════════════════════════════════
-  // 4. MATHEMATICAL UTILITIES
+  // 4. FREE-ROAMING COSMIC SPHERE GENERATOR (FULL SCREEN WIDTH)
   // ══════════════════════════════════════════════════════════════════════════
-  function advanceQuest() {
-    consecutiveCorrect = 0;
-    questFactor++;
-    const cfg = GAME_CONFIGS[currentDivisor];
-
-    if (questFactor > 9) {
-      triggerTitanBoss();
-      return;
-    }
-
-    questTarget = currentDivisor * questFactor;
-    ensureTargetInPool(questTarget);
-    updateHUD();
-
-    playTone(523.25, 0.2, 'sine', 0.15);
-    setTimeout(() => playTone(659.25, 0.25, 'sine', 0.15), 100);
-    spawnFloatingText(`QUEST ADVANCED: ${currentDivisor} × ${questFactor} = ?`, width / 2, height * 0.22, '#fde047', 22);
-  }
-
-  function ensureTargetInPool(targetVal) {
-    const exists = spheres.some(s => s.value === targetVal);
-    if (!exists && spheres.length > 0) {
-      let nonDivIdx = spheres.findIndex(s => !s.isTarget);
-      let replaceIdx = nonDivIdx !== -1 ? nonDivIdx : Math.floor(Math.random() * spheres.length);
-      if (replaceIdx >= 0) {
-        spheres[replaceIdx].value = targetVal;
-        spheres[replaceIdx].isTarget = true;
-      }
-    }
-  }
-
-  // ══════════════════════════════════════════════════════════════════════════
-  // 5. HARMONIC PLANETARY CONSTELLATIONS
-  // ══════════════════════════════════════════════════════════════════════════
-  const ORBIT_RINGS = [
-    { ring: 0, count: 5, radiusRatio: 0.22, speed: 0.0016 },
-    { ring: 1, count: 7, radiusRatio: 0.35, speed: -0.0012 },
-    { ring: 2, count: 8, radiusRatio: 0.46, speed: 0.0009 }
-  ];
-
-  function createSphere(preferredValue, ringIndex, slotIndex, totalInRing) {
+  function createSphere(preferredValue = null, spawnX = null, spawnY = null) {
     const cfg = GAME_CONFIGS[currentDivisor];
     let val = preferredValue;
 
@@ -375,63 +338,86 @@
       }
     }
 
-    // Slightly larger, comfortable radius for ultra-clear visibility
     const radius = Math.max(26, Math.min(32, width * 0.026));
-    const baseAngle = (Math.PI * 2 * slotIndex) / Math.max(1, totalInRing) + (Math.random() - 0.5) * 0.25;
+    const pad = radius + 20;
+    const topMargin = 55;
+
+    let x = spawnX !== null ? spawnX : pad + Math.random() * (width - pad * 2);
+    let y = spawnY !== null ? spawnY : topMargin + pad + Math.random() * (height - topMargin - pad * 2);
+
+    const speed = 0.55 + Math.random() * 0.65;
+    const angle = Math.random() * Math.PI * 2;
     const isTarget = cfg.targetMultiples.includes(val);
 
     return {
       value: val,
       isTarget: isTarget,
-      ringIndex: ringIndex,
-      baseAngle: baseAngle,
-      currentAngle: baseAngle,
-      wobblePhase: Math.random() * Math.PI * 2,
-      wobbleSpeed: 0.0015 + Math.random() * 0.001,
-      wobbleAmp: 8 + Math.random() * 10,
+      x: x,
+      y: y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
       radius: radius,
       rotation: Math.random() * Math.PI * 2,
-      rotSpeed: (Math.random() - 0.5) * 0.02,
+      rotSpeed: (Math.random() - 0.5) * 0.015,
       pulsePhase: Math.random() * Math.PI * 2,
-      scale: 1,
-      x: width / 2,
-      y: height / 2
+      scale: 1
     };
   }
 
+  // Uniform Distribution across the FULL SCREEN WIDTH & HEIGHT (5 columns x 4 rows)
   function initSpheres() {
     spheres = [];
     const cfg = GAME_CONFIGS[currentDivisor];
 
-    const multiplesToSeed = [questTarget];
+    // Seed the active quest target first
+    const valuesToSeed = [questTarget];
     const otherTargets = cfg.normalFactors
       .map(f => currentDivisor * f)
       .filter(m => m !== questTarget);
     otherTargets.sort(() => Math.random() - 0.5);
     for (let i = 0; i < 3 && i < otherTargets.length; i++) {
-      multiplesToSeed.push(otherTargets[i]);
+      valuesToSeed.push(otherTargets[i]);
     }
 
+    const cols = 5;
+    const rows = 4;
+    const topMargin = 60;
+    const cellW = (width - 60) / cols;
+    const cellH = (height - topMargin - 40) / rows;
+
     let seedIdx = 0;
-    ORBIT_RINGS.forEach(ringDef => {
-      for (let s = 0; s < ringDef.count; s++) {
-        let val = null;
-        if (seedIdx < multiplesToSeed.length) {
-          val = multiplesToSeed[seedIdx++];
-        }
-        spheres.push(createSphere(val, ringDef.ring, s, ringDef.count));
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const val = seedIdx < valuesToSeed.length ? valuesToSeed[seedIdx++] : null;
+        const cx = 30 + (c + 0.5) * cellW + (Math.random() - 0.5) * (cellW * 0.5);
+        const cy = topMargin + (r + 0.5) * cellH + (Math.random() - 0.5) * (cellH * 0.5);
+        spheres.push(createSphere(val, cx, cy));
       }
-    });
+    }
+
+    // Initialize Cosmic Nebulae Clouds across wide expanse
+    cosmicNebulae = [
+      { x: width * 0.2, y: height * 0.35, r: Math.max(width, height) * 0.45, color: 'rgba(56, 189, 248, 0.06)' },
+      { x: width * 0.78, y: height * 0.65, r: Math.max(width, height) * 0.5, color: 'rgba(168, 85, 247, 0.05)' },
+      { x: width * 0.5, y: height * 0.85, r: Math.max(width, height) * 0.38, color: 'rgba(239, 68, 68, 0.04)' }
+    ];
+  }
+
+  function ensureTargetInPool(targetVal) {
+    const exists = spheres.some(s => s.value === targetVal);
+    if (!exists && spheres.length > 0) {
+      let nonDivIdx = spheres.findIndex(s => !s.isTarget);
+      let replaceIdx = nonDivIdx !== -1 ? nonDivIdx : Math.floor(Math.random() * spheres.length);
+      if (replaceIdx >= 0) {
+        spheres[replaceIdx].value = targetVal;
+        spheres[replaceIdx].isTarget = true;
+      }
+    }
   }
 
   // ══════════════════════════════════════════════════════════════════════════
-  // 6. GRAPHICS RENDERING ENGINE (UNIFORM PURE DEDUCTION COLORS)
+  // 5. RADIANT LUXURIOUS GRAPHICS RENDERING (PURE DEDUCTION — IDENTICAL COLORS)
   // ══════════════════════════════════════════════════════════════════════════
-
-  // Draw 3D Glassmorphic Number Sphere:
-  // CRITICAL RULE: ALL 20 SPHERES SHARE THE EXACT SAME LUXURIOUS COLOR & SHADING!
-  // No color hints or spoiler cues between multiples, non-multiples, or quest targets.
-  // The learner must read the number and perform the mental calculation!
   function drawSphere(s, time) {
     const cfg = GAME_CONFIGS[currentDivisor];
     const isChained = chainHighlightSpheres.has(s);
@@ -449,17 +435,17 @@
       }
     }
 
-    // 1. Ambient Outer Halo — 100% Identical for ALL choices
-    const haloGrad = ctx.createRadialGradient(0, 0, r * 0.5, 0, 0, r * 1.6);
-    haloGrad.addColorStop(0, cfg.palette.aura);
-    haloGrad.addColorStop(0.7, 'rgba(56, 189, 248, 0.15)');
-    haloGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
-    ctx.fillStyle = haloGrad;
+    // 1. Dual-Stage Radiant Corona Outer Aura (100% Identical for ALL choices)
+    const auraGrad = ctx.createRadialGradient(0, 0, r * 0.4, 0, 0, r * 2.1);
+    auraGrad.addColorStop(0, cfg.palette.aura);
+    auraGrad.addColorStop(0.55, 'rgba(56, 189, 248, 0.14)');
+    auraGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+    ctx.fillStyle = auraGrad;
     ctx.beginPath();
-    ctx.arc(0, 0, r * 1.6, 0, Math.PI * 2);
+    ctx.arc(0, 0, r * 2.1, 0, Math.PI * 2);
     ctx.fill();
 
-    // Harmonic Chain Reaction Resonant Ripples (Doubles/multiples of caught number)
+    // Harmonic Chain Reaction Resonant Ripples
     if (isChained) {
       const rippleR = r * 1.5 + Math.sin(time * 0.01) * 6;
       ctx.strokeStyle = 'rgba(251, 191, 36, 0.85)';
@@ -469,11 +455,13 @@
       ctx.stroke();
     }
 
-    // 2. 3D Volumetric Sphere Body — 100% Identical luxurious theme palette for ALL choices
-    const sphereGrad = ctx.createRadialGradient(-r * 0.35, -r * 0.35, r * 0.1, 0, 0, r);
+    // 2. 6-Stop Radiant Gemstone Volumetric 3D Gradient (100% Identical for ALL choices)
+    const sphereGrad = ctx.createRadialGradient(-r * 0.38, -r * 0.4, r * 0.05, 0, 0, r);
     sphereGrad.addColorStop(0, '#ffffff');
-    sphereGrad.addColorStop(0.35, cfg.palette.coreGradStart);
-    sphereGrad.addColorStop(0.82, cfg.palette.coreGradEnd);
+    sphereGrad.addColorStop(0.18, cfg.palette.highlightTint);
+    sphereGrad.addColorStop(0.42, cfg.palette.primary);
+    sphereGrad.addColorStop(0.72, cfg.palette.coreGradStart);
+    sphereGrad.addColorStop(0.9, cfg.palette.coreGradEnd);
     sphereGrad.addColorStop(1, '#020617');
 
     ctx.fillStyle = sphereGrad;
@@ -481,37 +469,53 @@
     ctx.arc(0, 0, r, 0, Math.PI * 2);
     ctx.fill();
 
-    // 3. Specular Reflection Highlight (Glass Glare)
+    // 3. Subsurface Caustic Crescent Light Arc (High-end optical refraction depth)
     ctx.save();
     ctx.beginPath();
-    ctx.ellipse(-r * 0.3, -r * 0.35, r * 0.42, r * 0.22, -Math.PI / 4, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.52)';
+    ctx.arc(0, r * 0.15, r * 0.85, 0.22 * Math.PI, 0.78 * Math.PI);
+    ctx.strokeStyle = cfg.palette.primary;
+    ctx.lineWidth = 2.8;
+    ctx.shadowColor = cfg.palette.primary;
+    ctx.shadowBlur = 8;
+    ctx.stroke();
+    ctx.restore();
+
+    // 4. Primary Specular Gloss Glare & Diamond Micro-Flare
+    ctx.save();
+    ctx.beginPath();
+    ctx.ellipse(-r * 0.32, -r * 0.36, r * 0.44, r * 0.22, -Math.PI / 4, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.65)';
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.arc(-r * 0.52, -r * 0.52, 2.2, 0, Math.PI * 2);
+    ctx.fillStyle = '#ffffff';
     ctx.fill();
     ctx.restore();
 
-    // 4. Outer Glass Rim
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+    // 5. Outer Metallic Edge Rim
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.42)';
     ctx.lineWidth = 1.8;
     ctx.beginPath();
     ctx.arc(0, 0, r, 0, Math.PI * 2);
     ctx.stroke();
 
-    // 5. High-Contrast Dark Backing Disc for Enhanced Number Visibility
-    // Ensures digits pop out with supreme clarity against any background or glow
-    ctx.fillStyle = 'rgba(5, 12, 24, 0.62)';
+    // 6. High-Contrast Dark Backing Disc for Ultra-Visibility
+    ctx.fillStyle = 'rgba(3, 7, 18, 0.7)';
     ctx.beginPath();
     ctx.arc(0, 0, r * 0.72, 0, Math.PI * 2);
     ctx.fill();
 
-    // 6. Razor-Sharp Ultra-Visible Typography
+    // 7. Razor-Sharp Ultra-Visible Typography (Zero clutter, pristine legibility)
     const strVal = String(s.value);
     const fontSize = strVal.length >= 3 ? Math.round(r * 0.78) : Math.round(r * 0.98);
     ctx.fillStyle = '#ffffff';
     ctx.font = `900 ${fontSize}px 'Space Grotesk', system-ui, -apple-system, sans-serif`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
-    ctx.shadowBlur = 8;
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.98)';
+    ctx.shadowBlur = 9;
+    ctx.shadowOffsetY = 1.5;
     ctx.fillText(strVal, 0, 1.5);
     ctx.shadowBlur = 0;
 
@@ -694,7 +698,6 @@
   }
 
   // Draw Quantum Telekinesis Laser Tractor Beam & Lock-on Reticle
-  // UNIFIED COLOR: Beam never reveals divisibility; always uses theme's electric beam!
   function drawTractorBeam(targetX, targetY, isBoss = false, time) {
     const cfg = GAME_CONFIGS[currentDivisor];
     ctx.save();
@@ -716,7 +719,6 @@
     ctx.shadowColor = cfg.palette.primary;
     ctx.shadowBlur = 12;
 
-    // Laser sine-wave oscillation
     ctx.beginPath();
     ctx.moveTo(cursor.x, cursor.y);
     const dist = Math.hypot(targetX - cursor.x, targetY - cursor.y);
@@ -744,7 +746,6 @@
     ctx.shadowBlur = 10;
 
     const bSize = 10;
-    // 4 Corner Brackets
     [-reticleR, reticleR].forEach(bx => {
       [-reticleR, reticleR].forEach(by => {
         ctx.beginPath();
@@ -760,7 +761,7 @@
     ctx.restore();
   }
 
-  // Draw Grand Titan Boss
+  // Draw Grand Titan Boss (Term 10 Climax)
   function drawTitanBoss(time) {
     if (!boss) return;
     const cfg = GAME_CONFIGS[currentDivisor];
@@ -781,7 +782,7 @@
     ctx.arc(0, 0, br * 2.4, 0, Math.PI * 2);
     ctx.fill();
 
-    // 2. Multi-Shield Harmonic Rotating Rings (Number of rings = boss.hp)
+    // 2. Multi-Shield Harmonic Rotating Rings
     for (let s = 0; s < boss.hp; s++) {
       ctx.save();
       const rot = (time * 0.001 * (s % 2 === 0 ? 1 : -1)) + (s * 1.2);
@@ -808,7 +809,6 @@
     ctx.arc(0, 0, br, 0, Math.PI * 2);
     ctx.fill();
 
-    // Outer Heavy Golden Rim
     ctx.strokeStyle = '#fef08a';
     ctx.lineWidth = 3;
     ctx.stroke();
@@ -836,35 +836,26 @@
     ctx.restore();
   }
 
-  // Draw Deep Celestial Cosmos with Concentric Orbit Tracks
+  // Draw Deep Celestial Cosmos with Radiant Nebulae (Across Full Canvas)
   function drawBackground() {
-    const bgGrad = ctx.createRadialGradient(width / 2, height / 2, 50, width / 2, height / 2, Math.max(width, height) * 0.85);
+    const bgGrad = ctx.createRadialGradient(width / 2, height / 2, 50, width / 2, height / 2, Math.max(width, height) * 0.95);
     bgGrad.addColorStop(0, '#0a0f1d');
-    bgGrad.addColorStop(0.6, '#030712');
+    bgGrad.addColorStop(0.65, '#030712');
     bgGrad.addColorStop(1, '#000000');
     ctx.fillStyle = bgGrad;
     ctx.fillRect(0, 0, width, height);
 
-    // Subtle Concentric Planetary Orbit Tracks
-    const cx = width / 2;
-    const cy = Math.max(height / 2, 280);
-    const minDim = Math.min(width, height);
-
-    ctx.save();
-    ORBIT_RINGS.forEach((ringDef) => {
-      const radius = minDim * ringDef.radiusRatio;
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
-      ctx.lineWidth = 1.2;
-      ctx.setLineDash([4, 8]);
-      ctx.beginPath();
-      ctx.arc(cx, cy, radius, 0, Math.PI * 2);
-      ctx.stroke();
+    // Radiant Drifting Cosmic Nebulae Clouds across wide expanse
+    cosmicNebulae.forEach(neb => {
+      const ng = ctx.createRadialGradient(neb.x, neb.y, 10, neb.x, neb.y, neb.r);
+      ng.addColorStop(0, neb.color);
+      ng.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = ng;
+      ctx.fillRect(0, 0, width, height);
     });
-    ctx.setLineDash([]);
-    ctx.restore();
 
     // Cosmic Star Dust
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
     for (let i = 0; i < cosmicDust.length; i++) {
       const d = cosmicDust[i];
       d.y += d.speed * stasisFactor;
@@ -876,7 +867,7 @@
   }
 
   // ══════════════════════════════════════════════════════════════════════════
-  // 7. PARTICLE PHYSICS & SHOCKWAVES
+  // 6. PARTICLE PHYSICS & SHOCKWAVES
   // ══════════════════════════════════════════════════════════════════════════
   function spawnSupernova(x, y, count = 35) {
     const cfg = GAME_CONFIGS[currentDivisor];
@@ -952,7 +943,7 @@
       ctx.restore();
     }
 
-    // 3. Floating Score / Educational Texts
+    // 3. Floating Texts
     for (let i = floatingTexts.length - 1; i >= 0; i--) {
       const t = floatingTexts[i];
       t.y += t.vy * stasisFactor;
@@ -975,7 +966,7 @@
   }
 
   // ══════════════════════════════════════════════════════════════════════════
-  // 8. REMOTE ABSORPTION & WISDOM HIT LOGIC
+  // 7. SEQUENTIAL TERM PROGRESSION LOGIC (2nd to 10th Term)
   // ══════════════════════════════════════════════════════════════════════════
   function triggerRemoteAbsorption() {
     if (gameCleared || gamePaused) return;
@@ -989,10 +980,13 @@
       const idx = spheres.indexOf(targetedSphere);
       if (idx !== -1) {
         if (targetedSphere.value === questTarget) {
+          // ACTIVE SEQUENTIAL TERM HIT!
           handleQuestTargetHit(targetedSphere, idx);
         } else if (targetedSphere.isTarget) {
-          handleSecondaryMultipleHit(targetedSphere, idx);
+          // MULTIPLE, BUT OUT OF SEQUENCE
+          handleOutOrSequenceMultiple(targetedSphere);
         } else {
+          // NON-DIVISIBLE HIT
           mistakesMade++;
           handleNonDivisibleHit(targetedSphere);
         }
@@ -1028,32 +1022,31 @@
       playTone(880, 0.25, 'triangle', 0.15);
     }
 
-    spawnFloatingText(`CRITICAL HIT! +${300 * combo}  ${currentDivisor} × ${factor} = ${val}!`, s.x, s.y, '#fef08a', 18);
+    spawnFloatingText(`CRITICAL HIT! +${300 * combo} (Term ${factor} Mastered!)`, s.x, s.y, '#fef08a', 18);
 
-    // Replace sphere smoothly on same orbit ring
-    spheres[index] = createSphere(null, s.ringIndex, Math.floor(Math.random() * 8), 8);
+    // Advance sequence: 2 -> 3 -> 4 ... -> 10
+    questFactor++;
 
-    updateHUD();
-    advanceQuest();
+    if (questFactor > 9) {
+      // 10th Term Titan Boss Climax!
+      spheres.splice(index, 1);
+      triggerTitanBoss();
+    } else {
+      questTarget = currentDivisor * questFactor;
+      // Replace caught sphere with new target or fresh free-roamer
+      spheres[index] = createSphere(questTarget);
+      ensureTargetInPool(questTarget);
+      spawnFloatingText(`ADVANCED TO TERM ${questFactor}!`, width / 2, height * 0.22, '#fbbf24', 20);
+      playTone(523.25, 0.2, 'sine', 0.15);
+      setTimeout(() => playTone(659.25, 0.25, 'sine', 0.15), 100);
+      updateHUD();
+    }
   }
 
-  function handleSecondaryMultipleHit(s, index) {
-    const val = s.value;
-    const factor = val / currentDivisor;
-
-    totalCaptures++;
-    spawnSupernova(s.x, s.y, 30);
-    playTone(587.33, 0.25, 'triangle', 0.16);
-
-    caughtMultiples.add(val);
-    score += 150 * combo;
-    combo = Math.min(10, combo + 1);
-
-    spawnFloatingText(`MULTIPLE CAPTURED! +${150 * combo}  (${currentDivisor} × ${factor} = ${val})`, s.x, s.y, '#38bdf8', 16);
-
-    spheres[index] = createSphere(null, s.ringIndex, Math.floor(Math.random() * 8), 8);
-
-    updateHUD();
+  function handleOutOrSequenceMultiple(s) {
+    // Instructive guidance for sequential progression
+    spawnFloatingText(`⚠️ Follow Sequence! Find Term ${questFactor}: ${currentDivisor} × ${questFactor} = ?`, s.x, s.y, '#f97316', 16);
+    playTone(330, 0.18, 'triangle', 0.12);
   }
 
   function handleNonDivisibleHit(s) {
@@ -1111,7 +1104,7 @@
 
     boss = {
       x: width / 2,
-      y: height * 0.38,
+      y: height * 0.42,
       radius: Math.max(68, Math.min(85, width * 0.065)),
       hp: 3,
       maxHp: 3,
@@ -1121,7 +1114,7 @@
     playTone(330, 0.4, 'sawtooth', 0.18);
     setTimeout(() => playTone(440, 0.4, 'triangle', 0.22), 250);
 
-    spawnFloatingText('⚠️ TITAN 10TH TERM DETECTED!', width / 2, height * 0.5, '#ef4444', 26);
+    spawnFloatingText('⚠️ FINAL TITAN 10TH TERM DETECTED!', width / 2, height * 0.5, '#ef4444', 26);
     updateHUD();
   }
 
@@ -1168,7 +1161,6 @@
       if (titleEl) titleEl.textContent = `DIVISOR ${currentDivisor} & TITAN ${cfg.titanMultiple} DEFEATED!`;
       if (scoreEl) scoreEl.textContent = `Final Score: ${score.toLocaleString()} Points · Move Economy: ${mistakesMade} Mistakes`;
 
-      // Archimedes Grandmaster Laurel Rating
       if (rankEl) {
         if (mistakesMade === 0) {
           rankEl.textContent = '⭐⭐⭐ ARCHIMEDES GRANDMASTER · ZERO MISTAKES DEDUCTION';
@@ -1179,7 +1171,6 @@
         }
       }
 
-      // Populate Multiplication Table
       if (tableEl) {
         let tableHtml = '';
         cfg.targetMultiples.forEach((m, idx) => {
@@ -1194,7 +1185,6 @@
         tableEl.innerHTML = tableHtml;
       }
 
-      // The Codex of Orlando Lore Card
       const lore = CODEX_LORE[currentDivisor] || CODEX_LORE[6];
       if (codexTitleEl) codexTitleEl.textContent = lore.title;
       if (codexTextEl) codexTextEl.textContent = lore.text;
@@ -1204,67 +1194,62 @@
   }
 
   // ══════════════════════════════════════════════════════════════════════════
-  // 9. HUD MANAGEMENT
+  // 8. COMPRESSED HUD MANAGEMENT (ZERO ANSWER REVEAL)
   // ══════════════════════════════════════════════════════════════════════════
   function updateHUD() {
     const cfg = GAME_CONFIGS[currentDivisor];
 
     const levelTitle = document.getElementById('qGameLevelTitle');
-    const levelSub = document.getElementById('qGameLevelSubtitle');
+    const questLabel = document.getElementById('qGameQuestLabel');
     const questFormula = document.getElementById('qGameQuestFormula');
-    const questHint = document.getElementById('qGameQuestHint');
     const scoreVal = document.getElementById('qGameScoreVal');
     const comboVal = document.getElementById('qGameComboVal');
     const shieldIcons = document.getElementById('qGameShieldIcons');
-    const progressBar = document.getElementById('qGameProgressBar');
 
     if (levelTitle) levelTitle.textContent = `DIVISOR ${currentDivisor} · ${cfg.name.toUpperCase()}`;
-    if (levelSub) levelSub.textContent = cfg.subtitle;
 
-    if (questFormula && questHint) {
+    if (questFormula && questLabel) {
       if (bossActive) {
-        questFormula.textContent = `FINAL TITAN BOSS (${cfg.titanMultiple})`;
+        questLabel.textContent = `TITAN 10TH TERM:`;
+        questFormula.textContent = `${currentDivisor} × 10 = ?`;
         questFormula.style.color = '#ef4444';
-        questHint.textContent = `[Absorb 3 Resonance Pulses!]`;
-        questHint.style.color = '#fbbf24';
       } else {
+        questLabel.textContent = `TERM ${questFactor}/10:`;
         questFormula.textContent = `${currentDivisor} × ${questFactor} = ?`;
         questFormula.style.color = '#ffffff';
-        questHint.textContent = `[Find ${questTarget}]`;
-        questHint.style.color = '#fde047';
       }
     }
 
     if (scoreVal) scoreVal.textContent = score.toLocaleString();
     if (comboVal) comboVal.textContent = `x${combo}`;
 
-    if (shieldIcons) {
-      let sHtml = '';
-      for (let i = 0; i < 3; i++) {
-        sHtml += i < shields ? '🛡️' : '🖤';
+    // Update Shield Icons in HUD
+    for (let i = 1; i <= 3; i++) {
+      const sEl = document.getElementById(`qShield${i}`);
+      if (sEl) {
+        if (i <= shields) {
+          sEl.textContent = '🛡️';
+          sEl.style.opacity = '1';
+        } else {
+          sEl.textContent = '🖤';
+          sEl.style.opacity = '0.4';
+        }
       }
-      shieldIcons.innerHTML = sHtml;
-    }
-
-    if (progressBar) {
-      const pct = (caughtMultiples.size / cfg.targetMultiples.length) * 100;
-      progressBar.style.width = `${Math.min(100, pct)}%`;
     }
   }
 
   // ══════════════════════════════════════════════════════════════════════════
-  // 10. ANIMATION LOOP & SUPERHOT STASIS ENGINE
+  // 9. ANIMATION LOOP (FREE ROAMING ACROSS FULL SCREEN WIDTH)
   // ══════════════════════════════════════════════════════════════════════════
   function loop(time) {
     if (!activeGame) return;
 
     if (!gamePaused) {
-      // Superhot Stasis: Freeze cosmos if cursor pauses for calm reflection
+      // Superhot Stasis
       const timeSinceMove = performance.now() - lastMoveTimestamp;
       const targetStasis = timeSinceMove > 160 ? 0.02 : 1.0;
       stasisFactor += (targetStasis - stasisFactor) * 0.12;
 
-      // Update Stasis HUD Badge
       const stasisBadge = document.getElementById('qGameStasisBadge');
       const stasisText = document.getElementById('qStasisStateText');
       if (stasisBadge && stasisText) {
@@ -1279,7 +1264,6 @@
         }
       }
 
-      // Decay harmonic chain highlights
       for (const [s, frames] of chainHighlightSpheres.entries()) {
         if (frames <= 1) chainHighlightSpheres.delete(s);
         else chainHighlightSpheres.set(s, frames - 1);
@@ -1288,29 +1272,43 @@
       ctx.clearRect(0, 0, width, height);
       drawBackground();
 
-      // Update Planetary Constellations along 3 orbital rings
-      const cx = width / 2;
-      const cy = Math.max(height / 2, 280);
-      const minDim = Math.min(width, height);
+      // Free-Roaming Across 100% of Screen Width & Height
+      const topMargin = 58;
+      const padB = 25;
+      const padSide = 25;
 
       for (let i = 0; i < spheres.length; i++) {
         const s = spheres[i];
-        const ringDef = ORBIT_RINGS[s.ringIndex] || ORBIT_RINGS[0];
-        s.currentAngle += ringDef.speed * stasisFactor;
-        const r = (minDim * ringDef.radiusRatio) + Math.sin(time * s.wobbleSpeed + s.wobblePhase) * s.wobbleAmp;
-        s.x = cx + Math.cos(s.currentAngle) * r;
-        s.y = cy + Math.sin(s.currentAngle) * r;
+        s.x += s.vx * stasisFactor;
+        s.y += s.vy * stasisFactor;
         s.rotation += s.rotSpeed * stasisFactor;
+
+        // Soft elastic reflection across full screen boundary
+        if (s.x - s.radius < padSide) {
+          s.x = padSide + s.radius;
+          s.vx = Math.abs(s.vx);
+        } else if (s.x + s.radius > width - padSide) {
+          s.x = width - padSide - s.radius;
+          s.vx = -Math.abs(s.vx);
+        }
+
+        if (s.y - s.radius < topMargin) {
+          s.y = topMargin + s.radius;
+          s.vy = Math.abs(s.vy);
+        } else if (s.y + s.radius > height - padB) {
+          s.y = height - padB - s.radius;
+          s.vy = -Math.abs(s.vy);
+        }
 
         drawSphere(s, time);
       }
 
-      // Draw Boss if active
+      // Draw Titan Boss if active
       if (bossActive && boss) {
         drawTitanBoss(time);
       }
 
-      // Find Closest Sphere for Quantum Telekinesis Lock-on
+      // Tractor Beam Lock-on (Unified electric cyan beam — no spoiler hints)
       if (bossActive && boss) {
         targetedBoss = true;
         targetedSphere = null;
@@ -1328,7 +1326,6 @@
         }
         targetedSphere = best;
         if (targetedSphere) {
-          // Unified laser beam — never spoils divisibility!
           drawTractorBeam(targetedSphere.x, targetedSphere.y, false, time);
         }
       }
@@ -1341,7 +1338,7 @@
   }
 
   // ══════════════════════════════════════════════════════════════════════════
-  // 11. PUBLIC CONTROLS & LIFECYCLE
+  // 10. PUBLIC CONTROLS & LIFECYCLE
   // ══════════════════════════════════════════════════════════════════════════
   function launch(divisorNum = 6) {
     if (!GAME_CONFIGS[divisorNum]) divisorNum = 6;
@@ -1351,7 +1348,7 @@
     score = 0;
     combo = 1;
     caughtMultiples = new Set();
-    questFactor = 2;
+    questFactor = 2; // Starts at 2nd term
     questTarget = currentDivisor * 2;
     shields = 3;
     consecutiveCorrect = 0;
@@ -1382,7 +1379,6 @@
       resizeCanvas();
     }
 
-    // Generate Background Cosmic Dust
     cosmicDust = [];
     for (let d = 0; d < 80; d++) {
       cosmicDust.push({
@@ -1397,7 +1393,6 @@
     initSpheres();
     updateHUD();
 
-    // Reset modals
     const revModal = document.getElementById('qGameReviveModal');
     if (revModal) revModal.style.display = 'none';
     const vicModal = document.getElementById('qDivisorVictoryModal');
@@ -1431,6 +1426,14 @@
     height = window.innerHeight;
     canvas.width = width;
     canvas.height = height;
+
+    if (activeGame) {
+      cosmicNebulae = [
+        { x: width * 0.2, y: height * 0.35, r: Math.max(width, height) * 0.45, color: 'rgba(56, 189, 248, 0.06)' },
+        { x: width * 0.78, y: height * 0.65, r: Math.max(width, height) * 0.5, color: 'rgba(168, 85, 247, 0.05)' },
+        { x: width * 0.5, y: height * 0.85, r: Math.max(width, height) * 0.38, color: 'rgba(239, 68, 68, 0.04)' }
+      ];
+    }
   }
 
   function onMouseMove(e) {
@@ -1518,7 +1521,7 @@
 
   function updateAudioToggleBtn() {
     const btn = document.getElementById('qGameAudioToggleBtn');
-    if (btn) btn.textContent = audioMuted ? '🔇 Sound: OFF' : '🔊 Sound: ON';
+    if (btn) btn.textContent = audioMuted ? '🔇' : '🔊';
   }
 
   // DOM Bindings Initialization
@@ -1552,7 +1555,6 @@
     const visionBtn = document.getElementById('qGameWisdomVisionBtn');
     if (visionBtn) visionBtn.addEventListener('click', cycleWisdomVision);
 
-    // Revive Modal Actions
     const rebootBtn = document.getElementById('qReviveRebootBtn');
     if (rebootBtn) {
       rebootBtn.addEventListener('click', () => {
@@ -1571,7 +1573,6 @@
       });
     }
 
-    // Victory Modal Actions
     const vicNextBtn = document.getElementById('qVictoryNextBtn');
     if (vicNextBtn) {
       vicNextBtn.addEventListener('click', () => {
@@ -1584,7 +1585,6 @@
     const vicCloseBtn = document.getElementById('qVictoryCloseBtn');
     if (vicCloseBtn) vicCloseBtn.addEventListener('click', exit);
 
-    // Header & Spotlight Launcher Buttons: [ 6 ] [ 7 ] [ 8 ] [ 9 ] [ 12 ] [ 13 ]
     const launcherBtns = document.querySelectorAll('[data-divisor-launch], .qgame-btn-launch, .qg-header-pill');
     launcherBtns.forEach(btn => {
       btn.addEventListener('click', (e) => {
@@ -1595,7 +1595,6 @@
       });
     });
 
-    // In-game Divisor Tabs: [6] [7] [8] [9] [12] [13]
     const tabBtns = document.querySelectorAll('.qg-tab-btn');
     tabBtns.forEach(btn => {
       btn.addEventListener('click', () => {
@@ -1606,7 +1605,6 @@
       });
     });
 
-    // Global Event Delegation fallback for any divisor launcher button
     document.addEventListener('click', (e) => {
       const target = e.target.closest('[data-divisor-launch], .qgame-btn-launch');
       if (target) {
@@ -1617,14 +1615,12 @@
     });
   }
 
-  // Run DOM initialization on DOMContentLoaded or immediately
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initDOMBindings);
   } else {
     initDOMBindings();
   }
 
-  // Expose Global Public APIs on window (supporting both QuantumDivisorGame and QuantumDivisorArcade)
   const publicAPI = {
     launch: launch,
     exit: exit,

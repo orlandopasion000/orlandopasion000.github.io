@@ -41,7 +41,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700;800;900&family=Orbitron:wght@600;700;800;900&family=Outfit:wght@600;700;800;900&family=Space+Grotesk:wght@600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
   <!-- Relative Stylesheet (with cache-bust versioning) -->
-  <link rel="stylesheet" href="style.css?v=33.0">
+  <link rel="stylesheet" href="style.css?v=34.0">
 </head>
 <body data-app-theme="pure-black" data-clock-style="pure-black">
   <!-- Accessibility Live Region for Screen Readers -->
@@ -1298,16 +1298,14 @@
   <div id="quantumDivisorGameOverlay" class="quantum-divisor-overlay" style="display:none;" aria-hidden="true" role="dialog" aria-label="Quantum Divisor Math Arcade">
     <canvas id="quantumDivisorCanvas" class="qgame-canvas"></canvas>
 
-    <!-- In-Game Top HUD -->
-    <header class="qg-top-hud">
-      <div class="qg-hud-upper">
-        <!-- Title & Subtitle -->
-        <div class="qg-title-block">
-          <div class="qg-level-title" id="qGameLevelTitle">DIVISOR 6 · DYNAMO SINGULARITY</div>
-          <div class="qg-level-subtitle" id="qGameLevelSubtitle">Catch Multiples of 6 · Target Quest &amp; Titan Boss Encounter</div>
+    <!-- In-Game Top HUD (Compressed Luxury Single-Row Bar) -->
+    <header class="qg-top-hud" id="qGameTopHud">
+      <!-- Left: Game Badge & Divisor Tabs -->
+      <div class="qg-hud-left">
+        <div class="qg-compact-badge" id="qGameCompactBadge">
+          <span class="qg-badge-dot"></span>
+          <span class="qg-level-title" id="qGameLevelTitle">DIVISOR 6</span>
         </div>
-
-        <!-- Level Selector Tabs [ 6 ] [ 7 ] [ 8 ] [ 9 ] [ 12 ] [ 13 ] -->
         <div class="qg-tabs-row" role="tablist" aria-label="Select Divisor Game">
           <button type="button" class="qg-tab-btn active" data-divisor="6">6</button>
           <button type="button" class="qg-tab-btn" data-divisor="7">7</button>
@@ -1316,55 +1314,37 @@
           <button type="button" class="qg-tab-btn" data-divisor="12">12</button>
           <button type="button" class="qg-tab-btn" data-divisor="13">13</button>
         </div>
-
-        <!-- Metrics & Controls -->
-        <div class="qg-actions-right">
-          <div class="qg-metric-badge" title="Current Score">
-            <span>Score:</span> <strong id="qGameScoreVal">0</strong>
-          </div>
-          <div class="qg-metric-badge" title="Combo Multiplier">
-            <span>Combo:</span> <strong id="qGameComboVal" style="color:#38bdf8;">x1</strong>
-          </div>
-          <div class="qg-metric-badge qg-stasis-badge" id="qGameStasisBadge" title="Superhot Stasis: Universe freezes when cursor pauses">
-            <span>Stasis:</span> <strong id="qStasisStateText" style="color:#4ade80;">❄️ FROZEN</strong>
-          </div>
-          <button type="button" class="qg-hud-btn" id="qGameWisdomVisionBtn" title="Toggle Wisdom Vision: All | Even Parity | Digit Sum (V)">👁️ Vision: ALL</button>
-          <button type="button" class="qg-hud-btn" id="qGameAudioToggleBtn" title="Toggle Sound (M)">🔊 Sound: ON</button>
-          <button type="button" class="qg-hud-btn" id="qGameFullscreenBtn" title="Toggle Fullscreen (F)">⛶ Fullscreen</button>
-          <button type="button" class="qg-hud-btn qg-btn-close" id="qGameCloseBtn" title="Exit Game (Esc)">✕ Exit</button>
-        </div>
       </div>
 
-      <!-- Feature 1: Prominent Target Term Quest Strip + Feature 4: 3 Shields -->
-      <div class="qg-quest-strip" id="qGameQuestStrip">
+      <!-- Center: Sequential Term Quest (NO ANSWER SHOWN!) + Shields -->
+      <div class="qg-hud-center">
         <div class="qg-quest-badge" id="qGameQuestBadge">
           <span class="qg-quest-pulse-icon">🎯</span>
-          <span class="qg-quest-label">ACTIVE QUEST:</span>
+          <span class="qg-quest-label" id="qGameQuestLabel">QUEST:</span>
           <span class="qg-quest-formula" id="qGameQuestFormula">6 × 2 = ?</span>
-          <span class="qg-quest-hint" id="qGameQuestHint">[Find 12]</span>
         </div>
-        
-        <div class="qg-shields-container" id="qGameShieldsRow" title="Quantum Energy Shields (Avoid Non-Divisibles!)">
-          <span class="qg-shield-label">SHIELDS:</span>
+        <div class="qg-shields-container" id="qGameShieldsRow" title="Quantum Shields (Avoid Non-Divisibles)">
           <span class="qg-shield-icon active" id="qShield1">🛡️</span>
           <span class="qg-shield-icon active" id="qShield2">🛡️</span>
           <span class="qg-shield-icon active" id="qShield3">🛡️</span>
         </div>
       </div>
 
-      <!-- Feature 8: Titan Boss Health Strip (Shown during Titan Boss encounter) -->
-      <div class="qg-boss-strip" id="qGameBossStrip" style="display:none;">
-        <span class="qg-boss-badge">⚠️ TITAN BOSS ALERT</span>
-        <span class="qg-boss-name" id="qGameBossName">TITAN 60 (6 × 10)</span>
-        <div class="qg-boss-hp-track">
-          <div class="qg-boss-hp-fill" id="qGameBossHpFill" style="width:100%;"></div>
+      <!-- Right: Compact Metrics & Action Buttons -->
+      <div class="qg-actions-right">
+        <div class="qg-metric-badge" title="Current Score">
+          <span>Score:</span> <strong id="qGameScoreVal">0</strong>
         </div>
-        <span class="qg-boss-hp-text" id="qGameBossHpText">3 / 3 LOCKS</span>
-      </div>
-
-      <!-- Live Checklist of Target Multiples -->
-      <div class="qg-checklist-row" id="qGameChecklistRow" aria-label="Target multiples checklist">
-        <!-- Generated dynamically via JS -->
+        <div class="qg-metric-badge" title="Combo Multiplier">
+          <span>Combo:</span> <strong id="qGameComboVal" style="color:#38bdf8;">x1</strong>
+        </div>
+        <div class="qg-metric-badge qg-stasis-badge" id="qGameStasisBadge" title="Superhot Stasis: Universe freezes when cursor pauses">
+          <span>Stasis:</span> <strong id="qStasisStateText" style="color:#4ade80;">❄️ FROZEN</strong>
+        </div>
+        <button type="button" class="qg-hud-btn" id="qGameWisdomVisionBtn" title="Toggle Wisdom Vision (V)">👁️ ALL</button>
+        <button type="button" class="qg-hud-btn" id="qGameAudioToggleBtn" title="Toggle Sound (M)">🔊</button>
+        <button type="button" class="qg-hud-btn" id="qGameFullscreenBtn" title="Toggle Fullscreen (F)">⛶</button>
+        <button type="button" class="qg-hud-btn qg-btn-close" id="qGameCloseBtn" title="Exit Game (Esc)">✕</button>
       </div>
     </header>
 
@@ -1430,7 +1410,7 @@
   <script src="assets/relative-time.js"></script>
   <script src="assets/qrcode.min.js"></script>
   <script src="app.js?v=31.0"></script>
-  <script src="assets/quantum-divisor-game.js?v=4.0"></script>
+  <script src="assets/quantum-divisor-game.js?v=5.0"></script>
 
 
 
