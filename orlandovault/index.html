@@ -17,8 +17,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/vault-core.css?v=vault-v79">
-  <link rel="stylesheet" href="css/vault-pro.css?v=vault-v79">
+  <link rel="stylesheet" href="css/vault-core.css?v=vault-v80">
+  <link rel="stylesheet" href="css/vault-pro.css?v=vault-v80">
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
@@ -513,15 +513,20 @@
       <div class="sync-security-panel">
         <div class="sync-security-row">
           <span>Google Session: <strong id="syncAuthEmailLabel" style="color:#6ee7b7;">Not Signed In</strong></span>
-          <button type="button" class="btn-sync-action" id="btnVaultSignOut" style="padding:4px 10px;font-size:11px;">Sign Out</button>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <button type="button" class="btn-sync-action primary" id="btnReconnectGoogleSync" style="display:none;padding:4px 10px;font-size:11px;">☁️ Sync Sign-In</button>
+            <button type="button" class="btn-sync-action" id="btnVaultSignOut" style="padding:4px 10px;font-size:11px;">Sign Out</button>
+          </div>
         </div>
         <div class="sync-security-row">
-          <label for="selectAutoLockMinutes">Auto-Lock Idle Timeout</label>
+          <label for="selectAutoLockMinutes">Remember Device &amp; Auto-Lock</label>
           <select id="selectAutoLockMinutes">
-            <option value="2">2 Minutes</option>
-            <option value="5" selected>5 Minutes</option>
-            <option value="10">10 Minutes</option>
-            <option value="15">15 Minutes</option>
+            <option value="remember_90d" selected>Remember Device · 90 Days (Google/Gmail)</option>
+            <option value="remember_24h">Remember Today · 24 Hours</option>
+            <option value="remember_8h">Workday · 8 Hours</option>
+            <option value="15">Strict Auto-Lock · 15 Minutes</option>
+            <option value="5">Strict Auto-Lock · 5 Minutes</option>
+            <option value="2">Strict Auto-Lock · 2 Minutes</option>
           </select>
         </div>
         <div class="sync-security-row">
@@ -3305,13 +3310,13 @@
         if (window.caches) {
           caches.keys().then(keys => {
             keys.forEach(k => {
-              if (k.startsWith('vault-') && k !== 'vault-jarvis-v79') {
+              if (k.startsWith('vault-') && k !== 'vault-jarvis-v80') {
                 caches.delete(k);
               }
             });
           });
         }
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v79', { scope: '/orlandovault/' }).then(reg => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v80', { scope: '/orlandovault/' }).then(reg => {
           if (reg && reg.update) reg.update();
         }).catch(err => {
           console.warn('Vault SW registration error:', err);
@@ -4554,6 +4559,8 @@
       'orlandovault_enc_snaps_v4': { type: 'LOCAL_ONLY', category: 'crypto_backup', schemaVersion: 4, dataType: 'array' },
       'orlandovault_bio_wrap_v4': { type: 'LOCAL_ONLY', category: 'webauthn', schemaVersion: 4, dataType: 'object' },
       'orlandovault_faceid_prompt_dismissed_v1': { type: 'LOCAL_ONLY', category: 'webauthn', schemaVersion: 1, dataType: 'boolean' },
+      'orlandovault_trusted_owner_v1': { type: 'LOCAL_ONLY', category: 'identity', schemaVersion: 1, dataType: 'object' },
+      'orlandovault_remember_mode_v1': { type: 'LOCAL_ONLY', category: 'security', schemaVersion: 1, dataType: 'string' },
       'orlandovault_autolock_min': { type: 'LOCAL_ONLY', category: 'security', schemaVersion: 1, dataType: 'number' },
       'orlandovault_privacy_mask_v1': { type: 'LOCAL_ONLY', category: 'security', schemaVersion: 1, dataType: 'boolean' },
       'orlandovault_priority_pins_v4': { type: 'SYNC', category: 'pins', schemaVersion: 4, dataType: 'array' },
@@ -4591,10 +4598,17 @@
     };
     window.STORAGE_MANIFEST = STORAGE_MANIFEST;
 
-    function isAllowedStorageKey(key) {
+    const transientSdkProbeKeys = new Set();
+
+    function isAllowedStorageKey(key, val) {
       if (!key) return true;
       if (STORAGE_MANIFEST[key]) return true;
       if (key === '__sak' || key.startsWith('firebase:') || key.startsWith('firebaseui') || key.startsWith('firestore_')) return true;
+      if (transientSdkProbeKeys.has(key)) return true;
+      if (/^\d{8,14}$/.test(key) && val !== undefined && (val === key || val === '1' || val === 'test' || val === '__sak')) {
+        transientSdkProbeKeys.add(key);
+        return true;
+      }
       return false;
     }
 
@@ -4602,7 +4616,7 @@
     const origGetItem = Storage.prototype.getItem;
 
     Storage.prototype.setItem = function(key, val) {
-      if ((this === localStorage || this === sessionStorage) && !isAllowedStorageKey(key)) {
+      if ((this === localStorage || this === sessionStorage) && !isAllowedStorageKey(key, String(val))) {
         console.error('[Storage Audit Violation] Key not declared in STORAGE_MANIFEST: "' + key + '"');
       }
       return origSetItem.call(this, key, val);
@@ -4787,6 +4801,7 @@
     let activeVaultMeta = null; // { v: 4, saltHex, kdfIterations, keyCanary }
     let isFirstTimeMigration = false;
     let isAuthPopupOpen = false;
+    let explicitSignOutInProgress = false;
     let lastActivityAt = Date.now();
     let lastSeenRemoteTs = 0;
     let lastRenderFingerprint = '';
@@ -4820,8 +4835,15 @@
     };
 
     function getAutoLockMs() {
-      const mins = parseInt(localStorage.getItem(LS_AUTOLOCK_MIN) || '5', 10);
-      return Math.max(1, isNaN(mins) ? 5 : mins) * 60 * 1000;
+      if (window.VaultTrustedDevice && typeof window.VaultTrustedDevice.getRememberDurationMs === 'function') {
+        return window.VaultTrustedDevice.getRememberDurationMs();
+      }
+      const val = localStorage.getItem('orlandovault_remember_mode_v1') || localStorage.getItem(LS_AUTOLOCK_MIN) || 'remember_90d';
+      if (val === 'remember_90d') return 90 * 24 * 60 * 60 * 1000;
+      if (val === 'remember_24h') return 24 * 60 * 60 * 1000;
+      if (val === 'remember_8h') return 8 * 60 * 60 * 1000;
+      const mins = parseInt(val, 10);
+      return Math.max(1, isNaN(mins) ? (90 * 24 * 60) : mins) * 60 * 1000;
     }
 
     function recordUserActivity() {
@@ -4859,6 +4881,9 @@
           firebase.initializeApp(FIREBASE_CONFIG);
         }
         firebaseAuth = firebase.auth();
+        if (firebase.auth && firebase.auth.Auth && firebase.auth.Auth.Persistence) {
+          firebaseAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(() => {});
+        }
         if (typeof firebase.firestore === 'function') {
           firebaseDb = firebase.firestore();
           firebaseDb.enablePersistence({ synchronizeTabs: true }).catch(() => {});
@@ -4992,6 +5017,22 @@
       }
     }
 
+    function persistActiveTrustedDevice(ownerHint) {
+      try {
+        if (!window.VaultTrustedDevice) return;
+        const curUser = (firebaseAuth && firebaseAuth.currentUser) || null;
+        if (ownerHint || curUser) {
+          window.VaultTrustedDevice.saveTrustedOwner(ownerHint || curUser);
+        } else {
+          const existingOwner = window.VaultTrustedDevice.getTrustedOwner();
+          window.VaultTrustedDevice.saveTrustedOwner(existingOwner || { email: 'Authorized Owner' });
+        }
+        if (activeSessionKey && activeVaultMeta) {
+          window.VaultTrustedDevice.persistTrustedSession(activeSessionKey, activeVaultMeta).catch(() => {});
+        }
+      } catch(e) {}
+    }
+
     function readLocalEncryptedCacheEnvelope() {
       try {
         const raw = localStorage.getItem(LS_ENC_CACHE);
@@ -5063,6 +5104,7 @@
       if (typeof window.renderVault === 'function') window.renderVault();
       if (typeof window.renderMetrics === 'function') window.renderMetrics();
       updateSyncHealthUI();
+      persistActiveTrustedDevice();
       runPhase3PostUnlockHooks(true);
       if (window.VaultFaceId && typeof window.VaultFaceId.onPasscodeUnlockSuccess === 'function') {
         window.VaultFaceId.onPasscodeUnlockSuccess(passphrase, env.saltHex, env.passcodeMode || 'pin6', false);
@@ -5096,6 +5138,7 @@
     }
 
     function lockVault(reason = '') {
+      const wasUnlocked = !!activeSessionKey;
       const lastMode = (activeVaultMeta && activeVaultMeta.passcodeMode) || (readLocalEncryptedCacheEnvelope() || {}).passcodeMode || 'password';
       stopRealtimeFirestoreSync();
       activeSessionKey = null;
@@ -5143,6 +5186,13 @@
 
       const gateCard = document.getElementById('vaultGateCard');
       const stGoogle = document.getElementById('lockStageGoogle');
+      const stUnlock = document.getElementById('lockStageUnlock');
+      const isRemembered = !explicitSignOutInProgress && window.VaultTrustedDevice && window.VaultTrustedDevice.isDeviceRemembered();
+      if (isRemembered) {
+        if (stGoogle) stGoogle.style.display = 'none';
+        if (stUnlock) stUnlock.style.display = 'block';
+        if (gateCard) gateCard.classList.remove('google-signin-only');
+      }
       if (stGoogle && stGoogle.style.display !== 'none') {
         if (gateCard) {
           gateCard.classList.remove('ios-pin-active');
@@ -5161,7 +5211,7 @@
       updateSyncHealthUI();
       refreshBioButtonVisibility();
       if (window.VaultFaceId && typeof window.VaultFaceId.onManualVaultLock === 'function') {
-        window.VaultFaceId.onManualVaultLock();
+        window.VaultFaceId.onManualVaultLock(wasUnlocked);
       }
     }
     window.lockVault = lockVault;
@@ -5382,6 +5432,7 @@
       showUnlockedWorkspace();
       if (typeof window.renderVault === 'function') window.renderVault();
       if (typeof window.renderMetrics === 'function') window.renderMetrics();
+      persistActiveTrustedDevice();
       if (typeof logAudit === 'function') logAudit('VAULT_UPGRADED_V4', 'Upgraded Zero-Knowledge Encryption to PBKDF2 600k + Random Salt');
     }
 
@@ -5414,6 +5465,7 @@
       }
       refreshBioButtonVisibility();
       await persistEncryptedVaultCache();
+      persistActiveTrustedDevice();
       fullPushRequired = true;
       await pushToCloud(true);
       if (window.VaultFaceId && typeof window.VaultFaceId.stashTransientUnlockSecret === 'function') {
@@ -5478,6 +5530,7 @@
         showUnlockedWorkspace();
         if (typeof window.renderVault === 'function') window.renderVault();
         if (typeof window.renderMetrics === 'function') window.renderMetrics();
+        persistActiveTrustedDevice();
         if (window.VaultFaceId && typeof window.VaultFaceId.onPasscodeUnlockSuccess === 'function') {
           window.VaultFaceId.onPasscodeUnlockSuccess(masterPassword, meta.saltHex, meta.passcodeMode || 'pin6', true);
         }
@@ -5556,6 +5609,7 @@
             if (typeof window.renderVault === 'function') window.renderVault();
             if (typeof window.renderMetrics === 'function') window.renderMetrics();
             updateSyncHealthUI();
+            persistActiveTrustedDevice();
             Promise.resolve().then(async () => {
               if (isCloudAuthenticated()) {
                 await pullFromCloud(true, false).catch(() => {});
@@ -5571,6 +5625,95 @@
           return;
         }
         throw new Error('Could not unwrap vault key.');
+      },
+      restoreFromTrustedSession: async (trustedCryptoKey, savedMeta) => {
+        if (!trustedCryptoKey) return false;
+        const env = readLocalEncryptedCacheEnvelope();
+        const meta = savedMeta || (env && env.saltHex ? env : null);
+        if (!env || !env.encryptedData || !env.keyCanary) return false;
+        const valid = await VaultCrypto.verifyCanary(env.keyCanary, trustedCryptoKey);
+        if (!valid) return false;
+
+        activeSessionKey = trustedCryptoKey;
+        activeVaultMeta = {
+          v: 4,
+          passcodeMode: (meta && meta.passcodeMode) || env.passcodeMode || 'pin6',
+          saltHex: (meta && meta.saltHex) || env.saltHex,
+          kdfIterations: (meta && meta.kdfIterations) || env.kdfIterations || KDF_ITERATIONS_V4,
+          keyCanary: env.keyCanary
+        };
+        lastActivityAt = Date.now();
+
+        const dec = await VaultCrypto.decryptStrict(env.encryptedData, trustedCryptoKey);
+        const parsed = JSON.parse(dec || '{}');
+        const items = Array.isArray(parsed.items) ? parsed.items : [];
+        if (typeof window.setVaultItems === 'function') window.setVaultItems(items);
+        window.vaultItems = items;
+        if (Array.isArray(parsed.pins) && typeof savePinnedRegistry === 'function') savePinnedRegistry(parsed.pins);
+        if (parsed.tombstones && typeof saveVaultTombstones === 'function') saveVaultTombstones(parsed.tombstones);
+        if (typeof window.reapplyPriorityPins === 'function') window.reapplyPriorityPins(items);
+
+        const stGoogle = document.getElementById('lockStageGoogle');
+        const stUnlock = document.getElementById('lockStageUnlock');
+        const gateCard = document.getElementById('vaultGateCard');
+        if (stGoogle) stGoogle.style.display = 'none';
+        if (stUnlock) stUnlock.style.display = 'block';
+        if (gateCard) gateCard.classList.remove('google-signin-only');
+
+        const owner = window.VaultTrustedDevice ? window.VaultTrustedDevice.getTrustedOwner() : null;
+        const emailPill = document.getElementById('lockSignedInEmail');
+        const modalEmail = document.getElementById('syncAuthEmailLabel');
+        const labelEmail = (firebaseAuth && firebaseAuth.currentUser && firebaseAuth.currentUser.email)
+          || (owner && owner.email)
+          || 'Trusted Device';
+        if (emailPill) emailPill.textContent = '✓ ' + labelEmail;
+        if (modalEmail) modalEmail.textContent = labelEmail;
+
+        showUnlockedWorkspace();
+        if (typeof window.renderVault === 'function') window.renderVault();
+        if (typeof window.renderMetrics === 'function') window.renderMetrics();
+        updateSyncHealthUI();
+        Promise.resolve().then(async () => {
+          if (isCloudAuthenticated()) {
+            await pullFromCloud(true, false).catch(() => {});
+            startRealtimeFirestoreSync();
+          }
+          runPhase3PostUnlockHooks(!isCloudAuthenticated());
+        });
+        return true;
+      },
+      enterRememberedDeviceUnlockGate: () => {
+        if (activeSessionKey) return;
+        const env = readLocalEncryptedCacheEnvelope();
+        if (!activeVaultMeta && env && env.saltHex && env.keyCanary) {
+          activeVaultMeta = {
+            v: 4,
+            passcodeMode: env.passcodeMode || 'pin6',
+            saltHex: env.saltHex,
+            kdfIterations: env.kdfIterations || KDF_ITERATIONS_V4,
+            keyCanary: env.keyCanary
+          };
+        }
+        const owner = window.VaultTrustedDevice ? window.VaultTrustedDevice.getTrustedOwner() : null;
+        const emailText = (owner && owner.email) ? owner.email : 'Remembered Device';
+        const stGoogle = document.getElementById('lockStageGoogle');
+        const stUnlock = document.getElementById('lockStageUnlock');
+        const gateCard = document.getElementById('vaultGateCard');
+        const emailPill = document.getElementById('lockSignedInEmail');
+        const modalEmail = document.getElementById('syncAuthEmailLabel');
+        if (stGoogle) stGoogle.style.display = 'none';
+        if (stUnlock) stUnlock.style.display = 'block';
+        if (gateCard) gateCard.classList.remove('google-signin-only');
+        if (emailPill) emailPill.textContent = '✓ ' + emailText;
+        if (modalEmail) modalEmail.textContent = emailText + ' (Remembered)';
+        if (!activeVaultMeta || activeVaultMeta.passcodeMode === 'pin6') {
+          const pinSt = window.getIosPinState && window.getIosPinState();
+          if (!(pinSt && pinSt.panelVisible && pinSt.mode === 'unlock')) {
+            showIosPinPanel('unlock', false);
+          }
+        } else {
+          showPasswordUnlockForm();
+        }
       },
       fillAllPinDotsForMatch: () => {
         document.querySelectorAll('#iosPinDots .ios-pin-dot').forEach(d => d.classList.add('filled'));
@@ -6592,7 +6735,10 @@
         if (strengthBox) strengthBox.style.display = 'none';
         showIosPinPanel('setup_create', false);
       } else if (activeVaultMeta && activeVaultMeta.passcodeMode === 'pin6') {
-        showIosPinPanel('unlock', false);
+        const curPinSt = typeof window.getIosPinState === 'function' ? window.getIosPinState() : null;
+        if (!(curPinSt && curPinSt.panelVisible && curPinSt.mode === 'unlock')) {
+          showIosPinPanel('unlock', false);
+        }
       } else {
         if (modeBadge) modeBadge.textContent = '🔐 ZERO-KNOWLEDGE VAULT · LOCKED';
         if (gateTitle) gateTitle.textContent = 'Unlock OrlandoVault';
@@ -6617,14 +6763,21 @@
       const btnLock = document.getElementById('btnTopbarLockVault');
       if (btnLock) btnLock.onclick = () => { lockVault('Vault locked manually.'); };
 
-      // Auto-lock selector in Sync Health modal
+      // Auto-lock / Remember Device selector in Sync Health modal
       const selAuto = document.getElementById('selectAutoLockMinutes');
       if (selAuto) {
-        selAuto.value = localStorage.getItem(LS_AUTOLOCK_MIN) || '5';
+        const curMode = localStorage.getItem('orlandovault_remember_mode_v1') || localStorage.getItem(LS_AUTOLOCK_MIN) || 'remember_90d';
+        const hasOpt = Array.from(selAuto.options).some(o => o.value === curMode);
+        selAuto.value = hasOpt ? curMode : 'remember_90d';
         selAuto.onchange = () => {
+          localStorage.setItem('orlandovault_remember_mode_v1', selAuto.value);
           localStorage.setItem(LS_AUTOLOCK_MIN, selAuto.value);
           recordUserActivity();
-          if (typeof showToast === 'function') showToast('⏱️ Auto-lock timer set to ' + selAuto.value + ' minutes.', '🛡️');
+          if (activeSessionKey && activeVaultMeta && window.VaultTrustedDevice) {
+            window.VaultTrustedDevice.persistTrustedSession(activeSessionKey, activeVaultMeta).catch(() => {});
+          }
+          const lblText = selAuto.options[selAuto.selectedIndex]?.textContent || selAuto.value;
+          if (typeof showToast === 'function') showToast('🛡️ Updated: ' + lblText, '✅');
         };
       }
 
@@ -6742,20 +6895,37 @@
         };
       }
 
+      async function performExplicitDeviceSignOut(reasonMsg) {
+        explicitSignOutInProgress = true;
+        try {
+          if (window.VaultTrustedDevice) {
+            window.VaultTrustedDevice.clearTrustedOwner();
+            await window.VaultTrustedDevice.clearTrustedSession();
+          }
+          const stGoogle = document.getElementById('lockStageGoogle');
+          const stUnlock = document.getElementById('lockStageUnlock');
+          const gateCard = document.getElementById('vaultGateCard');
+          if (stGoogle) stGoogle.style.display = 'block';
+          if (stUnlock) stUnlock.style.display = 'none';
+          if (gateCard) {
+            gateCard.classList.remove('ios-pin-active');
+            gateCard.classList.add('google-signin-only');
+          }
+          lockVault(reasonMsg || '');
+          if (firebaseAuth) { try { await firebaseAuth.signOut(); } catch(e) {} }
+        } finally {
+          explicitSignOutInProgress = false;
+        }
+      }
+
       const btnSignOut = document.getElementById('btnVaultSignOut');
       if (btnSignOut) {
-        btnSignOut.onclick = async () => {
-          lockVault('Signed out.');
-          if (firebaseAuth) { try { await firebaseAuth.signOut(); } catch(e) {} }
-        };
+        btnSignOut.onclick = () => performExplicitDeviceSignOut('Signed out of this device.');
       }
 
       const btnSwitchGoogle = document.getElementById('btnLockSwitchGoogle');
       if (btnSwitchGoogle) {
-        btnSwitchGoogle.onclick = async () => {
-          lockVault('');
-          if (firebaseAuth) { try { await firebaseAuth.signOut(); } catch(e) {} }
-        };
+        btnSwitchGoogle.onclick = () => performExplicitDeviceSignOut('');
       }
 
       const btnBioSetup = document.getElementById('btnSetupBiometricUnlock');
@@ -6806,40 +6976,52 @@
         };
       }
 
-      // Google Sign-In Button
-      const btnGoogle = document.getElementById('btnVaultGoogleSignIn');
-      const setupHint = document.getElementById('lockGoogleSetupHint');
-      if (btnGoogle) {
-        btnGoogle.onclick = async () => {
-          setLockError('');
-          if (setupHint) setupHint.style.display = 'none';
-          if (!firebaseAuth || typeof firebase === 'undefined' || !firebase.auth) {
-            setLockError('Firebase Auth SDK failed to load. Check network connection.');
-            return;
-          }
-          const provider = new firebase.auth.GoogleAuthProvider();
+      // Google Sign-In & Trusted Reconnect Helper
+      async function triggerVaultGoogleSignIn() {
+        setLockError('');
+        const setupHint = document.getElementById('lockGoogleSetupHint');
+        if (setupHint) setupHint.style.display = 'none';
+        if (!firebaseAuth || typeof firebase === 'undefined' || !firebase.auth) {
+          setLockError('Firebase Auth SDK failed to load. Check network connection.');
+          return;
+        }
+        const provider = new firebase.auth.GoogleAuthProvider();
+        const savedOwner = window.VaultTrustedDevice ? window.VaultTrustedDevice.getTrustedOwner() : null;
+        if (savedOwner && savedOwner.email && savedOwner.email.includes('@')) {
+          provider.setCustomParameters({ login_hint: savedOwner.email });
+        } else {
           provider.setCustomParameters({ prompt: 'select_account' });
-          isAuthPopupOpen = true;
-          try {
-            await firebaseAuth.signInWithPopup(provider);
-          } catch(err) {
-            if (err && (err.code === 'auth/popup-blocked' || err.code === 'auth/operation-not-supported-in-this-environment')) {
-              try {
-                await firebaseAuth.signInWithRedirect(provider);
-                return;
-              } catch(redErr) {
-                err = redErr;
-              }
+        }
+        isAuthPopupOpen = true;
+        try {
+          await firebaseAuth.signInWithPopup(provider);
+          if (typeof showToast === 'function' && activeSessionKey) showToast('☁️ Cloud Sync Session Connected!', '✅');
+        } catch(err) {
+          if (err && (err.code === 'auth/popup-blocked' || err.code === 'auth/operation-not-supported-in-this-environment')) {
+            try {
+              await firebaseAuth.signInWithRedirect(provider);
+              return;
+            } catch(redErr) {
+              err = redErr;
             }
-            const code = (err && err.code) || '';
-            if (code.includes('configuration-not-found') || code.includes('operation-not-allowed') || code.includes('unauthorized-domain')) {
-              if (setupHint) setupHint.style.display = 'block';
-            }
-            setLockError((err && err.message) || 'Google Sign-In failed.');
-          } finally {
-            isAuthPopupOpen = false;
           }
-        };
+          const code = (err && err.code) || '';
+          if (code.includes('configuration-not-found') || code.includes('operation-not-allowed') || code.includes('unauthorized-domain')) {
+            if (setupHint) setupHint.style.display = 'block';
+          }
+          setLockError((err && err.message) || 'Google Sign-In failed.');
+        } finally {
+          isAuthPopupOpen = false;
+        }
+      }
+
+      const btnGoogle = document.getElementById('btnVaultGoogleSignIn');
+      if (btnGoogle) {
+        btnGoogle.onclick = triggerVaultGoogleSignIn;
+      }
+      const btnReconnectSync = document.getElementById('btnReconnectGoogleSync');
+      if (btnReconnectSync) {
+        btnReconnectSync.onclick = triggerVaultGoogleSignIn;
       }
 
       // Password Strength Meter & Eye Toggle on Lock Gate
@@ -6941,12 +7123,14 @@
             updateIosPinDots();
             return;
           }
-          // 0 digits entered -> 'Cancel' action
+          // 0 digits entered -> 'Cancel' clears errors / returns if unlocked without signing out of Google
           if (iosPinAllowCancel && activeSessionKey) {
             showUnlockedWorkspace();
           } else {
             setLockError('');
-            if (firebaseAuth) { try { await firebaseAuth.signOut(); } catch(e) {} }
+            if (window.VaultFaceId && window.VaultFaceId.hasBioWrapConfigured()) {
+              window.VaultFaceId.unlockWithFaceId({ reason: 'cancel_rescan', silentOnCancel: true }).catch(() => {});
+            }
           }
         };
       }
@@ -7039,9 +7223,25 @@
           const stUnlock = document.getElementById('lockStageUnlock');
           const emailPill = document.getElementById('lockSignedInEmail');
           const modalEmail = document.getElementById('syncAuthEmailLabel');
+          const btnReconnect = document.getElementById('btnReconnectGoogleSync');
 
           const gateCard = document.getElementById('vaultGateCard');
           if (!user) {
+            if (!explicitSignOutInProgress && window.VaultTrustedDevice && window.VaultTrustedDevice.isDeviceRemembered()) {
+              const owner = window.VaultTrustedDevice.getTrustedOwner();
+              const labelEmail = (owner && owner.email) ? owner.email : 'Remembered Device';
+              if (gateCard) gateCard.classList.remove('google-signin-only');
+              if (stGoogle) stGoogle.style.display = 'none';
+              if (stUnlock) stUnlock.style.display = 'block';
+              if (emailPill) emailPill.textContent = '✓ ' + labelEmail;
+              if (modalEmail) modalEmail.textContent = labelEmail + ' · Sync Standby';
+              if (btnReconnect) btnReconnect.style.display = 'inline-flex';
+              if (!activeSessionKey && window._ovFaceIdHooks && window._ovFaceIdHooks.enterRememberedDeviceUnlockGate) {
+                window._ovFaceIdHooks.enterRememberedDeviceUnlockGate();
+              }
+              return;
+            }
+
             if (gateCard) {
               gateCard.classList.remove('ios-pin-active');
               gateCard.classList.add('google-signin-only');
@@ -7049,6 +7249,7 @@
             if (stGoogle) stGoogle.style.display = 'block';
             if (stUnlock) stUnlock.style.display = 'none';
             if (modalEmail) modalEmail.textContent = 'Not Signed In';
+            if (btnReconnect) btnReconnect.style.display = 'none';
             if (activeSessionKey) lockVault('');
             return;
           }
@@ -7067,16 +7268,27 @@
           }
 
           setLockError('');
+          if (window.VaultTrustedDevice) {
+            window.VaultTrustedDevice.saveTrustedOwner({ email: user.email, uid: user.uid });
+          }
+          if (btnReconnect) btnReconnect.style.display = 'none';
           if (gateCard) gateCard.classList.remove('google-signin-only');
           if (emailPill) emailPill.textContent = '✓ ' + user.email;
           if (modalEmail) modalEmail.textContent = user.email;
           if (stGoogle) stGoogle.style.display = 'none';
           if (stUnlock) stUnlock.style.display = 'block';
 
-          if (!activeSessionKey) {
-            showIosPinPanel('unlock', false);
-            await inspectCloudVersionForSignedInUser();
+          if (activeSessionKey) {
+            Promise.resolve().then(async () => {
+              await pullFromCloud(true, false).catch(() => {});
+              startRealtimeFirestoreSync();
+              runPhase3PostUnlockHooks(false);
+            });
+            return;
           }
+
+          showIosPinPanel('unlock', false);
+          await inspectCloudVersionForSignedInUser();
         });
       }
 
@@ -9052,10 +9264,10 @@
   })();
   </script>
 
-  <script src="js/vault-faceid.js?v=vault-v79"></script>
-  <script src="js/vault-templates.js?v=vault-v79"></script>
-  <script src="js/totp-watchtower.js?v=vault-v79"></script>
-  <script src="js/cloud-telemetry.js?v=vault-v79"></script>
-  <script src="js/autofill-bridge.js?v=vault-v79"></script>
+  <script src="js/vault-faceid.js?v=vault-v80"></script>
+  <script src="js/vault-templates.js?v=vault-v80"></script>
+  <script src="js/totp-watchtower.js?v=vault-v80"></script>
+  <script src="js/cloud-telemetry.js?v=vault-v80"></script>
+  <script src="js/autofill-bridge.js?v=vault-v80"></script>
 </body>
 </html>

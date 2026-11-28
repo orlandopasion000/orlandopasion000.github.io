@@ -7,16 +7,23 @@
 
   const LS_BIO_WRAP = 'orlandovault_bio_wrap_v4';
   const LS_FACEID_DISMISSED = 'orlandovault_faceid_prompt_dismissed_v1';
+  const LS_TRUSTED_OWNER = 'orlandovault_trusted_owner_v1';
+  const LS_REMEMBER_MODE = 'orlandovault_remember_mode_v1';
   const IDB_FACEID_DB = 'orlandovault_faceid_idb_v4';
   const IDB_FACEID_STORE = 'hw_keys';
   const IDB_FACEID_KEY = 'bio_wrap_key_v4';
+
+  const IDB_SESSION_DB = 'orlandovault_trusted_session_idb_v1';
+  const IDB_SESSION_STORE = 'session';
+  const IDB_SESSION_KEY = 'active_trusted_session_v1';
 
   const IDB_SCANS_DB = 'orlandovault_enc_scans_v4';
   const IDB_SCANS_STORE = 'scans';
 
   let activeFaceIdPromise = null;
   let gestureAutoSeekArmed = true;
-  let suppressAutoSeekOnce = false;
+  let anyTouchAutoScanArmed = true;
+  let manualLockGraceUntil = 0;
   let autoMountTimer = null;
   let diResetTimer = null;
   let forceEnrollPromptNextUnlock = false;
@@ -604,7 +611,7 @@
     const tStart = performance.now();
 
     try {
-      const assertion = await navigator.credentials.get({ publicKey: pubKey });
+      const assertion = await navigator.credentials.get({ publicKey: pubKey, mediation: 'optional' });
       if (!assertion || !assertion.response || !assertion.response.authenticatorData) {
         throw new Error('Face ID assertion returned empty authenticator data.');
       }
@@ -654,9 +661,10 @@
       }
 
       gestureAutoSeekArmed = false;
+      anyTouchAutoScanArmed = false;
       setDynamicIslandState('matched', 'Unlocked');
       if (h.fillAllPinDotsForMatch) h.fillAllPinDotsForMatch();
-      if (navigator.vibrate) {
+      if (navigator.vibrate && navigator.userActivation && navigator.userActivation.hasBeenActive) {
         try { navigator.vibrate([12, 30, 18]); } catch (e) {}
       }
 
@@ -670,12 +678,18 @@
       const isGestureGate = reason === 'auto_mount'
         && err
         && (err.name === 'NotAllowedError' || err.name === 'SecurityError')
-        && elapsed < 220
+        && elapsed < 250
         && !(navigator.userActivation && navigator.userActivation.isActive);
 
       if (isGestureGate) {
         gestureAutoSeekArmed = true;
+        anyTouchAutoScanArmed = true;
         setDynamicIslandState('idle');
+        const subEl = document.getElementById('iosPinSubHint');
+        if (subEl && !subEl.textContent) {
+          subEl.textContent = 'Touch anywhere or look for Face ID';
+          subEl.classList.add('visible');
+        }
         return false;
       }
 
@@ -704,7 +718,152 @@
   }
 
   // ==========================================================================
-  // AUTOMATIC FACE ID SEEKING HOOKS (LOCK SCREEN, DIGIT TAP, SWIPE UP, RESUME)
+  // PERSISTENT TRUSTED DEVICE ENGINE (GOOGLE / GMAIL / WINDOWS 90-DAY SESSION)
+  // ==========================================================================
+  function saveTrustedOwner(userOrEmail) {
+    try {
+      const email = typeof userOrEmail === 'string'
+        ? userOrEmail
+        : (userOrEmail && userOrEmail.email ? userOrEmail.email : '');
+      const uid = userOrEmail && userOrEmail.uid ? userOrEmail.uid : '';
+      const existing = getTrustedOwner() || {};
+      const record = {
+        email: email || existing.email || 'Authorized Owner',
+        uid: uid || existing.uid || '',
+        trustedAt: existing.trustedAt || Date.now(),
+        lastVerifiedAt: Date.now()
+      };
+      localStorage.setItem(LS_TRUSTED_OWNER, JSON.stringify(record));
+      return record;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function getTrustedOwner() {
+    try {
+      const raw = localStorage.getItem(LS_TRUSTED_OWNER);
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function clearTrustedOwner() {
+    try { localStorage.removeItem(LS_TRUSTED_OWNER); } catch (e) {}
+  }
+
+  function isDeviceRemembered() {
+    if (getTrustedOwner()) return true;
+    try {
+      const cache = localStorage.getItem('orlandovault_enc_cache_v4');
+      if (cache) return true;
+    } catch (e) {}
+    return false;
+  }
+
+  function getRememberDurationMs() {
+    try {
+      const val = localStorage.getItem(LS_REMEMBER_MODE) || localStorage.getItem('orlandovault_autolock_min') || 'remember_90d';
+      if (val === 'remember_90d') return 90 * 24 * 60 * 60 * 1000;
+      if (val === 'remember_24h') return 24 * 60 * 60 * 1000;
+      if (val === 'remember_8h') return 8 * 60 * 60 * 1000;
+      const mins = parseInt(val, 10);
+      if (!isNaN(mins) && mins > 0) return mins * 60 * 1000;
+    } catch (e) {}
+    return 90 * 24 * 60 * 60 * 1000;
+  }
+
+  async function persistTrustedSession(nonExtractableCryptoKey, meta) {
+    try {
+      if (!nonExtractableCryptoKey || nonExtractableCryptoKey.extractable !== false) return false;
+      const now = Date.now();
+      const db = await openIdb(IDB_SESSION_DB, IDB_SESSION_STORE, null);
+      const record = {
+        cryptoKey: nonExtractableCryptoKey,
+        meta: meta || null,
+        savedAt: now,
+        expiresAt: now + getRememberDurationMs()
+      };
+      return await new Promise((resolve) => {
+        const tx = db.transaction(IDB_SESSION_STORE, 'readwrite');
+        tx.objectStore(IDB_SESSION_STORE).put(record, IDB_SESSION_KEY);
+        tx.oncomplete = () => { db.close(); resolve(true); };
+        tx.onerror = () => { db.close(); resolve(false); };
+      });
+    } catch (e) {
+      return false;
+    }
+  }
+
+  async function clearTrustedSession() {
+    try {
+      const db = await openIdb(IDB_SESSION_DB, IDB_SESSION_STORE, null);
+      await new Promise((resolve) => {
+        const tx = db.transaction(IDB_SESSION_STORE, 'readwrite');
+        tx.objectStore(IDB_SESSION_STORE).delete(IDB_SESSION_KEY);
+        tx.oncomplete = () => { db.close(); resolve(); };
+        tx.onerror = () => { db.close(); resolve(); };
+      });
+    } catch (e) {}
+  }
+
+  async function loadValidTrustedSession() {
+    try {
+      const db = await openIdb(IDB_SESSION_DB, IDB_SESSION_STORE, null);
+      const rec = await new Promise((resolve) => {
+        const tx = db.transaction(IDB_SESSION_STORE, 'readonly');
+        const req = tx.objectStore(IDB_SESSION_STORE).get(IDB_SESSION_KEY);
+        req.onsuccess = () => { db.close(); resolve(req.result || null); };
+        req.onerror = () => { db.close(); resolve(null); };
+      });
+      if (!rec || !rec.cryptoKey || Date.now() >= (rec.expiresAt || 0)) {
+        if (rec) clearTrustedSession();
+        return null;
+      }
+      persistTrustedSession(rec.cryptoKey, rec.meta).catch(() => {});
+      return rec;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  async function bootTrustedDevice() {
+    const h = hooks();
+    if (h.isUnlocked && h.isUnlocked()) return true;
+    const sess = await loadValidTrustedSession();
+    if (sess && sess.cryptoKey && h.restoreFromTrustedSession) {
+      const ok = await h.restoreFromTrustedSession(sess.cryptoKey, sess.meta).catch(() => false);
+      if (ok) return true;
+    }
+    if (isDeviceRemembered() && !(h.isUnlocked && h.isUnlocked()) && h.enterRememberedDeviceUnlockGate) {
+      h.enterRememberedDeviceUnlockGate();
+    }
+    return false;
+  }
+
+  function showDesktopBioOfferPill() {
+    if (document.getElementById('desktopBioOfferPill')) return;
+    const pill = document.createElement('div');
+    pill.id = 'desktopBioOfferPill';
+    pill.className = 'desktop-bio-offer-pill';
+    pill.innerHTML = `
+      <button type="button" id="btnDesktopBioOfferEnable" class="btn-desktop-bio-enable">🧬 Enable Windows Hello / Face ID</button>
+      <button type="button" id="btnDesktopBioOfferDismiss" class="btn-desktop-bio-dismiss" title="Dismiss">✕</button>
+    `;
+    document.body.appendChild(pill);
+    document.getElementById('btnDesktopBioOfferEnable').onclick = () => {
+      pill.remove();
+      openEnrollSheet('one_tap');
+    };
+    document.getElementById('btnDesktopBioOfferDismiss').onclick = () => {
+      pill.remove();
+      try { localStorage.setItem(LS_FACEID_DISMISSED, '1'); } catch (e) {}
+    };
+  }
+
+  // ==========================================================================
+  // AUTOMATIC FACE ID SEEKING HOOKS (LOCK SCREEN, DIGIT TAP, ANY TOUCH, RESUME)
   // ==========================================================================
   function onPinPanelShown(mode) {
     currentPinMode = mode || 'unlock';
@@ -718,7 +877,8 @@
     setDynamicIslandState('idle');
     if (hasBioWrapConfigured()) {
       gestureAutoSeekArmed = true;
-      if (!suppressAutoSeekOnce && document.visibilityState === 'visible') {
+      anyTouchAutoScanArmed = true;
+      if (Date.now() >= manualLockGraceUntil && document.visibilityState === 'visible' && !activeFaceIdPromise) {
         if (autoMountTimer) clearTimeout(autoMountTimer);
         autoMountTimer = setTimeout(() => {
           const pinPanel = document.getElementById('iosPinPanel');
@@ -727,12 +887,12 @@
           if (panelOpen && currentPinMode === 'unlock' && !(hooks().isUnlocked && hooks().isUnlocked())) {
             unlockWithFaceId({ reason: 'auto_mount', silentOnCancel: true }).catch(() => {});
           }
-        }, 80);
+        }, 15);
       }
     } else {
       gestureAutoSeekArmed = false;
+      anyTouchAutoScanArmed = false;
     }
-    suppressAutoSeekOnce = false;
   }
 
   function onKeypadDigitClick() {
@@ -741,15 +901,18 @@
     if (!gestureAutoSeekArmed || activeFaceIdPromise) return;
     if (hooks().isUnlocked && hooks().isUnlocked()) return;
     gestureAutoSeekArmed = false;
-    // Fires immediately inside real click gesture so iOS Safari allows Face ID prompt
-    // while keeping already-tapped digits intact if user falls back to passcode!
+    anyTouchAutoScanArmed = false;
     unlockWithFaceId({ reason: 'typing_digits', silentOnCancel: true }).catch(() => {});
   }
 
-  function onManualVaultLock() {
-    suppressAutoSeekOnce = true;
+  function onManualVaultLock(wasUnlocked = true) {
+    manualLockGraceUntil = wasUnlocked ? (Date.now() + 900) : 0;
     gestureAutoSeekArmed = true;
+    anyTouchAutoScanArmed = true;
     clearTransientSecret();
+    clearTrustedSession();
+    const bioPill = document.getElementById('desktopBioOfferPill');
+    if (bioPill) bioPill.remove();
     if (autoMountTimer) { clearTimeout(autoMountTimer); autoMountTimer = null; }
     setDynamicIslandState('idle');
     if (window.VaultEncryptedScans) window.VaultEncryptedScans.clearDecryptedMemory();
@@ -768,16 +931,31 @@
       || !!(window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
     const shouldForce = forceEnrollPromptNextUnlock;
     forceEnrollPromptNextUnlock = false;
-    if (!shouldForce && (!isInteractive || !isTouchDevice || dismissed)) return;
+    if (!shouldForce && (!isInteractive || dismissed)) return;
 
     const supported = await isPlatformBiometricSupported();
     if (!supported && !shouldForce) return;
 
     setTimeout(() => {
-      if (hooks().isUnlocked && hooks().isUnlocked() && !hasBioWrapConfigured()) {
+      if (!(hooks().isUnlocked && hooks().isUnlocked()) || hasBioWrapConfigured()) return;
+      if (shouldForce || isTouchDevice) {
         openEnrollSheet('one_tap');
+      } else {
+        showDesktopBioOfferPill();
       }
     }, 360);
+  }
+
+  function tryResumeAutoFaceId(reason) {
+    if (Date.now() < manualLockGraceUntil) return;
+    const overlayEl = document.getElementById('vaultLockOverlay');
+    const pinPanel = document.getElementById('iosPinPanel');
+    const isLockedOnPin = overlayEl && !overlayEl.classList.contains('unlocked')
+      && pinPanel && pinPanel.style.display !== 'none'
+      && currentPinMode === 'unlock';
+    if (isLockedOnPin && hasBioWrapConfigured() && !activeFaceIdPromise && !(hooks().isUnlocked && hooks().isUnlocked())) {
+      unlockWithFaceId({ reason, silentOnCancel: true }).catch(() => {});
+    }
   }
 
   function wireGlobalGestures() {
@@ -805,23 +983,39 @@
         if (dy <= -36 && dx < 70 && currentPinMode === 'unlock' && hasBioWrapConfigured()) {
           const pinPanel = document.getElementById('iosPinPanel');
           if (pinPanel && pinPanel.style.display !== 'none' && !overlay.classList.contains('unlocked')) {
+            anyTouchAutoScanArmed = false;
+            gestureAutoSeekArmed = false;
             unlockWithFaceId({ reason: 'swipe_up', silentOnCancel: false }).catch(() => {});
           }
         }
       }, { passive: true });
+
+      // Universal lock-screen any-touch catch-all for iOS Safari user-gesture Face ID
+      overlay.addEventListener('click', (e) => {
+        if (overlay.classList.contains('unlocked') || currentPinMode !== 'unlock') return;
+        if (!hasBioWrapConfigured() || !anyTouchAutoScanArmed || activeFaceIdPromise) return;
+        if (Date.now() < manualLockGraceUntil) return;
+        if (hooks().isUnlocked && hooks().isUnlocked()) return;
+        const pinPanel = document.getElementById('iosPinPanel');
+        if (!pinPanel || pinPanel.style.display === 'none') return;
+
+        const target = e.target;
+        if (target && target.closest) {
+          if (target.closest('#btnLockSwitchGoogle, #btnIosRightAction')) return;
+          if (target.closest('#btnIosLeftAction') && !hasBioWrapConfigured()) return;
+          if (target.closest('#iosDynamicIsland')) return;
+        }
+        anyTouchAutoScanArmed = false;
+        gestureAutoSeekArmed = false;
+        unlockWithFaceId({ reason: 'screen_touch', silentOnCancel: true }).catch(() => {});
+      }, true);
     }
 
     document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState !== 'visible') return;
-      const overlayEl = document.getElementById('vaultLockOverlay');
-      const pinPanel = document.getElementById('iosPinPanel');
-      const isLockedOnPin = overlayEl && !overlayEl.classList.contains('unlocked')
-        && pinPanel && pinPanel.style.display !== 'none'
-        && currentPinMode === 'unlock';
-      if (isLockedOnPin && hasBioWrapConfigured() && !activeFaceIdPromise && !(hooks().isUnlocked && hooks().isUnlocked())) {
-        unlockWithFaceId({ reason: 'visibility_return', silentOnCancel: true }).catch(() => {});
-      }
+      if (document.visibilityState === 'visible') tryResumeAutoFaceId('visibility_return');
     });
+    window.addEventListener('pageshow', () => tryResumeAutoFaceId('app_pageshow'));
+    window.addEventListener('focus', () => tryResumeAutoFaceId('app_focus'));
   }
 
   // ==========================================================================
@@ -1236,5 +1430,22 @@
     clearDecryptedMemory
   };
 
-  document.addEventListener('DOMContentLoaded', wireGlobalGestures);
+  window.VaultTrustedDevice = {
+    LS_TRUSTED_OWNER,
+    LS_REMEMBER_MODE,
+    saveTrustedOwner,
+    getTrustedOwner,
+    clearTrustedOwner,
+    isDeviceRemembered,
+    getRememberDurationMs,
+    persistTrustedSession,
+    loadValidTrustedSession,
+    clearTrustedSession,
+    bootTrustedDevice
+  };
+
+  document.addEventListener('DOMContentLoaded', () => {
+    wireGlobalGestures();
+    bootTrustedDevice().catch(() => {});
+  });
 })();
