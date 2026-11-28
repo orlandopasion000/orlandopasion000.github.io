@@ -963,14 +963,14 @@
 
   function getRememberDurationMs() {
     try {
-      const val = localStorage.getItem(LS_REMEMBER_MODE) || localStorage.getItem('orlandovault_autolock_min') || 'remember_90d';
+      const val = localStorage.getItem(LS_REMEMBER_MODE) || localStorage.getItem('orlandovault_autolock_min') || '5';
       if (val === 'remember_90d') return 90 * 24 * 60 * 60 * 1000;
       if (val === 'remember_24h') return 24 * 60 * 60 * 1000;
       if (val === 'remember_8h') return 8 * 60 * 60 * 1000;
       const mins = parseInt(val, 10);
       if (!isNaN(mins) && mins > 0) return mins * 60 * 1000;
     } catch (e) {}
-    return 90 * 24 * 60 * 60 * 1000;
+    return 5 * 60 * 1000;
   }
 
   async function persistTrustedSession(nonExtractableCryptoKey, meta) {

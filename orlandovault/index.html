@@ -17,8 +17,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/vault-core.css?v=vault-v81">
-  <link rel="stylesheet" href="css/vault-pro.css?v=vault-v81">
+  <link rel="stylesheet" href="css/vault-core.css?v=vault-v82">
+  <link rel="stylesheet" href="css/vault-pro.css?v=vault-v82">
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
@@ -529,14 +529,16 @@
           </div>
         </div>
         <div class="sync-security-row">
-          <label for="selectAutoLockMinutes">Remember Device &amp; Auto-Lock</label>
+          <label for="selectAutoLockMinutes">Idle Auto-Lock Timer (Device Stays Remembered)</label>
           <select id="selectAutoLockMinutes">
-            <option value="remember_90d" selected>Remember Device · 90 Days (Google/Gmail)</option>
-            <option value="remember_24h">Remember Today · 24 Hours</option>
-            <option value="remember_8h">Workday · 8 Hours</option>
-            <option value="15">Strict Auto-Lock · 15 Minutes</option>
-            <option value="5">Strict Auto-Lock · 5 Minutes</option>
             <option value="2">Strict Auto-Lock · 2 Minutes</option>
+            <option value="5" selected>Auto-Lock · 5 Minutes (Default)</option>
+            <option value="10">Auto-Lock · 10 Minutes</option>
+            <option value="15">Auto-Lock · 15 Minutes</option>
+            <option value="30">Auto-Lock · 30 Minutes</option>
+            <option value="remember_8h">Workday · 8 Hours</option>
+            <option value="remember_24h">Keep Unlocked · 24 Hours</option>
+            <option value="remember_90d">Keep Unlocked · 90 Days</option>
           </select>
         </div>
         <div class="sync-security-row">
@@ -3320,13 +3322,13 @@
         if (window.caches) {
           caches.keys().then(keys => {
             keys.forEach(k => {
-              if (k.startsWith('vault-') && k !== 'vault-jarvis-v81') {
+              if (k.startsWith('vault-') && k !== 'vault-jarvis-v82') {
                 caches.delete(k);
               }
             });
           });
         }
-        navigator.serviceWorker.register('vault-sw.js?v=vault-v81', { scope: '/orlandovault/' }).then(reg => {
+        navigator.serviceWorker.register('vault-sw.js?v=vault-v82', { scope: '/orlandovault/' }).then(reg => {
           if (reg && reg.update) reg.update();
         }).catch(err => {
           console.warn('Vault SW registration error:', err);
@@ -4844,21 +4846,54 @@
       hashMatch: true
     };
 
+    let lastTrustedSessionRefreshAt = 0;
+
     function getAutoLockMs() {
       if (window.VaultTrustedDevice && typeof window.VaultTrustedDevice.getRememberDurationMs === 'function') {
         return window.VaultTrustedDevice.getRememberDurationMs();
       }
-      const val = localStorage.getItem('orlandovault_remember_mode_v1') || localStorage.getItem(LS_AUTOLOCK_MIN) || 'remember_90d';
+      const val = localStorage.getItem('orlandovault_remember_mode_v1') || localStorage.getItem(LS_AUTOLOCK_MIN) || '5';
       if (val === 'remember_90d') return 90 * 24 * 60 * 60 * 1000;
       if (val === 'remember_24h') return 24 * 60 * 60 * 1000;
       if (val === 'remember_8h') return 8 * 60 * 60 * 1000;
       const mins = parseInt(val, 10);
-      return Math.max(1, isNaN(mins) ? (90 * 24 * 60) : mins) * 60 * 1000;
+      return Math.max(1, isNaN(mins) ? 5 : mins) * 60 * 1000;
+    }
+
+    function checkIdleAutoLockNow() {
+      if (!activeSessionKey) return false;
+      const limitMs = getAutoLockMs();
+      if (Date.now() - lastActivityAt >= limitMs) {
+        const mins = Math.max(1, Math.round(limitMs / 60000));
+        lockVault('Auto-locked after ' + mins + ' minute' + (mins === 1 ? '' : 's') + ' of inactivity.');
+        return true;
+      }
+      return false;
     }
 
     function recordUserActivity() {
-      if (activeSessionKey) lastActivityAt = Date.now();
+      if (!activeSessionKey) return;
+      if (checkIdleAutoLockNow()) return;
+      const now = Date.now();
+      lastActivityAt = now;
+      if (now - lastTrustedSessionRefreshAt >= 30000 && activeVaultMeta && window.VaultTrustedDevice && typeof window.VaultTrustedDevice.persistTrustedSession === 'function') {
+        lastTrustedSessionRefreshAt = now;
+        window.VaultTrustedDevice.persistTrustedSession(activeSessionKey, activeVaultMeta).catch(() => {});
+      }
     }
+
+    window.getVaultAutoLockState = function() {
+      return {
+        autoLockMs: getAutoLockMs(),
+        idleElapsedMs: Date.now() - lastActivityAt,
+        unlocked: !!activeSessionKey
+      };
+    };
+    window.__simulateVaultIdleMs = function(ms) {
+      if (typeof ms === 'number' && ms >= 0) {
+        lastActivityAt = Date.now() - ms;
+      }
+    };
 
     function syncPrivacyMaskUI() {
       const btn = document.getElementById('btnTopbarPrivacyMask');
@@ -5165,11 +5200,15 @@
       const lastMode = (activeVaultMeta && activeVaultMeta.passcodeMode) || (readLocalEncryptedCacheEnvelope() || {}).passcodeMode || 'password';
       stopRealtimeFirestoreSync();
       activeSessionKey = null;
+      lastTrustedSessionRefreshAt = 0;
       hasCompletedInitialPull = false;
       isSyncing = false;
       isPushing = false;
       lastRenderFingerprint = '';
       if (pushTimer) { clearTimeout(pushTimer); pushTimer = null; }
+      if (window.VaultTrustedDevice && typeof window.VaultTrustedDevice.clearTrustedSession === 'function') {
+        window.VaultTrustedDevice.clearTrustedSession().catch(() => {});
+      }
 
       if (typeof window.setVaultItems === 'function') window.setVaultItems([]);
       window.vaultItems = [];
@@ -6798,9 +6837,9 @@
       // Auto-lock / Remember Device selector in Sync Health modal
       const selAuto = document.getElementById('selectAutoLockMinutes');
       if (selAuto) {
-        const curMode = localStorage.getItem('orlandovault_remember_mode_v1') || localStorage.getItem(LS_AUTOLOCK_MIN) || 'remember_90d';
+        const curMode = localStorage.getItem('orlandovault_remember_mode_v1') || localStorage.getItem(LS_AUTOLOCK_MIN) || '5';
         const hasOpt = Array.from(selAuto.options).some(o => o.value === curMode);
-        selAuto.value = hasOpt ? curMode : 'remember_90d';
+        selAuto.value = hasOpt ? curMode : '5';
         selAuto.onchange = () => {
           localStorage.setItem('orlandovault_remember_mode_v1', selAuto.value);
           localStorage.setItem(LS_AUTOLOCK_MIN, selAuto.value);
@@ -7347,8 +7386,8 @@
         if (lockOv) new ResizeObserver(scheduleLensSync).observe(lockOv);
       }
 
-      // Activity & Auto-Lock / Instant Privacy Curtain
-      ['pointerdown', 'keydown', 'touchstart', 'scroll'].forEach(evt => {
+      // Activity & Auto-Lock / Instant Privacy Curtain (sleeping-tab resilient)
+      ['pointerdown', 'mousemove', 'keydown', 'touchstart', 'scroll'].forEach(evt => {
         window.addEventListener(evt, recordUserActivity, { passive: true });
       });
 
@@ -7365,12 +7404,9 @@
       if (curtain) {
         curtain.addEventListener('click', () => {
           if (!activeSessionKey) return;
-          if (Date.now() - lastActivityAt >= getAutoLockMs()) {
-            lockVault('Auto-locked after inactivity.');
-          } else {
-            curtain.classList.remove('active');
-            recordUserActivity();
-          }
+          if (checkIdleAutoLockNow()) return;
+          curtain.classList.remove('active');
+          recordUserActivity();
         });
       }
 
@@ -7382,12 +7418,15 @@
 
       window.addEventListener('focus', () => {
         if (!activeSessionKey) return;
-        if (Date.now() - lastActivityAt >= getAutoLockMs()) {
-          lockVault('Auto-locked after inactivity.');
-          return;
-        }
+        if (checkIdleAutoLockNow()) return;
         if (curtain) curtain.classList.remove('active');
         pullFromCloud(false, false);
+      });
+
+      window.addEventListener('pageshow', () => {
+        if (!activeSessionKey) return;
+        if (checkIdleAutoLockNow()) return;
+        if (curtain) curtain.classList.remove('active');
       });
 
       document.addEventListener('visibilitychange', () => {
@@ -7395,10 +7434,7 @@
           if (activeSessionKey && !isAuthPopupOpen && curtain) curtain.classList.add('active');
         } else if (document.visibilityState === 'visible') {
           if (!activeSessionKey) return;
-          if (Date.now() - lastActivityAt >= getAutoLockMs()) {
-            lockVault('Auto-locked after inactivity.');
-            return;
-          }
+          if (checkIdleAutoLockNow()) return;
           if (curtain) curtain.classList.remove('active');
           pullFromCloud(false, false);
         }
@@ -7412,12 +7448,10 @@
         updateSyncHealthUI();
       });
 
-      // Idle Auto-Lock Check (5s) + Sync Heartbeat (8s)
+      // Idle Auto-Lock Check (1s precision) + Sync Heartbeat (8s)
       setInterval(() => {
-        if (activeSessionKey && (Date.now() - lastActivityAt >= getAutoLockMs())) {
-          lockVault('Auto-locked after ' + Math.round(getAutoLockMs() / 60000) + ' minutes of inactivity.');
-        }
-      }, 5000);
+        checkIdleAutoLockNow();
+      }, 1000);
 
       setInterval(() => {
         if (activeSessionKey && !isRealtimeListenerActive && document.visibilityState === 'visible') {
@@ -9307,10 +9341,10 @@
   })();
   </script>
 
-  <script src="js/vault-faceid.js?v=vault-v81"></script>
-  <script src="js/vault-templates.js?v=vault-v81"></script>
-  <script src="js/totp-watchtower.js?v=vault-v81"></script>
-  <script src="js/cloud-telemetry.js?v=vault-v81"></script>
-  <script src="js/autofill-bridge.js?v=vault-v81"></script>
+  <script src="js/vault-faceid.js?v=vault-v82"></script>
+  <script src="js/vault-templates.js?v=vault-v82"></script>
+  <script src="js/totp-watchtower.js?v=vault-v82"></script>
+  <script src="js/cloud-telemetry.js?v=vault-v82"></script>
+  <script src="js/autofill-bridge.js?v=vault-v82"></script>
 </body>
 </html>
